@@ -1,0 +1,21 @@
+{
+  "name": "Nephilim Wars, When the Watchers Walked Among Us",
+  "short_name": "NephilimWars",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "description": "Roleplay set in the preflood world.",
+  "icons": [
+    {
+      "src": "./images/image192.ico",
+      "sizes": "192x192",
+      "type": "image/ico"
+    },
+    {
+      "src": "./images/image512.ico",
+      "sizes": "512x512",
+      "type": "image/ico"
+    }
+  ]
+}
