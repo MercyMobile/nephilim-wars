@@ -85,7 +85,326 @@
 
   <script type="text/babel">
     const { useState, useEffect } = React;
+    const BESTIARY_DATA = {
+        giants: {
+          title: "Giants — The Forbidden Offspring",
+          intro: "Born of Watcher and human unions, giants terrorize the earth in three generations of decreasing power but increasing cunning.",
+          creatures: [
+            { 
+              name: "Greater Giant (1st Generation)", 
+              image: "images/GreaterGiant.png", 
+              hd: 16, hp: 160, def: 16, 
+              attack: "Massive Club +12 (4d12+8) or Boulder Hurl +10 (3d10, 60ft)", 
+              special: "Colossal (30-50 ft), Terrifying Presence (WIS save or frightened), Earthquake Stomp (1/day), DR 10/blessed",
+              desc: "Direct offspring of Watchers. Tower over cities, command lesser giants, remember fragments of heavenly knowledge."
+            },
+            { 
+              name: "Nephilim Warlord (2nd Generation)",
+              image: "images/NephilimWarlord.jpg", 
+              hd: 10, hp: 100, def: 17, 
+              attack: "Giant Bronze Sword +10 (3d10+6) or Javelin +8 (2d8+4, 80ft)", 
+              special: "Giant-Sized (15-30 ft), Watcher's Blood (resist fire/cold), Command Giants, Forbidden Weapon Mastery",
+              desc: "Warriors of renown, the 'mighty men of old.' Lead giant war-bands and claim human cities as tribute."
+            },
+            { 
+              name: "Nephilim Sorcerer (2nd Generation)", 
+              image: "images/NephilimSorceror.png", 
+              hd: 8, hp: 70, def: 14, 
+              attack: "Staff +6 (2d8+3) or Watcher's Fire +10 (3d8 fire, 100ft)", 
+              special: "Giant-Sized (15-20 ft), Forbidden Sorcery (3/day), Enchantment, Spirit Sight, Lore of Azazel",
+              desc: "Taught the dark arts by their fathers. Weave enchantments, curse enemies, and commune with bound Watchers."
+            },
+            { 
+              name: "Elioud Hunter (3rd Generation)", 
+              image: "images/NephilimHunter.jpg", 
+              hd: 6, hp: 55, def: 15, 
+              attack: "Barbed Spear +8 (2d8+4) or Net & Trident +7 (1d8+3, entangle)", 
+              special: "Large (10-20 ft), Darkvision 60ft, Track by Scent, Ambush (+2d6 sneak), Giant's Cunning",
+              desc: "The most human-like giants, but twisted with cruelty. Hunt humans for sport and darker purposes."
+            },
+            { 
+              name: "Elioud Deceiver (3rd Generation)", 
+              image: "images/ElioudDeceiver.jpg",
+              hd: 5, hp: 45, def: 13, 
+              attack: "Hidden Blade +7 (2d6+3 + poison)", 
+              special: "Large (10-15 ft), Shapeshifting (appear human-sized), Silver Tongue, Poison Use, Infiltrator",
+              desc: "Can compress their forms to pass among humans. Serve as spies, assassins, and corrupters for their greater kin."
+            },
+            { 
+              name: "Ohya, Son of Semyaza", 
+              image: "images/Ohya.png",
+              hd: 14, hp: 140, def: 18, 
+              attack: "Sword of Wrath +14 (4d10+8 fire) or Thunderous Roar (30ft cone, 4d8 thunder)", 
+              special: "Legendary (40 ft), Prophetic Dreams, Leviathan-Slayer, Wrath Aura (enemies -2 to hit), Semyaza's Heir",
+              desc: "Wrathful leader of giants. Dreams of heaven's judgment haunt him. Said to have slain the Leviathan itself.",
+              legendary: true
+            },
+            { 
+              name: "Hahya, Brother of Ohya", 
+              image: "images/Hahya.png",
+              hd: 12, hp: 110, def: 16, 
+              attack: "Greataxe +11 (3d12+6) or Dream Curse (WIS save or nightmares)", 
+              special: "Legendary (35 ft), Dream Visions, Contemplative (-2 initiative, +2 WIS saves), Prophet's Burden",
+              desc: "More thoughtful than his brother. Received the vision of 200 trees destroyed by fire—the Watchers' doom.",
+              legendary: true
+            },
+            { 
+              name: "Mahway, the Winged", 
+              image: "images/Mahway.png",
+              hd: 10, hp: 95, def: 19, 
+              attack: "Talon Strike +10 (2d8+5) or Diving Attack +12 (4d8+5, from flight)", 
+              special: "Legendary (25 ft), True Flight (60 ft), Eagle's Eyes, Messenger of Giants, Sun Vulnerability",
+              desc: "Son of Barakel. 'Flew with his hands like eagles.' Serves as herald between giant kingdoms. Warned never to fly too close to the sun.",
+              legendary: true
+            },
+            { 
+              name: "Gilgamesh, the Mighty", 
+              image: "images/Gilgamesh.png",
+              hd: 12, hp: 120, def: 17, 
+              attack: "Hero's Blade +12 (3d10+7) or Grapple +14", 
+              special: "Legendary (30 ft), Heroic Resilience (advantage on death saves), Tragic Awareness, Wrestler Supreme",
+              desc: "The legendary hero-king, counted among the giants. Knows he cannot stand against heaven: 'My opponents reside in Heaven, and I am not able to stand against them.'",
+              legendary: true
+            },
+            { 
+              name: "Giant Thrall", 
+              image: "images/Thrall.png", // Updated link for the Thrall
+              hd: 4, hp: 35, def: 12, 
+              attack: "Crude Club +5 (2d8+3) or Rock +4 (1d10+2)", 
+              special: "Large (12 ft), Enslaved (broken will), Pack Fighter (+1 per ally), Expendable",
+              desc: "Lesser giants enslaved by their more powerful kin. Used as shock troops, laborers, and sacrifices."
+            }
+          ]
+        },
+        watchers: {
+          title: "The Watchers — Fallen Angels",
+          intro: "The 200 angels who abandoned heaven. Most are now bound, but their influence persists through teachings, artifacts, and the rare unbound insurgent.",
+          creatures: [
+            { 
+              name: "Azazel, Lord of Weapons (Bound)", 
+              image: "images/Azazel.jpg",
+              hd: 20, hp: 200, def: 22, 
+              attack: "Burning Blade +16 (5d10+10 fire) or Forge Curse (corrupts metal)", 
+              special: "Celestial, Bound in Dudael, All Sin Ascribed, Weapon Mastery Supreme, Corruption Aura 100ft",
+              desc: "Bound beneath jagged rocks in the desert of Dudael. 'To him ascribe ALL sin.' His whispers still reach those who forge weapons of war.",
+              legendary: true,
+              bound: true
+            },
+            { 
+              name: "Semyaza, Chief of Watchers (Bound)", 
+              hd: 22, hp: 220, def: 23, 
+              attack: "Oath-Breaker Sword +18 (6d8+12) or Binding Curse (imprisoned 70 generations)", 
+              special: "Celestial, Bound in Earth's Valleys, Enchantment Supreme, Command Watchers, The Name Has Seen",
+              desc: "Leader who convinced 199 others to swear the oath on Hermon. Imprisoned in the valleys of the earth, awaiting final judgment.",
+              legendary: true,
+              bound: true
+            },
+            { 
+              name: "Kokabel, Star-Lord (Bound)", 
+              hd: 18, hp: 180, def: 20, 
+              attack: "Starfire +15 (4d10 radiant) or Constellation Curse (fate manipulation)", 
+              special: "Celestial, Bound, Commands 365,000 Spirits, Star Knowledge, Night Empowered",
+              desc: "Taught the constellations. Even bound, commands hundreds of thousands of lesser spirits who execute his will among the stars.",
+              legendary: true,
+              bound: true
+            },
+            { 
+              name: "Gadreel, the Serpent's Agent", 
+              hd: 16, hp: 150, def: 19, 
+              attack: "Deceiver's Blade +14 (3d10+8 poison) or Temptation (WIS save or charmed)", 
+              special: "Celestial, Eden's Corrupter, Taught Murder, Shapeshifter, Silver Tongue Supreme",
+              desc: "Deceived Eve in the garden. Taught humanity the killing blow. Master of lies and manipulation.",
+              legendary: true
+            },
+            { 
+              name: "Watcher Remnant (Unbound)", 
+              hd: 14, hp: 130, def: 20, 
+              attack: "Celestial Blade +13 (4d8+7 radiant/necrotic) or Forbidden Teaching", 
+              special: "Celestial, Flight, Damage Resist (non-blessed), Forbidden Knowledge (1 domain), Possession",
+              desc: "One of the few Watchers who escaped immediate binding. Hunted by heaven, desperately teaching forbidden arts to build power."
+            },
+            { 
+              name: "Watcher Manifestation", 
+              hd: 8, hp: 70, def: 16, 
+              attack: "Spirit Touch +8 (2d10 necrotic, bypasses armor)", 
+              special: "Incorporeal, Bound Echo, Limited Teaching, Whisper Corruption, Dismiss (DC 18 FAI)",
+              desc: "A bound Watcher's projected consciousness. Can manifest near those who invoke their name or use their teachings."
+            }
+          ]
+        },
+        corrupted: {
+          title: "Corrupted Humanity",
+          intro: "Those who serve the giants, practice forbidden arts, or have been twisted by the age's corruption.",
+          creatures: [
+            { 
+              name: "Baal-Priest", 
+              hd: 6, hp: 50, def: 13, 
+              attack: "Sacrificial Knife +6 (1d8+2 + bleed) or Dark Invocation +8 (2d8 necrotic)", 
+              special: "Dark Sorcery (3/day), Blood Magic, Summon Lesser Demon, Giant-Favored",
+              desc: "Priests of the Nephilim god-kings. Perform blood sacrifices to fuel dark miracles and curry favor with their giant masters."
+            },
+            { 
+              name: "Forge-Cultist of Azazel", 
+              hd: 5, hp: 45, def: 15, 
+              attack: "Azazel-Forged Blade +7 (2d6+3, ignores 2 armor) or Molten Splash +5 (1d10 fire)", 
+              special: "Forbidden Smithing, Fire Resistant, Weapon Enhancement, Marked by Azazel (-2 Righteousness aura)",
+              desc: "Smiths who learned Azazel's weapon-craft. Their forges produce unnaturally sharp blades, but each working darkens their soul."
+            },
+            { 
+              name: "Star-Witch of Kokabel", 
+              hd: 5, hp: 40, def: 12, 
+              attack: "Curse Touch +5 (1d6 + curse) or Star-Hex +7 (2d6 psychic)", 
+              special: "Astrology, Fate Reading, Night Magic (+2 at night), Constellation Curse",
+              desc: "Women who learned star-magic from Kokabel's teachings. Read fates in the heavens and twist destiny with forbidden knowledge."
+            },
+            { 
+              name: "Cainite Warlord", 
+              hd: 7, hp: 65, def: 16, 
+              attack: "Bronze Sword +9 (1d10+4) and Shield Bash +7 (1d6+2, stun)", 
+              special: "Tubal-Cain's Arsenal, Command Troops, City-Born (urban combat +2), Seventy-Seven Vengeance",
+              desc: "Military leaders from the cities of Cain. Well-equipped with Tubal-cain's metalwork, they enforce giant tribute and raid the faithful."
+            },
+            { 
+              name: "Cainite Soldier", 
+              hd: 3, hp: 25, def: 14, 
+              attack: "Bronze Spear +5 (1d8+2) or Short Sword +5 (1d6+2)", 
+              special: "Formation Fighting (+2 AC with allies), City Guard, Equipped",
+              desc: "Professional soldiers from the line of Cain. Better armed than most humans of the age."
+            },
+            { 
+              name: "Root-Cutter (Herbalist)", 
+              hd: 3, hp: 22, def: 11, 
+              attack: "Poisoned Blade +4 (1d6+1 + poison) or Thrown Powder +4 (sleep/blind)", 
+              special: "Semyaza's Herbalism, Poison Craft, Healing Herbs, Potion Brewing",
+              desc: "Practitioners of Semyaza's root-cutting arts. Can heal or harm with their knowledge of forbidden botany."
+            },
+            { 
+              name: "Giant-Thrall (Human)", 
+              hd: 2, hp: 15, def: 10, 
+              attack: "Club +3 (1d6+1) or Thrown Rock +2 (1d4)", 
+              special: "Fanatical (immune to fear of giants), Expendable, Human Shield",
+              desc: "Humans so broken or corrupted they worship the Nephilim as gods. Used as servants, messengers, and cannon fodder."
+            },
+            { 
+              name: "Painted Warrior", 
+              hd: 4, hp: 32, def: 12, 
+              attack: "War Club +6 (1d8+3) or Javelin +5 (1d6+2)", 
+              special: "Azazel's Cosmetics (war paint grants +1 attack), Berserker Rage, Intimidating",
+              desc: "Warriors who use Azazel's cosmetic arts for war paint that grants supernatural fury. Fight with reckless abandon."
+            },
+            { 
+              name: "Lamech the Avenger (Legendary)", 
+              hd: 9, hp: 85, def: 17, 
+              attack: "Tubal-Cain's Blade +11 (2d8+5) or Crossbow +9 (1d10+3)", 
+              special: "Legendary, Seventy-Sevenfold Vengeance (if wounded, +4 damage next attack), First Polygamist, Boastful",
+              desc: "The infamous Cainite who boasted of killing a young man for wounding him. His vengeance exceeds even God's protection of Cain.",
+              legendary: true
+            }
+          ]
+        },
+        spirits: {
+          title: "Demon Spirits",
+          intro: "When giants die, their hybrid nature traps their spirits on earth. They become demons that 'afflict, oppress, destroy, attack... hunger and thirst' eternally.",
+          creatures: [
+            { 
+              name: "Lilith, The Night Monster",
+              image: "images/Lilith.png",
+              hd: 15, hp: 120, def: 19,
+              attack: "Midnight Talons +12 (3d8+5 necrotic) or Screech of Desolation (CON save or stunned)",
+              special: "Flight, Darkvision 120ft, Night Terror (dreams), Child-Stealer, Immune to non-blessed weapons, Seduce & Corrupt",
+              desc: "Ancient demon queen of the night. Haunts desolate places and preys upon the vulnerable. Mother of countless lesser demons.",
+              legendary: true
+            },
+            { 
+              name: "Giant-Spirit (Unbound)", 
+              hd: 8, hp: 65, def: 15, 
+              attack: "Spectral Slam +8 (2d10 necrotic) or Possession Attempt (WIS save)", 
+              special: "Incorporeal, Possession, Hunger Aura (1d6 necrotic/round nearby), Sense Life 60ft, Sunlight Weakness",
+              desc: "The wandering spirit of a slain giant. Consumed by hunger it can never satisfy, it seeks living hosts to experience sensation again."
+            },
+            { 
+              name: "Plague Spirit", 
+              hd: 6, hp: 50, def: 14, 
+              attack: "Disease Touch +7 (1d8 + disease) or Pestilent Cloud (15ft, CON save)", 
+              special: "Incorporeal, Disease Carrier (typhus/plague), Swarm Form, Immune to poison/disease",
+              desc: "Demon born from giants who died of plague. Spreads sickness wherever it manifests, delighting in suffering."
+            },
+            { 
+              name: "Rage Spirit", 
+              hd: 7, hp: 60, def: 13, 
+              attack: "Fury Strike +9 (2d8+4 psychic)", 
+              special: "Incorporeal, Incite Violence (WIS save or attack nearest), Battle Frenzy Aura, Feed on Anger",
+              desc: "Spirit of a giant slain in battle. Drives mortals to senseless violence, growing stronger from bloodshed."
+            },
+            { 
+              name: "Whisper Demon", 
+              hd: 4, hp: 30, def: 16, 
+              attack: "Maddening Whisper +6 (1d6 psychic + confusion)", 
+              special: "Invisible, Suggestion (3/day), Plant Thoughts, Memory Corruption, Flee from Prayer",
+              desc: "Subtle tempters that plant sinful thoughts. Often the first stage of demonic corruption, preparing victims for worse."
+            }
+          ]
+        },
+        beasts: {
+          title: "Corrupted Beasts",
+          intro: "Animals twisted by the world's corruption, proximity to Nephilim, or dark sorcery. Some were bred as war-beasts by giants.",
+          creatures: [
+            { 
+              name: "Behemoth", 
+              image: "images/Behemoth.png",
+              hd: 18, hp: 180, def: 18, 
+              attack: "Tail Sweep +14 (4d10+8, knockdown) or Trample +12 (3d12+6)", 
+              special: "Colossal Beast, DR 15/blessed, Earthquake Walk, Immune to fear/charm, Primal Terror",
+              desc: "The greatest land beast, described in Job. Bones like bronze, limbs like iron. Nearly unstoppable once roused to anger.",
+              legendary: true
+            },
+            { 
+              name: "Leviathan Spawn", 
+              hd: 12, hp: 110, def: 17, 
+              attack: "Crushing Bite +11 (3d10+6) or Tail Lash +10 (2d8+4)", 
+              special: "Aquatic, Armored Scales (DR 5), Capsize Ships, Breath Weapon (steam, 3/day)",
+              desc: "Lesser offspring of the great sea dragon. Terrorize coastal waters and drag ships to the depths."
+            },
+            { 
+              name: "War-Mammoth", 
+              hd: 10, hp: 95, def: 15, 
+              attack: "Tusks +10 (2d12+5) or Trunk Grab +8 (grapple, throw 20ft)", 
+              special: "Siege Beast, Howdah Platform (carries 4 warriors), Trample, War-Trained",
+              desc: "Mammoths bred and armored by giants for war. Carry giant warriors into battle and crush fortifications."
+            },
+            { 
+              name: "Corruption Wolf", 
+              hd: 5, hp: 40, def: 14, 
+              attack: "Diseased Bite +7 (1d10+3 + corruption)", 
+              special: "Pack Tactics, Corrupting Bite (FAI save or -1 Righteousness), Darkvision, Track Righteous",
+              desc: "Wolves twisted by feeding on Nephilim corpses. Hunt in packs, spreading corruption with every bite."
+            },
+            { 
+              name: "Giant Serpent", 
+              hd: 6, hp: 50, def: 13, 
+              attack: "Constrict +8 (2d8+4, grapple) or Venomous Bite +7 (1d6+2 + poison)", 
+              special: "Constrict, Deadly Venom (2d10, CON save half), Swallow Whole (Medium or smaller)",
+              desc: "Massive snakes grown to unnatural size. Some say they carry the curse of Eden's serpent."
+            },
+            { 
+              name: "Nephilim Hound", 
+              hd: 4, hp: 35, def: 13, 
+              attack: "Savage Bite +6 (1d8+3, trip)", 
+              special: "Pack Tactics, Scent Tracking, Giant-Bred (loyal to giant masters), Fearless",
+              desc: "Dogs bred by Nephilim for hunting humans. Unnaturally large, vicious, and utterly loyal to their giant masters."
+            },
+            { 
+              name: "Carrion Vulture", 
+              hd: 3, hp: 22, def: 12, 
+              attack: "Diseased Beak +4 (1d6+1 + disease) or Talon Rake +4 (1d4+1)", 
+              special: "Flight, Disease Carrier, Flock Attack, Drawn to Death",
+              desc: "Giant vultures that feast on battlefield dead. Carry diseases and attack the wounded."
+            }
+          ]
+        }
+      };
 
+    
     // Icon components using Lucide
     const Icon = ({ name, className = "w-5 h-5" }) => {
       const ref = React.useRef(null);
@@ -989,17 +1308,19 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
       return (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 overflow-y-auto">
           <div className={`${theme.bgSecondary} rounded-xl shadow-2xl max-w-5xl w-full my-8`}>
-            <div className={`sticky top-0 ${theme.accent} text-white p-6 flex justify-between items-center rounded-t-xl z-10`}>
+            {/* Header with Close 'X' */}
+            <div className={`sticky top-0 ${theme.accent} text-white p-6 flex justify-between items-center rounded-t-xl z-10 shadow-md`}>
               <div>
                 <h3 className="text-3xl font-bold">{character.name}</h3>
                 <p className="text-amber-200">{character.bloodline} • {character.calling}</p>
               </div>
-              <button onClick={onClose} className="p-2 hover:bg-amber-700 rounded-lg">
-                <Icon name="x" className="w-6 h-6" />
+              <button onClick={onClose} className="p-2 hover:bg-amber-800 rounded-lg transition-colors">
+                <Icon name="x" className="w-8 h-8" />
               </button>
             </div>
 
             <div className="p-6 space-y-6">
+              {/* Stats Grid */}
               <div className="grid md:grid-cols-3 gap-4">
                 <div className={`${theme.card} p-4 rounded-lg`}>
                   <div className={`text-sm ${theme.textMuted} mb-1`}>Level</div>
@@ -1021,6 +1342,7 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
                 </div>
               </div>
 
+              {/* HP & CP */}
               <div className="grid md:grid-cols-2 gap-4">
                 <div className={`${theme.card} p-4 rounded-lg`}>
                   <div className="flex justify-between items-center mb-2">
@@ -1033,7 +1355,6 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
                     <button onClick={() => adjustHP(1)} className="px-3 py-1 bg-green-600 text-white rounded">+1</button>
                     <button onClick={() => adjustHP(5)} className="px-3 py-1 bg-green-600 text-white rounded">+5</button>
                   </div>
-                  {/* Dynamic HP bar with color */}
                   <div className="w-full bg-gray-700 rounded-full h-3">
                     <div className={`${(character.currentHP / character.maxHP) * 100 <= 25 ? 'bg-red-500' : (character.currentHP / character.maxHP) * 100 <= 50 ? 'bg-yellow-500' : 'bg-green-500'} h-3 rounded-full transition-all duration-500`} style={{ width: `${(character.currentHP / character.maxHP) * 100}%` }}></div>
                   </div>
@@ -1055,6 +1376,7 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
                 </div>
               </div>
 
+              {/* Attributes */}
               <div className={`${theme.card} p-6 rounded-lg`}>
                 <h4 className={`text-xl font-bold ${theme.text} mb-4`}>Attributes</h4>
                 <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
@@ -1078,6 +1400,7 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
                 </div>
               </div>
 
+              {/* Skills & Equipment */}
               <div className="grid md:grid-cols-2 gap-4">
                 <div className={`${theme.card} p-6 rounded-lg`}>
                   <h4 className={`text-xl font-bold ${theme.text} mb-4`}>Skills</h4>
@@ -1103,6 +1426,7 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
                 </div>
               </div>
 
+              {/* Defense & Initiative */}
               <div className="grid md:grid-cols-2 gap-3">
                 <div className={`${theme.card} p-4 rounded-lg text-center`}>
                   <div className={`text-sm ${theme.textMuted}`}>Defense</div>
@@ -1113,16 +1437,53 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
                   <div className={`text-3xl font-bold ${theme.text}`}>+{character.initiative}</div>
                 </div>
               </div>
+
+              {/* === NEW: LARGE CLOSE BUTTON AT BOTTOM === */}
+              <button
+                onClick={onClose}
+                className={`w-full ${theme.accent} ${theme.accentHover} text-white py-4 rounded-lg font-bold text-lg shadow-lg mt-4 flex items-center justify-center gap-2 hover:scale-[1.01] transition-transform`}
+              >
+                <Icon name="check" className="w-6 h-6" />
+                <span>Return to Character List</span>
+              </button>
+
             </div>
           </div>
         </div>
       );
     };
-
     // ============================================
-    // COMBAT TAB
+    // COMBAT TAB (WITH CENTERED CREATURE IMAGE)
     // ============================================
     const CombatTab = ({ theme, characters, setCharacters, combat, setCombat }) => {
+      // 1. State for the dropdown selection
+      const [selectedTemplate, setSelectedTemplate] = useState('');
+
+      // 2. Flatten the BESTIARY_DATA into a single list
+      const allMonsters = React.useMemo(() => {
+        if (typeof BESTIARY_DATA === 'undefined') return []; 
+        const list = [];
+        Object.values(BESTIARY_DATA).forEach(cat => {
+          if(cat.creatures) {
+             cat.creatures.forEach(creature => list.push(creature));
+          }
+        });
+        return list.sort((a, b) => a.name.localeCompare(b.name));
+      }, []);
+
+      // --- HELPER: Find image for the active combatant ---
+      const activeCombatant = combat.active && combat.combatants.length > 0 
+        ? combat.combatants[combat.currentTurn] 
+        : null;
+
+      const activeMonsterImage = React.useMemo(() => {
+        if (!activeCombatant || activeCombatant.type === 'player') return null;
+        // Try to find the monster in the bestiary to get its image
+        const monster = allMonsters.find(m => m.name === activeCombatant.name);
+        return monster ? monster.image : null;
+      }, [activeCombatant, allMonsters]);
+      // --------------------------------------------------
+
       const startCombat = () => {
         const combatants = characters.map(char => ({
           ...char,
@@ -1138,25 +1499,42 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
         });
       };
 
-      const addEnemy = () => {
+      const addSelectedEnemy = () => {
+        if (!selectedTemplate) return;
+        const creature = allMonsters.find(m => m.name === selectedTemplate);
+        if (!creature) return;
+
+        const init = Math.floor(Math.random() * 20) + 1;
+        const newEnemy = {
+          id: Date.now(),
+          name: creature.name,
+          maxHP: creature.hp,
+          currentHP: creature.hp,
+          defense: creature.def,
+          initiative: init, 
+          type: 'enemy'
+        };
+
+        const newCombatants = [...combat.combatants, newEnemy].sort((a, b) => b.initiative - a.initiative);
+        setCombat({ ...combat, combatants: newCombatants });
+        setSelectedTemplate('');
+      };
+
+      const addManualEnemy = () => {
         const name = prompt('Enemy name:');
         if (!name) return;
-        
         const hp = parseInt(prompt('Max HP:', '30')) || 30;
         const def = parseInt(prompt('Defense:', '12')) || 12;
         const init = Math.floor(Math.random() * 20) + 1;
-
         const newEnemy = {
           id: Date.now(),
           name,
           maxHP: hp,
           currentHP: hp,
           defense: def,
-          // For enemies, initiative roll is constant, mod is 0. Players calculate mod from stats
           initiative: init, 
           type: 'enemy'
         };
-
         const newCombatants = [...combat.combatants, newEnemy].sort((a, b) => b.initiative - a.initiative);
         setCombat({ ...combat, combatants: newCombatants });
       };
@@ -1170,7 +1548,6 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
         });
         setCombat({ ...combat, combatants: updated });
         
-        // Also update the persistent character data if it's a player
         const char = characters.find(ch => ch.id === id);
         if (char) {
           const newChars = characters.map(c => 
@@ -1223,18 +1600,65 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
               <h2 className="text-2xl font-bold">Combat Active</h2>
               <p>Round {combat.round}</p>
             </div>
-            <div className="flex gap-2 flex-wrap">
-              <button onClick={addEnemy} className="bg-red-600 px-4 py-2 rounded-lg hover:bg-red-700 font-bold">
-                Add Enemy
+            
+            <div className="flex flex-wrap items-center gap-2">
+              <select 
+                value={selectedTemplate}
+                onChange={(e) => setSelectedTemplate(e.target.value)}
+                className="bg-white text-black px-3 py-2 rounded-lg font-bold min-w-[200px]"
+              >
+                <option value="">-- Summon Bestiary Enemy --</option>
+                {allMonsters.map((m, i) => (
+                  <option key={i} value={m.name}>{m.name} (HP: {m.hp})</option>
+                ))}
+              </select>
+
+              <button 
+                onClick={addSelectedEnemy} 
+                disabled={!selectedTemplate}
+                className="bg-amber-950 text-amber-100 border border-amber-500 px-4 py-2 rounded-lg hover:bg-amber-900 font-bold disabled:opacity-50"
+              >
+                Add
+              </button>
+
+              <div className="w-px h-8 bg-amber-400/50 mx-2 hidden md:block"></div>
+
+              <button onClick={addManualEnemy} className="bg-red-600 px-4 py-2 rounded-lg hover:bg-red-700 font-bold">
+                Custom
               </button>
               <button onClick={nextTurn} className="bg-green-600 px-4 py-2 rounded-lg hover:bg-green-700 font-bold">
                 Next Turn
               </button>
               <button onClick={endCombat} className="bg-gray-600 px-4 py-2 rounded-lg hover:bg-gray-700 font-bold">
-                End Combat
+                End
               </button>
             </div>
           </div>
+
+          {/* --- NEW: CINEMATIC ENEMY DISPLAY --- */}
+          {activeMonsterImage && (
+            <div className="mb-8 flex justify-center animate-bounce-once">
+              <div className="relative group max-w-lg w-full">
+                <div className={`absolute -inset-1 bg-gradient-to-r from-red-600 to-amber-600 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200`}></div>
+                <div className={`relative ${theme.card} rounded-xl overflow-hidden shadow-2xl border-2 border-amber-500/50`}>
+                  <img 
+                    src={activeMonsterImage} 
+                    alt="Active Enemy" 
+                    className="w-full h-64 md:h-80 object-cover object-top"
+                  />
+                  <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/80 to-transparent p-4 pt-12 text-center">
+                    <h3 className="text-2xl font-bold text-white tracking-widest uppercase drop-shadow-lg">
+                      {activeCombatant.name}
+                    </h3>
+                    <p className="text-red-400 font-bold text-sm mt-1 animate-pulse">
+                      IS ATTACKING!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {/* ---------------------------------- */}
 
           <div className="space-y-3">
             {combat.combatants.map((combatant, idx) => (
@@ -1243,8 +1667,7 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
                 className={`rounded-xl p-4 shadow-xl border-4 transition-all duration-300
                   ${
                     idx === combat.currentTurn 
-                      // ADDED: scale and smooth transition for dramatic effect
-                      ? 'border-amber-500 bg-amber-900/20 shadow-amber-500/50 scale-[1.01] transition-shadow duration-500' 
+                      ? 'border-amber-500 bg-amber-900/20 shadow-amber-500/50 scale-[1.01]' 
                       : `border-transparent ${theme.card}`
                   } 
                   ${combatant.currentHP === 0 ? 'opacity-50' : ''}`}
@@ -1252,7 +1675,6 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
                 <div className="flex flex-col md:flex-row md:items-center gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      {/* NEW: Use an animated icon for the current turn indicator */}
                       {idx === combat.currentTurn && <Icon name="zap" className="w-5 h-5 text-amber-500 animate-bounce-y" />} 
                       <h3 className={`text-xl font-bold ${theme.text}`}>{combatant.name}</h3>
                       <span className={`px-2 py-1 rounded text-xs font-bold ${
@@ -1297,7 +1719,6 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
         </div>
       );
     };
-
     // ============================================
     // DICE TAB
     // ============================================
@@ -1487,7 +1908,7 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
       </div>
     );
 
-    const MiracleCard = ({ theme, name, cost, desc }) => (
+const MiracleCard = ({ theme, name, cost, desc }) => (
       <div className={`${theme.bgTertiary} rounded-lg p-4 border-l-4 border-amber-500`}>
         <div className="flex justify-between items-start mb-2">
           <h3 className={`text-lg font-bold ${theme.text}`}>{name}</h3>
@@ -1497,12 +1918,15 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
       </div>
     );
 
-// ============================================
-    // UPDATED MONSTERS REFERENCE (With Lightbox & Hover Effects)
+    /// ============================================
+    // UPDATED MONSTERS REFERENCE (FIXED)
     // ============================================
     const MonstersRef = ({ theme }) => {
       const [category, setCategory] = useState('giants');
-      const [selectedImage, setSelectedImage] = useState(null); // State for the Lightbox
+      const [selectedImage, setSelectedImage] = useState(null);
+
+      // FIX: This line was missing! It connects the tab to the global data
+      const currentCategory = BESTIARY_DATA[category];
 
       const categories = [
         { id: 'giants', name: 'Giants', icon: 'skull' },
@@ -1511,327 +1935,6 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
         { id: 'spirits', name: 'Demon Spirits', icon: 'flame' },
         { id: 'beasts', name: 'Corrupted Beasts', icon: 'shield' }
       ];
-
-      const bestiary = {
-        giants: {
-          title: "Giants — The Forbidden Offspring",
-          intro: "Born of Watcher and human unions, giants terrorize the earth in three generations of decreasing power but increasing cunning.",
-          creatures: [
-            { 
-              name: "Greater Giant (1st Generation)", 
-              image: "images/GreaterGiant.png", 
-              hd: 16, hp: 160, def: 16, 
-              attack: "Massive Club +12 (4d12+8) or Boulder Hurl +10 (3d10, 60ft)", 
-              special: "Colossal (30-50 ft), Terrifying Presence (WIS save or frightened), Earthquake Stomp (1/day), DR 10/blessed",
-              desc: "Direct offspring of Watchers. Tower over cities, command lesser giants, remember fragments of heavenly knowledge."
-            },
-            { 
-              name: "Nephilim Warlord (2nd Generation)",
-              image: "images/NephilimWarlord.jpg", 
-              hd: 10, hp: 100, def: 17, 
-              attack: "Giant Bronze Sword +10 (3d10+6) or Javelin +8 (2d8+4, 80ft)", 
-              special: "Giant-Sized (15-30 ft), Watcher's Blood (resist fire/cold), Command Giants, Forbidden Weapon Mastery",
-              desc: "Warriors of renown, the 'mighty men of old.' Lead giant war-bands and claim human cities as tribute."
-            },
-            { 
-              name: "Nephilim Sorcerer (2nd Generation)", 
-              image: "images/NephilimSorceror.png", 
-              hd: 8, hp: 70, def: 14, 
-              attack: "Staff +6 (2d8+3) or Watcher's Fire +10 (3d8 fire, 100ft)", 
-              special: "Giant-Sized (15-20 ft), Forbidden Sorcery (3/day), Enchantment, Spirit Sight, Lore of Azazel",
-              desc: "Taught the dark arts by their fathers. Weave enchantments, curse enemies, and commune with bound Watchers."
-            },
-            { 
-              name: "Elioud Hunter (3rd Generation)", 
-              image: "images/NephilimHunter.jpg", 
-              hd: 6, hp: 55, def: 15, 
-              attack: "Barbed Spear +8 (2d8+4) or Net & Trident +7 (1d8+3, entangle)", 
-              special: "Large (10-20 ft), Darkvision 60ft, Track by Scent, Ambush (+2d6 sneak), Giant's Cunning",
-              desc: "The most human-like giants, but twisted with cruelty. Hunt humans for sport and darker purposes."
-            },
-            { 
-              name: "Elioud Deceiver (3rd Generation)", 
-              image: "images/ElioudDeceiver.jpg",
-              hd: 5, hp: 45, def: 13, 
-              attack: "Hidden Blade +7 (2d6+3 + poison)", 
-              special: "Large (10-15 ft), Shapeshifting (appear human-sized), Silver Tongue, Poison Use, Infiltrator",
-              desc: "Can compress their forms to pass among humans. Serve as spies, assassins, and corrupters for their greater kin."
-            },
-            { 
-              name: "Ohya, Son of Semyaza", 
-              image: "images/Ohya.png",
-              hd: 14, hp: 140, def: 18, 
-              attack: "Sword of Wrath +14 (4d10+8 fire) or Thunderous Roar (30ft cone, 4d8 thunder)", 
-              special: "Legendary (40 ft), Prophetic Dreams, Leviathan-Slayer, Wrath Aura (enemies -2 to hit), Semyaza's Heir",
-              desc: "Wrathful leader of giants. Dreams of heaven's judgment haunt him. Said to have slain the Leviathan itself.",
-              legendary: true
-            },
-            { 
-              name: "Hahya, Brother of Ohya", 
-              image: "images/Hahya.png",
-              hd: 12, hp: 110, def: 16, 
-              attack: "Greataxe +11 (3d12+6) or Dream Curse (WIS save or nightmares)", 
-              special: "Legendary (35 ft), Dream Visions, Contemplative (-2 initiative, +2 WIS saves), Prophet's Burden",
-              desc: "More thoughtful than his brother. Received the vision of 200 trees destroyed by fire—the Watchers' doom.",
-              legendary: true
-            },
-            { 
-              name: "Mahway, the Winged", 
-              image: "images/Mahway.png",
-              hd: 10, hp: 95, def: 19, 
-              attack: "Talon Strike +10 (2d8+5) or Diving Attack +12 (4d8+5, from flight)", 
-              special: "Legendary (25 ft), True Flight (60 ft), Eagle's Eyes, Messenger of Giants, Sun Vulnerability",
-              desc: "Son of Barakel. 'Flew with his hands like eagles.' Serves as herald between giant kingdoms. Warned never to fly too close to the sun.",
-              legendary: true
-            },
-            { 
-              name: "Gilgamesh, the Mighty", 
-              image: "images/Gilgamesh.png",
-              hd: 12, hp: 120, def: 17, 
-              attack: "Hero's Blade +12 (3d10+7) or Grapple +14", 
-              special: "Legendary (30 ft), Heroic Resilience (advantage on death saves), Tragic Awareness, Wrestler Supreme",
-              desc: "The legendary hero-king, counted among the giants. Knows he cannot stand against heaven: 'My opponents reside in Heaven, and I am not able to stand against them.'",
-              legendary: true
-            },
-            { 
-              name: "Giant Thrall", 
-              image: "images/Thrall.png", // Updated link for the Thrall
-              hd: 4, hp: 35, def: 12, 
-              attack: "Crude Club +5 (2d8+3) or Rock +4 (1d10+2)", 
-              special: "Large (12 ft), Enslaved (broken will), Pack Fighter (+1 per ally), Expendable",
-              desc: "Lesser giants enslaved by their more powerful kin. Used as shock troops, laborers, and sacrifices."
-            }
-          ]
-        },
-        watchers: {
-          title: "The Watchers — Fallen Angels",
-          intro: "The 200 angels who abandoned heaven. Most are now bound, but their influence persists through teachings, artifacts, and the rare unbound insurgent.",
-          creatures: [
-            { 
-              name: "Azazel, Lord of Weapons (Bound)", 
-              image: "images/Azazel.jpg",
-              hd: 20, hp: 200, def: 22, 
-              attack: "Burning Blade +16 (5d10+10 fire) or Forge Curse (corrupts metal)", 
-              special: "Celestial, Bound in Dudael, All Sin Ascribed, Weapon Mastery Supreme, Corruption Aura 100ft",
-              desc: "Bound beneath jagged rocks in the desert of Dudael. 'To him ascribe ALL sin.' His whispers still reach those who forge weapons of war.",
-              legendary: true,
-              bound: true
-            },
-            { 
-              name: "Semyaza, Chief of Watchers (Bound)", 
-              hd: 22, hp: 220, def: 23, 
-              attack: "Oath-Breaker Sword +18 (6d8+12) or Binding Curse (imprisoned 70 generations)", 
-              special: "Celestial, Bound in Earth's Valleys, Enchantment Supreme, Command Watchers, The Name Has Seen",
-              desc: "Leader who convinced 199 others to swear the oath on Hermon. Imprisoned in the valleys of the earth, awaiting final judgment.",
-              legendary: true,
-              bound: true
-            },
-            { 
-              name: "Kokabel, Star-Lord (Bound)", 
-              hd: 18, hp: 180, def: 20, 
-              attack: "Starfire +15 (4d10 radiant) or Constellation Curse (fate manipulation)", 
-              special: "Celestial, Bound, Commands 365,000 Spirits, Star Knowledge, Night Empowered",
-              desc: "Taught the constellations. Even bound, commands hundreds of thousands of lesser spirits who execute his will among the stars.",
-              legendary: true,
-              bound: true
-            },
-            { 
-              name: "Gadreel, the Serpent's Agent", 
-              hd: 16, hp: 150, def: 19, 
-              attack: "Deceiver's Blade +14 (3d10+8 poison) or Temptation (WIS save or charmed)", 
-              special: "Celestial, Eden's Corrupter, Taught Murder, Shapeshifter, Silver Tongue Supreme",
-              desc: "Deceived Eve in the garden. Taught humanity the killing blow. Master of lies and manipulation.",
-              legendary: true
-            },
-            { 
-              name: "Watcher Remnant (Unbound)", 
-              hd: 14, hp: 130, def: 20, 
-              attack: "Celestial Blade +13 (4d8+7 radiant/necrotic) or Forbidden Teaching", 
-              special: "Celestial, Flight, Damage Resist (non-blessed), Forbidden Knowledge (1 domain), Possession",
-              desc: "One of the few Watchers who escaped immediate binding. Hunted by heaven, desperately teaching forbidden arts to build power."
-            },
-            { 
-              name: "Watcher Manifestation", 
-              hd: 8, hp: 70, def: 16, 
-              attack: "Spirit Touch +8 (2d10 necrotic, bypasses armor)", 
-              special: "Incorporeal, Bound Echo, Limited Teaching, Whisper Corruption, Dismiss (DC 18 FAI)",
-              desc: "A bound Watcher's projected consciousness. Can manifest near those who invoke their name or use their teachings."
-            }
-          ]
-        },
-        corrupted: {
-          title: "Corrupted Humanity",
-          intro: "Those who serve the giants, practice forbidden arts, or have been twisted by the age's corruption.",
-          creatures: [
-            { 
-              name: "Baal-Priest", 
-              hd: 6, hp: 50, def: 13, 
-              attack: "Sacrificial Knife +6 (1d8+2 + bleed) or Dark Invocation +8 (2d8 necrotic)", 
-              special: "Dark Sorcery (3/day), Blood Magic, Summon Lesser Demon, Giant-Favored",
-              desc: "Priests of the Nephilim god-kings. Perform blood sacrifices to fuel dark miracles and curry favor with their giant masters."
-            },
-            { 
-              name: "Forge-Cultist of Azazel", 
-              hd: 5, hp: 45, def: 15, 
-              attack: "Azazel-Forged Blade +7 (2d6+3, ignores 2 armor) or Molten Splash +5 (1d10 fire)", 
-              special: "Forbidden Smithing, Fire Resistant, Weapon Enhancement, Marked by Azazel (-2 Righteousness aura)",
-              desc: "Smiths who learned Azazel's weapon-craft. Their forges produce unnaturally sharp blades, but each working darkens their soul."
-            },
-            { 
-              name: "Star-Witch of Kokabel", 
-              hd: 5, hp: 40, def: 12, 
-              attack: "Curse Touch +5 (1d6 + curse) or Star-Hex +7 (2d6 psychic)", 
-              special: "Astrology, Fate Reading, Night Magic (+2 at night), Constellation Curse",
-              desc: "Women who learned star-magic from Kokabel's teachings. Read fates in the heavens and twist destiny with forbidden knowledge."
-            },
-            { 
-              name: "Cainite Warlord", 
-              hd: 7, hp: 65, def: 16, 
-              attack: "Bronze Sword +9 (1d10+4) and Shield Bash +7 (1d6+2, stun)", 
-              special: "Tubal-Cain's Arsenal, Command Troops, City-Born (urban combat +2), Seventy-Seven Vengeance",
-              desc: "Military leaders from the cities of Cain. Well-equipped with Tubal-cain's metalwork, they enforce giant tribute and raid the faithful."
-            },
-            { 
-              name: "Cainite Soldier", 
-              hd: 3, hp: 25, def: 14, 
-              attack: "Bronze Spear +5 (1d8+2) or Short Sword +5 (1d6+2)", 
-              special: "Formation Fighting (+2 AC with allies), City Guard, Equipped",
-              desc: "Professional soldiers from the line of Cain. Better armed than most humans of the age."
-            },
-            { 
-              name: "Root-Cutter (Herbalist)", 
-              hd: 3, hp: 22, def: 11, 
-              attack: "Poisoned Blade +4 (1d6+1 + poison) or Thrown Powder +4 (sleep/blind)", 
-              special: "Semyaza's Herbalism, Poison Craft, Healing Herbs, Potion Brewing",
-              desc: "Practitioners of Semyaza's root-cutting arts. Can heal or harm with their knowledge of forbidden botany."
-            },
-            { 
-              name: "Giant-Thrall (Human)", 
-              hd: 2, hp: 15, def: 10, 
-              attack: "Club +3 (1d6+1) or Thrown Rock +2 (1d4)", 
-              special: "Fanatical (immune to fear of giants), Expendable, Human Shield",
-              desc: "Humans so broken or corrupted they worship the Nephilim as gods. Used as servants, messengers, and cannon fodder."
-            },
-            { 
-              name: "Painted Warrior", 
-              hd: 4, hp: 32, def: 12, 
-              attack: "War Club +6 (1d8+3) or Javelin +5 (1d6+2)", 
-              special: "Azazel's Cosmetics (war paint grants +1 attack), Berserker Rage, Intimidating",
-              desc: "Warriors who use Azazel's cosmetic arts for war paint that grants supernatural fury. Fight with reckless abandon."
-            },
-            { 
-              name: "Lamech the Avenger (Legendary)", 
-              hd: 9, hp: 85, def: 17, 
-              attack: "Tubal-Cain's Blade +11 (2d8+5) or Crossbow +9 (1d10+3)", 
-              special: "Legendary, Seventy-Sevenfold Vengeance (if wounded, +4 damage next attack), First Polygamist, Boastful",
-              desc: "The infamous Cainite who boasted of killing a young man for wounding him. His vengeance exceeds even God's protection of Cain.",
-              legendary: true
-            }
-          ]
-        },
-        spirits: {
-          title: "Demon Spirits",
-          intro: "When giants die, their hybrid nature traps their spirits on earth. They become demons that 'afflict, oppress, destroy, attack... hunger and thirst' eternally.",
-          creatures: [
-            { 
-              name: "Lilith, The Night Monster",
-              image: "images/Lilith.png",
-              hd: 15, hp: 120, def: 19,
-              attack: "Midnight Talons +12 (3d8+5 necrotic) or Screech of Desolation (CON save or stunned)",
-              special: "Flight, Darkvision 120ft, Night Terror (dreams), Child-Stealer, Immune to non-blessed weapons, Seduce & Corrupt",
-              desc: "Ancient demon queen of the night. Haunts desolate places and preys upon the vulnerable. Mother of countless lesser demons.",
-              legendary: true
-            },
-            { 
-              name: "Giant-Spirit (Unbound)", 
-              hd: 8, hp: 65, def: 15, 
-              attack: "Spectral Slam +8 (2d10 necrotic) or Possession Attempt (WIS save)", 
-              special: "Incorporeal, Possession, Hunger Aura (1d6 necrotic/round nearby), Sense Life 60ft, Sunlight Weakness",
-              desc: "The wandering spirit of a slain giant. Consumed by hunger it can never satisfy, it seeks living hosts to experience sensation again."
-            },
-            { 
-              name: "Plague Spirit", 
-              hd: 6, hp: 50, def: 14, 
-              attack: "Disease Touch +7 (1d8 + disease) or Pestilent Cloud (15ft, CON save)", 
-              special: "Incorporeal, Disease Carrier (typhus/plague), Swarm Form, Immune to poison/disease",
-              desc: "Demon born from giants who died of plague. Spreads sickness wherever it manifests, delighting in suffering."
-            },
-            { 
-              name: "Rage Spirit", 
-              hd: 7, hp: 60, def: 13, 
-              attack: "Fury Strike +9 (2d8+4 psychic)", 
-              special: "Incorporeal, Incite Violence (WIS save or attack nearest), Battle Frenzy Aura, Feed on Anger",
-              desc: "Spirit of a giant slain in battle. Drives mortals to senseless violence, growing stronger from bloodshed."
-            },
-            { 
-              name: "Whisper Demon", 
-              hd: 4, hp: 30, def: 16, 
-              attack: "Maddening Whisper +6 (1d6 psychic + confusion)", 
-              special: "Invisible, Suggestion (3/day), Plant Thoughts, Memory Corruption, Flee from Prayer",
-              desc: "Subtle tempters that plant sinful thoughts. Often the first stage of demonic corruption, preparing victims for worse."
-            }
-          ]
-        },
-        beasts: {
-          title: "Corrupted Beasts",
-          intro: "Animals twisted by the world's corruption, proximity to Nephilim, or dark sorcery. Some were bred as war-beasts by giants.",
-          creatures: [
-            { 
-              name: "Behemoth", 
-              image: "images/Behemoth.png",
-              hd: 18, hp: 180, def: 18, 
-              attack: "Tail Sweep +14 (4d10+8, knockdown) or Trample +12 (3d12+6)", 
-              special: "Colossal Beast, DR 15/blessed, Earthquake Walk, Immune to fear/charm, Primal Terror",
-              desc: "The greatest land beast, described in Job. Bones like bronze, limbs like iron. Nearly unstoppable once roused to anger.",
-              legendary: true
-            },
-            { 
-              name: "Leviathan Spawn", 
-              hd: 12, hp: 110, def: 17, 
-              attack: "Crushing Bite +11 (3d10+6) or Tail Lash +10 (2d8+4)", 
-              special: "Aquatic, Armored Scales (DR 5), Capsize Ships, Breath Weapon (steam, 3/day)",
-              desc: "Lesser offspring of the great sea dragon. Terrorize coastal waters and drag ships to the depths."
-            },
-            { 
-              name: "War-Mammoth", 
-              hd: 10, hp: 95, def: 15, 
-              attack: "Tusks +10 (2d12+5) or Trunk Grab +8 (grapple, throw 20ft)", 
-              special: "Siege Beast, Howdah Platform (carries 4 warriors), Trample, War-Trained",
-              desc: "Mammoths bred and armored by giants for war. Carry giant warriors into battle and crush fortifications."
-            },
-            { 
-              name: "Corruption Wolf", 
-              hd: 5, hp: 40, def: 14, 
-              attack: "Diseased Bite +7 (1d10+3 + corruption)", 
-              special: "Pack Tactics, Corrupting Bite (FAI save or -1 Righteousness), Darkvision, Track Righteous",
-              desc: "Wolves twisted by feeding on Nephilim corpses. Hunt in packs, spreading corruption with every bite."
-            },
-            { 
-              name: "Giant Serpent", 
-              hd: 6, hp: 50, def: 13, 
-              attack: "Constrict +8 (2d8+4, grapple) or Venomous Bite +7 (1d6+2 + poison)", 
-              special: "Constrict, Deadly Venom (2d10, CON save half), Swallow Whole (Medium or smaller)",
-              desc: "Massive snakes grown to unnatural size. Some say they carry the curse of Eden's serpent."
-            },
-            { 
-              name: "Nephilim Hound", 
-              hd: 4, hp: 35, def: 13, 
-              attack: "Savage Bite +6 (1d8+3, trip)", 
-              special: "Pack Tactics, Scent Tracking, Giant-Bred (loyal to giant masters), Fearless",
-              desc: "Dogs bred by Nephilim for hunting humans. Unnaturally large, vicious, and utterly loyal to their giant masters."
-            },
-            { 
-              name: "Carrion Vulture", 
-              hd: 3, hp: 22, def: 12, 
-              attack: "Diseased Beak +4 (1d6+1 + disease) or Talon Rake +4 (1d4+1)", 
-              special: "Flight, Disease Carrier, Flock Attack, Drawn to Death",
-              desc: "Giant vultures that feast on battlefield dead. Carry diseases and attack the wounded."
-            }
-          ]
-        }
-      };
-
-      const currentCategory = bestiary[category];
 
       return (
         <div>
