@@ -1533,44 +1533,78 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
       );
     };
 
-    // ============================================
-    // DICE TAB (Fixed Dropdown & Skins)
+// ============================================
+    // DICE TAB (Traditional Feel: Slower + Clacking Sounds)
     // ============================================
     const DiceTab = ({ theme }) => {
       const [rolls, setRolls] = useState([]);
       const [modifier, setModifier] = useState(0);
       const [lastResult, setLastResult] = useState(null);
+      const [displayValue, setDisplayValue] = useState('?'); // For the animation
       const [isRolling, setIsRolling] = useState(false);
       const [diceSkin, setDiceSkin] = useState('standard');
 
+      // Updated skins to be slightly more earthy/matte by default
       const skins = {
-        standard: { name: 'Standard Amber', text: 'text-amber-500', border: 'border-amber-500', glow: 'shadow-amber-500/50' },
-        blood: { name: 'Blood of Giants', text: 'text-red-600', border: 'border-red-600', glow: 'shadow-red-600/50' },
-        bone: { name: 'Ancient Bone', text: 'text-stone-400', border: 'border-stone-400', glow: 'shadow-stone-400/50' },
-        sapphire: { name: 'Watcher Sapphire', text: 'text-blue-500', border: 'border-blue-500', glow: 'shadow-blue-500/50' },
-        void: { name: 'Void Purple', text: 'text-purple-500', border: 'border-purple-500', glow: 'shadow-purple-500/50' },
-        emerald: { name: 'Serpent Green', text: 'text-emerald-500', border: 'border-emerald-500', glow: 'shadow-emerald-500/50' }
+        standard: { name: 'Standard Amber', text: 'text-amber-600', border: 'border-amber-600', glow: 'shadow-none' }, // Removed glow for realism
+        blood: { name: 'Blood of Giants', text: 'text-red-800', border: 'border-red-800', glow: 'shadow-none' },
+        bone: { name: 'Ancient Bone', text: 'text-stone-500', border: 'border-stone-500', glow: 'shadow-none' },
+        sapphire: { name: 'Watcher Sapphire', text: 'text-blue-700', border: 'border-blue-700', glow: 'shadow-none' },
+        void: { name: 'Void Purple', text: 'text-purple-800', border: 'border-purple-800', glow: 'shadow-none' },
+        emerald: { name: 'Serpent Green', text: 'text-emerald-700', border: 'border-emerald-700', glow: 'shadow-none' }
       };
 
-      const playDiceSound = () => {
+      // NEW SOUND ENGINE: Synthesizes "Clacks" instead of "Beeps"
+      const playDiceSound = (type) => {
         try {
           const AudioContext = window.AudioContext || window.webkitAudioContext;
           if (!AudioContext) return;
           const ctx = new AudioContext();
-          const count = 6; 
-          for(let i=0; i<count; i++) {
-            const osc = ctx.createOscillator();
-            const gainNode = ctx.createGain();
-            osc.connect(gainNode);
-            gainNode.connect(ctx.destination);
-            osc.frequency.value = 600 + Math.random() * 800;
-            osc.type = 'triangle';
-            const time = ctx.currentTime + (i * 0.09);
-            osc.start(time);
-            gainNode.gain.setValueAtTime(0.1, time);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, time + 0.08);
-            osc.stop(time + 0.1);
+          
+          // Helper to create a noise burst (impact sound)
+          const createImpact = (time, duration, frequency) => {
+            const bufferSize = ctx.sampleRate * duration;
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            // Fill with white noise
+            for (let i = 0; i < bufferSize; i++) {
+              data[i] = Math.random() * 2 - 1;
+            }
+
+            const noise = ctx.createBufferSource();
+            noise.buffer = buffer;
+
+            // Filter the noise to sound more like plastic/bone (Bandpass)
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.value = frequency; // 1000-3000Hz gives a good "clack"
+            filter.Q.value = 1;
+
+            // Envelope for the "hit"
+            const gain = ctx.createGain();
+            gain.gain.setValueAtTime(0.5, time);
+            gain.gain.exponentialRampToValueAtTime(0.01, time + duration);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(ctx.destination);
+            
+            noise.start(time);
+          };
+
+          const now = ctx.currentTime;
+
+          if (type === 'shake') {
+            // Play a rattle (multiple small impacts)
+            for(let i = 0; i < 5; i++) {
+               createImpact(now + (i * 0.08), 0.05, 2000 + Math.random() * 1000);
+            }
+          } else if (type === 'land') {
+            // One final heavier thud
+            createImpact(now, 0.1, 800);
           }
+
         } catch (e) { console.error("Audio fail", e); }
       };
 
@@ -1578,31 +1612,55 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
         if (isRolling) return;
         setIsRolling(true);
         setLastResult(null);
-        playDiceSound();
+        
+        // 1. Start the "Shake" sound
+        playDiceSound('shake');
+
+        // 2. Determine final results immediately (but don't show yet)
         const results = [];
         for (let i = 0; i < count; i++) { results.push(Math.floor(Math.random() * sides) + 1); }
         const total = results.reduce((a, b) => a + b, 0) + modifier;
         const newRoll = { dice: `${count}d${sides}${modifier !== 0 ? ` ${modifier > 0 ? '+' : ''}${modifier}` : ''}`, results, modifier, total, timestamp: new Date().toLocaleTimeString(), skin: diceSkin };
-        setTimeout(() => {
-            setRolls([newRoll, ...rolls].slice(0, 20));
-            setLastResult(newRoll.total);
+
+        // 3. Animation Logic: Decelerating Ticker
+        let speed = 50; // Start fast (50ms)
+        const maxTime = 1800; // Duration in ms
+        let elapsed = 0;
+
+        const animate = () => {
+          // Show a random number while rolling
+          setDisplayValue(Math.floor(Math.random() * (sides * count)) + 1 + modifier);
+          
+          elapsed += speed;
+          speed += 15; // Slow down (increase interval) each step
+
+          if (elapsed < maxTime) {
+            setTimeout(animate, speed);
+          } else {
+            // 4. Finish
+            playDiceSound('land'); // Final clack
+            setLastResult(total);
+            setDisplayValue(total);
+            setRolls(prev => [newRoll, ...prev].slice(0, 20));
             setIsRolling(false);
-        }, 1200); 
+          }
+        };
+
+        animate();
       };
 
       const currentSkin = skins[diceSkin];
 
       return (
         <div className="max-w-4xl mx-auto">
-          {/* Controls - Fixed Dropdown Visibility */}
+          {/* Controls */}
           <div className="flex justify-end mb-4">
              <div className={`${theme.bgSecondary} px-3 py-2 rounded-lg border ${theme.border} flex items-center gap-2 shadow-sm`}>
-                <span className={`text-sm font-bold ${theme.textMuted}`}>Dice Color:</span>
+                <span className={`text-sm font-bold ${theme.textMuted}`}>Dice Material:</span>
                 <select 
                   value={diceSkin}
                   onChange={(e) => setDiceSkin(e.target.value)}
                   className={`bg-transparent ${currentSkin.text} font-bold focus:outline-none cursor-pointer uppercase tracking-wider text-sm appearance-none pr-4`}
-                  style={{ backgroundImage: 'none' }} // Remove default arrow for cleaner look or keep it
                 >
                   {Object.entries(skins).map(([key, skin]) => (
                     <option key={key} value={key} className="bg-gray-800 text-white">{skin.name}</option>
@@ -1612,17 +1670,19 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
              </div>
           </div>
 
+          {/* The Rolling Area */}
           <div className={`${theme.card} rounded-xl shadow-xl p-6 mb-6`}>
             <div className="text-center mb-10 relative h-32 flex items-center justify-center">
-                <div className={`text-9xl font-extrabold transition-all duration-300 relative select-none ${currentSkin.text} ${isRolling ? 'animate-tumble blur-sm' : ''} ${!isRolling && lastResult !== null ? 'animate-bounce-once' : ''}`}>
-                    {isRolling ? '🎲' : (lastResult !== null ? lastResult : '?')}
-                    <div className={`absolute inset-0 blur-xl opacity-20 rounded-full ${isRolling ? currentSkin.text : ''}`}></div>
+                {/* Visual Change: Removed the blur/glow animation for a solid, heavy look */}
+                <div className={`text-9xl font-extrabold transition-all duration-100 relative select-none ${currentSkin.text} ${isRolling ? 'opacity-80' : 'scale-110'}`}>
+                    {isRolling ? displayValue : (lastResult !== null ? lastResult : '?')}
                 </div>
                 <p className={`${theme.textMuted} absolute -bottom-4 w-full text-center font-mono text-sm`}>
                     {isRolling ? 'Rolling...' : (rolls[0] ? `Result of ${rolls[0].dice}` : 'Ready to Roll')}
                 </p>
             </div>
 
+            {/* Modifier Controls */}
             <div className="mb-8 max-w-xs mx-auto">
               <label className={`block ${theme.text} text-center font-bold mb-2 text-xs uppercase tracking-widest opacity-70`}>Modifier</label>
               <div className="flex items-center gap-2">
@@ -1632,15 +1692,16 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
               </div>
             </div>
 
+            {/* Dice Buttons */}
             <div className="grid grid-cols-4 gap-3 mb-6">
               {[4, 6, 8, 10, 12, 20].map(sides => (
-                <button key={sides} onClick={() => rollDice(sides)} disabled={isRolling} className={`${theme.bgSecondary} border ${theme.border} py-4 rounded-xl shadow-lg hover:scale-105 transition-all disabled:opacity-50 group`}>
+                <button key={sides} onClick={() => rollDice(sides)} disabled={isRolling} className={`${theme.bgSecondary} border ${theme.border} py-4 rounded-xl shadow-lg hover:translate-y-[-2px] transition-all disabled:opacity-50 disabled:hover:translate-y-0 group`}>
                   <span className={`${theme.textMuted} text-lg`}>d</span>
-                  <span className={`${currentSkin.text} text-2xl font-bold group-hover:scale-110 inline-block transition-transform`}>{sides}</span>
+                  <span className={`${currentSkin.text} text-2xl font-bold`}>{sides}</span>
                 </button>
               ))}
               <div className="col-span-2">
-                <button onClick={() => rollDice(20, 2)} disabled={isRolling} className={`w-full h-full ${theme.bgSecondary} border ${theme.border} rounded-xl shadow-lg hover:scale-105 transition-all flex items-center justify-center gap-2`}>
+                <button onClick={() => rollDice(20, 2)} disabled={isRolling} className={`w-full h-full ${theme.bgSecondary} border ${theme.border} rounded-xl shadow-lg hover:translate-y-[-2px] transition-all flex items-center justify-center gap-2`}>
                     <span className={`${currentSkin.text} text-xl font-bold`}>2d20</span>
                     <span className={theme.textMuted}>(Advantage)</span>
                 </button>
@@ -1649,6 +1710,7 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
             <button onClick={() => setRolls([])} className={`w-full text-xs uppercase tracking-widest ${theme.textMuted} hover:${theme.text} transition-colors mt-4`}>Clear History</button>
           </div>
 
+          {/* Roll History */}
           <div className={`${theme.card} rounded-xl shadow-xl p-6`}>
             <h3 className={`text-xl font-bold ${theme.text} mb-4`}>Roll History</h3>
             <div className="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
