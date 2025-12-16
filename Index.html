@@ -49,8 +49,7 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* --- NEW ANIMATIONS FOR EXCITEMENT --- */
-    
+    /* ANIMATIONS */
     @keyframes bounce-once {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
@@ -59,12 +58,15 @@
         animation: bounce-once 0.3s ease-out;
     }
 
-    @keyframes spin-fast {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
+    @keyframes tumble {
+        0% { transform: rotate(0deg) scale(1); }
+        25% { transform: rotate(90deg) scale(0.9); }
+        50% { transform: rotate(180deg) scale(1.1); }
+        75% { transform: rotate(270deg) scale(0.9); }
+        100% { transform: rotate(360deg) scale(1); }
     }
-    .animate-spin-fast {
-        animation: spin-fast 0.1s linear infinite;
+    .animate-tumble {
+        animation: tumble 0.6s linear infinite;
     }
 
     @keyframes bounce-y {
@@ -84,11 +86,217 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useEffect } = React;
+    const { useState, useEffect, useRef } = React;
 
+// ============================================
+    // GLOBAL DATA (Bestiary) - EXPANDED LORE
+    // ============================================
+    const BESTIARY_DATA = {
+      giants: {
+        title: "Giants — The Forbidden Offspring",
+        intro: "Born of Watcher and human unions, giants terrorize the earth.",
+        creatures: [
+          { 
+            name: "Ohya, Son of Semyaza", 
+            image: "images/Ohya.png", 
+            hd: 14, hp: 140, def: 18, 
+            attack: "Sword of Wrath +14 (4d10+8 fire)", 
+            special: "Legendary, Prophetic Dreams", 
+            desc: "The wrathful first-born of Semyaza.", 
+            lore: "In the Book of Giants, Ohya is plagued by nightmares. He dreamt of a great tablet submerged in water, where names were washed away until only three remained (symbolizing Noah's sons). He is the more violent brother, constantly arguing against the judgment that Mahway brings news of.",
+            legendary: true 
+          },
+          { 
+            name: "Hahya, Brother of Ohya", 
+            image: "images/Hahya.png", 
+            hd: 12, hp: 110, def: 16, 
+            attack: "Greataxe +11 (3d12+6)", 
+            special: "Legendary, Dream Visions", 
+            desc: "The contemplative brother.", 
+            lore: "Hahya had a distinct dream of a garden where gardeners (angels) watered 200 trees and great shoots, only to burn the garden and leave one tree standing. He represents the giants' realization that their 'fathers' (the Watchers) cannot save them from the coming Flood.",
+            legendary: true 
+          },
+          { 
+            name: "Mahway, the Winged", 
+            image: "images/Mahway.png", 
+            hd: 10, hp: 95, def: 19, 
+            attack: "Diving Attack +12 (4d8+5)", 
+            special: "Legendary, True Flight", 
+            desc: "Son of Barakel, the messenger.", 
+            lore: "Mahway is unique among giants for his ability to fly. In the texts, he is sent by the other giants to fly to the 'ends of the earth' to find Enoch the Scribe and petition for mercy. He returns with the Tablet of Judgment, sealing the giants' fate.",
+            legendary: true 
+          },
+          { 
+            name: "Gilgamesh", 
+            image: "images/Gilgamesh.png", 
+            hd: 12, hp: 120, def: 17, 
+            attack: "Hero's Blade +12 (3d10+7)", 
+            special: "Legendary, Wrestler Supreme", 
+            desc: "The legendary hero-king.", 
+            lore: "Mentioned explicitly in the Dead Sea Scrolls fragments of the Book of Giants. Unlike the Mesopotamian hero, here he is one of the Nephilim offspring, a mighty warrior confused by the nightmares plaguing his brethren.",
+            legendary: true 
+          },
+          { 
+            name: "Greater Giant (1st Gen)", 
+            image: "images/GreaterGiant.png", 
+            hd: 16, hp: 160, def: 16, 
+            attack: "Massive Club +12 (4d12+8)", 
+            special: "Colossal, Terrifying Presence", 
+            desc: "Direct offspring of Watchers.",
+            lore: "The first generation stood as tall as cedars (Amos 2:9). Their hunger was insatiable; when they consumed all the produce of men, they began to sin against birds, beasts, reptiles, and fish, and to devour one another's flesh and drink the blood."
+          },
+          { 
+            name: "Nephilim Warlord", 
+            image: "images/NephilimWarlord.jpg", 
+            hd: 10, hp: 100, def: 17, 
+            attack: "Bronze Sword +10 (3d10+6)", 
+            special: "Giant-Sized, Watcher's Blood", 
+            desc: "The 'mighty men of old.'", 
+            lore: "These are the Gibborim, the mighty men of renown. While smaller than their first-generation sires, they rule city-states with iron fists and possess superior strength to any mortal man." 
+          },
+          { 
+            name: "Nephilim Sorcerer", 
+            image: "images/NephilimSorceror.png", 
+            hd: 8, hp: 70, def: 14, 
+            attack: "Watcher's Fire +10 (3d8 fire)", 
+            special: "Forbidden Sorcery, Spirit Sight", 
+            desc: "Taught the dark arts by their fathers.", 
+            lore: "Semyaza taught enchantments and root-cutting. These sorcerers use that forbidden knowledge to bind spirits and corrupt the land." 
+          },
+          { 
+            name: "Elioud Hunter", 
+            image: "images/NephilimHunter.jpg", 
+            hd: 6, hp: 55, def: 15, 
+            attack: "Barbed Spear +8 (2d8+4)", 
+            special: "Large, Darkvision, Ambush", 
+            desc: "Twisted with cruelty.", 
+            lore: "The third generation (Elioud) were smaller but more vicious, serving as the scouts and hunters for the great giant kings." 
+          },
+          { 
+            name: "Elioud Deceiver", 
+            image: "images/ElioudDeceiver.jpg", 
+            hd: 5, hp: 45, def: 13, 
+            attack: "Hidden Blade +7 (2d6+3)", 
+            special: "Shapeshifting, Silver Tongue", 
+            desc: "Can compress their forms.", 
+            lore: "Some Elioud inherited the shape-shifting deception of the Watchers, able to pass as large humans to infiltrate settlements." 
+          },
+          { 
+            name: "Giant Thrall", 
+            image: "images/Thrall.png", 
+            hd: 4, hp: 35, def: 12, 
+            attack: "Crude Club +5 (2d8+3)", 
+            special: "Large, Enslaved", 
+            desc: "Lesser giants.", 
+            lore: "Runts of the litter, enslaved by their stronger brothers to haul stones for the great cyclopean cities." 
+          }
+        ]
+      },
+      watchers: {
+        title: "The Watchers",
+        intro: "The 200 angels who abandoned heaven.",
+        creatures: [
+          { 
+            name: "Azazel (Bound)", 
+            image: "images/Azazel.jpg", 
+            hd: 20, hp: 200, def: 22, 
+            attack: "Burning Blade +16 (5d10+10)", 
+            special: "Bound in Dudael, Weapon Mastery", 
+            desc: "Bound beneath jagged rocks.", 
+            lore: "The chief corrupter who taught men to make swords, knives, shields, and breastplates. By divine command, Raphael bound him hand and foot and cast him into the darkness of Dudael, piling rough and jagged rocks upon him.",
+            legendary: true, bound: true 
+          },
+          { 
+            name: "Semyaza", 
+            image: "images/Semyaza.png", 
+            hd: 18, hp: 180, def: 20, 
+            attack: "Arcane Bolt +15 (4d10+8)", 
+            special: "Master of Oaths, Root-Cutting", 
+            desc: "Leader of the rebellion.", 
+            lore: "The leader of the 200. He feared to descend alone, so he made all 200 swear an oath (anathema) on Mount Hermon to fulfill their deed together. He taught enchantments and the properties of roots.",
+            legendary: true 
+          }
+        ]
+      },
+      corrupted: {
+        title: "Corrupted Humanity",
+        intro: "Those who serve the giants.",
+        creatures: [
+          { 
+            name: "Baal-Priest", 
+            image: null, 
+            hd: 6, hp: 50, def: 13, 
+            attack: "Sacrificial Knife +6", 
+            special: "Dark Sorcery", 
+            desc: "Priests of the Nephilim god-kings.", 
+            lore: "Humans who have abandoned the Creator to worship the Nephilim as gods, performing blood sacrifices to fuel their dark miracles." 
+          },
+          { 
+            name: "Lamech the Avenger", 
+            image: null, 
+            hd: 9, hp: 85, def: 17, 
+            attack: "Tubal-Cain's Blade +11", 
+            special: "Legendary, Vengeance", 
+            desc: "The infamous Cainite.", 
+            lore: "Seventh from Adam in the line of Cain. He boasted to his wives Adah and Zillah that he had slain a man for wounding him, claiming a vengeance seventy-seven fold.", 
+            legendary: true 
+          }
+        ]
+      },
+      spirits: {
+        title: "Demon Spirits",
+        intro: "Spirits of dead giants.",
+        creatures: [
+          { 
+            name: "Lilith", 
+            image: "images/Lilith.png", 
+            hd: 15, hp: 120, def: 19, 
+            attack: "Midnight Talons +12", 
+            special: "Flight, Night Terror", 
+            desc: "Ancient demon queen.", 
+            lore: "Often associated with the night wind and screech owls. In this era, she is the mother of monsters, haunting the desolate places.", 
+            legendary: true 
+          },
+          { 
+            name: "Giant-Spirit", 
+            image: null, 
+            hd: 8, hp: 65, def: 15, 
+            attack: "Spectral Slam +8", 
+            special: "Incorporeal, Possession", 
+            desc: "Wandering spirit.", 
+            lore: "When a giant's physical body is killed, their immortal soul (half-angelic) cannot die nor return to heaven. They become the 'evil spirits' that wander the earth, oppressing, corrupting, and possessing humanity." 
+          }
+        ]
+      },
+      beasts: {
+        title: "Corrupted Beasts",
+        intro: "Animals twisted by corruption.",
+        creatures: [
+          { 
+            name: "Behemoth", 
+            image: "images/Behemoth.png", 
+            hd: 18, hp: 180, def: 18, 
+            attack: "Tail Sweep +14", 
+            special: "Colossal Beast", 
+            desc: "The greatest land beast.", 
+            lore: "The primeval land-monster created on the sixth day. His tail moves like a cedar; the sinews of his stones are wrapped together. He is the masterpiece of God's physical creation, now roaming the wilderness.", 
+            legendary: true 
+          }
+        ]
+      }
+    };
+
+    // Helper to find image by name
+    const findMonsterImage = (name) => {
+      for (const cat of Object.values(BESTIARY_DATA)) {
+        const found = cat.creatures.find(c => c.name.toLowerCase() === name.toLowerCase());
+        if (found && found.image) return found.image;
+      }
+      return null;
+    };
     // Icon components using Lucide
     const Icon = ({ name, className = "w-5 h-5" }) => {
-      const ref = React.useRef(null);
+      const ref = useRef(null);
       useEffect(() => {
         if (ref.current) {
           ref.current.innerHTML = '';
@@ -958,8 +1166,8 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
       );
     };
 
-    // ============================================
-    // CHARACTER SHEET
+ // ============================================
+    // CHARACTER SHEET (Fixed Close Button)
     // ============================================
     const CharacterSheet = ({ theme, character, onUpdate, onClose }) => {
       const calculateMod = (val) => Math.floor((val - 10) / 2);
@@ -988,18 +1196,25 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
 
       return (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 overflow-y-auto">
-          <div className={`${theme.bgSecondary} rounded-xl shadow-2xl max-w-5xl w-full my-8`}>
-            <div className={`sticky top-0 ${theme.accent} text-white p-6 flex justify-between items-center rounded-t-xl z-10`}>
+          <div className={`${theme.bgSecondary} rounded-xl shadow-2xl max-w-5xl w-full my-8 relative`}>
+            
+            {/* Header with Top Close Button */}
+            <div className={`sticky top-0 ${theme.accent} text-white p-6 flex justify-between items-center rounded-t-xl z-20 shadow-md`}>
               <div>
                 <h3 className="text-3xl font-bold">{character.name}</h3>
                 <p className="text-amber-200">{character.bloodline} • {character.calling}</p>
               </div>
-              <button onClick={onClose} className="p-2 hover:bg-amber-700 rounded-lg">
-                <Icon name="x" className="w-6 h-6" />
+              <button 
+                onClick={onClose} 
+                className="p-2 bg-black/20 hover:bg-black/40 rounded-lg transition-colors border border-white/20"
+                title="Close Sheet"
+              >
+                <Icon name="x" className="w-6 h-6 text-white" />
               </button>
             </div>
 
             <div className="p-6 space-y-6">
+              {/* Stats Row 1: Level / XP / Righteousness */}
               <div className="grid md:grid-cols-3 gap-4">
                 <div className={`${theme.card} p-4 rounded-lg`}>
                   <div className={`text-sm ${theme.textMuted} mb-1`}>Level</div>
@@ -1021,6 +1236,7 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
                 </div>
               </div>
 
+              {/* Stats Row 2: HP / CP */}
               <div className="grid md:grid-cols-2 gap-4">
                 <div className={`${theme.card} p-4 rounded-lg`}>
                   <div className="flex justify-between items-center mb-2">
@@ -1028,10 +1244,10 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
                     <span className={`text-2xl font-bold ${theme.text}`}>{character.currentHP} / {character.maxHP}</span>
                   </div>
                   <div className="flex gap-2 mb-2">
-                    <button onClick={() => adjustHP(-5)} className="px-3 py-1 bg-red-600 text-white rounded">-5</button>
-                    <button onClick={() => adjustHP(-1)} className="px-3 py-1 bg-red-600 text-white rounded">-1</button>
-                    <button onClick={() => adjustHP(1)} className="px-3 py-1 bg-green-600 text-white rounded">+1</button>
-                    <button onClick={() => adjustHP(5)} className="px-3 py-1 bg-green-600 text-white rounded">+5</button>
+                    <button onClick={() => adjustHP(-5)} className="px-3 py-1 bg-red-600 text-white rounded font-bold">-5</button>
+                    <button onClick={() => adjustHP(-1)} className="px-3 py-1 bg-red-600 text-white rounded font-bold">-1</button>
+                    <button onClick={() => adjustHP(1)} className="px-3 py-1 bg-green-600 text-white rounded font-bold">+1</button>
+                    <button onClick={() => adjustHP(5)} className="px-3 py-1 bg-green-600 text-white rounded font-bold">+5</button>
                   </div>
                   {/* Dynamic HP bar with color */}
                   <div className="w-full bg-gray-700 rounded-full h-3">
@@ -1045,9 +1261,9 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
                     <span className={`text-2xl font-bold ${theme.text}`}>{character.currentCP} / {character.maxCP}</span>
                   </div>
                   <div className="flex gap-2 mb-2">
-                    <button onClick={() => adjustCP(-1)} className="px-3 py-1 bg-red-600 text-white rounded">-1</button>
-                    <button onClick={() => adjustCP(1)} className="px-3 py-1 bg-green-600 text-white rounded">+1</button>
-                    <button onClick={() => adjustCP(character.maxCP - character.currentCP)} className="px-3 py-1 bg-blue-600 text-white rounded">Full</button>
+                    <button onClick={() => adjustCP(-1)} className="px-3 py-1 bg-red-600 text-white rounded font-bold">-1</button>
+                    <button onClick={() => adjustCP(1)} className="px-3 py-1 bg-green-600 text-white rounded font-bold">+1</button>
+                    <button onClick={() => adjustCP(character.maxCP - character.currentCP)} className="px-3 py-1 bg-blue-600 text-white rounded font-bold">Full</button>
                   </div>
                   <div className="w-full bg-gray-700 rounded-full h-3">
                     <div className="bg-blue-500 h-3 rounded-full" style={{ width: `${(character.currentCP / character.maxCP) * 100}%` }}></div>
@@ -1055,6 +1271,7 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
                 </div>
               </div>
 
+              {/* Attributes Grid */}
               <div className={`${theme.card} p-6 rounded-lg`}>
                 <h4 className={`text-xl font-bold ${theme.text} mb-4`}>Attributes</h4>
                 <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
@@ -1078,6 +1295,7 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
                 </div>
               </div>
 
+              {/* Skills & Equipment */}
               <div className="grid md:grid-cols-2 gap-4">
                 <div className={`${theme.card} p-6 rounded-lg`}>
                   <h4 className={`text-xl font-bold ${theme.text} mb-4`}>Skills</h4>
@@ -1103,6 +1321,7 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
                 </div>
               </div>
 
+              {/* Defense & Initiative */}
               <div className="grid md:grid-cols-2 gap-3">
                 <div className={`${theme.card} p-4 rounded-lg text-center`}>
                   <div className={`text-sm ${theme.textMuted}`}>Defense</div>
@@ -1113,78 +1332,79 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
                   <div className={`text-3xl font-bold ${theme.text}`}>+{character.initiative}</div>
                 </div>
               </div>
+
+              {/* BOTTOM CLOSE BUTTON - THE FIX */}
+              <div className="pt-4 mt-6 border-t border-gray-700">
+                <button 
+                    onClick={onClose}
+                    className={`w-full py-4 rounded-lg font-bold text-lg shadow-lg flex items-center justify-center gap-2 ${theme.accent} text-white hover:brightness-110 transition-all`}
+                >
+                    <Icon name="x" className="w-5 h-5" />
+                    Close Character Sheet
+                </button>
+              </div>
+
             </div>
           </div>
         </div>
       );
     };
-
     // ============================================
-    // COMBAT TAB
+    // COMBAT TAB (REWRITTEN & FIXED)
     // ============================================
     const CombatTab = ({ theme, characters, setCharacters, combat, setCombat }) => {
+      const [showModal, setShowModal] = useState(false);
+      const [selectedCat, setSelectedCat] = useState('giants');
+      const [selectedIdx, setSelectedIdx] = useState(0);
+
+      // Handle category change to reset index
+      const handleCatChange = (e) => {
+        setSelectedCat(e.target.value);
+        setSelectedIdx(0);
+      };
+
       const startCombat = () => {
         const combatants = characters.map(char => ({
           ...char,
           initiative: Math.floor(Math.random() * 20) + 1 + (char.initiative || 0),
           type: 'player'
         }));
-        
-        setCombat({
-          active: true,
-          combatants: combatants.sort((a, b) => b.initiative - a.initiative),
-          round: 1,
-          currentTurn: 0
-        });
+        setCombat({ active: true, combatants: combatants.sort((a, b) => b.initiative - a.initiative), round: 1, currentTurn: 0 });
       };
 
-      const addEnemy = () => {
-        const name = prompt('Enemy name:');
-        if (!name) return;
-        
-        const hp = parseInt(prompt('Max HP:', '30')) || 30;
-        const def = parseInt(prompt('Defense:', '12')) || 12;
-        const init = Math.floor(Math.random() * 20) + 1;
+      const handleAddEnemy = () => {
+        const creature = BESTIARY_DATA[selectedCat].creatures[selectedIdx];
+        if(!creature) return;
 
         const newEnemy = {
           id: Date.now(),
-          name,
-          maxHP: hp,
-          currentHP: hp,
-          defense: def,
-          // For enemies, initiative roll is constant, mod is 0. Players calculate mod from stats
-          initiative: init, 
-          type: 'enemy'
+          name: creature.name,
+          maxHP: creature.hp,
+          currentHP: creature.hp,
+          defense: creature.def,
+          initiative: Math.floor(Math.random() * 20) + 1,
+          type: 'enemy',
+          attack: creature.attack,
+          special: creature.special,
+          image: creature.image // Pull image directly from bestiary
         };
 
         const newCombatants = [...combat.combatants, newEnemy].sort((a, b) => b.initiative - a.initiative);
         setCombat({ ...combat, combatants: newCombatants });
+        setShowModal(false);
       };
 
       const adjustCombatantHP = (id, amount) => {
-        const updated = combat.combatants.map(c => {
-          if (c.id === id) {
-            return { ...c, currentHP: Math.max(0, Math.min(c.maxHP, c.currentHP + amount)) };
-          }
-          return c;
-        });
+        const updated = combat.combatants.map(c => c.id === id ? { ...c, currentHP: Math.max(0, Math.min(c.maxHP, c.currentHP + amount)) } : c);
         setCombat({ ...combat, combatants: updated });
-        
-        // Also update the persistent character data if it's a player
         const char = characters.find(ch => ch.id === id);
         if (char) {
-          const newChars = characters.map(c => 
-            c.id === id ? { ...c, currentHP: Math.max(0, Math.min(c.maxHP, c.currentHP + amount)) } : c
-          );
-          setCharacters(newChars);
+          setCharacters(characters.map(c => c.id === id ? { ...c, currentHP: Math.max(0, Math.min(c.maxHP, c.currentHP + amount)) } : c));
         }
       };
 
       const removeCombatant = (id) => {
-        setCombat({
-          ...combat,
-          combatants: combat.combatants.filter(c => c.id !== id)
-        });
+        setCombat({ ...combat, combatants: combat.combatants.filter(c => c.id !== id) });
       };
 
       const nextTurn = () => {
@@ -1193,22 +1413,13 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
         setCombat({ ...combat, currentTurn: nextIdx, round: newRound });
       };
 
-      const endCombat = () => {
-        setCombat({ active: false, combatants: [] });
-      };
-
       if (!combat.active) {
         return (
           <div className="max-w-4xl mx-auto text-center">
             <div className={`${theme.card} rounded-xl shadow-2xl p-12`}>
               <Icon name="sword" className="w-24 h-24 mx-auto text-amber-500 mb-6" />
               <h2 className={`text-3xl font-bold ${theme.text} mb-4`}>Combat Tracker</h2>
-              <p className={`${theme.textSecondary} mb-8`}>Start a combat encounter to track initiative and HP</p>
-              <button
-                onClick={startCombat}
-                disabled={characters.length === 0}
-                className={`${theme.accent} ${theme.accentHover} text-white px-8 py-4 rounded-lg text-xl font-bold disabled:bg-gray-600 disabled:cursor-not-allowed shadow-lg`}
-              >
+              <button onClick={startCombat} disabled={characters.length === 0} className={`${theme.accent} ${theme.accentHover} text-white px-8 py-4 rounded-lg text-xl font-bold disabled:bg-gray-600 shadow-lg`}>
                 {characters.length === 0 ? 'Create Characters First' : 'Start Combat'}
               </button>
             </div>
@@ -1218,209 +1429,239 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
 
       return (
         <div className="max-w-6xl mx-auto">
+          {/* Combat Header */}
           <div className={`${theme.accent} text-white rounded-xl p-6 mb-6 flex flex-col md:flex-row justify-between items-center gap-4 shadow-xl`}>
-            <div>
-              <h2 className="text-2xl font-bold">Combat Active</h2>
-              <p>Round {combat.round}</p>
-            </div>
+            <div><h2 className="text-2xl font-bold">Combat Active</h2><p>Round {combat.round}</p></div>
             <div className="flex gap-2 flex-wrap">
-              <button onClick={addEnemy} className="bg-red-600 px-4 py-2 rounded-lg hover:bg-red-700 font-bold">
-                Add Enemy
-              </button>
-              <button onClick={nextTurn} className="bg-green-600 px-4 py-2 rounded-lg hover:bg-green-700 font-bold">
-                Next Turn
-              </button>
-              <button onClick={endCombat} className="bg-gray-600 px-4 py-2 rounded-lg hover:bg-gray-700 font-bold">
-                End Combat
-              </button>
+              <button onClick={() => setShowModal(true)} className="bg-red-600 px-4 py-2 rounded-lg hover:bg-red-700 font-bold flex items-center gap-2"><Icon name="plus" /> Add Enemy</button>
+              <button onClick={nextTurn} className="bg-green-600 px-4 py-2 rounded-lg hover:bg-green-700 font-bold">Next Turn</button>
+              <button onClick={() => setCombat({ active: false, combatants: [] })} className="bg-gray-600 px-4 py-2 rounded-lg hover:bg-gray-700 font-bold">End</button>
             </div>
           </div>
 
-          <div className="space-y-3">
-            {combat.combatants.map((combatant, idx) => (
-              <div
-                key={combatant.id}
-                className={`rounded-xl p-4 shadow-xl border-4 transition-all duration-300
-                  ${
-                    idx === combat.currentTurn 
-                      // ADDED: scale and smooth transition for dramatic effect
-                      ? 'border-amber-500 bg-amber-900/20 shadow-amber-500/50 scale-[1.01] transition-shadow duration-500' 
-                      : `border-transparent ${theme.card}`
-                  } 
-                  ${combatant.currentHP === 0 ? 'opacity-50' : ''}`}
-              >
-                <div className="flex flex-col md:flex-row md:items-center gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      {/* NEW: Use an animated icon for the current turn indicator */}
-                      {idx === combat.currentTurn && <Icon name="zap" className="w-5 h-5 text-amber-500 animate-bounce-y" />} 
-                      <h3 className={`text-xl font-bold ${theme.text}`}>{combatant.name}</h3>
-                      <span className={`px-2 py-1 rounded text-xs font-bold ${
-                        combatant.type === 'player' ? 'bg-blue-500/30 text-blue-400' : 'bg-red-500/30 text-red-400'
-                      }`}>
-                        {combatant.type === 'player' ? 'PLAYER' : 'ENEMY'}
-                      </span>
-                      {combatant.currentHP === 0 && (
-                        <span className="px-2 py-1 rounded text-xs font-bold bg-gray-500/30 text-gray-400">DOWN</span>
-                      )}
-                    </div>
-                    
-                    <div className="flex gap-4 text-sm">
-                      <span className={theme.textSecondary}><strong>Init:</strong> {combatant.initiative}</span>
-                      <span className={theme.textSecondary}><strong>Defense:</strong> {combatant.defense}</span>
-                    </div>
+          {/* Combat List */}
+          <div className="space-y-4">
+            {combat.combatants.map((combatant, idx) => {
+              return (
+                <div key={combatant.id} className={`rounded-xl p-5 shadow-xl border-4 transition-all duration-300 ${idx === combat.currentTurn ? 'border-amber-500 bg-amber-900/20 scale-[1.01]' : `border-transparent ${theme.card}`} ${combatant.currentHP === 0 ? 'opacity-50' : ''}`}>
+                  
+                  {/* Stats Row */}
+                  <div className="flex flex-col md:flex-row gap-4 justify-between items-start mb-4">
+                     <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                           {idx === combat.currentTurn && <Icon name="zap" className="w-5 h-5 text-amber-500 animate-bounce-y" />} 
+                           <h3 className={`text-2xl font-bold ${theme.text}`}>{combatant.name}</h3>
+                           <span className={`px-2 py-1 rounded text-xs font-bold ${combatant.type === 'player' ? 'bg-blue-500/30 text-blue-400' : 'bg-red-500/30 text-red-400'}`}>
+                             {combatant.type === 'player' ? 'PLAYER' : 'ENEMY'}
+                           </span>
+                        </div>
+                        
+                        <div className="flex gap-4 text-sm mb-2">
+                           <span className={`${theme.bgTertiary} px-3 py-1 rounded`}><strong>Init:</strong> {combatant.initiative}</span>
+                           <span className={`${theme.bgTertiary} px-3 py-1 rounded`}><strong>Def:</strong> {combatant.defense}</span>
+                        </div>
+                        
+                        {(combatant.attack || combatant.special) && (
+                            <div className="text-sm mt-2">
+                               {combatant.attack && <div className={theme.textSecondary}><strong className={theme.text}>Attack:</strong> {combatant.attack}</div>}
+                               {combatant.special && <div className={theme.textSecondary}><strong className={theme.text}>Special:</strong> {combatant.special}</div>}
+                            </div>
+                        )}
+                     </div>
+
+                     {/* HP Controls */}
+                     <div className="flex flex-col items-end gap-2">
+                        <div className="text-right">
+                           <div className={`text-sm ${theme.textMuted}`}>HP</div>
+                           <div className={`text-3xl font-bold ${theme.text}`}>{combatant.currentHP} / {combatant.maxHP}</div>
+                        </div>
+                        <div className="flex gap-1">
+                           <button onClick={() => adjustCombatantHP(combatant.id, -5)} className="px-3 py-1 bg-red-600 text-white rounded font-bold">-5</button>
+                           <button onClick={() => adjustCombatantHP(combatant.id, -1)} className="px-3 py-1 bg-red-600 text-white rounded font-bold">-1</button>
+                           <button onClick={() => adjustCombatantHP(combatant.id, 1)} className="px-3 py-1 bg-green-600 text-white rounded font-bold">+1</button>
+                        </div>
+                        <button onClick={() => removeCombatant(combatant.id)} className="text-gray-500 hover:text-red-500 text-sm flex items-center gap-1 mt-1"><Icon name="trash-2" className="w-4 h-4"/> Remove</button>
+                     </div>
                   </div>
 
-                  <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2">
-                    <div className="text-center md:text-right md:mr-2">
-                      <div className={`text-sm ${theme.textMuted} mb-1`}>HP</div>
-                      <div className={`text-2xl font-bold ${theme.text}`}>
-                        {combatant.currentHP} / {combatant.maxHP}
-                      </div>
-                    </div>
-                    
-                    <div className="flex gap-1">
-                      <button onClick={() => adjustCombatantHP(combatant.id, -5)} className="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700 font-bold">-5</button>
-                      <button onClick={() => adjustCombatantHP(combatant.id, -1)} className="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700 font-bold">-1</button>
-                      <button onClick={() => adjustCombatantHP(combatant.id, 1)} className="px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700 font-bold">+1</button>
-                      <button onClick={() => adjustCombatantHP(combatant.id, 5)} className="px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700 font-bold">+5</button>
-                    </div>
-                    
-                    <button onClick={() => removeCombatant(combatant.id)} className="p-2 bg-gray-600 text-white rounded hover:bg-gray-700">
-                      <Icon name="trash-2" className="w-5 h-5" />
-                    </button>
-                  </div>
+                  {/* Image Row (Centered Underneath) */}
+                  {combatant.image && (
+                     <div className="w-full flex justify-center mt-4 border-t border-gray-700 pt-4">
+                        <img 
+                            src={combatant.image} 
+                            alt={combatant.name} 
+                            className="rounded-lg shadow-lg max-h-64 object-contain border-2 border-amber-500/50"
+                            onError={(e) => { e.target.style.display='none'; }} 
+                        />
+                     </div>
+                  )}
+
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
+
+          {/* Add Enemy Modal */}
+          {showModal && (
+            <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
+               <div className={`${theme.bgSecondary} rounded-xl shadow-2xl max-w-md w-full p-6 border ${theme.border}`}>
+                  <h3 className={`text-2xl font-bold ${theme.text} mb-4`}>Summon Enemy</h3>
+                  
+                  <div className="space-y-4 mb-6">
+                     <div>
+                        <label className={`block text-sm font-bold ${theme.textMuted} mb-1`}>Category</label>
+                        <select className={`w-full p-3 rounded bg-gray-700 text-white border border-gray-600`} value={selectedCat} onChange={handleCatChange}>
+                           {Object.keys(BESTIARY_DATA).map(k => <option key={k} value={k}>{BESTIARY_DATA[k].title}</option>)}
+                        </select>
+                     </div>
+                     <div>
+                        <label className={`block text-sm font-bold ${theme.textMuted} mb-1`}>Creature</label>
+                        <select className={`w-full p-3 rounded bg-gray-700 text-white border border-gray-600`} value={selectedIdx} onChange={(e) => setSelectedIdx(parseInt(e.target.value))}>
+                           {BESTIARY_DATA[selectedCat].creatures.map((c, i) => <option key={i} value={i}>{c.name} (HP: {c.hp})</option>)}
+                        </select>
+                     </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                     <button onClick={handleAddEnemy} className="flex-1 bg-red-600 text-white py-3 rounded font-bold hover:bg-red-700">Add to Combat</button>
+                     <button onClick={() => setShowModal(false)} className="flex-1 bg-gray-600 text-white py-3 rounded font-bold hover:bg-gray-700">Cancel</button>
+                  </div>
+               </div>
+            </div>
+          )}
         </div>
       );
     };
 
     // ============================================
-    // DICE TAB
+    // DICE TAB (Fixed Dropdown & Skins)
     // ============================================
     const DiceTab = ({ theme }) => {
       const [rolls, setRolls] = useState([]);
       const [modifier, setModifier] = useState(0);
-      const [lastResult, setLastResult] = useState(null); // NEW: State for last result
-      const [isRolling, setIsRolling] = useState(false); // NEW: State for animation
+      const [lastResult, setLastResult] = useState(null);
+      const [isRolling, setIsRolling] = useState(false);
+      const [diceSkin, setDiceSkin] = useState('standard');
+
+      const skins = {
+        standard: { name: 'Standard Amber', text: 'text-amber-500', border: 'border-amber-500', glow: 'shadow-amber-500/50' },
+        blood: { name: 'Blood of Giants', text: 'text-red-600', border: 'border-red-600', glow: 'shadow-red-600/50' },
+        bone: { name: 'Ancient Bone', text: 'text-stone-400', border: 'border-stone-400', glow: 'shadow-stone-400/50' },
+        sapphire: { name: 'Watcher Sapphire', text: 'text-blue-500', border: 'border-blue-500', glow: 'shadow-blue-500/50' },
+        void: { name: 'Void Purple', text: 'text-purple-500', border: 'border-purple-500', glow: 'shadow-purple-500/50' },
+        emerald: { name: 'Serpent Green', text: 'text-emerald-500', border: 'border-emerald-500', glow: 'shadow-emerald-500/50' }
+      };
+
+      const playDiceSound = () => {
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContext) return;
+          const ctx = new AudioContext();
+          const count = 6; 
+          for(let i=0; i<count; i++) {
+            const osc = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(ctx.destination);
+            osc.frequency.value = 600 + Math.random() * 800;
+            osc.type = 'triangle';
+            const time = ctx.currentTime + (i * 0.09);
+            osc.start(time);
+            gainNode.gain.setValueAtTime(0.1, time);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, time + 0.08);
+            osc.stop(time + 0.1);
+          }
+        } catch (e) { console.error("Audio fail", e); }
+      };
 
       const rollDice = (sides, count = 1) => {
         if (isRolling) return;
-
-        setIsRolling(true); // Start animation
+        setIsRolling(true);
         setLastResult(null);
-
+        playDiceSound();
         const results = [];
-        for (let i = 0; i < count; i++) {
-          results.push(Math.floor(Math.random() * sides) + 1);
-        }
-        
+        for (let i = 0; i < count; i++) { results.push(Math.floor(Math.random() * sides) + 1); }
         const total = results.reduce((a, b) => a + b, 0) + modifier;
-        const newRoll = {
-          dice: `${count}d${sides}${modifier !== 0 ? ` ${modifier > 0 ? '+' : ''}${modifier}` : ''}`,
-          results,
-          modifier,
-          total,
-          timestamp: new Date().toLocaleTimeString()
-        };
-        
-        // Simulate a dramatic pause for the animation
+        const newRoll = { dice: `${count}d${sides}${modifier !== 0 ? ` ${modifier > 0 ? '+' : ''}${modifier}` : ''}`, results, modifier, total, timestamp: new Date().toLocaleTimeString(), skin: diceSkin };
         setTimeout(() => {
             setRolls([newRoll, ...rolls].slice(0, 20));
             setLastResult(newRoll.total);
-            setIsRolling(false); // Stop animation
-        }, 500); // 500ms for dramatic effect
+            setIsRolling(false);
+        }, 1200); 
       };
+
+      const currentSkin = skins[diceSkin];
 
       return (
         <div className="max-w-4xl mx-auto">
+          {/* Controls - Fixed Dropdown Visibility */}
+          <div className="flex justify-end mb-4">
+             <div className={`${theme.bgSecondary} px-3 py-2 rounded-lg border ${theme.border} flex items-center gap-2 shadow-sm`}>
+                <span className={`text-sm font-bold ${theme.textMuted}`}>Dice Color:</span>
+                <select 
+                  value={diceSkin}
+                  onChange={(e) => setDiceSkin(e.target.value)}
+                  className={`bg-transparent ${currentSkin.text} font-bold focus:outline-none cursor-pointer uppercase tracking-wider text-sm appearance-none pr-4`}
+                  style={{ backgroundImage: 'none' }} // Remove default arrow for cleaner look or keep it
+                >
+                  {Object.entries(skins).map(([key, skin]) => (
+                    <option key={key} value={key} className="bg-gray-800 text-white">{skin.name}</option>
+                  ))}
+                </select>
+                <Icon name="chevron-down" className={`w-4 h-4 ${currentSkin.text}`} />
+             </div>
+          </div>
+
           <div className={`${theme.card} rounded-xl shadow-xl p-6 mb-6`}>
-            <h2 className={`text-2xl font-bold ${theme.text} mb-4`}>Dice Roller</h2>
-            
-            {/* NEW: Visual Roll Display */}
-            <div className="text-center mb-6">
-                <div className={`
-                    text-8xl font-extrabold transition-all duration-300 relative
-                    ${isRolling ? 'animate-spin-fast blur-sm text-amber-500' : 'text-green-500'}
-                    ${!isRolling && lastResult !== null ? 'animate-bounce-once' : ''} 
-                    ${isRolling ? 'opacity-80' : 'opacity-100'}
-                `}>
+            <div className="text-center mb-10 relative h-32 flex items-center justify-center">
+                <div className={`text-9xl font-extrabold transition-all duration-300 relative select-none ${currentSkin.text} ${isRolling ? 'animate-tumble blur-sm' : ''} ${!isRolling && lastResult !== null ? 'animate-bounce-once' : ''}`}>
                     {isRolling ? '🎲' : (lastResult !== null ? lastResult : '?')}
-                    {/* Glow effect for high rolls */}
-                    {lastResult === 20 && !isRolling && (
-                        <span className={`absolute inset-0 filter blur-lg opacity-50 text-amber-400 -z-10`}>
-                            {lastResult}
-                        </span>
-                    )}
+                    <div className={`absolute inset-0 blur-xl opacity-20 rounded-full ${isRolling ? currentSkin.text : ''}`}></div>
                 </div>
-                <p className={`${theme.textMuted} mt-2`}>
+                <p className={`${theme.textMuted} absolute -bottom-4 w-full text-center font-mono text-sm`}>
                     {isRolling ? 'Rolling...' : (rolls[0] ? `Result of ${rolls[0].dice}` : 'Ready to Roll')}
                 </p>
             </div>
 
-            <div className="mb-6">
-              <label className={`block ${theme.text} font-bold mb-2`}>Modifier</label>
+            <div className="mb-8 max-w-xs mx-auto">
+              <label className={`block ${theme.text} text-center font-bold mb-2 text-xs uppercase tracking-widest opacity-70`}>Modifier</label>
               <div className="flex items-center gap-2">
-                <button onClick={() => setModifier(modifier - 1)} className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold">-</button>
-                <input
-                  type="number"
-                  value={modifier}
-                  onChange={(e) => setModifier(parseInt(e.target.value) || 0)}
-                  className={`flex-1 text-center text-2xl font-bold border-2 ${theme.input} rounded-lg p-2 focus:outline-none focus:border-amber-500`}
-                  disabled={isRolling}
-                />
-                <button onClick={() => setModifier(modifier + 1)} className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-bold">+</button>
+                <button onClick={() => setModifier(modifier - 1)} className={`w-12 h-12 ${theme.bgTertiary} ${theme.text} border ${theme.border} rounded-lg font-bold text-xl`}>-</button>
+                <input type="number" value={modifier} onChange={(e) => setModifier(parseInt(e.target.value) || 0)} className={`flex-1 text-center text-3xl font-bold bg-transparent border-b-2 ${theme.border} ${theme.text} p-2 focus:outline-none`} disabled={isRolling} />
+                <button onClick={() => setModifier(modifier + 1)} className={`w-12 h-12 ${theme.bgTertiary} ${theme.text} border ${theme.border} rounded-lg font-bold text-xl`}>+</button>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-              {[4, 6, 8, 10, 12, 20, 100].map(sides => (
-                <button
-                  key={sides}
-                  onClick={() => rollDice(sides)}
-                  disabled={isRolling}
-                  className={`${theme.accent} ${theme.accentHover} text-white py-4 rounded-lg font-bold text-lg shadow-lg hover:scale-105 transition-transform disabled:bg-gray-600 disabled:cursor-not-allowed`}
-                >
-                  d{sides}
+            <div className="grid grid-cols-4 gap-3 mb-6">
+              {[4, 6, 8, 10, 12, 20].map(sides => (
+                <button key={sides} onClick={() => rollDice(sides)} disabled={isRolling} className={`${theme.bgSecondary} border ${theme.border} py-4 rounded-xl shadow-lg hover:scale-105 transition-all disabled:opacity-50 group`}>
+                  <span className={`${theme.textMuted} text-lg`}>d</span>
+                  <span className={`${currentSkin.text} text-2xl font-bold group-hover:scale-110 inline-block transition-transform`}>{sides}</span>
                 </button>
               ))}
-              <button
-                onClick={() => rollDice(20, 2)}
-                disabled={isRolling}
-                className="bg-purple-600 text-white py-4 rounded-lg font-bold hover:bg-purple-700 text-lg shadow-lg hover:scale-105 transition-transform disabled:bg-gray-600 disabled:cursor-not-allowed"
-              >
-                2d20
-              </button>
+              <div className="col-span-2">
+                <button onClick={() => rollDice(20, 2)} disabled={isRolling} className={`w-full h-full ${theme.bgSecondary} border ${theme.border} rounded-xl shadow-lg hover:scale-105 transition-all flex items-center justify-center gap-2`}>
+                    <span className={`${currentSkin.text} text-xl font-bold`}>2d20</span>
+                    <span className={theme.textMuted}>(Advantage)</span>
+                </button>
+              </div>
             </div>
-
-            <button onClick={() => setRolls([])} className="w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700">
-              Clear History
-            </button>
+            <button onClick={() => setRolls([])} className={`w-full text-xs uppercase tracking-widest ${theme.textMuted} hover:${theme.text} transition-colors mt-4`}>Clear History</button>
           </div>
 
           <div className={`${theme.card} rounded-xl shadow-xl p-6`}>
             <h3 className={`text-xl font-bold ${theme.text} mb-4`}>Roll History</h3>
-            <div className="space-y-2 max-h-96 overflow-y-auto">
-              {rolls.map((roll, idx) => (
-                <div key={idx} className={`${theme.bgTertiary} rounded-lg p-3 border ${theme.border}`}>
-                  <div className="flex justify-between items-center flex-wrap gap-2">
-                    <div>
-                      <span className={`font-bold ${theme.text}`}>{roll.dice}</span>
-                      <span className={`${theme.textSecondary} ml-3`}>[{roll.results.join(', ')}]</span>
+            <div className="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+              {rolls.map((roll, idx) => {
+                const rollSkin = skins[roll.skin] || skins.standard;
+                return (
+                    <div key={idx} className={`${theme.bgTertiary} rounded-lg p-3 border-l-4 ${rollSkin.border} flex justify-between items-center`}>
+                      <div><span className={`font-bold ${theme.text} mr-2`}>{roll.dice}</span><span className={`${theme.textSecondary} text-sm`}>[{roll.results.join(', ')}]</span></div>
+                      <div className="flex items-center gap-3"><span className={`text-xl font-bold ${rollSkin.text}`}>{roll.total}</span><span className={`text-xs ${theme.textMuted}`}>{roll.timestamp}</span></div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className={`text-2xl font-bold ${roll.total === 20 ? 'text-amber-400' : theme.accentText}`}>{roll.total}</span>
-                      <span className={`text-xs ${theme.textMuted}`}>{roll.timestamp}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-              {rolls.length === 0 && (
-                <div className={`text-center ${theme.textMuted} py-8`}>No rolls yet</div>
-              )}
+                );
+              })}
+              {rolls.length === 0 && <div className={`text-center ${theme.textMuted} py-8`}>No rolls yet</div>}
             </div>
           </div>
         </div>
@@ -1428,11 +1669,10 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
     };
 
     // ============================================
-    // REFERENCE TAB
+    // REFERENCE TAB (Updated to use GLOBAL DATA)
     // ============================================
     const ReferenceTab = ({ theme }) => {
       const [selectedSection, setSelectedSection] = useState('miracles');
-
       const sections = [
         { id: 'miracles', name: 'Miracles', icon: 'flame' },
         { id: 'monsters', name: 'Bestiary', icon: 'shield' },
@@ -1446,22 +1686,12 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
             <div className="md:w-64">
               <div className={`${theme.card} rounded-xl shadow-xl p-4 space-y-2`}>
                 {sections.map(section => (
-                  <button
-                    key={section.id}
-                    onClick={() => setSelectedSection(section.id)}
-                    className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all ${
-                      selectedSection === section.id
-                        ? `${theme.accent} text-white shadow-lg`
-                        : `${theme.bgTertiary} ${theme.text} hover:bg-opacity-80`
-                    }`}
-                  >
-                    <Icon name={section.icon} />
-                    <span className="font-bold">{section.name}</span>
+                  <button key={section.id} onClick={() => setSelectedSection(section.id)} className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all ${selectedSection === section.id ? `${theme.accent} text-white shadow-lg` : `${theme.bgTertiary} ${theme.text} hover:bg-opacity-80`}`}>
+                    <Icon name={section.icon} /><span className="font-bold">{section.name}</span>
                   </button>
                 ))}
               </div>
             </div>
-
             <div className={`flex-1 ${theme.card} rounded-xl shadow-xl p-6`}>
               {selectedSection === 'miracles' && <MiraclesRef theme={theme} />}
               {selectedSection === 'monsters' && <MonstersRef theme={theme} />}
@@ -1482,461 +1712,83 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
           <MiracleCard theme={theme} name="Smite the Wicked" cost={2} desc="Next attack deals +2d8 radiant damage" />
           <MiracleCard theme={theme} name="Call Down Fire" cost={3} desc="15-foot area, 4d10 damage (DEX save half)" />
           <MiracleCard theme={theme} name="Hymn of Protection" cost={1} desc="Allies within earshot gain +2 Defense for 1 minute" />
-          <MiracleCard theme={theme} name="Song of Restoration" cost={2} desc="All allies within earshot heal 1d6 HP" />
         </div>
       </div>
     );
-
     const MiracleCard = ({ theme, name, cost, desc }) => (
       <div className={`${theme.bgTertiary} rounded-lg p-4 border-l-4 border-amber-500`}>
-        <div className="flex justify-between items-start mb-2">
-          <h3 className={`text-lg font-bold ${theme.text}`}>{name}</h3>
-          <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold">{cost} CP</span>
-        </div>
+        <div className="flex justify-between items-start mb-2"><h3 className={`text-lg font-bold ${theme.text}`}>{name}</h3><span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold">{cost} CP</span></div>
         <p className={theme.textSecondary}>{desc}</p>
       </div>
     );
 
-// ============================================
-    // UPDATED MONSTERS REFERENCE (With Lightbox & Hover Effects)
-    // ============================================
-    const MonstersRef = ({ theme }) => {
+const MonstersRef = ({ theme }) => {
       const [category, setCategory] = useState('giants');
-      const [selectedImage, setSelectedImage] = useState(null); // State for the Lightbox
-
+      const [selectedImage, setSelectedImage] = useState(null);
       const categories = [
         { id: 'giants', name: 'Giants', icon: 'skull' },
         { id: 'watchers', name: 'Watchers', icon: 'eye' },
-        { id: 'corrupted', name: 'Corrupted Humans', icon: 'users' },
-        { id: 'spirits', name: 'Demon Spirits', icon: 'flame' },
-        { id: 'beasts', name: 'Corrupted Beasts', icon: 'shield' }
+        { id: 'corrupted', name: 'Corrupted', icon: 'users' },
+        { id: 'spirits', name: 'Spirits', icon: 'flame' },
+        { id: 'beasts', name: 'Beasts', icon: 'shield' }
       ];
 
-      const bestiary = {
-        giants: {
-          title: "Giants — The Forbidden Offspring",
-          intro: "Born of Watcher and human unions, giants terrorize the earth in three generations of decreasing power but increasing cunning.",
-          creatures: [
-            { 
-              name: "Greater Giant (1st Generation)", 
-              image: "images/GreaterGiant.png", 
-              hd: 16, hp: 160, def: 16, 
-              attack: "Massive Club +12 (4d12+8) or Boulder Hurl +10 (3d10, 60ft)", 
-              special: "Colossal (30-50 ft), Terrifying Presence (WIS save or frightened), Earthquake Stomp (1/day), DR 10/blessed",
-              desc: "Direct offspring of Watchers. Tower over cities, command lesser giants, remember fragments of heavenly knowledge."
-            },
-            { 
-              name: "Nephilim Warlord (2nd Generation)",
-              image: "images/NephilimWarlord.jpg", 
-              hd: 10, hp: 100, def: 17, 
-              attack: "Giant Bronze Sword +10 (3d10+6) or Javelin +8 (2d8+4, 80ft)", 
-              special: "Giant-Sized (15-30 ft), Watcher's Blood (resist fire/cold), Command Giants, Forbidden Weapon Mastery",
-              desc: "Warriors of renown, the 'mighty men of old.' Lead giant war-bands and claim human cities as tribute."
-            },
-            { 
-              name: "Nephilim Sorcerer (2nd Generation)", 
-              image: "images/NephilimSorceror.png", 
-              hd: 8, hp: 70, def: 14, 
-              attack: "Staff +6 (2d8+3) or Watcher's Fire +10 (3d8 fire, 100ft)", 
-              special: "Giant-Sized (15-20 ft), Forbidden Sorcery (3/day), Enchantment, Spirit Sight, Lore of Azazel",
-              desc: "Taught the dark arts by their fathers. Weave enchantments, curse enemies, and commune with bound Watchers."
-            },
-            { 
-              name: "Elioud Hunter (3rd Generation)", 
-              image: "images/NephilimHunter.jpg", 
-              hd: 6, hp: 55, def: 15, 
-              attack: "Barbed Spear +8 (2d8+4) or Net & Trident +7 (1d8+3, entangle)", 
-              special: "Large (10-20 ft), Darkvision 60ft, Track by Scent, Ambush (+2d6 sneak), Giant's Cunning",
-              desc: "The most human-like giants, but twisted with cruelty. Hunt humans for sport and darker purposes."
-            },
-            { 
-              name: "Elioud Deceiver (3rd Generation)", 
-              image: "images/ElioudDeceiver.jpg",
-              hd: 5, hp: 45, def: 13, 
-              attack: "Hidden Blade +7 (2d6+3 + poison)", 
-              special: "Large (10-15 ft), Shapeshifting (appear human-sized), Silver Tongue, Poison Use, Infiltrator",
-              desc: "Can compress their forms to pass among humans. Serve as spies, assassins, and corrupters for their greater kin."
-            },
-            { 
-              name: "Ohya, Son of Semyaza", 
-              image: "images/Ohya.png",
-              hd: 14, hp: 140, def: 18, 
-              attack: "Sword of Wrath +14 (4d10+8 fire) or Thunderous Roar (30ft cone, 4d8 thunder)", 
-              special: "Legendary (40 ft), Prophetic Dreams, Leviathan-Slayer, Wrath Aura (enemies -2 to hit), Semyaza's Heir",
-              desc: "Wrathful leader of giants. Dreams of heaven's judgment haunt him. Said to have slain the Leviathan itself.",
-              legendary: true
-            },
-            { 
-              name: "Hahya, Brother of Ohya", 
-              image: "images/Hahya.png",
-              hd: 12, hp: 110, def: 16, 
-              attack: "Greataxe +11 (3d12+6) or Dream Curse (WIS save or nightmares)", 
-              special: "Legendary (35 ft), Dream Visions, Contemplative (-2 initiative, +2 WIS saves), Prophet's Burden",
-              desc: "More thoughtful than his brother. Received the vision of 200 trees destroyed by fire—the Watchers' doom.",
-              legendary: true
-            },
-            { 
-              name: "Mahway, the Winged", 
-              image: "images/Mahway.png",
-              hd: 10, hp: 95, def: 19, 
-              attack: "Talon Strike +10 (2d8+5) or Diving Attack +12 (4d8+5, from flight)", 
-              special: "Legendary (25 ft), True Flight (60 ft), Eagle's Eyes, Messenger of Giants, Sun Vulnerability",
-              desc: "Son of Barakel. 'Flew with his hands like eagles.' Serves as herald between giant kingdoms. Warned never to fly too close to the sun.",
-              legendary: true
-            },
-            { 
-              name: "Gilgamesh, the Mighty", 
-              image: "images/Gilgamesh.png",
-              hd: 12, hp: 120, def: 17, 
-              attack: "Hero's Blade +12 (3d10+7) or Grapple +14", 
-              special: "Legendary (30 ft), Heroic Resilience (advantage on death saves), Tragic Awareness, Wrestler Supreme",
-              desc: "The legendary hero-king, counted among the giants. Knows he cannot stand against heaven: 'My opponents reside in Heaven, and I am not able to stand against them.'",
-              legendary: true
-            },
-            { 
-              name: "Giant Thrall", 
-              image: "images/Thrall.png", // Updated link for the Thrall
-              hd: 4, hp: 35, def: 12, 
-              attack: "Crude Club +5 (2d8+3) or Rock +4 (1d10+2)", 
-              special: "Large (12 ft), Enslaved (broken will), Pack Fighter (+1 per ally), Expendable",
-              desc: "Lesser giants enslaved by their more powerful kin. Used as shock troops, laborers, and sacrifices."
-            }
-          ]
-        },
-        watchers: {
-          title: "The Watchers — Fallen Angels",
-          intro: "The 200 angels who abandoned heaven. Most are now bound, but their influence persists through teachings, artifacts, and the rare unbound insurgent.",
-          creatures: [
-            { 
-              name: "Azazel, Lord of Weapons (Bound)", 
-              image: "images/Azazel.jpg",
-              hd: 20, hp: 200, def: 22, 
-              attack: "Burning Blade +16 (5d10+10 fire) or Forge Curse (corrupts metal)", 
-              special: "Celestial, Bound in Dudael, All Sin Ascribed, Weapon Mastery Supreme, Corruption Aura 100ft",
-              desc: "Bound beneath jagged rocks in the desert of Dudael. 'To him ascribe ALL sin.' His whispers still reach those who forge weapons of war.",
-              legendary: true,
-              bound: true
-            },
-            { 
-              name: "Semyaza, Chief of Watchers (Bound)", 
-              hd: 22, hp: 220, def: 23, 
-              attack: "Oath-Breaker Sword +18 (6d8+12) or Binding Curse (imprisoned 70 generations)", 
-              special: "Celestial, Bound in Earth's Valleys, Enchantment Supreme, Command Watchers, The Name Has Seen",
-              desc: "Leader who convinced 199 others to swear the oath on Hermon. Imprisoned in the valleys of the earth, awaiting final judgment.",
-              legendary: true,
-              bound: true
-            },
-            { 
-              name: "Kokabel, Star-Lord (Bound)", 
-              hd: 18, hp: 180, def: 20, 
-              attack: "Starfire +15 (4d10 radiant) or Constellation Curse (fate manipulation)", 
-              special: "Celestial, Bound, Commands 365,000 Spirits, Star Knowledge, Night Empowered",
-              desc: "Taught the constellations. Even bound, commands hundreds of thousands of lesser spirits who execute his will among the stars.",
-              legendary: true,
-              bound: true
-            },
-            { 
-              name: "Gadreel, the Serpent's Agent", 
-              hd: 16, hp: 150, def: 19, 
-              attack: "Deceiver's Blade +14 (3d10+8 poison) or Temptation (WIS save or charmed)", 
-              special: "Celestial, Eden's Corrupter, Taught Murder, Shapeshifter, Silver Tongue Supreme",
-              desc: "Deceived Eve in the garden. Taught humanity the killing blow. Master of lies and manipulation.",
-              legendary: true
-            },
-            { 
-              name: "Watcher Remnant (Unbound)", 
-              hd: 14, hp: 130, def: 20, 
-              attack: "Celestial Blade +13 (4d8+7 radiant/necrotic) or Forbidden Teaching", 
-              special: "Celestial, Flight, Damage Resist (non-blessed), Forbidden Knowledge (1 domain), Possession",
-              desc: "One of the few Watchers who escaped immediate binding. Hunted by heaven, desperately teaching forbidden arts to build power."
-            },
-            { 
-              name: "Watcher Manifestation", 
-              hd: 8, hp: 70, def: 16, 
-              attack: "Spirit Touch +8 (2d10 necrotic, bypasses armor)", 
-              special: "Incorporeal, Bound Echo, Limited Teaching, Whisper Corruption, Dismiss (DC 18 FAI)",
-              desc: "A bound Watcher's projected consciousness. Can manifest near those who invoke their name or use their teachings."
-            }
-          ]
-        },
-        corrupted: {
-          title: "Corrupted Humanity",
-          intro: "Those who serve the giants, practice forbidden arts, or have been twisted by the age's corruption.",
-          creatures: [
-            { 
-              name: "Baal-Priest", 
-              hd: 6, hp: 50, def: 13, 
-              attack: "Sacrificial Knife +6 (1d8+2 + bleed) or Dark Invocation +8 (2d8 necrotic)", 
-              special: "Dark Sorcery (3/day), Blood Magic, Summon Lesser Demon, Giant-Favored",
-              desc: "Priests of the Nephilim god-kings. Perform blood sacrifices to fuel dark miracles and curry favor with their giant masters."
-            },
-            { 
-              name: "Forge-Cultist of Azazel", 
-              hd: 5, hp: 45, def: 15, 
-              attack: "Azazel-Forged Blade +7 (2d6+3, ignores 2 armor) or Molten Splash +5 (1d10 fire)", 
-              special: "Forbidden Smithing, Fire Resistant, Weapon Enhancement, Marked by Azazel (-2 Righteousness aura)",
-              desc: "Smiths who learned Azazel's weapon-craft. Their forges produce unnaturally sharp blades, but each working darkens their soul."
-            },
-            { 
-              name: "Star-Witch of Kokabel", 
-              hd: 5, hp: 40, def: 12, 
-              attack: "Curse Touch +5 (1d6 + curse) or Star-Hex +7 (2d6 psychic)", 
-              special: "Astrology, Fate Reading, Night Magic (+2 at night), Constellation Curse",
-              desc: "Women who learned star-magic from Kokabel's teachings. Read fates in the heavens and twist destiny with forbidden knowledge."
-            },
-            { 
-              name: "Cainite Warlord", 
-              hd: 7, hp: 65, def: 16, 
-              attack: "Bronze Sword +9 (1d10+4) and Shield Bash +7 (1d6+2, stun)", 
-              special: "Tubal-Cain's Arsenal, Command Troops, City-Born (urban combat +2), Seventy-Seven Vengeance",
-              desc: "Military leaders from the cities of Cain. Well-equipped with Tubal-cain's metalwork, they enforce giant tribute and raid the faithful."
-            },
-            { 
-              name: "Cainite Soldier", 
-              hd: 3, hp: 25, def: 14, 
-              attack: "Bronze Spear +5 (1d8+2) or Short Sword +5 (1d6+2)", 
-              special: "Formation Fighting (+2 AC with allies), City Guard, Equipped",
-              desc: "Professional soldiers from the line of Cain. Better armed than most humans of the age."
-            },
-            { 
-              name: "Root-Cutter (Herbalist)", 
-              hd: 3, hp: 22, def: 11, 
-              attack: "Poisoned Blade +4 (1d6+1 + poison) or Thrown Powder +4 (sleep/blind)", 
-              special: "Semyaza's Herbalism, Poison Craft, Healing Herbs, Potion Brewing",
-              desc: "Practitioners of Semyaza's root-cutting arts. Can heal or harm with their knowledge of forbidden botany."
-            },
-            { 
-              name: "Giant-Thrall (Human)", 
-              hd: 2, hp: 15, def: 10, 
-              attack: "Club +3 (1d6+1) or Thrown Rock +2 (1d4)", 
-              special: "Fanatical (immune to fear of giants), Expendable, Human Shield",
-              desc: "Humans so broken or corrupted they worship the Nephilim as gods. Used as servants, messengers, and cannon fodder."
-            },
-            { 
-              name: "Painted Warrior", 
-              hd: 4, hp: 32, def: 12, 
-              attack: "War Club +6 (1d8+3) or Javelin +5 (1d6+2)", 
-              special: "Azazel's Cosmetics (war paint grants +1 attack), Berserker Rage, Intimidating",
-              desc: "Warriors who use Azazel's cosmetic arts for war paint that grants supernatural fury. Fight with reckless abandon."
-            },
-            { 
-              name: "Lamech the Avenger (Legendary)", 
-              hd: 9, hp: 85, def: 17, 
-              attack: "Tubal-Cain's Blade +11 (2d8+5) or Crossbow +9 (1d10+3)", 
-              special: "Legendary, Seventy-Sevenfold Vengeance (if wounded, +4 damage next attack), First Polygamist, Boastful",
-              desc: "The infamous Cainite who boasted of killing a young man for wounding him. His vengeance exceeds even God's protection of Cain.",
-              legendary: true
-            }
-          ]
-        },
-        spirits: {
-          title: "Demon Spirits",
-          intro: "When giants die, their hybrid nature traps their spirits on earth. They become demons that 'afflict, oppress, destroy, attack... hunger and thirst' eternally.",
-          creatures: [
-            { 
-              name: "Lilith, The Night Monster",
-              image: "images/Lilith.png",
-              hd: 15, hp: 120, def: 19,
-              attack: "Midnight Talons +12 (3d8+5 necrotic) or Screech of Desolation (CON save or stunned)",
-              special: "Flight, Darkvision 120ft, Night Terror (dreams), Child-Stealer, Immune to non-blessed weapons, Seduce & Corrupt",
-              desc: "Ancient demon queen of the night. Haunts desolate places and preys upon the vulnerable. Mother of countless lesser demons.",
-              legendary: true
-            },
-            { 
-              name: "Giant-Spirit (Unbound)", 
-              hd: 8, hp: 65, def: 15, 
-              attack: "Spectral Slam +8 (2d10 necrotic) or Possession Attempt (WIS save)", 
-              special: "Incorporeal, Possession, Hunger Aura (1d6 necrotic/round nearby), Sense Life 60ft, Sunlight Weakness",
-              desc: "The wandering spirit of a slain giant. Consumed by hunger it can never satisfy, it seeks living hosts to experience sensation again."
-            },
-            { 
-              name: "Plague Spirit", 
-              hd: 6, hp: 50, def: 14, 
-              attack: "Disease Touch +7 (1d8 + disease) or Pestilent Cloud (15ft, CON save)", 
-              special: "Incorporeal, Disease Carrier (typhus/plague), Swarm Form, Immune to poison/disease",
-              desc: "Demon born from giants who died of plague. Spreads sickness wherever it manifests, delighting in suffering."
-            },
-            { 
-              name: "Rage Spirit", 
-              hd: 7, hp: 60, def: 13, 
-              attack: "Fury Strike +9 (2d8+4 psychic)", 
-              special: "Incorporeal, Incite Violence (WIS save or attack nearest), Battle Frenzy Aura, Feed on Anger",
-              desc: "Spirit of a giant slain in battle. Drives mortals to senseless violence, growing stronger from bloodshed."
-            },
-            { 
-              name: "Whisper Demon", 
-              hd: 4, hp: 30, def: 16, 
-              attack: "Maddening Whisper +6 (1d6 psychic + confusion)", 
-              special: "Invisible, Suggestion (3/day), Plant Thoughts, Memory Corruption, Flee from Prayer",
-              desc: "Subtle tempters that plant sinful thoughts. Often the first stage of demonic corruption, preparing victims for worse."
-            }
-          ]
-        },
-        beasts: {
-          title: "Corrupted Beasts",
-          intro: "Animals twisted by the world's corruption, proximity to Nephilim, or dark sorcery. Some were bred as war-beasts by giants.",
-          creatures: [
-            { 
-              name: "Behemoth", 
-              image: "images/Behemoth.png",
-              hd: 18, hp: 180, def: 18, 
-              attack: "Tail Sweep +14 (4d10+8, knockdown) or Trample +12 (3d12+6)", 
-              special: "Colossal Beast, DR 15/blessed, Earthquake Walk, Immune to fear/charm, Primal Terror",
-              desc: "The greatest land beast, described in Job. Bones like bronze, limbs like iron. Nearly unstoppable once roused to anger.",
-              legendary: true
-            },
-            { 
-              name: "Leviathan Spawn", 
-              hd: 12, hp: 110, def: 17, 
-              attack: "Crushing Bite +11 (3d10+6) or Tail Lash +10 (2d8+4)", 
-              special: "Aquatic, Armored Scales (DR 5), Capsize Ships, Breath Weapon (steam, 3/day)",
-              desc: "Lesser offspring of the great sea dragon. Terrorize coastal waters and drag ships to the depths."
-            },
-            { 
-              name: "War-Mammoth", 
-              hd: 10, hp: 95, def: 15, 
-              attack: "Tusks +10 (2d12+5) or Trunk Grab +8 (grapple, throw 20ft)", 
-              special: "Siege Beast, Howdah Platform (carries 4 warriors), Trample, War-Trained",
-              desc: "Mammoths bred and armored by giants for war. Carry giant warriors into battle and crush fortifications."
-            },
-            { 
-              name: "Corruption Wolf", 
-              hd: 5, hp: 40, def: 14, 
-              attack: "Diseased Bite +7 (1d10+3 + corruption)", 
-              special: "Pack Tactics, Corrupting Bite (FAI save or -1 Righteousness), Darkvision, Track Righteous",
-              desc: "Wolves twisted by feeding on Nephilim corpses. Hunt in packs, spreading corruption with every bite."
-            },
-            { 
-              name: "Giant Serpent", 
-              hd: 6, hp: 50, def: 13, 
-              attack: "Constrict +8 (2d8+4, grapple) or Venomous Bite +7 (1d6+2 + poison)", 
-              special: "Constrict, Deadly Venom (2d10, CON save half), Swallow Whole (Medium or smaller)",
-              desc: "Massive snakes grown to unnatural size. Some say they carry the curse of Eden's serpent."
-            },
-            { 
-              name: "Nephilim Hound", 
-              hd: 4, hp: 35, def: 13, 
-              attack: "Savage Bite +6 (1d8+3, trip)", 
-              special: "Pack Tactics, Scent Tracking, Giant-Bred (loyal to giant masters), Fearless",
-              desc: "Dogs bred by Nephilim for hunting humans. Unnaturally large, vicious, and utterly loyal to their giant masters."
-            },
-            { 
-              name: "Carrion Vulture", 
-              hd: 3, hp: 22, def: 12, 
-              attack: "Diseased Beak +4 (1d6+1 + disease) or Talon Rake +4 (1d4+1)", 
-              special: "Flight, Disease Carrier, Flock Attack, Drawn to Death",
-              desc: "Giant vultures that feast on battlefield dead. Carry diseases and attack the wounded."
-            }
-          ]
-        }
-      };
-
-      const currentCategory = bestiary[category];
+      const currentCategory = BESTIARY_DATA[category];
 
       return (
         <div>
-          {/* Lightbox Modal */}
           {selectedImage && (
-            <div 
-              className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 cursor-pointer"
-              onClick={() => setSelectedImage(null)}
-            >
+            <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 cursor-pointer" onClick={() => setSelectedImage(null)}>
               <div className="relative max-w-4xl max-h-[90vh]">
-                <img 
-                  src={selectedImage} 
-                  alt="Creature" 
-                  className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
-                />
-                <button 
-                  onClick={() => setSelectedImage(null)}
-                  className="absolute top-2 right-2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70"
-                >
-                  <Icon name="x" className="w-6 h-6" />
-                </button>
+                <img src={selectedImage} alt="Creature" className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl" onError={(e) => { e.target.onerror = null; e.target.src = `https://placehold.co/600x400/333/orange?text=Image+Missing`; }} />
+                <button onClick={() => setSelectedImage(null)} className="absolute top-2 right-2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70"><Icon name="x" className="w-6 h-6" /></button>
               </div>
             </div>
           )}
-
           <h2 className={`text-2xl font-bold ${theme.text} mb-4`}>Bestiary</h2>
-          
-          {/* Category Tabs */}
           <div className="flex flex-wrap gap-2 mb-6">
             {categories.map(cat => (
-              <button
-                key={cat.id}
-                onClick={() => setCategory(cat.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                  category === cat.id 
-                    ? 'bg-amber-600 text-white' 
-                    : `${theme.bgTertiary} ${theme.text} hover:bg-amber-700 hover:text-white`
-                }`}
-              >
-                <Icon name={cat.icon} className="w-4 h-4" />
-                <span>{cat.name}</span>
+              <button key={cat.id} onClick={() => setCategory(cat.id)} className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${category === cat.id ? 'bg-amber-600 text-white' : `${theme.bgTertiary} ${theme.text} hover:bg-amber-700 hover:text-white`}`}>
+                <Icon name={cat.icon} className="w-4 h-4" /><span>{cat.name}</span>
               </button>
             ))}
           </div>
-
-          {/* Category Content */}
           <div className={`${theme.card} rounded-xl p-6 mb-6`}>
             <h3 className={`text-xl font-bold ${theme.text} mb-2`}>{currentCategory.title}</h3>
             <p className={`${theme.textSecondary} italic`}>{currentCategory.intro}</p>
           </div>
-
-          {/* Creature Cards */}
           <div className="space-y-4">
             {currentCategory.creatures.map((creature, idx) => (
-              <div 
-                key={idx} 
-                className={`${theme.card} rounded-xl overflow-hidden ${creature.legendary ? 'ring-2 ring-amber-500' : ''}`}
-              >
+              <div key={idx} className={`${theme.card} rounded-xl overflow-hidden ${creature.legendary ? 'ring-2 ring-amber-500' : ''}`}>
                 <div className="flex flex-col md:flex-row">
-                  {/* Image Section */}
                   {creature.image && (
-                    <div 
-                      className="md:w-48 h-48 md:h-auto flex-shrink-0 cursor-pointer group relative overflow-hidden"
-                      onClick={() => setSelectedImage(creature.image)}
-                    >
-                      <img 
-                        src={creature.image} 
-                        alt={creature.name}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                        <Icon name="zoom-in" className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </div>
+                    <div className="md:w-48 h-48 md:h-auto flex-shrink-0 cursor-pointer group relative overflow-hidden bg-black" onClick={() => setSelectedImage(creature.image)}>
+                      <img src={creature.image} alt={creature.name} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" onError={(e) => { e.target.onerror = null; e.target.src = `https://placehold.co/400x400/222/d97706?text=${creature.name.replace(/ /g, '+')}`; }} />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center"><Icon name="zoom-in" className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" /></div>
                     </div>
                   )}
-                  
-                  {/* Content Section */}
                   <div className="flex-1 p-4">
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className={`text-lg font-bold ${theme.text}`}>
-                        {creature.name}
-                        {creature.legendary && <span className="ml-2 text-amber-400 text-sm">★ LEGENDARY</span>}
-                      </h4>
-                    </div>
-                    
-                    {/* Stats Row */}
+                    <div className="flex justify-between items-start mb-2"><h4 className={`text-lg font-bold ${theme.text}`}>{creature.name}{creature.legendary && <span className="ml-2 text-amber-400 text-sm">★ LEGENDARY</span>}</h4></div>
                     <div className="flex flex-wrap gap-3 mb-3 text-sm">
-                      <span className={`${theme.bgTertiary} px-2 py-1 rounded`}>
-                        <strong>HD:</strong> {creature.hd}
-                      </span>
-                      <span className={`${theme.bgTertiary} px-2 py-1 rounded`}>
-                        <strong>HP:</strong> {creature.hp}
-                      </span>
-                      <span className={`${theme.bgTertiary} px-2 py-1 rounded`}>
-                        <strong>DEF:</strong> {creature.def}
-                      </span>
+                      <span className={`${theme.bgTertiary} px-2 py-1 rounded`}><strong>HD:</strong> {creature.hd}</span>
+                      <span className={`${theme.bgTertiary} px-2 py-1 rounded`}><strong>HP:</strong> {creature.hp}</span>
+                      <span className={`${theme.bgTertiary} px-2 py-1 rounded`}><strong>DEF:</strong> {creature.def}</span>
                     </div>
+                    <p className={`${theme.textSecondary} text-sm mb-2`}><strong className={theme.text}>Attack:</strong> {creature.attack}</p>
+                    <p className={`${theme.textSecondary} text-sm mb-2`}><strong className={theme.text}>Special:</strong> {creature.special}</p>
+                    <p className={`${theme.textMuted} text-sm italic mb-3`}>{creature.desc}</p>
                     
-                    <p className={`${theme.textSecondary} text-sm mb-2`}>
-                      <strong className={theme.text}>Attack:</strong> {creature.attack}
-                    </p>
-                    <p className={`${theme.textSecondary} text-sm mb-2`}>
-                      <strong className={theme.text}>Special:</strong> {creature.special}
-                    </p>
-                    <p className={`${theme.textMuted} text-sm italic`}>{creature.desc}</p>
+                    {/* NEW LORE SECTION */}
+                    {creature.lore && (
+                        <div className={`mt-3 p-3 rounded text-sm leading-relaxed border ${theme.border} bg-opacity-50 ${theme.bgTertiary}`}>
+                            <div className="flex items-center gap-2 mb-1 opacity-75">
+                                <Icon name="book-open" className="w-3 h-3" />
+                                <span className="text-xs font-bold uppercase tracking-widest">Ancient Lore</span>
+                            </div>
+                            <p className={theme.textSecondary}>{creature.lore}</p>
+                        </div>
+                    )}
+
                   </div>
                 </div>
               </div>
@@ -1949,7 +1801,6 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
     const RighteousnessRef = ({ theme }) => (
       <div>
         <h2 className={`text-2xl font-bold ${theme.text} mb-4`}>Righteousness Track</h2>
-        <p className={`${theme.textSecondary} mb-6`}>Your moral standing affects miracles and corruption resistance.</p>
         <div className="space-y-3">
           <RLevel theme={theme} range="+8 to +10" label="Anointed" desc="Divine favor, miracles cost less" color="blue" />
           <RLevel theme={theme} range="+4 to +7" label="Righteous" desc="Clear conscience, divine protection" color="blue" />
@@ -1961,22 +1812,11 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
         </div>
       </div>
     );
-
     const RLevel = ({ theme, range, label, desc, color }) => {
-      const colors = {
-        blue: 'border-blue-500',
-        gray: 'border-gray-500',
-        yellow: 'border-yellow-500',
-        orange: 'border-orange-500',
-        red: 'border-red-500'
-      };
-
+      const colors = { blue: 'border-blue-500', gray: 'border-gray-500', yellow: 'border-yellow-500', orange: 'border-orange-500', red: 'border-red-500' };
       return (
         <div className={`${theme.bgTertiary} rounded-lg p-4 border-l-4 ${colors[color]}`}>
-          <div className="flex justify-between mb-1">
-            <h3 className={`font-bold ${theme.text}`}>{label}</h3>
-            <span className={`text-sm ${theme.textMuted}`}>{range}</span>
-          </div>
+          <div className="flex justify-between mb-1"><h3 className={`font-bold ${theme.text}`}>{label}</h3><span className={`text-sm ${theme.textMuted}`}>{range}</span></div>
           <p className={`text-sm ${theme.textSecondary}`}>{desc}</p>
         </div>
       );
@@ -2005,7 +1845,6 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
         </div>
       </div>
     );
-
     // ============================================
     // IT IS WRITTEN TAB (Lore Compendium)
     // ============================================
