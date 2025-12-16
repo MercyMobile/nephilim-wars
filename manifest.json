@@ -3,19 +3,19 @@
   "short_name": "NephilimWars",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#1f2937",
+  "theme_color": "##d97706",
   "description": "Roleplay set in the preflood world.",
   "icons": [
     {
-      "src": "./images/image192.ico",
+      "src": "./images/image192.png",
       "sizes": "192x192",
-      "type": "image/ico"
+      "type": "image/png"
     },
     {
-      "src": "./images/image512.ico",
+      "src": "./images/image512.png",
       "sizes": "512x512",
-      "type": "image/ico"
+      "type": "image/png"
     }
   ]
 }
