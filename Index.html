@@ -6,7 +6,6 @@
   <title>Nephilim Wars - Biblical RPG</title>
   <meta name="description" content="A digital tabletop companion for the Nephilim Wars Biblical RPG">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
-  <link rel="manifest" href="manifest.json">
   <script src="https://cdn.tailwindcss.com"></script>
   
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -1534,6 +1533,105 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
     };
 
 // ============================================
+    // SVG DICE COMPONENTS
+    // ============================================
+    const DiceIcon = ({ sides, value, color, size = 80 }) => {
+      // Extract the actual Tailwind color value from the class name
+      const colorMap = {
+        'text-amber-500': '#f59e0b',
+        'text-red-700': '#b91c1c',
+        'text-stone-400': '#a8a29e',
+        'text-blue-600': '#2563eb',
+        'text-purple-700': '#7e22ce',
+        'text-emerald-600': '#059669'
+      };
+      
+      const fillColor = colorMap[color] || '#f59e0b';
+      const dotColor = '#1f2937'; // Dark gray for pips
+      
+      // D6 faces
+      const d6Faces = {
+        1: [[0.5, 0.5]], // center
+        2: [[0.3, 0.3], [0.7, 0.7]], // diagonal
+        3: [[0.3, 0.3], [0.5, 0.5], [0.7, 0.7]], // diagonal with center
+        4: [[0.3, 0.3], [0.7, 0.3], [0.3, 0.7], [0.7, 0.7]], // corners
+        5: [[0.3, 0.3], [0.7, 0.3], [0.5, 0.5], [0.3, 0.7], [0.7, 0.7]], // corners + center
+        6: [[0.3, 0.3], [0.7, 0.3], [0.3, 0.5], [0.7, 0.5], [0.3, 0.7], [0.7, 0.7]] // 3x2 grid
+      };
+      
+      if (sides === 6) {
+        const dots = d6Faces[value] || d6Faces[1];
+        return (
+          <svg width={size} height={size} viewBox="0 0 100 100" style={{ filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))' }}>
+            <rect x="10" y="10" width="80" height="80" rx="12" fill={fillColor} stroke={dotColor} strokeWidth="2"/>
+            {dots.map((dot, i) => (
+              <circle key={i} cx={dot[0] * 100} cy={dot[1] * 100} r="7" fill={dotColor}/>
+            ))}
+          </svg>
+        );
+      }
+      
+      if (sides === 4) {
+        // Triangular d4
+        return (
+          <svg width={size} height={size} viewBox="0 0 100 100" style={{ filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))' }}>
+            <polygon points="50,15 90,85 10,85" fill={fillColor} stroke={dotColor} strokeWidth="2"/>
+            <text x="50" y="65" fontSize="32" fontWeight="bold" fill={dotColor} textAnchor="middle">{value}</text>
+          </svg>
+        );
+      }
+      
+      if (sides === 8) {
+        // Octagonal d8
+        return (
+          <svg width={size} height={size} viewBox="0 0 100 100" style={{ filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))' }}>
+            <polygon points="50,10 75,25 85,50 75,75 50,90 25,75 15,50 25,25" fill={fillColor} stroke={dotColor} strokeWidth="2"/>
+            <text x="50" y="62" fontSize="32" fontWeight="bold" fill={dotColor} textAnchor="middle">{value}</text>
+          </svg>
+        );
+      }
+      
+      if (sides === 10) {
+        // Pentagonal d10
+        return (
+          <svg width={size} height={size} viewBox="0 0 100 100" style={{ filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))' }}>
+            <polygon points="50,10 80,35 70,70 30,70 20,35" fill={fillColor} stroke={dotColor} strokeWidth="2"/>
+            <text x="50" y="55" fontSize="28" fontWeight="bold" fill={dotColor} textAnchor="middle">{value}</text>
+          </svg>
+        );
+      }
+      
+      if (sides === 12) {
+        // Dodecahedron-ish d12
+        return (
+          <svg width={size} height={size} viewBox="0 0 100 100" style={{ filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))' }}>
+            <polygon points="50,5 80,20 90,50 80,80 50,95 20,80 10,50 20,20" fill={fillColor} stroke={dotColor} strokeWidth="2"/>
+            <text x="50" y="62" fontSize="32" fontWeight="bold" fill={dotColor} textAnchor="middle">{value}</text>
+          </svg>
+        );
+      }
+      
+      if (sides === 20) {
+        // Icosahedron-ish d20
+        return (
+          <svg width={size} height={size} viewBox="0 0 100 100" style={{ filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))' }}>
+            <polygon points="50,8 75,22 85,45 75,68 50,82 25,68 15,45 25,22" fill={fillColor} stroke={dotColor} strokeWidth="2"/>
+            <polygon points="50,8 65,35 50,45 35,35" fill={fillColor} opacity="0.3" stroke={dotColor} strokeWidth="1"/>
+            <text x="50" y="62" fontSize="32" fontWeight="bold" fill={dotColor} textAnchor="middle">{value}</text>
+          </svg>
+        );
+      }
+      
+      // Default circle for any other
+      return (
+        <svg width={size} height={size} viewBox="0 0 100 100" style={{ filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))' }}>
+          <circle cx="50" cy="50" r="40" fill={fillColor} stroke={dotColor} strokeWidth="2"/>
+          <text x="50" y="62" fontSize="32" fontWeight="bold" fill={dotColor} textAnchor="middle">{value}</text>
+        </svg>
+      );
+    };
+
+    // ============================================
     // DICE TAB (Traditional Feel: Slower + Clacking Sounds)
     // ============================================
     const DiceTab = ({ theme }) => {
@@ -1543,15 +1641,16 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
       const [displayValue, setDisplayValue] = useState('?'); // For the animation
       const [isRolling, setIsRolling] = useState(false);
       const [diceSkin, setDiceSkin] = useState('standard');
+      const [currentDieSides, setCurrentDieSides] = useState(20); // Track which die was rolled
 
-      // Updated skins to be slightly more earthy/matte by default
+      // Dice skins - these colors ONLY affect the dice appearance, not the interface
       const skins = {
-        standard: { name: 'Standard Amber', text: 'text-amber-600', border: 'border-amber-600', glow: 'shadow-none' }, // Removed glow for realism
-        blood: { name: 'Blood of Giants', text: 'text-red-800', border: 'border-red-800', glow: 'shadow-none' },
-        bone: { name: 'Ancient Bone', text: 'text-stone-500', border: 'border-stone-500', glow: 'shadow-none' },
-        sapphire: { name: 'Watcher Sapphire', text: 'text-blue-700', border: 'border-blue-700', glow: 'shadow-none' },
-        void: { name: 'Void Purple', text: 'text-purple-800', border: 'border-purple-800', glow: 'shadow-none' },
-        emerald: { name: 'Serpent Green', text: 'text-emerald-700', border: 'border-emerald-700', glow: 'shadow-none' }
+        standard: { name: 'Standard Amber', diceText: 'text-amber-500', diceBorder: 'border-amber-500' },
+        blood: { name: 'Blood of Giants', diceText: 'text-red-700', diceBorder: 'border-red-700' },
+        bone: { name: 'Ancient Bone', diceText: 'text-stone-400', diceBorder: 'border-stone-400' },
+        sapphire: { name: 'Watcher Sapphire', diceText: 'text-blue-600', diceBorder: 'border-blue-600' },
+        void: { name: 'Void Purple', diceText: 'text-purple-700', diceBorder: 'border-purple-700' },
+        emerald: { name: 'Serpent Green', diceText: 'text-emerald-600', diceBorder: 'border-emerald-600' }
       };
 
       // NEW SOUND ENGINE: Synthesizes "Clacks" instead of "Beeps"
@@ -1612,6 +1711,7 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
         if (isRolling) return;
         setIsRolling(true);
         setLastResult(null);
+        setCurrentDieSides(sides); // Track which die type is being rolled
         
         // 1. Start the "Shake" sound
         playDiceSound('shake');
@@ -1660,24 +1760,33 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
                 <select 
                   value={diceSkin}
                   onChange={(e) => setDiceSkin(e.target.value)}
-                  className={`bg-transparent ${currentSkin.text} font-bold focus:outline-none cursor-pointer uppercase tracking-wider text-sm appearance-none pr-4`}
+                  className={`bg-transparent ${currentSkin.diceText} font-bold focus:outline-none cursor-pointer uppercase tracking-wider text-sm appearance-none pr-4`}
                 >
                   {Object.entries(skins).map(([key, skin]) => (
                     <option key={key} value={key} className="bg-gray-800 text-white">{skin.name}</option>
                   ))}
                 </select>
-                <Icon name="chevron-down" className={`w-4 h-4 ${currentSkin.text}`} />
+                <Icon name="chevron-down" className={`w-4 h-4 ${currentSkin.diceText}`} />
              </div>
           </div>
 
           {/* The Rolling Area */}
           <div className={`${theme.card} rounded-xl shadow-xl p-6 mb-6`}>
-            <div className="text-center mb-10 relative h-32 flex items-center justify-center">
-                {/* Visual Change: Removed the blur/glow animation for a solid, heavy look */}
-                <div className={`text-9xl font-extrabold transition-all duration-100 relative select-none ${currentSkin.text} ${isRolling ? 'opacity-80' : 'scale-110'}`}>
+            <div className="text-center mb-10 relative flex flex-col items-center justify-center gap-4">
+                {/* Show the die graphic */}
+                <div className={`${isRolling ? 'animate-tumble' : ''}`}>
+                  <DiceIcon 
+                    sides={currentDieSides} 
+                    value={lastResult !== null ? (lastResult > currentDieSides ? currentDieSides : lastResult) : (currentDieSides === 6 ? 6 : Math.ceil(currentDieSides/2))} 
+                    color={currentSkin.diceText} 
+                    size={120} 
+                  />
+                </div>
+                {/* Show the total result below */}
+                <div className={`text-5xl font-extrabold ${currentSkin.diceText}`}>
                     {isRolling ? displayValue : (lastResult !== null ? lastResult : '?')}
                 </div>
-                <p className={`${theme.textMuted} absolute -bottom-4 w-full text-center font-mono text-sm`}>
+                <p className={`${theme.textMuted} text-center font-mono text-sm`}>
                     {isRolling ? 'Rolling...' : (rolls[0] ? `Result of ${rolls[0].dice}` : 'Ready to Roll')}
                 </p>
             </div>
@@ -1693,19 +1802,29 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
             </div>
 
             {/* Dice Buttons */}
-            <div className="grid grid-cols-4 gap-3 mb-6">
+            <div className="grid grid-cols-3 gap-4 mb-6">
               {[4, 6, 8, 10, 12, 20].map(sides => (
-                <button key={sides} onClick={() => rollDice(sides)} disabled={isRolling} className={`${theme.bgSecondary} border ${theme.border} py-4 rounded-xl shadow-lg hover:translate-y-[-2px] transition-all disabled:opacity-50 disabled:hover:translate-y-0 group`}>
-                  <span className={`${theme.textMuted} text-lg`}>d</span>
-                  <span className={`${currentSkin.text} text-2xl font-bold`}>{sides}</span>
+                <button 
+                  key={sides} 
+                  onClick={() => rollDice(sides)} 
+                  disabled={isRolling} 
+                  className={`${theme.bgSecondary} border ${theme.border} py-4 px-2 rounded-xl shadow-lg hover:translate-y-[-2px] transition-all disabled:opacity-50 disabled:hover:translate-y-0 group flex flex-col items-center gap-2`}
+                >
+                  <DiceIcon sides={sides} value={sides === 6 ? 6 : Math.ceil(sides/2)} color={currentSkin.diceText} size={60} />
+                  <span className={`${theme.text} text-sm font-bold`}>d{sides}</span>
                 </button>
               ))}
-              <div className="col-span-2">
-                <button onClick={() => rollDice(20, 2)} disabled={isRolling} className={`w-full h-full ${theme.bgSecondary} border ${theme.border} rounded-xl shadow-lg hover:translate-y-[-2px] transition-all flex items-center justify-center gap-2`}>
-                    <span className={`${currentSkin.text} text-xl font-bold`}>2d20</span>
-                    <span className={theme.textMuted}>(Advantage)</span>
-                </button>
-              </div>
+            </div>
+            <div className="mb-6">
+              <button 
+                onClick={() => rollDice(20, 2)} 
+                disabled={isRolling} 
+                className={`w-full ${theme.bgSecondary} border ${theme.border} py-4 rounded-xl shadow-lg hover:translate-y-[-2px] transition-all flex items-center justify-center gap-3`}
+              >
+                <DiceIcon sides={20} value={20} color={currentSkin.diceText} size={50} />
+                <DiceIcon sides={20} value={20} color={currentSkin.diceText} size={50} />
+                <span className={`${theme.text} text-lg font-bold`}>2d20 (Advantage)</span>
+              </button>
             </div>
             <button onClick={() => setRolls([])} className={`w-full text-xs uppercase tracking-widest ${theme.textMuted} hover:${theme.text} transition-colors mt-4`}>Clear History</button>
           </div>
@@ -1717,9 +1836,9 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
               {rolls.map((roll, idx) => {
                 const rollSkin = skins[roll.skin] || skins.standard;
                 return (
-                    <div key={idx} className={`${theme.bgTertiary} rounded-lg p-3 border-l-4 ${rollSkin.border} flex justify-between items-center`}>
+                    <div key={idx} className={`${theme.bgTertiary} rounded-lg p-3 border-l-4 ${rollSkin.diceBorder} flex justify-between items-center`}>
                       <div><span className={`font-bold ${theme.text} mr-2`}>{roll.dice}</span><span className={`${theme.textSecondary} text-sm`}>[{roll.results.join(', ')}]</span></div>
-                      <div className="flex items-center gap-3"><span className={`text-xl font-bold ${rollSkin.text}`}>{roll.total}</span><span className={`text-xs ${theme.textMuted}`}>{roll.timestamp}</span></div>
+                      <div className="flex items-center gap-3"><span className={`text-xl font-bold ${rollSkin.diceText}`}>{roll.total}</span><span className={`text-xs ${theme.textMuted}`}>{roll.timestamp}</span></div>
                     </div>
                 );
               })}
@@ -1739,7 +1858,8 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
         { id: 'miracles', name: 'Miracles', icon: 'flame' },
         { id: 'monsters', name: 'Bestiary', icon: 'shield' },
         { id: 'righteousness', name: 'Righteousness', icon: 'heart' },
-        { id: 'combat', name: 'Combat', icon: 'sword' }
+        { id: 'combat', name: 'Combat', icon: 'sword' },
+        { id: 'encyclopedia', name: 'Encyclopedia Angelorum', icon: 'book-open' }
       ];
 
       return (
@@ -1759,6 +1879,7 @@ The Almighty sees. The Almighty remembers. And the Almighty acts.`
               {selectedSection === 'monsters' && <MonstersRef theme={theme} />}
               {selectedSection === 'righteousness' && <RighteousnessRef theme={theme} />}
               {selectedSection === 'combat' && <CombatRef theme={theme} />}
+              {selectedSection === 'encyclopedia' && <EncyclopediaRef theme={theme} />}
             </div>
           </div>
         </div>
@@ -1907,6 +2028,67 @@ const MonstersRef = ({ theme }) => {
         </div>
       </div>
     );
+
+    const EncyclopediaRef = ({ theme }) => (
+      <div>
+        <h2 className={`text-2xl font-bold ${theme.text} mb-4`}>
+          <span className="text-amber-400">📖</span> Encyclopedia Angelorum et Daemonum
+        </h2>
+        <div className={`${theme.bgTertiary} rounded-lg p-6 border-l-4 border-amber-500 mb-6`}>
+          <p className={`${theme.textSecondary} mb-4 leading-relaxed`}>
+            A comprehensive compendium of angelic hierarchies, fallen Watchers, and the demonic 
+            spirits that arose from the Nephilim. This sacred text catalogs the names, powers, 
+            and histories of celestial and infernal beings from the days before the Flood.
+          </p>
+          <p className={`${theme.textSecondary} mb-6 italic`}>
+            "And the angels which kept not their first estate, but left their own habitation, 
+            he hath reserved in everlasting chains under darkness..."
+          </p>
+        </div>
+
+        <div className={`${theme.bgSecondary} rounded-xl p-8 text-center border-2 ${theme.border} hover:border-amber-500 transition-colors`}>
+          <div className="mb-4">
+            <span className="text-6xl">📚</span>
+          </div>
+          <h3 className={`text-xl font-bold ${theme.text} mb-3`}>
+            Open the Encyclopedia
+          </h3>
+          <p className={`${theme.textSecondary} mb-6 max-w-md mx-auto`}>
+            Access the full digital encyclopedia containing detailed entries on angels, 
+            Watchers, demons, and the spiritual hierarchies of heaven and the abyss.
+          </p>
+          <a 
+            href="encyclopedia.html" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`inline-flex items-center gap-2 ${theme.accent} ${theme.accentHover} text-white px-6 py-3 rounded-lg font-bold shadow-lg transition-all hover:scale-105`}
+          >
+            <Icon name="book-open" className="w-5 h-5" />
+            <span>Open Encyclopedia</span>
+            <Icon name="external-link" className="w-4 h-4" />
+          </a>
+        </div>
+
+        <div className={`mt-6 grid md:grid-cols-3 gap-4`}>
+          <div className={`${theme.bgTertiary} rounded-lg p-4 text-center`}>
+            <div className="text-3xl mb-2">👼</div>
+            <h4 className={`font-bold ${theme.text} mb-1`}>Angelic Orders</h4>
+            <p className={`text-sm ${theme.textSecondary}`}>Seraphim, Cherubim, and the heavenly host</p>
+          </div>
+          <div className={`${theme.bgTertiary} rounded-lg p-4 text-center`}>
+            <div className="text-3xl mb-2">⚡</div>
+            <h4 className={`font-bold ${theme.text} mb-1`}>The Watchers</h4>
+            <p className={`text-sm ${theme.textSecondary}`}>The 200 fallen angels and their teachings</p>
+          </div>
+          <div className={`${theme.bgTertiary} rounded-lg p-4 text-center`}>
+            <div className="text-3xl mb-2">👹</div>
+            <h4 className={`font-bold ${theme.text} mb-1`}>Demon Spirits</h4>
+            <p className={`text-sm ${theme.textSecondary}`}>Disembodied Nephilim seeking hosts</p>
+          </div>
+        </div>
+      </div>
+    );
+
     // ============================================
     // IT IS WRITTEN TAB (Lore Compendium)
     // ============================================
@@ -2124,19 +2306,6 @@ const MonstersRef = ({ theme }) => {
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<NephilimWarsApp />);
   </script>
-  <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./service-worker.js')
-        .then((registration) => {
-          console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        })
-        .catch((err) => {
-          console.log('ServiceWorker registration failed: ', err);
-        });
-    });
-  }
-</script>
 </body>
 
 </html>
