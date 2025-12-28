@@ -1,0 +1,3310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nephilim Wars - Combat System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Crimson Text', 'Georgia', serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e6e6e6;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(15, 15, 30, 0.95);
+            border: 2px solid #d4af37;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2d1b00 0%, #1a0f00 100%);
+            padding: 30px;
+            text-align: center;
+            border-bottom: 3px solid #d4af37;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        h1 {
+            color: #d4af37;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #b8860b;
+            font-style: italic;
+            font-size: 1.2em;
+        }
+        
+        nav {
+            background: rgba(20, 20, 40, 0.9);
+            padding: 15px;
+            border-bottom: 2px solid #d4af37;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .nav-btn {
+            background: linear-gradient(135deg, #3d2a00 0%, #2d1f00 100%);
+            color: #d4af37;
+            border: 1px solid #d4af37;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 0.95em;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #d4af37;
+            color: #1a0f00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(212, 175, 55, 0.4);
+        }
+        
+        .nav-btn.active {
+            background: #d4af37;
+            color: #1a0f00;
+            font-weight: bold;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h2 {
+            color: #d4af37;
+            font-size: 2em;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #d4af37;
+        }
+        
+        h3 {
+            color: #b8860b;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+        
+        h4 {
+            color: #daa520;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+        
+        .mechanic-box {
+            background: rgba(30, 30, 50, 0.8);
+            border-left: 4px solid #d4af37;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .righteous-box {
+            border-left-color: #4da6ff;
+            background: rgba(30, 40, 60, 0.8);
+        }
+        
+        .corruption-box {
+            border-left-color: #cc0000;
+            background: rgba(60, 30, 30, 0.8);
+        }
+        
+        .spiritual-box {
+            border-left-color: #9370db;
+            background: rgba(50, 30, 60, 0.8);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(20, 20, 35, 0.9);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #3d2a00 0%, #2d1f00 100%);
+            color: #d4af37;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #d4af37;
+        }
+        
+        td {
+            padding: 10px;
+            border: 1px solid #555;
+        }
+        
+        tr:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+        
+        .dice-notation {
+            color: #4da6ff;
+            font-weight: bold;
+        }
+        
+        .rp-cost {
+            color: #4da6ff;
+            font-weight: bold;
+        }
+        
+        .cp-cost {
+            color: #cc0000;
+            font-weight: bold;
+        }
+        
+        ul, ol {
+            margin: 15px 0 15px 30px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .expandable {
+            margin: 15px 0;
+        }
+        
+        .expandable-header {
+            background: rgba(40, 40, 60, 0.8);
+            padding: 15px;
+            cursor: pointer;
+            border: 1px solid #d4af37;
+            border-radius: 5px;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .expandable-header:hover {
+            background: rgba(60, 60, 80, 0.9);
+        }
+        
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+            background: rgba(25, 25, 40, 0.8);
+            border: 1px solid #555;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+        
+        .expandable-content.open {
+            max-height: 2000px;
+            padding: 20px;
+        }
+        
+        .arrow {
+            transition: transform 0.3s;
+            color: #d4af37;
+            font-size: 1.2em;
+        }
+        
+        .arrow.open {
+            transform: rotate(90deg);
+        }
+        
+        .quick-ref {
+            background: rgba(40, 40, 60, 0.9);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border: 2px solid #d4af37;
+        }
+        
+        .warning {
+            background: rgba(80, 30, 30, 0.8);
+            border-left: 4px solid #cc0000;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .tip {
+            background: rgba(30, 60, 80, 0.8);
+            border-left: 4px solid #4da6ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .stat-block {
+            background: rgba(30, 30, 50, 0.9);
+            border: 2px solid #d4af37;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .stat-block h4 {
+            margin-top: 0;
+            color: #d4af37;
+            text-align: center;
+            font-size: 1.5em;
+        }
+        
+        code {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #4da6ff;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.5em; }
+            .nav-btn { padding: 8px 15px; font-size: 0.9em; }
+            .content { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚔️ NEPHILIM WARS ⚔️</h1>
+            <div class="subtitle">Combat System - Antediluvian Age</div>
+        </header>
+        
+        <nav>
+            <button class="nav-btn active" onclick="showSection('core')">Core Rules</button>
+            <button class="nav-btn" onclick="showSection('rp-cp')">RP/CP System</button>
+            <button class="nav-btn" onclick="showSection('spiritual')">Spiritual Warfare</button>
+            <button class="nav-btn" onclick="showSection('actions')">Combat Actions</button>
+            <button class="nav-btn" onclick="showSection('weapons')">Weapons & Artifacts</button>
+            <button class="nav-btn" onclick="showSection('bloodlines')">Giant Bloodlines</button>
+            <button class="nav-btn" onclick="showSection('angels-demons')">Angels & Demons</button>
+            <button class="nav-btn" onclick="showSection('mass-combat')">Mass Combat</button>
+            <button class="nav-btn" onclick="showSection('tables')">Reference Tables</button>
+        </nav>
+        
+        <div class="content">
+            <!-- CORE RULES SECTION -->
+            <div id="core" class="section active">
+                <h2>Core Combat Rules</h2>
+                
+                <div class="mechanic-box">
+                    <h3>Turn Structure (5e Compatible)</h3>
+                    <p>Each turn in Nephilim Wars follows the standard D&D 5e action economy with antediluvian enhancements:</p>
+                    <ol>
+                        <li><strong>Movement:</strong> Up to your speed (typically 30 ft)</li>
+                        <li><strong>Action:</strong> Attack, Cast a Spell, Dash, Disengage, Dodge, Help, Hide, Ready, Search, Use Object</li>
+                        <li><strong>Bonus Action:</strong> If you have an ability that uses a bonus action</li>
+                        <li><strong>Reaction:</strong> One per round (opportunity attacks, etc.)</li>
+                        <li><strong>Free Actions:</strong> Drop item, short communication, etc.</li>
+                    </ol>
+                </div>
+                
+                <div class="mechanic-box spiritual-box">
+                    <h3>Initiative</h3>
+                    <p><strong>Roll:</strong> <span class="dice-notation">1d20 + DEX modifier</span></p>
+                    <p><strong>Antediluvian Variant - Spiritual Awareness:</strong></p>
+                    <ul>
+                        <li>If your RP ≥ 10: Add <span class="rp-cost">+2</span> to initiative</li>
+                        <li>If your CP ≥ 10: Subtract <span class="cp-cost">-2</span> from initiative</li>
+                        <li>Angels and righteous beings always act before corrupted creatures on tied initiative</li>
+                    </ul>
+                </div>
+                
+                <div class="quick-ref">
+                    <h4>Quick Reference - Your Turn</h4>
+                    <table>
+                        <tr>
+                            <th>Action Type</th>
+                            <th>Examples</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Action</strong></td>
+                            <td>Attack (melee/ranged), Cast spell, Dash, Dodge, Help, Hide, Disengage, Ready, Search, Use Object</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bonus Action</strong></td>
+                            <td>Off-hand attack, certain spells, class features, Desperation Action (once per combat)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Movement</strong></td>
+                            <td>Walk, climb (half speed), swim (half speed), jump</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reaction</strong></td>
+                            <td>Opportunity attack, Shield spell, certain abilities</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Free</strong></td>
+                            <td>Drop item, speak briefly, interact with one object</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <h3>Attack Resolution</h3>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>Melee Attacks</strong></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <p><strong>Attack Roll:</strong> <span class="dice-notation">1d20 + STR modifier + proficiency bonus</span> (if proficient)</p>
+                        <p><strong>Hit if:</strong> Attack roll ≥ target's AC</p>
+                        <p><strong>Critical Hit:</strong> Natural 20 - roll all damage dice twice</p>
+                        <p><strong>Critical Miss:</strong> Natural 1 - automatic miss (optional fumble table)</p>
+                        <p><strong>Damage:</strong> Weapon damage + STR modifier</p>
+                        
+                        <h4>Advantage/Disadvantage</h4>
+                        <ul>
+                            <li><strong>Advantage:</strong> Roll 2d20, take higher (flanking, prone target, etc.)</li>
+                            <li><strong>Disadvantage:</strong> Roll 2d20, take lower (restrained, prone attacker, etc.)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>Ranged Attacks</strong></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <p><strong>Attack Roll:</strong> <span class="dice-notation">1d20 + DEX modifier + proficiency bonus</span></p>
+                        <p><strong>Range:</strong> Most weapons have normal/long range (e.g., 80/320)</p>
+                        <ul>
+                            <li>Normal range: No penalty</li>
+                            <li>Long range: Disadvantage on attack</li>
+                            <li>Beyond long range: Cannot attack</li>
+                        </ul>
+                        <p><strong>Cover:</strong></p>
+                        <ul>
+                            <li>Half cover: +2 AC and DEX saves</li>
+                            <li>Three-quarters cover: +5 AC and DEX saves</li>
+                            <li>Full cover: Cannot be targeted directly</li>
+                        </ul>
+                        <p><strong>Adjacent Enemies:</strong> Disadvantage on ranged attacks if hostile creature within 5 ft</p>
+                    </div>
+                </div>
+                
+                <h3>Damage & Hit Points</h3>
+                <div class="mechanic-box">
+                    <p><strong>Taking Damage:</strong> Reduce your HP by the damage amount</p>
+                    <p><strong>Bloodied:</strong> When you reach half HP or less, you can use Desperation Actions</p>
+                    <p><strong>Reaching 0 HP:</strong> You fall unconscious and begin making death saves (or use Grievous Wounds variant)</p>
+                    
+                    <h4>Death Saves</h4>
+                    <ul>
+                        <li>Roll <span class="dice-notation">1d20</span> at the start of your turn</li>
+                        <li>10+: Success (record one success)</li>
+                        <li>1-9: Failure (record one failure)</li>
+                        <li>Natural 20: Regain 1 HP and become conscious</li>
+                        <li>Natural 1: Count as two failures</li>
+                        <li>Three successes: Stabilized (unconscious but alive)</li>
+                        <li>Three failures: Dead</li>
+                    </ul>
+                    
+                    <div class="tip">
+                        <strong>Antediluvian Mercy:</strong> Allies can use an Action to stabilize you with DC 10 Medicine check, or spend 1 RP to automatically stabilize you from 30 ft away.
+                    </div>
+                </div>
+                
+                <h3>Conditions</h3>
+                <table>
+                    <tr>
+                        <th>Condition</th>
+                        <th>Effect</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Blinded</strong></td>
+                        <td>Can't see, auto-fail sight checks, disadvantage on attacks, attacks against you have advantage</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Charmed</strong></td>
+                        <td>Can't attack charmer, charmer has advantage on social checks against you</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Frightened</strong></td>
+                        <td>Disadvantage on checks and attacks while source is in sight, can't move closer to source</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Grappled</strong></td>
+                        <td>Speed becomes 0, can't benefit from speed bonuses</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Incapacitated</strong></td>
+                        <td>Can't take actions or reactions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Paralyzed</strong></td>
+                        <td>Incapacitated, can't move or speak, auto-fail STR and DEX saves, attacks have advantage, hits within 5 ft are crits</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Poisoned</strong></td>
+                        <td>Disadvantage on attack rolls and ability checks</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Prone</strong></td>
+                        <td>Disadvantage on attacks, attacks against you have advantage (if within 5 ft) or disadvantage (if beyond), costs half movement to stand</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Restrained</strong></td>
+                        <td>Speed 0, disadvantage on attacks and DEX saves, attacks against you have advantage</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stunned</strong></td>
+                        <td>Incapacitated, can't move, can speak only falteringly, auto-fail STR and DEX saves, attacks have advantage</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Unconscious</strong></td>
+                        <td>Incapacitated, can't move or speak, unaware of surroundings, drop everything held, fall prone, auto-fail STR and DEX saves, attacks have advantage, hits within 5 ft are crits</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- RP/CP SYSTEM SECTION -->
+            <div id="rp-cp" class="section">
+                <h2>Righteousness & Corruption System</h2>
+                
+                <div class="mechanic-box righteous-box">
+                    <h3>Righteousness Points (RP)</h3>
+                    <p>RP represents your spiritual alignment with divine order, accumulated through righteous acts, prayer, and moral choices.</p>
+                    
+                    <h4>Gaining RP</h4>
+                    <ul>
+                        <li>Protecting the innocent: +1-3 RP</li>
+                        <li>Resisting temptation: +1-2 RP</li>
+                        <li>Acts of mercy: +1 RP</li>
+                        <li>Prayer and worship: +1 RP per hour of sincere prayer</li>
+                        <li>Destroying corrupted artifacts: +2-5 RP</li>
+                        <li>Confession and repentance: Variable, removes CP</li>
+                    </ul>
+                    
+                    <h4>RP Combat Benefits</h4>
+                    <table>
+                        <tr>
+                            <th>Cost</th>
+                            <th>Benefit</th>
+                        </tr>
+                        <tr>
+                            <td><span class="rp-cost">1 RP</span></td>
+                            <td>Reroll any d20 (attack, save, ability check)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rp-cost">2 RP</span></td>
+                            <td>Grant ally within 30 ft advantage on next roll</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rp-cost">3 RP</span></td>
+                            <td>Automatically stabilize dying ally within 30 ft</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rp-cost">5 RP</span></td>
+                            <td>Invoke Divine Shield - gain resistance to next attack</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rp-cost">7 RP</span></td>
+                            <td>Righteous Smite - add 3d8 radiant damage to attack</td>
+                        </tr>
+                    </table>
+                    
+                    <h4>Passive RP Bonuses</h4>
+                    <ul>
+                        <li><strong>RP 5+:</strong> +1 to WIS saving throws</li>
+                        <li><strong>RP 10+:</strong> +1 to AC and all saves, +2 initiative</li>
+                        <li><strong>RP 15+:</strong> Advantage on saves against fear and charm</li>
+                        <li><strong>RP 20+:</strong> Faint golden aura, disadvantage on Stealth but advantage on Intimidation vs corrupted</li>
+                    </ul>
+                </div>
+                
+                <div class="mechanic-box corruption-box">
+                    <h3>Corruption Points (CP)</h3>
+                    <p>CP represents the taint of the fallen world, gained through sinful acts, exposure to darkness, and embracing forbidden power.</p>
+                    
+                    <h4>Gaining CP</h4>
+                    <ul>
+                        <li>Killing innocents: +3-5 CP</li>
+                        <li>Using forbidden knowledge: +1-3 CP</li>
+                        <li>Consorting with demons: +2 CP</li>
+                        <li>Breaking sacred oaths: +3 CP</li>
+                        <li>Accepting dark bargains: +1-5 CP</li>
+                        <li>Consuming corrupted flesh: +2 CP</li>
+                        <li>Witnessing cosmic horrors: +1-3 CP</li>
+                    </ul>
+                    
+                    <h4>CP Combat Consequences</h4>
+                    <table>
+                        <tr>
+                            <th>CP Level</th>
+                            <th>Effects</th>
+                        </tr>
+                        <tr>
+                            <td><span class="cp-cost">CP 1-4</span></td>
+                            <td>Minor discomfort, occasional dark thoughts</td>
+                        </tr>
+                        <tr>
+                            <td><span class="cp-cost">CP 5-9</span></td>
+                            <td>Enemies sense corruption (disadvantage on Intimidation vs righteous, advantage vs corrupted), -2 initiative</td>
+                        </tr>
+                        <tr>
+                            <td><span class="cp-cost">CP 10-14</span></td>
+                            <td>Nephilim can smell your taint (prioritized as target), visible veins darken, nightmares every rest</td>
+                        </tr>
+                        <tr>
+                            <td><span class="cp-cost">CP 15-19</span></td>
+                            <td>Physical mutations manifest (+1 damage, disadvantage on Persuasion), marked by angels</td>
+                        </tr>
+                        <tr>
+                            <td><span class="cp-cost">CP 20+</span></td>
+                            <td>Partially fallen - risk of full corruption, demons sense you from miles away</td>
+                        </tr>
+                    </table>
+                    
+                    <h4>Corruption Flares</h4>
+                    <p>When you take a critical hit or fall to 0 HP, roll <span class="dice-notation">1d20</span>. If the result is ≤ your CP total, trigger a Corruption Flare:</p>
+                    
+                    <div class="expandable">
+                        <div class="expandable-header" onclick="toggleExpand(this)">
+                            <span><strong>Corruption Flare Table (1d12)</strong></span>
+                            <span class="arrow">▶</span>
+                        </div>
+                        <div class="expandable-content">
+                            <table>
+                                <tr>
+                                    <th>d12</th>
+                                    <th>Flare Effect</th>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td><strong>Dark Surge:</strong> Deal extra 1d6 necrotic damage to attacker, gain 1 CP</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td><strong>Unholy Resilience:</strong> Reduce damage by half, gain 1 CP</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td><strong>Feral Instinct:</strong> Immediately move up to half speed and make opportunity attack, gain 1 CP</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td><strong>Shadow Step:</strong> Teleport up to 15 ft to unoccupied space you can see, gain 1 CP</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td><strong>Corrupted Cry:</strong> All enemies within 20 ft must make DC 13 WIS save or be frightened until end of your next turn, gain 1 CP</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td><strong>Vampiric Touch:</strong> Heal HP equal to damage dealt on next melee hit, gain 2 CP</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td><strong>Dark Whispers:</strong> Learn one secret about attacker (GM choice), gain 1 CP</td>
+                                </tr>
+                                <tr>
+                                    <td>8</td>
+                                    <td><strong>Fel Armor:</strong> +3 AC until end of next turn, skin blackens temporarily, gain 1 CP</td>
+                                </tr>
+                                <tr>
+                                    <td>9</td>
+                                    <td><strong>Chaos Burst:</strong> Random wild magic effect (GM discretion), gain 1d4 CP</td>
+                                </tr>
+                                <tr>
+                                    <td>10</td>
+                                    <td><strong>Entropic Touch:</strong> Attacker must make DC 14 CON save or gain 1 level of exhaustion, gain 2 CP</td>
+                                </tr>
+                                <tr>
+                                    <td>11</td>
+                                    <td><strong>Demon's Bargain:</strong> Fully heal but gain 3 CP and owe a favor to a demon lord</td>
+                                </tr>
+                                <tr>
+                                    <td>12</td>
+                                    <td><strong>Abyssal Transformation:</strong> Temporarily transform into corrupted form (see mutations table) for 1 minute, gain 2 CP</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mechanic-box">
+                    <h3>CP/RP Balance & Redemption</h3>
+                    
+                    <h4>Removing Corruption</h4>
+                    <ul>
+                        <li><strong>Prayer & Fasting:</strong> Spend 8 hours in prayer, remove 1 CP (once per week)</li>
+                        <li><strong>Confession:</strong> Confess sins to righteous priest/elder, DC 15 Religion check, remove 1d4 CP</li>
+                        <li><strong>Sacrifice:</strong> Sacrifice something precious (item worth 100+ gp or personal sacrifice), remove 1d6 CP</li>
+                        <li><strong>Divine Intervention:</strong> Angel or prophet can remove CP (rare, quest reward)</li>
+                        <li><strong>Righteous Acts:</strong> For every 3 RP gained, may spend those RP to remove 1 CP</li>
+                    </ul>
+                    
+                    <h4>Point of No Return</h4>
+                    <div class="warning">
+                        <strong>⚠️ CP 25+:</strong> Character is at risk of full corruption. Must make DC 18 WIS save every long rest or become NPC under GM control as a fallen, corrupted being. Only divine miracle can save them now.
+                    </div>
+                </div>
+                
+                <h3>Dark Temptations (Mid-Combat)</h3>
+                <p>1-2 times per major combat, the GM may offer a Dark Temptation - immediate power in exchange for CP:</p>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>Sample Dark Temptations</strong></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <table>
+                            <tr>
+                                <th>Temptation</th>
+                                <th>Benefit</th>
+                                <th>CP Cost</th>
+                            </tr>
+                            <tr>
+                                <td>Fury of Fallen Stars</td>
+                                <td>Deal maximum damage this turn</td>
+                                <td>+2 CP</td>
+                            </tr>
+                            <tr>
+                                <td>Shadow Strike</td>
+                                <td>Automatically hit next attack</td>
+                                <td>+1 CP</td>
+                            </tr>
+                            <tr>
+                                <td>Abyssal Endurance</td>
+                                <td>Gain temp HP equal to character level × 5</td>
+                                <td>+2 CP</td>
+                            </tr>
+                            <tr>
+                                <td>Forbidden Knowledge</td>
+                                <td>Automatically succeed on next skill check</td>
+                                <td>+1 CP</td>
+                            </tr>
+                            <tr>
+                                <td>Death's Grip</td>
+                                <td>Target must make DC 15 CON save or drop to 1 HP</td>
+                                <td>+3 CP</td>
+                            </tr>
+                            <tr>
+                                <td>Eldritch Might</td>
+                                <td>Gain advantage on all rolls for 1 round</td>
+                                <td>+3 CP</td>
+                            </tr>
+                            <tr>
+                                <td>Demon's Whisper</td>
+                                <td>Learn all enemy weaknesses and resistances</td>
+                                <td>+1 CP</td>
+                            </tr>
+                            <tr>
+                                <td>Chaos Bolt</td>
+                                <td>Add 3d10 random damage type to attack</td>
+                                <td>+2 CP</td>
+                            </tr>
+                        </table>
+                        
+                        <div class="tip">
+                            <strong>GM Note:</strong> Present temptations when players are desperate, bloodied, or facing overwhelming odds. Make the whispers thematic to the situation and character weaknesses.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SPIRITUAL WARFARE SECTION -->
+            <div id="spiritual" class="section">
+                <h2>Spiritual Warfare System</h2>
+                
+                <div class="mechanic-box spiritual-box">
+                    <h3>Spiritual Integrity (SI)</h3>
+                    <p><strong>SI = 10 + WIS modifier + character level</strong></p>
+                    
+                    <p>SI represents your soul's resilience against supernatural assault. While HP measures physical vitality, SI measures spiritual wholeness.</p>
+                    
+                    <h4>What Damages SI?</h4>
+                    <ul>
+                        <li>Angel weapons (radiant damage to corrupted beings)</li>
+                        <li>Demon weapons (necrotic/psychic damage to righteous beings)</li>
+                        <li>Demonic whispers and temptations</li>
+                        <li>Ancient curses and hexes</li>
+                        <li>Witnessing cosmic horrors</li>
+                        <li>Exposure to fallen watcher magic</li>
+                        <li>Certain forbidden rituals</li>
+                    </ul>
+                    
+                    <h4>SI Damage Examples</h4>
+                    <table>
+                        <tr>
+                            <th>Source</th>
+                            <th>SI Damage</th>
+                            <th>Additional Effect</th>
+                        </tr>
+                        <tr>
+                            <td>Angel's Flaming Sword</td>
+                            <td>1d6</td>
+                            <td>Only to corrupted (CP 5+)</td>
+                        </tr>
+                        <tr>
+                            <td>Demon's Claw</td>
+                            <td>1d4</td>
+                            <td>WIS save DC 13 or gain 1 CP</td>
+                        </tr>
+                        <tr>
+                            <td>Witnessing Greater Demon</td>
+                            <td>1d8</td>
+                            <td>WIS save DC 15 or frightened</td>
+                        </tr>
+                        <tr>
+                            <td>Curse of the Fallen</td>
+                            <td>2d6</td>
+                            <td>Disadvantage on next save</td>
+                        </tr>
+                        <tr>
+                            <td>Psychic Assault</td>
+                            <td>1d10</td>
+                            <td>INT save or stunned 1 round</td>
+                        </tr>
+                        <tr>
+                            <td>Eldritch Horror Vision</td>
+                            <td>3d6</td>
+                            <td>WIS save DC 16 or gain 1d4 CP</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="mechanic-box corruption-box">
+                    <h3>Spiritual Crisis (SI Reaches 0)</h3>
+                    <p>When your SI is reduced to 0, you don't die - but your soul enters crisis. Roll <span class="dice-notation">1d10</span> on the Spiritual Crisis table:</p>
+                    
+                    <table>
+                        <tr>
+                            <th>d10</th>
+                            <th>Crisis Effect</th>
+                            <th>Duration</th>
+                        </tr>
+                        <tr>
+                            <td>1-2</td>
+                            <td><strong>Despair:</strong> Disadvantage on all saves, cannot spend RP</td>
+                            <td>Until SI restored to 3+</td>
+                        </tr>
+                        <tr>
+                            <td>3-4</td>
+                            <td><strong>Possession Vulnerability:</strong> Demons have advantage on possession attempts against you</td>
+                            <td>Until SI restored to 5+</td>
+                        </tr>
+                        <tr>
+                            <td>5-6</td>
+                            <td><strong>Divine Abandonment:</strong> Cannot pray for RP, -2 to WIS-based checks</td>
+                            <td>24 hours or until confession</td>
+                        </tr>
+                        <tr>
+                            <td>7-8</td>
+                            <td><strong>Corruption Surge:</strong> Gain 1d6 CP immediately, nightmarish visions</td>
+                            <td>Permanent (until CP removed)</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td><strong>Soul Fracture:</strong> Max HP reduced by 10, visible spiritual wound</td>
+                            <td>Until Greater Restoration or divine healing</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td><strong>Marked by Darkness:</strong> Demons can sense you from miles away, gain 2d4 CP</td>
+                            <td>Permanent scar (quest to remove)</td>
+                        </tr>
+                    </table>
+                    
+                    <div class="warning">
+                        <strong>Critical:</strong> Multiple Spiritual Crises compound. If SI reaches 0 while already in crisis, roll again and suffer both effects simultaneously.
+                    </div>
+                </div>
+                
+                <div class="mechanic-box righteous-box">
+                    <h3>SI Recovery</h3>
+                    
+                    <h4>Natural Recovery</h4>
+                    <ul>
+                        <li><strong>Long Rest:</strong> Restore 1 SI</li>
+                        <li><strong>Prayer (1 hour):</strong> Restore 1d4 SI (once per long rest)</li>
+                        <li><strong>Sabbath Rest:</strong> Full 24-hour rest restores all SI</li>
+                    </ul>
+                    
+                    <h4>Active Restoration</h4>
+                    <ul>
+                        <li><strong>Confession:</strong> DC 12 Religion check, restore 1d6 SI</li>
+                        <li><strong>Divine Blessing:</strong> Priest/prophet can restore 2d8 SI (requires ritual)</li>
+                        <li><strong>Sacred Site:</strong> Resting at altar/holy place restores 1d4 extra SI</li>
+                        <li><strong>Angelic Touch:</strong> Angel can fully restore SI (rare)</li>
+                    </ul>
+                    
+                    <h4>RP-Based SI Healing</h4>
+                    <p>Spend <span class="rp-cost">2 RP</span> as an action to restore <span class="dice-notation">1d6 SI</span> to yourself or an ally you touch.</p>
+                </div>
+                
+                <h3>Spiritual Attacks in Combat</h3>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>Making Spiritual Attacks</strong></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <h4>When to Target SI Instead of HP</h4>
+                        <p>Certain beings and weapons specifically assault the soul:</p>
+                        <ul>
+                            <li>Angels wielding holy weapons against the corrupted</li>
+                            <li>Demons using psychic/necrotic powers</li>
+                            <li>Watcher magic and forbidden spells</li>
+                            <li>Cursed artifacts</li>
+                            <li>Eldritch phenomena</li>
+                        </ul>
+                        
+                        <h4>Spiritual Attack Roll</h4>
+                        <p><strong>Attacker rolls:</strong> <span class="dice-notation">1d20 + CHA modifier + proficiency</span> (for most spiritual attacks)</p>
+                        <p><strong>Defender's Spiritual Defense = 10 + WIS modifier + level/2</strong></p>
+                        
+                        <h4>On Hit</h4>
+                        <p>Roll SI damage as specified by the attack. Target's current SI is reduced.</p>
+                        
+                        <h4>Critical Spiritual Hits (Natural 20)</h4>
+                        <p>Double SI damage dice AND target must make WIS save (DC = 8 + attacker's proficiency + CHA mod) or suffer additional effect:</p>
+                        <ul>
+                            <li>Righteous crit on corrupted: Target gains 1d4 CP and is frightened 1 round</li>
+                            <li>Corrupted crit on righteous: Target loses 1 RP and disadvantage on next save</li>
+                        </ul>
+                        
+                        <div class="tip">
+                            <strong>Dual Damage:</strong> Some powerful attacks deal BOTH HP and SI damage. For example, a fallen angel's sword might deal 2d8 slashing (HP) + 1d6 necrotic (SI).
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>Spiritual Defenses & Wards</strong></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <h4>Active Defenses</h4>
+                        <table>
+                            <tr>
+                                <th>Defense</th>
+                                <th>Effect</th>
+                                <th>Cost/Requirement</th>
+                            </tr>
+                            <tr>
+                                <td>Spiritual Shield</td>
+                                <td>Resistance to next SI damage (half damage)</td>
+                                <td>Reaction, 1 RP</td>
+                            </tr>
+                            <tr>
+                                <td>Prayer of Protection</td>
+                                <td>+2 to Spiritual Defense for 1 minute</td>
+                                <td>Action, DC 13 Religion</td>
+                            </tr>
+                            <tr>
+                                <td>Sacred Circle</td>
+                                <td>Allies within 10 ft gain advantage on saves vs spiritual attacks</td>
+                                <td>1 minute ritual, 3 RP</td>
+                            </tr>
+                            <tr>
+                                <td>Righteous Rebuke</td>
+                                <td>Reflect half of SI damage back to attacker</td>
+                                <td>Reaction, 2 RP, RP ≥10 required</td>
+                            </tr>
+                        </table>
+                        
+                        <h4>Passive Protections</h4>
+                        <ul>
+                            <li><strong>High RP:</strong> RP 10+ grants +1 to Spiritual Defense, RP 15+ grants +2</li>
+                            <li><strong>Sacred Items:</strong> Blessed talismans, phylacteries with scripture (+1 to SD)</li>
+                            <li><strong>Guardian Angel:</strong> If you have divine favor, angel may intervene (GM discretion)</li>
+                            <li><strong>Pure Heart:</strong> CP 0 and RP 10+ grants advantage on saves vs corruption</li>
+                        </ul>
+                        
+                        <h4>Environmental Wards</h4>
+                        <ul>
+                            <li><strong>Consecrated Ground:</strong> Demons cannot enter, corrupted take 1d4 SI damage per round</li>
+                            <li><strong>Blood of the Lamb:</strong> Doorway marked with sacrificial blood wards against evil</li>
+                            <li><strong>Salt Circle:</strong> Prevents lesser demons from crossing (DC 15 to break)</li>
+                            <li><strong>Holy Water:</strong> Splash deals 2d4 SI damage to demons, cleanses minor corruption</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- COMBAT ACTIONS SECTION -->
+            <div id="actions" class="section">
+                <h2>Combat Actions - Antediluvian Enhancements</h2>
+                
+                <div class="mechanic-box">
+                    <h3>Desperation Actions</h3>
+                    <p><strong>Trigger:</strong> Available when bloodied (half HP or less), once per combat</p>
+                    <p><strong>Usage:</strong> Bonus Action</p>
+                    
+                    <h4>Choose One:</h4>
+                    
+                    <div class="expandable">
+                        <div class="expandable-header" onclick="toggleExpand(this)">
+                            <span><strong>Corrupted Surge</strong> <span class="cp-cost">(Gain 2 CP)</span></span>
+                            <span class="arrow">▶</span>
+                        </div>
+                        <div class="expandable-content">
+                            <p>Tap into dark power within. Choose one benefit:</p>
+                            <ul>
+                                <li><strong>Extra Attack:</strong> Make one additional weapon attack this turn</li>
+                                <li><strong>Empowered Spell:</strong> Next spell deals +1d8 damage and ignores resistance</li>
+                                <li><strong>Dark Vitality:</strong> Gain temporary HP equal to 2× character level</li>
+                                <li><strong>Shadow Speed:</strong> Gain +20 ft movement and ignore difficult terrain until end of turn</li>
+                            </ul>
+                            <p><strong>Cost:</strong> Gain 2 CP, veins darken visibly for 1 minute</p>
+                        </div>
+                    </div>
+                    
+                    <div class="expandable">
+                        <div class="expandable-header" onclick="toggleExpand(this)">
+                            <span><strong>Righteous Stand</strong> <span class="rp-cost">(Spend 3 RP)</span></span>
+                            <span class="arrow">▶</span>
+                        </div>
+                        <div class="expandable-content">
+                            <p>Call upon divine strength in your hour of need:</p>
+                            <ul>
+                                <li>Heal <span class="dice-notation">1d8 + WIS modifier</span> HP</li>
+                                <li>Remove one condition (frightened, poisoned, cursed, etc.)</li>
+                                <li>Gain +2 AC until end of next turn</li>
+                                <li>Golden light briefly emanates from you</li>
+                            </ul>
+                            <p><strong>Cost:</strong> 3 RP (must have 3 RP available)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="expandable">
+                        <div class="expandable-header" onclick="toggleExpand(this)">
+                            <span><strong>Ancient Instinct</strong> <span class="cp-cost">(Gain 1 CP)</span></span>
+                            <span class="arrow">▶</span>
+                        </div>
+                        <div class="expandable-content">
+                            <p>Your giant bloodline awakens in crisis:</p>
+                            <ul>
+                                <li>Increase size by one category for 1 minute (Small→Medium, Medium→Large)</li>
+                                <li>Gain +2 STR, -1 DEX while enlarged</li>
+                                <li>Advantage on STR checks and saves</li>
+                                <li>Melee attacks deal +1d4 damage</li>
+                                <li>Physical features become more brutish/giant-like</li>
+                            </ul>
+                            <p><strong>Cost:</strong> 1 CP, 1 level exhaustion when effect ends</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Enhanced Grappling (Giant Wrestling)</h3>
+                <div class="mechanic-box">
+                    <p>Giants were legendary wrestlers. Nephilim Wars makes grappling dynamic and tactical.</p>
+                    
+                    <h4>Initiating Grapple</h4>
+                    <p><strong>Action:</strong> Use Attack action, one attack</p>
+                    <p><strong>Contest:</strong> Your Athletics (STR) vs target's Athletics (STR) or Acrobatics (DEX)</p>
+                    <p><strong>Size Requirement:</strong> Target must be no more than one size larger than you</p>
+                    
+                    <h4>Success Levels</h4>
+                    <table>
+                        <tr>
+                            <th>Beat Target By</th>
+                            <th>Result</th>
+                            <th>Effect</th>
+                        </tr>
+                        <tr>
+                            <td>0-4</td>
+                            <td><strong>Grappled</strong></td>
+                            <td>Target's speed becomes 0, cannot benefit from speed bonuses</td>
+                        </tr>
+                        <tr>
+                            <td>5-9</td>
+                            <td><strong>Pinned</strong></td>
+                            <td>Grappled + Restrained, you have advantage on attacks against them</td>
+                        </tr>
+                        <tr>
+                            <td>10+</td>
+                            <td><strong>Dominant Position</strong></td>
+                            <td>Pinned + they have disadvantage to escape, you can use bonus action to deal 1d6 + STR damage</td>
+                        </tr>
+                    </table>
+                    
+                    <h4>Escaping Grapple</h4>
+                    <p><strong>Action:</strong> Attempt to escape</p>
+                    <p><strong>Contest:</strong> Your Athletics or Acrobatics vs grappler's Athletics</p>
+                    <p><strong>Success:</strong> Break free and can move normally</p>
+                    
+                    <h4>Moving Grappled Target</h4>
+                    <p>While grappling, your speed is halved unless target is two sizes smaller. You can drag/carry the grappled creature with you.</p>
+                    
+                    <h4>Giant Bloodline Grappling Bonus</h4>
+                    <p>If you have giant ancestry:</p>
+                    <ul>
+                        <li>+2 to grapple checks against smaller creatures</li>
+                        <li>Can grapple creatures up to two sizes larger</li>
+                        <li>Bonus action damage increases to 1d8 + STR in Dominant Position</li>
+                    </ul>
+                </div>
+                
+                <h3>Called Shots</h3>
+                <div class="mechanic-box">
+                    <p><strong>Penalty:</strong> Take -2 to attack roll</p>
+                    <p><strong>Benefit:</strong> If hit, apply additional effect based on target location</p>
+                    
+                    <table>
+                        <tr>
+                            <th>Target</th>
+                            <th>Effect on Hit</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Head</strong></td>
+                            <td>+1d4 damage, target has disadvantage on concentration checks until end of next turn</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Arm/Weapon</strong></td>
+                            <td>Target makes STR save (DC = 8 + your STR + proficiency) or drops held item</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Leg</strong></td>
+                            <td>Reduce target's speed by 10 ft until end of their next turn</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Wings</strong></td>
+                            <td>Flying creature must make DEX save or fall, flying speed reduced by half for 1 minute</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Vitals</strong></td>
+                            <td>If target is bloodied, +2d6 damage. If not bloodied, +1d6 damage</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Eyes</strong></td>
+                            <td>Target makes CON save or is blinded until end of next turn (disadvantage if helmeted)</td>
+                        </tr>
+                    </table>
+                    
+                    <div class="tip">
+                        <strong>GM Discretion:</strong> Called shots against creatures without the targeted anatomy (e.g., no wings, no legs) automatically fail or should target something appropriate.
+                    </div>
+                </div>
+                
+                <h3>Prayer in Combat</h3>
+                <div class="mechanic-box righteous-box">
+                    <p><strong>Action:</strong> Use your Action to pray earnestly</p>
+                    <p><strong>Roll:</strong> Religion check</p>
+                    
+                    <table>
+                        <tr>
+                            <th>Religion Check</th>
+                            <th>Result</th>
+                        </tr>
+                        <tr>
+                            <td>DC 10-14</td>
+                            <td>Restore <span class="dice-notation">1d4 RP</span> to self or ally within 30 ft</td>
+                        </tr>
+                        <tr>
+                            <td>DC 15-19</td>
+                            <td>Restore <span class="dice-notation">1d6 RP</span> to self or ally within 30 ft</td>
+                        </tr>
+                        <tr>
+                            <td>DC 20+</td>
+                            <td>Restore <span class="dice-notation">1d6 RP</span> AND remove one condition OR restore <span class="dice-notation">1d4 SI</span></td>
+                        </tr>
+                        <tr>
+                            <td>Natural 1</td>
+                            <td>Prayer unanswered, -1 RP (if any), doubt creeps in</td>
+                        </tr>
+                    </table>
+                    
+                    <h4>Modifiers to Prayer</h4>
+                    <ul>
+                        <li><strong>Sacred ground:</strong> +2 to check</li>
+                        <li><strong>In great peril (surrounded, bloodied):</strong> +1 to check</li>
+                        <li><strong>CP 10+:</strong> -2 to check (corruption hinders)</li>
+                        <li><strong>Defiled location:</strong> -3 to check</li>
+                        <li><strong>Ally praying with you (Help action):</strong> Advantage on check</li>
+                    </ul>
+                    
+                    <div class="warning">
+                        <strong>Note:</strong> Prayer takes your full Action and requires genuine need. Cynical or manipulative prayers may fail automatically (GM discretion).
+                    </div>
+                </div>
+                
+                <h3>Positioning & Terrain</h3>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>Sacred Ground Mechanics</strong></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <h4>Altars (Consecrated)</h4>
+                        <ul>
+                            <li>Regenerate 1 RP per round (max once per combat)</li>
+                            <li>Advantage on Religion checks for prayer</li>
+                            <li>Demons cannot approach within 10 ft (DC 16 CHA save to override)</li>
+                            <li>Corruption effects suppressed while standing on altar</li>
+                        </ul>
+                        
+                        <h4>Defiled Sites</h4>
+                        <ul>
+                            <li>All creatures make DC 12 WIS save on entering or gain 1 CP</li>
+                            <li>Demonic powers enhanced (+1d4 damage)</li>
+                            <li>Prayer checks have disadvantage</li>
+                            <li>Unholy aura: -1 to WIS saves</li>
+                        </ul>
+                        
+                        <h4>Stone Circles (Ancient Power)</h4>
+                        <ul>
+                            <li>Giant bloodline abilities amplified (+2 damage)</li>
+                            <li>Advantage on checks related to giant heritage</li>
+                            <li>Magic is unpredictable (roll on wild magic table on natural 1)</li>
+                            <li>May attract attention of Watchers or their descendants</li>
+                        </ul>
+                        
+                        <h4>Running Water</h4>
+                        <ul>
+                            <li>Disrupts certain corrupted powers (GM discretion)</li>
+                            <li>Cleanse 1 CP if you fully immerse for 1 minute</li>
+                            <li>Demons must make DC 13 CHA save to cross</li>
+                            <li>Restore 1d4 SI if you drink from pure source</li>
+                        </ul>
+                        
+                        <h4>High Ground</h4>
+                        <ul>
+                            <li>Standard +2 to ranged attacks when shooting downward</li>
+                            <li>Advantage on Intimidation checks from elevated position</li>
+                            <li>Melee attacks from higher ground: +1 to hit if wielding reach weapon</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>Height Advantage (Giants Matter)</strong></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <p>Size differences create tactical advantages in the antediluvian world where giants roam:</p>
+                        
+                        <table>
+                            <tr>
+                                <th>Size Difference</th>
+                                <th>Combat Benefit (Larger Creature)</th>
+                            </tr>
+                            <tr>
+                                <td>One category larger</td>
+                                <td>+1 to melee attack rolls, advantage on shove/grapple</td>
+                            </tr>
+                            <tr>
+                                <td>Two categories larger</td>
+                                <td>+2 to melee attack rolls, smaller creature disadvantage on opportunity attacks, advantage on shove/grapple</td>
+                            </tr>
+                            <tr>
+                                <td>Three+ categories larger</td>
+                                <td>+3 to melee attacks, automatically succeed on shove, can use smaller creatures as improvised weapons</td>
+                            </tr>
+                        </table>
+                        
+                        <p><strong>Size Categories:</strong> Tiny → Small → Medium → Large → Huge → Gargantuan</p>
+                        
+                        <h4>Fighting Giants (Smaller Creature Tactics)</h4>
+                        <p>When fighting larger foes, smaller creatures can:</p>
+                        <ul>
+                            <li><strong>Target Weak Points:</strong> Called shots against legs/joints (standard called shot rules)</li>
+                            <li><strong>Climb:</strong> Use Athletics to climb onto larger creature (contested), gain advantage on attacks while mounted</li>
+                            <li><strong>Evasion:</strong> Squeeze into spaces giant cannot reach (avoid attacks)</li>
+                            <li><strong>Trip:</strong> Coordinated attacks on legs (2+ creatures), giant makes DEX save or falls prone</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- WEAPONS & ARTIFACTS SECTION -->
+            <div id="weapons" class="section">
+                <h2>Weapons & Sacred Artifacts</h2>
+                
+                <div class="mechanic-box">
+                    <h3>Bronze Age Weaponry</h3>
+                    <p>The antediluvian world uses bronze, stone, and wood. Iron is rare and often associated with fallen angels' forbidden knowledge.</p>
+                </div>
+                
+                <h3>Standard Weapons</h3>
+                <table>
+                    <tr>
+                        <th>Weapon</th>
+                        <th>Damage</th>
+                        <th>Properties</th>
+                        <th>Cost (gp)</th>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="background: rgba(60, 60, 80, 0.5);"><strong>Simple Melee Weapons</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Club (Wood)</td>
+                        <td>1d4 bludgeoning</td>
+                        <td>Light</td>
+                        <td>1 sp</td>
+                    </tr>
+                    <tr>
+                        <td>Dagger (Bronze)</td>
+                        <td>1d4 piercing</td>
+                        <td>Finesse, light, thrown (20/60)</td>
+                        <td>2 gp</td>
+                    </tr>
+                    <tr>
+                        <td>Sling</td>
+                        <td>1d4 bludgeoning</td>
+                        <td>Ammunition (30/120)</td>
+                        <td>1 sp</td>
+                    </tr>
+                    <tr>
+                        <td>Staff (Wood)</td>
+                        <td>1d6 bludgeoning</td>
+                        <td>Versatile (1d8)</td>
+                        <td>2 sp</td>
+                    </tr>
+                    <tr>
+                        <td>Stone Axe</td>
+                        <td>1d6 slashing</td>
+                        <td>Light, thrown (20/60)</td>
+                        <td>5 sp</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="background: rgba(60, 60, 80, 0.5);"><strong>Simple Ranged Weapons</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Javelin (Wood/Bronze)</td>
+                        <td>1d6 piercing</td>
+                        <td>Thrown (30/120)</td>
+                        <td>5 sp</td>
+                    </tr>
+                    <tr>
+                        <td>Shortbow</td>
+                        <td>1d6 piercing</td>
+                        <td>Ammunition (80/320), two-handed</td>
+                        <td>25 gp</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="background: rgba(60, 60, 80, 0.5);"><strong>Martial Melee Weapons</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Bronze Sword (Khopesh)</td>
+                        <td>1d8 slashing</td>
+                        <td>Versatile (1d10)</td>
+                        <td>15 gp</td>
+                    </tr>
+                    <tr>
+                        <td>Bronze Spear</td>
+                        <td>1d6 piercing</td>
+                        <td>Thrown (20/60), versatile (1d8), reach</td>
+                        <td>5 gp</td>
+                    </tr>
+                    <tr>
+                        <td>War Club (Stone/Wood)</td>
+                        <td>1d8 bludgeoning</td>
+                        <td>—</td>
+                        <td>2 gp</td>
+                    </tr>
+                    <tr>
+                        <td>Battle Axe (Bronze)</td>
+                        <td>1d8 slashing</td>
+                        <td>Versatile (1d10)</td>
+                        <td>10 gp</td>
+                    </tr>
+                    <tr>
+                        <td>Warhammer (Bronze/Stone)</td>
+                        <td>1d8 bludgeoning</td>
+                        <td>Versatile (1d10)</td>
+                        <td>15 gp</td>
+                    </tr>
+                    <tr>
+                        <td>Giant's Club</td>
+                        <td>2d6 bludgeoning</td>
+                        <td>Heavy, two-handed, requires STR 15+</td>
+                        <td>20 gp</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="background: rgba(60, 60, 80, 0.5);"><strong>Martial Ranged Weapons</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Longbow</td>
+                        <td>1d8 piercing</td>
+                        <td>Ammunition (150/600), heavy, two-handed</td>
+                        <td>50 gp</td>
+                    </tr>
+                    <tr>
+                        <td>Composite Bow</td>
+                        <td>1d8 piercing</td>
+                        <td>Ammunition (100/400), two-handed, add STR to damage</td>
+                        <td>75 gp</td>
+                    </tr>
+                    <tr>
+                        <td>Atlatl (Spear-thrower)</td>
+                        <td>1d8 piercing</td>
+                        <td>Ammunition (100/400), loading</td>
+                        <td>10 gp</td>
+                    </tr>
+                </table>
+                
+                <h3>Special Weapon Properties</h3>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>Blessed Weapons</strong> <span class="rp-cost">(Requires RP 5+)</span></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <p>Weapons consecrated by priests/prophets or forged on sacred ground. Requires 8-hour ritual and 50 gp in sacred materials.</p>
+                        
+                        <h4>Blessed Weapon Benefits:</h4>
+                        <ul>
+                            <li><strong>+1 to hit and damage</strong> vs corrupted creatures (CP 5+)</li>
+                            <li><strong>Deal radiant damage</strong> instead of normal type vs demons/undead</li>
+                            <li><strong>Cannot be wielded</strong> by creatures with CP 10+</li>
+                            <li><strong>Glows faintly</strong> within 30 ft of corrupted beings</li>
+                            <li><strong>Retains blessing</strong> until wielder falls to CP 5+ or weapon desecrated</li>
+                        </ul>
+                        
+                        <h4>Greater Blessing (Rare)</h4>
+                        <p>Requires prophet or angel, 24-hour ritual, 500 gp sacred materials:</p>
+                        <ul>
+                            <li>All benefits above, plus:</li>
+                            <li>+2 to hit and damage vs corrupted/evil</li>
+                            <li>On critical hit: target must make DC 15 WIS save or take 2d8 extra radiant damage</li>
+                            <li>Wielder gains +1 RP on killing blow against demon/corrupted</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>Cursed/Corrupted Weapons</strong> <span class="cp-cost">(Grants CP)</span></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <p>Weapons tainted by evil, forged in blood sacrifice, or wielded by the damned.</p>
+                        
+                        <h4>Cursed Weapon Effects:</h4>
+                        <ul>
+                            <li><strong>+1 to hit and damage</strong> but wielder gains 1 CP per day of use</li>
+                            <li><strong>Deal necrotic damage</strong> instead of normal type</li>
+                            <li><strong>Cannot be wielded</strong> by creatures with RP 10+ (burns their hands)</li>
+                            <li><strong>Whispers dark thoughts</strong> to wielder (WIS DC 13 or disadvantage on Insight)</li>
+                            <li><strong>Hard to discard:</strong> DC 15 WIS save to willingly drop weapon</li>
+                        </ul>
+                        
+                        <h4>Demon-Forged Weapons (Very Rare)</h4>
+                        <p>Created in the fires of the abyss:</p>
+                        <ul>
+                            <li>All cursed effects above, plus:</li>
+                            <li>+2 to hit and damage</li>
+                            <li>On critical hit: heal wielder for damage dealt but gain 1 CP</li>
+                            <li>Wielder gains 1d4 CP per week</li>
+                            <li>Cannot be destroyed by normal means</li>
+                        </ul>
+                        
+                        <div class="warning">
+                            <strong>Cleansing Cursed Weapons:</strong> Requires ritual by righteous priest, 3 days fasting/prayer, sacrifice worth 100+ gp. Success cleanses curse; failure may strengthen it.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>Giant-Sized Weapons</strong></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <p>Weapons sized for Large or larger creatures. Medium creatures can wield them with penalty.</p>
+                        
+                        <table>
+                            <tr>
+                                <th>Weapon</th>
+                                <th>Damage (Large)</th>
+                                <th>STR Req</th>
+                                <th>Properties</th>
+                            </tr>
+                            <tr>
+                                <td>Giant's Maul</td>
+                                <td>3d6 bludgeoning</td>
+                                <td>18</td>
+                                <td>Heavy, two-handed, reach 10 ft</td>
+                            </tr>
+                            <tr>
+                                <td>Giant's Greataxe</td>
+                                <td>2d12 slashing</td>
+                                <td>17</td>
+                                <td>Heavy, two-handed</td>
+                            </tr>
+                            <tr>
+                                <td>Giant's Spear</td>
+                                <td>2d8 piercing</td>
+                                <td>16</td>
+                                <td>Reach 15 ft, thrown (30/120)</td>
+                            </tr>
+                            <tr>
+                                <td>Boulder (improvised)</td>
+                                <td>3d8 bludgeoning</td>
+                                <td>20</td>
+                                <td>Thrown (60/180), destroys on impact</td>
+                            </tr>
+                        </table>
+                        
+                        <p><strong>Medium Wielding Large Weapons:</strong></p>
+                        <ul>
+                            <li>Must meet STR requirement or have disadvantage</li>
+                            <li>Attack at disadvantage unless STR exceeds requirement by 2</li>
+                            <li>Speed reduced by 10 ft while wielding</li>
+                            <li>Deal weapon damage as shown if proficient</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>Sacred Artifacts</h3>
+                
+                <div class="stat-block">
+                    <h4>⚔️ Sword of Enoch</h4>
+                    <p><em>Legendary weapon (requires attunement by righteous, RP 15+)</em></p>
+                    <p><strong>Damage:</strong> <span class="dice-notation">2d8 slashing + 1d8 radiant</span></p>
+                    <p><strong>Properties:</strong> Versatile (2d10), finesse, blessed</p>
+                    
+                    <p><strong>Special Abilities:</strong></p>
+                    <ul>
+                        <li><strong>Divine Edge:</strong> +3 to attack and damage rolls</li>
+                        <li><strong>Demon Bane:</strong> Deals additional 2d10 radiant vs demons/fallen</li>
+                        <li><strong>Righteous Flame:</strong> As bonus action, spend 2 RP to ignite blade for 1 minute (shed bright light 20 ft, add 1d6 fire damage)</li>
+                        <li><strong>Corruption Severing:</strong> On critical hit vs corrupted creature, can choose to deal no damage but remove 1d6 CP from target (WIS save DC 18 resists)</li>
+                        <li><strong>Voice of Heaven:</strong> Wielder can cast <em>Zone of Truth</em> 1/day</li>
+                    </ul>
+                    
+                    <p><strong>Curse:</strong> If wielder's CP ever exceeds RP, sword abandons them and vanishes.</p>
+                </div>
+                
+                <div class="stat-block">
+                    <h4>🛡️ Shield of Faith</h4>
+                    <p><em>Rare shield (requires attunement)</em></p>
+                    <p><strong>AC Bonus:</strong> +3 (instead of normal +2)</p>
+                    
+                    <p><strong>Special Abilities:</strong></p>
+                    <ul>
+                        <li><strong>Divine Bulwark:</strong> Advantage on saves vs fear and charm</li>
+                        <li><strong>Righteous Reflection:</strong> Reaction, spend 1 RP - when hit by spell attack, reflect half damage back to caster</li>
+                        <li><strong>Sanctuary:</strong> 1/day, activate for 1 minute - enemies must make WIS save DC 15 to attack you</li>
+                        <li><strong>Growing Faith:</strong> For each combat you survive without taking damage, gain 1 RP (max 3 per day)</li>
+                    </ul>
+                </div>
+                
+                <div class="stat-block corruption-box">
+                    <h4>🗡️ Blade of the Fallen Watcher</h4>
+                    <p><em>Very rare weapon (cursed, requires attunement)</em></p>
+                    <p><strong>Damage:</strong> <span class="dice-notation">2d6 slashing + 1d6 necrotic</span></p>
+                    <p><strong>Properties:</strong> Finesse, light, cursed</p>
+                    
+                    <p><strong>Special Abilities:</strong></p>
+                    <ul>
+                        <li><strong>Shadow Strike:</strong> +2 to attack and damage, advantage in dim light/darkness</li>
+                        <li><strong>Life Drain:</strong> On hit, heal HP equal to necrotic damage dealt but gain 1 CP</li>
+                        <li><strong>Forbidden Knowledge:</strong> Wielder learns one secret about any creature they damage</li>
+                        <li><strong>Dark Empowerment:</strong> For each 5 CP wielder has, gain +1 damage (max +5)</li>
+                    </ul>
+                    
+                    <p><strong>Curse:</strong></p>
+                    <ul>
+                        <li>Wielder gains 1 CP per day attuned</li>
+                        <li>Cannot unattune willingly (requires <em>Remove Curse</em>)</li>
+                        <li>Whispers temptations constantly (disadvantage on WIS saves vs corruption)</li>
+                        <li>If wielder dies while attuned, soul is claimed by the fallen watcher who forged it</li>
+                    </ul>
+                </div>
+                
+                <div class="stat-block spiritual-box">
+                    <h4>📜 Scroll of the Covenant</h4>
+                    <p><em>Rare sacred text</em></p>
+                    
+                    <p><strong>Abilities:</strong></p>
+                    <ul>
+                        <li><strong>Study (1 hour):</strong> Gain 1d4 RP, +2 to Religion checks for 24 hours</li>
+                        <li><strong>Public Reading (Action):</strong> All allies within 30 ft gain advantage on next save vs fear/corruption</li>
+                        <li><strong>Divine Ward:</strong> Draw 10-ft circle (1 minute), demons cannot cross (DC 18 CHA to break)</li>
+                        <li><strong>Exorcism:</strong> Read aloud for 10 minutes over possessed creature, contested Religion vs demon's CHA save</li>
+                    </ul>
+                    
+                    <p><strong>Protection:</strong> Cannot be destroyed by fire or water. Corrupted beings (CP 10+) take 1d4 radiant damage when touching it.</p>
+                </div>
+                
+                <div class="stat-block">
+                    <h4>🏺 Horn of Jericho</h4>
+                    <p><em>Legendary artifact</em></p>
+                    
+                    <p><strong>Abilities:</strong></p>
+                    <ul>
+                        <li><strong>Blast (Action, Recharge 5-6):</strong> 60-ft cone, all creatures make DC 17 CON save or take 6d8 thunder damage and be knocked prone. Half damage on success.</li>
+                        <li><strong>Shatter Walls:</strong> 3/day, blow horn at non-magical wall/structure within 100 ft. Structure takes 10d10 damage.</li>
+                        <li><strong>Rally (Bonus Action, 1/day):</strong> All allies within 120 ft gain temp HP equal to your level + CHA mod and advantage on attacks for 1 minute</li>
+                        <li><strong>Divine Resonance:</strong> Sound can be heard up to 10 miles away. Righteous beings are heartened, corrupted are unnerved.</li>
+                    </ul>
+                    
+                    <p><strong>Requirement:</strong> Must have RP 10+ to sound it effectively. Corrupted who attempt suffer 4d10 thunder damage.</p>
+                </div>
+                
+                <h3>Consumable Sacred Items</h3>
+                
+                <table>
+                    <tr>
+                        <th>Item</th>
+                        <th>Effect</th>
+                        <th>Cost</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Holy Water (vial)</strong></td>
+                        <td>Splash attack, 2d4 radiant to demons/undead, cleanses minor corruption (remove 1 CP on full immersion)</td>
+                        <td>25 gp</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Anointing Oil</strong></td>
+                        <td>Apply to weapon, next 3 hits deal +1d4 radiant vs corrupted. Lasts 1 hour.</td>
+                        <td>50 gp</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Incense of Protection</strong></td>
+                        <td>Burn for 1 hour, 20-ft radius gains +1 to saves vs corruption, demons have disadvantage on attacks in area</td>
+                        <td>30 gp</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Blessed Salt (pouch)</strong></td>
+                        <td>Create 10-ft circle (1 action), lesser demons cannot cross (DC 13 CHA to break)</td>
+                        <td>10 gp</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Prayer Beads</strong></td>
+                        <td>Hold while praying, +2 to Religion check for prayer attempts, restores 1 extra RP on success</td>
+                        <td>100 gp</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sacred Bread</strong></td>
+                        <td>Consume during short rest, restore 1d4 RP in addition to normal benefits. Corrupted (CP 5+) cannot digest.</td>
+                        <td>20 gp</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phylactery (Scripture Box)</strong></td>
+                        <td>Wear on forehead/arm, +1 to WIS saves, demon detection (sense within 60 ft)</td>
+                        <td>150 gp</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Frankincense (rare)</strong></td>
+                        <td>Burn during prayer, double RP restored from prayer. Used in anointing kings/prophets.</td>
+                        <td>200 gp</td>
+                    </tr>
+                </table>
+                
+                <h3>Corrupted Relics (Dangerous!)</h3>
+                
+                <div class="warning">
+                    <p><strong>⚠️ GM Warning:</strong> These items grant power but corrupt the soul. Use sparingly as temptations or found in evil places.</p>
+                </div>
+                
+                <table>
+                    <tr>
+                        <th>Item</th>
+                        <th>Benefit</th>
+                        <th>Corruption Cost</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Watcher's Eye Amulet</strong></td>
+                        <td>See invisible, detect thoughts at will, darkvision 120 ft</td>
+                        <td>+1 CP per day worn, nightmares, paranoia</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Blood Stone</strong></td>
+                        <td>Absorb HP from kills (heal HP equal to CR of creature slain)</td>
+                        <td>+1 CP per kill absorbed</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Demon's Whisper Ring</strong></td>
+                        <td>Advantage on Deception, Persuasion, Intimidation. Learn one secret per person/day.</td>
+                        <td>+2 CP per week worn, compulsive lying</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Forbidden Grimoire</strong></td>
+                        <td>Learn any spell (up to 5th level) not in your class list</td>
+                        <td>+3 CP per spell learned, risk of madness</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Nephilim Giant's Heart</strong></td>
+                        <td>Consume to permanently increase STR by 2 (max 22)</td>
+                        <td>+5 CP, physical mutations, cannibalistic urges</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fallen Feather Cloak</strong></td>
+                        <td>Fly speed 60 ft, advantage on Stealth in darkness</td>
+                        <td>+1 CP per hour worn, wings appear on back (can't hide)</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- BLOODLINES SECTION -->
+            <div id="bloodlines" class="section">
+                <h2>Giant Bloodlines</h2>
+                
+                <div class="mechanic-box">
+                    <h3>Overview: Children of the Watchers</h3>
+                    <p>When the Watchers (fallen angels) took human wives, their offspring were the Nephilim - giants of great power and terrible corruption. Different bloodlines emerged, each carrying unique traits from their angelic progenitors.</p>
+                    
+                    <p><strong>Bloodline Intensity:</strong> Characters with giant heritage have varying degrees of angelic ancestry:</p>
+                    <ul>
+                        <li><strong>Pure-Blood Nephilim (First Generation):</strong> Direct offspring of Watcher + human</li>
+                        <li><strong>Rephaim/Anakim (Second-Third Generation):</strong> Grandchildren of Watchers</li>
+                        <li><strong>Diluted Heritage (4+ Generations):</strong> Distant giant ancestry</li>
+                    </ul>
+                </div>
+                
+                <h3>Selecting a Bloodline</h3>
+                <p>At character creation, if you have giant heritage, choose one bloodline. This determines your inherent abilities, physical traits, and spiritual tendencies.</p>
+                
+                <div class="stat-block">
+                    <h4>👁️ Nephilim - The First Giants</h4>
+                    <p><em>"There were giants in the earth in those days... mighty men which were of old, men of renown." - Genesis 6:4</em></p>
+                    
+                    <p><strong>Physical Traits:</strong></p>
+                    <ul>
+                        <li>Height: 9-15 feet (Large size)</li>
+                        <li>Six fingers/toes on each hand/foot (distinctive mark)</li>
+                        <li>Unusual eye colors (gold, violet, silver)</li>
+                        <li>Supernatural strength and resilience</li>
+                    </ul>
+                    
+                    <p><strong>Bloodline Features:</strong></p>
+                    <ul>
+                        <li><strong>Giant's Might:</strong> +2 STR, +1 CON (instead of normal racial bonuses)</li>
+                        <li><strong>Powerful Build:</strong> Count as one size larger for carrying capacity, grappling, shoving</li>
+                        <li><strong>Nephilim Resilience:</strong> When reduced to 0 HP, may stay conscious at 1 HP once per long rest (but gain 1 CP and 1 exhaustion)</li>
+                        <li><strong>Angelic Heritage:</strong> Advantage on saves vs being charmed, resistance to radiant damage</li>
+                        <li><strong>Marked by Heaven:</strong> Angels can always sense your presence. Gain +2 to Religion checks.</li>
+                    </ul>
+                    
+                    <p><strong>Corruption Susceptibility:</strong></p>
+                    <ul>
+                        <li>Start with <span class="cp-cost">2 CP</span> (tainted bloodline)</li>
+                        <li>Vulnerable to dark temptations (disadvantage on saves vs corruption from power)</li>
+                        <li>At CP 15+, begin manifesting monstrous features</li>
+                    </ul>
+                    
+                    <p><strong>Bloodline Powers (Unlock with CP):</strong></p>
+                    <table>
+                        <tr>
+                            <th>CP Threshold</th>
+                            <th>Power Unlocked</th>
+                        </tr>
+                        <tr>
+                            <td>CP 5</td>
+                            <td><strong>Giant's Fury:</strong> Bonus action, enter rage for 1 minute (1/long rest): +2 damage, resistance to physical damage, gain 1 CP when rage ends</td>
+                        </tr>
+                        <tr>
+                            <td>CP 10</td>
+                            <td><strong>Tremor Stomp:</strong> Action, stomp ground - all creatures within 15 ft make DC (8+STR+prof) DEX save or knocked prone, gain 1 CP</td>
+                        </tr>
+                        <tr>
+                            <td>CP 15</td>
+                            <td><strong>Monstrous Transformation:</strong> Bonus action, transform fully (1/long rest): Increase size to Huge for 1 minute, +4 STR, +10 ft reach, frightening appearance (enemies within 30 ft make WIS save DC 15 or frightened), gain 2 CP when ends</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="stat-block">
+                    <h4>⚔️ Rephaim - The Warrior Giants</h4>
+                    <p><em>"A people great and tall, the children of the Anakim" - Deuteronomy 2:10-11</em></p>
+                    
+                    <p><strong>Physical Traits:</strong></p>
+                    <ul>
+                        <li>Height: 7-12 feet (Large size)</li>
+                        <li>Exceptionally muscular and broad</li>
+                        <li>Often have bronze-tinted skin</li>
+                        <li>Deep, resonant voices that carry far</li>
+                    </ul>
+                    
+                    <p><strong>Bloodline Features:</strong></p>
+                    <ul>
+                        <li><strong>Warrior's Frame:</strong> +2 STR, +1 CON</li>
+                        <li><strong>Born to Battle:</strong> Proficiency with all martial weapons, +1 AC when wearing heavy armor</li>
+                        <li><strong>Fearsome Presence:</strong> Advantage on Intimidation, can use Intimidation as bonus action in combat</li>
+                        <li><strong>Thick Hide:</strong> Natural AC = 12 + CON modifier (can't wear armor lighter than medium)</li>
+                        <li><strong>Siege Breaker:</strong> Deal double damage to structures and objects</li>
+                    </ul>
+                    
+                    <p><strong>Corruption Resistance:</strong></p>
+                    <ul>
+                        <li>Start with <span class="cp-cost">1 CP</span> (less tainted than pure Nephilim)</li>
+                        <li>Advantage on saves vs corruption from despair/defeat</li>
+                        <li>Can channel CP into combat prowess without additional corruption</li>
+                    </ul>
+                    
+                    <p><strong>Bloodline Powers:</strong></p>
+                    <ul>
+                        <li><strong>Giant's Reach (Passive):</strong> Increase reach by 5 ft with melee weapons</li>
+                        <li><strong>Crushing Blow (1/short rest):</strong> Spend 1 CP - next melee attack deals +2d6 damage and target makes STR save or knocked prone</li>
+                        <li><strong>Immovable (Reaction, 2/long rest):</strong> When hit, reduce damage by 1d10 + CON modifier, don't get moved/knocked prone</li>
+                        <li><strong>War Cry (Action, 1/long rest):</strong> All allies within 60 ft gain +2 to attack rolls for 1 minute, enemies must make WIS save DC (8+CHA+prof) or be frightened</li>
+                    </ul>
+                </div>
+                
+                <div class="stat-block">
+                    <h4>📚 Anakim - The Noble Giants</h4>
+                    <p><em>"The sons of Anak, which come of the giants" - Numbers 13:33</em></p>
+                    
+                    <p><strong>Physical Traits:</strong></p>
+                    <ul>
+                        <li>Height: 8-11 feet (Large size)</li>
+                        <li>Elegant, proportioned features despite size</li>
+                        <li>Often have fair or striking appearance</li>
+                        <li>Luminous eyes, sometimes faintly glow in darkness</li>
+                    </ul>
+                    
+                    <p><strong>Bloodline Features:</strong></p>
+                    <ul>
+                        <li><strong>Noble Heritage:</strong> +1 STR, +2 CHA</li>
+                        <li><strong>Watcher's Wisdom:</strong> Proficiency in two of: Arcana, History, Insight, Religion</li>
+                        <li><strong>Commanding Presence:</strong> Advantage on Persuasion and Performance checks, can speak to crowds of 100+ without magical aid</li>
+                        <li><strong>Forbidden Knowledge:</strong> Learn one cantrip from any spell list (INT or CHA for spellcasting)</li>
+                        <li><strong>Legacy of Kings:</strong> Proficiency with one artisan's tool and one musical instrument</li>
+                    </ul>
+                    
+                    <p><strong>Balanced Corruption:</strong></p>
+                    <ul>
+                        <li>Start with <span class="cp-cost">1 CP</span></li>
+                        <li>Can more easily balance RP and CP (advantage on checks to resist corruption when RP ≥ CP)</li>
+                        <li>At high RP (15+), can use RP to suppress CP manifestations temporarily</li>
+                    </ul>
+                    
+                    <p><strong>Bloodline Powers:</strong></p>
+                    <ul>
+                        <li><strong>Angelic Insight (3/long rest):</strong> Spend 1 RP - gain advantage on any INT, WIS, or CHA check/save</li>
+                        <li><strong>Voice of Command (1/long rest):</strong> Speak a one-word command (as <em>Command</em> spell) affecting all creatures of your choice within 30 ft (DC = 8+CHA+prof)</li>
+                        <li><strong>Radiant Soul (1/long rest):</strong> If RP ≥ 10, activate for 1 minute: shed bright light 30 ft, resistant to necrotic damage, melee attacks deal +1d6 radiant</li>
+                        <li><strong>Corruption's Price (Dark Temptation):</strong> Can sacrifice 3 RP to remove 1d6 CP, or sacrifice 3 CP to gain 1d6 RP (1/week, dangerous balancing act)</li>
+                    </ul>
+                </div>
+                
+                <div class="stat-block corruption-box">
+                    <h4>🌑 Emim - The Terror Giants</h4>
+                    <p><em>"A people great, and many, and tall, as the Anakim; which also were accounted giants" - Deuteronomy 2:10</em></p>
+                    
+                    <p><strong>Physical Traits:</strong></p>
+                    <ul>
+                        <li>Height: 9-13 feet (Large size)</li>
+                        <li>Gaunt, unsettling appearance</li>
+                        <li>Shadowy aura, seem darker than surroundings</li>
+                        <li>Eyes glow faintly red when angered</li>
+                    </ul>
+                    
+                    <p><strong>Bloodline Features:</strong></p>
+                    <ul>
+                        <li><strong>Terror Born:</strong> +2 STR, +1 WIS</li>
+                        <li><strong>Fearsome Aura:</strong> Creatures within 10 ft have disadvantage on saves vs being frightened</li>
+                        <li><strong>Shadow Step:</strong> In dim light/darkness, bonus action to teleport up to 30 ft to unoccupied space you can see (2/short rest)</li>
+                        <li><strong>Darkvision:</strong> 120 ft, see in magical darkness to 60 ft</li>
+                        <li><strong>Nightmare Whispers:</strong> Speak telepathically to creatures within 60 ft (they can't reply)</li>
+                    </ul>
+                    
+                    <p><strong>High Corruption:</strong></p>
+                    <ul>
+                        <li>Start with <span class="cp-cost">3 CP</span> (heavily corrupted lineage)</li>
+                        <li>Gain 1 CP per week automatically (cursed bloodline)</li>
+                        <li>RP is harder to gain (disadvantage on prayer checks)</li>
+                        <li>Cannot use Righteous Stand desperation action</li>
+                    </ul>
+                    
+                    <p><strong>Bloodline Powers (All cost CP):</strong></p>
+                    <ul>
+                        <li><strong>Terror Strike (3/long rest):</strong> Spend 1 CP - when you hit with melee attack, target must make WIS save (DC 8+STR+prof) or be frightened for 1 minute</li>
+                        <li><strong>Shadow Form (1/long rest):</strong> Spend 2 CP - become incorporeal for 1 minute: resistant to all damage except radiant, can move through objects/creatures, attacks pass through you</li>
+                        <li><strong>Feast on Fear (Passive):</strong> When enemy within 30 ft fails save vs being frightened, heal HP equal to your proficiency bonus</li>
+                        <li><strong>Dread Manifestation (1/long rest):</strong> Spend 3 CP - all enemies within 30 ft must make WIS save (DC 8+CHA+prof) or take 3d10 psychic damage and be paralyzed with fear until end of your next turn</li>
+                    </ul>
+                </div>
+                
+                <div class="stat-block">
+                    <h4>🏔️ Zamzummim - The Howling Giants</h4>
+                    <p><em>"A people great, and many, and tall... The Ammonites called them Zamzummim" - Deuteronomy 2:20-21</em></p>
+                    
+                    <p><strong>Physical Traits:</strong></p>
+                    <ul>
+                        <li>Height: 8-14 feet (Large size)</li>
+                        <li>Wild, unkempt appearance</li>
+                        <li>Can unhinge jaw to emit terrifying howls</li>
+                        <li>Often have animalistic features (fangs, claws)</li>
+                    </ul>
+                    
+                    <p><strong>Bloodline Features:</strong></p>
+                    <ul>
+                        <li><strong>Savage Heritage:</strong> +2 STR, +1 WIS</li>
+                        <li><strong>Natural Weapons:</strong> Claws deal 1d6 + STR slashing, count as magical</li>
+                        <li><strong>Primal Howl:</strong> Action (1/short rest) - all creatures within 60 ft make WIS save (DC 8+CON+prof) or frightened for 1 minute. Can be heard up to 1 mile away.</li>
+                        <li><strong>Keen Senses:</strong> Proficiency in Perception, advantage on Perception checks relying on hearing or smell</li>
+                        <li><strong>Survivor's Instinct:</strong> Proficiency in Survival, can track by scent</li>
+                    </ul>
+                    
+                    <p><strong>Moderate Corruption:</strong></p>
+                    <ul>
+                        <li>Start with <span class="cp-cost">2 CP</span></li>
+                        <li>Gain CP when giving in to primal urges (GM discretion)</li>
+                        <li>Lose RP when being civilized/refined (uncomfortable in cities)</li>
+                    </ul>
+                    
+                    <p><strong>Bloodline Powers:</strong></p>
+                    <ul>
+                        <li><strong>Savage Frenzy (1/long rest):</strong> Bonus action - enter frenzy for 1 minute: +2 to hit and damage, resistance to physical damage, must attack nearest creature each turn (ally or enemy), gain 1 CP when ends</li>
+                        <li><strong>Rending Claws:</strong> When you hit with both claw attacks in same turn, deal extra 1d8 slashing</li>
+                        <li><strong>Territorial Roar (1/long rest):</strong> Action - release mighty roar. All creatures of your choice within 100 ft must make WIS save (DC 8+CON+prof) or be frightened and have speed reduced to 0 for 1 round</li>
+                        <li><strong>Pack Hunter:</strong> Advantage on attacks against creatures if ally is within 5 ft of target</li>
+                    </ul>
+                </div>
+                
+                <div class="stat-block righteous-box">
+                    <h4>✨ Avvim - The Diminished Giants</h4>
+                    <p><em>"The Avims which dwelt in Hazerim" - Deuteronomy 2:23</em></p>
+                    
+                    <p><strong>Physical Traits:</strong></p>
+                    <ul>
+                        <li>Height: 6-8 feet (Medium or Large size, player's choice)</li>
+                        <li>More human-like appearance</li>
+                        <li>Subtle giant features (large frame, strong build)</li>
+                        <li>Can pass as tall human with effort</li>
+                    </ul>
+                    
+                    <p><strong>Bloodline Features:</strong></p>
+                    <ul>
+                        <li><strong>Diluted Heritage:</strong> +1 STR, +1 CON, +1 to any ability</li>
+                        <li><strong>Human Guise:</strong> Advantage on Deception checks to hide giant ancestry</li>
+                        <li><strong>Blessing of Reduction:</strong> Your diluted bloodline is less cursed. Start with <span class="cp-cost">0 CP</span> (unusual for giant-blooded)</li>
+                        <li><strong>Adaptable:</strong> Gain proficiency in two skills of your choice</li>
+                        <li><strong>Mortal Allies:</strong> Humans trust you more easily (advantage on Persuasion with humans)</li>
+                    </ul>
+                    
+                    <p><strong>Minimal Corruption:</strong></p>
+                    <ul>
+                        <li>Start with <span class="cp-cost">0 CP</span> (unique among giants)</li>
+                        <li>Can more easily gain RP (no disadvantage on prayers)</li>
+                        <li>Less tempted by dark power (advantage on saves vs corruption temptations)</li>
+                        <li>Can choose Righteous path more easily</li>
+                    </ul>
+                    
+                    <p><strong>Bloodline Powers (Flexible):</strong></p>
+                    <ul>
+                        <li><strong>Giant's Strength (3/long rest):</strong> Bonus action - for 1 minute, count as Large for STR checks, carrying capacity doubles, +1d4 melee damage</li>
+                        <li><strong>Ancestral Resistance (1/long rest):</strong> When taking damage, use reaction to gain resistance to that damage type until end of next turn</li>
+                        <li><strong>Choice of Paths:</strong> At level 5, choose to embrace either Righteousness OR Corruption:
+                            <ul>
+                                <li><strong>Righteous:</strong> Gain <em>Lay on Hands</em> (paladin feature), restore HP = 5× level, spend RP to boost healing</li>
+                                <li><strong>Corrupted:</strong> Unlock Corrupted Surge and other CP abilities, gain +2 damage but start accumulating CP</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                
+                <h3>Bloodline Manifestations (Physical Changes with CP)</h3>
+                
+                <p>As giant-blooded characters gain CP, their angelic heritage corrupts, manifesting physically:</p>
+                
+                <table>
+                    <tr>
+                        <th>CP Range</th>
+                        <th>Physical Manifestations</th>
+                        <th>Mechanical Effect</th>
+                    </tr>
+                    <tr>
+                        <td>CP 1-4</td>
+                        <td>Veins darken slightly, occasional red glint in eyes</td>
+                        <td>None (cosmetic)</td>
+                    </tr>
+                    <tr>
+                        <td>CP 5-9</td>
+                        <td>Veins clearly visible and dark, eyes glow faintly in darkness, voice deepens</td>
+                        <td>Disadvantage on Persuasion vs righteous, advantage on Intimidation</td>
+                    </tr>
+                    <tr>
+                        <td>CP 10-14</td>
+                        <td>Skin toughens, claws begin forming, teeth sharpen, shadow seems to cling to you</td>
+                        <td>Natural AC +1, unarmed strikes deal 1d4 slashing, disadvantage on Deception to hide nature</td>
+                    </tr>
+                    <tr>
+                        <td>CP 15-19</td>
+                        <td>Partial monstrous features: horns, wings (non-functional), tail, scaled patches, eyes fully glow</td>
+                        <td>+1 damage to all attacks, cannot hide corrupted nature, animals flee from you</td>
+                    </tr>
+                    <tr>
+                        <td>CP 20-24</td>
+                        <td>Fully monstrous: multiple eyes, additional limbs, wrong number of joints, speak in two voices</td>
+                        <td>+2 damage, frightening appearance (enemies within 30 ft make WIS DC 13 or frightened), shunned by all righteous</td>
+                    </tr>
+                    <tr>
+                        <td>CP 25+</td>
+                        <td>Abomination: body warped beyond recognition, clearly demonic, barely humanoid</td>
+                        <td>Character becoming NPC (fallen completely), size may increase, intelligence may decrease, hunted by angels</td>
+                    </tr>
+                </table>
+                
+                <h3>Interbreeding & Hybrid Bloodlines</h3>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>Creating Hybrid Characters</strong></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <p>Some characters may have mixed giant heritage (e.g., Nephilim/Rephaim or Anakim/Avvim). Work with GM to create hybrid:</p>
+                        
+                        <h4>Hybrid Rules:</h4>
+                        <ul>
+                            <li>Choose primary bloodline (determines size, starting CP, main features)</li>
+                            <li>Select 2-3 features from secondary bloodline</li>
+                            <li>Average the starting CP of both bloodlines (round up)</li>
+                            <li>May have conflicting powers (some require high CP, others require low CP)</li>
+                            <li>Often socially outcast even among giants</li>
+                        </ul>
+                        
+                        <h4>Example: Nephilim/Avvim Hybrid "The Struggling Giant"</h4>
+                        <ul>
+                            <li><strong>Primary:</strong> Nephilim (Large, powerful)</li>
+                            <li><strong>Secondary:</strong> Avvim (human-like features, less cursed)</li>
+                            <li><strong>Starting CP:</strong> 1 (average of 2 and 0)</li>
+                            <li><strong>Features:</strong> Nephilim Resilience, Giant's Might, Human Guise (from Avvim), Blessing of Reduction (from Avvim)</li>
+                            <li><strong>Roleplay:</strong> Torn between monstrous heritage and desire for redemption</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>Roleplaying Giant Heritage</h3>
+                
+                <div class="tip">
+                    <h4>Social Dynamics</h4>
+                    <ul>
+                        <li><strong>Among Humans:</strong> Feared, revered, or hunted depending on actions and appearance</li>
+                        <li><strong>Among Other Giants:</strong> Status determined by lineage purity and strength</li>
+                        <li><strong>Angels' View:</strong> Abominations to be destroyed OR pitiable creatures to be redeemed (depends on angel)</li>
+                        <li><strong>Demons' View:</strong> Tools to be used, corrupted kin to recruit, or threats to subjugate</li>
+                    </ul>
+                    
+                    <h4>Internal Struggle</h4>
+                    <ul>
+                        <li>Constant battle between human morality and angelic pride</li>
+                        <li>Temptation to use immense power for selfish ends</li>
+                        <li>Hunger for dominance vs desire for acceptance</li>
+                        <li>Memory of glory (if older) vs reality of being hunted</li>
+                        <li>Question of whether redemption is even possible</li>
+                    </ul>
+                    
+                    <h4>Questions to Ask Your Character</h4>
+                    <ul>
+                        <li>Do you see yourself as human or giant?</li>
+                        <li>Do you resent or embrace your heritage?</li>
+                        <li>Have you met your Watcher ancestor? What was it like?</li>
+                        <li>How do you view "normal" humans - as equals, prey, or charges to protect?</li>
+                        <li>What would you sacrifice to be free of corruption?</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- ANGELS & DEMONS SECTION -->
+            <div id="angels-demons" class="section">
+                <h2>Angels & Demons - Cosmic Warfare</h2>
+                
+                <div class="mechanic-box spiritual-box">
+                    <h3>Overview: The Invisible War</h3>
+                    <p>Combat in Nephilim Wars extends beyond the physical. Angels and demons wage eternal war, and mortal combatants are often caught between them.</p>
+                    
+                    <p><strong>Key Principles:</strong></p>
+                    <ul>
+                        <li>Angels attack SI (Spiritual Integrity) of corrupted beings</li>
+                        <li>Demons attack SI of righteous beings</li>
+                        <li>Both can manifest physically but prefer spiritual warfare</li>
+                        <li>Mortals can call upon angels (with high RP) or demons (with high CP)</li>
+                        <li>Divine intervention is rare but devastating</li>
+                    </ul>
+                </div>
+                
+                <h2>Angelic Beings</h2>
+                
+                <div class="stat-block righteous-box">
+                    <h4>☀️ Cherubim - Guardians of the Sacred</h4>
+                    <p><em>"He placed at the east of the garden of Eden Cherubims, and a flaming sword" - Genesis 3:24</em></p>
+                    
+                    <p><strong>CR 10-15 (depending on power)</strong></p>
+                    
+                    <p><strong>Appearance:</strong> Four-faced (lion, ox, eagle, human), four wings, eyes covering wings, wheel-within-wheel structure beneath them</p>
+                    
+                    <p><strong>Combat Statistics:</strong></p>
+                    <ul>
+                        <li><strong>AC:</strong> 20 (divine armor)</li>
+                        <li><strong>HP:</strong> 200 (20d10 + 100)</li>
+                        <li><strong>Speed:</strong> 40 ft, fly 120 ft (hover)</li>
+                        <li><strong>STR</strong> 22 (+6), <strong>DEX</strong> 18 (+4), <strong>CON</strong> 20 (+5), <strong>INT</strong> 20 (+5), <strong>WIS</strong> 22 (+6), <strong>CHA</strong> 20 (+5)</li>
+                    </ul>
+                    
+                    <p><strong>Defenses:</strong></p>
+                    <ul>
+                        <li><strong>Damage Resistances:</strong> Radiant; bludgeoning, piercing, slashing from nonmagical weapons</li>
+                        <li><strong>Damage Immunities:</strong> Poison, psychic</li>
+                        <li><strong>Condition Immunities:</strong> Charmed, exhaustion, frightened, poisoned</li>
+                        <li><strong>Senses:</strong> Truesight 120 ft, passive Perception 26</li>
+                    </ul>
+                    
+                    <p><strong>Special Abilities:</strong></p>
+                    <ul>
+                        <li><strong>Divine Awareness:</strong> Knows alignment of all creatures within 60 ft</li>
+                        <li><strong>Holy Aura:</strong> Allies within 30 ft gain +2 AC and advantage on saves</li>
+                        <li><strong>Magic Resistance:</strong> Advantage on saves vs spells and magical effects</li>
+                        <li><strong>Corruption Sense:</strong> Detect CP levels of all creatures within 120 ft</li>
+                    </ul>
+                    
+                    <p><strong>Actions:</strong></p>
+                    <ul>
+                        <li><strong>Multiattack:</strong> Makes three attacks: two with Flaming Sword, one with Wing Buffet</li>
+                        <li><strong>Flaming Sword:</strong> +11 to hit, reach 10 ft, 2d8+6 slashing + 2d8 fire + 2d6 radiant. If target has CP 5+, also deals 1d6 SI damage.</li>
+                        <li><strong>Wing Buffet:</strong> +11 to hit, reach 10 ft, 2d6+6 bludgeoning, target pushed 15 ft and knocked prone (STR DC 18 negates)</li>
+                        <li><strong>Burning Gaze (Recharge 5-6):</strong> 60-ft cone, all creatures make DC 18 DEX save or take 6d8 radiant damage (half on success). Corrupted creatures (CP 10+) take double damage.</li>
+                    </ul>
+                    
+                    <p><strong>Legendary Actions (3/round):</strong></p>
+                    <ul>
+                        <li><strong>Detect:</strong> Automatically detect CP/RP of one creature within 120 ft</li>
+                        <li><strong>Wing Attack (Costs 2):</strong> Make one Wing Buffet attack</li>
+                        <li><strong>Teleport (Costs 2):</strong> Teleport up to 60 ft to unoccupied space</li>
+                        <li><strong>Smite the Corrupt (Costs 3):</strong> Target one corrupted creature (CP 5+) within 60 ft. Target takes 4d10 radiant damage and 2d6 SI damage, no save.</li>
+                    </ul>
+                </div>
+                
+                <div class="stat-block righteous-box">
+                    <h4>🔥 Seraphim - The Burning Ones</h4>
+                    <p><em>"Above it stood the seraphims: each one had six wings" - Isaiah 6:2</em></p>
+                    
+                    <p><strong>CR 16-20</strong></p>
+                    
+                    <p><strong>Appearance:</strong> Humanoid form wreathed in holy fire, six wings, face too bright to look upon directly</p>
+                    
+                    <p><strong>Combat Statistics:</strong></p>
+                    <ul>
+                        <li><strong>AC:</strong> 22 (divine radiance)</li>
+                        <li><strong>HP:</strong> 300 (24d10 + 144)</li>
+                        <li><strong>Speed:</strong> 50 ft, fly 150 ft (hover)</li>
+                        <li><strong>STR</strong> 24 (+7), <strong>DEX</strong> 22 (+6), <strong>CON</strong> 22 (+6), <strong>INT</strong> 22 (+6), <strong>WIS</strong> 24 (+7), <strong>CHA</strong> 24 (+7)</li>
+                    </ul>
+                    
+                    <p><strong>Defenses:</strong></p>
+                    <ul>
+                        <li><strong>Damage Immunities:</strong> Fire, radiant, poison, psychic; nonmagical weapons</li>
+                        <li><strong>Condition Immunities:</strong> All conditions</li>
+                        <li><strong>Senses:</strong> Truesight 180 ft, passive Perception 27</li>
+                    </ul>
+                    
+                    <p><strong>Special Abilities:</strong></p>
+                    <ul>
+                        <li><strong>Divine Presence:</strong> Creatures with CP 5+ within 60 ft must make DC 20 WIS save each round or be frightened. On failed save, also take 2d10 radiant damage.</li>
+                        <li><strong>Burning Aura:</strong> Creatures that touch seraphim or hit with melee attack within 5 ft take 4d6 fire damage</li>
+                        <li><strong>Uncorrupted:</strong> Immune to all CP-based effects, cannot be charmed/dominated</li>
+                        <li><strong>Heaven's Voice:</strong> When speaks, all creatures within 300 ft hear perfectly in their own language</li>
+                    </ul>
+                    
+                    <p><strong>Actions:</strong></p>
+                    <ul>
+                        <li><strong>Multiattack:</strong> Makes four attacks with Flaming Touch or casts one spell</li>
+                        <li><strong>Flaming Touch:</strong> +13 to hit, reach 5 ft, 3d8+7 fire + 3d8 radiant. On hit, target must make DC 20 CON save or catch fire (1d10 fire per round until extinguished). Deals 2d6 SI to corrupted targets.</li>
+                        <li><strong>Holy Fire Bolt:</strong> Ranged spell attack, +13 to hit, range 120 ft, 4d10 radiant damage. If target has CP 10+, also deals 3d6 SI damage.</li>
+                        <li><strong>Purifying Flame (Recharge 5-6):</strong> 30-ft radius sphere within 120 ft. All creatures in area make DC 20 DEX save or take 8d8 fire + 6d8 radiant damage (half on success). Corrupted creatures (CP 5+) have disadvantage and take full damage on success.</li>
+                    </ul>
+                    
+                    <p><strong>Legendary Actions (3/round):</strong></p>
+                    <ul>
+                        <li><strong>Detect Evil:</strong> Know alignment and CP of all creatures within 180 ft</li>
+                        <li><strong>Smite (Costs 2):</strong> One creature within 60 ft takes 6d10 radiant damage, no save</li>
+                        <li><strong>Cleanse (Costs 3):</strong> Remove all CP from one willing creature within 30 ft, or force corrupted to make DC 20 WIS save or lose 1d6 CP</li>
+                        <li><strong>Divine Command (Costs 3):</strong> All allies within 60 ft can immediately use reaction to move up to their speed or make one attack</li>
+                    </ul>
+                </div>
+                
+                <div class="stat-block righteous-box">
+                    <h4>⚔️ Archangel - Warrior of Heaven</h4>
+                    <p><em>"Michael and his angels fought against the dragon" - Revelation 12:7</em></p>
+                    
+                    <p><strong>CR 18-22</strong></p>
+                    
+                    <p><strong>Appearance:</strong> Warrior in gleaming armor, wings of pure light, wielding sword and shield that shine like the sun</p>
+                    
+                    <p><strong>Combat Statistics:</strong></p>
+                    <ul>
+                        <li><strong>AC:</strong> 24 (divine plate + shield)</li>
+                        <li><strong>HP:</strong> 350 (28d10 + 168)</li>
+                        <li><strong>Speed:</strong> 60 ft, fly 180 ft</li>
+                        <li><strong>STR</strong> 26 (+8), <strong>DEX</strong> 22 (+6), <strong>CON</strong> 22 (+6), <strong>INT</strong> 24 (+7), <strong>WIS</strong> 26 (+8), <strong>CHA</strong> 26 (+8)</li>
+                    </ul>
+                    
+                    <p><strong>Defenses:</strong></p>
+                    <ul>
+                        <li><strong>Saving Throws:</strong> STR +15, CON +13, WIS +15, CHA +15</li>
+                        <li><strong>Damage Immunities:</strong> Radiant, poison, necrotic; nonmagical weapons</li>
+                        <li><strong>Condition Immunities:</strong> All</li>
+                        <li><strong>Senses:</strong> Truesight 240 ft, passive Perception 28</li>
+                    </ul>
+                    
+                    <p><strong>Special Abilities:</strong></p>
+                    <ul>
+                        <li><strong>Legendary Resistance (3/day):</strong> If fails save, can choose to succeed instead</li>
+                        <li><strong>Divine Champion:</strong> Critical hits on 19-20</li>
+                        <li><strong>Radiant Weapons:</strong> All weapon attacks magical and deal extra 3d8 radiant damage</li>
+                        <li><strong>Aura of Protection:</strong> Allies within 60 ft gain +3 AC and +3 to all saves</li>
+                    </ul>
+                    
+                    <p><strong>Actions:</strong></p>
+                    <ul>
+                        <li><strong>Multiattack:</strong> Makes five attacks with Holy Longsword</li>
+                        <li><strong>Holy Longsword:</strong> +15 to hit, reach 10 ft, 3d8+8 slashing + 3d8 radiant + 2d6 SI (vs corrupted)</li>
+                        <li><strong>Divine Smite:</strong> When hits with sword, can expend spell slot equivalent to add 5d8 radiant (up to 10d8 for highest level)</li>
+                        <li><strong>Trumpet of Judgment (1/day):</strong> Sound trumpet. All corrupted creatures (CP 5+) within 300 ft must make DC 22 WIS save or take 10d10 radiant damage, be stunned for 1 minute, and lose 2d6 CP. Success: half damage, not stunned.</li>
+                    </ul>
+                    
+                    <p><strong>Legendary Actions (3/round):</strong></p>
+                    <ul>
+                        <li><strong>Attack:</strong> Make one Holy Longsword attack</li>
+                        <li><strong>Shield Bash (Costs 2):</strong> +15 to hit, 2d6+8 bludgeoning, target knocked prone and pushed 20 ft</li>
+                        <li><strong>Healing Light (Costs 2):</strong> Touch one creature, restore 6d8+8 HP and remove one condition</li>
+                        <li><strong>Smite Evil (Costs 3):</strong> Target corrupted creature within 120 ft, 12d10 radiant + 4d6 SI damage, no save, ignores resistances</li>
+                    </ul>
+                </div>
+                
+                <h2>Demonic Beings</h2>
+                
+                <div class="stat-block corruption-box">
+                    <h4>😈 Lesser Demon - Foot Soldiers of Hell</h4>
+                    <p><em>Corrupted spirits, fallen angels' servants</em></p>
+                    
+                    <p><strong>CR 3-5</strong></p>
+                    
+                    <p><strong>Appearance:</strong> Varies wildly - twisted humanoids, beast-like, shadowy forms. Always disturbing.</p>
+                    
+                    <p><strong>Combat Statistics:</strong></p>
+                    <ul>
+                        <li><strong>AC:</strong> 15 (natural armor)</li>
+                        <li><strong>HP:</strong> 68 (8d8 + 32)</li>
+                        <li><strong>Speed:</strong> 40 ft, climb 40 ft</li>
+                        <li><strong>STR</strong> 17 (+3), <strong>DEX</strong> 15 (+2), <strong>CON</strong> 18 (+4), <strong>INT</strong> 8 (-1), <strong>WIS</strong> 12 (+1), <strong>CHA</strong> 14 (+2)</li>
+                    </ul>
+                    
+                    <p><strong>Defenses:</strong></p>
+                    <ul>
+                        <li><strong>Damage Resistances:</strong> Cold, fire, necrotic</li>
+                        <li><strong>Damage Immunities:</strong> Poison</li>
+                        <li><strong>Condition Immunities:</strong> Poisoned</li>
+                        <li><strong>Senses:</strong> Darkvision 120 ft, passive Perception 11</li>
+                    </ul>
+                    
+                    <p><strong>Special Abilities:</strong></p>
+                    <ul>
+                        <li><strong>Corruption Sense:</strong> Detect RP levels within 60 ft, prioritize high-RP targets</li>
+                        <li><strong>Dark Whispers:</strong> Bonus action, one creature within 30 ft makes DC 13 WIS save or has disadvantage on next attack/check</li>
+                    </ul>
+                    
+                    <p><strong>Actions:</strong></p>
+                    <ul>
+                        <li><strong>Multiattack:</strong> Two attacks: one Claw, one Bite or two Claws</li>
+                        <li><strong>Claw:</strong> +5 to hit, reach 5 ft, 1d8+3 slashing + 1d6 necrotic</li>
+                        <li><strong>Bite:</strong> +5 to hit, reach 5 ft, 2d6+3 piercing. On hit, target makes DC 14 CON save or poisoned for 1 minute.</li>
+                        <li><strong>Psychic Assault (Recharge 5-6):</strong> One creature within 60 ft makes DC 13 INT save or takes 3d8 psychic + 1d4 SI damage</li>
+                    </ul>
+                </div>
+                
+                <div class="stat-block corruption-box">
+                    <h4>👹 Greater Demon - Lords of Corruption</h4>
+                    <p><em>Fallen watchers' lieutenants, princes of darkness</em></p>
+                    
+                    <p><strong>CR 12-16</strong></p>
+                    
+                    <p><strong>Appearance:</strong> Massive, terrifying, unique to each demon. Often blend multiple disturbing features.</p>
+                    
+                    <p><strong>Combat Statistics:</strong></p>
+                    <ul>
+                        <li><strong>AC:</strong> 19 (natural armor)</li>
+                        <li><strong>HP:</strong> 250 (20d12 + 120)</li>
+                        <li><strong>Speed:</strong> 50 ft, fly 80 ft</li>
+                        <li><strong>STR</strong> 24 (+7), <strong>DEX</strong> 18 (+4), <strong>CON</strong> 22 (+6), <strong>INT</strong> 20 (+5), <strong>WIS</strong> 18 (+4), <strong>CHA</strong> 22 (+6)</li>
+                    </ul>
+                    
+                    <p><strong>Defenses:</strong></p>
+                    <ul>
+                        <li><strong>Saving Throws:</strong> STR +12, CON +11, WIS +9, CHA +11</li>
+                        <li><strong>Damage Resistances:</strong> Cold, fire, lightning; nonmagical weapons</li>
+                        <li><strong>Damage Immunities:</strong> Necrotic, poison</li>
+                        <li><strong>Condition Immunities:</strong> Charmed, frightened, poisoned</li>
+                        <li><strong>Senses:</strong> Truesight 120 ft, passive Perception 24</li>
+                    </ul>
+                    
+                    <p><strong>Special Abilities:</strong></p>
+                    <ul>
+                        <li><strong>Aura of Despair:</strong> Creatures with RP 5+ within 30 ft have disadvantage on WIS saves and lose 1 RP per minute</li>
+                        <li><strong>Corruption Master:</strong> Can grant Dark Temptations at will to creatures within 60 ft</li>
+                        <li><strong>Legendary Resistance (2/day):</strong> If fails save, can choose to succeed</li>
+                        <li><strong>Magic Resistance:</strong> Advantage on saves vs spells</li>
+                    </ul>
+                    
+                    <p><strong>Actions:</strong></p>
+                    <ul>
+                        <li><strong>Multiattack:</strong> Makes four attacks with Corrupted Claws or casts two spells</li>
+                        <li><strong>Corrupted Claw:</strong> +12 to hit, reach 10 ft, 2d8+7 slashing + 2d8 necrotic + 1d6 SI (vs righteous RP 5+)</li>
+                        <li><strong>Soul Rend (Recharge 5-6):</strong> 60-ft cone, all creatures make DC 19 WIS save or take 6d10 necrotic + 3d6 SI damage, half on success. Righteous (RP 10+) have disadvantage.</li>
+                        <li><strong>Possession (1/day):</strong> Target humanoid within 30 ft makes DC 19 CHA save. On fail, demon possesses body. Host's SI becomes demon's SI pool. Requires exorcism or killing host.</li>
+                    </ul>
+                    
+                    <p><strong>Legendary Actions (3/round):</strong></p>
+                    <ul>
+                        <li><strong>Detect Faith:</strong> Know RP/CP of all creatures within 120 ft</li>
+                        <li><strong>Tempt (Costs 2):</strong> Offer Dark Temptation to one creature within 60 ft</li>
+                        <li><strong>Corrupt (Costs 2):</strong> One creature within 30 ft makes DC 19 WIS save or gains 1d4 CP</li>
+                        <li><strong>Despair Wave (Costs 3):</strong> All creatures within 30 ft make DC 19 WIS save or frightened for 1 minute and lose 1d4 RP</li>
+                    </ul>
+                </div>
+                
+                <div class="stat-block corruption-box">
+                    <h4>🔱 Fallen Watcher - Architect of Corruption</h4>
+                    <p><em>"The angels which kept not their first estate" - Jude 1:6</em></p>
+                    
+                    <p><strong>CR 20-25</strong></p>
+                    
+                    <p><strong>Appearance:</strong> Once beautiful angel, now twisted. Maintains some former glory but corrupted - cracked wings, darkened light, beautiful yet horrifying.</p>
+                    
+                    <p><strong>Combat Statistics:</strong></p>
+                    <ul>
+                        <li><strong>AC:</strong> 22 (cursed armor)</li>
+                        <li><strong>HP:</strong> 400 (32d10 + 192)</li>
+                        <li><strong>Speed:</strong> 60 ft, fly 180 ft</li>
+                        <li><strong>STR</strong> 26 (+8), <strong>DEX</strong> 24 (+7), <strong>CON</strong> 22 (+6), <strong>INT</strong> 26 (+8), <strong>WIS</strong> 24 (+7), <strong>CHA</strong> 26 (+8)</li>
+                    </ul>
+                    
+                    <p><strong>Defenses:</strong></p>
+                    <ul>
+                        <li><strong>Saving Throws:</strong> All +13 or higher</li>
+                        <li><strong>Damage Immunities:</strong> Necrotic, poison, psychic; nonmagical weapons</li>
+                        <li><strong>Condition Immunities:</strong> All</li>
+                        <li><strong>Senses:</strong> Truesight 300 ft, passive Perception 30</li>
+                    </ul>
+                    
+                    <p><strong>Special Abilities:</strong></p>
+                    <ul>
+                        <li><strong>Forbidden Knowledge:</strong> Can cast any spell up to 9th level (limited by slots: 3/3/3/3/2/1/1/1/1)</li>
+                        <li><strong>Corruption Aura:</strong> All creatures within 60 ft gain 1 CP per minute. Righteous (RP 10+) must make DC 22 WIS save each round or be frightened.</li>
+                        <li><strong>Legendary Resistance (3/day):</strong> If fails save, can choose to succeed</li>
+                        <li><strong>Master of Temptation:</strong> Can offer enhanced Dark Temptations (no CP cost limit)</li>
+                        <li><strong>Immortal:</strong> If killed, reforms in 1d100 years unless specific ritual performed</li>
+                    </ul>
+                    
+                    <p><strong>Actions:</strong></p>
+                    <ul>
+                        <li><strong>Multiattack:</strong> Makes five attacks or casts three spells</li>
+                        <li><strong>Cursed Blade:</strong> +15 to hit, reach 15 ft, 4d8+8 slashing + 4d8 necrotic + 3d6 SI (vs righteous). On critical hit, target loses 1d6 RP.</li>
+                        <li><strong>Eldritch Blast:</strong> Ranged spell attack, +15 to hit, range 300 ft, 6d10 force + 2d6 SI</li>
+                        <li><strong>Reality Tear (Recharge 5-6):</strong> 60-ft radius sphere within 240 ft. All creatures make DC 22 INT save or take 8d10 force + 4d6 SI damage and be stunned for 1 round. Half damage on success, not stunned.</li>
+                        <li><strong>Offer Ultimate Bargain (1/day):</strong> Speak to one creature. Offer impossible power in exchange for soul. Target makes DC 25 WIS save. On fail, possessed permanently and becomes NPC servant.</li>
+                    </ul>
+                    
+                    <p><strong>Legendary Actions (5/round):</strong></p>
+                    <ul>
+                        <li><strong>Spell (Costs 2):</strong> Cast one spell</li>
+                        <li><strong>Teleport (Costs 2):</strong> Teleport up to 120 ft</li>
+                        <li><strong>Mass Corruption (Costs 3):</strong> All creatures within 60 ft gain 1d6 CP, WIS DC 22 save for half (round down)</li>
+                        <li><strong>Shatter Faith (Costs 4):</strong> One creature within 120 ft loses all RP and gains CP equal to RP lost, WIS DC 22 save negates</li>
+                        <li><strong>Summon Demons (Costs 5):</strong> Summon 1d4+1 Greater Demons or 3d6 Lesser Demons</li>
+                    </ul>
+                </div>
+                
+                <h3>Calling Upon Angels/Demons</h3>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>Invoking Angelic Aid</strong> <span class="rp-cost">(Requires RP 15+)</span></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <p><strong>Ritual:</strong> 10-minute prayer of desperation, clear need for divine intervention</p>
+                        <p><strong>Check:</strong> Religion DC 20 (advantage if at sacred site)</p>
+                        <p><strong>Cost:</strong> Spend 5 RP</p>
+                        
+                        <p><strong>Success - Angel Responds (roll 1d6):</strong></p>
+                        <table>
+                            <tr>
+                                <th>d6</th>
+                                <th>Response</th>
+                            </tr>
+                            <tr>
+                                <td>1-2</td>
+                                <td><strong>Divine Blessing:</strong> No angel appears, but gain advantage on all rolls for 1 hour, restore all SI</td>
+                            </tr>
+                            <tr>
+                                <td>3-4</td>
+                                <td><strong>Messenger Angel:</strong> Lesser angel appears briefly, delivers guidance, heals party for 6d8+20 HP, leaves</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><strong>Guardian Angel:</strong> Medium-powered angel arrives, fights alongside for 1 hour or until combat ends</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><strong>Archangel:</strong> Powerful angel descends, smites primary evil threat, may grant quest or blessing</td>
+                            </tr>
+                        </table>
+                        
+                        <p><strong>Failure:</strong> Prayer unanswered, lose 5 RP anyway. Cannot attempt again for 1 week.</p>
+                        
+                        <div class="warning">
+                            <strong>Angel Expectations:</strong> Angels aid the righteous for righteous causes. If they discover you're corrupt or using them for selfish ends, consequences are severe (possible smiting, loss of all RP, marked as false prophet).
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>Summoning Demons</strong> <span class="cp-cost">(Requires CP 10+)</span></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <p><strong>Ritual:</strong> Blood sacrifice (minimum 1 HP, more = better results), 1-hour dark ritual</p>
+                        <p><strong>Check:</strong> Arcana DC 15 (advantage if at defiled site, disadvantage if at sacred site)</p>
+                        <p><strong>Cost:</strong> 1d6 HP (blood sacrifice), gain 2 CP</p>
+                        
+                        <p><strong>Success - Demon Appears (roll 1d6 + CP/5):</strong></p>
+                        <table>
+                            <tr>
+                                <th>Result</th>
+                                <th>Demon Type</th>
+                                <th>Price</th>
+                            </tr>
+                            <tr>
+                                <td>1-3</td>
+                                <td><strong>Imp:</strong> Tiny demon, scouts/spies for you</td>
+                                <td>1 CP, must feed it souls (kill someone within 1 week)</td>
+                            </tr>
+                            <tr>
+                                <td>4-6</td>
+                                <td><strong>Lesser Demon:</strong> Fights for you, 1 combat</td>
+                                <td>2 CP, owe demon a favor (GM determines)</td>
+                            </tr>
+                            <tr>
+                                <td>7-9</td>
+                                <td><strong>Greater Demon:</strong> Powerful ally, 1 hour service</td>
+                                <td>3 CP, must kill an innocent or corrupt a righteous person within 1 month</td>
+                            </tr>
+                            <tr>
+                                <td>10+</td>
+                                <td><strong>Fallen Watcher:</strong> Offers ultimate bargain</td>
+                                <td>Your soul (if accepted, gain immense power but doomed). Can refuse and still get lesser aid for 5 CP.</td>
+                            </tr>
+                        </table>
+                        
+                        <p><strong>Failure:</strong> Demon appears but attacks you instead. Roll on demon table but it's hostile.</p>
+                        
+                        <div class="warning">
+                            <strong>⚠️ EXTREME DANGER:</strong> Demons always betray eventually. Debts compound. Each summoning makes next easier (lower DC) but increases price. CP accumulates rapidly. Soul is at risk.
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Spiritual Warfare Tactics</h3>
+                
+                <div class="tip">
+                    <h4>Fighting Angels (If You're Corrupted)</h4>
+                    <ul>
+                        <li>Angels prioritize SI damage over HP damage vs corrupted</li>
+                        <li>Radiant damage ignores resistance if CP 10+</li>
+                        <li>Flee or surrender if possible - angels may offer redemption</li>
+                        <li>Defiled ground weakens angels (-2 to hit, disadvantage on spells)</li>
+                        <li>Some artifacts can shield you temporarily</li>
+                        <li><strong>Best Defense:</strong> Repent, drop CP, ask for mercy</li>
+                    </ul>
+                    
+                    <h4>Fighting Demons (If You're Righteous)</h4>
+                    <ul>
+                        <li>Holy water, blessed weapons highly effective</li>
+                        <li>Prayer mid-combat can restore RP and SI</li>
+                        <li>Sacred ground gives you advantage</li>
+                        <li>Demons flee if reduced to half HP (unless commanded by Watcher)</li>
+                        <li>Exorcism is effective but takes time (ritual, not combat action)</li>
+                        <li><strong>Best Offense:</strong> Maintain high RP, use blessed weapons, fight on consecrated ground</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- MASS COMBAT SECTION -->
+            <div id="mass-combat" class="section">
+                <h2>Mass Combat - Armies & Warfare</h2>
+                
+                <div class="mechanic-box">
+                    <h3>Overview: War in the Antediluvian Age</h3>
+                    <p>When giants walk the earth and cities wage war, individual combat gives way to mass battles. These rules abstract army-scale conflict while keeping player characters central to the action.</p>
+                    
+                    <p><strong>Scale:</strong></p>
+                    <ul>
+                        <li><strong>Squad:</strong> 10-50 troops (use normal combat)</li>
+                        <li><strong>Company:</strong> 50-200 troops (simplified combat)</li>
+                        <li><strong>Battalion:</strong> 200-1,000 troops (mass combat - unit-based)</li>
+                        <li><strong>Army:</strong> 1,000+ troops (strategic warfare)</li>
+                    </ul>
+                </div>
+                
+                <h3>Unit System</h3>
+                
+                <div class="mechanic-box">
+                    <p>Armies are divided into <strong>Units</strong>. Each unit represents ~100 soldiers and has simplified stats:</p>
+                    
+                    <h4>Unit Statistics</h4>
+                    <table>
+                        <tr>
+                            <th>Stat</th>
+                            <th>Explanation</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Size</strong></td>
+                            <td>Number of soldiers (typically 100). When size reaches 0, unit is routed/destroyed.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Quality</strong></td>
+                            <td>Green (+0), Trained (+2), Veteran (+4), Elite (+6)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Attack</strong></td>
+                            <td>1d20 + Quality vs enemy Defense</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Defense</strong></td>
+                            <td>10 + Quality + Equipment bonus</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Morale</strong></td>
+                            <td>10 + Quality + Commander bonus (1-20 scale)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Type</strong></td>
+                            <td>Infantry, Archers, Cavalry, Giants, Chariots, Siege</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <h3>Sample Units</h3>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>Human Units</strong></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <table>
+                            <tr>
+                                <th>Unit Type</th>
+                                <th>Size</th>
+                                <th>Quality</th>
+                                <th>Attack</th>
+                                <th>Defense</th>
+                                <th>Morale</th>
+                                <th>Special</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Militia Spearmen</strong></td>
+                                <td>100</td>
+                                <td>Green (+0)</td>
+                                <td>+2</td>
+                                <td>11</td>
+                                <td>8</td>
+                                <td>+2 vs cavalry</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Trained Infantry</strong></td>
+                                <td>100</td>
+                                <td>Trained (+2)</td>
+                                <td>+5</td>
+                                <td>14</td>
+                                <td>12</td>
+                                <td>Shields (+2 def vs ranged)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Veteran Swordsmen</strong></td>
+                                <td>100</td>
+                                <td>Veteran (+4)</td>
+                                <td>+7</td>
+                                <td>16</td>
+                                <td>15</td>
+                                <td>Disciplined (adv on morale)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Archers</strong></td>
+                                <td>100</td>
+                                <td>Trained (+2)</td>
+                                <td>+5</td>
+                                <td>12</td>
+                                <td>10</td>
+                                <td>Range 300 ft, -2 def in melee</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Light Cavalry</strong></td>
+                                <td>50</td>
+                                <td>Trained (+2)</td>
+                                <td>+6</td>
+                                <td>13</td>
+                                <td>12</td>
+                                <td>Mobile (can disengage), +3 vs archers</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Heavy Chariots</strong></td>
+                                <td>20</td>
+                                <td>Veteran (+4)</td>
+                                <td>+8</td>
+                                <td>15</td>
+                                <td>14</td>
+                                <td>Charge (+4 dmg first round), trample</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>Giant & Monster Units</strong></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <table>
+                            <tr>
+                                <th>Unit Type</th>
+                                <th>Size</th>
+                                <th>Quality</th>
+                                <th>Attack</th>
+                                <th>Defense</th>
+                                <th>Morale</th>
+                                <th>Special</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Nephilim Warband</strong></td>
+                                <td>10</td>
+                                <td>Elite (+6)</td>
+                                <td>+12</td>
+                                <td>18</td>
+                                <td>18</td>
+                                <td>Each counts as 10 soldiers, terror (enemies -2 morale)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Rephaim Warriors</strong></td>
+                                <td>20</td>
+                                <td>Veteran (+4)</td>
+                                <td>+10</td>
+                                <td>17</td>
+                                <td>16</td>
+                                <td>Siege breakers (2× damage to walls), each = 5 soldiers</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Anakim Elite Guard</strong></td>
+                                <td>50</td>
+                                <td>Elite (+6)</td>
+                                <td>+11</td>
+                                <td>19</td>
+                                <td>17</td>
+                                <td>Inspire nearby units (+2 morale in 100 ft)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>War Beasts</strong></td>
+                                <td>5-10</td>
+                                <td>—</td>
+                                <td>+8</td>
+                                <td>16</td>
+                                <td>6</td>
+                                <td>Terror, uncontrolled (may attack anyone on morale fail)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Corrupted Horde</strong></td>
+                                <td>200</td>
+                                <td>Green (+0)</td>
+                                <td>+3</td>
+                                <td>10</td>
+                                <td>5</td>
+                                <td>Fearless (never fail morale), corrupted aura</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <h3>Mass Combat Round Structure</h3>
+                
+                <div class="mechanic-box">
+                    <p>Each mass combat round = ~10 minutes of battle time.</p>
+                    
+                    <h4>Round Sequence:</h4>
+                    <ol>
+                        <li><strong>Initiative:</strong> Each side rolls 1d20 + commander's CHA modifier</li>
+                        <li><strong>Player Actions:</strong> PCs can take individual actions (see below)</li>
+                        <li><strong>Unit Attacks:</strong> Each unit attacks an enemy unit
+                            <ul>
+                                <li>Roll unit's Attack vs enemy unit's Defense</li>
+                                <li>On hit: Deal damage = 1d20 casualties</li>
+                                <li>Reduce enemy unit size by casualties dealt</li>
+                            </ul>
+                        </li>
+                        <li><strong>Morale Checks:</strong> Units that lost 25%+ size this round make morale check
+                            <ul>
+                                <li>Roll 1d20 + current Morale score</li>
+                                <li>DC = 10 + (casualties taken this round / 10)</li>
+                                <li>Failure: Unit routes (flees battlefield)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Assess Victory:</strong> If one side has no units remaining or all units routed, battle ends</li>
+                    </ol>
+                </div>
+                
+                <h3>PC Actions in Mass Combat</h3>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>Combat Actions (Players Are Heroes)</strong></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <p>PCs remain significant forces. Each round of mass combat, each PC can:</p>
+                        
+                        <h4>Choose One Action:</h4>
+                        
+                        <table>
+                            <tr>
+                                <th>Action</th>
+                                <th>Effect</th>
+                                <th>Check</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Lead from Front</strong></td>
+                                <td>Join a unit, grant +2 to attack and +3 morale for this round</td>
+                                <td>CHA (Persuasion) DC 12</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Heroic Charge</strong></td>
+                                <td>Attack enemy unit personally, deal 2d10 casualties, become target of enemy attacks</td>
+                                <td>STR (Athletics) DC 15, take 2d6 damage from counterattack</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tactical Command</strong></td>
+                                <td>Grant one friendly unit advantage on attack or enemy disadvantage</td>
+                                <td>INT (History/Warfare) DC 14</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Rally Troops</strong></td>
+                                <td>Restore 1d6 morale to one routing unit, prevent rout</td>
+                                <td>CHA (Persuasion) DC 16</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Targeted Strike</strong></td>
+                                <td>Kill enemy commander, giant, or champion (opposed roll)</td>
+                                <td>Your attack vs their defense, epic duel</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Prayer for Victory</strong></td>
+                                <td>Spend 3 RP, all friendly units gain +2 attack and morale for 3 rounds</td>
+                                <td>Religion DC 15, only if RP 10+</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dark Ritual</strong></td>
+                                <td>Sacrifice 10 HP, summon 1d4 Lesser Demons to attack enemy unit</td>
+                                <td>Arcana DC 13, gain 2 CP</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Giant's Rampage</strong></td>
+                                <td>If giant-blooded, deal 3d10 casualties to enemy unit, terrify nearby (morale -3)</td>
+                                <td>STR check DC 12, gain 1 CP, take 1d10 damage</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <h3>Terrain & Battlefield Conditions</h3>
+                
+                <table>
+                    <tr>
+                        <th>Terrain</th>
+                        <th>Effect on Combat</th>
+                    </tr>
+                    <tr>
+                        <td><strong>High Ground</strong></td>
+                        <td>Defenders: +2 Defense, +1 to morale checks. Attackers uphill: -2 to attacks</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Forest/Dense Cover</strong></td>
+                        <td>Cavalry ineffective (-4 to attack). Infantry +2 Defense vs ranged. Archers disadvantage.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>River/Water</strong></td>
+                        <td>Crossing requires full round (can't attack). Defenders on far bank advantage on attacks vs crossers.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Open Plains</strong></td>
+                        <td>Cavalry +3 to attack. Archers +50 ft range. Chariots +2 attack.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mud/Rain</strong></td>
+                        <td>All units -2 Defense, cavalry -4 attack, movement halved</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Night/Darkness</strong></td>
+                        <td>All attacks at disadvantage unless darkvision. Morale -2. Surprise attacks easier.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sacred Ground</strong></td>
+                        <td>Righteous units +2 attack/morale. Corrupted units -2 attack/morale, take 1d10 casualties per round.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Defiled Site</strong></td>
+                        <td>Corrupted units +2 attack/morale. Righteous units -2 morale. Demons may spontaneously appear.</td>
+                    </tr>
+                </table>
+                
+                <h3>Siege Warfare</h3>
+                
+                <div class="mechanic-box">
+                    <h4>Defending a City</h4>
+                    
+                    <p><strong>City Defenses:</strong></p>
+                    <ul>
+                        <li><strong>Walls:</strong> HP based on construction (stone: 500 HP, wood: 200 HP, brick: 300 HP)</li>
+                        <li><strong>Gates:</strong> HP = Wall HP / 5, but AC is lower (easier to damage)</li>
+                        <li><strong>Towers:</strong> Allow archers +2 to attack, +100 ft range</li>
+                        <li><strong>Moat:</strong> Prevents direct assault, must be crossed (takes 1 round, vulnerable during crossing)</li>
+                    </ul>
+                    
+                    <p><strong>Defenders Inside City:</strong></p>
+                    <ul>
+                        <li>+4 Defense (protected by walls)</li>
+                        <li>+3 Morale (defending home)</li>
+                        <li>Archers can attack from walls without being attacked by melee</li>
+                        <li>Can sally forth (leave city to attack) but lose bonuses</li>
+                    </ul>
+                    
+                    <h4>Assaulting a City</h4>
+                    
+                    <p><strong>Direct Assault:</strong></p>
+                    <ul>
+                        <li>Attacking units must first damage walls/gates to HP 0</li>
+                        <li>While attacking walls, take damage from defender archers each round</li>
+                        <li>Once breach made, units can enter city (normal combat)</li>
+                        <li>Morale -2 (dangerous assault)</li>
+                    </ul>
+                    
+                    <p><strong>Siege Equipment:</strong></p>
+                    <table>
+                        <tr>
+                            <th>Equipment</th>
+                            <th>Effect</th>
+                            <th>Cost</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Battering Ram</strong></td>
+                            <td>Deals 3d10 damage to gates per round. Size 20 (can be destroyed by defenders).</td>
+                            <td>500 gp, 1 week to build</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Siege Tower</strong></td>
+                            <td>Allows units to attack over walls (negates defender +4 Defense). Size 30.</td>
+                            <td>800 gp, 2 weeks to build</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Catapult</strong></td>
+                            <td>Deals 4d10 damage to walls or 2d20 casualties to unit behind walls. Range 300 ft.</td>
+                            <td>1,000 gp, 2 weeks to build</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ballista</strong></td>
+                            <td>Attacks single target (giant, tower, gate) for 6d10 damage. Range 400 ft.</td>
+                            <td>600 gp, 1 week to build</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ladders</strong></td>
+                            <td>Allow infantry to scale walls. Climbing unit has disadvantage on defense, takes 1d20 casualties from defenders.</td>
+                            <td>50 gp per 10 ladders</td>
+                        </tr>
+                    </table>
+                    
+                    <h4>Starvation Siege</h4>
+                    <p>Surround city, cut off supplies:</p>
+                    <ul>
+                        <li>Each week, besieged city makes CON save DC 10 (+1 per week)</li>
+                        <li>Failure: Lose 10% of population, all units -1 morale</li>
+                        <li>After 4 weeks: Disease may break out (GM rolls, -2d10 casualties per week)</li>
+                        <li>City surrenders when morale drops below 5 or population drops below 25%</li>
+                    </ul>
+                </div>
+                
+                <h3>Special Conditions & Events</h3>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>Divine Intervention in Battle</strong></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <h4>Angelic Host Arrives</h4>
+                        <p><strong>Trigger:</strong> Righteous army facing overwhelming evil, player calls for aid with RP 15+</p>
+                        <p><strong>Effect:</strong></p>
+                        <ul>
+                            <li>1d6 Angels descend to battlefield</li>
+                            <li>Each Angel counts as Elite unit with Size 10 (but each = 20 soldiers)</li>
+                            <li>All corrupted units must make morale check DC 18 or route immediately</li>
+                            <li>Righteous units gain +4 morale for remainder of battle</li>
+                            <li>Angels specifically target giants, demons, corrupted champions</li>
+                        </ul>
+                        
+                        <h4>Demonic Legion Summoned</h4>
+                        <p><strong>Trigger:</strong> Corrupted leader sacrifices 100+ innocents or calls on Fallen Watcher</p>
+                        <p><strong>Effect:</strong></p>
+                        <ul>
+                            <li>2d10 Lesser Demons or 1d4 Greater Demons appear</li>
+                            <li>All righteous units must make morale check DC 16 or be frightened (disadvantage on attacks)</li>
+                            <li>Demons fight for corrupted side but may demand price after battle</li>
+                            <li>All participants on corrupted side gain 1d4 CP</li>
+                            <li>Sacred ground becomes defiled</li>
+                        </ul>
+                        
+                        <h4>Natural Disaster (Divine Judgment)</h4>
+                        <p>Roll 1d6 when cosmic powers are invoked recklessly:</p>
+                        <table>
+                            <tr>
+                                <th>d6</th>
+                                <th>Event</th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td><strong>Earthquake:</strong> All units take 2d20 casualties, walls take 6d10 damage, difficult terrain everywhere</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><strong>Fire from Heaven:</strong> Random unit (1d6 for side) takes 6d20 casualties, no save</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><strong>Flood:</strong> Water rises, must retreat to high ground or drown. Half of both armies lost.</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><strong>Darkness:</strong> Supernatural darkness for 1d4 rounds. All attacks at severe disadvantage, chaos ensues.</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><strong>Plague:</strong> Both armies affected. Each unit loses 1d10 size per round for 3 rounds.</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><strong>Angel of Death:</strong> Corrupted side: all first-born die (lose 20% of army). Righteous side: unaffected.</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <h3>Victory & Aftermath</h3>
+                
+                <div class="mechanic-box">
+                    <h4>Determining Victor</h4>
+                    <p>Battle ends when:</p>
+                    <ul>
+                        <li>One side has no units remaining on field</li>
+                        <li>One side's units all route (morale collapse)</li>
+                        <li>Commander killed and heir routes</li>
+                        <li>Objective achieved (city taken, artifact secured, etc.)</li>
+                    </ul>
+                    
+                    <h4>Spoils of War</h4>
+                    <table>
+                        <tr>
+                            <th>Victory Type</th>
+                            <th>Spoils</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Pyrrhic (Lost 60%+ of army)</strong></td>
+                            <td>500 gp × army size modifier, -2 morale for all surviving units for 1 month, enemy escapes mostly intact</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Marginal (Lost 30-60%)</strong></td>
+                            <td>1,000 gp × modifier, enemy wounded leaders captured, control battlefield</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Decisive (Lost <30%)</strong></td>
+                            <td>3,000 gp × modifier, enemy leaders captured/killed, weapons/armor looted, +1 morale to all units for 1 month</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total (Lost <10%)</strong></td>
+                            <td>5,000 gp × modifier, enemy annihilated, legendary victory (+2 morale permanently), songs sung of triumph, recruit new units easily</td>
+                        </tr>
+                    </table>
+                    
+                    <p><em>Army Size Modifier: Small (500-) = 1×, Medium (500-2000) = 2×, Large (2000-5000) = 3×, Massive (5000+) = 5×</em></p>
+                    
+                    <h4>Casualties & Recovery</h4>
+                    <ul>
+                        <li><strong>Dead:</strong> 50% of casualties are dead (can't be recovered)</li>
+                        <li><strong>Wounded:</strong> 50% of casualties are wounded (recover in 1d4 weeks)</li>
+                        <li><strong>Routing Units:</strong> 50% return after battle (scattered, regrouped)</li>
+                        <li><strong>Morale Impact:</strong> Losing battle: -1d4 morale for all units. Winning battle: +1d4 morale.</li>
+                    </ul>
+                </div>
+                
+                <h3>Sample Battle Scenario</h3>
+                
+                <div class="tip">
+                    <h4>The Siege of Enoch's Gate</h4>
+                    <p><strong>Situation:</strong> City of Enoch (righteous settlement, pop 3,000) is besieged by Nephilim warlord Azazel with army of 2,000 corrupted warriors and 50 giants.</p>
+                    
+                    <p><strong>Defender Forces (Inside City):</strong></p>
+                    <ul>
+                        <li>4 units Trained Infantry (400 soldiers, +5 atk, 14 def, 12 morale + 3 city = 15)</li>
+                        <li>2 units Archers (200 soldiers, +5 atk, 12 def, 10 morale +3 city = 13)</li>
+                        <li>1 unit Veteran Temple Guard (100 elite, +7 atk, 16 def, 15 morale +3 city = 18)</li>
+                        <li>City Walls: 500 HP, AC 15</li>
+                        <li>Commander: Prophet Jared (CHA +4, RP 18)</li>
+                    </ul>
+                    
+                    <p><strong>Attacker Forces (Siege Lines):</strong></p>
+                    <ul>
+                        <li>10 units Corrupted Warriors (1,000 soldiers, +3 atk, 10 def, 5 morale - fearless)</li>
+                        <li>5 units Nephilim Warband (50 giants, +12 atk, 18 def, 18 morale, terror)</li>
+                        <li>2 Catapults, 1 Battering Ram</li>
+                        <li>Commander: Azazel the Warlord (Nephilim, CP 20, STR +8)</li>
+                    </ul>
+                    
+                    <p><strong>Round 1:</strong></p>
+                    <ul>
+                        <li>Initiative: Defenders win (Jared CHA +4)</li>
+                        <li>PC Action: Cleric prays (spends 3 RP) - all defender units +2 attack/morale for 3 rounds</li>
+                        <li>Catapults fire at walls: 2× 4d10 damage = 48 HP to walls (452 HP remain)</li>
+                        <li>Defender archers fire: Deal 2d20 casualties to Corrupted Warriors (unit 1 loses 23 soldiers, now 77)</li>
+                        <li>No morale checks (casualties <25%)</li>
+                    </ul>
+                    
+                    <p><strong>Outcome (after 8 rounds):</strong> Walls breached, desperate melee in streets, PCs kill Azazel in heroic duel. Corrupted army routes. Pyrrhic victory - city saved but 40% casualties. Prophet Jared grants blessing (all PCs +1d4 RP).</p>
+                </div>
+            </div>
+            
+            <!-- TABLES SECTION -->
+            <div id="tables" class="section">
+                <h2>Quick Reference Tables</h2>
+                
+                <h3>Grievous Wounds Table (d10)</h3>
+                <p>Roll when reduced to 0 HP (optional rule for grittier gameplay):</p>
+                
+                <table>
+                    <tr>
+                        <th>d10</th>
+                        <th>Wound</th>
+                        <th>Effect</th>
+                    </tr>
+                    <tr>
+                        <td>1-3</td>
+                        <td><strong>Bleeding Out</strong></td>
+                        <td>Make death saves as normal, unconscious</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><strong>Shattered Bone</strong></td>
+                        <td>Disadvantage on STR/DEX checks, half speed until magically healed or 1 week rest</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><strong>Concussed</strong></td>
+                        <td>Disadvantage on INT/WIS/CHA checks until long rest</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td><strong>Marked by Death</strong></td>
+                        <td>Vulnerable (double damage) to next attack against you</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td><strong>Spirit Shaken</strong></td>
+                        <td>Lose <span class="dice-notation">1d4 SI</span>, unconscious</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td><strong>Deep Wound</strong></td>
+                        <td>Lose 1 Hit Die permanently (regain after 1 week), bleeding (1d4 damage per round until stabilized)</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td><strong>Maimed</strong></td>
+                        <td>Lose use of limb/eye (GM choice), permanent scar, disadvantage on related checks</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td><strong>Nephilim Resilience</strong></td>
+                        <td>If giant-blooded: stay conscious at 1 HP, gain 1 CP and 1 level exhaustion. Otherwise: reroll.</td>
+                    </tr>
+                </table>
+                
+                <h3>Combat Modifiers Quick Reference</h3>
+                <table>
+                    <tr>
+                        <th>Situation</th>
+                        <th>Modifier</th>
+                    </tr>
+                    <tr>
+                        <td>Flanking (ally opposite side of enemy)</td>
+                        <td>Advantage on melee attacks</td>
+                    </tr>
+                    <tr>
+                        <td>High ground (ranged)</td>
+                        <td>+2 to attack</td>
+                    </tr>
+                    <tr>
+                        <td>One size category larger</td>
+                        <td>+1 to melee attack</td>
+                    </tr>
+                    <tr>
+                        <td>Two sizes larger</td>
+                        <td>+2 to melee attack</td>
+                    </tr>
+                    <tr>
+                        <td>Half cover</td>
+                        <td>Target gains +2 AC</td>
+                    </tr>
+                    <tr>
+                        <td>Three-quarters cover</td>
+                        <td>Target gains +5 AC</td>
+                    </tr>
+                    <tr>
+                        <td>Prone attacker (melee)</td>
+                        <td>Disadvantage on attack</td>
+                    </tr>
+                    <tr>
+                        <td>Prone target (melee within 5 ft)</td>
+                        <td>Advantage on attack</td>
+                    </tr>
+                    <tr>
+                        <td>Prone target (ranged)</td>
+                        <td>Disadvantage on attack</td>
+                    </tr>
+                    <tr>
+                        <td>Unseen attacker</td>
+                        <td>Advantage on attack</td>
+                    </tr>
+                    <tr>
+                        <td>Unseen target</td>
+                        <td>Disadvantage on attack</td>
+                    </tr>
+                    <tr>
+                        <td>Ranged attack while adjacent to enemy</td>
+                        <td>Disadvantage on attack</td>
+                    </tr>
+                    <tr>
+                        <td>Long range</td>
+                        <td>Disadvantage on ranged attack</td>
+                    </tr>
+                    <tr>
+                        <td>Called shot</td>
+                        <td>-2 to attack, special effect on hit</td>
+                    </tr>
+                </table>
+                
+                <h3>Condition Summary</h3>
+                <table>
+                    <tr>
+                        <th>Condition</th>
+                        <th>Key Effect</th>
+                    </tr>
+                    <tr>
+                        <td>Blinded</td>
+                        <td>Can't see, disadvantage on attacks, attacks vs you have advantage</td>
+                    </tr>
+                    <tr>
+                        <td>Charmed</td>
+                        <td>Can't attack charmer, charmer has advantage on social checks</td>
+                    </tr>
+                    <tr>
+                        <td>Frightened</td>
+                        <td>Disadvantage on checks/attacks while source visible, can't move closer</td>
+                    </tr>
+                    <tr>
+                        <td>Grappled</td>
+                        <td>Speed 0</td>
+                    </tr>
+                    <tr>
+                        <td>Incapacitated</td>
+                        <td>Can't take actions or reactions</td>
+                    </tr>
+                    <tr>
+                        <td>Paralyzed</td>
+                        <td>Incapacitated, auto-fail STR/DEX saves, attacks have advantage, hits within 5 ft are crits</td>
+                    </tr>
+                    <tr>
+                        <td>Poisoned</td>
+                        <td>Disadvantage on attacks and ability checks</td>
+                    </tr>
+                    <tr>
+                        <td>Prone</td>
+                        <td>Disadvantage on attacks, melee attacks vs you have advantage, costs half movement to stand</td>
+                    </tr>
+                    <tr>
+                        <td>Restrained</td>
+                        <td>Speed 0, disadvantage on attacks and DEX saves, attacks vs you have advantage</td>
+                    </tr>
+                    <tr>
+                        <td>Stunned</td>
+                        <td>Incapacitated, can't move, auto-fail STR/DEX saves, attacks have advantage</td>
+                    </tr>
+                    <tr>
+                        <td>Unconscious</td>
+                        <td>Incapacitated, can't move/speak, drop everything, fall prone, auto-fail STR/DEX saves, attacks have advantage, hits within 5 ft are crits</td>
+                    </tr>
+                </table>
+                
+                <h3>Damage Type Resistances & Vulnerabilities</h3>
+                <table>
+                    <tr>
+                        <th>Creature Type</th>
+                        <th>Typically Resistant To</th>
+                        <th>Typically Vulnerable To</th>
+                    </tr>
+                    <tr>
+                        <td>Angels</td>
+                        <td>Radiant, psychic, nonmagical weapons</td>
+                        <td>Corrupted/cursed weapons</td>
+                    </tr>
+                    <tr>
+                        <td>Demons</td>
+                        <td>Fire, poison, necrotic</td>
+                        <td>Radiant, holy water</td>
+                    </tr>
+                    <tr>
+                        <td>Corrupted (CP 15+)</td>
+                        <td>Necrotic, poison</td>
+                        <td>Radiant</td>
+                    </tr>
+                    <tr>
+                        <td>Righteous (RP 15+)</td>
+                        <td>Radiant, psychic</td>
+                        <td>Corrupted weapons</td>
+                    </tr>
+                    <tr>
+                        <td>Giants/Nephilim</td>
+                        <td>Bludgeoning, cold</td>
+                        <td>Called shots to vitals</td>
+                    </tr>
+                    <tr>
+                        <td>Watchers (Fallen)</td>
+                        <td>Psychic, fire, most physical</td>
+                        <td>Divine/angelic weapons</td>
+                    </tr>
+                    <tr>
+                        <td>Undead</td>
+                        <td>Poison, necrotic</td>
+                        <td>Radiant</td>
+                    </tr>
+                </table>
+                
+                <h3>Sample DCs</h3>
+                <table>
+                    <tr>
+                        <th>Task Difficulty</th>
+                        <th>DC</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td>Very Easy</td>
+                        <td>5</td>
+                        <td>Notice a giant walking nearby</td>
+                    </tr>
+                    <tr>
+                        <td>Easy</td>
+                        <td>10</td>
+                        <td>Climb a knotted rope, simple prayer</td>
+                    </tr>
+                    <tr>
+                        <td>Medium</td>
+                        <td>15</td>
+                        <td>Scale a rough wall, effective combat prayer</td>
+                    </tr>
+                    <tr>
+                        <td>Hard</td>
+                        <td>20</td>
+                        <td>Climb a slick surface, powerful prayer</td>
+                    </tr>
+                    <tr>
+                        <td>Very Hard</td>
+                        <td>25</td>
+                        <td>Swim in stormy seas, miraculous prayer</td>
+                    </tr>
+                    <tr>
+                        <td>Nearly Impossible</td>
+                        <td>30</td>
+                        <td>Jump across a wide chasm, divine intervention</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active from all buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Highlight active button
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Expandable sections
+        function toggleExpand(header) {
+            const content = header.nextElementSibling;
+            const arrow = header.querySelector('.arrow');
+            
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                arrow.classList.remove('open');
+            } else {
+                content.classList.add('open');
+                arrow.classList.add('open');
+            }
+        }
+        
+        // Scroll to top button (optional enhancement)
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                // Could add a "scroll to top" button here
+            }
+        });
+    </script>
+</body>
+</html>

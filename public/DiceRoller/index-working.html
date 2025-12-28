@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nephilim Wars - Dice Roller</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { margin: 0; overflow: hidden; background-color: #111; font-family: 'Cinzel', serif; }
+
+        /* --- 3D CANVAS BEHIND UI --- */
+        #canvas-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
+        }
+
+        /* --- NAVIGATION BUTTON (Top Left) --- */
+        .nav-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100; /* Above Canvas */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            background: rgba(28, 25, 23, 0.9); 
+            border: 2px solid #b45309;
+            color: #fcd34d; 
+            text-decoration: none; 
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 14px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        .nav-button:hover {
+            background: linear-gradient(135deg, #78350f 0%, #451a03 100%);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+        /* --- CONTROLS PANEL (Top Right) --- */
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            width: 280px;
+            padding: 25px;
+            border-radius: 12px;
+            background: rgba(28, 25, 23, 0.9); 
+            border: 2px solid #b45309;          
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            color: #d6d3d1; 
+        }
+
+        .title {
+            color: #fcd34d; 
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            border-bottom: 1px solid #78350f;
+            padding-bottom: 10px;
+        }
+
+        .control-group { margin-bottom: 15px; }
+        
+        label {
+            display: block; color: #f59e0b; font-size: 12px; font-weight: 600;
+            margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        select, input {
+            width: 100%; padding: 10px; border-radius: 6px;
+            border: 1px solid #78350f; background: #0c0a09; color: #e7e5e4;
+            font-family: 'Cinzel', serif; font-size: 14px; transition: all 0.3s;
+        }
+
+        select:focus, input:focus {
+            outline: none; border-color: #fcd34d; box-shadow: 0 0 10px rgba(180, 83, 9, 0.3);
+        }
+
+        button {
+            width: 100%; padding: 12px; border-radius: 6px;
+            border: 1px solid #f59e0b;
+            background: linear-gradient(135deg, #78350f 0%, #451a03 100%);
+            color: #fcd34d; font-size: 16px; font-family: 'Cinzel', serif;
+            font-weight: bold; cursor: pointer; margin-top: 10px;
+            transition: all 0.3s; text-transform: uppercase; letter-spacing: 2px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+        }
+        button:hover {
+            background: linear-gradient(135deg, #92400e 0%, #78350f 100%);
+            transform: translateY(-2px); box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); 
+        }
+        button:active { transform: translateY(0); }
+
+        #result-display {
+            margin-top: 20px; padding: 15px; background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #78350f; border-radius: 8px; text-align: center;
+            min-height: 80px; display: flex; flex-direction: column; justify-content: center;
+        }
+        .result-total {
+            font-size: 42px; font-weight: bold; color: #fcd34d; 
+            text-shadow: 0 0 20px rgba(180, 83, 9, 0.5); margin-bottom: 5px;
+        }
+        .result-details { font-size: 14px; color: #a8a29e; font-family: sans-serif; }
+        .divider {
+            height: 1px; background: linear-gradient(90deg, transparent, #78350f, transparent); margin: 20px 0;
+        }
+        .rolling-indicator { color: #f59e0b; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    </style>
+</head>
+<body>
+    
+    <a href="../CharacterGen/index.html" class="nav-button">
+        <span>⚔️ Create Character</span>
+    </a>
+
+    <div id="canvas-container"></div>
+
+    <div class="controls">
+        <div class="title">⚔️ NEPHILIM WARS ⚔️</div>
+        
+        <div class="control-group">
+            <label>🎨 Damage Type</label>
+            <select id="theme-selector">
+                <option value="fire">🔥 Fire</option>
+                <option value="ice">❄️ Ice</option>
+                <option value="necrotic">💀 Necrotic</option>
+                <option value="radiant">✨ Radiant</option>
+                <option value="acid">🧪 Acid</option>
+                <option value="lightning">⚡ Lightning</option>
+                <option value="force">🌀 Force</option>
+                <option value="psychic">🧠 Psychic</option>
+                <option value="nature">🌿 Nature</option>
+                <option value="thunder">⛈️ Thunder</option>
+                <option value="holy">🙏 Holy</option>
+                <option value="shadow">🌑 Shadow</option>
+                <option value="blood">🩸 Blood</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>🎲 Number of Dice</label>
+            <input type="number" id="dice-count" value="1" min="1" max="10">
+        </div>
+
+        <div class="control-group">
+            <label>📊 Die Type</label>
+            <select id="dice-type">
+                <option value="4">d4 (Pyramid)</option>
+                <option value="6">d6 (Cube)</option>
+                <option value="8">d8 (Octahedron)</option>
+                <option value="10">d10 (Decahedron)</option>
+                <option value="12">d12 (Dodecahedron)</option>
+                <option value="20" selected>d20 (Icosahedron)</option>
+            </select>
+        </div>
+
+        <div class="divider"></div>
+
+        <button onclick="rollDice()">🎲 ROLL DICE</button>
+        
+        <div id="result-display">
+            <div style="color: #666; font-size: 14px;">Ready to roll!</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+        import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js';
+
+        // THEME DEFINITIONS
+        const THEMES = {
+            fire:     { color: 0xFF4500, label: '🔥 Fire', glow: 0xFF6347 },
+            ice:      { color: 0x87CEEB, label: '❄️ Ice', glow: 0xADD8E6 },
+            necrotic: { color: 0x2F2F2F, label: '💀 Necrotic', glow: 0x4A4A4A },
+            radiant:  { color: 0xFFD700, label: '✨ Radiant', glow: 0xFFE55C },
+            acid:     { color: 0x76FF03, label: '🧪 Acid', glow: 0x9AFF4D },
+            lightning:{ color: 0x00BFFF, label: '⚡ Lightning', glow: 0x1E90FF },
+            force:    { color: 0x9400D3, label: '🌀 Force', glow: 0xBA55D3 },
+            psychic:  { color: 0xFF1493, label: '🧠 Psychic', glow: 0xFF69B4 },
+            nature:   { color: 0x228B22, label: '🌿 Nature', glow: 0x32CD32 },
+            thunder:  { color: 0x708090, label: '⛈️ Thunder', glow: 0x98A8B8 },
+            holy:     { color: 0xFFFACD, label: '🙏 Holy', glow: 0xFFFFE0 },
+            shadow:   { color: 0x4B0082, label: '🌑 Shadow', glow: 0x6A0DAD },
+            blood:    { color: 0x8B0000, label: '🩸 Blood', glow: 0xDC143C },
+        };
+
+        // --- SCENE SETUP ---
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x111118); 
+        scene.fog = new THREE.Fog(0x111118, 10, 50);
+
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 12, 16); 
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        
+        // Safety check to ensure container exists before appending
+        const container = document.getElementById('canvas-container');
+        if (container) {
+            container.appendChild(renderer.domElement);
+        }
+
+        // TEXTURES
+        function createFloorTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024; canvas.height = 1024;
+            const ctx = canvas.getContext('2d');
+            
+            // Base background (Dark Stone Grey)
+            ctx.fillStyle = '#44403c'; 
+            ctx.fillRect(0, 0, 1024, 1024);
+
+            // Add tiny grains (Noise)
+            for (let i = 0; i < 50000; i++) {
+                ctx.fillStyle = Math.random() > 0.5 ? '#78716c' : '#171717';
+                ctx.globalAlpha = Math.random() * 0.3;
+                const x = Math.random() * 1024;
+                const y = Math.random() * 1024;
+                const size = Math.random() * 3;
+                ctx.fillRect(x, y, size, size);
+            }
+            
+            // Add worn patches
+            for (let i = 0; i < 30; i++) {
+                 ctx.fillStyle = '#57534e'; 
+                 ctx.globalAlpha = 0.1;
+                 ctx.beginPath();
+                 ctx.arc(Math.random() * 1024, Math.random() * 1024, Math.random() * 200 + 50, 0, Math.PI * 2);
+                 ctx.fill();
+            }
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.wrapS = THREE.RepeatWrapping; texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(8, 8); 
+            return texture;
+        }
+
+        const floorGeometry = new THREE.PlaneGeometry(200, 200);
+        const floorMaterial = new THREE.MeshStandardMaterial({ 
+            map: createFloorTexture(), color: 0xffffff, roughness: 0.9, metalness: 0.1
+        });
+        const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
+        floorMesh.rotation.x = -Math.PI / 2;
+        floorMesh.receiveShadow = true;
+        scene.add(floorMesh);
+
+        // LIGHTING
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        const rimLight = new THREE.PointLight(0xffffff, 2, 50);
+        rimLight.position.set(0, 20, -10); scene.add(rimLight);
+        const spotlight = new THREE.SpotLight(0xffffff, 1.5);
+        spotlight.position.set(0, 15, 0);
+        spotlight.castShadow = true;
+        spotlight.shadow.mapSize.width = 2048; spotlight.shadow.mapSize.height = 2048;
+        scene.add(spotlight);
+
+        // PHYSICS
+        const world = new CANNON.World();
+        world.gravity.set(0, -25, 0);
+        world.defaultContactMaterial.restitution = 0.3;
+        
+        const groundBody = new CANNON.Body({ mass: 0 });
+        groundBody.addShape(new CANNON.Plane());
+        groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
+        world.addBody(groundBody);
+
+        const wallShape = new CANNON.Plane();
+        const walls = [
+            { pos: [0, 5, -8], rot: [0, 0, 0] },
+            { pos: [0, 5, 8], rot: [0, Math.PI, 0] },
+            { pos: [-8, 5, 0], rot: [0, Math.PI/2, 0] },
+            { pos: [8, 5, 0], rot: [0, -Math.PI/2, 0] }
+        ];
+        walls.forEach(wall => {
+            const b = new CANNON.Body({ mass: 0 });
+            b.addShape(wallShape); b.position.set(...wall.pos); b.quaternion.setFromEuler(...wall.rot);
+            world.addBody(b);
+        });
+
+        // DICE CREATION HELPERS
+        function createNumberTexture(text) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 128; canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'rgba(255, 255, 255, 1)'; 
+            ctx.font = 'bold 80px Arial';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.strokeStyle = 'rgba(0,0,0,0.5)'; ctx.lineWidth = 4;
+            ctx.strokeText(text, 64, 64); ctx.fillText(text, 64, 64);
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        function createMarbleTexture(colorHex) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512; canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+            
+            // Base color
+            ctx.fillStyle = colorHex;
+            ctx.fillRect(0, 0, 512, 512);
+
+            // White Veins
+            ctx.globalCompositeOperation = 'source-over'; 
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)'; 
+            ctx.lineWidth = 8; ctx.lineCap = 'round';
+
+            for (let i = 0; i < 10; i++) {
+                ctx.beginPath();
+                ctx.moveTo(Math.random() * 512, Math.random() * 512);
+                ctx.bezierCurveTo(
+                    Math.random() * 512, Math.random() * 512,
+                    Math.random() * 512, Math.random() * 512,
+                    Math.random() * 512, Math.random() * 512
+                );
+                ctx.stroke();
+            }
+
+            // Dark Veins
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+            for (let i = 0; i < 6; i++) {
+                ctx.beginPath();
+                ctx.moveTo(Math.random() * 512, Math.random() * 512);
+                ctx.bezierCurveTo(
+                    Math.random() * 512, Math.random() * 512,
+                    Math.random() * 512, Math.random() * 512,
+                    Math.random() * 512, Math.random() * 512
+                );
+                ctx.stroke();
+            }
+            
+            // Noise
+            for (let i = 0; i < 800; i++) {
+                ctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.3})`;
+                ctx.beginPath();
+                ctx.arc(Math.random() * 512, Math.random() * 512, Math.random() * 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        function addNumbersToMesh(mesh, sides) {
+            const geometry = mesh.geometry;
+            geometry.computeVertexNormals();
+            const posAttribute = geometry.attributes.position;
+            const faces = [];
+            const threshold = 0.99; 
+
+            for (let i = 0; i < posAttribute.count; i += 3) {
+                const a = new THREE.Vector3().fromBufferAttribute(posAttribute, i);
+                const b = new THREE.Vector3().fromBufferAttribute(posAttribute, i+1);
+                const c = new THREE.Vector3().fromBufferAttribute(posAttribute, i+2);
+                const center = new THREE.Vector3().add(a).add(b).add(c).divideScalar(3);
+                const normal = new THREE.Vector3().crossVectors(
+                    new THREE.Vector3().subVectors(b, a),
+                    new THREE.Vector3().subVectors(c, a)
+                ).normalize();
+
+                let faceGroup = faces.find(f => f.normal.dot(normal) > threshold);
+                if (!faceGroup) {
+                    faceGroup = { normal: normal, center: center, count: 1 };
+                    faces.push(faceGroup);
+                } else {
+                    faceGroup.center.add(center);
+                    faceGroup.count++;
+                }
+            }
+
+            faces.forEach(f => f.center.divideScalar(f.count));
+
+            faces.forEach((face, index) => {
+                if (index >= sides && sides !== 10) return;
+                
+                let num = index + 1;
+                if (sides === 10) num = (index % 10); 
+
+                const texture = createNumberTexture(num.toString());
+                const material = new THREE.MeshBasicMaterial({ 
+                    map: texture, transparent: true, depthTest: false, side: THREE.DoubleSide
+                });
+                const labelSize = sides === 4 ? 0.5 : 0.8; 
+                const labelGeo = new THREE.PlaneGeometry(labelSize, labelSize);
+                const labelMesh = new THREE.Mesh(labelGeo, material);
+
+                labelMesh.position.copy(face.center).multiplyScalar(1.03); 
+                const lookPos = new THREE.Vector3().copy(face.center).multiplyScalar(2);
+                labelMesh.lookAt(lookPos);
+                mesh.add(labelMesh);
+            });
+        }
+
+        // AUDIO
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playDiceSound(velocity) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            if (velocity < 0.5) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.frequency.value = 300 + (velocity * 50) + (Math.random() * 100);
+            osc.type = 'sine'; 
+            const volume = Math.min(velocity / 10, 1); 
+            const now = audioCtx.currentTime;
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(volume, now + 0.005); 
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08); 
+            osc.start(now); osc.stop(now + 0.1);
+        }
+
+        let dice = [];
+
+        function createDie(sides, color, position) {
+            let geometry, shape;
+            const size = 1;
+
+            switch(sides) {
+                case 4:
+                    geometry = new THREE.TetrahedronGeometry(size);
+                    shape = new CANNON.Sphere(size * 0.7);
+                    break;
+                case 6:
+                    geometry = new THREE.BoxGeometry(size, size, size);
+                    shape = new CANNON.Box(new CANNON.Vec3(size/2, size/2, size/2));
+                    break;
+                case 8:
+                    geometry = new THREE.OctahedronGeometry(size);
+                    shape = new CANNON.Sphere(size * 0.8);
+                    break;
+                case 10:
+                    geometry = new THREE.DodecahedronGeometry(size * 0.9);
+                    shape = new CANNON.Sphere(size * 0.9);
+                    break;
+                case 12:
+                    geometry = new THREE.DodecahedronGeometry(size);
+                    shape = new CANNON.Sphere(size);
+                    break;
+                case 20:
+                    geometry = new THREE.IcosahedronGeometry(size);
+                    shape = new CANNON.Sphere(size);
+                    break;
+            }
+
+            const colorHex = '#' + color.toString(16).padStart(6, '0');
+            const marbleMap = createMarbleTexture(colorHex);
+
+            const material = new THREE.MeshPhysicalMaterial({
+                color: 0xffffff, map: marbleMap,
+                metalness: 0.1, roughness: 0.1,
+                clearcoat: 1.0, clearcoatRoughness: 0.05,
+                reflectivity: 1.0, flatShading: false
+            });
+
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.castShadow = true; mesh.receiveShadow = true;
+            addNumbersToMesh(mesh, sides);
+
+            const body = new CANNON.Body({
+                mass: 1, shape: shape, linearDamping: 0.3, angularDamping: 0.3
+            });
+
+            body.addEventListener("collide", (e) => {
+                const relativeVelocity = e.contact.getImpactVelocityAlongNormal();
+                if(Math.abs(relativeVelocity) > 1.5) {
+                    playDiceSound(Math.abs(relativeVelocity));
+                }
+            });
+
+            body.position.set(
+                position.x + (Math.random() - 0.5) * 2,
+                position.y + Math.random() * 3,
+                position.z + (Math.random() - 0.5) * 2
+            );
+
+            body.velocity.set(
+                (Math.random() - 0.5) * 5,
+                Math.random() * 3,
+                (Math.random() - 0.5) * 5
+            );
+
+            body.angularVelocity.set(
+                (Math.random() - 0.5) * 20,
+                (Math.random() - 0.5) * 20,
+                (Math.random() - 0.5) * 20
+            );
+
+            scene.add(mesh);
+            world.addBody(body);
+
+            return { mesh, body, sides, settled: false };
+        }
+
+        function clearDice() {
+            dice.forEach(die => {
+                scene.remove(die.mesh);
+                world.removeBody(die.body);
+            });
+            dice = [];
+        }
+
+        function calculateResult(die) {
+            return Math.floor(Math.random() * die.sides) + 1;
+        }
+
+        window.rollDice = function() {
+            clearDice();
+
+            const count = parseInt(document.getElementById('dice-count').value);
+            const sides = parseInt(document.getElementById('dice-type').value);
+            const themeKey = document.getElementById('theme-selector').value;
+            const theme = THEMES[themeKey];
+
+            const resultDiv = document.getElementById('result-display');
+            resultDiv.innerHTML = '<div class="rolling-indicator">🎲 Rolling...</div>';
+
+            for (let i = 0; i < count; i++) {
+                const angle = (i / count) * Math.PI * 2;
+                const radius = Math.min(count * 0.5, 3);
+                const position = {
+                    x: Math.cos(angle) * radius,
+                    y: 8,
+                    z: Math.sin(angle) * radius
+                };
+                dice.push(createDie(sides, theme.color, position));
+            }
+
+            setTimeout(() => {
+                const results = dice.map(die => calculateResult(die));
+                const total = results.reduce((sum, val) => sum + val, 0);
+                const individual = results.join(' + ');
+
+                resultDiv.innerHTML = `
+                    <div class="result-total">${total}</div>
+                    <div class="result-details">${individual}</div>
+                    <div class="result-details" style="margin-top: 8px; color: ${'#' + theme.color.toString(16).padStart(6, '0')};">${count}d${sides}</div>
+                `;
+            }, 3000);
+        };
+
+        function animate() {
+            requestAnimationFrame(animate);
+            world.step(1/60);
+
+            dice.forEach(die => {
+                die.mesh.position.copy(die.body.position);
+                die.mesh.quaternion.copy(die.body.quaternion);
+                if (!die.settled && die.body.sleepState === CANNON.Body.SLEEPING) {
+                    die.settled = true;
+                }
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+        console.log('✅ Nephilim Wars Dice Roller Ready!');
+    </script>
+</body>
+</html>

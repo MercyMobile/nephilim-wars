@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nephilim Wars - Combat Rules</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0c0a09;
+            --panel-bg: rgba(28, 25, 23, 0.95);
+            --border: #78350f;
+            --accent: #f59e0b;
+            --text: #d6d3d1;
+            --header: #fcd34d;
+            --righteous: #0ea5e9; 
+            --corruption: #dc2626;
+            --spiritual: #a855f7;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            background-color: var(--bg-dark); 
+            background-image: url("https://www.transparenttextures.com/patterns/dark-matter.png");
+            color: var(--text); 
+            font-family: 'EB Garamond', serif;
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        /* --- NAVIGATION BAR --- */
+        .nav-bar {
+            position: sticky; top: 0; z-index: 100;
+            background: var(--panel-bg);
+            border-bottom: 2px solid var(--border);
+            padding: 15px;
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .home-btn {
+            position: absolute; left: 20px; top: 15px;
+            color: var(--header); text-decoration: none;
+            font-family: 'Cinzel', serif; font-weight: bold;
+            display: flex; align-items: center; gap: 5px;
+            transition: 0.3s;
+        }
+        .home-btn:hover { color: #fff; text-shadow: 0 0 10px var(--accent); }
+
+        .tab-btn {
+            background: transparent; border: 1px solid var(--border);
+            color: var(--text); padding: 8px 16px;
+            font-family: 'Cinzel', serif; cursor: pointer;
+            text-transform: uppercase; transition: all 0.3s;
+            border-radius: 4px;
+        }
+        .tab-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .tab-btn.active { background: var(--border); color: #fff; border-color: var(--accent); }
+
+        /* --- CONTENT --- */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+
+        .header-title {
+            text-align: center; font-family: 'Cinzel', serif; font-size: 3rem;
+            color: var(--header); margin-bottom: 10px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.8);
+        }
+        .header-sub { text-align: center; color: var(--border); font-size: 1.2rem; margin-bottom: 40px; text-transform: uppercase; letter-spacing: 2px; }
+
+        .section { display: none; animation: fadeIn 0.5s; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- CARDS & BOXES --- */
+        .card {
+            background: #1c1917; border: 1px solid var(--border);
+            border-radius: 8px; padding: 25px; margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border-left: 4px solid var(--border);
+        }
+        .card.righteous { border-left-color: var(--righteous); }
+        .card.corruption { border-left-color: var(--corruption); }
+        .card.spiritual { border-left-color: var(--spiritual); }
+
+        h2 { font-family: 'Cinzel', serif; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; }
+        h3 { font-family: 'Cinzel', serif; color: var(--text); margin-bottom: 15px; font-size: 1.4rem; }
+        h4 { color: var(--header); margin-bottom: 10px; font-weight: bold; }
+
+        /* --- TABLES --- */
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; background: rgba(0,0,0,0.2); }
+        th { background: var(--border); color: #fff; padding: 10px; text-align: left; font-family: 'Cinzel', serif; }
+        td { padding: 10px; border-bottom: 1px solid #292524; }
+        tr:hover { background: rgba(255,255,255,0.05); }
+
+        /* --- EXPANDABLES --- */
+        .expandable { margin-bottom: 10px; }
+        .expand-header {
+            background: #292524; padding: 15px; cursor: pointer;
+            border: 1px solid var(--border); border-radius: 4px;
+            display: flex; justify-content: space-between; align-items: center;
+            font-family: 'Cinzel', serif; transition: 0.3s;
+        }
+        .expand-header:hover { border-color: var(--accent); color: var(--accent); }
+        .expand-content {
+            max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out;
+            background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-top: none;
+            padding: 0 20px;
+        }
+        .expand-content.open { padding: 20px; max-height: 2000px; }
+        .arrow { transition: transform 0.3s; }
+        .arrow.open { transform: rotate(90deg); }
+
+        /* Mobile Fixes */
+        @media (max-width: 900px) {
+            .home-btn { position: relative; width: 100%; justify-content: center; margin-bottom: 10px; left: 0; top: 0; }
+            .nav-bar { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-bar">
+        <a href="../index.html" class="home-btn">🏠 Home Hub</a>
+        <button class="tab-btn active" onclick="showSection('core')">Core Rules</button>
+        <button class="tab-btn" onclick="showSection('rp-cp')">Soul Economy</button>
+        <button class="tab-btn" onclick="showSection('spiritual')">Spiritual Warfare</button>
+        <button class="tab-btn" onclick="showSection('actions')">Actions</button>
+        <button class="tab-btn" onclick="showSection('weapons')">Arsenal</button>
+        <button class="tab-btn" onclick="showSection('bloodlines')">Bloodlines</button>
+        <button class="tab-btn" onclick="showSection('angels')">Angels & Demons</button>
+        <button class="tab-btn" onclick="showSection('mass')">Mass Combat</button>
+    </nav>
+
+    <div class="container">
+        <div class="header-title">Nephilim Wars</div>
+        <div class="header-sub">Combat Systems & Mechanics</div>
+
+        <div id="core" class="section active">
+            <h2>Core Mechanics</h2>
+            <div class="card">
+                <h3>Turn Structure</h3>
+                <p>Standard 5e action economy with antediluvian enhancements.</p>
+                <ol style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>Movement:</strong> Standard speed.</li>
+                    <li><strong>Action:</strong> Attack, Cast, Dash, etc.</li>
+                    <li><strong>Bonus Action:</strong> Includes <em>Desperation Actions</em> when Bloodied.</li>
+                    <li><strong>Reaction:</strong> Opportunity attacks, spells.</li>
+                </ol>
+            </div>
+            
+            <div class="card spiritual">
+                <h3>Initiative</h3>
+                <p><strong>Righteous (RP 10+):</strong> +2 Initiative.<br>
+                <strong>Corrupted (CP 10+):</strong> -2 Initiative.<br>
+                <em>Angels always act before Corrupted on ties.</em></p>
+            </div>
+
+            <div class="expandable">
+                <div class="expand-header" onclick="toggleExpand(this)"><span>Attack & Damage</span><span class="arrow">▶</span></div>
+                <div class="expand-content">
+                    <p><strong>Melee:</strong> d20 + STR + Prof vs AC.</p>
+                    <p><strong>Ranged:</strong> d20 + DEX + Prof vs AC.</p>
+                    <p><strong>Crit:</strong> Double dice. <strong>Fumble (Nat 1):</strong> Auto miss.</p>
+                    <br>
+                    <h4>Death & Dying</h4>
+                    <p><strong>Bloodied:</strong> 50% HP. Unlocks special actions.</p>
+                    <p><strong>0 HP:</strong> Death Saves (DC 10). 3 Success / 3 Fail.</p>
+                    <p><strong>Mercy:</strong> Ally can spend 1 RP to stabilize you from 30ft.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="rp-cp" class="section">
+            <h2>Righteousness & Corruption</h2>
+            
+            <div class="card righteous">
+                <h3>Righteousness Points (RP)</h3>
+                <p>Gained by prayer, mercy, and destroying evil.</p>
+                <table>
+                    <tr><th>Cost</th><th>Benefit</th></tr>
+                    <tr><td>1 RP</td><td>Reroll d20</td></tr>
+                    <tr><td>2 RP</td><td>Grant Advantage to Ally</td></tr>
+                    <tr><td>3 RP</td><td>Auto-Stabilize Ally</td></tr>
+                    <tr><td>5 RP</td><td>Resistance to next attack</td></tr>
+                    <tr><td>7 RP</td><td><strong>Smite:</strong> +3d8 Radiant Dmg</td></tr>
+                </table>
+            </div>
+
+            <div class="card corruption">
+                <h3>Corruption Points (CP)</h3>
+                <p>Gained by sin, dark magic, and killing innocents.</p>
+                <table>
+                    <tr><th>Level</th><th>Effect</th></tr>
+                    <tr><td>CP 5-9</td><td>-2 Initiative, Animals fear you</td></tr>
+                    <tr><td>CP 10-14</td><td>Nephilim target you first. Dark veins visible.</td></tr>
+                    <tr><td>CP 15-19</td><td>Physical Mutations. Disadvantage Persuasion.</td></tr>
+                    <tr><td>CP 25+</td><td><strong>Fallen:</strong> Character becomes NPC.</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div id="spiritual" class="section">
+            <h2>Spiritual Integrity (SI)</h2>
+            <div class="card spiritual">
+                <h3>Soul Health</h3>
+                <p><strong>Max SI = 10 + WIS Mod + Level</strong></p>
+                <p>SI is damageable by Angels (vs corrupt), Demons, and Horror.</p>
+                <p><em>Reaching 0 SI does not kill you; it breaks you.</em></p>
+            </div>
+            
+            <div class="card">
+                <h3>Spiritual Crisis (0 SI)</h3>
+                <p>Roll 1d10 when SI reaches 0:</p>
+                <table>
+                    <tr><th>Roll</th><th>Effect</th></tr>
+                    <tr><td>1-2</td><td><strong>Despair:</strong> Disadvantage on Saves.</td></tr>
+                    <tr><td>3-4</td><td><strong>Vulnerable:</strong> Demons have Adv to possess.</td></tr>
+                    <tr><td>5-6</td><td><strong>Forsaken:</strong> Cannot gain RP.</td></tr>
+                    <tr><td>7-8</td><td><strong>Surge:</strong> Gain 1d6 CP immediately.</td></tr>
+                    <tr><td>9</td><td><strong>Fracture:</strong> Max HP -10 permanently.</td></tr>
+                    <tr><td>10</td><td><strong>Marked:</strong> Demons sense you 10 miles away.</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div id="actions" class="section">
+            <h2>Special Actions</h2>
+            <div class="card">
+                <h3>Desperation Actions</h3>
+                <p><strong>Trigger:</strong> You are Bloodied (50% HP). <strong>Cost:</strong> Bonus Action.</p>
+                
+                <div class="expandable">
+                    <div class="expand-header" onclick="toggleExpand(this)"><span>Corrupted Surge (Gain 2 CP)</span><span class="arrow">▶</span></div>
+                    <div class="expand-content">
+                        <ul>
+                            <li><strong>Extra Attack:</strong> Make one free attack.</li>
+                            <li><strong>Dark Vitality:</strong> Gain Temp HP = 2x Level.</li>
+                            <li><strong>Shadow Speed:</strong> +20ft move, ignore terrain.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="expandable">
+                    <div class="expand-header" onclick="toggleExpand(this)"><span>Righteous Stand (Spend 3 RP)</span><span class="arrow">▶</span></div>
+                    <div class="expand-content">
+                        <ul>
+                            <li><strong>Heal:</strong> Regain 1d8 + WIS HP.</li>
+                            <li><strong>Cleanse:</strong> Remove one condition.</li>
+                            <li><strong>Shield:</strong> +2 AC for 1 round.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="weapons" class="section">
+            <h2>Arsenal</h2>
+            <div class="card">
+                <h3>Bronze Age Weapons</h3>
+                <table>
+                    <tr><th>Weapon</th><th>Damage</th><th>Notes</th></tr>
+                    <tr><td>Bronze Khopesh</td><td>1d8 Slashing</td><td>Versatile (1d10)</td></tr>
+                    <tr><td>Bronze Spear</td><td>1d6 Piercing</td><td>Thrown, Reach</td></tr>
+                    <tr><td>Giant's Maul</td><td>2d6 Bludgeoning</td><td>Heavy, Req STR 15</td></tr>
+                    <tr><td>Composite Bow</td><td>1d8 Piercing</td><td>Range 100/400</td></tr>
+                </table>
+            </div>
+            
+            <div class="card righteous">
+                <h3>Artifact: Sword of Enoch</h3>
+                <p><em>Legendary. Requires RP 15+.</em></p>
+                <p>Deals <strong>2d8 Slashing + 1d8 Radiant</strong>.</p>
+                <p><strong>Demon Bane:</strong> +2d10 Radiant vs Demons.</p>
+                <p><strong>Curse:</strong> If CP > RP, sword vanishes.</p>
+            </div>
+        </div>
+
+        <div id="bloodlines" class="section">
+            <h2>Giant Bloodlines</h2>
+            <div class="card">
+                <h3>Nephilim (First Giants)</h3>
+                <p><strong>Size:</strong> Large (9-15ft). <strong>Traits:</strong> +2 STR, +1 CON.</p>
+                <p><strong>Feature:</strong> 6 Fingers/Toes. Start with 2 CP.</p>
+                <p><strong>Power:</strong> At CP 10, gain <em>Tremor Stomp</em> (Knockdown 15ft).</p>
+            </div>
+            <div class="card">
+                <h3>Rephaim (Warrior Giants)</h3>
+                <p><strong>Size:</strong> Large (7-12ft). <strong>Traits:</strong> +2 STR, Heavy Armor Prof.</p>
+                <p><strong>Feature:</strong> Siege Breaker (Double dmg to objects).</p>
+                <p><strong>Start:</strong> 1 CP.</p>
+            </div>
+        </div>
+
+        <div id="angels" class="section">
+            <h2>Cosmic Beings</h2>
+            <div class="card righteous">
+                <h3>Seraphim (CR 16)</h3>
+                <p><strong>Aura:</strong> Burning Presence (2d10 radiant to CP 5+ within 30ft).</p>
+                <p><strong>Attack:</strong> Flaming Sword (4d8 Fire/Radiant).</p>
+                <p><strong>Behavior:</strong> Ignores righteous, hunts high-CP targets.</p>
+            </div>
+            <div class="card corruption">
+                <h3>Fallen Watcher (CR 20)</h3>
+                <p><strong>Aura:</strong> Corruption (Gain 1 CP/min within 60ft).</p>
+                <p><strong>Attack:</strong> Void Blade (Necrotic + SI Damage).</p>
+                <p><strong>Special:</strong> Can offer "Ultimate Bargain" for your soul.</p>
+            </div>
+        </div>
+
+        <div id="mass" class="section">
+            <h2>Mass Combat</h2>
+            <div class="card">
+                <h3>Unit Stats</h3>
+                <p><strong>Size:</strong> HP of unit (100 soldiers).</p>
+                <p><strong>Morale:</strong> Will to fight. Break point = Rout.</p>
+                <p><strong>Quality:</strong> Adds to Attack/Defense rolls.</p>
+            </div>
+            <div class="card">
+                <h3>Player Actions</h3>
+                <table>
+                    <tr><th>Action</th><th>Effect</th></tr>
+                    <tr><td>Lead from Front</td><td>+2 Atk, +3 Morale to unit.</td></tr>
+                    <tr><td>Heroic Charge</td><td>Solo attack enemy unit (2d10 casualties).</td></tr>
+                    <tr><td>Tactical Command</td><td>Grant Advantage (INT check).</td></tr>
+                    <tr><td>Prayer for Victory</td><td>Spend 3 RP, Army +2 Morale.</td></tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            // Highlight the clicked button
+            const buttons = document.getElementsByTagName('button');
+            for (let b of buttons) {
+                if (b.getAttribute('onclick') === `showSection('${id}')`) {
+                    b.classList.add('active');
+                }
+            }
+            window.scrollTo(0,0);
+        }
+
+        function toggleExpand(header) {
+            const content = header.nextElementSibling;
+            const arrow = header.querySelector('.arrow');
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                arrow.classList.remove('open');
+            } else {
+                content.classList.add('open');
+                arrow.classList.add('open');
+            }
+        }
+    </script>
+</body>
+</html>

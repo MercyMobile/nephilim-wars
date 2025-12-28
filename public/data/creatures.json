@@ -1,0 +1,62 @@
+{
+  "giants": {
+    "title": "Giants — The Forbidden Offspring",
+    "intro": "Born of Watcher and human unions, giants terrorize the earth.",
+    "entries": [
+      { 
+        "id": "ohya",
+        "name": "Ohya, Son of Semyaza", 
+        "hd": 14, "hp": 140, "def": 18, 
+        "attack": "Sword of Wrath +14 (4d10+8 fire)", 
+        "special": "Legendary, Prophetic Dreams", 
+        "description": "The wrathful first-born of Semyaza. Plagued by nightmares of the coming deluge."
+      },
+      { 
+        "id": "hahya",
+        "name": "Hahya, Brother of Ohya", 
+        "hd": 12, "hp": 110, "def": 16, 
+        "attack": "Greataxe +11 (3d12+6)", 
+        "special": "Legendary, Dream Visions", 
+        "description": "The contemplative brother who dreamt of the garden where only one tree remained."
+      },
+      { 
+        "id": "mahway",
+        "name": "Mahway, the Winged", 
+        "hd": 10, "hp": 95, "def": 19, 
+        "attack": "Diving Attack +12 (4d8+5)", 
+        "special": "Legendary, True Flight", 
+        "description": "Son of Barakel. The messenger sent to find Enoch at the ends of the earth."
+      },
+      { 
+        "id": "gilgamesh",
+        "name": "Gilgamesh", 
+        "hd": 12, "hp": 120, "def": 17, 
+        "attack": "Hero's Blade +12 (3d10+7)", 
+        "special": "Legendary, Wrestler Supreme", 
+        "description": "A giant mentioned in the Dead Sea Scrolls, confused by the nightmares of his brethren."
+      }
+    ]
+  },
+  "corrupted": {
+    "title": "Corrupted Humanity",
+    "intro": "Those who have turned from the Creator to serve the Nephilim.",
+    "entries": [
+      { 
+        "id": "baal_priest",
+        "name": "Baal-Priest", 
+        "hd": 6, "hp": 50, "def": 13, 
+        "attack": "Sacrificial Knife +6", 
+        "special": "Dark Sorcery", 
+        "description": "Priests who perform blood sacrifices to fuel dark miracles."
+      },
+      { 
+        "id": "lamech",
+        "name": "Lamech the Avenger", 
+        "hd": 9, "hp": 85, "def": 17, 
+        "attack": "Tubal-Cain's Blade +11", 
+        "special": "Legendary, Vengeance", 
+        "description": "The Cainite king who boasted of killing a man for wounding him."
+      }
+    ]
+  }
+}

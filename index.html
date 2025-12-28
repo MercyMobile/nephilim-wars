@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nephilim Wars - Nexus</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            background-color: #0c0a09; 
+            background-image: url("https://www.transparenttextures.com/patterns/dark-matter.png");
+            color: #d6d3d1; 
+            font-family: 'Cinzel', serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+        }
+
+        /* --- LOGO / TITLE --- */
+        h1 {
+            font-size: 5rem;
+            color: #fcd34d;
+            text-transform: uppercase;
+            letter-spacing: 10px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(245, 158, 11, 0.6);
+            border-bottom: 2px solid #78350f;
+            display: inline-block;
+            padding-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #a8a29e;
+            letter-spacing: 5px;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+        }
+
+        /* --- GRID MENU --- */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .menu-card {
+            background: rgba(28, 25, 23, 0.8);
+            border: 2px solid #78350f;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px);
+            border-color: #fcd34d;
+            background: linear-gradient(135deg, rgba(120, 53, 15, 0.4) 0%, rgba(28, 25, 23, 0.9) 100%);
+            box-shadow: 0 0 40px rgba(245, 158, 11, 0.2);
+        }
+
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .card-title {
+            color: #fcd34d;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .card-desc {
+            color: #a8a29e;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            font-family: sans-serif;
+            opacity: 0.8;
+        }
+
+        /* --- BACKGROUND DECORATION --- */
+        .bg-rune {
+            position: absolute;
+            color: rgba(120, 53, 15, 0.1);
+            font-size: 20rem;
+            z-index: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>

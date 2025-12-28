@@ -1,0 +1,288 @@
+{
+  "metadata": {
+    "version": "2.1",
+    "description": "Encyclopedia Angelorum et Daemonum - Full Archive"
+  },
+  "entries": [
+    {
+      "id": "michael",
+      "name": "Michael",
+      "hebrew": "מִיכָאֵל",
+      "translation": "Who is like God?",
+      "type": "Angel",
+      "classification": "Archangel",
+      "roles": ["Protector of Israel", "Psychopomp", "Defeater of Satan"],
+      "description": "Michael stands as the preeminent warrior among all angels. He is explicitly called 'one of the chief princes' and 'the great prince who stands guard over the sons of your people'. He serves as the primary antagonist to the forces of darkness, the divine warrior who executes God's judgments.",
+      "theology": {
+        "biblical": ["Daniel 10:13, 21", "Jude 1:9", "Revelation 12:7-9"],
+        "extraBiblical": ["1 Enoch 20:5", "War Scroll (1QM)", "Testament of Abraham"]
+      }
+    },
+    {
+      "id": "gabriel",
+      "name": "Gabriel",
+      "hebrew": "גַּבְרִיאֵל",
+      "translation": "God is my strength",
+      "type": "Angel",
+      "classification": "Archangel",
+      "roles": ["Interpreter of Visions", "Herald of Messiah"],
+      "description": "Gabriel serves as God's primary herald, entrusted with delivering the most significant announcements in salvation history. Unlike Michael who wages war, Gabriel wields the weapon of divine communication, bringing understanding to confusion and revelation to mystery.",
+      "theology": {
+        "biblical": ["Daniel 8:15", "Daniel 9:20", "Luke 1:19, 26"],
+        "extraBiblical": ["1 Enoch 9:1", "1 Enoch 20:7"]
+      }
+    },
+    {
+      "id": "raphael",
+      "name": "Raphael",
+      "hebrew": "רְפָאֵל",
+      "translation": "God heals",
+      "type": "Angel",
+      "classification": "Archangel",
+      "roles": ["Binder of Demons", "Guide of Travelers", "Healer"],
+      "description": "Raphael embodies God's compassionate care, serving as the celestial physician. In 1 Enoch, he is commissioned to bind Azazel and 'heal the earth'. He acts not merely to heal victims but to restrain the victimizers.",
+      "theology": {
+        "biblical": ["Tobit 3:17", "Tobit 12:15"],
+        "extraBiblical": ["1 Enoch 10:4", "1 Enoch 20:3", "Jubilees 10:10"]
+      }
+    },
+    {
+      "id": "uriel",
+      "name": "Uriel",
+      "hebrew": "אוּרִיאֵל",
+      "translation": "God is my light",
+      "type": "Angel",
+      "classification": "Archangel",
+      "roles": ["Illuminator of Truth", "Overseer of Tartarus", "Guardian of Eden"],
+      "description": "Uriel stands as the archangel of divine illumination. He carries the flame of enlightenment and the scroll of knowledge. He is the celestial teacher par excellence, revealing mysteries about creation, judgment, and the movements of celestial bodies.",
+      "theology": {
+        "biblical": ["Genesis 3:24 (Tradition)"],
+        "extraBiblical": ["1 Enoch 20:2", "2 Esdras 4"]
+      }
+    },
+    {
+      "id": "sariel",
+      "name": "Sariel / Suriel",
+      "hebrew": "שַׂרִיאֵל",
+      "translation": "Prince of God",
+      "type": "Angel",
+      "classification": "Archangel",
+      "roles": ["Angel of Death", "Teacher of Lunar Courses", "Avenger of Spirits"],
+      "description": "Sariel serves as one of the seven archangels, often associated with judgment and the lunar calendar. His specific assignment is 'over the spirits of those who sin against the spirit', suggesting a role in judging spiritual corruption.",
+      "theology": {
+        "biblical": [],
+        "extraBiblical": ["1 Enoch 20:6", "1 Enoch 9:1"]
+      }
+    },
+    {
+      "id": "raguel",
+      "name": "Raguel",
+      "hebrew": "רְעוּאֵל",
+      "translation": "Friend of God",
+      "type": "Angel",
+      "classification": "Archangel",
+      "roles": ["Angel of Justice", "Overseer of Luminaries"],
+      "description": "Raguel holds a unique position as the enforcer of divine order among the angels themselves. He takes vengeance on the world of the luminaries, ensuring that celestial beings fulfill their duties.",
+      "theology": {
+        "biblical": [],
+        "extraBiblical": ["1 Enoch 20:4", "1 Enoch 23:4"]
+      }
+    },
+    {
+      "id": "remiel",
+      "name": "Remiel / Jeremiel",
+      "hebrew": "רְמִיאֵל",
+      "translation": "Thunder of God",
+      "type": "Angel",
+      "classification": "Archangel",
+      "roles": ["Angel of Resurrection", "Guide of Souls"],
+      "description": "Remiel serves as the archangel of resurrection and hope. He is 'set over those who rise', making him the herald of humanity's ultimate hope that death is not the end.",
+      "theology": {
+        "biblical": [],
+        "extraBiblical": ["1 Enoch 20:8", "2 Baruch", "2 Esdras 4:36"]
+      }
+    },
+    {
+      "id": "metatron",
+      "name": "Metatron",
+      "hebrew": "מֵטַטְרוֹן",
+      "translation": "Guardian",
+      "type": "Angel",
+      "classification": "High Angel",
+      "roles": ["Celestial Scribe", "Voice of God"],
+      "description": "Metatron stands as the greatest angel in Jewish mystical tradition, serving as God's scribe. Many identify him as the patriarch Enoch transformed into an angel after being taken to heaven.",
+      "theology": {
+        "biblical": ["Genesis 5:24 (Implied)"],
+        "extraBiblical": ["3 Enoch", "Babylonian Talmud"]
+      }
+    },
+    {
+      "id": "raziel",
+      "name": "Raziel",
+      "hebrew": "רָזִיאֵל",
+      "translation": "Secret of God",
+      "type": "Angel",
+      "classification": "High Angel",
+      "roles": ["Keeper of Mysteries", "Teacher of Adam"],
+      "description": "Raziel is the angel of mysteries who stands near God's throne recording all divine secrets. He gave Adam the Sefer Raziel containing all knowledge of the universe.",
+      "theology": {
+        "biblical": [],
+        "extraBiblical": ["Sefer Raziel HaMalakh", "Zohar"]
+      }
+    },
+    {
+      "id": "azrael",
+      "name": "Azrael",
+      "hebrew": "עֲזַרְאֵל",
+      "translation": "Whom God Helps",
+      "type": "Angel",
+      "classification": "Angel of Death",
+      "roles": ["Psychopomp", "Separator of Soul"],
+      "description": "Azrael separates the soul from the body at death. Despite his fearsome role, he is often described as serving with compassion and accuracy.",
+      "theology": {
+        "biblical": [],
+        "extraBiblical": ["Jewish Mysticism", "Islamic Tradition"]
+      }
+    },
+    {
+      "id": "satan",
+      "name": "Satan / Sammael",
+      "hebrew": "שָׂטָן",
+      "translation": "The Adversary",
+      "type": "Demon",
+      "classification": "Demon Prince",
+      "roles": ["Accuser", "Father of Lies", "Ruler of this World"],
+      "description": "The supreme mystery of evil. Originally a high-ranking angel who chose rebellion. He operates through deception and accusation, holding temporary power over the world system.",
+      "theology": {
+        "biblical": ["Job 1-2", "Isaiah 14", "Revelation 12"],
+        "extraBiblical": ["Life of Adam and Eve", "Martyrdom of Isaiah"]
+      }
+    },
+    {
+      "id": "semyaza",
+      "name": "Semyaza",
+      "hebrew": "שֶׁמְחֲזַאי",
+      "translation": "The Name has Seen",
+      "type": "Fallen",
+      "classification": "Fallen Watcher",
+      "roles": ["Leader of the 200", "Progenitor of Giants"],
+      "description": "Leader of the Watchers who descended on Mount Hermon. He taught enchantments and root-cutting, and bound his brethren by an oath to corrupt humanity.",
+      "theology": {
+        "biblical": ["Genesis 6:1-4 (Implied)"],
+        "extraBiblical": ["1 Enoch 6-10", "Book of Giants"]
+      }
+    },
+    {
+      "id": "azazel",
+      "name": "Azazel",
+      "hebrew": "עֲזָאזֵל",
+      "translation": "Scapegoat",
+      "type": "Fallen",
+      "classification": "Fallen Watcher",
+      "roles": ["Teacher of Warfare", "Corrupter"],
+      "description": "Azazel taught humanity the arts of war (swords, shields) and vanity (cosmetics). He corrupted the earth so thoroughly that Raphael was commanded to bind him in the desert.",
+      "theology": {
+        "biblical": ["Leviticus 16"],
+        "extraBiblical": ["1 Enoch 8:1", "1 Enoch 10:4", "Apocalypse of Abraham"]
+      }
+    },
+    {
+      "id": "lilith",
+      "name": "Lilith",
+      "hebrew": "לִילִית",
+      "translation": "Night Creature",
+      "type": "Demon",
+      "classification": "Demoness",
+      "roles": ["Mother of Monsters", "Night Terror"],
+      "description": "A female night demon associated with storms and danger to children. Later traditions identify her as Adam's first wife who refused submission and fled Eden.",
+      "theology": {
+        "biblical": ["Isaiah 34:14"],
+        "extraBiblical": ["Dead Sea Scrolls 4Q510", "Alphabet of Ben-Sira"]
+      }
+    },
+    {
+      "id": "asmodeus",
+      "name": "Asmodeus",
+      "hebrew": "אַשְׁמְדַאי",
+      "translation": "Destroyer",
+      "type": "Demon",
+      "classification": "Demon King",
+      "roles": ["Destroyer of Marriage", "Demon of Lust"],
+      "description": "A powerful demon associated with lust and rage. In Tobit, he kills Sarah's seven husbands. He was eventually bound by Raphael.",
+      "theology": {
+        "biblical": ["Tobit 3:8"],
+        "extraBiblical": ["Testament of Solomon", "Talmud Gittin 68a"]
+      }
+    },
+    {
+      "id": "belial",
+      "name": "Belial",
+      "hebrew": "בְּלִיַּעַל",
+      "translation": "Worthlessness",
+      "type": "Demon",
+      "classification": "Demon Prince",
+      "roles": ["Prince of Darkness", "Spirit of Lawlessness"],
+      "description": "Belial is the embodiment of lawlessness, leading the forces of darkness against the forces of light in the Dead Sea Scrolls war theology.",
+      "theology": {
+        "biblical": ["2 Corinthians 6:15"],
+        "extraBiblical": ["War Scroll (1QM)", "Testament of the Twelve Patriarchs"]
+      }
+    },
+    {
+      "id": "mastema",
+      "name": "Mastema",
+      "hebrew": "מַשְׂטֵמָה",
+      "translation": "Animosity",
+      "type": "Demon",
+      "classification": "Prince of Evil Spirits",
+      "roles": ["Accuser", "Executor of Punishment"],
+      "description": "The chief of evil spirits who received permission from God to retain some demons after the Flood to continue testing humanity. He acts as both accuser and punisher.",
+      "theology": {
+        "biblical": [],
+        "extraBiblical": ["Book of Jubilees 10", "Book of Jubilees 48"]
+      }
+    },
+    {
+      "id": "abaddon",
+      "name": "Abaddon / Apollyon",
+      "hebrew": "אֲבַדּוֹן",
+      "translation": "Destruction",
+      "type": "Demon",
+      "classification": "Angel of the Abyss",
+      "roles": ["King of Locusts", "Destroyer"],
+      "description": "The angel of the bottomless pit who leads tormenting locust-like creatures during the apocalyptic judgments.",
+      "theology": {
+        "biblical": ["Revelation 9:11", "Job 26:6"],
+        "extraBiblical": ["Dead Sea Scrolls"]
+      }
+    },
+    {
+      "id": "gadreel",
+      "name": "Gadreel",
+      "hebrew": "גַּדְרֵאל",
+      "translation": "Wall of God",
+      "type": "Fallen",
+      "classification": "Fallen Watcher",
+      "roles": ["Tempter of Eve", "Teacher of Weapons"],
+      "description": "Identified in 1 Enoch as the angel who led Eve astray. He also taught humanity the art of making weapons of death.",
+      "theology": {
+        "biblical": [],
+        "extraBiblical": ["1 Enoch 69:6"]
+      }
+    },
+    {
+      "id": "prince_persia",
+      "name": "Prince of Persia",
+      "hebrew": "שַׂר פָּרַס",
+      "translation": "Sar Paras",
+      "type": "Demon",
+      "classification": "Territorial Spirit",
+      "roles": ["Ruler of Nations", "Opposer of Angels"],
+      "description": "A powerful territorial spirit with authority over the Persian Empire who opposed the angelic messenger sent to Daniel for 21 days.",
+      "theology": {
+        "biblical": ["Daniel 10:13, 20"],
+        "extraBiblical": []
+      }
+    }
+  ]
+}
