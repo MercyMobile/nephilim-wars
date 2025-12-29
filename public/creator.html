@@ -529,7 +529,7 @@
 
             try {
                 // Using the Netlify function structure from your previous file
-                const response = await fetch('/.netlify/functions/generate-image', {
+                const response = await fetch('/generate-image', {
                     method: 'POST',
                     body: JSON.stringify({
                         prompt: imgPrompt,
