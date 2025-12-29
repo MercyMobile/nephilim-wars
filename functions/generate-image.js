@@ -1,20 +1,33 @@
 // functions/generate-image.js
 // Cloudflare Pages function for Hugging Face image generation
 
-// Handle CORS preflight requests
-export async function onRequestOptions() {
-  return new Response(null, {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    }
-  });
-}
+export async function onRequest(context) {
+  const { request } = context;
+  
+  // Handle CORS preflight
+  if (request.method === 'OPTIONS') {
+    return new Response(null, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      }
+    });
+  }
 
-export async function onRequestPost(context) {
+  // Only allow POST for actual requests
+  if (request.method !== 'POST') {
+    return new Response(
+      JSON.stringify({ error: 'Method not allowed' }),
+      { 
+        status: 405,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
+  }
+
   try {
-    const { model, prompt, negativePrompt } = await context.request.json();
+    const { model, prompt, negativePrompt } = await request.json();
     
     // Validate input
     if (!model || !prompt) {
@@ -74,7 +87,10 @@ export async function onRequestPost(context) {
         }),
         { 
           status: 503,
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
         }
       );
     }
@@ -83,7 +99,13 @@ export async function onRequestPost(context) {
       const errorText = await response.text();
       return new Response(
         JSON.stringify({ error: errorText }),
-        { status: response.status, headers: { 'Content-Type': 'application/json' } }
+        { 
+          status: response.status,
+          headers: { 
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        }
       );
     }
 
@@ -117,7 +139,13 @@ export async function onRequestPost(context) {
     console.error('Error:', error);
     return new Response(
       JSON.stringify({ error: error.message }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
+      { 
+        status: 500,
+        headers: { 
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        }
+      }
     );
   }
 }
