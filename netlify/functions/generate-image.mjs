@@ -32,10 +32,10 @@ export const handler = async (event, context) => {
     }
     
     // Model endpoints
-    const MODEL_ENDPOINTS = {
-      'z-image-turbo': 'https://api-inference.huggingface.co/models/Tongyi-MAI/Z-Image-Turbo',
-      'flux-schnell': 'https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell',
-      'sdxl': 'https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0'
+     const MODEL_ENDPOINTS = {
+      'z-image-turbo': 'https://router.huggingface.co/models/Tongyi-MAI/Z-Image-Turbo',
+      'flux-schnell': 'https://router.huggingface.co/models/black-forest-labs/FLUX.1-schnell',
+      'sdxl': 'https://router.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0'
     };
 
     const endpoint = MODEL_ENDPOINTS[model];
