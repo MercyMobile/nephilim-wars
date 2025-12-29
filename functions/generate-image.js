@@ -1,6 +1,17 @@
 // functions/generate-image.js
 // Cloudflare Pages function for Hugging Face image generation
 
+// Handle CORS preflight requests
+export async function onRequestOptions() {
+  return new Response(null, {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    }
+  });
+}
+
 export async function onRequestPost(context) {
   try {
     const { model, prompt, negativePrompt } = await context.request.json();
