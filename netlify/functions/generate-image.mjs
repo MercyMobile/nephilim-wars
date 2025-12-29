@@ -1,8 +1,7 @@
-// netlify/functions/generate-image.js
-// This serverless function proxies requests to Hugging Face API
-// This avoids CORS issues and keeps your API token secure
+// netlify/functions/generate-image.mjs
+// ES Module version for Netlify serverless functions
 
-exports.handler = async (event, context) => {
+export const handler = async (event, context) => {
   // Only allow POST requests
   if (event.httpMethod !== 'POST') {
     return {
@@ -22,8 +21,15 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Your HF token (move to Netlify environment variable for security!)
-    const HF_TOKEN = process.env.HF_TOKEN || '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';
+    // Get token from environment variable
+    const HF_TOKEN = process.env.HF_TOKEN;
+    
+    if (!HF_TOKEN) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: 'HF_TOKEN not configured' })
+      };
+    }
     
     // Model endpoints
     const MODEL_ENDPOINTS = {
