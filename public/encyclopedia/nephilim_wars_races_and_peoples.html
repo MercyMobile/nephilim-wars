@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nephilim Wars - Races & Peoples</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Theme Colors */
+            --bg-dark: #050508;
+            --bg-panel: #0f0f16;
+            --bg-card: #14141d;
+            
+            /* Accents */
+            --gold-primary: #d4af37;
+            --gold-dim: #8a7018;
+            --gold-bright: #f9e29c;
+            
+            /* Faction Colors */
+            --sethite-blue: #4da6ff;
+            --giant-red: #8a1c1c;
+            --magic-purple: #9d4eff;
+            --beast-green: #2d5a2d;
+            
+            /* Text */
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold-dim) var(--bg-dark);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 4px; }
+
+        body {
+            font-family: 'Crimson Pro', serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 50% 0%, #1a1a2e 0%, transparent 70%),
+                repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 4px);
+            color: var(--text-main);
+            line-height: 1.7;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(15, 15, 22, 0.95);
+            border: 1px solid var(--gold-dim);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+            position: relative;
+        }
+
+        /* Decorative Corners */
+        .container::before, .container::after {
+            content: "";
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--gold-primary);
+            pointer-events: none;
+        }
+        .container::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+        .container::after { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(to bottom, #0a0a0f, #14141d);
+            border-bottom: 2px solid var(--gold-dim);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            background: linear-gradient(180deg, var(--gold-bright), var(--gold-primary), var(--gold-dim));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 3.5em;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.8);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-dim);
+            font-size: 1.2em;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+        }
+
+        .scripture {
+            font-style: italic;
+            color: #bfa15f;
+            margin: 20px auto;
+            max-width: 800px;
+            padding: 20px;
+            border-left: 3px solid var(--gold-dim);
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.05), transparent);
+        }
+
+        /* Back to Encyclopedia Link */
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-size: 0.9em;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--gold-primary); }
+
+        /* Navigation */
+        nav {
+            background: #0a0a0f;
+            padding: 15px;
+            border-bottom: 1px solid var(--gold-dim);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .nav-btn {
+            font-family: 'Cinzel', serif;
+            background: transparent;
+            color: var(--gold-dim);
+            border: 1px solid var(--gold-dim);
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-btn:hover {
+            color: var(--gold-bright);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            border-color: var(--gold-primary);
+        }
+
+        .nav-btn.active {
+            background: var(--gold-dim);
+            color: #000;
+            border-color: var(--gold-bright);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Content */
+        .content { padding: 40px; }
+        .section { display: none; animation: fadeIn 0.6s ease-out; }
+        .section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-primary);
+            font-size: 2.5em;
+            border-bottom: 1px solid var(--gold-dim);
+            padding-bottom: 15px;
+            margin: 40px 0 30px 0;
+        }
+
+        h3, h4 {
+            font-family: 'Cinzel', serif;
+            color: var(--text-main);
+            margin-top: 25px;
+        }
+
+        h3 { font-size: 1.8em; border-left: 4px solid var(--gold-dim); padding-left: 15px; }
+        h4 { font-size: 1.3em; color: var(--gold-dim); margin-bottom: 10px; }
+
+        /* Race Cards */
+        .race-card {
+            background: linear-gradient(135deg, rgba(20, 20, 29, 0.95) 0%, rgba(10, 10, 15, 0.98) 100%);
+            border: 1px solid #333;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
+        .race-card:hover { border-color: var(--gold-dim); }
+
+        .race-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .race-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2em;
+            color: var(--gold-bright);
+        }
+
+        .race-type {
+            font-family: 'Cinzel', serif;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--gold-dim);
+            padding: 5px 15px;
+            font-size: 0.8em;
+            color: var(--gold-dim);
+            text-transform: uppercase;
+        }
+
+        /* Stat Grids */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-label {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        /* Faction Styles */
+        .human-box { border-left: 4px solid var(--sethite-blue); }
+        .human-box .stat-label { color: var(--sethite-blue); }
+        
+        .giant-box { border-left: 4px solid var(--giant-red); }
+        .giant-box .stat-label { color: var(--giant-red); }
+        
+        .hybrid-box { border-left: 4px solid var(--magic-purple); }
+        .hybrid-box .stat-label { color: var(--magic-purple); }
+        
+        .beast-box { border-left: 4px solid var(--beast-green); }
+        .beast-box .stat-label { color: var(--beast-green); }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid #333;
+        }
+        th {
+            background: #1a1a25;
+            color: var(--gold-primary);
+            font-family: 'Cinzel', serif;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid var(--gold-dim);
+        }
+        td { padding: 15px; border-bottom: 1px solid #333; color: var(--text-muted); }
+        tr:hover td { background: rgba(212, 175, 55, 0.05); color: var(--text-main); }
+
+        /* Ability Lists */
+        .ability-list {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
+            padding: 20px;
+        }
+        .ability-list p { margin-bottom: 10px; border-bottom: 1px dashed #333; padding-bottom: 5px; }
+        .rp-cost { color: var(--sethite-blue); font-weight: 900; }
+        .cp-cost { color: var(--giant-red); font-weight: 900; }
+
+        /* Timeline */
+        .timeline { position: relative; padding: 20px 0; border-left: 2px solid #333; margin-left: 20px; }
+        .timeline-event {
+            background: rgba(255,255,255,0.02);
+            padding: 20px;
+            margin: 0 0 30px 30px;
+            border: 1px solid #333;
+            position: relative;
+        }
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            left: -42px;
+            top: 20px;
+            width: 16px;
+            height: 16px;
+            background: var(--bg-dark);
+            border: 2px solid var(--gold-dim);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--gold-dim);
+        }
+        .timeline-date {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-primary);
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Warnings & Lore */
+        .warning {
+            background: linear-gradient(to right, rgba(138, 28, 28, 0.1), transparent);
+            border-left: 4px solid var(--giant-red);
+            padding: 20px;
+            color: #ffcccc;
+            margin: 20px 0;
+        }
+        .lore-box {
+            background: linear-gradient(to right, rgba(147, 112, 219, 0.05), transparent);
+            border-left: 4px solid var(--magic-purple);
+            padding: 20px;
+            margin: 25px 0;
+            font-style: italic;
+        }
+
+        /* Expandable Details */
+        .expandable { margin: 15px 0; }
+        .expandable-header {
+            background: #1a1a25;
+            padding: 15px 20px;
+            cursor: pointer;
+            border: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Cinzel', serif;
+            transition: background 0.3s;
+        }
+        .expandable-header:hover { background: #252535; border-color: var(--gold-dim); }
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid #333;
+            border-top: none;
+        }
+        .expandable-content.open { max-height: 2000px; padding: 20px; }
+        .arrow { font-size: 0.8em; transition: transform 0.3s; }
+        .arrow.open { transform: rotate(90deg); color: var(--gold-primary); }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .nav-btn { width: 100%; text-align: center; }
+            .content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Nephilim Wars</h1>
+            <div class="subtitle">Volume II: Races & Peoples</div>
+            <a href="index.html" class="back-link">↩ Return to Main Encyclopedia</a>
+            
+            <div class="scripture">"There were giants in the earth in those days; and also after that, when the sons of God came in unto the daughters of men, and they bare children to them, the same became mighty men which were of old, men of renown." <br>- Genesis 6:4</div>
+        </header>
+        
+        <nav>
+            <button class="nav-btn active" onclick="showSection('overview')">Overview</button>
+            <button class="nav-btn" onclick="showSection('humans')">Human Lines</button>
+            <button class="nav-btn" onclick="showSection('giants')">Giant Races</button>
+            <button class="nav-btn" onclick="showSection('watchers')">Watchers</button>
+            <button class="nav-btn" onclick="showSection('hybrids')">Hybrids</button>
+            <button class="nav-btn" onclick="showSection('beasts')">Beasts</button>
+            <button class="nav-btn" onclick="showSection('timeline')">Timeline</button>
+            <button class="nav-btn" onclick="showSection('cultures')">Cultures</button>
+        </nav>
+        
+        <div class="content">
+            <div id="overview" class="section active">
+                <h2>The Peoples of the First World</h2>
+                
+                <div class="lore-box">
+                    <h3>The Three Creations</h3>
+                    <p>According to ancient texts and the Book of Enoch, three distinct orders of beings exist in the antediluvian world:</p>
+                    <ol>
+                        <li><strong>The First Creation - Angels (Watchers):</strong> Created before the foundation of the earth, spiritual beings of immense power.</li>
+                        <li><strong>The Second Creation - Humanity (Adam's Line):</strong> Made in the image of God, given dominion over the earth.</li>
+                        <li><strong>The Third Creation - Nephilim (Forbidden Union):</strong> Offspring of Watchers and humans. Unnatural, powerful, and corrupted.</li>
+                    </ol>
+                </div>
+                
+                <h3>Classification System</h3>
+                <div class="stat-grid">
+                    <div class="stat-box human-box">
+                        <div class="stat-label">PURE HUMAN LINES</div>
+                        <p>Descendants of Adam through Seth or Cain. Shortest-lived but most blessed.</p>
+                        <ul>
+                            <li>Sethites (Righteous)</li>
+                            <li>Cainites (Corrupted)</li>
+                            <li>Wanderers (Nomadic)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="stat-box giant-box">
+                        <div class="stat-label">GIANT RACES</div>
+                        <p>Offspring of Watchers. Supernatural size and strength.</p>
+                        <ul>
+                            <li>Nephilim (1st Gen)</li>
+                            <li>Rephaim (2nd Gen)</li>
+                            <li>Anakim (Noble Giants)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="stat-box hybrid-box">
+                        <div class="stat-label">HYBRID PEOPLES</div>
+                        <p>Mixed bloodlines and corrupted arts.</p>
+                        <ul>
+                            <li>Gibborim (Mighty Men)</li>
+                            <li>Horim (Cave Dwellers)</li>
+                            <li>Sorcerer Clans</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="stat-box beast-box">
+                        <div class="stat-label">CORRUPTED CREATURES</div>
+                        <p>Animals twisted by experiments or possession.</p>
+                        <ul>
+                            <li>Chimera (Mixed Beasts)</li>
+                            <li>Dragons/Serpents</li>
+                            <li>Demonic Fauna</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Population Distribution</h3>
+                <table>
+                    <tr>
+                        <th>People Group</th>
+                        <th>Est. Population</th>
+                        <th>Region</th>
+                    </tr>
+                    <tr>
+                        <td>Sethites</td>
+                        <td>~500,000</td>
+                        <td>Highlands, Sacred Sites</td>
+                    </tr>
+                    <tr>
+                        <td>Cainites</td>
+                        <td>~2,000,000</td>
+                        <td>Great Cities (Enoch, Irad)</td>
+                    </tr>
+                    <tr>
+                        <td>Nephilim</td>
+                        <td>~3,000</td>
+                        <td>Mountain Strongholds</td>
+                    </tr>
+                    <tr>
+                        <td>Hybrids/Giants</td>
+                        <td>~350,000</td>
+                        <td>Borderlands, Wastes</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div id="humans" class="section">
+                <h2>Human Bloodlines</h2>
+                <div class="scripture">"And Adam lived an hundred and thirty years, and begat a son in his own likeness... and called his name Seth" - Genesis 5:3</div>
+                
+                <div class="race-card" style="border-left: 4px solid var(--sethite-blue);">
+                    <div class="race-header">
+                        <div class="race-title">Sethites</div>
+                        <div class="race-type" style="color: var(--sethite-blue); border-color: var(--sethite-blue);">The Righteous Line</div>
+                    </div>
+                    <p>The descendants of Seth maintained the worship of God and preserved the history of the pre-fall world.</p>
+                    <div class="ability-list">
+                        <p><strong>Attributes:</strong> +2 WIS, +1 Other</p>
+                        <p><strong>Starting Cost:</strong> <span class="rp-cost">2 RP</span> / <span class="cp-cost">0 CP</span></p>
+                        <p><strong>Blessed Heritage:</strong> Advantage on Religion checks; easier prayer checks.</p>
+                        <p><strong>Divine Favor:</strong> 1/Long Rest, turn a failed save into a success.</p>
+                    </div>
+                </div>
+                
+                <div class="race-card" style="border-left: 4px solid var(--gold-primary);">
+                    <div class="race-header">
+                        <div class="race-title">Cainites</div>
+                        <div class="race-type" style="color: var(--gold-primary); border-color: var(--gold-primary);">The City Builders</div>
+                    </div>
+                    <p>Descendants of the first murderer, builders of the first cities, masters of metallurgy and music.</p>
+                    <div class="ability-list">
+                        <p><strong>Attributes:</strong> +2 Any, +1 Any</p>
+                        <p><strong>Starting Cost:</strong> <span class="rp-cost">0 RP</span> / <span class="cp-cost">1 CP</span></p>
+                        <p><strong>Mark of Cain:</strong> Cannot be killed in single combat by vengeance seekers.</p>
+                        <p><strong>City Born:</strong> Advantage on social checks in urban settings.</p>
+                        <p><strong>Builder's Heritage:</strong> Proficiency with two artisan tools.</p>
+                    </div>
+                </div>
+
+                <div class="race-card" style="border-left: 4px solid var(--text-muted);">
+                    <div class="race-header">
+                        <div class="race-title">Wanderers</div>
+                        <div class="race-type" style="color: var(--text-muted); border-color: var(--text-muted);">Nomadic Tribes</div>
+                    </div>
+                    <p>Those who rejected both the cities of Cain and the strictures of Seth, living in the wilds.</p>
+                    <div class="ability-list">
+                        <p><strong>Attributes:</strong> +2 DEX, +1 WIS</p>
+                        <p><strong>Starting Cost:</strong> Variable</p>
+                        <p><strong>Survivalist:</strong> Advantage on finding food/water.</p>
+                        <p><strong>Swift Footed:</strong> Base speed 35 ft.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="giants" class="section">
+                <h2>The Giant Races</h2>
+                <div class="lore-box">
+                    <h3>The Watcher Bloodlines</h3>
+                    <p>Nephilim traits depend on their Watcher sire. Semjaza's line are kings; Azazel's are warriors and smiths.</p>
+                </div>
+                
+                <div class="race-card" style="border-left: 4px solid var(--giant-red);">
+                    <div class="race-header">
+                        <div class="race-title">Nephilim</div>
+                        <div class="race-type" style="color: var(--giant-red); border-color: var(--giant-red);">First Generation Giants</div>
+                    </div>
+                    <p>Direct offspring of Angels and Humans. Titans of the ancient world.</p>
+                    
+                    <div class="ability-list">
+                        <p><strong>Size:</strong> Large (12-15 ft)</p>
+                        <p><strong>Attributes:</strong> +4 STR, +2 CON, -2 DEX</p>
+                        <p><strong>Starting Cost:</strong> <span class="rp-cost">0 RP</span> / <span class="cp-cost">3-5 CP</span></p>
+                        <p><strong>Angelic Resistance:</strong> Resistance to Radiant damage.</p>
+                        <p><strong>Insatiable Hunger:</strong> Must eat 4x normal food or gain Corruption.</p>
+                        <p><strong>Powerful Build:</strong> Count as Huge for lifting/grappling.</p>
+                    </div>
+
+                    <div class="expandable">
+                        <div class="expandable-header" onclick="toggleExpand(this)">
+                            <span><strong>Sub-Species: Children of Azazel</strong></span>
+                            <span class="arrow">▶</span>
+                        </div>
+                        <div class="expandable-content">
+                            <p><strong>The Weapon Masters:</strong> Inherited the knowledge of war.</p>
+                            <ul>
+                                <li><strong>Master Smiths:</strong> Proficiency with all weapons/armor.</li>
+                                <li><strong>Forge-Born:</strong> Resistance to Fire.</li>
+                                <li><strong>War Tactics:</strong> +2 to Hit with metal weapons.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="watchers" class="section">
+                <h2>Watchers & Angels</h2>
+                <div class="warning">
+                    <strong>⚠️ EXTREME DANGER:</strong> Interacting with Fallen Watchers risks immediate Corruption (2d6 CP) and possession.
+                </div>
+
+                <div class="race-card" style="border-left: 4px solid var(--magic-purple);">
+                    <div class="race-header">
+                        <div class="race-title">The Fallen</div>
+                        <div class="race-type">Corrupted Angelic Beings</div>
+                    </div>
+                    <p>The 200 angels who descended on Mount Hermon. Most are now bound in the earth, but their influence remains.</p>
+                    <table>
+                        <tr><th>Name</th><th>Forbidden Teaching</th><th>Consequence</th></tr>
+                        <tr><td><strong>Azazel</strong></td><td>Warfare, Weapons, Cosmetics</td><td>Endless War, Vanity</td></tr>
+                        <tr><td><strong>Semjaza</strong></td><td>Enchantments, Root-cutting</td><td>Sorcery, Poison</td></tr>
+                        <tr><td><strong>Baraqel</strong></td><td>Astrology</td><td>Fate-reading</td></tr>
+                        <tr><td><strong>Tamiel</strong></td><td>Seeing Spirits</td><td>Demon Trafficking</td></tr>
+                    </table>
+                </div>
+
+                <div class="race-card" style="border-left: 4px solid var(--gold-bright);">
+                    <div class="race-header">
+                        <div class="race-title">The Faithful</div>
+                        <div class="race-type">Holy Archangels</div>
+                    </div>
+                    <p>Agents of judgment and revelation.</p>
+                    <ul>
+                        <li><strong>Michael:</strong> The Warrior, binder of Semjaza.</li>
+                        <li><strong>Raphael:</strong> The Healer, binder of Azazel.</li>
+                        <li><strong>Gabriel:</strong> The Messenger, destroyer of the Nephilim.</li>
+                        <li><strong>Uriel:</strong> The Jailor, guardian of Tartarus.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="hybrids" class="section">
+                <h2>Hybrid Peoples</h2>
+                <div class="scripture">"And God saw that the wickedness of man was great... for all flesh had corrupted his way upon the earth."</div>
+
+                <div class="race-card">
+                    <div class="race-header">
+                        <div class="race-title">Gibborim</div>
+                        <div class="race-type">Human/Giant Hybrids</div>
+                    </div>
+                    <p>The "Mighty Men of Old." Several generations removed from pure Nephilim, appearing as massive humans.</p>
+                    <div class="ability-list">
+                        <p><strong>Attributes:</strong> +2 STR, +1 CON</p>
+                        <p><strong>Powerful Build:</strong> Count as one size larger.</p>
+                        <p><strong>Mighty Warrior:</strong> Proficiency with all martial weapons.</p>
+                        <p><strong>Heroic Feat:</strong> Perform incredible strength feats (GM discretion).</p>
+                    </div>
+                </div>
+
+                <div class="race-card">
+                    <div class="race-header">
+                        <div class="race-title">Horim</div>
+                        <div class="race-type">Cave Dwellers</div>
+                    </div>
+                    <p>Giant-kin adapted to underground life.</p>
+                    <div class="ability-list">
+                        <p><strong>Attributes:</strong> +2 DEX, +1 WIS</p>
+                        <p><strong>Superior Darkvision:</strong> See 120ft in dark.</p>
+                        <p><strong>Sunlight Sensitivity:</strong> Disadvantage in direct sun.</p>
+                        <p><strong>Stone Cunning:</strong> Expertise in stone-related history/investigation.</p>
+                    </div>
+                </div>
+                
+                <div class="race-card">
+                    <div class="race-header">
+                        <div class="race-title">Sorcerer Clans</div>
+                        <div class="race-type">Watcher-Taught Lines</div>
+                    </div>
+                    <p>Humans initiated into Watcher mysteries, altering their bloodlines forever.</p>
+                    <div class="ability-list">
+                        <p><strong>Attributes:</strong> +2 INT, +1 CHA</p>
+                        <p><strong>Dark Insight:</strong> Passive Detect Magic.</p>
+                        <p><strong>Blood Magic:</strong> Sacrifice HP to cast spells without slots.</p>
+                        <p><strong>Watcher's Mark:</strong> Angels can sense you from 1 mile away.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="beasts" class="section">
+                <h2>Corrupted Beasts</h2>
+                <div class="lore-box">
+                    <h4>Dinosaurs & Dragons</h4>
+                    <p>In this era, dinosaurs (Behemoth) and dragons (Leviathan) coexist, often twisted by Watcher experiments.</p>
+                </div>
+
+                <div class="race-card" style="border-left: 4px solid var(--beast-green);">
+                    <div class="race-header">
+                        <div class="race-title">Leviathan</div>
+                        <div class="race-type" style="color: var(--beast-green); border-color: var(--beast-green);">CR 20 - Gargantuan Dragon</div>
+                    </div>
+                    <p>"His scales are his pride... out of his mouth go burning lamps." - Job 41</p>
+                    <div class="stat-grid">
+                        <div class="stat-box beast-box">
+                            <div class="stat-label">STATS</div>
+                            <p><strong>AC:</strong> 22 (Natural)</p>
+                            <p><strong>HP:</strong> 600+</p>
+                            <p><strong>Abilities:</strong> Fire Breath, Swallow Whole, Boiling Water Aura.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpand(this)">
+                        <span><strong>War Beasts & Chimeras</strong></span>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="expandable-content">
+                        <ul>
+                            <li><strong>Dire Wolves:</strong> Pack hunters, used by tribes.</li>
+                            <li><strong>Mammoths:</strong> Siege engines of the North.</li>
+                            <li><strong>Griffins/Manticore:</strong> Results of species-mixing experiments.</li>
+                            <li><strong>Demon-Swine:</strong> Pigs possessed by wandering spirits.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="timeline" class="section">
+                <h2>Historical Timeline</h2>
+                <div class="timeline">
+                    <div class="timeline-event">
+                        <div class="timeline-date">Year 0</div>
+                        <h4>Creation</h4>
+                        <p>The perfect world.</p>
+                    </div>
+                    <div class="timeline-event">
+                        <div class="timeline-date">Year 100</div>
+                        <h4>The Fall</h4>
+                        <p>Exile from Eden. Death enters the world.</p>
+                    </div>
+                    <div class="timeline-event">
+                        <div class="timeline-date">Year 1000</div>
+                        <h4>The Watchers Descend</h4>
+                        <p>The 200 arrive on Mt. Hermon. The Corruption begins.</p>
+                    </div>
+                    <div class="timeline-event">
+                        <div class="timeline-date">Year 1050</div>
+                        <h4>Nephilim Born</h4>
+                        <p>Giants begin to dominate the earth.</p>
+                    </div>
+                    <div class="timeline-event">
+                        <div class="timeline-date">Year 1556</div>
+                        <h4>The Ark</h4>
+                        <p>Noah begins construction. 100 year countdown.</p>
+                    </div>
+                    <div class="timeline-event" style="border-left-color: var(--giant-red);">
+                        <div class="timeline-date" style="color: var(--giant-red);">Year 1656</div>
+                        <h4>THE FLOOD</h4>
+                        <p>The Great Reset. All flesh destroyed.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="cultures" class="section">
+                <h2>Cultures & Society</h2>
+                <div class="stat-grid">
+                    <div class="stat-box human-box">
+                        <div class="stat-label">Sethite Values</div>
+                        <p>Monotheism, Patriarchal Authority, Separation from Corruption, Preservation of Pre-Fall History.</p>
+                    </div>
+                    <div class="stat-box" style="border-left: 4px solid var(--gold-primary);">
+                        <div class="stat-label">Cainite Values</div>
+                        <p>Urbanization, Metalworking, Music, Personal Glory ("Making a Name"), Syncretism.</p>
+                    </div>
+                    <div class="stat-box giant-box">
+                        <div class="stat-label">Nephilim Law</div>
+                        <p>Might Makes Right. The strong eat the weak. Trophy taking, cannibalism, and god-king worship.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <script>
+        function showSection(sectionId) {
+            // Hide all
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            // Show selected
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Highlight button
+            const activeBtn = Array.from(document.querySelectorAll('.nav-btn'))
+                .find(btn => btn.getAttribute('onclick').includes(sectionId));
+            if(activeBtn) activeBtn.classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function toggleExpand(header) {
+            const content = header.nextElementSibling;
+            const arrow = header.querySelector('.arrow');
+            content.classList.toggle('open');
+            arrow.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

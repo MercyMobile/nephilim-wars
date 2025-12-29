@@ -4,19 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nephilim Wars - Character Creator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
     <style>
-        /* --- ORIGINAL STYLES RESTORED --- */
+        :root {
+            --bg-dark: #050508;
+            --bg-panel: #0f0f16;
+            --gold-primary: #d4af37;
+            --gold-dim: #8a7018;
+            --gold-bright: #f9e29c;
+            --sethite-blue: #4da6ff;
+            --giant-red: #8a1c1c;
+            --magic-purple: #9d4eff;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
-            background-color: #0c0a09; 
-            background-image: url("https://www.transparenttextures.com/patterns/dark-matter.png");
-            color: #d6d3d1; 
-            font-family: 'Cinzel', serif;
+            background-color: var(--bg-dark); 
+            background-image: 
+                radial-gradient(circle at 50% 0%, #1a1a2e 0%, transparent 70%),
+                repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 4px);
+            color: var(--text-main); 
+            font-family: 'Crimson Pro', serif;
             min-height: 100vh;
             padding: 20px;
         }
+
+        h1, h2, h3, label, button, .cinzel { font-family: 'Cinzel', serif; }
 
         .main-grid {
             display: grid;
@@ -30,119 +49,165 @@
             .main-grid { grid-template-columns: 1fr; }
         }
 
+        /* --- LEFT PANEL: BUILDER --- */
         .builder-panel {
-            background: rgba(28, 25, 23, 0.95);
-            border: 2px solid #b45309;
-            border-radius: 12px;
+            background: rgba(15, 15, 22, 0.95);
+            border: 1px solid var(--gold-dim);
+            border-radius: 4px;
             padding: 30px;
             box-shadow: 0 0 30px rgba(0,0,0,0.8);
-            height: fit-content;
+            position: relative;
         }
+        
+        /* Decorative corners */
+        .builder-panel::before, .builder-panel::after {
+            content: ""; position: absolute; width: 20px; height: 20px;
+            border: 2px solid var(--gold-primary); pointer-events: none;
+        }
+        .builder-panel::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .builder-panel::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
 
         h1 {
-            color: #fcd34d; font-size: 28px; text-align: center;
-            margin-bottom: 20px; border-bottom: 1px solid #78350f; padding-bottom: 15px;
+            background: linear-gradient(180deg, var(--gold-bright), var(--gold-primary));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            font-size: 28px; text-align: center; margin-bottom: 25px;
+            border-bottom: 1px solid var(--gold-dim); padding-bottom: 15px;
         }
 
-        .form-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
-        }
-
-        .stats-input-grid {
-            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
-            grid-column: 1 / -1;
-            background: rgba(0,0,0,0.3);
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #44403c;
-        }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .full-width { grid-column: 1 / -1; }
 
         .section-title {
-            grid-column: 1 / -1; color: #f59e0b; font-size: 16px;
-            margin-top: 15px; border-bottom: 1px solid #44403c; padding-bottom: 5px;
+            grid-column: 1 / -1; color: var(--gold-primary); font-size: 1.1em;
+            margin-top: 15px; border-bottom: 1px dashed #444; padding-bottom: 5px;
         }
 
         .input-group { display: flex; flex-direction: column; }
 
         label {
-            font-size: 11px; color: #a8a29e; margin-bottom: 5px;
-            text-transform: uppercase; letter-spacing: 1px;
+            font-size: 0.8em; color: var(--gold-dim); margin-bottom: 8px;
+            text-transform: uppercase; letter-spacing: 1px; font-weight: 700;
         }
 
         select, input {
-            padding: 10px; background: #0c0a09; border: 1px solid #57534e;
-            color: #e7e5e4; font-family: 'Cinzel', serif; border-radius: 4px; font-size: 14px;
+            padding: 12px; background: #0a0a0f; border: 1px solid #333;
+            color: var(--text-main); font-family: 'Cinzel', serif; 
+            font-size: 14px; transition: border 0.3s;
         }
-        select:focus, input:focus { outline: none; border-color: #fcd34d; }
+        select:focus, input:focus { outline: none; border-color: var(--gold-primary); }
+
+        /* Dynamic Info Box */
+        .info-box {
+            background: rgba(0,0,0,0.3);
+            border-left: 3px solid var(--gold-dim);
+            padding: 15px;
+            margin-top: 5px;
+            font-size: 0.95em;
+            min-height: 100px;
+        }
+        .info-title { color: var(--gold-bright); font-weight: bold; margin-bottom: 5px; display: block; }
+        .info-traits { font-size: 0.9em; color: var(--text-muted); margin-top: 8px; }
+        .trait-tag {
+            display: inline-block;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--gold-dim);
+            padding: 2px 8px;
+            margin: 2px;
+            font-size: 0.8em;
+            color: var(--gold-bright);
+        }
+
+        /* Stats Input */
+        .stats-input-grid {
+            display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px;
+            background: rgba(255,255,255,0.02); padding: 15px;
+            border: 1px solid #333;
+        }
+        .stat-input-col { text-align: center; }
+        .stat-input-col label { display: block; margin-bottom: 5px; font-size: 0.7em; }
+        .stat-input-col select { width: 100%; padding: 5px; font-size: 0.9em; text-align: center; }
 
         .generate-btn {
             width: 100%; padding: 15px; margin-top: 25px;
-            background: linear-gradient(135deg, #78350f 0%, #451a03 100%);
-            border: 1px solid #f59e0b; color: #fcd34d; font-size: 18px;
-            font-family: 'Cinzel', serif; font-weight: bold; cursor: pointer;
-            text-transform: uppercase; letter-spacing: 2px; border-radius: 6px;
+            background: linear-gradient(135deg, var(--gold-dim) 0%, #451a03 100%);
+            border: 1px solid var(--gold-bright); color: #fff; font-size: 18px;
+            font-family: 'Cinzel', serif; font-weight: 900; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 2px;
             transition: all 0.3s;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
         .generate-btn:hover {
-            background: linear-gradient(135deg, #92400e 0%, #78350f 100%);
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            border-color: #fff;
         }
 
+        /* --- RIGHT PANEL: SHEET --- */
         .sheet-panel {
             position: sticky; top: 20px;
-            background: #1c1917;
-            border: 4px double #78350f;
-            border-radius: 8px;
-            padding: 20px;
-            display: flex; flex-direction: column; align-items: center;
+            background: #0a0a0f;
+            border: 1px solid #333;
+            padding: 0;
+            display: flex; flex-direction: column;
             box-shadow: 0 0 50px rgba(0,0,0,0.9);
-            min-height: 600px;
+            min-height: 700px;
         }
 
-        .sheet-header { width: 100%; text-align: center; margin-bottom: 20px; }
-        .char-name { font-size: 32px; color: #fcd34d; text-shadow: 0 2px 4px black; }
-        .char-subtitle { font-size: 16px; color: #a8a29e; font-style: italic; }
-
-        .portrait-frame {
-            width: 100%; max-width: 350px; margin: 0 auto;
-            aspect-ratio: 2/3; background: #000;
-            border: 2px solid #57534e; border-radius: 4px;
-            overflow: hidden; position: relative;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        .sheet-header { 
+            background: #14141d; padding: 20px; text-align: center; 
+            border-bottom: 2px solid var(--gold-dim);
         }
+        .char-name { font-size: 2em; color: var(--gold-primary); text-transform: uppercase; letter-spacing: 2px; }
+        .char-subtitle { color: var(--text-muted); font-style: italic; margin-top: 5px; }
 
-        #char-image { width: 100%; height: 100%; object-fit: cover; display: none; }
-        .loading-spinner {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            color: #f59e0b; font-size: 20px; text-transform: uppercase;
-            animation: pulse 1s infinite; text-align: center; width: 80%;
-        }
-        .placeholder-text {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            color: #44403c; text-align: center; width: 80%;
+        .portrait-container {
+            width: 100%; background: #000;
+            aspect-ratio: 1/1; /* Square for simplicity */
+            position: relative; overflow: hidden;
+            border-bottom: 1px solid var(--gold-dim);
         }
 
-        .stats-grid {
-            width: 100%; display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 10px; margin-top: 20px; border-top: 1px solid #44403c; padding-top: 20px;
-        }
-        .stat-box {
-            background: #0c0a09; border: 1px solid #292524;
-            padding: 10px; text-align: center; border-radius: 4px;
-        }
-        .stat-val { font-size: 18px; color: #e7e5e4; font-weight: bold; }
-        .stat-label { font-size: 10px; color: #78716c; margin-top: 2px; }
-
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        #char-image { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s; }
         
-        .save-btn {
-            display: none;
-            width: 100%; padding: 15px; margin-top: 15px;
-            background: #14532d; border: 1px solid #22c55e;
-            color: #bbf7d0; font-family: 'Cinzel', serif; font-weight: bold;
-            text-transform: uppercase; cursor: pointer; border-radius: 6px;
+        .loading-overlay {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            background: #050508; color: var(--gold-dim);
+            z-index: 2;
         }
-        .save-btn:hover { background: #166534; box-shadow: 0 0 15px rgba(34, 197, 94, 0.4); }
+        .spinner {
+            width: 40px; height: 40px; border: 3px solid var(--gold-dim);
+            border-top-color: transparent; border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 15px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .sheet-body { padding: 20px; }
+
+        /* Hex Stat Display */
+        .stats-display {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 15px; margin-bottom: 20px;
+        }
+        .stat-hex {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid #333;
+            text-align: center; padding: 10px;
+            position: relative;
+        }
+        .stat-val { font-size: 1.5em; color: var(--text-main); font-weight: bold; }
+        .stat-lbl { font-size: 0.7em; color: var(--gold-dim); letter-spacing: 1px; }
+        .stat-mod { 
+            position: absolute; top: -10px; right: -5px;
+            background: #1a1a25; border: 1px solid var(--gold-dim);
+            font-size: 0.8em; padding: 2px 6px; color: var(--gold-bright);
+            border-radius: 4px;
+        }
+
+        .abilities-list { font-size: 0.9em; color: #ccc; }
+        .ability-item { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed #333; }
+        .ability-name { color: var(--gold-primary); font-weight: bold; }
+
     </style>
 </head>
 <body>
@@ -150,472 +215,344 @@
     <div class="main-grid">
         <div class="builder-panel">
             <h1>Character Creator</h1>
+            
             <div class="form-grid">
+                <div class="full-width input-group">
+                    <label>Name</label>
+                    <input type="text" id="custom-name" placeholder="Leave blank for random ancient name...">
+                </div>
+
+                <div class="section-title">Lineage</div>
                 
-                <div class="input-group" style="grid-column: 1 / -1;">
-                    <label>Character Name (Leave blank for Random)</label>
-                    <input type="text" id="custom-name" placeholder="Enter Name or Leave Empty...">
+                <div class="full-width input-group">
+                    <label>Race / People</label>
+                    <select id="race" onchange="updateRaceInfo()">
+                        </select>
+                    <div class="info-box" id="race-info">
+                        </div>
                 </div>
 
-                <div class="section-title">Lineage & Origin</div>
                 <div class="input-group">
-                    <label>Race</label>
-                    <select id="race">
-                        <option value="Adamite">Adamite (Human)</option>
-                        <option value="Nephilim">Nephilim (Giant-Kin)</option>
-                        <option value="Rephaim">Rephaim (Shade/Giant)</option>
-                        <option value="Lilin">Lilin (Night Spirit)</option>
-                        <option value="Shedim">Shedim (Demon-Born)</option>
-                        <option value="Anakim">Anakim (Long-Necked)</option>
-                        <option value="Apkallu">Apkallu (Fish-Sage)</option>
-                        <option value="Seraph-Kin">Seraph-Kin (Burning One)</option>
-                        <option value="Cainite">Cainite (Marked Wanderer)</option>
-                        <option value="Gammadim">Gammadim (Dwarven Warrior)</option>
-                        <option value="Zamzummim">Zamzummim (Buzzing Giant)</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Class</label>
+                    <label>Class / Role</label>
                     <select id="class">
-                        <option value="Gibbor">Gibbor (Mighty Warrior)</option>
-                        <option value="Magi">Magi (Wiseman/Sorcerer)</option>
-                        <option value="Hunter">Hunter (Archer/Tracker)</option>
-                        <option value="Scribe">Scribe (Sage/Historian)</option>
-                        <option value="Priest">Priest (Temple-Keeper)</option>
-                        <option value="Rebel">Rebel (Outcast/Wanderer)</option>
+                        <option value="Warrior">Warrior (Tribal Fighter)</option>
+                        <option value="Gibbor">Gibbor (Mighty Hero)</option>
+                        <option value="Hunter">Hunter (Wilderness)</option>
+                        <option value="Magi">Magi (Watcher-Taught Sorcerer)</option>
+                        <option value="Priest">Priest (Keeper of Rituals)</option>
+                        <option value="Artisan">Artisan (Smith/Builder)</option>
+                        <option value="Scribe">Scribe (Keeper of Tablets)</option>
                     </select>
                 </div>
 
-                <div class="section-title">Physical Traits</div>
                 <div class="input-group">
                     <label>Sex</label>
                     <select id="sex">
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
-                        <option value="Androgynous">Androgynous</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Build</label>
-                    <select id="build">
-                        <option value="muscular">Muscular</option>
-                        <option value="lean">Lean</option>
-                        <option value="stocky">Stocky</option>
-                        <option value="towering">Towering</option>
-                        <option value="slender">Slender</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Skin Tone</label>
-                    <select id="skin">
-                        <option value="bronze">Bronze</option>
-                        <option value="olive">Olive</option>
-                        <option value="pale">Pale</option>
-                        <option value="dark">Dark</option>
-                        <option value="ashen">Ashen</option>
-                        <option value="golden">Golden</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Hair</label>
-                    <select id="hair">
-                        <option value="black braided">Black Braided</option>
-                        <option value="silver long">Silver Long</option>
-                        <option value="wild red">Wild Red</option>
-                        <option value="bald with tattoos">Bald with Tattoos</option>
-                        <option value="blonde flowing">Blonde Flowing</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Eyes</label>
-                    <select id="eyes">
-                        <option value="burning amber">Burning Amber</option>
-                        <option value="deep blue">Deep Blue</option>
-                        <option value="glowing green">Glowing Green</option>
-                        <option value="black void">Black Void</option>
-                        <option value="golden">Golden</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Distinct Feature</label>
-                    <select id="trait1">
-                        <option value="">None</option>
-                        <option value="battle scars">Battle Scars</option>
-                        <option value="glowing runes">Glowing Runes</option>
-                        <option value="six fingers">Six Fingers</option>
-                        <option value="ethereal glow">Ethereal Glow</option>
-                        <option value="mark of Cain">Mark of Cain</option>
                     </select>
                 </div>
 
-                <div class="section-title">Background & Vibe</div>
-                <div class="input-group" style="grid-column: 1 / -1;">
+                <div class="section-title">Attributes (Base Roll)</div>
+                <div class="full-width stats-input-grid">
+                    <div class="stat-input-col"><label>STR</label><select id="base-str" class="stat-select"></select></div>
+                    <div class="stat-input-col"><label>DEX</label><select id="base-dex" class="stat-select"></select></div>
+                    <div class="stat-input-col"><label>CON</label><select id="base-con" class="stat-select"></select></div>
+                    <div class="stat-input-col"><label>INT</label><select id="base-int" class="stat-select"></select></div>
+                    <div class="stat-input-col"><label>WIS</label><select id="base-wis" class="stat-select"></select></div>
+                    <div class="stat-input-col"><label>CHA</label><select id="base-cha" class="stat-select"></select></div>
+                </div>
+                
+                <div class="section-title">Visual Details</div>
+                <div class="input-group">
                     <label>Background</label>
                     <select id="background">
-                        <option value="temple">Temple</option>
-                        <option value="wilderness">Wilderness</option>
-                        <option value="battlefield">Battlefield</option>
-                        <option value="ancient city">Ancient City</option>
-                        <option value="underworld">Underworld</option>
+                        <option value="ancient stone city">Stone City (Enoch/Irad)</option>
+                        <option value="mountain stronghold">Mountain Fortress</option>
+                        <option value="arid desert wasteland">Desert Wasteland</option>
+                        <option value="lush hanging gardens">Hanging Gardens</option>
+                        <option value="dark ritual cavern">Dark Cavern</option>
                     </select>
                 </div>
-                <div class="input-group" style="grid-column: 1 / -1;">
-                    <label>Atmosphere</label>
+                <div class="input-group">
+                    <label>Vibe</label>
                     <select id="vibe">
-                        <option value="epic and heroic">Epic & Heroic</option>
-                        <option value="dark and ominous">Dark & Ominous</option>
-                        <option value="mystical and ethereal">Mystical & Ethereal</option>
-                        <option value="savage and primal">Savage & Primal</option>
+                        <option value="biblical epic">Biblical Epic</option>
+                        <option value="dark fantasy">Dark Fantasy</option>
+                        <option value="ethereal and holy">Ethereal/Holy</option>
+                        <option value="savage and primal">Savage/Primal</option>
                     </select>
                 </div>
 
-                <div class="section-title">Base Attributes (Random = 8-16)</div>
-                <div class="stats-input-grid">
-                    <div class="input-group">
-                        <label>STR</label>
-                        <select id="base-str" class="stat-select"></select>
-                    </div>
-                    <div class="input-group">
-                        <label>DEX</label>
-                        <select id="base-dex" class="stat-select"></select>
-                    </div>
-                    <div class="input-group">
-                        <label>CON</label>
-                        <select id="base-con" class="stat-select"></select>
-                    </div>
-                    <div class="input-group">
-                        <label>INT</label>
-                        <select id="base-int" class="stat-select"></select>
-                    </div>
-                    <div class="input-group">
-                        <label>WIS</label>
-                        <select id="base-wis" class="stat-select"></select>
-                    </div>
-                    <div class="input-group">
-                        <label>CHA</label>
-                        <select id="base-cha" class="stat-select"></select>
-                    </div>
-                </div>
-
-                <button class="generate-btn" onclick="generateCharacter()">Forge Character</button>
+                <button class="generate-btn full-width" onclick="generateCharacter()">Forge Legend</button>
             </div>
         </div>
 
         <div class="sheet-panel">
             <div class="sheet-header">
-                <div class="char-name" id="display-name">Your Character</div>
-                <div class="char-subtitle" id="display-subtitle">Awaits Creation</div>
+                <div class="char-name" id="sheet-name">Unknown Soul</div>
+                <div class="char-subtitle" id="sheet-sub">Select options to begin...</div>
             </div>
 
-            <div class="portrait-frame">
-                <img id="char-image" alt="Character Portrait">
-                <div class="loading-spinner" id="loading" style="display: none;">Summoning from the depths...</div>
-                <div class="placeholder-text" id="placeholder">Portrait will appear here</div>
+            <div class="portrait-container">
+                <div class="loading-overlay" id="loader" style="display:none;">
+                    <div class="spinner"></div>
+                    <div>Summoning Image...</div>
+                </div>
+                <img id="char-image" src="https://placehold.co/600x600/0a0a0f/333?text=Portrait" alt="Character">
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-box"><div class="stat-val" id="str-val">10</div><div class="stat-label">STR</div></div>
-                <div class="stat-box"><div class="stat-val" id="dex-val">10</div><div class="stat-label">DEX</div></div>
-                <div class="stat-box"><div class="stat-val" id="con-val">10</div><div class="stat-label">CON</div></div>
-                <div class="stat-box"><div class="stat-val" id="int-val">10</div><div class="stat-label">INT</div></div>
-                <div class="stat-box"><div class="stat-val" id="wis-val">10</div><div class="stat-label">WIS</div></div>
-                <div class="stat-box"><div class="stat-val" id="cha-val">10</div><div class="stat-label">CHA</div></div>
-            </div>
+            <div class="sheet-body">
+                <div class="stats-display">
+                    <div class="stat-hex"><div class="stat-val" id="val-str">10</div><div class="stat-lbl">STR</div><div class="stat-mod" id="mod-str">+0</div></div>
+                    <div class="stat-hex"><div class="stat-val" id="val-dex">10</div><div class="stat-lbl">DEX</div><div class="stat-mod" id="mod-dex">+0</div></div>
+                    <div class="stat-hex"><div class="stat-val" id="val-con">10</div><div class="stat-lbl">CON</div><div class="stat-mod" id="mod-con">+0</div></div>
+                    <div class="stat-hex"><div class="stat-val" id="val-int">10</div><div class="stat-lbl">INT</div><div class="stat-mod" id="mod-int">+0</div></div>
+                    <div class="stat-hex"><div class="stat-val" id="val-wis">10</div><div class="stat-lbl">WIS</div><div class="stat-mod" id="mod-wis">+0</div></div>
+                    <div class="stat-hex"><div class="stat-val" id="val-cha">10</div><div class="stat-lbl">CHA</div><div class="stat-mod" id="mod-cha">+0</div></div>
+                </div>
 
-            <button class="save-btn" id="save-btn" onclick="saveToRoster()">Save to Roster</button>
+                <div class="section-title">Racial Traits & Abilities</div>
+                <div class="abilities-list" id="abilities-list">
+                    </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Setup stat selectors
-        document.querySelectorAll('.stat-select').forEach(sel => {
-            let opt = document.createElement('option');
-            opt.value = 'random'; opt.textContent = 'Random';
-            sel.appendChild(opt);
-            for(let i=8; i<=18; i++) {
-                opt = document.createElement('option');
-                opt.value = i;
-                opt.textContent = i;
-                if(i===10) opt.selected = true; 
-                sel.appendChild(opt);
+        // --- DATA FROM ENCYCLOPEDIA ---
+        const RACES = {
+            "Sethite": {
+                name: "Sethite (Righteous Line)",
+                desc: "Descendants of Seth. Keepers of the original faith and pre-fall history.",
+                stats: { wis: 2, cha: 1 },
+                traits: ["Blessed Heritage (Advantage on Religion)", "Divine Favor (1/Long Rest Reroll)"],
+                visuals: "simple robes, prayer shawl, serene expression, holding scroll or staff, semitic features"
+            },
+            "Cainite": {
+                name: "Cainite (City Builder)",
+                desc: "Descendants of the first murderer. Masters of metallurgy, music, and urbanization.",
+                stats: { int: 2, con: 1 },
+                traits: ["Mark of Cain (Protection from vengeance)", "City Born (Urban Advantage)", "Builder's Heritage"],
+                visuals: "adorned in gold and brass jewelry, fine dyed clothes, musical instrument or hammer, elaborate hair, sharp features"
+            },
+            "Wanderer": {
+                name: "Wanderer (Nomad)",
+                desc: "Those who rejected both the cities of Cain and the strictures of Seth.",
+                stats: { dex: 2, wis: 1 },
+                traits: ["Survivalist", "Swift Footed (35ft Speed)"],
+                visuals: "weather-beaten skin, animal furs, tribal tattoos, bow on back, wild hair, dust covered"
+            },
+            "Nephilim": {
+                name: "Nephilim (1st Gen Giant)",
+                desc: "Direct offspring of Watchers and Humans. Titans of the ancient world.",
+                stats: { str: 4, con: 2, dex: -2 },
+                traits: ["Large Size (12-15ft)", "Angelic Resistance (Radiant)", "Insatiable Hunger", "Powerful Build"],
+                visuals: "massive 12ft tall giant, glowing eyes, unnatural muscles, wearing heavy bronze armor, carrying massive weapon"
+            },
+            "Rephaim": {
+                name: "Rephaim (Shade/Giant)",
+                desc: "Later generations of giants, often associated with the dead.",
+                stats: { str: 2, con: 2 },
+                traits: ["Spirit Sight", "Intimidating Presence"],
+                visuals: "tall gaunt figure, pale grey skin, shadowy aura, ancient rusted armor"
+            },
+            "Anakim": {
+                name: "Anakim (Noble Giant)",
+                desc: "The 'Long-Necked Ones'. A race of giants known for wearing heavy chains.",
+                stats: { str: 3, cha: 1, dex: -1 },
+                traits: ["Chain Master", "Noble Bearing"],
+                visuals: "giant stature, wearing heavy gold chains around neck, regal posture, clean shaven head"
+            },
+            "Gibborim": {
+                name: "Gibborim (Mighty Man)",
+                desc: "Human-Giant hybrids. Appearance is mostly human but with heroic stature.",
+                stats: { str: 2, con: 1 },
+                traits: ["Powerful Build", "Martial Proficiency", "Heroic Feat"],
+                visuals: "7ft tall, extremely muscular human, lion skin cloak, heroic pose, holding spear"
+            },
+            "Horim": {
+                name: "Horim (Cave Dweller)",
+                desc: "Giant-kin adapted to underground life.",
+                stats: { dex: 2, wis: 1 },
+                traits: ["Superior Darkvision", "Sunlight Sensitivity", "Stone Cunning"],
+                visuals: "pale skin, large black eyes, crouched posture, primitive stone tools, cave background"
+            },
+            "Sorcerer": {
+                name: "Sorcerer Clan (Watcher-Taught)",
+                desc: "Humans initiated into Watcher mysteries like root-cutting and astrology.",
+                stats: { int: 2, cha: 1 },
+                traits: ["Dark Insight (Detect Magic)", "Blood Magic", "Watcher's Mark"],
+                visuals: "robes covered in constellations, glowing runes on skin, holding strange herbs or crystals, purple magical aura"
             }
-        });
-
-        const names = {
-            Male: ["Enoch", "Nimrod", "Gilgamesh", "Methuselah", "Jared", "Lamech", "Barak", "Goliath", "Og"],
-            Female: ["Lilith", "Semiramis", "Jezebel", "Deborah", "Salome", "Athaliah", "Hagar"],
-            Androgynous: ["Azazel", "Samyaza", "Baraqiel", "Kokabiel"]
         };
-        const titles = ["the Accursed", "of the Watchers", "the Giant", "Light-Bringer", "of Ur"];
 
-        let generatedData = null; 
-
-        function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-
-        function getStatValue(id) {
-            const val = document.getElementById(id).value;
-            if(val === 'random') return getRandomInt(8, 16); 
-            return parseInt(val);
-        }
-
-        function generateStats(cls) {
-            let stats = {
-                str: getStatValue('base-str'),
-                dex: getStatValue('base-dex'),
-                con: getStatValue('base-con'),
-                int: getStatValue('base-int'),
-                wis: getStatValue('base-wis'),
-                cha: getStatValue('base-cha')
-            };
-            if(cls.includes('Gibbor') || cls.includes('Hunter')) { stats.str += 4; stats.con += 2; }
-            if(cls.includes('Magi') || cls.includes('Scribe')) { stats.int += 4; stats.wis += 2; }
-            return stats;
-        }
-
-        // ============================================================
-        // IMPROVED HUGGING FACE IMAGE GENERATION WITH FALLBACK SYSTEM
-        // ============================================================
-
-        // CONFIGURATION - Adjust these to control retry behavior
-        const CONFIG = {
-            RETRIES_PER_API: 3,           // How many times to retry each API
-            RETRY_DELAY: 5000,             // Wait 5 seconds between retries (in ms)
-            MODEL_LOAD_EXTRA_TIME: 2000,   // Extra time to wait after model load estimate (in ms)
-            API_SWITCH_DELAY: 2000         // Wait before switching to next API (in ms)
+        const NAMES = {
+            Male: ["Enoch", "Irad", "Lamech", "Jabal", "Tubal", "Methuselah", "Jared", "Mahalalel", "Kenan", "Zillah"],
+            Female: ["Adah", "Zillah", "Naamah", "Sarai", "Milcah", "Noa", "Hoglah", "Tirzah"],
+            Nephilim: ["Og", "Sihon", "Ahiman", "Sheshai", "Talmai", "Arba", "Goliath", "Lahmi"]
         };
 
-        // API configuration - now using Netlify serverless functions
-        const IMAGE_APIS = [
-            { name: 'Z-Image-Turbo', model: 'z-image-turbo' },
-            { name: 'FLUX Schnell', model: 'flux-schnell' },
-            { name: 'Stable Diffusion XL', model: 'sdxl' }
-        ];
-
-        function buildOptimizedPrompt(data) {
-            const { sex, race, cls, build, skin, hair, eyes, trait1, vibe, background } = data;
-            
-            // Enhanced prompt engineering for biblical/antediluvian characters
-            let prompt = `portrait of ${sex.toLowerCase()} ${race} ${cls}, `;
-            prompt += `${build} build, ${skin} skin tone, ${hair} hair, ${eyes} eyes, `;
-            
-            if(trait1) {
-                prompt += `distinctive ${trait1}, `;
+        // --- INIT ---
+        window.onload = function() {
+            // Populate Race Select
+            const raceSel = document.getElementById('race');
+            for (let r in RACES) {
+                let opt = document.createElement('option');
+                opt.value = r;
+                opt.innerText = RACES[r].name;
+                raceSel.appendChild(opt);
             }
             
-            // Add biblical/ancient near east context
-            prompt += `ancient mesopotamian setting, bronze age aesthetics, `;
-            prompt += `${background} background, ${vibe} atmosphere, `;
+            // Populate Stat Selects
+            document.querySelectorAll('.stat-select').forEach(sel => {
+                let rOpt = document.createElement('option');
+                rOpt.value = "random"; rOpt.text = "Roll";
+                sel.add(rOpt);
+                for(let i=8; i<=18; i++) {
+                    let opt = document.createElement('option');
+                    opt.value = i; opt.text = i;
+                    if(i===10) opt.selected = true;
+                    sel.add(opt);
+                }
+            });
+
+            updateRaceInfo();
+        };
+
+        function updateRaceInfo() {
+            const key = document.getElementById('race').value;
+            const data = RACES[key];
+            const infoBox = document.getElementById('race-info');
             
-            // Quality enhancers
-            prompt += `detailed fantasy character art, epic fantasy illustration, `;
-            prompt += `intricate details, dramatic lighting, professional digital painting, `;
-            prompt += `trending on artstation, 8k quality`;
+            let html = `<span class="info-title">${data.name}</span>`;
+            html += `<div>${data.desc}</div>`;
+            html += `<div class="info-traits">`;
             
-            return prompt;
+            // Stats Text
+            let statTxt = [];
+            for(let s in data.stats) {
+                let val = data.stats[s];
+                statTxt.push(`${s.toUpperCase()} ${val>0?'+':''}${val}`);
+            }
+            html += `<span class="trait-tag" style="border-color:#fff">${statTxt.join(', ')}</span>`;
+
+            // Traits
+            data.traits.forEach(t => {
+                html += `<span class="trait-tag">${t}</span>`;
+            });
+            html += `</div>`;
+            
+            infoBox.innerHTML = html;
         }
 
-        async function tryGenerateImage(api, prompt, loading) {
-            for (let attempt = 1; attempt <= CONFIG.RETRIES_PER_API; attempt++) {
-                loading.innerText = `${api.name} (attempt ${attempt}/${CONFIG.RETRIES_PER_API})...`;
-                
-                try {
-                    // Call our Netlify serverless function
-                    const response = await fetch('/.netlify/functions/generate-image', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            model: api.model,
-                            prompt: prompt,
-                            negativePrompt: "blurry, low quality, deformed, disfigured, text, watermark, modern clothing, gun, car, sci-fi, anime, cartoon"
-                        })
-                    });
-
-                    const data = await response.json();
-
-                    // Check if model is loading
-                    if (response.status === 503 && data.error?.includes('loading')) {
-                        const estimatedTime = data.estimated_time || 20;
-                        loading.innerText = `${api.name} loading model... (~${Math.ceil(estimatedTime)}s)`;
-                        console.log(`${api.name} is loading, waiting ${estimatedTime} seconds...`);
-                        
-                        // Wait for the model to load, then retry
-                        await new Promise(resolve => setTimeout(resolve, (estimatedTime * 1000) + CONFIG.MODEL_LOAD_EXTRA_TIME));
-                        continue; // Retry this same API
-                    }
-
-                    if (!response.ok) {
-                        console.warn(`${api.name} attempt ${attempt} failed: ${response.status} - ${data.error}`);
-                        
-                        // If not the last attempt, wait and retry
-                        if (attempt < CONFIG.RETRIES_PER_API) {
-                            const waitTime = CONFIG.RETRY_DELAY / 1000;
-                            loading.innerText = `${api.name} busy, retrying in ${waitTime}s...`;
-                            await new Promise(resolve => setTimeout(resolve, CONFIG.RETRY_DELAY));
-                            continue;
-                        }
-                        
-                        throw new Error(`${api.name} failed after ${CONFIG.RETRIES_PER_API} attempts`);
-                    }
-
-                    // Convert base64 to blob
-                    const imageData = atob(data.image);
-                    const imageArray = new Uint8Array(imageData.length);
-                    for (let i = 0; i < imageData.length; i++) {
-                        imageArray[i] = imageData.charCodeAt(i);
-                    }
-                    const blob = new Blob([imageArray], { type: data.contentType });
-                    
-                    console.log(`✅ ${api.name} succeeded on attempt ${attempt}`);
-                    return URL.createObjectURL(blob);
-                    
-                } catch (error) {
-                    console.error(`${api.name} attempt ${attempt} error:`, error);
-                    
-                    // If last attempt, throw error to move to next API
-                    if (attempt === CONFIG.RETRIES_PER_API) {
-                        throw error;
-                    }
-                    
-                    // Otherwise wait and retry this same API
-                    loading.innerText = `${api.name} error, retrying in 3s...`;
-                    await new Promise(resolve => setTimeout(resolve, 3000));
-                }
-            }
+        function rollD6() { return Math.floor(Math.random() * 6) + 1; }
+        
+        // 4d6 drop lowest
+        function rollStat() {
+            let rolls = [rollD6(), rollD6(), rollD6(), rollD6()];
+            rolls.sort((a,b) => a-b);
+            return rolls[1] + rolls[2] + rolls[3];
         }
 
-        async function generateImage(promptData, loading) {
-            const prompt = buildOptimizedPrompt(promptData);
-            console.log('Generated prompt:', prompt);
-            
-            // Try each API in sequence (each API will retry 3 times internally)
-            for (let i = 0; i < IMAGE_APIS.length; i++) {
-                try {
-                    loading.innerText = `Attempting ${IMAGE_APIS[i].name}...`;
-                    const imageUrl = await tryGenerateImage(IMAGE_APIS[i], prompt, loading);
-                    console.log(`🎉 Success with ${IMAGE_APIS[i].name}!`);
-                    return imageUrl;
-                } catch (error) {
-                    console.log(`❌ ${IMAGE_APIS[i].name} failed after all retries`);
-                    
-                    // If this was the last API, throw error
-                    if (i === IMAGE_APIS.length - 1) {
-                        throw new Error('All image generation APIs failed');
-                    }
-                    
-                    // Before trying next API, give a small break
-                    loading.innerText = `${IMAGE_APIS[i].name} exhausted. Trying next API...`;
-                    await new Promise(resolve => setTimeout(resolve, CONFIG.API_SWITCH_DELAY));
-                }
-            }
+        function getStat(id) {
+            let val = document.getElementById(id).value;
+            return val === "random" ? rollStat() : parseInt(val);
+        }
+
+        function getMod(score) {
+            let mod = Math.floor((score - 10) / 2);
+            return mod >= 0 ? `+${mod}` : mod;
         }
 
         async function generateCharacter() {
-            // 1. GATHER DATA
-            const customName = document.getElementById('custom-name').value;
-            const race = document.getElementById('race').value;
-            const cls = document.getElementById('class').value;
+            // 1. Gather Basic Info
+            const raceKey = document.getElementById('race').value;
+            const raceData = RACES[raceKey];
+            const role = document.getElementById('class').value;
             const sex = document.getElementById('sex').value;
-            const background = document.getElementById('background').value;
-            const build = document.getElementById('build').value;
-            const skin = document.getElementById('skin').value;
-            const hair = document.getElementById('hair').value;
-            const eyes = document.getElementById('eyes').value;
-            const trait1 = document.getElementById('trait1').value;
+            const bg = document.getElementById('background').value;
             const vibe = document.getElementById('vibe').value;
+            let name = document.getElementById('custom-name').value;
 
-            // 2. UPDATE TEXT UI
-            let name = customName.trim() || (names[sex] ? names[sex][getRandomInt(0, names[sex].length-1)] : "Unknown") + " " + titles[getRandomInt(0, titles.length-1)];
-            document.getElementById('display-name').innerText = name;
-            document.getElementById('display-subtitle').innerText = `${race} ${cls}`;
-
-            const stats = generateStats(cls);
-            document.getElementById('str-val').innerText = stats.str;
-            document.getElementById('dex-val').innerText = stats.dex;
-            document.getElementById('con-val').innerText = stats.con;
-            document.getElementById('int-val').innerText = stats.int;
-            document.getElementById('wis-val').innerText = stats.wis;
-            document.getElementById('cha-val').innerText = stats.cha;
-
-            // 3. PREPARE IMAGE UI
-            const imgElement = document.getElementById('char-image');
-            const loading = document.getElementById('loading');
-            const placeholder = document.getElementById('placeholder');
-            const saveBtn = document.getElementById('save-btn');
-
-            imgElement.style.display = 'none';
-            placeholder.style.display = 'none';
-            saveBtn.style.display = 'none';
-            loading.style.display = 'block';
-            loading.innerText = "Summoning character image...";
-
-            // 4. GENERATE IMAGE WITH FALLBACK
-            const promptData = { sex, race, cls, build, skin, hair, eyes, trait1, vibe, background };
-            
-            try {
-                const imageUrl = await generateImage(promptData, loading);
-                
-                // SUCCESS
-                imgElement.onload = function() {
-                    loading.style.display = 'none';
-                    imgElement.style.display = 'block';
-                    saveBtn.style.display = 'block';
-                };
-                imgElement.src = imageUrl;
-
-                generatedData = { name, race, cls, stats, image: imageUrl };
-
-            } catch (error) {
-                console.error('All image generation failed:', error);
-                loading.innerText = "All APIs busy. Using placeholder.";
-                
-                // Ultimate fallback to placeholder
-                setTimeout(() => {
-                    const backupUrl = `https://placehold.co/400x600/1c1917/fcd34d?text=${encodeURIComponent(name)}&font=raleway`;
-                    imgElement.src = backupUrl;
-                    imgElement.style.display = 'block';
-                    loading.style.display = 'none';
-                    saveBtn.style.display = 'block';
-                    generatedData = { name, race, cls, stats, image: backupUrl };
-                }, 1000);
+            // 2. Name Generation
+            if (!name) {
+                let nameList = (raceKey === 'Nephilim' || raceKey === 'Anakim') ? NAMES.Nephilim : NAMES[sex];
+                name = nameList[Math.floor(Math.random() * nameList.length)];
             }
-        }
 
-        function saveToRoster() {
-            if(!generatedData) return;
-
-            const strMod = Math.floor((generatedData.stats.str - 10) / 2);
-            const dexMod = Math.floor((generatedData.stats.dex - 10) / 2);
-            const conMod = Math.floor((generatedData.stats.con - 10) / 2);
-
-            const combatChar = {
-                id: Date.now().toString(),
-                name: generatedData.name,
-                isPlayer: true,
-                hp: 10 + conMod, 
-                maxHp: 10 + conMod,
-                defense: 10 + dexMod,
-                initiativeBonus: dexMod,
-                portrait: generatedData.image,
-                actions: [
-                    { 
-                        id: `atk_${Date.now()}`, 
-                        name: 'Main Attack', 
-                        type: 'melee',
-                        cost: 1, 
-                        toHitBonus: strMod + 2,
-                        damageDice: '1d8', 
-                        damageBonus: strMod, 
-                        damageType: 'physical' 
-                    }
-                ]
+            // 3. Calc Stats
+            let stats = {
+                str: getStat('base-str'),
+                dex: getStat('base-dex'),
+                con: getStat('base-con'),
+                int: getStat('base-int'),
+                wis: getStat('base-wis'),
+                cha: getStat('base-cha')
             };
 
-            const existing = JSON.parse(localStorage.getItem('my_characters') || '[]');
-            localStorage.setItem('my_characters', JSON.stringify([...existing, combatChar]));
+            // Apply Racial Mods
+            if(raceData.stats) {
+                for(let s in raceData.stats) {
+                    if(stats[s]) stats[s] += raceData.stats[s];
+                }
+            }
 
-            alert(`${combatChar.name} has been added to your roster!`);
+            // 4. Update UI
+            document.getElementById('sheet-name').innerText = name;
+            document.getElementById('sheet-sub').innerText = `${sex} ${raceData.name} - ${role}`;
+
+            // Update Hexes
+            for (let s in stats) {
+                document.getElementById(`val-${s}`).innerText = stats[s];
+                document.getElementById(`mod-${s}`).innerText = getMod(stats[s]);
+            }
+
+            // Update Traits List
+            let traitsHtml = "";
+            raceData.traits.forEach(t => {
+                let parts = t.split('(');
+                let title = parts[0];
+                let detail = parts[1] ? `(${parts[1]}` : "";
+                traitsHtml += `<div class="ability-item"><span class="ability-name">${title}</span> ${detail}</div>`;
+            });
+            document.getElementById('abilities-list').innerHTML = traitsHtml;
+
+            // 5. Image Generation
+            const imgPrompt = `portrait of a ${raceData.visuals}, ${role} class, ${sex}, ${vibe} atmosphere, ${bg} background, detailed fantasy art, dramatic lighting, 8k, oil painting style`;
+            
+            const imgEl = document.getElementById('char-image');
+            const loader = document.getElementById('loader');
+            
+            imgEl.style.opacity = 0;
+            loader.style.display = 'flex';
+
+            try {
+                // Using the Netlify function structure from your previous file
+                const response = await fetch('/.netlify/functions/generate-image', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        prompt: imgPrompt,
+                        model: 'flux-schnell' // Fast model
+                    })
+                });
+                
+                if(response.ok) {
+                    const data = await response.json();
+                    imgEl.src = `data:image/jpeg;base64,${data.image}`;
+                } else {
+                    // Fallback placeholder
+                    imgEl.src = `https://placehold.co/600x600/1a1a1d/d4af37?text=${raceKey}+${role}`;
+                }
+            } catch (e) {
+                console.log("Image gen failed, using placeholder");
+                imgEl.src = `https://placehold.co/600x600/1a1a1d/d4af37?text=${raceKey}+${role}`;
+            }
+
+            imgEl.onload = () => {
+                loader.style.display = 'none';
+                imgEl.style.opacity = 1;
+            };
         }
     </script>
 </body>

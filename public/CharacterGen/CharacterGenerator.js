@@ -30,7 +30,7 @@ const CharacterGenerator = ({ onSave }) => {
 
     try {
       // Call your Netlify function
-      const response = await fetch('/.netlify/functions/generate-avatar', {
+      const response = await fetch('/generate-image', {
         method: 'POST',
         body: JSON.stringify({ prompt }),
       });
