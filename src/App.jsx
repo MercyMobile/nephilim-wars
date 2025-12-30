@@ -11,21 +11,12 @@ function ConnectionCheck() {
 
   async function handleConnect() {
     setStatus("loading");
-    
-    // Access token securely via Vite
-    const token = import.meta.env.VITE_HF_TOKEN;
-
-    if (!token) {
-      setStatus("error");
-      alert("❌ No token found! Check your .env file.");
-      return;
-    }
 
     try {
-      const response = await fetch("https://huggingface.co/api/whoami", {
+      // Call our serverless function instead of directly calling HF
+      const response = await fetch("/api/hf-whoami", {
         method: "GET",
         headers: {
-          "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
         }
       });
@@ -151,7 +142,7 @@ function App() {
           {/* Connection Checker (Now placed below buttons) */}
           <ConnectionCheck />
 
-          <p className="mt-8 text-stone-700 text-xs">v0.3.0 - Alpha Build</p>
+          <p className="mt-8 text-stone-700 text-xs">v0.3.1 - Alpha Build</p>
         </div>
       )}
 
