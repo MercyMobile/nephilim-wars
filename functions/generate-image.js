@@ -38,8 +38,8 @@ export async function onRequest(context) {
       );
     }
 
-    // Use the correct router endpoint with /v1/ path
-    const endpoint = 'https://router.huggingface.co/v1/models/black-forest-labs/FLUX.1-schnell';
+    // Correct router endpoint format (NO /v1/)
+    const endpoint = 'https://router.huggingface.co/models/black-forest-labs/FLUX.1-schnell';
     
     const hfResponse = await fetch(endpoint, {
       method: 'POST',
