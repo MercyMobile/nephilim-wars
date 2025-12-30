@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import CombatScreen from './components/CombatScreen';
 import BestiaryScreen from './components/BestiaryScreen';
 import DiceScreen from './components/DiceScreen';
-import CreatorScreen from './components/CreatorScreen'; // <--- IMPORT ADDED
+import CreatorScreen from './components/CreatorScreen';
 
-
-// 1. Notice: No "export default" here anymore!
+// --- COMPONENT: Connection Checker (Nephilim Uplink) ---
 function ConnectionCheck() {
   const [status, setStatus] = useState("idle");
   const [userData, setUserData] = useState(null);
@@ -13,7 +12,7 @@ function ConnectionCheck() {
   async function handleConnect() {
     setStatus("loading");
     
-    // Get the token securely
+    // Access token securely via Vite
     const token = import.meta.env.VITE_HF_TOKEN;
 
     if (!token) {
@@ -36,7 +35,7 @@ function ConnectionCheck() {
       }
 
       const data = await response.json();
-      setUserData(data.name);
+      setUserData(data.name); // Store the username
       setStatus("success");
       
     } catch (err) {
@@ -46,36 +45,36 @@ function ConnectionCheck() {
   }
 
   return (
-    <div style={{ padding: '20px', border: '1px solid #333', marginTop: '20px' }}>
-      <h3>🔮 Nephilim Wars: Uplink</h3>
+    <div className="mt-8 p-4 border border-stone-700 bg-stone-900/80 rounded-lg max-w-md w-full text-center shadow-lg">
+      <h3 className="text-stone-400 text-xs tracking-[0.2em] uppercase mb-3">🔮 Nephilim Uplink</h3>
       
       {status === "idle" && (
-        <button onClick={handleConnect}>
-          Test Connection
+        <button 
+          onClick={handleConnect}
+          className="px-4 py-2 bg-stone-700 hover:bg-stone-600 text-stone-200 text-sm rounded transition-colors border border-stone-600"
+        >
+          Initialize Connection
         </button>
       )}
 
-      {status === "loading" && <p>Connecting to neural net...</p>}
+      {status === "loading" && <p className="text-amber-500 animate-pulse text-sm">Connecting to neural net...</p>}
 
       {status === "success" && (
-        <p style={{ color: 'lightgreen' }}>
-          ✅ <strong>Connected!</strong> Welcome, Commander {userData}.
+        <p className="text-green-400 text-sm">
+          ✅ <strong>Signal Locked.</strong> Welcome, {userData}.
         </p> 
       )}
 
       {status === "error" && (
-        <p style={{ color: 'red' }}>
-          ❌ Connection Failed. Check console for details.
+        <p className="text-red-400 text-sm">
+          ❌ Connection Failed. Check console.
         </p>
       )}
     </div>
   );
 }
 
-
-
-
-
+// --- MAIN APP COMPONENT ---
 function App() {
   // Screens: 'menu', 'combat', 'bestiary', 'dice', 'creator'
   const [currentScreen, setCurrentScreen] = useState('menu');
@@ -86,23 +85,30 @@ function App() {
       case 'combat': return <CombatScreen />;
       case 'bestiary': return <BestiaryScreen />;
       case 'dice': return <DiceScreen />;
-      case 'creator': return <CreatorScreen />; // <--- SWITCH CASE ADDED
+      case 'creator': return <CreatorScreen />;
       default: return null; 
     }
   };
 
   return (
-    <div className="min-h-screen bg-stone-900 text-stone-200 font-sans">
+    <div className="min-h-screen bg-stone-900 text-stone-200 font-sans selection:bg-amber-900 selection:text-white">
       
       {/* SCENE 1: THE MENU */}
       {currentScreen === 'menu' && (
-        <div className="flex flex-col items-center justify-center h-screen bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')]">
-          <h1 className="text-6xl text-amber-500 font-serif mb-2 uppercase tracking-widest text-center">Nephilim Wars</h1>
-          <p className="text-stone-500 mb-12 tracking-[0.5em] uppercase text-sm">The Preflood Chronicles</p>
+        <div className="flex flex-col items-center justify-center min-h-screen bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] py-10">
           
+          {/* Header */}
+          <h1 className="text-5xl md:text-6xl text-amber-500 font-serif mb-2 uppercase tracking-widest text-center drop-shadow-lg">
+            Nephilim Wars
+          </h1>
+          <p className="text-stone-500 mb-12 tracking-[0.5em] uppercase text-xs md:text-sm">
+            The Preflood Chronicles
+          </p>
+          
+          {/* Main Navigation Grid */}
           <div className="grid grid-cols-1 gap-4 w-full max-w-md px-6">
             
-            {/* --- NEW BUTTON: CHARACTER CREATOR --- */}
+            {/* CHARACTER CREATOR */}
             <button 
               onClick={() => setCurrentScreen('creator')}
               className="group px-8 py-5 bg-stone-800 border-2 border-amber-900/50 rounded-lg hover:border-amber-500 hover:scale-105 transition-all flex items-center justify-center gap-4 shadow-xl"
@@ -111,7 +117,7 @@ function App() {
               <span className="font-bold text-xl text-amber-100 group-hover:text-white">Create Character</span>
             </button>
 
-            {/* COMBAT BUTTON */}
+            {/* COMBAT */}
             <button 
               onClick={() => setCurrentScreen('combat')}
               className="group relative px-8 py-5 bg-stone-800 border border-stone-700 rounded-lg hover:bg-stone-800 hover:border-red-500 hover:scale-105 transition-all shadow-xl overflow-hidden"
@@ -122,7 +128,7 @@ function App() {
               </div>
             </button>
             
-            {/* BESTIARY BUTTON */}
+            {/* BESTIARY */}
             <button 
               onClick={() => setCurrentScreen('bestiary')}
               className="group px-8 py-4 bg-stone-800 border border-stone-700 rounded-lg hover:border-blue-500 hover:scale-105 transition-all flex items-center justify-center gap-3"
@@ -131,7 +137,7 @@ function App() {
               <span className="font-bold text-stone-300 group-hover:text-white">Bestiary</span>
             </button>
             
-            {/* DICE BUTTON */}
+            {/* DICE */}
             <button 
               onClick={() => setCurrentScreen('dice')}
               className="group px-8 py-4 bg-stone-800 border border-stone-700 rounded-lg hover:border-green-500 hover:scale-105 transition-all flex items-center justify-center gap-3"
@@ -141,11 +147,15 @@ function App() {
             </button>
 
           </div>
-          <p className="absolute bottom-8 text-stone-700 text-xs">v0.3.0 - Alpha Build</p>
+
+          {/* Connection Checker (Now placed below buttons) */}
+          <ConnectionCheck />
+
+          <p className="mt-8 text-stone-700 text-xs">v0.3.0 - Alpha Build</p>
         </div>
       )}
 
-      {/* SCENE 2: ACTIVE APP SCREEN */}
+      {/* SCENE 2: ACTIVE APP SCREEN (Combat, Dice, etc.) */}
       {currentScreen !== 'menu' && (
         <div className="relative h-screen w-full">
           {/* Global Back Button */}
