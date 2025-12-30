@@ -3,7 +3,90 @@ import CombatScreen from './components/CombatScreen';
 import BestiaryScreen from './components/BestiaryScreen';
 import DiceScreen from './components/DiceScreen';
 import CreatorScreen from './components/CreatorScreen'; // <--- IMPORT ADDED
+import { useState } from 'react';
 
+export default function ConnectionCheck() {
+  const [status, setStatus] = useState("idle"); // idle, loading, success, error
+  const [userData, setUserData] = useState(null);
+
+  async function handleConnect() {
+    setStatus("loading");
+    
+    // 1. Get the token securely from Vite
+    const token = import.meta.env.VITE_HF_TOKEN;
+
+    if (!token) {
+      setStatus("error");
+      alert("❌ No token found! Check your .env file.");
+      return;
+    }
+
+    try {
+      // 2. Call Hugging Face API
+      const response = await fetch("https://huggingface.co/api/whoami", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Auth failed: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      setUserData(data.name); // Store the username
+      setStatus("success");
+      
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+    }
+  }
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid #333', marginTop: '20px' }}>
+      <h3>🔮 Nephilim Wars: Uplink</h3>
+      
+      {status === "idle" && (
+        <button onClick={handleConnect}>
+          Test Connection
+        </button>
+      )}
+
+      {status === "loading" && <p>Connecting to neural net...</p>}
+
+      {status === "success" && (
+        <p style={{ color: 'lightgreen' }}>
+          ✅ <strong>Connected!</strong> Welcome, Commander {userData}.
+        </button>
+      )}
+
+      {status === "error" && (
+        <p style={{ color: 'red' }}>
+          ❌ Connection Failed. Check console for details.
+        </button>
+      )}
+    </div>
+  );
+}
+
+
+import ConnectionCheck from './ConnectionCheck'; // Adjust path if needed
+
+function App() {
+  return (
+    <div>
+      <h1>Nephilim Wars</h1>
+      {/* Other components... */}
+      
+      <ConnectionCheck /> 
+    </div>
+  );
+}
+
+export default App;
 function App() {
   // Screens: 'menu', 'combat', 'bestiary', 'dice', 'creator'
   const [currentScreen, setCurrentScreen] = useState('menu');
