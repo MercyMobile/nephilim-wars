@@ -41,10 +41,10 @@ export async function onRequest(context) {
 
     // --- FIX STARTS HERE ---
     
-    // 3. Define Model URL directly
-    // The raw API requires the model ID to be in the URL, not the body.
+    // 3. New Router URL
+    // The "hf-inference" path segment routes to the serverless inference API.
     const MODEL_ID = 'black-forest-labs/FLUX.1-schnell';
-    const API_URL = `https://api-inference.huggingface.co/models/${MODEL_ID}`;
+    const API_URL = `https://router.huggingface.co/hf-inference/models/${MODEL_ID}`;
 
     // 4. Call the API
     const hfResponse = await fetch(API_URL, {
@@ -52,9 +52,8 @@ export async function onRequest(context) {
       headers: {
         'Authorization': `Bearer ${HF_TOKEN}`,
         'Content-Type': 'application/json',
-        'x-use-cache': 'false' // Optional: Forces a new generation rather than a cached one
       },
-      // Raw API expects "inputs" as the key for the prompt
+      // The router expects "inputs" just like the old API
       body: JSON.stringify({
         inputs: prompt
       })
@@ -66,7 +65,7 @@ export async function onRequest(context) {
       return new Response(
         JSON.stringify({ 
           error: 'HF API error', 
-          status: hfResponse.status,
+          status: hfResponse.status, 
           details: errorText 
         }),
         { status: hfResponse.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
@@ -74,7 +73,6 @@ export async function onRequest(context) {
     }
 
     // 5. Handle Image Response
-    // The API returns the raw binary image (blob), not JSON.
     const imageBlob = await hfResponse.arrayBuffer();
     const base64 = btoa(String.fromCharCode(...new Uint8Array(imageBlob)));
 
