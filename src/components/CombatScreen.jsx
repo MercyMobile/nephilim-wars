@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useCombatEngine } from '../hooks/useCombatEngine';
-import { resolveAttack } from '../utils/combatRules'; // Import Phase 1 logic
-import CharacterSheet from './CharacterSheet'; // Import Phase 2 component
+import { resolveAttack } from '../utils/combatRules'; 
+import CharacterSheet from '../components/CharacterSheet'; 
 
-// ... [Keep InitiativeRibbon and ActionDeck components exactly as they were] ...
+// Components (assuming these are in ../components/)
+import InitiativeRibbon from '../components/InitiativeRibbon';
+import ActionDeck from '../components/ActionDeck';
 
 const CombatScreen = () => {
   const engine = useCombatEngine();
   const [showSheet, setShowSheet] = useState(false);
 
-  // 1. LOAD CHARACTERS (Modified to accept generated data)
+  // 1. LOAD CHARACTERS
   useEffect(() => {
     // Attempt to load generated character from local storage
     const savedChar = JSON.parse(localStorage.getItem('generatedCharacter'));
@@ -18,7 +20,7 @@ const CombatScreen = () => {
       ...savedChar,
       id: 'p1', 
       isPlayer: true,
-      // Ensure these fields exist for the combat engine
+      // Ensure specific combat stats exist, defaulting if missing
       hp: savedChar.hp || 45,
       maxHp: savedChar.maxHp || 45,
       defense: savedChar.defense || 14,
@@ -43,48 +45,39 @@ const CombatScreen = () => {
 
   const activeChar = engine.combatants.find(c => c.id === engine.activeCombatantId);
 
-  // 2. HANDLE COMBAT ACTIONS (The "Tough" Part)
+  // 2. HANDLE ACTIONS
   const handleAction = (action) => {
-    // Determine Target (Simple logic: select the first enemy)
     const target = engine.combatants.find(c => c.id !== activeChar.id);
     if (!target) return;
 
-    // A. SIMULATE DICE ROLL (1d20)
-    // In a real app, you might wait for the iframe to postMessage back with a result.
-    // For now, we simulate the roll here to apply the logic immediately.
+    // Simulate Roll & Apply Rules
     const d20Roll = Math.ceil(Math.random() * 20);
-
-    // B. APPLY RULES (Using combatRules.js)
     const result = resolveAttack(action, activeChar, target, d20Roll);
 
-    // C. UPDATE ENGINE
-    // We pass the calculated damage to the engine
     engine.executeAction({
       ...action,
-      calculatedDamage: result.damage, // Pass the pre-calculated damage
+      calculatedDamage: result.damage,
       isHit: result.isHit,
-      logMessages: result.log // Pass flavor text for the log
+      logMessages: result.log
     }, target.id);
 
-    // D. TURN CYCLE
     setTimeout(() => engine.nextTurn(), 1000);
   };
-// ... inside CombatScreen component ...
 
-const activeChar = engine.combatants.find(c => c.id === engine.activeCombatantId);
+  // --- 🔴 THE FIX IS HERE 🔴 ---
+  // If activeChar isn't ready yet, show a loading text instead of crashing.
+  if (!activeChar) {
+    return (
+      <div className="h-screen bg-gray-900 text-amber-500 font-serif flex items-center justify-center">
+        <div className="text-2xl animate-pulse">Summoning Combatants...</div>
+      </div>
+    );
+  }
+  // -----------------------------
 
-// --- FIX: Add this Loading State ---
-if (!activeChar) {
-  return <div className="h-screen bg-gray-900 text-white flex items-center justify-center">
-    <div className="text-2xl animate-pulse">Summoning Combatants...</div>
-  </div>;
-}
-
-return (
-  <div className="h-screen flex flex-col bg-gray-900 overflow-hidden relative text-white">
-    {/* ... rest of your JSX ... */}
   return (
     <div className="h-screen flex flex-col bg-gray-900 overflow-hidden relative text-white">
+      
       {/* View Sheet Button */}
       <button 
         onClick={() => setShowSheet(true)}
@@ -93,24 +86,45 @@ return (
         📜 View Character
       </button>
 
-      {/* Render Character Sheet Modal */}
-      {showSheet && activeChar && activeChar.isPlayer && (
+      {/* Character Sheet Modal */}
+      {showSheet && activeChar.isPlayer && (
         <CharacterSheet character={activeChar} onClose={() => setShowSheet(false)} />
       )}
 
-      {/* Existing UI Components */}
+      {/* Initiative & Action Components */}
       <InitiativeRibbon queue={engine.turnQueue} combatants={engine.combatants} activeId={engine.activeCombatantId} />
       
-      {/* ... [Rest of the visual layout remains the same] ... */}
       <div className="flex-1 flex items-center justify-center gap-20 p-8 relative">
-          {/* ... Battlefield rendering ... */}
-          {engine.combatants.map(char => { /* ... existing map code ... */ })}
+        {/* Render combatants using your existing engine mapping, or manual cards here */}
+        {engine.combatants.map(char => (
+           <div key={char.id} className={`relative transition-all duration-500 ${char.id === activeChar.id ? 'scale-110 z-10' : 'opacity-80'}`}>
+              <div className={`w-64 h-80 border-4 rounded-lg overflow-hidden bg-black relative ${char.id === activeChar.id ? 'border-amber-500 shadow-[0_0_30px_rgba(245,158,11,0.5)]' : 'border-stone-700'}`}>
+                  <img src={char.portrait} alt={char.name} className="w-full h-full object-cover" />
+                  
+                  {/* Floating Damage Text (if you have that feature) */}
+                  
+                  {/* Health Bar Overlay */}
+                  <div className="absolute bottom-0 w-full bg-black/80 p-2 border-t border-stone-600">
+                    <div className="text-center font-cinzel font-bold text-lg mb-1">{char.name}</div>
+                    <div className="w-full bg-stone-800 h-2 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-red-600 transition-all duration-500" 
+                        style={{ width: `${(char.hp / char.maxHp) * 100}%` }}
+                      />
+                    </div>
+                    <div className="text-xs text-center mt-1 text-stone-400">{char.hp} / {char.maxHp} HP</div>
+                  </div>
+              </div>
+           </div>
+        ))}
       </div>
 
-      <div className="absolute top-28 right-4 w-64 pointer-events-none flex flex-col gap-2 z-40">
-        {engine.battleLog.slice(0, 4).map(log => (
-           <div key={log.id} className="bg-black/80 border-r-2 border-amber-500 p-2 rounded text-sm text-right text-gray-200 animate-bounce-once">
-            <span className="text-amber-500 font-bold">{log.sourceName}:</span> {log.message}
+      {/* Battle Log Overlay */}
+      <div className="absolute top-28 right-4 w-72 pointer-events-none flex flex-col gap-2 z-40 font-serif">
+        {engine.battleLog.slice(0, 5).map(log => (
+           <div key={log.id} className="bg-black/80 border-r-2 border-amber-500 p-3 rounded text-sm text-right text-stone-200 shadow-lg animate-fade-in-left">
+            <span className="text-amber-500 font-bold uppercase text-xs block mb-1">{log.sourceName}</span> 
+            {log.message}
           </div>
         ))}
       </div>
