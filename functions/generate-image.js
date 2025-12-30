@@ -72,7 +72,7 @@ export async function onRequest(context) {
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${VITE_HF_TOKEN}`,
+        'Authorization': `Bearer ${HF_TOKEN}`,  // FIXED: Was VITE_HF_TOKEN
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
