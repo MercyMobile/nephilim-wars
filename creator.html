@@ -508,7 +508,7 @@
                 document.getElementById(`mod-${s}`).innerText = getMod(stats[s]);
             }
 
-            // Update Traits List
+            // Traits List
             let traitsHtml = "";
             raceData.traits.forEach(t => {
                 let parts = t.split('(');
@@ -529,8 +529,8 @@
 
             try {
                 
-                const response = await fetch('/generate-image', {
-                    method: 'POST',
+                const response = await fetch('/generate-image', { 
+    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
