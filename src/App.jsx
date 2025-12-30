@@ -5,14 +5,15 @@ import DiceScreen from './components/DiceScreen';
 import CreatorScreen from './components/CreatorScreen'; // <--- IMPORT ADDED
 import { useState } from 'react';
 
-export default function ConnectionCheck() {
-  const [status, setStatus] = useState("idle"); // idle, loading, success, error
+// 1. Notice: No "export default" here anymore!
+function ConnectionCheck() {
+  const [status, setStatus] = useState("idle");
   const [userData, setUserData] = useState(null);
 
   async function handleConnect() {
     setStatus("loading");
     
-    // 1. Get the token securely from Vite
+    // Get the token securely
     const token = import.meta.env.VITE_HF_TOKEN;
 
     if (!token) {
@@ -22,7 +23,6 @@ export default function ConnectionCheck() {
     }
 
     try {
-      // 2. Call Hugging Face API
       const response = await fetch("https://huggingface.co/api/whoami", {
         method: "GET",
         headers: {
@@ -36,7 +36,7 @@ export default function ConnectionCheck() {
       }
 
       const data = await response.json();
-      setUserData(data.name); // Store the username
+      setUserData(data.name);
       setStatus("success");
       
     } catch (err) {
@@ -60,31 +60,20 @@ export default function ConnectionCheck() {
       {status === "success" && (
         <p style={{ color: 'lightgreen' }}>
           ✅ <strong>Connected!</strong> Welcome, Commander {userData}.
-        </button>
+        </p> 
       )}
 
       {status === "error" && (
         <p style={{ color: 'red' }}>
           ❌ Connection Failed. Check console for details.
-        </button>
+        </p>
       )}
     </div>
   );
 }
 
 
-import ConnectionCheck from './ConnectionCheck'; // Adjust path if needed
 
-function App() {
-  return (
-    <div>
-      <h1>Nephilim Wars</h1>
-      {/* Other components... */}
-      
-      <ConnectionCheck /> 
-    </div>
-  );
-}
 
 export default App;
 function App() {
