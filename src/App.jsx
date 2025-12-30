@@ -75,7 +75,7 @@ function ConnectionCheck() {
 
 
 
-export default App;
+
 function App() {
   // Screens: 'menu', 'combat', 'bestiary', 'dice', 'creator'
   const [currentScreen, setCurrentScreen] = useState('menu');
