@@ -38,16 +38,19 @@ export async function onRequest(context) {
       );
     }
 
-    // Correct router endpoint format (NO /v1/)
-    const endpoint = 'https://router.huggingface.co/models/black-forest-labs/FLUX.1-schnell';
-    
-    const hfResponse = await fetch(endpoint, {
+    // Use HF Inference API with provider parameter
+    // This uses the correct client-library format
+    const hfResponse = await fetch('https://huggingface.co/api/inference/textToImage', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${HF_TOKEN}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ inputs: prompt })
+      body: JSON.stringify({
+        model: 'black-forest-labs/FLUX.1-schnell',
+        inputs: prompt,
+        provider: 'auto'  // Let HF choose best provider
+      })
     });
 
     if (!hfResponse.ok) {
