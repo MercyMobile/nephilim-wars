@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<body>
+<button onclick="test()">Test Fetch</button>
+<div id="result"></div>
+<script>
+async function test() {
+  try {
+    const r = await fetch('/generate-image', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({prompt: 'test', model: 'flux-schnell'})
+    });
+    document.getElementById('result').innerText = await r.text();
+  } catch(e) {
+    document.getElementById('result').innerText = 'ERROR: ' + e;
+  }
+}
+</script>
+</body>
+</html>

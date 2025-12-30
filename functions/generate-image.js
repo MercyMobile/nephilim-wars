@@ -1,7 +1,7 @@
+
 export async function onRequest(context) {
   const { request } = context;
 
-  // Handle CORS preflight
   if (request.method === 'OPTIONS') {
     return new Response(null, {
       headers: {
@@ -12,7 +12,6 @@ export async function onRequest(context) {
     });
   }
 
-  // Only allow POST
   if (request.method !== 'POST') {
     return new Response(
       JSON.stringify({ error: 'Method not allowed' }),
@@ -27,7 +26,6 @@ export async function onRequest(context) {
   }
 
   try {
-    // Parse request body
     const body = await request.json();
     const { model, prompt, negativePrompt } = body;
 
@@ -44,7 +42,6 @@ export async function onRequest(context) {
       );
     }
 
-    // Get HF token
     const HF_TOKEN = context.env.HF_TOKEN;
     if (!HF_TOKEN) {
       return new Response(
@@ -59,10 +56,10 @@ export async function onRequest(context) {
       );
     }
 
-    // Model endpoints
+    // Use router.huggingface.co (new endpoint)
     const MODEL_ENDPOINTS = {
-      'flux-schnell': 'https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell',
-      'sdxl': 'https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0'
+      'flux-schnell': 'https://router.huggingface.co/models/black-forest-labs/FLUX.1-schnell',
+      'sdxl': 'https://router.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0'
     };
 
     const endpoint = MODEL_ENDPOINTS[model];
@@ -79,7 +76,6 @@ export async function onRequest(context) {
       );
     }
 
-    // Call Hugging Face API
     const hfResponse = await fetch(endpoint, {
       method: 'POST',
       headers: {
@@ -94,7 +90,6 @@ export async function onRequest(context) {
       })
     });
 
-    // Handle model loading
     if (hfResponse.status === 503) {
       const errorData = await hfResponse.json().catch(() => ({}));
       return new Response(
@@ -112,7 +107,6 @@ export async function onRequest(context) {
       );
     }
 
-    // Handle errors
     if (!hfResponse.ok) {
       const errorText = await hfResponse.text();
       return new Response(
@@ -131,7 +125,6 @@ export async function onRequest(context) {
       );
     }
 
-    // Convert image to base64
     const imageBlob = await hfResponse.arrayBuffer();
     const base64 = btoa(String.fromCharCode(...new Uint8Array(imageBlob)));
 
