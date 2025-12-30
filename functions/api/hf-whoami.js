@@ -22,7 +22,7 @@ export async function onRequest(context) {
       );
     }
 
-    const response = await fetch("https://huggingface.co/api/whoami", {
+    const response = await fetch("https://huggingface.co/api/whoami-v2", {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${HF_TOKEN}`,
