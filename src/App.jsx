@@ -3,7 +3,7 @@ import CombatScreen from './components/CombatScreen';
 import BestiaryScreen from './components/BestiaryScreen';
 import DiceScreen from './components/DiceScreen';
 import CreatorScreen from './components/CreatorScreen'; // <--- IMPORT ADDED
-import { useState } from 'react';
+
 
 // 1. Notice: No "export default" here anymore!
 function ConnectionCheck() {
