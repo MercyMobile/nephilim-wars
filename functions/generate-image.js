@@ -1,10 +1,7 @@
 // functions/generate-image.js
-// Cloudflare Pages function for Hugging Face image generation
-
 export async function onRequest(context) {
   const { request } = context;
-  
-  // Handle CORS preflight
+
   if (request.method === 'OPTIONS') {
     return new Response(null, {
       headers: {
@@ -15,21 +12,16 @@ export async function onRequest(context) {
     });
   }
 
-  // Only allow POST for actual requests
   if (request.method !== 'POST') {
     return new Response(
       JSON.stringify({ error: 'Method not allowed' }),
-      { 
-        status: 405,
-        headers: { 'Content-Type': 'application/json' }
-      }
+      { status: 405, headers: { 'Content-Type': 'application/json' } }
     );
   }
 
   try {
     const { model, prompt, negativePrompt } = await request.json();
     
-    // Validate input
     if (!model || !prompt) {
       return new Response(
         JSON.stringify({ error: 'Missing required parameters' }),
@@ -37,7 +29,6 @@ export async function onRequest(context) {
       );
     }
 
-    // Get token from environment variable
     const HF_TOKEN = context.env.HF_TOKEN;
     
     if (!HF_TOKEN) {
@@ -47,7 +38,6 @@ export async function onRequest(context) {
       );
     }
     
-    // Model endpoints
     const MODEL_ENDPOINTS = {
       'z-image-turbo': 'https://router.huggingface.co/models/Tongyi-MAI/Z-Image-Turbo',
       'flux-schnell': 'https://router.huggingface.co/models/black-forest-labs/FLUX.1-schnell',
@@ -62,7 +52,6 @@ export async function onRequest(context) {
       );
     }
 
-    // Call Hugging Face API
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
@@ -77,7 +66,6 @@ export async function onRequest(context) {
       })
     });
 
-    // Handle model loading status
     if (response.status === 503) {
       const errorData = await response.json();
       return new Response(
@@ -109,11 +97,9 @@ export async function onRequest(context) {
       );
     }
 
-    // Get the image blob and convert to base64
     const imageBuffer = await response.arrayBuffer();
     const uint8Array = new Uint8Array(imageBuffer);
     
-    // Convert to base64 using btoa
     let binary = '';
     for (let i = 0; i < uint8Array.length; i++) {
       binary += String.fromCharCode(uint8Array[i]);
