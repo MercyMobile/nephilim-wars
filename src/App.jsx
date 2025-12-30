@@ -1,116 +1,114 @@
 import React, { useState, useEffect } from 'react';
 
-// --- 1. Import Your Screens ---
-import CharacterGenerator from './pages/CharacterGenerator.jsx'; // The new creator
-import CombatScreen from './pages/CombatScreen.jsx';             // The updated combat engine
-import DiceScreen from './components/DiceScreen.jsx';            // Your uploaded Dice file
+// --- Imports ---
+// Make sure these match your actual folder structure!
+import CharacterGenerator from './pages/CharacterGenerator'; 
+import CombatScreen from './pages/CombatScreen';             
+import DiceScreen from './components/DiceScreen';            
 
-// If you have a Bestiary component, import it here. 
-// If not, I have provided a placeholder below.
-// import Bestiary from './pages/Bestiary'; 
-
+// Placeholder for Bestiary if you haven't created it yet
 const BestiaryPlaceholder = () => (
-  <div className="h-screen bg-stone-900 text-amber-500 flex items-center justify-center font-serif text-3xl">
-    📖 The Tome of Beasts is currently closed.
+  <div className="h-full bg-stone-900 text-amber-500 flex flex-col items-center justify-center font-serif">
+    <div className="text-6xl mb-4">📖</div>
+    <div className="text-3xl border-b-2 border-amber-700 pb-2">Tome of Beasts</div>
+    <p className="mt-4 text-stone-400">The archives are currently sealed.</p>
   </div>
 );
 
+// --- HOME MENU COMPONENT ---
+const MainMenu = ({ onNavigate }) => (
+  <div className="h-full bg-black flex flex-col items-center justify-center relative overflow-hidden">
+    {/* Background texture or effect could go here */}
+    <div className="z-10 text-center space-y-8 p-8 border-4 border-double border-amber-900/50 bg-stone-950/80 rounded-lg shadow-2xl max-w-2xl w-full">
+      
+      <div>
+        <h1 className="text-6xl font-cinzel text-amber-500 mb-2 text-shadow-lg">NEPHILIM WARS</h1>
+        <div className="h-1 w-32 bg-gradient-to-r from-transparent via-amber-700 to-transparent mx-auto"></div>
+        <p className="text-stone-400 font-serif italic mt-2">The Age of Myth & Steel</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+        <MenuButton onClick={() => onNavigate('combat')} icon="⚔️" title="Enter Combat" desc="Tactical Warfare" />
+        <MenuButton onClick={() => onNavigate('generator')} icon="✨" title="Soul Forge" desc="Create Character" />
+        <MenuButton onClick={() => onNavigate('dice')} icon="🎲" title="Dice Roller" desc="3D Physics" />
+        <MenuButton onClick={() => onNavigate('bestiary')} icon="📖" title="Bestiary" desc="Lore & Stats" />
+      </div>
+
+      <div className="text-xs text-stone-600 uppercase tracking-widest mt-8">Version 0.9.2 • Mercy Mobile</div>
+    </div>
+  </div>
+);
+
+const MenuButton = ({ onClick, icon, title, desc }) => (
+  <button 
+    onClick={onClick}
+    className="flex items-center gap-4 p-4 bg-stone-900 border border-stone-800 hover:border-amber-600 hover:bg-stone-800 transition-all group text-left rounded"
+  >
+    <span className="text-3xl group-hover:scale-110 transition-transform">{icon}</span>
+    <div>
+      <div className="text-amber-500 font-bold font-cinzel group-hover:text-amber-400">{title}</div>
+      <div className="text-stone-500 text-xs uppercase tracking-wider group-hover:text-stone-400">{desc}</div>
+    </div>
+  </button>
+);
+
 export default function App() {
-  // Navigation State
-  const [currentView, setCurrentView] = useState('loading');
+  // 1. Default to 'home' instead of 'generator' or 'combat'
+  const [currentView, setCurrentView] = useState('home');
   const [characterExists, setCharacterExists] = useState(false);
 
-  // Initial Load Check
+  // Check for saved character on load
   useEffect(() => {
     const saved = localStorage.getItem('generatedCharacter');
-    if (saved) {
-      setCharacterExists(true);
-      setCurrentView('combat'); // Default to combat if we have a hero
-    } else {
-      setCharacterExists(false);
-      setCurrentView('generator'); // Otherwise create one
-    }
+    if (saved) setCharacterExists(true);
   }, []);
 
-  // Handler: When a new character is saved in the Generator
   const handleCharacterReady = () => {
     setCharacterExists(true);
     setCurrentView('combat');
   };
 
-  // Handler: Reset Data
-  const handleReset = () => {
-    if (window.confirm("Are you sure? This will delete your current character.")) {
-      localStorage.removeItem('generatedCharacter');
-      setCharacterExists(false);
-      setCurrentView('generator');
-    }
-  };
-
-  if (currentView === 'loading') return <div className="bg-black h-screen text-white p-10">Loading Nephilim Wars...</div>;
-
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
+    <div className="h-screen flex flex-col bg-black overflow-hidden font-serif">
       
-      {/* --- TOP NAVIGATION BAR (Similar to your index.html) --- */}
-      {/* Only show nav if we aren't in the initial creation phase */}
-      {characterExists && (
-        <nav className="bg-stone-900 border-b-2 border-amber-700 p-3 flex justify-center gap-4 z-50 shrink-0 shadow-xl">
-          <NavButton 
-            label="⚔️ Combat" 
-            isActive={currentView === 'combat'} 
-            onClick={() => setCurrentView('combat')} 
-          />
-          <NavButton 
-            label="🎲 Dice" 
-            isActive={currentView === 'dice'} 
-            onClick={() => setCurrentView('dice')} 
-          />
-          <NavButton 
-            label="📖 Bestiary" 
-            isActive={currentView === 'bestiary'} 
-            onClick={() => setCurrentView('bestiary')} 
-          />
-          <NavButton 
-            label="🔄 New Character" 
-            isActive={false} 
-            onClick={handleReset} 
-            danger 
-          />
-        </nav>
-      )}
+      {/* --- RIBBON MENU (Always Visible now) --- */}
+      <nav className="bg-stone-950 border-b border-amber-900/50 p-2 flex justify-center gap-2 z-50 shadow-2xl relative">
+        <NavButton label="🏛️ Home" isActive={currentView === 'home'} onClick={() => setCurrentView('home')} />
+        <NavButton label="⚔️ Combat" isActive={currentView === 'combat'} onClick={() => setCurrentView('combat')} />
+        <NavButton label="✨ Forge" isActive={currentView === 'generator'} onClick={() => setCurrentView('generator')} />
+        <NavButton label="🎲 Dice" isActive={currentView === 'dice'} onClick={() => setCurrentView('dice')} />
+        <NavButton label="📖 Bestiary" isActive={currentView === 'bestiary'} onClick={() => setCurrentView('bestiary')} />
+      </nav>
 
-      {/* --- MAIN CONTENT AREA --- */}
-      <div className="flex-1 overflow-hidden relative bg-black">
+      {/* --- MAIN CONTENT --- */}
+      <div className="flex-1 relative overflow-hidden">
         
-        {/* View: Character Generator */}
+        {currentView === 'home' && (
+          <MainMenu onNavigate={setCurrentView} />
+        )}
+
         {currentView === 'generator' && (
           <CharacterGenerator onCharacterComplete={handleCharacterReady} />
         )}
 
-        {/* View: Combat Screen */}
         {currentView === 'combat' && (
           <CombatScreen />
         )}
 
-        {/* View: Dice Roller */}
         {currentView === 'dice' && (
-          <div className="h-full relative z-40">
-            {/* We render DiceScreen directly. Since your component uses fixed inset-0, 
-                it will cover the specific div, but inside this layout it's safer. */}
-            <DiceScreen />
-            
-            {/* Close button overlay for Dice if it takes over full screen */}
-            <button 
-              onClick={() => setCurrentView('combat')}
-              className="absolute top-4 right-4 z-50 bg-red-900 text-white px-4 py-2 rounded border border-red-500"
-            >
-              Return to Combat
-            </button>
+           /* DiceScreen handles its own layout, but we wrap it to ensure it fits */
+          <div className="w-full h-full bg-black relative">
+             <DiceScreen />
+             {/* Floating back button specific for Dice view if needed */}
+             <button 
+               onClick={() => setCurrentView('home')}
+               className="absolute top-4 left-4 z-50 bg-stone-900/80 text-amber-500 border border-amber-900 px-3 py-1 rounded hover:bg-black"
+             >
+               ← Back to Menu
+             </button>
           </div>
         )}
 
-        {/* View: Bestiary */}
         {currentView === 'bestiary' && (
           <BestiaryPlaceholder />
         )}
@@ -120,17 +118,15 @@ export default function App() {
   );
 }
 
-// Simple Helper Component for Buttons
-const NavButton = ({ label, isActive, onClick, danger }) => (
+// Helper for Top Nav Buttons
+const NavButton = ({ label, isActive, onClick }) => (
   <button
     onClick={onClick}
     className={`
-      px-4 py-2 font-serif font-bold uppercase tracking-wider text-sm rounded transition-all
-      ${danger 
-        ? 'bg-red-900/20 text-red-500 border border-red-900 hover:bg-red-900 hover:text-white' 
-        : isActive 
-          ? 'bg-amber-700 text-white border border-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.4)]' 
-          : 'bg-stone-800 text-stone-400 border border-stone-700 hover:text-amber-500 hover:border-amber-700'
+      px-4 py-2 font-cinzel font-bold text-xs md:text-sm tracking-widest uppercase rounded transition-all
+      ${isActive 
+        ? 'bg-amber-900/40 text-amber-400 border border-amber-600/50 shadow-[0_0_10px_rgba(245,158,11,0.2)]' 
+        : 'text-stone-500 hover:text-amber-500 hover:bg-stone-900'
       }
     `}
   >
