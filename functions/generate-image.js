@@ -1,7 +1,7 @@
-
 export async function onRequest(context) {
   const { request } = context;
 
+  // 1. Handle CORS Preflight
   if (request.method === 'OPTIONS') {
     return new Response(null, {
       headers: {
@@ -12,6 +12,7 @@ export async function onRequest(context) {
     });
   }
 
+  // 2. Validate Method
   if (request.method !== 'POST') {
     return new Response(
       JSON.stringify({ error: 'Method not allowed' }),
@@ -38,20 +39,27 @@ export async function onRequest(context) {
       );
     }
 
-    // Use HF Inference API with provider parameter
-    // This uses the correct client-library format
-    const hfResponse = await fetch('https://huggingface.co/api/inference/textToImage', {
+    // --- FIX STARTS HERE ---
+    
+    // 3. Define Model URL directly
+    // The raw API requires the model ID to be in the URL, not the body.
+    const MODEL_ID = 'black-forest-labs/FLUX.1-schnell';
+    const API_URL = `https://api-inference.huggingface.co/models/${MODEL_ID}`;
+
+    // 4. Call the API
+    const hfResponse = await fetch(API_URL, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${HF_TOKEN}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'x-use-cache': 'false' // Optional: Forces a new generation rather than a cached one
       },
+      // Raw API expects "inputs" as the key for the prompt
       body: JSON.stringify({
-        model: 'black-forest-labs/FLUX.1-schnell',
-        inputs: prompt,
-        provider: 'auto'  // Let HF choose best provider
+        inputs: prompt
       })
     });
+    // --- FIX ENDS HERE ---
 
     if (!hfResponse.ok) {
       const errorText = await hfResponse.text();
@@ -65,7 +73,8 @@ export async function onRequest(context) {
       );
     }
 
-    // Convert image to base64
+    // 5. Handle Image Response
+    // The API returns the raw binary image (blob), not JSON.
     const imageBlob = await hfResponse.arrayBuffer();
     const base64 = btoa(String.fromCharCode(...new Uint8Array(imageBlob)));
 
