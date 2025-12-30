@@ -69,7 +69,20 @@ const CombatScreen = () => {
     // D. TURN CYCLE
     setTimeout(() => engine.nextTurn(), 1000);
   };
+// ... inside CombatScreen component ...
 
+const activeChar = engine.combatants.find(c => c.id === engine.activeCombatantId);
+
+// --- FIX: Add this Loading State ---
+if (!activeChar) {
+  return <div className="h-screen bg-gray-900 text-white flex items-center justify-center">
+    <div className="text-2xl animate-pulse">Summoning Combatants...</div>
+  </div>;
+}
+
+return (
+  <div className="h-screen flex flex-col bg-gray-900 overflow-hidden relative text-white">
+    {/* ... rest of your JSX ... */}
   return (
     <div className="h-screen flex flex-col bg-gray-900 overflow-hidden relative text-white">
       {/* View Sheet Button */}
