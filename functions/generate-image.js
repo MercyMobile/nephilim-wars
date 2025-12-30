@@ -38,15 +38,14 @@ export async function onRequest(context) {
       );
     }
 
-    // Use the serverless inference API endpoint
-    const endpoint = 'https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell';
+    // Use the correct router endpoint with /v1/ path
+    const endpoint = 'https://router.huggingface.co/v1/models/black-forest-labs/FLUX.1-schnell';
     
     const hfResponse = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${HF_TOKEN}`,
-        'Content-Type': 'application/json',
-        'x-use-cache': 'false'  // Don't use cached results
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({ inputs: prompt })
     });
@@ -74,7 +73,7 @@ export async function onRequest(context) {
 
   } catch (error) {
     return new Response(
-      JSON.stringify({ error: 'Internal error', message: error.message, stack: error.stack }),
+      JSON.stringify({ error: 'Internal error', message: error.message }),
       { status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
     );
   }
