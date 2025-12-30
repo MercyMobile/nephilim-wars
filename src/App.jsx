@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
 // --- 1. Import Your Screens ---
-import CharacterGenerator from './pages/CharacterGenerator'; // The new creator
-import CombatScreen from './pages/CombatScreen';             // The updated combat engine
-import DiceScreen from './components/DiceScreen';            // Your uploaded Dice file
+import CharacterGenerator from './pages/CharacterGenerator.jsx'; // The new creator
+import CombatScreen from './pages/CombatScreen.jsx';             // The updated combat engine
+import DiceScreen from './components/DiceScreen.jsx';            // Your uploaded Dice file
 
 // If you have a Bestiary component, import it here. 
 // If not, I have provided a placeholder below.
