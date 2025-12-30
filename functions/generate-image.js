@@ -21,11 +21,11 @@ export async function onRequest(context) {
 
   try {
     const body = await request.json();
-    const { model, prompt } = body;
+    const { prompt } = body;
 
-    if (!model || !prompt) {
+    if (!prompt) {
       return new Response(
-        JSON.stringify({ error: 'Missing model or prompt' }),
+        JSON.stringify({ error: 'Missing prompt' }),
         { status: 400, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
       );
     }
@@ -38,77 +38,43 @@ export async function onRequest(context) {
       );
     }
 
-    // Use Gradio space
-    const spaceUrl = 'https://evalstate-flux1-schnell.hf.space/call/flux1_schnell_infer';
+    // Use the serverless inference API endpoint
+    const endpoint = 'https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell';
     
-    // Start the prediction
-    const initResponse = await fetch(spaceUrl, {
+    const hfResponse = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${HF_TOKEN}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'x-use-cache': 'false'  // Don't use cached results
       },
-      body: JSON.stringify({
-        data: [prompt, 0, true, 1024, 1024, 4]  // prompt, seed, randomize_seed, width, height, steps
-      })
+      body: JSON.stringify({ inputs: prompt })
     });
 
-    if (!initResponse.ok) {
-      const errorText = await initResponse.text();
+    if (!hfResponse.ok) {
+      const errorText = await hfResponse.text();
       return new Response(
-        JSON.stringify({ error: 'Failed to start generation', details: errorText }),
-        { status: initResponse.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
+        JSON.stringify({ 
+          error: 'HF API error', 
+          status: hfResponse.status,
+          details: errorText 
+        }),
+        { status: hfResponse.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
       );
     }
 
-    const initData = await initResponse.json();
-    const eventId = initData.event_id;
-
-    // Poll for result
-    const resultUrl = `https://evalstate-flux1-schnell.hf.space/call/flux1_schnell_infer/${eventId}`;
-    
-    let attempts = 0;
-    while (attempts < 30) {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
-      
-      const resultResponse = await fetch(resultUrl, {
-        headers: { 'Authorization': `Bearer ${HF_TOKEN}` }
-      });
-
-      const text = await resultResponse.text();
-      const lines = text.trim().split('\n');
-      
-      for (const line of lines) {
-        if (line.startsWith('data: ')) {
-          const data = JSON.parse(line.slice(6));
-          if (data.msg === 'process_completed') {
-            // Get image URL from result
-            const imageUrl = data.output.data[0][0].image.url;
-            
-            // Fetch the image
-            const imgResponse = await fetch(imageUrl);
-            const imageBlob = await imgResponse.arrayBuffer();
-            const base64 = btoa(String.fromCharCode(...new Uint8Array(imageBlob)));
-
-            return new Response(
-              JSON.stringify({ success: true, image: base64 }),
-              { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
-            );
-          }
-        }
-      }
-      
-      attempts++;
-    }
+    // Convert image to base64
+    const imageBlob = await hfResponse.arrayBuffer();
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(imageBlob)));
 
     return new Response(
-      JSON.stringify({ error: 'Generation timeout' }),
-      { status: 504, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
+      JSON.stringify({ success: true, image: base64 }),
+      { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
     );
 
   } catch (error) {
     return new Response(
-      JSON.stringify({ error: 'Internal error', message: error.message }),
+      JSON.stringify({ error: 'Internal error', message: error.message, stack: error.stack }),
       { status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
     );
   }
