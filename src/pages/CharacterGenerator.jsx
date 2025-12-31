@@ -330,6 +330,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
 
     try {
       const fullPrompt = buildImagePrompt();
+      console.log('Generating image with prompt:', fullPrompt);
 
       const response = await fetch('/generate-image', {
         method: 'POST',
@@ -338,9 +339,11 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       });
 
       const data = await response.json();
+      console.log('API Response:', data);
 
       if (!response.ok) {
-        throw new Error(data.details || data.error || "Generation failed");
+        const errorMsg = data.message || data.details || data.error || "Generation failed";
+        throw new Error(errorMsg);
       }
 
       if (data.image) {
@@ -350,7 +353,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       }
 
     } catch (err) {
-      console.error(err);
+      console.error('Image generation error:', err);
       setError(`Error: ${err.message}`);
     } finally {
       setLoading(false);
