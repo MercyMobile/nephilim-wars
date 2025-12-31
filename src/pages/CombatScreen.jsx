@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import DiceRollerModal from '../components/DiceRollerModal';
 
 const CombatScreen = () => {
   const [playerCharacter, setPlayerCharacter] = useState(null);
@@ -8,6 +9,8 @@ const CombatScreen = () => {
   const [battleLog, setBattleLog] = useState([]);
   const [playerTurn, setPlayerTurn] = useState(true);
   const [rolling, setRolling] = useState(false);
+  const [showDiceRoller, setShowDiceRoller] = useState(false);
+  const [pendingAttack, setPendingAttack] = useState(null);
 
   // Load player character and bestiary
   useEffect(() => {
@@ -71,70 +74,72 @@ const CombatScreen = () => {
     return total;
   };
 
-  // Handle attack
+  // Handle attack - trigger dice roller
   const handleAttack = (attacker, defender, action) => {
-    setRolling(true);
+    setPendingAttack({ attacker, defender, action });
+    setShowDiceRoller(true);
+  };
 
-    setTimeout(() => {
-      const d20 = rollD20();
-      const toHit = d20 + action.toHitBonus;
-      const isHit = toHit >= (defender.stats?.defense || defender.defense);
+  // Process attack result after dice roll
+  const processAttackResult = (d20) => {
+    const { attacker, defender, action } = pendingAttack;
+    const toHit = d20 + action.toHitBonus;
+    const isHit = toHit >= (defender.stats?.defense || defender.defense);
 
-      let damage = 0;
-      let logMessage = '';
+    let damage = 0;
+    let logMessage = '';
 
-      if (d20 === 20) {
-        // Critical hit
-        damage = rollDamage(action.damageDice) * 2 + action.damageBonus;
-        logMessage = `🔥 CRITICAL HIT! ${attacker.name} rolled NAT 20! ${action.name} deals ${damage} ${action.damageType} damage!`;
-      } else if (d20 === 1) {
-        // Critical miss
-        logMessage = `💀 CRITICAL MISS! ${attacker.name} rolled NAT 1! ${action.name} fails completely!`;
-      } else if (isHit) {
-        // Normal hit
-        damage = rollDamage(action.damageDice) + action.damageBonus;
-        logMessage = `⚔️ ${attacker.name} rolled ${d20}+${action.toHitBonus}=${toHit} vs DEF ${defender.stats?.defense || defender.defense}. ${action.name} hits for ${damage} ${action.damageType} damage!`;
-      } else {
-        // Miss
-        logMessage = `🛡️ ${attacker.name} rolled ${d20}+${action.toHitBonus}=${toHit} vs DEF ${defender.stats?.defense || defender.defense}. ${action.name} misses!`;
-      }
+    if (d20 === 20) {
+      // Critical hit
+      damage = rollDamage(action.damageDice) * 2 + action.damageBonus;
+      logMessage = `🔥 CRITICAL HIT! ${attacker.name} rolled NAT 20! ${action.name} deals ${damage} ${action.damageType} damage!`;
+    } else if (d20 === 1) {
+      // Critical miss
+      logMessage = `💀 CRITICAL MISS! ${attacker.name} rolled NAT 1! ${action.name} fails completely!`;
+    } else if (isHit) {
+      // Normal hit
+      damage = rollDamage(action.damageDice) + action.damageBonus;
+      logMessage = `⚔️ ${attacker.name} rolled ${d20}+${action.toHitBonus}=${toHit} vs DEF ${defender.stats?.defense || defender.defense}. ${action.name} hits for ${damage} ${action.damageType} damage!`;
+    } else {
+      // Miss
+      logMessage = `🛡️ ${attacker.name} rolled ${d20}+${action.toHitBonus}=${toHit} vs DEF ${defender.stats?.defense || defender.defense}. ${action.name} misses!`;
+    }
 
-      // Apply damage
-      if (damage > 0) {
-        if (attacker === playerCharacter) {
-          setEnemy(prev => ({
-            ...prev,
-            currentHp: Math.max(0, prev.currentHp - damage)
-          }));
-        } else {
-          setPlayerCharacter(prev => ({
-            ...prev,
-            currentHp: Math.max(0, prev.currentHp - damage)
-          }));
-        }
-      }
-
-      // Add to battle log
-      setBattleLog(prev => [{
-        id: Date.now(),
-        message: logMessage,
-        type: isHit ? 'hit' : 'miss',
-        actor: attacker.name
-      }, ...prev].slice(0, 10));
-
-      setRolling(false);
-
-      // Switch turns
+    // Apply damage
+    if (damage > 0) {
       if (attacker === playerCharacter) {
-        setTimeout(() => {
-          setPlayerTurn(false);
-          // Enemy AI turn
-          setTimeout(() => enemyTurn(), 1500);
-        }, 1000);
+        setEnemy(prev => ({
+          ...prev,
+          currentHp: Math.max(0, prev.currentHp - damage)
+        }));
       } else {
-        setPlayerTurn(true);
+        setPlayerCharacter(prev => ({
+          ...prev,
+          currentHp: Math.max(0, prev.currentHp - damage)
+        }));
       }
-    }, 1000);
+    }
+
+    // Add to battle log
+    setBattleLog(prev => [{
+      id: Date.now(),
+      message: logMessage,
+      type: isHit ? 'hit' : 'miss',
+      actor: attacker.name
+    }, ...prev].slice(0, 10));
+
+    // Switch turns
+    if (attacker === playerCharacter) {
+      setTimeout(() => {
+        setPlayerTurn(false);
+        // Enemy AI turn
+        setTimeout(() => enemyTurn(), 1500);
+      }, 500);
+    } else {
+      setPlayerTurn(true);
+    }
+
+    setPendingAttack(null);
   };
 
   // Enemy AI turn
@@ -180,14 +185,23 @@ const CombatScreen = () => {
   }
 
   return (
-    <div className="h-full bg-[#0c0a09] text-[#d6d3d1] font-serif overflow-auto">
-      <div className="max-w-7xl mx-auto p-6">
+    <>
+      {/* Dice Roller Modal */}
+      <DiceRollerModal
+        isOpen={showDiceRoller}
+        onClose={() => setShowDiceRoller(false)}
+        diceType="d20"
+        onResult={processAttackResult}
+      />
 
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-5xl font-cinzel font-bold text-amber-500 mb-2">COMBAT ARENA</h1>
-          <div className="h-1 w-48 bg-gradient-to-r from-transparent via-amber-700 to-transparent mx-auto"></div>
-        </div>
+      <div className="h-full bg-[#0c0a09] text-[#d6d3d1] font-serif overflow-auto">
+        <div className="max-w-7xl mx-auto p-6">
+
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-5xl font-cinzel font-bold text-amber-500 mb-2">COMBAT ARENA</h1>
+            <div className="h-1 w-48 bg-gradient-to-r from-transparent via-amber-700 to-transparent mx-auto"></div>
+          </div>
 
         {/* Enemy Selection */}
         {!enemy && (
@@ -398,6 +412,8 @@ const CharacterCard = ({ character, isPlayer, isActive, isVictory, isDefeat }) =
         </div>
       </div>
     </div>
+      </div>
+    </>
   );
 };
 
