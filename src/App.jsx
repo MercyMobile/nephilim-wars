@@ -59,6 +59,7 @@ export default function App() {
   const [currentView, setCurrentView] = useState('home');
   const [characterExists, setCharacterExists] = useState(false);
   const [loreTab, setLoreTab] = useState('codex'); // Track active lore tab
+  const [rulesTab, setRulesTab] = useState('combat'); // Track active rules tab
 
   // Check for saved character on load
   useEffect(() => {
@@ -133,12 +134,56 @@ export default function App() {
         )}
 
         {currentView === 'rules' && (
-          <div className="h-full w-full bg-stone-900">
-            <iframe
-              src="/combat/index.html"
-              className="w-full h-full border-0"
-              title="Rules of Engagement"
-            />
+          <div className="h-full w-full bg-stone-900 flex flex-col">
+            {/* Header */}
+            <div className="bg-stone-950 border-b border-amber-900/50 p-4 text-center">
+              <h2 className="text-2xl font-cinzel font-bold text-amber-500">Rules of Engagement</h2>
+              <p className="text-stone-400 text-sm mt-1">Combat System & Class Guides</p>
+            </div>
+
+            {/* Tab Navigation */}
+            <div className="flex flex-wrap gap-2 bg-stone-950 border-b border-stone-800 p-2">
+              <button
+                onClick={() => setRulesTab('combat')}
+                className={`px-3 sm:px-4 py-2 font-cinzel text-xs sm:text-sm uppercase tracking-widest rounded transition-all flex-1 sm:flex-initial ${
+                  rulesTab === 'combat'
+                    ? 'bg-amber-900/40 text-amber-400 border border-amber-600/50'
+                    : 'text-stone-500 hover:text-amber-500 hover:bg-stone-900'
+                }`}
+              >
+                <span className="hidden sm:inline">⚔️ Combat Rules</span>
+                <span className="sm:hidden">⚔️ Combat</span>
+              </button>
+              <button
+                onClick={() => setRulesTab('classes')}
+                className={`px-3 sm:px-4 py-2 font-cinzel text-xs sm:text-sm uppercase tracking-widest rounded transition-all flex-1 sm:flex-initial ${
+                  rulesTab === 'classes'
+                    ? 'bg-amber-900/40 text-amber-400 border border-amber-600/50'
+                    : 'text-stone-500 hover:text-amber-500 hover:bg-stone-900'
+                }`}
+              >
+                <span className="hidden sm:inline">📋 Class Guide</span>
+                <span className="sm:hidden">📋 Classes</span>
+              </button>
+            </div>
+
+            {/* Content Area */}
+            <div className="flex-1 overflow-hidden">
+              {rulesTab === 'combat' && (
+                <iframe
+                  src="/combat/index.html"
+                  className="w-full h-full border-0"
+                  title="Combat Rules"
+                />
+              )}
+              {rulesTab === 'classes' && (
+                <iframe
+                  src="/rules/classes.html"
+                  className="w-full h-full border-0"
+                  title="Class Guide"
+                />
+              )}
+            </div>
           </div>
         )}
 

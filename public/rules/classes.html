@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nephilim Wars - Class Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cinzel', serif;
+            background: linear-gradient(135deg, #0c0a09 0%, #1c1917 100%);
+            color: #d6d3d1;
+            padding: 2rem;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #fcd34d;
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(252, 211, 77, 0.3);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #a8a29e;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .class-section {
+            background: rgba(28, 25, 23, 0.6);
+            border: 2px solid #78350f;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .class-section h2 {
+            color: #f59e0b;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #78350f;
+            padding-bottom: 0.5rem;
+        }
+
+        .class-section h3 {
+            color: #fcd34d;
+            font-size: 1.3rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .stat-box {
+            background: rgba(12, 10, 9, 0.8);
+            border: 1px solid #44403c;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .stat-label {
+            color: #f59e0b;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            color: #d6d3d1;
+            font-size: 1rem;
+        }
+
+        ul {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        li:before {
+            content: "⚔️";
+            position: absolute;
+            left: 0;
+        }
+
+        .weapon-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .weapon-table th {
+            background: rgba(120, 53, 15, 0.3);
+            color: #fcd34d;
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid #78350f;
+            font-weight: 600;
+        }
+
+        .weapon-table td {
+            padding: 0.75rem;
+            border: 1px solid #44403c;
+            background: rgba(12, 10, 9, 0.4);
+        }
+
+        .highlight {
+            color: #fcd34d;
+            font-weight: 600;
+        }
+
+        .damage-type {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .slashing { background: #7c2d12; color: #fca5a5; }
+        .piercing { background: #1e3a8a; color: #93c5fd; }
+        .bludgeoning { background: #78350f; color: #fed7aa; }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .class-section {
+                padding: 1.5rem;
+            }
+
+            .weapon-table {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚔️ Class Guide ⚔️</h1>
+        <p class="subtitle">Master the art of warfare through understanding your class</p>
+
+        <!-- Warrior Class -->
+        <div class="class-section">
+            <h2>🛡️ Warrior</h2>
+            <p>Masters of combat and physical prowess, warriors are the backbone of any army. They excel in melee combat and can withstand tremendous punishment on the battlefield.</p>
+
+            <h3>Class Bonuses</h3>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Hit Points</div>
+                    <div class="stat-value">d10 per level (highest)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Primary Attributes</div>
+                    <div class="stat-value">Strength, Constitution</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Armor Proficiency</div>
+                    <div class="stat-value">All armor and shields</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Weapon Proficiency</div>
+                    <div class="stat-value">All weapons</div>
+                </div>
+            </div>
+
+            <h3>Special Abilities</h3>
+            <ul>
+                <li><span class="highlight">Action Surge:</span> Take an additional action in combat once per short rest</li>
+                <li><span class="highlight">Second Wind:</span> Regain HP as a bonus action</li>
+                <li><span class="highlight">Extra Attack:</span> Attack twice per action at higher levels</li>
+                <li><span class="highlight">Indomitable:</span> Reroll a failed saving throw</li>
+            </ul>
+
+            <h3>Recommended Weapons</h3>
+            <table class="weapon-table">
+                <tr>
+                    <th>Weapon</th>
+                    <th>Damage</th>
+                    <th>Type</th>
+                    <th>Properties</th>
+                </tr>
+                <tr>
+                    <td>Greatsword</td>
+                    <td>2d6</td>
+                    <td><span class="damage-type slashing">Slashing</span></td>
+                    <td>Two-handed, Heavy</td>
+                </tr>
+                <tr>
+                    <td>Longsword</td>
+                    <td>1d8 (1d10)</td>
+                    <td><span class="damage-type slashing">Slashing</span></td>
+                    <td>Versatile</td>
+                </tr>
+                <tr>
+                    <td>Battle Axe</td>
+                    <td>1d8 (1d10)</td>
+                    <td><span class="damage-type slashing">Slashing</span></td>
+                    <td>Versatile</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Ranger Class -->
+        <div class="class-section">
+            <h2>🏹 Ranger</h2>
+            <p>Expert trackers and hunters, rangers combine martial prowess with nature magic. They excel at ranged combat and wilderness survival.</p>
+
+            <h3>Class Bonuses</h3>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Hit Points</div>
+                    <div class="stat-value">d8 per level</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Primary Attributes</div>
+                    <div class="stat-value">Dexterity, Wisdom</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Armor Proficiency</div>
+                    <div class="stat-value">Light and medium armor, shields</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Weapon Proficiency</div>
+                    <div class="stat-value">Simple and martial weapons</div>
+                </div>
+            </div>
+
+            <h3>Special Abilities</h3>
+            <ul>
+                <li><span class="highlight">Favored Enemy:</span> Bonus damage against specific creature types</li>
+                <li><span class="highlight">Natural Explorer:</span> Advantages in favored terrain</li>
+                <li><span class="highlight">Hunter's Mark:</span> Mark a target for additional damage</li>
+                <li><span class="highlight">Multiattack:</span> Attack twice per action at higher levels</li>
+            </ul>
+
+            <h3>Recommended Weapons</h3>
+            <table class="weapon-table">
+                <tr>
+                    <th>Weapon</th>
+                    <th>Damage</th>
+                    <th>Type</th>
+                    <th>Properties</th>
+                </tr>
+                <tr>
+                    <td>Longbow</td>
+                    <td>1d8</td>
+                    <td><span class="damage-type piercing">Piercing</span></td>
+                    <td>Ranged (150/600), Heavy, Two-handed</td>
+                </tr>
+                <tr>
+                    <td>Shortbow</td>
+                    <td>1d6</td>
+                    <td><span class="damage-type piercing">Piercing</span></td>
+                    <td>Ranged (80/320), Two-handed</td>
+                </tr>
+                <tr>
+                    <td>Rapier</td>
+                    <td>1d8</td>
+                    <td><span class="damage-type piercing">Piercing</span></td>
+                    <td>Finesse</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Mage Class -->
+        <div class="class-section">
+            <h2>🔮 Mage</h2>
+            <p>Wielders of arcane power, mages command the forces of magic to devastating effect. While physically frail, their spells can turn the tide of battle.</p>
+
+            <h3>Class Bonuses</h3>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Hit Points</div>
+                    <div class="stat-value">d6 per level (lowest)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Primary Attributes</div>
+                    <div class="stat-value">Intelligence</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Armor Proficiency</div>
+                    <div class="stat-value">None (can use Mage Armor spell)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Weapon Proficiency</div>
+                    <div class="stat-value">Daggers, darts, slings, quarterstaffs, light crossbows</div>
+                </div>
+            </div>
+
+            <h3>Special Abilities</h3>
+            <ul>
+                <li><span class="highlight">Spellcasting:</span> Access to the most powerful arcane spells</li>
+                <li><span class="highlight">Arcane Recovery:</span> Recover spell slots during short rest</li>
+                <li><span class="highlight">Spell Mastery:</span> Cast certain low-level spells at will</li>
+                <li><span class="highlight">Signature Spells:</span> Cast high-level spells without using spell slots</li>
+            </ul>
+
+            <h3>Spell Damage Types</h3>
+            <ul>
+                <li><span class="highlight">Fire:</span> Fireball, Flame Strike - High damage, area effect</li>
+                <li><span class="highlight">Lightning:</span> Lightning Bolt, Chain Lightning - Line and chain attacks</li>
+                <li><span class="highlight">Ice:</span> Ice Storm, Cone of Cold - Damage plus slow effects</li>
+                <li><span class="highlight">Force:</span> Magic Missile, Eldritch Blast - Guaranteed hits</li>
+                <li><span class="highlight">Necrotic:</span> Blight, Finger of Death - Life drain effects</li>
+            </ul>
+
+            <h3>Limitations</h3>
+            <ul>
+                <li>Low hit points - must avoid melee combat</li>
+                <li>Limited armor options - relies on defensive spells</li>
+                <li>Spell slots - powerful but limited resource</li>
+                <li>Concentration - many powerful spells require maintaining focus</li>
+            </ul>
+        </div>
+
+        <!-- Cleric Class -->
+        <div class="class-section">
+            <h2>✨ Cleric</h2>
+            <p>Divine champions who channel the power of the heavens, clerics balance healing and support with formidable combat abilities.</p>
+
+            <h3>Class Bonuses</h3>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Hit Points</div>
+                    <div class="stat-value">d8 per level</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Primary Attributes</div>
+                    <div class="stat-value">Wisdom</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Armor Proficiency</div>
+                    <div class="stat-value">Light and medium armor, shields</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Weapon Proficiency</div>
+                    <div class="stat-value">Simple weapons</div>
+                </div>
+            </div>
+
+            <h3>Special Abilities</h3>
+            <ul>
+                <li><span class="highlight">Channel Divinity:</span> Turn undead or other divine effects</li>
+                <li><span class="highlight">Divine Domain:</span> Specialized abilities based on deity</li>
+                <li><span class="highlight">Healing Word:</span> Bonus action healing at range</li>
+                <li><span class="highlight">Divine Intervention:</span> Call upon deity for miraculous aid</li>
+            </ul>
+
+            <h3>Spell Types</h3>
+            <ul>
+                <li><span class="highlight">Healing:</span> Cure Wounds, Healing Word, Mass Heal</li>
+                <li><span class="highlight">Radiant Damage:</span> Sacred Flame, Guiding Bolt, Flame Strike</li>
+                <li><span class="highlight">Buffs:</span> Bless, Shield of Faith, Spiritual Weapon</li>
+                <li><span class="highlight">Control:</span> Hold Person, Command, Banishment</li>
+            </ul>
+        </div>
+
+        <!-- General Combat Tips -->
+        <div class="class-section">
+            <h2>⚔️ General Combat Tips</h2>
+
+            <h3>Understanding Damage Types</h3>
+            <ul>
+                <li><span class="highlight">Slashing:</span> Swords, axes - effective against unarmored foes</li>
+                <li><span class="highlight">Piercing:</span> Arrows, spears - can penetrate armor</li>
+                <li><span class="highlight">Bludgeoning:</span> Clubs, hammers - effective against skeletons and constructs</li>
+            </ul>
+
+            <h3>Combat Modifiers</h3>
+            <ul>
+                <li><span class="highlight">Advantage:</span> Roll twice, take higher result (+5 equivalent)</li>
+                <li><span class="highlight">Disadvantage:</span> Roll twice, take lower result (-5 equivalent)</li>
+                <li><span class="highlight">Cover:</span> Half cover (+2 AC), Three-quarters (+5 AC), Full (can't be targeted)</li>
+                <li><span class="highlight">Flanking:</span> Advantage on attacks when allies surround enemy</li>
+            </ul>
+
+            <h3>Action Economy</h3>
+            <ul>
+                <li><span class="highlight">Action:</span> Attack, cast spell, dash, disengage, dodge, help</li>
+                <li><span class="highlight">Bonus Action:</span> Second Wind, healing word, off-hand attack</li>
+                <li><span class="highlight">Reaction:</span> Opportunity attack, shield spell, counterspell</li>
+                <li><span class="highlight">Movement:</span> Can be split before and after action</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
