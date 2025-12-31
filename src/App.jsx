@@ -29,9 +29,11 @@ const MainMenu = ({ onNavigate }) => (
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
         <MenuButton onClick={() => onNavigate('combat')} icon="⚔️" title="Enter Combat" desc="Tactical Warfare" />
-        <MenuButton onClick={() => onNavigate('generator')} icon="✨" title="Soul Forge" desc="Create Character" />
+        <MenuButton onClick={() => onNavigate('generator')} icon="✨" title="Create Character" desc="Historical Builder" />
         <MenuButton onClick={() => onNavigate('dice')} icon="🎲" title="Dice Roller" desc="3D Physics" />
         <MenuButton onClick={() => onNavigate('bestiary')} icon="📖" title="Bestiary" desc="Lore & Stats" />
+        <MenuButton onClick={() => onNavigate('rules')} icon="📜" title="Rules of Engagement" desc="Combat System" />
+        <MenuButton onClick={() => onNavigate('lore')} icon="📚" title="Lore Codex" desc="History & Peoples" />
       </div>
 
       <div className="text-xs text-stone-600 uppercase tracking-widest mt-8">Version 0.9.2 • Mercy Mobile</div>
@@ -78,6 +80,8 @@ export default function App() {
         <NavButton label="✨ Create Character" isActive={currentView === 'generator'} onClick={() => setCurrentView('generator')} />
         <NavButton label="🎲 Dice" isActive={currentView === 'dice'} onClick={() => setCurrentView('dice')} />
         <NavButton label="📖 Bestiary" isActive={currentView === 'bestiary'} onClick={() => setCurrentView('bestiary')} />
+        <NavButton label="📜 Rules" isActive={currentView === 'rules'} onClick={() => setCurrentView('rules')} />
+        <NavButton label="📚 Lore" isActive={currentView === 'lore'} onClick={() => setCurrentView('lore')} />
       </nav>
 
       {/* --- MAIN CONTENT --- */}
@@ -113,6 +117,49 @@ export default function App() {
           <BestiaryPlaceholder />
         )}
 
+        {currentView === 'rules' && (
+          <div className="h-full bg-stone-900 text-amber-500 flex flex-col items-center justify-center font-serif p-8">
+            <div className="text-6xl mb-4">📜</div>
+            <div className="text-3xl border-b-2 border-amber-700 pb-2">Rules of Engagement</div>
+            <p className="mt-4 text-stone-400 text-center max-w-2xl">
+              The complete combat system documentation is being prepared. For now, consult the combat screen for active mechanics.
+            </p>
+            <a
+              href="/public/nephilim_wars_combat_system.html"
+              target="_blank"
+              className="mt-6 px-6 py-3 bg-amber-900/40 border border-amber-600 text-amber-400 font-bold uppercase tracking-widest hover:bg-amber-800 transition"
+            >
+              View Combat Rules (HTML)
+            </a>
+          </div>
+        )}
+
+        {currentView === 'lore' && (
+          <div className="h-full bg-stone-900 text-amber-500 flex flex-col items-center justify-center font-serif p-8">
+            <div className="text-6xl mb-4">📚</div>
+            <div className="text-3xl border-b-2 border-amber-700 pb-2">Lore Codex</div>
+            <p className="mt-4 text-stone-400 text-center max-w-2xl">
+              Explore the ancient peoples, angels, giants, and history of the antediluvian world.
+            </p>
+            <div className="flex gap-4 mt-6">
+              <a
+                href="/public/encyclopedia/index.html"
+                target="_blank"
+                className="px-6 py-3 bg-amber-900/40 border border-amber-600 text-amber-400 font-bold uppercase tracking-widest hover:bg-amber-800 transition"
+              >
+                Codex Angelorum
+              </a>
+              <a
+                href="/public/encyclopedia/nephilim_wars_races_and_peoples.html"
+                target="_blank"
+                className="px-6 py-3 bg-amber-900/40 border border-amber-600 text-amber-400 font-bold uppercase tracking-widest hover:bg-amber-800 transition"
+              >
+                Races & Peoples
+              </a>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
@@ -123,9 +170,9 @@ const NavButton = ({ label, isActive, onClick }) => (
   <button
     onClick={onClick}
     className={`
-      px-4 py-2 font-cinzel font-bold text-xs md:text-sm tracking-widest uppercase rounded transition-all
-      ${isActive 
-        ? 'bg-amber-900/40 text-amber-400 border border-amber-600/50 shadow-[0_0_10px_rgba(245,158,11,0.2)]' 
+      px-5 py-2.5 font-cinzel font-bold text-sm tracking-widest uppercase rounded transition-all min-w-[140px]
+      ${isActive
+        ? 'bg-amber-900/40 text-amber-400 border border-amber-600/50 shadow-[0_0_10px_rgba(245,158,11,0.2)]'
         : 'text-stone-500 hover:text-amber-500 hover:bg-stone-900'
       }
     `}
