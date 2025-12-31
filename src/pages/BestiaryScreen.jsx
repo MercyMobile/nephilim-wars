@@ -370,13 +370,13 @@ const BestiaryScreen = () => {
                   {/* Image Section */}
                   {creature.image && (
                     <div
-                      className="md:w-64 flex-shrink-0 cursor-pointer group relative overflow-hidden bg-black"
+                      className="md:w-96 lg:w-[28rem] flex-shrink-0 cursor-pointer group relative overflow-hidden bg-black"
                       onClick={() => setSelectedImage(creature.image)}
                     >
                       <img
                         src={creature.image}
                         alt={creature.name}
-                        className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = `https://placehold.co/400x400/1c1917/f59e0b?text=${creature.name.replace(/ /g, '+')}`;
