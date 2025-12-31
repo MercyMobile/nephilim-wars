@@ -318,9 +318,9 @@ const BestiaryScreen = () => {
 
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-5xl font-cinzel font-bold text-amber-500 mb-2">BESTIARY OF THE ANCIENT WORLD</h1>
-            <div className="h-1 w-64 bg-gradient-to-r from-transparent via-amber-700 to-transparent mx-auto mb-3"></div>
-            <p className="text-stone-400 italic text-lg">Creatures from the Days of Noah</p>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-cinzel font-bold text-amber-500 mb-2">BESTIARY OF THE ANCIENT WORLD</h1>
+            <div className="h-1 w-48 sm:w-64 bg-gradient-to-r from-transparent via-amber-700 to-transparent mx-auto mb-3"></div>
+            <p className="text-stone-400 italic text-base sm:text-lg">Creatures from the Days of Noah</p>
           </div>
 
           {/* Category Tabs */}

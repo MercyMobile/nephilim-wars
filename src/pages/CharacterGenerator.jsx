@@ -507,9 +507,9 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
         <div className="max-w-5xl mx-auto border-2 border-[#78350f] bg-[#1c1917] rounded-lg overflow-hidden mb-8">
 
           {/* Header */}
-          <div className="bg-gradient-to-r from-[#78350f] to-[#92400e] p-6 text-center">
-            <h1 className="text-4xl font-cinzel font-bold text-[#fcd34d] mb-2">{finalCharacter.name}</h1>
-            <div className="text-[#d6d3d1] text-lg">
+          <div className="bg-gradient-to-r from-[#78350f] to-[#92400e] p-4 sm:p-6 text-center">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-cinzel font-bold text-[#fcd34d] mb-2">{finalCharacter.name}</h1>
+            <div className="text-[#d6d3d1] text-base sm:text-lg">
               {finalCharacter.sex} {finalCharacter.lineageData.name} • {finalCharacter.class}
             </div>
             <div className="text-[#a8a29e] text-sm mt-1">{finalCharacter.height} tall</div>
@@ -655,8 +655,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 py-8">
 
         {/* LEFT PANEL: CREATION FORM */}
-        <div className="border-2 border-[#78350f] bg-[#1c1917]/95 p-6 shadow-[0_0_40px_rgba(245,158,11,0.1)] rounded-sm">
-          <h1 className="text-4xl text-[#fcd34d] font-cinzel font-bold mb-6 border-b border-[#78350f] pb-2 tracking-widest text-center shadow-black drop-shadow-lg">
+        <div className="border-2 border-[#78350f] bg-[#1c1917]/95 p-4 sm:p-6 shadow-[0_0_40px_rgba(245,158,11,0.1)] rounded-sm">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl text-[#fcd34d] font-cinzel font-bold mb-6 border-b border-[#78350f] pb-2 tracking-widest text-center shadow-black drop-shadow-lg">
             CREATE CHARACTER
           </h1>
 

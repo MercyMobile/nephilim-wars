@@ -19,12 +19,12 @@ const MainMenu = ({ onNavigate }) => (
     {/* Dark overlay for better text contrast */}
     <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
 
-    <div className="z-10 text-center space-y-8 p-8 border-4 border-double border-amber-900/50 bg-stone-950/80 rounded-lg shadow-2xl max-w-2xl w-full backdrop-blur-sm">
+    <div className="z-10 text-center space-y-6 sm:space-y-8 p-4 sm:p-8 border-4 border-double border-amber-900/50 bg-stone-950/80 rounded-lg shadow-2xl max-w-2xl w-full backdrop-blur-sm mx-4">
 
       <div>
-        <h1 className="text-6xl font-cinzel text-amber-500 mb-2 text-shadow-lg">NEPHILIM WARS</h1>
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-cinzel text-amber-500 mb-2 text-shadow-lg">NEPHILIM WARS</h1>
         <div className="h-1 w-32 bg-gradient-to-r from-transparent via-amber-700 to-transparent mx-auto"></div>
-        <p className="text-stone-400 font-serif italic mt-2">Creation to Corruption</p>
+        <p className="text-sm sm:text-base text-stone-400 font-serif italic mt-2">Creation to Corruption</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
@@ -151,26 +151,28 @@ export default function App() {
             </div>
 
             {/* Tab Navigation */}
-            <div className="flex gap-2 bg-stone-950 border-b border-stone-800 p-2">
+            <div className="flex flex-wrap gap-2 bg-stone-950 border-b border-stone-800 p-2">
               <button
                 onClick={() => setLoreTab('codex')}
-                className={`px-4 py-2 font-cinzel text-sm uppercase tracking-widest rounded transition-all ${
+                className={`px-3 sm:px-4 py-2 font-cinzel text-xs sm:text-sm uppercase tracking-widest rounded transition-all flex-1 sm:flex-initial ${
                   loreTab === 'codex'
                     ? 'bg-amber-900/40 text-amber-400 border border-amber-600/50'
                     : 'text-stone-500 hover:text-amber-500 hover:bg-stone-900'
                 }`}
               >
-                📚 Codex Angelorum
+                <span className="hidden sm:inline">📚 Codex Angelorum</span>
+                <span className="sm:hidden">📚 Codex</span>
               </button>
               <button
                 onClick={() => setLoreTab('races')}
-                className={`px-4 py-2 font-cinzel text-sm uppercase tracking-widest rounded transition-all ${
+                className={`px-3 sm:px-4 py-2 font-cinzel text-xs sm:text-sm uppercase tracking-widest rounded transition-all flex-1 sm:flex-initial ${
                   loreTab === 'races'
                     ? 'bg-amber-900/40 text-amber-400 border border-amber-600/50'
                     : 'text-stone-500 hover:text-amber-500 hover:bg-stone-900'
                 }`}
               >
-                👥 Races & Peoples
+                <span className="hidden sm:inline">👥 Races & Peoples</span>
+                <span className="sm:hidden">👥 Races</span>
               </button>
             </div>
 
@@ -205,7 +207,7 @@ const NavButton = ({ label, isActive, onClick }) => (
   <button
     onClick={onClick}
     className={`
-      px-5 py-2.5 font-cinzel font-bold text-sm tracking-widest uppercase rounded transition-all min-w-[140px]
+      px-3 sm:px-5 py-2 sm:py-2.5 font-cinzel font-bold text-xs sm:text-sm tracking-widest uppercase rounded transition-all
       ${isActive
         ? 'bg-amber-900/40 text-amber-400 border border-amber-600/50 shadow-[0_0_10px_rgba(245,158,11,0.2)]'
         : 'text-stone-500 hover:text-amber-500 hover:bg-stone-900'

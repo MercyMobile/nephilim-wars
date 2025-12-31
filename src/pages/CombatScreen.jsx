@@ -199,8 +199,8 @@ const CombatScreen = () => {
 
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-5xl font-cinzel font-bold text-amber-500 mb-2">COMBAT ARENA</h1>
-            <div className="h-1 w-48 bg-gradient-to-r from-transparent via-amber-700 to-transparent mx-auto"></div>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-cinzel font-bold text-amber-500 mb-2">COMBAT ARENA</h1>
+            <div className="h-1 w-32 sm:w-48 bg-gradient-to-r from-transparent via-amber-700 to-transparent mx-auto"></div>
           </div>
 
         {/* Enemy Selection */}
