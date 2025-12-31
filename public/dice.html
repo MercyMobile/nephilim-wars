@@ -98,6 +98,10 @@
 <body>
     
     
+    <a href="/" class="nav-button" onclick="window.parent.postMessage('returnHome', '*'); return false;">
+        🏛️ Return Home
+    </a>
+
 
     <div id="canvas-container"></div>
 
@@ -111,7 +115,7 @@
 
         <div class="control-group">
             <label>🎲 Number of Dice</label>
-            <input type="number" id="dice-count" value="1" min="1" max="10">
+            <input type="number" id="dice-count" value="1" min="1" max="99">
         </div>
 
         <div class="control-group">

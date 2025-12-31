@@ -63,6 +63,17 @@ export default function App() {
     const saved = localStorage.getItem('generatedCharacter');
     if (saved) setCharacterExists(true);
   }, []);
+  // Listen for messages from iframe (dice roller)
+  useEffect(() => {
+    const handleMessage = (event) => {
+      if (event.data === 'returnHome') {
+        setCurrentView('home');
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
 
   const handleCharacterReady = () => {
     setCharacterExists(true);
