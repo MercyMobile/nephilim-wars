@@ -120,7 +120,7 @@ export default function App() {
         {currentView === 'rules' && (
           <div className="h-full w-full bg-stone-900">
             <iframe
-              src="/encyclopedia/nephilim_wars_races_and_peoples.html"
+              src="/combat/index.html"
               className="w-full h-full border-0"
               title="Rules of Engagement"
             />
@@ -128,27 +128,32 @@ export default function App() {
         )}
 
         {currentView === 'lore' && (
-          <div className="h-full bg-stone-900 text-amber-500 flex flex-col items-center justify-center font-serif p-8">
-            <div className="text-6xl mb-4">📚</div>
-            <div className="text-3xl border-b-2 border-amber-700 pb-2">Lore Codex</div>
-            <p className="mt-4 text-stone-400 text-center max-w-2xl">
-              Explore the ancient peoples, angels, giants, and history of the antediluvian world.
-            </p>
-            <div className="flex gap-4 mt-6">
-              <a
-                href="/public/encyclopedia/index.html"
-                target="_blank"
-                className="px-6 py-3 bg-amber-900/40 border border-amber-600 text-amber-400 font-bold uppercase tracking-widest hover:bg-amber-800 transition"
-              >
-                Codex Angelorum
-              </a>
-              <a
-                href="/public/encyclopedia/nephilim_wars_races_and_peoples.html"
-                target="_blank"
-                className="px-6 py-3 bg-amber-900/40 border border-amber-600 text-amber-400 font-bold uppercase tracking-widest hover:bg-amber-800 transition"
-              >
-                Races & Peoples
-              </a>
+          <div className="h-full w-full bg-stone-900 flex flex-col">
+            <div className="bg-stone-950 border-b border-amber-900/50 p-4 text-center">
+              <h2 className="text-2xl font-cinzel font-bold text-amber-500">Lore Codex</h2>
+              <p className="text-stone-400 text-sm mt-1">Ancient History & Peoples</p>
+            </div>
+            <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden">
+              <div className="h-full border-r border-stone-950">
+                <div className="bg-stone-800 p-2 text-center border-b border-stone-950">
+                  <span className="text-amber-500 font-cinzel text-sm uppercase tracking-widest">📚 Codex Angelorum</span>
+                </div>
+                <iframe
+                  src="/encyclopedia/index.html"
+                  className="w-full h-[calc(100%-40px)] border-0"
+                  title="Codex Angelorum"
+                />
+              </div>
+              <div className="h-full">
+                <div className="bg-stone-800 p-2 text-center border-b border-stone-950">
+                  <span className="text-amber-500 font-cinzel text-sm uppercase tracking-widest">👥 Races & Peoples</span>
+                </div>
+                <iframe
+                  src="/encyclopedia/nephilim_wars_races_and_peoples.html"
+                  className="w-full h-[calc(100%-40px)] border-0"
+                  title="Races & Peoples"
+                />
+              </div>
             </div>
           </div>
         )}
