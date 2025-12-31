@@ -84,7 +84,7 @@ const DiceRollerModal = ({ isOpen, onClose, diceType = 'd20', onResult }) => {
         {/* Embedded Dice Roller Iframe */}
         <iframe
           ref={iframeRef}
-          src="/dice.html"
+          src={`/dice.html?v=${Date.now()}`}
           title="3D Dice Roller"
           className="w-full h-full border-none"
           allow="scripts"
