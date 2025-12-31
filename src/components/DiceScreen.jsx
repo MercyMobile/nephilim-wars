@@ -2,6 +2,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import { getPartyRoster } from '../utils/storage';
 
 const DiceScreen = () => {
+  // Default weapons when no characters exist
+  const DEFAULT_WEAPONS = [
+    { id: 'dagger', name: 'Dagger', type: 'melee', toHitBonus: 5, damageDice: '1d4', damageBonus: 3, damageType: 'piercing' },
+    { id: 'shortsword', name: 'Shortsword', type: 'melee', toHitBonus: 5, damageDice: '1d6', damageBonus: 3, damageType: 'slashing' },
+    { id: 'longsword', name: 'Longsword', type: 'melee', toHitBonus: 5, damageDice: '1d8', damageBonus: 3, damageType: 'slashing' },
+    { id: 'greataxe', name: 'Greataxe', type: 'melee', toHitBonus: 5, damageDice: '1d12', damageBonus: 3, damageType: 'slashing' },
+    { id: 'shortbow', name: 'Shortbow', type: 'ranged', toHitBonus: 5, damageDice: '1d6', damageBonus: 3, damageType: 'piercing' },
+    { id: 'longbow', name: 'Longbow', type: 'ranged', toHitBonus: 5, damageDice: '1d8', damageBonus: 3, damageType: 'piercing' },
+    { id: 'crossbow', name: 'Crossbow', type: 'ranged', toHitBonus: 5, damageDice: '1d10', damageBonus: 0, damageType: 'piercing' },
+    { id: 'spear', name: 'Spear', type: 'melee', toHitBonus: 5, damageDice: '1d6', damageBonus: 3, damageType: 'piercing' }
+  ];
+
   const [selectedCharacter, setSelectedCharacter] = useState(null);
   const [selectedAction, setSelectedAction] = useState(null);
   const [modifier, setModifier] = useState(0);
@@ -14,21 +26,37 @@ const DiceScreen = () => {
 
   // Load party roster
   const [partyRoster, setPartyRoster] = useState([]);
+  const [availableActions, setAvailableActions] = useState(DEFAULT_WEAPONS);
+
   useEffect(() => {
     const roster = getPartyRoster();
     setPartyRoster(roster);
     if (roster.length > 0) {
       setSelectedCharacter(roster[0]);
       if (roster[0].actions && roster[0].actions.length > 0) {
+        setAvailableActions(roster[0].actions);
         setSelectedAction(roster[0].actions[0]);
+      } else {
+        // Character has no actions, use defaults
+        setAvailableActions(DEFAULT_WEAPONS);
+        setSelectedAction(DEFAULT_WEAPONS[0]);
       }
+    } else {
+      // No characters, use default weapons
+      setAvailableActions(DEFAULT_WEAPONS);
+      setSelectedAction(DEFAULT_WEAPONS[0]);
     }
   }, []);
 
   // Update selected action when character changes
   useEffect(() => {
     if (selectedCharacter && selectedCharacter.actions && selectedCharacter.actions.length > 0) {
+      setAvailableActions(selectedCharacter.actions);
       setSelectedAction(selectedCharacter.actions[0]);
+    } else if (selectedCharacter) {
+      // Character has no actions, use defaults
+      setAvailableActions(DEFAULT_WEAPONS);
+      setSelectedAction(DEFAULT_WEAPONS[0]);
     }
   }, [selectedCharacter]);
 
@@ -169,13 +197,13 @@ const DiceScreen = () => {
         )}
 
         {/* Weapon/Action Selection */}
-        {selectedCharacter && selectedCharacter.actions && selectedCharacter.actions.length > 0 && (
+        {availableActions && availableActions.length > 0 && (
           <div className="mb-6 sm:mb-8">
             <label className="block text-amber-500 font-cinzel font-bold text-sm sm:text-base mb-2 text-center">
-              SELECT WEAPON/ACTION
+              SELECT WEAPON/ACTION {!selectedCharacter && <span className="text-stone-500 text-xs">(Default Weapons)</span>}
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-              {selectedCharacter.actions.map((action) => (
+              {availableActions.map((action) => (
                 <button
                   key={action.id}
                   onClick={() => setSelectedAction(action)}
@@ -271,8 +299,7 @@ const DiceScreen = () => {
           <div className="text-center text-stone-500 py-8 sm:py-12">
             <div className="text-4xl sm:text-6xl mb-4">🎲</div>
             <p className="text-lg sm:text-xl mb-2">No characters in your roster yet!</p>
-            <p className="text-xs sm:text-sm">Create characters in the Character Generator to use weapons and actions</p>
-            <p className="text-xs sm:text-sm mt-4 text-stone-400">You can still use the Quick Dice Rolls above</p>
+            <p className="text-xs sm:text-sm">Default weapons are available above - Create characters in the Character Generator to use custom weapons and actions</p>
           </div>
         )}
 

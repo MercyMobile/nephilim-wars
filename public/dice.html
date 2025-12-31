@@ -22,10 +22,10 @@
             gap: 10px;
             padding: 15px 25px;
             border-radius: 8px;
-            background: rgba(28, 25, 23, 0.9); 
+            background: rgba(28, 25, 23, 0.9);
             border: 2px solid #b45309;
-            color: #fcd34d; 
-            text-decoration: none; 
+            color: #fcd34d;
+            text-decoration: none;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -39,6 +39,10 @@
             box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
             transform: translateY(-2px);
             color: #fff;
+        }
+        /* Hide nav button when embedded in iframe */
+        .is-iframe .nav-button {
+            display: none !important;
         }
 
         /* --- UI PANEL --- */
@@ -155,6 +159,11 @@
     </div>
 
     <script type="module">
+        // Detect if we're in an iframe and hide nav button
+        if (window.self !== window.top) {
+            document.body.classList.add('is-iframe');
+        }
+
         import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
         import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js';
 
