@@ -11,7 +11,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingRP: 2,
       startingCP: 0,
       hpBonus: 0,
-      size: "Medium (5-6ft)",
+      heightRange: { male: [65, 72], female: [60, 67] }, // inches
+      accessory: "prayer shawl, scroll case, or holy phylactery",
       visuals: "simple robes, prayer shawl, serene expression, holding scroll or staff, semitic features, ancient hebrew"
     },
     Cainite: {
@@ -22,7 +23,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingRP: 0,
       startingCP: 1,
       hpBonus: 0,
-      size: "Medium (5-6ft)",
+      heightRange: { male: [66, 73], female: [61, 68] },
+      accessory: "bronze jewelry, musical instrument (lyre/flute), or artisan's hammer",
       visuals: "adorned in gold and brass jewelry, fine dyed clothes, musical instrument or hammer, elaborate hair, sharp features"
     },
     Wanderer: {
@@ -33,7 +35,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingRP: 0,
       startingCP: 0,
       hpBonus: 0,
-      size: "Medium (5-6ft)",
+      heightRange: { male: [64, 71], female: [59, 66] },
+      accessory: "tribal totems, bone necklace, or hunting fetish",
       visuals: "weather-beaten skin, animal furs, tribal tattoos, bow on back, wild hair, dust covered"
     },
     Nephilim: {
@@ -44,7 +47,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingRP: 0,
       startingCP: 3,
       hpBonus: 10,
-      size: "Large (12-15ft)",
+      heightRange: { male: [144, 180], female: [132, 168] }, // 12-15ft
+      accessory: "massive bronze armor plates, giant's chain, or trophy skulls",
       visuals: "massive 12ft tall giant, glowing eyes, unnatural muscles, wearing heavy bronze armor, carrying massive weapon, imposing presence"
     },
     Rephaim: {
@@ -55,7 +59,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingRP: 0,
       startingCP: 2,
       hpBonus: 5,
-      size: "Large (9-11ft)",
+      heightRange: { male: [108, 132], female: [102, 126] }, // 9-11ft
+      accessory: "death shroud, spirit talisman, or ancient burial mask",
       visuals: "tall gaunt figure, pale grey skin, shadowy aura, ancient rusted armor, haunting eyes"
     },
     Anakim: {
@@ -66,7 +71,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingRP: 0,
       startingCP: 2,
       hpBonus: 8,
-      size: "Large (10-13ft)",
+      heightRange: { male: [120, 156], female: [114, 144] }, // 10-13ft
+      accessory: "heavy gold chains (neck/wrist), royal signet, or ceremonial shackles",
       visuals: "giant stature, wearing heavy gold chains around neck, regal posture, clean shaven head, royal bearing"
     },
     Gibborim: {
@@ -77,7 +83,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingRP: 0,
       startingCP: 1,
       hpBonus: 3,
-      size: "Medium-Large (7-8ft)",
+      heightRange: { male: [78, 96], female: [72, 90] }, // 6.5-8ft
+      accessory: "lion pelt cloak, hero's bronze bracers, or trophy weapon",
       visuals: "7ft tall, extremely muscular human, lion skin cloak, heroic pose, holding spear, warrior build"
     },
     Horim: {
@@ -88,7 +95,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingRP: 0,
       startingCP: 1,
       hpBonus: 2,
-      size: "Medium (6-7ft)",
+      heightRange: { male: [70, 82], female: [65, 77] }, // 6-7ft
+      accessory: "stone carving tools, luminescent fungi, or cave crystals",
       visuals: "pale skin, large black eyes, crouched posture, primitive stone tools, cave background, nocturnal"
     },
     Sorcerer: {
@@ -99,10 +107,76 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingRP: 0,
       startingCP: 2,
       hpBonus: 0,
-      size: "Medium (5-6ft)",
+      heightRange: { male: [65, 72], female: [60, 67] },
+      accessory: "star charts, ritual dagger, dried herbs pouch, or crystal focus",
       visuals: "robes covered in constellations, glowing runes on skin, holding strange herbs or crystals, purple magical aura, mystical"
     }
   };
+
+  // === PHYSICAL APPEARANCE OPTIONS ===
+  const SKIN_TONES = [
+    { value: "olive", label: "Olive (Semitic)" },
+    { value: "tan", label: "Tan (Levantine)" },
+    { value: "light brown", label: "Light Brown (Mesopotamian)" },
+    { value: "bronze", label: "Bronze (Desert Nomad)" },
+    { value: "dark brown", label: "Dark Brown (Cushite/African)" },
+    { value: "pale", label: "Pale (Cave Dweller/Northern)" },
+    { value: "ashen grey", label: "Ashen Grey (Rephaim/Undead)" },
+    { value: "unnaturally pale", label: "Unnaturally Pale (Nephilim)" }
+  ];
+
+  const EYE_COLORS = [
+    { value: "dark brown", label: "Dark Brown" },
+    { value: "brown", label: "Brown" },
+    { value: "amber", label: "Amber" },
+    { value: "hazel", label: "Hazel" },
+    { value: "green", label: "Green (Rare)" },
+    { value: "grey", label: "Grey" },
+    { value: "blue-grey", label: "Blue-Grey (Rare)" },
+    { value: "glowing amber", label: "Glowing Amber (Nephilim)" },
+    { value: "black voids", label: "Black Voids (Corrupted)" }
+  ];
+
+  const HAIR_COLORS = [
+    { value: "black", label: "Black" },
+    { value: "dark brown", label: "Dark Brown" },
+    { value: "brown", label: "Brown" },
+    { value: "auburn", label: "Auburn/Reddish" },
+    { value: "grey", label: "Grey (Elder)" },
+    { value: "white", label: "White (Ancient)" },
+    { value: "silver", label: "Silver (Unnatural)" }
+  ];
+
+  const HAIR_LENGTHS = [
+    { value: "bald", label: "Bald/Shaven" },
+    { value: "very short", label: "Very Short (< 2 inches)" },
+    { value: "short", label: "Short (2-4 inches)" },
+    { value: "shoulder length", label: "Shoulder Length" },
+    { value: "mid-back", label: "Mid-Back" },
+    { value: "waist length", label: "Waist Length" },
+    { value: "floor length", label: "Floor Length (Nazarite)" }
+  ];
+
+  const DISTINGUISHING_FEATURES = [
+    { value: "none", label: "None" },
+    { value: "battle scar across face", label: "Battle Scar (Face)" },
+    { value: "missing eye", label: "Missing Eye" },
+    { value: "eyepatch", label: "Eyepatch" },
+    { value: "blind milky eyes", label: "Blind (Milky Eyes)" },
+    { value: "ritual scarification", label: "Ritual Scarification" },
+    { value: "tribal tattoos", label: "Tribal Tattoos" },
+    { value: "burn scars", label: "Burn Scars" },
+    { value: "missing hand/arm", label: "Missing Hand/Arm" },
+    { value: "peg leg", label: "Peg Leg" },
+    { value: "hunched back", label: "Hunchback" },
+    { value: "leprosy scars", label: "Leprosy (Scars)" },
+    { value: "facial deformity", label: "Facial Deformity" },
+    { value: "branded mark", label: "Branded Mark" },
+    { value: "six fingers", label: "Six Fingers (Giant Blood)" },
+    { value: "unnaturally tall", label: "Unnaturally Tall" },
+    { value: "glowing runes", label: "Glowing Runes (Sorcerer)" },
+    { value: "prophet's beard", label: "Long Prophet's Beard" }
+  ];
 
   // === NAME DATABASES ===
   const NAMES = {
@@ -156,6 +230,12 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     lineage: 'Sethite',
     charClass: 'Warrior',
     sex: 'Male',
+    height: '',
+    skinTone: 'olive',
+    eyeColor: 'dark brown',
+    hairColor: 'black',
+    hairLength: 'shoulder length',
+    distinguishingFeature: 'none',
     background: 'ancient stone city',
     vibe: 'biblical epic',
     customVisuals: '',
@@ -168,9 +248,10 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
   const [showSheet, setShowSheet] = useState(false);
   const [finalCharacter, setFinalCharacter] = useState(null);
 
-  // === AUTO-GENERATE RANDOM NAME ===
+  // === AUTO-GENERATE RANDOM NAME & HEIGHT ===
   useEffect(() => {
     generateRandomName();
+    generateRandomHeight();
   }, [formData.lineage, formData.sex]);
 
   const generateRandomName = () => {
@@ -192,6 +273,15 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     setFormData(prev => ({ ...prev, name: randomName }));
   };
 
+  const generateRandomHeight = () => {
+    const race = RACES[formData.lineage];
+    const heightRange = race.heightRange[formData.sex.toLowerCase()];
+    const randomHeight = Math.floor(Math.random() * (heightRange[1] - heightRange[0] + 1)) + heightRange[0];
+    const feet = Math.floor(randomHeight / 12);
+    const inches = randomHeight % 12;
+    setFormData(prev => ({ ...prev, height: `${feet}'${inches}"` }));
+  };
+
   // === HANDLERS ===
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -210,14 +300,26 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     const customDesc = formData.customVisuals.trim();
 
     const basePrompt = `Fantasy character portrait of a ${formData.sex} ${raceData.name}, ${formData.charClass} class`;
+
+    // Physical description
+    const physicalDesc = `${formData.skinTone} skin, ${formData.eyeColor} eyes, ${formData.hairLength} ${formData.hairColor} hair`;
+
+    // Distinguishing feature
+    const featureDesc = formData.distinguishingFeature !== 'none' ? formData.distinguishingFeature : '';
+
+    // Race visuals
     const raceVisuals = raceData.visuals;
+
+    // Height context
+    const heightDesc = formData.height.includes("'") && parseInt(formData.height) > 8 ? "towering giant stature" : "";
+
     const settingDesc = `${formData.vibe} atmosphere, ${formData.background} background`;
     const styleDesc = "detailed biblical fantasy art, dramatic lighting, 8k resolution, oil painting style, historically accurate ancient near east";
 
     if (customDesc) {
-      return `${basePrompt}, ${customDesc}, ${settingDesc}, ${styleDesc}`;
+      return `${basePrompt}, ${physicalDesc}, ${featureDesc}, ${customDesc}, ${heightDesc}, ${settingDesc}, ${styleDesc}`.replace(/,\s*,/g, ',').trim();
     } else {
-      return `${basePrompt}, ${raceVisuals}, ${settingDesc}, ${styleDesc}`;
+      return `${basePrompt}, ${physicalDesc}, ${featureDesc}, ${raceVisuals}, ${heightDesc}, ${settingDesc}, ${styleDesc}`.replace(/,\s*,/g, ',').trim();
     }
   };
 
@@ -318,7 +420,13 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       lineageData: loreData,
       class: formData.charClass,
       sex: formData.sex,
-      size: loreData.size,
+      height: formData.height,
+      skinTone: formData.skinTone,
+      eyeColor: formData.eyeColor,
+      hairColor: formData.hairColor,
+      hairLength: formData.hairLength,
+      distinguishingFeature: formData.distinguishingFeature,
+      accessory: loreData.accessory,
       attributes: finalStats,
       hp: maxHp,
       maxHp: maxHp,
@@ -355,7 +463,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
             <div className="text-[#d6d3d1] text-lg">
               {finalCharacter.sex} {finalCharacter.lineageData.name} • {finalCharacter.class}
             </div>
-            <div className="text-[#a8a29e] text-sm mt-1">{finalCharacter.size}</div>
+            <div className="text-[#a8a29e] text-sm mt-1">{finalCharacter.height} tall</div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
@@ -367,6 +475,20 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
 
             {/* Stats Column */}
             <div className="space-y-6">
+
+              {/* Physical Appearance */}
+              <div>
+                <h3 className="text-[#f59e0b] font-bold text-lg mb-3 border-b border-[#44403c] pb-1">APPEARANCE</h3>
+                <div className="bg-[#0c0a09] border border-[#44403c] p-3 space-y-1 text-sm">
+                  <div><span className="text-[#78716c]">Skin:</span> <span className="text-[#d6d3d1] capitalize">{finalCharacter.skinTone}</span></div>
+                  <div><span className="text-[#78716c]">Eyes:</span> <span className="text-[#d6d3d1] capitalize">{finalCharacter.eyeColor}</span></div>
+                  <div><span className="text-[#78716c]">Hair:</span> <span className="text-[#d6d3d1] capitalize">{finalCharacter.hairLength} {finalCharacter.hairColor}</span></div>
+                  {finalCharacter.distinguishingFeature !== 'none' && (
+                    <div><span className="text-[#78716c]">Feature:</span> <span className="text-[#fcd34d] capitalize">{finalCharacter.distinguishingFeature}</span></div>
+                  )}
+                  <div><span className="text-[#78716c]">Accessory:</span> <span className="text-[#a8a29e] italic">{finalCharacter.accessory}</span></div>
+                </div>
+              </div>
 
               {/* Attributes */}
               <div>
@@ -474,11 +596,11 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
 
   // === CREATION FORM ===
   return (
-    <div className="min-h-screen bg-[#0c0a09] text-[#d6d3d1] font-serif flex items-center justify-center p-4">
-      <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="min-h-screen bg-[#0c0a09] text-[#d6d3d1] font-serif flex items-center justify-center p-4 overflow-y-auto">
+      <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8 my-8">
 
         {/* LEFT PANEL: CREATION FORM */}
-        <div className="border-2 border-[#78350f] bg-[#1c1917]/95 p-8 shadow-[0_0_40px_rgba(245,158,11,0.1)] rounded-sm">
+        <div className="border-2 border-[#78350f] bg-[#1c1917]/95 p-8 shadow-[0_0_40px_rgba(245,158,11,0.1)] rounded-sm max-h-[90vh] overflow-y-auto">
           <h1 className="text-4xl text-[#fcd34d] font-cinzel font-bold mb-6 border-b border-[#78350f] pb-2 tracking-widest text-center shadow-black drop-shadow-lg">
             CREATE CHARACTER
           </h1>
@@ -513,7 +635,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   name="lineage"
                   value={formData.lineage}
                   onChange={handleChange}
-                  className="w-full bg-black border border-[#44403c] p-2 text-white outline-none"
+                  className="w-full bg-black border border-[#44403c] p-2 text-white outline-none text-sm"
                 >
                   {Object.keys(RACES).map(key => (
                     <option key={key} value={key}>{RACES[key].name}</option>
@@ -526,7 +648,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   name="sex"
                   value={formData.sex}
                   onChange={handleChange}
-                  className="w-full bg-black border border-[#44403c] p-2 text-white outline-none"
+                  className="w-full bg-black border border-[#44403c] p-2 text-white outline-none text-sm"
                 >
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
@@ -537,7 +659,6 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
             {/* LORE INFO */}
             <div className="bg-[#292524] p-3 border-l-2 border-[#f59e0b] text-xs">
               <p className="text-[#d6d3d1] mb-1">{RACES[formData.lineage].desc}</p>
-              <p className="text-[#a8a29e] mb-1">{RACES[formData.lineage].size}</p>
               <p className="text-[#fcd34d] font-bold">
                 Bonuses: {Object.entries(RACES[formData.lineage].stats).map(([k,v]) => `${v>0?'+':''}${v} ${k}`).join(', ')}
               </p>
@@ -551,7 +672,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                 name="charClass"
                 value={formData.charClass}
                 onChange={handleChange}
-                className="w-full bg-black border border-[#44403c] p-2 text-white outline-none"
+                className="w-full bg-black border border-[#44403c] p-2 text-white outline-none text-sm"
               >
                 {CLASSES.map(cls => (
                   <option key={cls.value} value={cls.value}>{cls.label}</option>
@@ -559,8 +680,108 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
               </select>
             </div>
 
+            {/* PHYSICAL APPEARANCE */}
+            <div className="border-t border-[#44403c] pt-4">
+              <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-3">Physical Appearance</label>
+
+              {/* Height & Skin Tone */}
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                  <label className="block text-[#78716c] text-[10px] font-bold mb-1">HEIGHT</label>
+                  <div className="flex gap-2">
+                    <input
+                      name="height"
+                      value={formData.height}
+                      onChange={handleChange}
+                      className="flex-1 bg-black border border-[#44403c] p-2 text-white text-sm outline-none"
+                      placeholder="e.g. 6'2&quot;"
+                    />
+                    <button
+                      onClick={generateRandomHeight}
+                      className="px-2 bg-[#292524] border border-[#44403c] text-[#78716c] hover:text-[#fcd34d] text-xs transition"
+                    >
+                      🎲
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[#78716c] text-[10px] font-bold mb-1">SKIN TONE</label>
+                  <select
+                    name="skinTone"
+                    value={formData.skinTone}
+                    onChange={handleChange}
+                    className="w-full bg-black border border-[#44403c] p-2 text-white text-sm outline-none"
+                  >
+                    {SKIN_TONES.map(s => (
+                      <option key={s.value} value={s.value}>{s.label}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Eye & Hair Color */}
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                  <label className="block text-[#78716c] text-[10px] font-bold mb-1">EYE COLOR</label>
+                  <select
+                    name="eyeColor"
+                    value={formData.eyeColor}
+                    onChange={handleChange}
+                    className="w-full bg-black border border-[#44403c] p-2 text-white text-sm outline-none"
+                  >
+                    {EYE_COLORS.map(e => (
+                      <option key={e.value} value={e.value}>{e.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[#78716c] text-[10px] font-bold mb-1">HAIR COLOR</label>
+                  <select
+                    name="hairColor"
+                    value={formData.hairColor}
+                    onChange={handleChange}
+                    className="w-full bg-black border border-[#44403c] p-2 text-white text-sm outline-none"
+                  >
+                    {HAIR_COLORS.map(h => (
+                      <option key={h.value} value={h.value}>{h.label}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Hair Length & Features */}
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                  <label className="block text-[#78716c] text-[10px] font-bold mb-1">HAIR LENGTH</label>
+                  <select
+                    name="hairLength"
+                    value={formData.hairLength}
+                    onChange={handleChange}
+                    className="w-full bg-black border border-[#44403c] p-2 text-white text-sm outline-none"
+                  >
+                    {HAIR_LENGTHS.map(h => (
+                      <option key={h.value} value={h.value}>{h.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[#78716c] text-[10px] font-bold mb-1">DISTINGUISHING FEATURE</label>
+                  <select
+                    name="distinguishingFeature"
+                    value={formData.distinguishingFeature}
+                    onChange={handleChange}
+                    className="w-full bg-black border border-[#44403c] p-2 text-white text-sm outline-none"
+                  >
+                    {DISTINGUISHING_FEATURES.map(f => (
+                      <option key={f.value} value={f.value}>{f.label}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
             {/* ATTRIBUTES */}
-            <div>
+            <div className="border-t border-[#44403c] pt-4">
               <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-2">Base Attributes</label>
               <div className="grid grid-cols-6 gap-2">
                 {Object.keys(formData.attributes).map(attr => (
