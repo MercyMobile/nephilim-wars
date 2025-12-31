@@ -412,7 +412,6 @@ const CharacterCard = ({ character, isPlayer, isActive, isVictory, isDefeat }) =
         </div>
       </div>
     </div>
-      </div>
     </>
   );
 };
