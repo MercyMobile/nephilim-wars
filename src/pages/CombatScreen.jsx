@@ -326,8 +326,9 @@ const CombatScreen = () => {
             </div>
           </>
         )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
