@@ -54,9 +54,16 @@
         .class-section h2 {
             color: #f59e0b;
             font-size: 2rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             border-bottom: 2px solid #78350f;
             padding-bottom: 0.5rem;
+        }
+
+        .class-subtitle {
+            color: #a8a29e;
+            font-size: 1rem;
+            font-style: italic;
+            margin-bottom: 1rem;
         }
 
         .class-section h3 {
@@ -148,6 +155,14 @@
         .slashing { background: #7c2d12; color: #fca5a5; }
         .piercing { background: #1e3a8a; color: #93c5fd; }
         .bludgeoning { background: #78350f; color: #fed7aa; }
+        .fire { background: #7c2d12; color: #fca5a5; }
+        .cold { background: #1e3a8a; color: #93c5fd; }
+        .lightning { background: #1e40af; color: #bfdbfe; }
+        .force { background: #581c87; color: #e9d5ff; }
+        .poison { background: #14532d; color: #bbf7d0; }
+        .radiant { background: #713f12; color: #fef3c7; }
+        .thunder { background: #475569; color: #cbd5e1; }
+        .psychic { background: #7c2d12; color: #fda4af; }
 
         @media (max-width: 768px) {
             body {
@@ -171,104 +186,434 @@
 <body>
     <div class="container">
         <h1>⚔️ Class Guide ⚔️</h1>
-        <p class="subtitle">Master the art of warfare through understanding your class</p>
+        <p class="subtitle">The Seven Paths of the Antediluvian World</p>
 
         <!-- Warrior Class -->
         <div class="class-section">
             <h2>🛡️ Warrior</h2>
-            <p>Masters of combat and physical prowess, warriors are the backbone of any army. They excel in melee combat and can withstand tremendous punishment on the battlefield.</p>
+            <p class="class-subtitle">Tribal Fighter</p>
+            <p>Battle-hardened warriors form the backbone of tribal armies. Trained from youth in the art of combat, they master all manner of weapons and stand as protectors of their people against the threats of the antediluvian world.</p>
 
-            <h3>Class Bonuses</h3>
+            <h3>Class Characteristics</h3>
             <div class="stat-grid">
                 <div class="stat-box">
-                    <div class="stat-label">Hit Points</div>
-                    <div class="stat-value">d10 per level (highest)</div>
+                    <div class="stat-label">Combat Role</div>
+                    <div class="stat-value">Frontline Fighter & Defender</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-label">Primary Attributes</div>
-                    <div class="stat-value">Strength, Constitution</div>
+                    <div class="stat-label">Primary Attribute</div>
+                    <div class="stat-value">Strength (STR)</div>
                 </div>
                 <div class="stat-box">
                     <div class="stat-label">Armor Proficiency</div>
-                    <div class="stat-value">All armor and shields</div>
+                    <div class="stat-value">All armor types & shields</div>
                 </div>
                 <div class="stat-box">
                     <div class="stat-label">Weapon Proficiency</div>
-                    <div class="stat-value">All weapons</div>
+                    <div class="stat-value">All melee weapons</div>
                 </div>
             </div>
 
-            <h3>Special Abilities</h3>
-            <ul>
-                <li><span class="highlight">Action Surge:</span> Take an additional action in combat once per short rest</li>
-                <li><span class="highlight">Second Wind:</span> Regain HP as a bonus action</li>
-                <li><span class="highlight">Extra Attack:</span> Attack twice per action at higher levels</li>
-                <li><span class="highlight">Indomitable:</span> Reroll a failed saving throw</li>
-            </ul>
-
-            <h3>Recommended Weapons</h3>
+            <h3>Available Weapons</h3>
             <table class="weapon-table">
                 <tr>
                     <th>Weapon</th>
                     <th>Damage</th>
                     <th>Type</th>
-                    <th>Properties</th>
+                    <th>Special Properties</th>
                 </tr>
                 <tr>
-                    <td>Greatsword</td>
+                    <td>Bronze Longsword</td>
+                    <td>1d8 (1d10)</td>
+                    <td><span class="damage-type slashing">Slashing</span></td>
+                    <td>Versatile bronze blade</td>
+                </tr>
+                <tr>
+                    <td>Bronze Greatsword</td>
                     <td>2d6</td>
                     <td><span class="damage-type slashing">Slashing</span></td>
-                    <td>Two-handed, Heavy</td>
+                    <td>Massive two-handed weapon</td>
                 </tr>
                 <tr>
-                    <td>Longsword</td>
+                    <td>Bronze Battle Axe</td>
                     <td>1d8 (1d10)</td>
                     <td><span class="damage-type slashing">Slashing</span></td>
-                    <td>Versatile</td>
+                    <td>Heavy war axe</td>
                 </tr>
                 <tr>
-                    <td>Battle Axe</td>
+                    <td>Spear & Shield</td>
+                    <td>1d6 (1d8)</td>
+                    <td><span class="damage-type piercing">Piercing</span></td>
+                    <td>+2 AC from shield</td>
+                </tr>
+                <tr>
+                    <td>Bronze War Hammer</td>
                     <td>1d8 (1d10)</td>
-                    <td><span class="damage-type slashing">Slashing</span></td>
-                    <td>Versatile</td>
+                    <td><span class="damage-type bludgeoning">Bludgeoning</span></td>
+                    <td>Crushing weapon</td>
+                </tr>
+                <tr>
+                    <td>Bronze Flail</td>
+                    <td>1d8</td>
+                    <td><span class="damage-type bludgeoning">Bludgeoning</span></td>
+                    <td>Chained weapon, ignores shields</td>
                 </tr>
             </table>
+
+            <h3>Tactical Role</h3>
+            <ul>
+                <li>Hold the front line and protect weaker allies</li>
+                <li>Deal consistent melee damage in prolonged combat</li>
+                <li>Withstand enemy attacks with superior armor</li>
+                <li>Versatile weapon selection for different situations</li>
+            </ul>
         </div>
 
-        <!-- Ranger Class -->
+        <!-- Gibbor Class -->
         <div class="class-section">
-            <h2>🏹 Ranger</h2>
-            <p>Expert trackers and hunters, rangers combine martial prowess with nature magic. They excel at ranged combat and wilderness survival.</p>
+            <h2>💪 Gibbor</h2>
+            <p class="class-subtitle">Mighty Hero</p>
+            <p>The Gibbor are legendary heroes of renown, blessed (or cursed) with strength that surpasses mortal limits. Descended from the unions of Watchers and humans, these mighty warriors wield the heaviest weapons with devastating effect.</p>
 
-            <h3>Class Bonuses</h3>
+            <h3>Class Characteristics</h3>
             <div class="stat-grid">
                 <div class="stat-box">
-                    <div class="stat-label">Hit Points</div>
-                    <div class="stat-value">d8 per level</div>
+                    <div class="stat-label">Combat Role</div>
+                    <div class="stat-value">Heavy Damage Dealer</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-label">Primary Attributes</div>
-                    <div class="stat-value">Dexterity, Wisdom</div>
+                    <div class="stat-label">Primary Attribute</div>
+                    <div class="stat-value">Strength (STR)</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-label">Armor Proficiency</div>
-                    <div class="stat-value">Light and medium armor, shields</div>
+                    <div class="stat-label">Special Trait</div>
+                    <div class="stat-value">Nephilim bloodline strength</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-label">Weapon Proficiency</div>
-                    <div class="stat-value">Simple and martial weapons</div>
+                    <div class="stat-label">Weapon Focus</div>
+                    <div class="stat-value">Heavy two-handed weapons</div>
                 </div>
             </div>
 
-            <h3>Special Abilities</h3>
-            <ul>
-                <li><span class="highlight">Favored Enemy:</span> Bonus damage against specific creature types</li>
-                <li><span class="highlight">Natural Explorer:</span> Advantages in favored terrain</li>
-                <li><span class="highlight">Hunter's Mark:</span> Mark a target for additional damage</li>
-                <li><span class="highlight">Multiattack:</span> Attack twice per action at higher levels</li>
-            </ul>
+            <h3>Available Weapons</h3>
+            <table class="weapon-table">
+                <tr>
+                    <th>Weapon</th>
+                    <th>Damage</th>
+                    <th>Type</th>
+                    <th>Special Properties</th>
+                </tr>
+                <tr>
+                    <td>Hero's Greatsword</td>
+                    <td>2d6</td>
+                    <td><span class="damage-type slashing">Slashing</span></td>
+                    <td>Legendary bronze blade of champions</td>
+                </tr>
+                <tr>
+                    <td>Giant Maul</td>
+                    <td>2d6</td>
+                    <td><span class="damage-type bludgeoning">Bludgeoning</span></td>
+                    <td>Devastating crushing weapon</td>
+                </tr>
+                <tr>
+                    <td>Bronze Glaive</td>
+                    <td>1d10</td>
+                    <td><span class="damage-type slashing">Slashing</span></td>
+                    <td>Polearm with 10ft reach</td>
+                </tr>
+                <tr>
+                    <td>Bronze Greataxe</td>
+                    <td>1d12</td>
+                    <td><span class="damage-type slashing">Slashing</span></td>
+                    <td>Brutal two-handed axe</td>
+                </tr>
+                <tr>
+                    <td>Bronze Lance</td>
+                    <td>1d12</td>
+                    <td><span class="damage-type piercing">Piercing</span></td>
+                    <td>Mounted weapon with reach</td>
+                </tr>
+            </table>
 
-            <h3>Recommended Weapons</h3>
+            <h3>Tactical Role</h3>
+            <ul>
+                <li>Maximum damage output with two-handed weapons</li>
+                <li>Control space with reach weapons</li>
+                <li>Break through enemy defenses with raw power</li>
+                <li>Excel in mounted combat with lances</li>
+            </ul>
+        </div>
+
+        <!-- Hunter Class -->
+        <div class="class-section">
+            <h2>🏹 Hunter</h2>
+            <p class="class-subtitle">Wilderness Expert</p>
+            <p>Masters of the hunt and survivors of the untamed wilds, Hunters track prey across vast distances and strike from the shadows. They excel with ranged weapons and can adapt to both wilderness and urban environments.</p>
+
+            <h3>Class Characteristics</h3>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Combat Role</div>
+                    <div class="stat-value">Ranged Specialist & Scout</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Primary Attribute</div>
+                    <div class="stat-value">Dexterity (DEX)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Combat Style</div>
+                    <div class="stat-value">Ranged attacks from distance</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Special Skills</div>
+                    <div class="stat-value">Tracking, stealth, survival</div>
+                </div>
+            </div>
+
+            <h3>Available Weapons</h3>
+            <table class="weapon-table">
+                <tr>
+                    <th>Weapon</th>
+                    <th>Damage</th>
+                    <th>Type</th>
+                    <th>Range / Properties</th>
+                </tr>
+                <tr>
+                    <td>Composite Longbow</td>
+                    <td>1d8</td>
+                    <td><span class="damage-type piercing">Piercing</span></td>
+                    <td>150/600 ft - Powerful bow</td>
+                </tr>
+                <tr>
+                    <td>Hunting Shortbow</td>
+                    <td>1d6</td>
+                    <td><span class="damage-type piercing">Piercing</span></td>
+                    <td>80/320 ft - Quick to draw</td>
+                </tr>
+                <tr>
+                    <td>Hand Crossbow</td>
+                    <td>1d6</td>
+                    <td><span class="damage-type piercing">Piercing</span></td>
+                    <td>30/120 ft - One-handed</td>
+                </tr>
+                <tr>
+                    <td>Leather Sling</td>
+                    <td>1d4</td>
+                    <td><span class="damage-type bludgeoning">Bludgeoning</span></td>
+                    <td>30/120 ft - Simple and silent</td>
+                </tr>
+                <tr>
+                    <td>Hunting Javelins</td>
+                    <td>1d6</td>
+                    <td><span class="damage-type piercing">Piercing</span></td>
+                    <td>30/120 ft - Throwable spear</td>
+                </tr>
+                <tr>
+                    <td>Bronze Scimitar</td>
+                    <td>1d6</td>
+                    <td><span class="damage-type slashing">Slashing</span></td>
+                    <td>Light, finesse blade (melee backup)</td>
+                </tr>
+            </table>
+
+            <h3>Tactical Role</h3>
+            <ul>
+                <li>Strike from maximum range before enemies close</li>
+                <li>Maintain distance and avoid melee combat</li>
+                <li>Use terrain and cover to your advantage</li>
+                <li>Scout ahead and detect threats early</li>
+            </ul>
+        </div>
+
+        <!-- Magi Class -->
+        <div class="class-section">
+            <h2>🔮 Magi</h2>
+            <p class="class-subtitle">Watcher-Taught Sorcerer</p>
+            <p>The Magi wield forbidden knowledge taught by the fallen Watchers. Through arcane focuses and forbidden rituals, they channel destructive elemental forces. Their power comes at a price - corruption follows those who delve too deep into forbidden magic.</p>
+
+            <h3>Class Characteristics</h3>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Combat Role</div>
+                    <div class="stat-value">Elemental Damage Caster</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Primary Attribute</div>
+                    <div class="stat-value">Charisma (CHA)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Power Source</div>
+                    <div class="stat-value">Watcher-taught sorcery</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Weakness</div>
+                    <div class="stat-value">Physically frail, high corruption</div>
+                </div>
+            </div>
+
+            <h3>Magical Focuses</h3>
+            <table class="weapon-table">
+                <tr>
+                    <th>Focus</th>
+                    <th>Damage</th>
+                    <th>Type</th>
+                    <th>Effect</th>
+                </tr>
+                <tr>
+                    <td>Watcher-Carved Staff</td>
+                    <td>1d10</td>
+                    <td><span class="damage-type force">Force</span></td>
+                    <td>Eldritch Blast - Forbidden Watcher magic</td>
+                </tr>
+                <tr>
+                    <td>Wand of Fire</td>
+                    <td>1d10</td>
+                    <td><span class="damage-type fire">Fire</span></td>
+                    <td>Fire Bolt - Flames of destruction</td>
+                </tr>
+                <tr>
+                    <td>Orb of Winter</td>
+                    <td>1d8</td>
+                    <td><span class="damage-type cold">Cold</span></td>
+                    <td>Ray of Frost - Freezing magic</td>
+                </tr>
+                <tr>
+                    <td>Lightning Rod</td>
+                    <td>1d8</td>
+                    <td><span class="damage-type lightning">Lightning</span></td>
+                    <td>Shocking Grasp - Electric touch</td>
+                </tr>
+                <tr>
+                    <td>Serpent Focus</td>
+                    <td>1d12</td>
+                    <td><span class="damage-type poison">Poison</span></td>
+                    <td>Poison Spray - Toxic cloud</td>
+                </tr>
+                <tr>
+                    <td>Ritual Dagger</td>
+                    <td>1d4</td>
+                    <td><span class="damage-type piercing">Piercing</span></td>
+                    <td>Ceremonial blade (last resort)</td>
+                </tr>
+            </table>
+
+            <h3>Tactical Role</h3>
+            <ul>
+                <li>Devastating ranged magical damage</li>
+                <li>Variety of elemental damage types</li>
+                <li>Must avoid melee - very fragile</li>
+                <li>Balance power with corruption risk</li>
+            </ul>
+        </div>
+
+        <!-- Priest Class -->
+        <div class="class-section">
+            <h2>✨ Priest</h2>
+            <p class="class-subtitle">Keeper of Rituals</p>
+            <p>Priests maintain the sacred traditions and invoke the power of the divine. They channel holy power through blessed implements and sacred words, bringing both divine wrath and healing to the battlefield.</p>
+
+            <h3>Class Characteristics</h3>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Combat Role</div>
+                    <div class="stat-value">Divine Caster & Support</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Primary Attribute</div>
+                    <div class="stat-value">Wisdom (WIS)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Power Source</div>
+                    <div class="stat-value">Divine favor & righteousness</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Special Ability</div>
+                    <div class="stat-value">Healing & divine smites</div>
+                </div>
+            </div>
+
+            <h3>Sacred Implements</h3>
+            <table class="weapon-table">
+                <tr>
+                    <th>Weapon/Spell</th>
+                    <th>Damage</th>
+                    <th>Type</th>
+                    <th>Properties</th>
+                </tr>
+                <tr>
+                    <td>Blessed Bronze Staff</td>
+                    <td>1d6</td>
+                    <td><span class="damage-type bludgeoning">Bludgeoning</span></td>
+                    <td>Inscribed with sacred names</td>
+                </tr>
+                <tr>
+                    <td>Ceremonial Mace</td>
+                    <td>1d6</td>
+                    <td><span class="damage-type bludgeoning">Bludgeoning</span></td>
+                    <td>Bronze holy weapon</td>
+                </tr>
+                <tr>
+                    <td>Sacred Flame</td>
+                    <td>1d8</td>
+                    <td><span class="damage-type radiant">Radiant</span></td>
+                    <td>Divine fire from heaven</td>
+                </tr>
+                <tr>
+                    <td>Divine Word</td>
+                    <td>1d8</td>
+                    <td><span class="damage-type thunder">Thunder</span></td>
+                    <td>Power of the spoken Name</td>
+                </tr>
+                <tr>
+                    <td>Priest's War Pick</td>
+                    <td>1d8</td>
+                    <td><span class="damage-type piercing">Piercing</span></td>
+                    <td>For holy warriors</td>
+                </tr>
+                <tr>
+                    <td>Blessed Sling</td>
+                    <td>1d4</td>
+                    <td><span class="damage-type bludgeoning">Bludgeoning</span></td>
+                    <td>30/120 ft - Like David</td>
+                </tr>
+            </table>
+
+            <h3>Tactical Role</h3>
+            <ul>
+                <li>Support allies with healing and blessings</li>
+                <li>Smite enemies with divine power</li>
+                <li>Gain strength from righteousness points</li>
+                <li>Versatile combat and support options</li>
+            </ul>
+        </div>
+
+        <!-- Artisan Class -->
+        <div class="class-section">
+            <h2>🔨 Artisan</h2>
+            <p class="class-subtitle">Smith & Builder</p>
+            <p>Descended from Tubal-Cain, the first metalworker, Artisans are masters of bronze and stone. They craft weapons and tools, and know how to use them in combat. Their practical knowledge makes them versatile and resourceful.</p>
+
+            <h3>Class Characteristics</h3>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Combat Role</div>
+                    <div class="stat-value">Versatile Fighter & Crafter</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Primary Attributes</div>
+                    <div class="stat-value">Strength (STR) & Dexterity (DEX)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Special Skills</div>
+                    <div class="stat-value">Crafting, engineering, repair</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Lineage</div>
+                    <div class="stat-value">Descended from Tubal-Cain</div>
+                </div>
+            </div>
+
+            <h3>Available Weapons</h3>
             <table class="weapon-table">
                 <tr>
                     <th>Weapon</th>
@@ -277,144 +622,166 @@
                     <th>Properties</th>
                 </tr>
                 <tr>
-                    <td>Longbow</td>
-                    <td>1d8</td>
-                    <td><span class="damage-type piercing">Piercing</span></td>
-                    <td>Ranged (150/600), Heavy, Two-handed</td>
+                    <td>Smith's War Hammer</td>
+                    <td>1d8 (1d10)</td>
+                    <td><span class="damage-type bludgeoning">Bludgeoning</span></td>
+                    <td>Forged by Tubal-Cain</td>
                 </tr>
                 <tr>
-                    <td>Shortbow</td>
+                    <td>Mining Pick</td>
+                    <td>1d8</td>
+                    <td><span class="damage-type piercing">Piercing</span></td>
+                    <td>Tool and weapon</td>
+                </tr>
+                <tr>
+                    <td>Bronze Hand Axe</td>
                     <td>1d6</td>
-                    <td><span class="damage-type piercing">Piercing</span></td>
-                    <td>Ranged (80/320), Two-handed</td>
+                    <td><span class="damage-type slashing">Slashing</span></td>
+                    <td>Light, throwable (20/60 ft)</td>
                 </tr>
                 <tr>
-                    <td>Rapier</td>
+                    <td>Engineering Crossbow</td>
                     <td>1d8</td>
                     <td><span class="damage-type piercing">Piercing</span></td>
-                    <td>Finesse</td>
+                    <td>80/320 ft - Mechanical marvel</td>
+                </tr>
+                <tr>
+                    <td>Reinforced Staff</td>
+                    <td>1d6 (1d8)</td>
+                    <td><span class="damage-type bludgeoning">Bludgeoning</span></td>
+                    <td>Versatile weapon</td>
                 </tr>
             </table>
-        </div>
 
-        <!-- Mage Class -->
-        <div class="class-section">
-            <h2>🔮 Mage</h2>
-            <p>Wielders of arcane power, mages command the forces of magic to devastating effect. While physically frail, their spells can turn the tide of battle.</p>
-
-            <h3>Class Bonuses</h3>
-            <div class="stat-grid">
-                <div class="stat-box">
-                    <div class="stat-label">Hit Points</div>
-                    <div class="stat-value">d6 per level (lowest)</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Primary Attributes</div>
-                    <div class="stat-value">Intelligence</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Armor Proficiency</div>
-                    <div class="stat-value">None (can use Mage Armor spell)</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Weapon Proficiency</div>
-                    <div class="stat-value">Daggers, darts, slings, quarterstaffs, light crossbows</div>
-                </div>
-            </div>
-
-            <h3>Special Abilities</h3>
+            <h3>Tactical Role</h3>
             <ul>
-                <li><span class="highlight">Spellcasting:</span> Access to the most powerful arcane spells</li>
-                <li><span class="highlight">Arcane Recovery:</span> Recover spell slots during short rest</li>
-                <li><span class="highlight">Spell Mastery:</span> Cast certain low-level spells at will</li>
-                <li><span class="highlight">Signature Spells:</span> Cast high-level spells without using spell slots</li>
-            </ul>
-
-            <h3>Spell Damage Types</h3>
-            <ul>
-                <li><span class="highlight">Fire:</span> Fireball, Flame Strike - High damage, area effect</li>
-                <li><span class="highlight">Lightning:</span> Lightning Bolt, Chain Lightning - Line and chain attacks</li>
-                <li><span class="highlight">Ice:</span> Ice Storm, Cone of Cold - Damage plus slow effects</li>
-                <li><span class="highlight">Force:</span> Magic Missile, Eldritch Blast - Guaranteed hits</li>
-                <li><span class="highlight">Necrotic:</span> Blight, Finger of Death - Life drain effects</li>
-            </ul>
-
-            <h3>Limitations</h3>
-            <ul>
-                <li>Low hit points - must avoid melee combat</li>
-                <li>Limited armor options - relies on defensive spells</li>
-                <li>Spell slots - powerful but limited resource</li>
-                <li>Concentration - many powerful spells require maintaining focus</li>
+                <li>Adaptable to different combat situations</li>
+                <li>Repair equipment and fortifications</li>
+                <li>Create improvised weapons and tools</li>
+                <li>Mix of melee and ranged capabilities</li>
             </ul>
         </div>
 
-        <!-- Cleric Class -->
+        <!-- Scribe Class -->
         <div class="class-section">
-            <h2>✨ Cleric</h2>
-            <p>Divine champions who channel the power of the heavens, clerics balance healing and support with formidable combat abilities.</p>
+            <h2>📜 Scribe</h2>
+            <p class="class-subtitle">Keeper of Tablets</p>
+            <p>Scribes preserve ancient knowledge and unlock the secrets of forgotten texts. While not primarily warriors, their intelligence and forbidden learning make them dangerous opponents who can wield both weapons and arcane knowledge.</p>
 
-            <h3>Class Bonuses</h3>
+            <h3>Class Characteristics</h3>
             <div class="stat-grid">
                 <div class="stat-box">
-                    <div class="stat-label">Hit Points</div>
-                    <div class="stat-value">d8 per level</div>
+                    <div class="stat-label">Combat Role</div>
+                    <div class="stat-value">Knowledge & Subtlety</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-label">Primary Attributes</div>
-                    <div class="stat-value">Wisdom</div>
+                    <div class="stat-label">Primary Attribute</div>
+                    <div class="stat-value">Intelligence (INT)</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-label">Armor Proficiency</div>
-                    <div class="stat-value">Light and medium armor, shields</div>
+                    <div class="stat-label">Combat Style</div>
+                    <div class="stat-value">Finesse weapons & psychic magic</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-label">Weapon Proficiency</div>
-                    <div class="stat-value">Simple weapons</div>
+                    <div class="stat-label">Special Skills</div>
+                    <div class="stat-value">Research, deciphering, lore</div>
                 </div>
             </div>
 
-            <h3>Special Abilities</h3>
-            <ul>
-                <li><span class="highlight">Channel Divinity:</span> Turn undead or other divine effects</li>
-                <li><span class="highlight">Divine Domain:</span> Specialized abilities based on deity</li>
-                <li><span class="highlight">Healing Word:</span> Bonus action healing at range</li>
-                <li><span class="highlight">Divine Intervention:</span> Call upon deity for miraculous aid</li>
-            </ul>
+            <h3>Available Weapons</h3>
+            <table class="weapon-table">
+                <tr>
+                    <th>Weapon</th>
+                    <th>Damage</th>
+                    <th>Type</th>
+                    <th>Properties</th>
+                </tr>
+                <tr>
+                    <td>Scribe Dagger</td>
+                    <td>1d4</td>
+                    <td><span class="damage-type piercing">Piercing</span></td>
+                    <td>Light, finesse, concealable</td>
+                </tr>
+                <tr>
+                    <td>Walking Staff</td>
+                    <td>1d6 (1d8)</td>
+                    <td><span class="damage-type bludgeoning">Bludgeoning</span></td>
+                    <td>Versatile weapon</td>
+                </tr>
+                <tr>
+                    <td>Poison Darts</td>
+                    <td>1d4</td>
+                    <td><span class="damage-type piercing">Piercing</span></td>
+                    <td>20/60 ft - Finesse, throwable</td>
+                </tr>
+                <tr>
+                    <td>Scholar's Sling</td>
+                    <td>1d4</td>
+                    <td><span class="damage-type bludgeoning">Bludgeoning</span></td>
+                    <td>30/120 ft - Simple weapon</td>
+                </tr>
+                <tr>
+                    <td>Arcane Knowledge</td>
+                    <td>1d10</td>
+                    <td><span class="damage-type psychic">Psychic</span></td>
+                    <td>Mind Spike - Forbidden knowledge</td>
+                </tr>
+            </table>
 
-            <h3>Spell Types</h3>
+            <h3>Tactical Role</h3>
             <ul>
-                <li><span class="highlight">Healing:</span> Cure Wounds, Healing Word, Mass Heal</li>
-                <li><span class="highlight">Radiant Damage:</span> Sacred Flame, Guiding Bolt, Flame Strike</li>
-                <li><span class="highlight">Buffs:</span> Bless, Shield of Faith, Spiritual Weapon</li>
-                <li><span class="highlight">Control:</span> Hold Person, Command, Banishment</li>
+                <li>Unlock ancient secrets and decipher texts</li>
+                <li>Use knowledge and cunning over brute force</li>
+                <li>Devastating psychic attacks from research</li>
+                <li>Support role with strategic information</li>
             </ul>
         </div>
 
         <!-- General Combat Tips -->
         <div class="class-section">
-            <h2>⚔️ General Combat Tips</h2>
+            <h2>⚔️ Combat Fundamentals</h2>
 
             <h3>Understanding Damage Types</h3>
             <ul>
-                <li><span class="highlight">Slashing:</span> Swords, axes - effective against unarmored foes</li>
-                <li><span class="highlight">Piercing:</span> Arrows, spears - can penetrate armor</li>
-                <li><span class="highlight">Bludgeoning:</span> Clubs, hammers - effective against skeletons and constructs</li>
+                <li><span class="highlight">Slashing:</span> Swords, axes - Effective against unarmored foes and flesh</li>
+                <li><span class="highlight">Piercing:</span> Spears, arrows - Can penetrate armor gaps</li>
+                <li><span class="highlight">Bludgeoning:</span> Hammers, maces - Effective against armored and skeletal enemies</li>
+                <li><span class="highlight">Elemental:</span> Fire, cold, lightning - Magical damage types bypass physical armor</li>
+                <li><span class="highlight">Divine:</span> Radiant, thunder - Holy damage effective against corrupt beings</li>
             </ul>
 
             <h3>Combat Modifiers</h3>
             <ul>
-                <li><span class="highlight">Advantage:</span> Roll twice, take higher result (+5 equivalent)</li>
-                <li><span class="highlight">Disadvantage:</span> Roll twice, take lower result (-5 equivalent)</li>
-                <li><span class="highlight">Cover:</span> Half cover (+2 AC), Three-quarters (+5 AC), Full (can't be targeted)</li>
-                <li><span class="highlight">Flanking:</span> Advantage on attacks when allies surround enemy</li>
+                <li><span class="highlight">Advantage:</span> Roll twice, take higher result (roughly +5 bonus)</li>
+                <li><span class="highlight">Disadvantage:</span> Roll twice, take lower result (roughly -5 penalty)</li>
+                <li><span class="highlight">Cover:</span> Half cover (+2 AC), Three-quarters (+5 AC), Full (cannot be targeted)</li>
+                <li><span class="highlight">Flanking:</span> Gain advantage when allies surround an enemy</li>
+                <li><span class="highlight">High Ground:</span> Advantage on ranged attacks from elevated position</li>
+            </ul>
+
+            <h3>Soul Economy System</h3>
+            <ul>
+                <li><span class="highlight">Righteousness Points (RP):</span> Gained through noble deeds, powers divine abilities</li>
+                <li><span class="highlight">Corruption Points (CP):</span> Gained through dark magic and evil acts, empowers forbidden powers</li>
+                <li><span class="highlight">Balance:</span> Too much corruption risks losing your character to darkness</li>
+                <li><span class="highlight">Class Impact:</span> Priests thrive on RP, Magi may embrace CP for power</li>
             </ul>
 
             <h3>Action Economy</h3>
             <ul>
-                <li><span class="highlight">Action:</span> Attack, cast spell, dash, disengage, dodge, help</li>
-                <li><span class="highlight">Bonus Action:</span> Second Wind, healing word, off-hand attack</li>
-                <li><span class="highlight">Reaction:</span> Opportunity attack, shield spell, counterspell</li>
-                <li><span class="highlight">Movement:</span> Can be split before and after action</li>
+                <li><span class="highlight">Action:</span> Attack, cast spell, dash, disengage, dodge, help, or use object</li>
+                <li><span class="highlight">Bonus Action:</span> Quick actions like off-hand attacks or short spells</li>
+                <li><span class="highlight">Reaction:</span> Opportunity attacks when enemies leave your reach</li>
+                <li><span class="highlight">Movement:</span> Can be split before and after your action</li>
+            </ul>
+
+            <h3>Class Selection Tips</h3>
+            <ul>
+                <li><span class="highlight">New Players:</span> Warrior or Hunter - straightforward and forgiving</li>
+                <li><span class="highlight">Damage Dealers:</span> Gibbor or Magi - maximum damage output</li>
+                <li><span class="highlight">Support Role:</span> Priest - healing and buffs keep the party alive</li>
+                <li><span class="highlight">Versatility:</span> Artisan or Hunter - adapt to different situations</li>
+                <li><span class="highlight">Strategic Play:</span> Scribe or Magi - intelligence-based problem solving</li>
             </ul>
         </div>
     </div>
