@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { validateCharacterName, validateAttribute, validateDescription } from '../utils/validation';
+import { setCharacterData } from '../utils/storage';
 
 const CharacterGenerator = ({ onCharacterComplete }) => {
   // === COMPREHENSIVE RACE DATA FROM ENCYCLOPEDIA ===
@@ -285,13 +287,29 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
 
   // === HANDLERS ===
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    // Validate name input
+    if (name === 'name') {
+      const sanitized = validateCharacterName(value);
+      setFormData({ ...formData, [name]: sanitized });
+    }
+    // Validate custom visuals
+    else if (name === 'customVisuals') {
+      const sanitized = validateDescription(value, 500);
+      setFormData({ ...formData, [name]: sanitized });
+    }
+    // All other fields
+    else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleAttrChange = (attr, value) => {
+    const validatedValue = validateAttribute(value, 3, 20);
     setFormData(prev => ({
       ...prev,
-      attributes: { ...prev.attributes, [attr]: parseInt(value) || 10 }
+      attributes: { ...prev.attributes, [attr]: validatedValue }
     }));
   };
 
@@ -448,9 +466,11 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
   // === SAVE & CONTINUE ===
   const handleSave = () => {
     if (finalCharacter) {
-      localStorage.setItem('generatedCharacter', JSON.stringify(finalCharacter));
-      if (onCharacterComplete) {
+      const success = setCharacterData(finalCharacter);
+      if (success && onCharacterComplete) {
         onCharacterComplete();
+      } else if (!success) {
+        setError('Failed to save character data. Please try again.');
       }
     }
   };
@@ -658,6 +678,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="e.g. Enoch"
+                maxLength={50}
+                required
                 className="w-full bg-black border border-[#44403c] p-3 text-xl text-white focus:border-[#f59e0b] outline-none"
               />
             </div>
@@ -824,6 +846,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                     <span className="block text-[9px] text-[#78716c] font-bold mb-1">{attr}</span>
                     <input
                       type="number"
+                      min={3}
+                      max={20}
                       value={formData.attributes[attr]}
                       onChange={(e) => handleAttrChange(attr, e.target.value)}
                       className="w-full bg-black border border-[#44403c] p-1 text-center text-[#fcd34d] font-bold focus:border-[#f59e0b] outline-none text-sm"
@@ -873,6 +897,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   value={formData.customVisuals}
                   onChange={handleChange}
                   placeholder="Add specific details (e.g., 'scarred face, carrying ancient tablet, glowing staff')..."
+                  maxLength={500}
                   className="w-full bg-black border border-[#44403c] p-2 text-sm text-white h-16 resize-none focus:border-[#f59e0b] outline-none"
                 />
               </div>

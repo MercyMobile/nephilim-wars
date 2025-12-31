@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import DiceRollerModal from '../components/DiceRollerModal';
+import { getCharacterData } from '../utils/storage';
 
 const CombatScreen = () => {
   const [playerCharacter, setPlayerCharacter] = useState(null);
@@ -15,10 +16,9 @@ const CombatScreen = () => {
   // Load player character and bestiary
   useEffect(() => {
     const loadData = async () => {
-      // Load player character from localStorage
-      const savedChar = localStorage.getItem('generatedCharacter');
-      if (savedChar) {
-        const char = JSON.parse(savedChar);
+      // Load player character from localStorage with validation
+      const char = getCharacterData();
+      if (char) {
         setPlayerCharacter({
           ...char,
           currentHp: char.hp || char.maxHp,
