@@ -75,7 +75,7 @@ export default function App() {
       <nav className="bg-stone-950 border-b border-amber-900/50 p-2 flex justify-center gap-2 z-50 shadow-2xl relative">
         <NavButton label="🏛️ Home" isActive={currentView === 'home'} onClick={() => setCurrentView('home')} />
         <NavButton label="⚔️ Combat" isActive={currentView === 'combat'} onClick={() => setCurrentView('combat')} />
-        <NavButton label="✨ Forge" isActive={currentView === 'generator'} onClick={() => setCurrentView('generator')} />
+        <NavButton label="✨ Create Character" isActive={currentView === 'generator'} onClick={() => setCurrentView('generator')} />
         <NavButton label="🎲 Dice" isActive={currentView === 'dice'} onClick={() => setCurrentView('dice')} />
         <NavButton label="📖 Bestiary" isActive={currentView === 'bestiary'} onClick={() => setCurrentView('bestiary')} />
       </nav>
