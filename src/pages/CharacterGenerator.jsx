@@ -439,7 +439,6 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       isPlayer: true,
       portrait: portrait,
       lineage: formData.lineage,
-      lineageData: loreData,
       class: formData.charClass,
       sex: formData.sex,
       height: formData.height,
@@ -493,7 +492,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
 
   // === RESET TO CREATE NEW CHARACTER ===
   const handleReset = () => {
-    setFormData({
+    const resetData = {
       name: '',
       sex: 'Male',
       lineage: 'Sethite',
@@ -508,8 +507,10 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       background: 'desert ruins',
       vibe: 'epic',
       attributes: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 }
-    });
-    setPortrait('');
+    };
+
+    setFormData(resetData);
+    setPortrait(null);
     setFinalCharacter(null);
     setShowSheet(false);
     setError('');
@@ -518,6 +519,9 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
 
   // === CHARACTER SHEET VIEW ===
   if (showSheet && finalCharacter) {
+    // Look up race data from RACES object using the lineage string
+    const raceData = RACES[finalCharacter.lineage];
+
     return (
       <div className="min-h-screen bg-[#0c0a09] text-[#d6d3d1] font-serif p-4 pb-8">
         <div className="max-w-5xl mx-auto border-2 border-[#78350f] bg-[#1c1917] rounded-lg overflow-hidden mb-8">
@@ -526,7 +530,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
           <div className="bg-gradient-to-r from-[#78350f] to-[#92400e] p-4 sm:p-6 text-center">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-cinzel font-bold text-[#fcd34d] mb-2">{finalCharacter.name}</h1>
             <div className="text-[#d6d3d1] text-base sm:text-lg">
-              {finalCharacter.sex} {finalCharacter.lineageData.name} • {finalCharacter.class}
+              {finalCharacter.sex} {raceData.name} • {finalCharacter.class}
             </div>
             <div className="text-[#a8a29e] text-sm mt-1">{finalCharacter.height} tall</div>
           </div>
@@ -611,7 +615,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
               <div>
                 <h3 className="text-[#f59e0b] font-bold text-lg mb-3 border-b border-[#44403c] pb-1">RACIAL TRAITS</h3>
                 <div className="space-y-2">
-                  {finalCharacter.lineageData.traits.map((trait, i) => (
+                  {raceData.traits.map((trait, i) => (
                     <div key={i} className="bg-[#0c0a09] border border-[#44403c] p-2 text-sm">
                       <span className="text-[#fcd34d] font-bold">{trait.split('(')[0]}</span>
                       {trait.includes('(') && <span className="text-[#a8a29e]"> ({trait.split('(')[1]}</span>}
