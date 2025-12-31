@@ -31,12 +31,10 @@ const DiceRollerModal = ({ isOpen, onClose, diceType = 'd20', onResult }) => {
       setResult(rollResult);
       setRolling(false);
 
-      // Call the callback with the result
+      // Call the callback with the result immediately
+      // Don't auto-close - let user close manually
       if (onResult) {
-        setTimeout(() => {
-          onResult(rollResult);
-          onClose();
-        }, 2000); // Show result for 2 seconds before auto-closing
+        onResult(rollResult);
       }
     }, 2000); // Dice rolling animation time
   };

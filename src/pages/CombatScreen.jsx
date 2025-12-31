@@ -137,6 +137,15 @@ const CombatScreen = () => {
     setShowDiceRoller(true);
   };
 
+  // Handle dice roller close - advance turn
+  const handleDiceRollerClose = () => {
+    setShowDiceRoller(false);
+    // Only advance turn if an attack was processed
+    if (pendingAttack === null) {
+      nextTurn();
+    }
+  };
+
   // Process attack result after dice roll
   const processAttackResult = (d20) => {
     const { attacker, defender, action } = pendingAttack;
@@ -170,12 +179,9 @@ const CombatScreen = () => {
     }
 
     setPendingAttack(null);
-    setShowDiceRoller(false);
 
-    // Auto-advance turn after a short delay
-    setTimeout(() => {
-      nextTurn();
-    }, 500);
+    // Don't auto-close dice roller - let player close it manually
+    // Don't auto-advance turn - wait for player to close modal
   };
 
   // Update HP
@@ -266,7 +272,7 @@ const CombatScreen = () => {
       {/* Dice Roller Modal */}
       <DiceRollerModal
         isOpen={showDiceRoller}
-        onClose={() => setShowDiceRoller(false)}
+        onClose={handleDiceRollerClose}
         diceType="d20"
         onResult={processAttackResult}
       />
