@@ -9,7 +9,7 @@
       "name": "Nephilim Warrior",
       "type": "Giant",
       "description": "Offspring of the Watchers and human women, standing 12-15 feet tall with immense strength.",
-      "portrait": "https://images.unsplash.com/photo-1594322436404-5a0526db4d13?fit=crop&w=300&h=300",
+      "portrait": "/images/combat/nephilim_warrior.png",
       "stats": {
         "hp": 120,
         "maxHp": 120,
@@ -50,7 +50,7 @@
       "name": "Rephaim Champion",
       "type": "Giant",
       "description": "Ancient giant warrior, remnant of the pre-flood world. Undying and merciless.",
-      "portrait": "https://images.unsplash.com/photo-1576328077645-2dd68934d2b7?fit=crop&w=300&h=300",
+      "portrait": "/images/combat/rephaim_champion.png",
       "stats": {
         "hp": 150,
         "maxHp": 150,
@@ -81,7 +81,7 @@
       "name": "Anakim Berserker",
       "type": "Giant",
       "description": "Descendants of Anak, fierce and battle-crazed warriors of Canaan.",
-      "portrait": "https://images.unsplash.com/photo-1605733160314-4fc7dac4bb16?fit=crop&w=300&h=300",
+      "portrait": "/images/combat/anakim_berserker.png",
       "stats": {
         "hp": 100,
         "maxHp": 100,
@@ -122,7 +122,7 @@
       "name": "Cainite Assassin",
       "type": "Human",
       "description": "Descendant of Cain, marked by violence and cunning. Master of stealth and poison.",
-      "portrait": "https://images.unsplash.com/photo-1566492031773-4f4e44671857?fit=crop&w=300&h=300",
+      "portrait": "/images/combat/cainite_assassin.png",
       "stats": {
         "hp": 60,
         "maxHp": 60,
@@ -163,7 +163,7 @@
       "name": "Sorcerer-Priest of Babylon",
       "type": "Human",
       "description": "Wielder of forbidden knowledge, channeling demonic power through ancient rituals.",
-      "portrait": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?fit=crop&w=300&h=300",
+      "portrait": "/images/combat/sorcerer_priest.png",
       "stats": {
         "hp": 70,
         "maxHp": 70,
@@ -204,7 +204,7 @@
       "name": "Horim Tunneler",
       "type": "Cave Dweller",
       "description": "Subterranean warriors who dwell in mountain caves. Adapted to darkness.",
-      "portrait": "https://images.unsplash.com/photo-1509967419530-da38b4704bc6?fit=crop&w=300&h=300",
+      "portrait": "/images/combat/horim_tunneler.png",
       "stats": {
         "hp": 80,
         "maxHp": 80,
@@ -235,7 +235,7 @@
       "name": "Gibborim Elite Guard",
       "type": "Mighty One",
       "description": "The 'Mighty Men' of ancient legend. Warriors of renown, feared across nations.",
-      "portrait": "https://images.unsplash.com/photo-1595433707802-6b2626ef1c91?fit=crop&w=300&h=300",
+      "portrait": "/images/combat/gibborim_elite.png",
       "stats": {
         "hp": 110,
         "maxHp": 110,
@@ -276,7 +276,7 @@
       "name": "Desert Raider",
       "type": "Human",
       "description": "Nomadic warrior from the wilderness, swift and deadly with bow and blade.",
-      "portrait": "https://images.unsplash.com/photo-1534030347209-467a5b0ad3e6?fit=crop&w=300&h=300",
+      "portrait": "/images/combat/desert_raider.png",
       "stats": {
         "hp": 50,
         "maxHp": 50,
