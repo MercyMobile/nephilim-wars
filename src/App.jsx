@@ -18,8 +18,15 @@ const BestiaryPlaceholder = () => (
 // --- HOME MENU COMPONENT ---
 const MainMenu = ({ onNavigate }) => (
   <div className="h-full bg-black flex flex-col items-center justify-center relative overflow-hidden">
-    {/* Background texture or effect could go here */}
-    <div className="z-10 text-center space-y-8 p-8 border-4 border-double border-amber-900/50 bg-stone-950/80 rounded-lg shadow-2xl max-w-2xl w-full">
+    {/* Full-screen background image */}
+    <div
+      className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
+      style={{ backgroundImage: "url('https://i.ibb.co/9gY8FJz/dead-sea-scroll.jpg')" }}
+    />
+    {/* Dark overlay for better text contrast */}
+    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
+
+    <div className="z-10 text-center space-y-8 p-8 border-4 border-double border-amber-900/50 bg-stone-950/80 rounded-lg shadow-2xl max-w-2xl w-full backdrop-blur-sm">
       
       <div>
         <h1 className="text-6xl font-cinzel text-amber-500 mb-2 text-shadow-lg">NEPHILIM WARS</h1>
