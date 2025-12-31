@@ -596,11 +596,11 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
 
   // === CREATION FORM ===
   return (
-    <div className="min-h-screen bg-[#0c0a09] text-[#d6d3d1] font-serif flex items-center justify-center p-4 overflow-y-auto">
-      <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8 my-8">
+    <div className="w-full bg-[#0c0a09] text-[#d6d3d1] font-serif p-4">
+      <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 py-8">
 
         {/* LEFT PANEL: CREATION FORM */}
-        <div className="border-2 border-[#78350f] bg-[#1c1917]/95 p-8 shadow-[0_0_40px_rgba(245,158,11,0.1)] rounded-sm max-h-[90vh] overflow-y-auto">
+        <div className="border-2 border-[#78350f] bg-[#1c1917]/95 p-6 shadow-[0_0_40px_rgba(245,158,11,0.1)] rounded-sm">
           <h1 className="text-4xl text-[#fcd34d] font-cinzel font-bold mb-6 border-b border-[#78350f] pb-2 tracking-widest text-center shadow-black drop-shadow-lg">
             CREATE CHARACTER
           </h1>
@@ -865,7 +865,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
         </div>
 
         {/* RIGHT: PREVIEW CARD */}
-        <div className="border-2 border-[#78350f] bg-black p-2 flex flex-col relative shadow-2xl h-full min-h-[600px]">
+        <div className="border-2 border-[#78350f] bg-black p-2 flex flex-col relative shadow-2xl">
           <div className="text-center py-4 bg-[#1c1917] border-b border-[#292524]">
             <h2 className="text-3xl font-cinzel font-bold text-[#fcd34d] drop-shadow-md">
               {formData.name || 'UNKNOWN'}
@@ -879,11 +879,11 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
             </div>
           </div>
 
-          <div className="flex-1 border border-[#292524] bg-[#0c0a09] relative overflow-hidden group">
+          <div className="border border-[#292524] bg-[#0c0a09] relative overflow-hidden group aspect-square">
             {portrait ? (
               <img src={portrait} alt="Generated" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
             ) : (
-              <div className="h-full flex flex-col items-center justify-center text-[#44403c]">
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-[#44403c]">
                 <span className="text-6xl opacity-20 mb-4 animate-pulse">📜</span>
                 <p className="uppercase tracking-widest text-xs">Awaiting Portrait</p>
               </div>

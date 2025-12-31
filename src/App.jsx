@@ -72,7 +72,7 @@ export default function App() {
     <div className="h-screen flex flex-col bg-black overflow-hidden font-serif">
       
       {/* --- RIBBON MENU (Always Visible now) --- */}
-      <nav className="bg-stone-950 border-b border-amber-900/50 p-2 flex justify-center gap-2 z-50 shadow-2xl relative">
+      <nav className="bg-stone-950 border-b border-amber-900/50 p-3 flex flex-wrap justify-center gap-2 z-50 shadow-2xl relative min-h-[60px]">
         <NavButton label="🏛️ Home" isActive={currentView === 'home'} onClick={() => setCurrentView('home')} />
         <NavButton label="⚔️ Combat" isActive={currentView === 'combat'} onClick={() => setCurrentView('combat')} />
         <NavButton label="✨ Create Character" isActive={currentView === 'generator'} onClick={() => setCurrentView('generator')} />
@@ -81,7 +81,7 @@ export default function App() {
       </nav>
 
       {/* --- MAIN CONTENT --- */}
-      <div className="flex-1 relative overflow-hidden">
+      <div className="flex-1 relative overflow-y-auto overflow-x-hidden">
         
         {currentView === 'home' && (
           <MainMenu onNavigate={setCurrentView} />
