@@ -118,19 +118,12 @@ export default function App() {
         )}
 
         {currentView === 'rules' && (
-          <div className="h-full bg-stone-900 text-amber-500 flex flex-col items-center justify-center font-serif p-8">
-            <div className="text-6xl mb-4">📜</div>
-            <div className="text-3xl border-b-2 border-amber-700 pb-2">Rules of Engagement</div>
-            <p className="mt-4 text-stone-400 text-center max-w-2xl">
-              The complete combat system documentation is being prepared. For now, consult the combat screen for active mechanics.
-            </p>
-            <a
-              href="/public/nephilim_wars_combat_system.html"
-              target="_blank"
-              className="mt-6 px-6 py-3 bg-amber-900/40 border border-amber-600 text-amber-400 font-bold uppercase tracking-widest hover:bg-amber-800 transition"
-            >
-              View Combat Rules (HTML)
-            </a>
+          <div className="h-full w-full bg-stone-900">
+            <iframe
+              src="/encyclopedia/nephilim_wars_races_and_peoples.html"
+              className="w-full h-full border-0"
+              title="Rules of Engagement"
+            />
           </div>
         )}
 
