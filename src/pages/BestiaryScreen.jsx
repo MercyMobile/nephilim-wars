@@ -370,19 +370,19 @@ const BestiaryScreen = () => {
                   {/* Image Section */}
                   {creature.image && (
                     <div
-                      className="md:w-64 h-64 md:h-auto flex-shrink-0 cursor-pointer group relative overflow-hidden bg-black"
+                      className="md:w-64 flex-shrink-0 cursor-pointer group relative overflow-hidden bg-black"
                       onClick={() => setSelectedImage(creature.image)}
                     >
                       <img
                         src={creature.image}
                         alt={creature.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-110"
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = `https://placehold.co/400x400/1c1917/f59e0b?text=${creature.name.replace(/ /g, '+')}`;
                         }}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60 pointer-events-none"></div>
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
                         <span className="text-white text-5xl opacity-0 group-hover:opacity-100 transition-opacity">🔍</span>
                       </div>
