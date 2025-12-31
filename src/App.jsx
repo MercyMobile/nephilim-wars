@@ -58,6 +58,7 @@ export default function App() {
   // 1. Default to 'home' instead of 'generator' or 'combat'
   const [currentView, setCurrentView] = useState('home');
   const [characterExists, setCharacterExists] = useState(false);
+  const [loreTab, setLoreTab] = useState('codex'); // Track active lore tab
 
   // Check for saved character on load
   useEffect(() => {
@@ -143,31 +144,52 @@ export default function App() {
 
         {currentView === 'lore' && (
           <div className="h-full w-full bg-stone-900 flex flex-col">
+            {/* Header */}
             <div className="bg-stone-950 border-b border-amber-900/50 p-4 text-center">
               <h2 className="text-2xl font-cinzel font-bold text-amber-500">Lore Codex</h2>
               <p className="text-stone-400 text-sm mt-1">Ancient History & Peoples</p>
             </div>
-            <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden">
-              <div className="h-full border-r border-stone-950">
-                <div className="bg-stone-800 p-2 text-center border-b border-stone-950">
-                  <span className="text-amber-500 font-cinzel text-sm uppercase tracking-widest">📚 Codex Angelorum</span>
-                </div>
+
+            {/* Tab Navigation */}
+            <div className="flex gap-2 bg-stone-950 border-b border-stone-800 p-2">
+              <button
+                onClick={() => setLoreTab('codex')}
+                className={`px-4 py-2 font-cinzel text-sm uppercase tracking-widest rounded transition-all ${
+                  loreTab === 'codex'
+                    ? 'bg-amber-900/40 text-amber-400 border border-amber-600/50'
+                    : 'text-stone-500 hover:text-amber-500 hover:bg-stone-900'
+                }`}
+              >
+                📚 Codex Angelorum
+              </button>
+              <button
+                onClick={() => setLoreTab('races')}
+                className={`px-4 py-2 font-cinzel text-sm uppercase tracking-widest rounded transition-all ${
+                  loreTab === 'races'
+                    ? 'bg-amber-900/40 text-amber-400 border border-amber-600/50'
+                    : 'text-stone-500 hover:text-amber-500 hover:bg-stone-900'
+                }`}
+              >
+                👥 Races & Peoples
+              </button>
+            </div>
+
+            {/* Content Area */}
+            <div className="flex-1 overflow-hidden">
+              {loreTab === 'codex' && (
                 <iframe
                   src="/encyclopedia/index.html"
-                  className="w-full h-[calc(100%-40px)] border-0"
+                  className="w-full h-full border-0"
                   title="Codex Angelorum"
                 />
-              </div>
-              <div className="h-full">
-                <div className="bg-stone-800 p-2 text-center border-b border-stone-950">
-                  <span className="text-amber-500 font-cinzel text-sm uppercase tracking-widest">👥 Races & Peoples</span>
-                </div>
+              )}
+              {loreTab === 'races' && (
                 <iframe
                   src="/encyclopedia/nephilim_wars_races_and_peoples.html"
-                  className="w-full h-[calc(100%-40px)] border-0"
+                  className="w-full h-full border-0"
                   title="Races & Peoples"
                 />
-              </div>
+              )}
             </div>
           </div>
         )}
