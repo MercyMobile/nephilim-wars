@@ -6,28 +6,38 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     name: '',
     lineage: 'Sethite',
     charClass: 'Warrior',
+    sex: 'Male',
     visuals: '',
-    // Base stats (before lineage bonuses)
+    // Base 5e Attributes (Standard Array-ish)
     attributes: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 }
   });
 
   const [loading, setLoading] = useState(false);
-  const [portrait, setPortrait] = useState(null); // Stores the Base64 image
+  const [portrait, setPortrait] = useState(null); 
   const [error, setError] = useState('');
 
-  // --- LORE LOGIC ---
+  // --- LORE RULES (Based on index.html) ---
   const LORE = {
     Sethite: { 
-      desc: "Keepers of the ancient faith. Wise and charismatic leaders.",
-      bonuses: { WIS: 2, CHA: 1 } 
+      desc: "Keepers of the original faith. +2 WIS, +1 CHA.",
+      bonuses: { WIS: 2, CHA: 1 },
+      startingRP: 1, // Righteousness Points
+      startingCP: 0,
+      hpBonus: 0
     },
     Cainite: { 
-      desc: "City builders and masters of the forge. Strong and cunning.",
-      bonuses: { STR: 2, INT: 1 } 
+      desc: "City builders and masters of the forge. +2 STR, +1 INT.",
+      bonuses: { STR: 2, INT: 1 },
+      startingRP: 0,
+      startingCP: 1, // Corruption Points
+      hpBonus: 0
     },
     Nephilim: { 
-      desc: "Giant-blooded warriors of renown. Mighty and enduring.",
-      bonuses: { STR: 2, CON: 2 } 
+      desc: "Giant-blooded warriors. +2 STR, +1 CON. Large Size.",
+      bonuses: { STR: 2, CON: 1 },
+      startingRP: 0,
+      startingCP: 2, // Start with Corruption per lore
+      hpBonus: 5     // Extra HP for being large/tough
     }
   };
 
@@ -43,10 +53,10 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     }));
   };
 
-  // --- 1. GENERATE IMAGE (Connects to your generate-image.js) ---
+  // --- 1. GENERATE IMAGE ---
   const handleGenerate = async () => {
     if (!formData.visuals) {
-      setError("Please describe your character first.");
+      setError("Please describe your character's appearance.");
       return;
     }
     
@@ -54,228 +64,284 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     setError('');
 
     try {
-      // Create a rich prompt for the AI
-      const prompt = `Fantasy character portrait, ${formData.sex || 'Male'} ${formData.lineage} ${formData.charClass}, ${formData.visuals}, ancient near east setting, biblical fantasy, realistic, dramatic lighting, 8k`;
+      // Create a rich prompt
+      const fullPrompt = `Fantasy character portrait, ${formData.sex} ${formData.lineage} ${formData.charClass}, ${formData.visuals}, ancient near east setting, biblical fantasy, realistic, dramatic lighting, 8k resolution`;
 
-      // Call the Worker
+      // CRITICAL FIX: Send payload exactly as your backend expects it
+      // Your generate-image.js expects: const { prompt } = await request.json();
       const response = await fetch('/generate-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: prompt })
+        body: JSON.stringify({ prompt: fullPrompt })
       });
 
       const data = await response.json();
       
-      if (!response.ok) throw new Error(data.details || "Generation failed");
+      if (!response.ok) {
+        throw new Error(data.details || data.error || "Generation failed");
+      }
       
-      // Save the image to state
-      setPortrait(`data:image/jpeg;base64,${data.image}`);
+      if (data.image) {
+        setPortrait(`data:image/jpeg;base64,${data.image}`);
+      } else {
+        throw new Error("No image data received");
+      }
 
     } catch (err) {
       console.error(err);
-      setError("Failed to summon image: " + err.message);
+      setError(`Error: ${err.message}`);
     } finally {
       setLoading(false);
     }
   };
 
-  // --- 2. CALCULATE STATS & SAVE ---
+  // --- 2. CALCULATE & SAVE ---
   const handleSave = () => {
     if (!formData.name || !portrait) {
-      setError("You must have a Name and a Portrait to proceed.");
+      setError("Name and Portrait are required.");
       return;
     }
 
     // A. Apply Lineage Bonuses
     const finalStats = { ...formData.attributes };
-    const bonuses = LORE[formData.lineage].bonuses;
-    for (const [key, val] of Object.entries(bonuses)) {
-      finalStats[key] += val;
+    const loreData = LORE[formData.lineage];
+    
+    Object.entries(loreData.bonuses).forEach(([stat, bonus]) => {
+      finalStats[stat] += bonus;
+    });
+
+    // B. Calculate 5e Modifiers
+    const getMod = (score) => Math.floor((score - 10) / 2);
+    const strMod = getMod(finalStats.STR);
+    const dexMod = getMod(finalStats.DEX);
+    const conMod = getMod(finalStats.CON);
+
+    // C. Calculate Derived Stats
+    const proficiency = 2; // Level 1 standard
+    const maxHp = 10 + conMod + loreData.hpBonus;
+    const defense = 10 + dexMod; // Unarmored defense or basic leather
+
+    // D. Define Actions based on Class (Simple loadout)
+    let mainAction = {};
+    
+    if (formData.charClass === 'Hunter') {
+        mainAction = {
+            id: 'w1', name: 'Composite Bow', type: 'ranged', cost: 1,
+            toHitBonus: proficiency + dexMod,
+            damageDice: '1d8', damageBonus: dexMod, damageType: 'piercing'
+        };
+    } else if (formData.charClass === 'Priest') {
+        mainAction = {
+            id: 'w1', name: 'Bronze Staff', type: 'melee', cost: 1,
+            toHitBonus: proficiency + strMod,
+            damageDice: '1d6', damageBonus: strMod, damageType: 'bludgeoning'
+        };
+    } else {
+        // Warrior default
+        mainAction = {
+            id: 'w1', name: 'Bronze Khopesh', type: 'melee', cost: 1,
+            toHitBonus: proficiency + strMod,
+            damageDice: '1d8', damageBonus: strMod, damageType: 'slashing'
+        };
     }
 
-    // B. Calculate Derivatives (5e Style)
-    const getMod = (score) => Math.floor((score - 10) / 2);
-    const conMod = getMod(finalStats.CON);
-    const dexMod = getMod(finalStats.DEX);
-    const strMod = getMod(finalStats.STR);
-
-    // C. Build Character Object
+    // E. Construct Character Object
     const newCharacter = {
-      id: 'player_1',
+      id: 'p1',
       name: formData.name,
       isPlayer: true,
-      portrait: portrait, // The base64 string
+      portrait: portrait,
       lineage: formData.lineage,
       class: formData.charClass,
+      attributes: finalStats,
       
-      // Combat Stats
-      maxHp: 10 + conMod + (formData.lineage === 'Nephilim' ? 5 : 0), // Nephilim get +5 HP
-      hp: 10 + conMod + (formData.lineage === 'Nephilim' ? 5 : 0),
-      defense: 10 + dexMod, // Base AC
+      // Combat Screen Specifics
+      hp: maxHp,
+      maxHp: maxHp,
+      defense: defense,
       initiativeBonus: dexMod,
       
-      // Soul Economy (from index.html)
-      rp: formData.lineage === 'Sethite' ? 2 : 0, 
-      cp: formData.lineage === 'Nephilim' ? 2 : 0,
+      // Soul Economy
+      rp: loreData.startingRP,
+      cp: loreData.startingCP,
 
-      // Default Weapon
-      actions: [
-        {
-          id: 'w1',
-          name: 'Bronze Sword',
-          type: 'melee',
-          cost: 1,
-          toHitBonus: 2 + strMod, // Proficiency(2) + STR
-          damageDice: '1d8',
-          damageBonus: strMod,
-          damageType: 'slashing'
-        }
-      ]
+      actions: [mainAction]
     };
 
-    // D. Save to LocalStorage
+    // F. Save
     localStorage.setItem('generatedCharacter', JSON.stringify(newCharacter));
 
-    // E. Notify App to Switch Screens
     if (onCharacterComplete) {
       onCharacterComplete();
     }
   };
 
-  // --- RENDER ---
   return (
-    <div className="min-h-screen bg-stone-950 text-stone-200 font-serif flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#0c0a09] text-[#d6d3d1] font-serif flex items-center justify-center p-4">
       <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8">
 
         {/* --- LEFT PANEL: THE FORGE --- */}
-        <div className="border-2 border-amber-700 bg-black/90 p-8 shadow-[0_0_50px_rgba(245,158,11,0.1)] relative">
-          <h1 className="text-4xl text-amber-500 font-cinzel font-bold mb-6 border-b border-amber-800 pb-2 tracking-widest text-center">
-            NEXUS CREATOR
+        <div className="border-2 border-[#78350f] bg-[#1c1917]/95 p-8 shadow-[0_0_40px_rgba(245,158,11,0.1)] rounded-sm">
+          <h1 className="text-4xl text-[#fcd34d] font-cinzel font-bold mb-6 border-b border-[#78350f] pb-2 tracking-widest text-center shadow-black drop-shadow-lg">
+            SOUL FORGE
           </h1>
 
-          <div className="space-y-6">
+          <div className="space-y-5">
             
-            {/* Name Input */}
+            {/* NAME */}
             <div>
-              <label className="block text-amber-600 text-xs font-bold uppercase tracking-widest mb-1">True Name</label>
+              <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-1">Name</label>
               <input 
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="e.g. Enoch"
-                className="w-full bg-stone-900 border border-stone-700 p-3 text-xl text-white focus:border-amber-500 outline-none"
+                placeholder="e.g. Adoniram"
+                className="w-full bg-black border border-[#44403c] p-3 text-xl text-white focus:border-[#f59e0b] outline-none"
               />
             </div>
 
-            {/* Lineage Selection */}
-            <div className="bg-stone-900/50 p-4 border-l-2 border-amber-600">
-              <label className="block text-amber-600 text-xs font-bold uppercase tracking-widest mb-1">Lineage</label>
-              <select 
-                name="lineage"
-                value={formData.lineage}
-                onChange={handleChange}
-                className="w-full bg-black border border-stone-700 p-2 text-white outline-none mb-2"
-              >
-                <option value="Sethite">Sethite (Righteous)</option>
-                <option value="Cainite">Cainite (Corrupted)</option>
-                <option value="Nephilim">Nephilim (Giant)</option>
-              </select>
-              <p className="text-xs text-stone-400 italic">{LORE[formData.lineage].desc}</p>
-              <p className="text-xs text-amber-500 mt-1">
+            {/* LINEAGE & SEX */}
+            <div className="grid grid-cols-2 gap-4">
+                <div>
+                    <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-1">Lineage</label>
+                    <select 
+                        name="lineage"
+                        value={formData.lineage}
+                        onChange={handleChange}
+                        className="w-full bg-black border border-[#44403c] p-2 text-white outline-none"
+                    >
+                        <option value="Sethite">Sethite</option>
+                        <option value="Cainite">Cainite</option>
+                        <option value="Nephilim">Nephilim</option>
+                    </select>
+                </div>
+                <div>
+                    <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-1">Sex</label>
+                    <select 
+                        name="sex"
+                        value={formData.sex} // Assuming you might add this to state
+                        onChange={(e) => setFormData({...formData, sex: e.target.value})}
+                        className="w-full bg-black border border-[#44403c] p-2 text-white outline-none"
+                    >
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+            </div>
+
+            {/* LORE INFO */}
+            <div className="bg-[#292524] p-3 border-l-2 border-[#f59e0b] text-xs text-[#a8a29e]">
+              <p className="italic mb-1">{LORE[formData.lineage].desc}</p>
+              <p className="text-[#fcd34d] font-bold">
                 Bonuses: {Object.entries(LORE[formData.lineage].bonuses).map(([k,v]) => `+${v} ${k}`).join(', ')}
               </p>
             </div>
 
-            {/* Attributes Grid */}
+            {/* CLASS & VISUALS */}
             <div>
-              <label className="block text-amber-600 text-xs font-bold uppercase tracking-widest mb-2">Base Attributes</label>
+              <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-1">Class</label>
+              <select 
+                name="charClass"
+                value={formData.charClass}
+                onChange={handleChange}
+                className="w-full bg-black border border-[#44403c] p-2 text-white outline-none mb-4"
+              >
+                <option>Warrior</option>
+                <option>Hunter</option>
+                <option>Priest</option>
+                <option>Scholar</option>
+              </select>
+
+              <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-1">Visual Prompt</label>
+              <textarea 
+                name="visuals"
+                value={formData.visuals}
+                onChange={handleChange}
+                placeholder="Describe your character (e.g. 'Golden armor, glowing halo, desert background')"
+                className="w-full bg-black border border-[#44403c] p-3 text-sm text-white h-24 resize-none focus:border-[#f59e0b] outline-none"
+              />
+            </div>
+
+            {/* ATTRIBUTES */}
+            <div>
+              <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-2">Base Attributes</label>
               <div className="grid grid-cols-6 gap-2">
                 {Object.keys(formData.attributes).map(attr => (
                   <div key={attr} className="text-center">
-                    <span className="block text-[10px] text-stone-500 font-bold mb-1">{attr}</span>
+                    <span className="block text-[9px] text-[#78716c] font-bold mb-1">{attr}</span>
                     <input 
                       type="number"
                       value={formData.attributes[attr]}
                       onChange={(e) => handleAttrChange(attr, e.target.value)}
-                      className="w-full bg-black border border-stone-800 p-1 text-center text-amber-500 font-bold focus:border-amber-500 outline-none"
+                      className="w-full bg-black border border-[#44403c] p-1 text-center text-[#fcd34d] font-bold focus:border-[#f59e0b] outline-none text-sm"
                     />
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Visual Prompt */}
-            <div>
-              <label className="block text-amber-600 text-xs font-bold uppercase tracking-widest mb-1">Visual Description</label>
-              <textarea 
-                name="visuals"
-                value={formData.visuals}
-                onChange={handleChange}
-                placeholder="Describe your hero... (e.g. 'Scarred face, glowing blue eyes, holding a bronze spear')"
-                className="w-full bg-stone-900 border border-stone-700 p-3 text-sm text-white h-24 resize-none focus:border-amber-500 outline-none"
-              />
-            </div>
-
-            {/* Generate Button */}
+            {/* GENERATE BUTTON */}
             <button 
               onClick={handleGenerate}
               disabled={loading}
-              className={`w-full py-4 font-cinzel font-bold text-lg uppercase tracking-widest transition-all border border-amber-600 ${
+              className={`w-full py-3 font-cinzel font-bold text-lg uppercase tracking-widest transition-all border border-[#f59e0b] ${
                 loading 
-                  ? 'bg-stone-800 text-stone-600 cursor-wait' 
-                  : 'bg-amber-900/40 text-amber-100 hover:bg-amber-700 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)]'
+                  ? 'bg-[#292524] text-[#78716c] cursor-not-allowed' 
+                  : 'bg-[#78350f] hover:bg-[#92400e] text-white shadow-[0_0_15px_rgba(245,158,11,0.3)]'
               }`}
             >
-              {loading ? 'Communing with the Machine...' : 'Generate Portrait'}
+              {loading ? 'Communing...' : 'Generate Portrait'}
             </button>
             
-            {error && <p className="text-red-500 text-sm text-center bg-red-900/20 p-2 border border-red-900">{error}</p>}
+            {error && (
+              <div className="bg-red-900/30 border border-red-800 p-2 text-red-400 text-xs text-center mt-2">
+                {error}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* --- RIGHT PANEL: THE CARD --- */}
-        <div className="border-2 border-stone-800 bg-black p-2 flex flex-col justify-center relative">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-700 to-transparent opacity-50"></div>
-            
-            {/* Character Header */}
-            <div className="text-center py-6">
-                <h2 className="text-5xl font-cinzel font-bold text-amber-500 drop-shadow-md">
+        {/* --- RIGHT: THE CARD PREVIEW --- */}
+        <div className="border-2 border-[#78350f] bg-black p-2 flex flex-col relative shadow-2xl h-full min-h-[500px]">
+            {/* Card Header */}
+            <div className="text-center py-4 bg-[#1c1917] border-b border-[#292524]">
+                <h2 className="text-3xl font-cinzel font-bold text-[#fcd34d] drop-shadow-md">
                     {formData.name || 'UNKNOWN'}
                 </h2>
-                <div className="flex justify-center gap-4 text-stone-500 font-serif italic mt-2 text-sm">
+                <div className="flex justify-center gap-3 text-[#a8a29e] font-serif italic mt-1 text-xs uppercase tracking-wide">
+                    <span>{formData.sex || 'Male'}</span>
+                    <span>•</span>
                     <span>{formData.lineage}</span>
                     <span>•</span>
                     <span>{formData.charClass}</span>
                 </div>
             </div>
 
-            {/* Image Frame */}
-            <div className="flex-1 border border-stone-800 bg-stone-900 relative overflow-hidden group">
+            {/* Portrait Frame */}
+            <div className="flex-1 border border-[#292524] bg-[#0c0a09] relative overflow-hidden group">
                 {portrait ? (
-                    <img src={portrait} alt="Generated" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+                    <img src={portrait} alt="Generated" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 ) : (
-                    <div className="h-full flex flex-col items-center justify-center text-stone-700">
-                        <span className="text-8xl opacity-20 mb-4">⚔️</span>
-                        <p className="uppercase tracking-widest text-xs">Portrait Pending</p>
+                    <div className="h-full flex flex-col items-center justify-center text-[#44403c]">
+                        <span className="text-6xl opacity-20 mb-4 animate-pulse">⚔️</span>
+                        <p className="uppercase tracking-widest text-xs">Portrait Required</p>
                     </div>
                 )}
-                
-                {/* Overlay Vignette */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60 pointer-events-none"></div>
             </div>
 
-            {/* Footer / Save */}
-            <div className="p-6">
+            {/* Save Button */}
+            <div className="p-4 bg-[#1c1917] border-t border-[#292524]">
                 {portrait ? (
                     <button 
                         onClick={handleSave}
-                        className="w-full bg-green-900/80 border border-green-600 text-green-100 py-3 text-xl font-cinzel font-bold uppercase tracking-widest hover:bg-green-800 hover:scale-[1.02] transition-all shadow-[0_0_20px_rgba(22,163,74,0.2)]"
+                        className="w-full bg-green-900/80 border border-green-600 text-green-100 py-3 text-lg font-cinzel font-bold uppercase tracking-widest hover:bg-green-800 hover:scale-[1.02] transition-all shadow-[0_0_20px_rgba(22,163,74,0.3)]"
                     >
                         Accept Soul & Begin
                     </button>
                 ) : (
-                    <div className="text-center text-stone-600 text-xs uppercase tracking-widest">
-                        Awaiting Creation
+                    <div className="text-center text-[#57534e] text-xs uppercase tracking-widest py-3">
+                        Awaiting Visualization
                     </div>
                 )}
             </div>
