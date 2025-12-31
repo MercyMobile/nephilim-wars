@@ -12,6 +12,10 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Cinzel', serif;
             background: linear-gradient(135deg, #0c0a09 0%, #1c1917 100%);
@@ -164,6 +168,41 @@
         .thunder { background: #475569; color: #cbd5e1; }
         .psychic { background: #7c2d12; color: #fda4af; }
 
+        .class-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 2rem 0 3rem 0;
+            padding: 1.5rem;
+            background: rgba(28, 25, 23, 0.6);
+            border: 2px solid #78350f;
+            border-radius: 12px;
+        }
+
+        .class-nav-button {
+            padding: 0.75rem 1.5rem;
+            background: rgba(12, 10, 9, 0.8);
+            border: 1px solid #78350f;
+            border-radius: 6px;
+            color: #d6d3d1;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .class-nav-button:hover {
+            background: rgba(120, 53, 15, 0.4);
+            border-color: #f59e0b;
+            color: #fcd34d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 1rem;
@@ -180,6 +219,16 @@
             .weapon-table {
                 font-size: 0.85rem;
             }
+
+            .class-nav {
+                padding: 1rem;
+                gap: 0.4rem;
+            }
+
+            .class-nav-button {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
@@ -188,8 +237,19 @@
         <h1>⚔️ Class Guide ⚔️</h1>
         <p class="subtitle">The Seven Paths of the Antediluvian World</p>
 
+        <!-- Class Navigation -->
+        <nav class="class-nav">
+            <a href="#warrior" class="class-nav-button">🛡️ Warrior</a>
+            <a href="#gibbor" class="class-nav-button">💪 Gibbor</a>
+            <a href="#hunter" class="class-nav-button">🏹 Hunter</a>
+            <a href="#magi" class="class-nav-button">🔮 Magi</a>
+            <a href="#priest" class="class-nav-button">✨ Priest</a>
+            <a href="#artisan" class="class-nav-button">🔨 Artisan</a>
+            <a href="#scribe" class="class-nav-button">📜 Scribe</a>
+        </nav>
+
         <!-- Warrior Class -->
-        <div class="class-section">
+        <div id="warrior" class="class-section">
             <h2>🛡️ Warrior</h2>
             <p class="class-subtitle">Tribal Fighter</p>
             <p>Battle-hardened warriors form the backbone of tribal armies. Trained from youth in the art of combat, they master all manner of weapons and stand as protectors of their people against the threats of the antediluvian world.</p>
@@ -270,7 +330,7 @@
         </div>
 
         <!-- Gibbor Class -->
-        <div class="class-section">
+        <div id="gibbor" class="class-section">
             <h2>💪 Gibbor</h2>
             <p class="class-subtitle">Mighty Hero</p>
             <p>The Gibbor are legendary heroes of renown, blessed (or cursed) with strength that surpasses mortal limits. Descended from the unions of Watchers and humans, these mighty warriors wield the heaviest weapons with devastating effect.</p>
@@ -345,7 +405,7 @@
         </div>
 
         <!-- Hunter Class -->
-        <div class="class-section">
+        <div id="hunter" class="class-section">
             <h2>🏹 Hunter</h2>
             <p class="class-subtitle">Wilderness Expert</p>
             <p>Masters of the hunt and survivors of the untamed wilds, Hunters track prey across vast distances and strike from the shadows. They excel with ranged weapons and can adapt to both wilderness and urban environments.</p>
@@ -426,7 +486,7 @@
         </div>
 
         <!-- Magi Class -->
-        <div class="class-section">
+        <div id="magi" class="class-section">
             <h2>🔮 Magi</h2>
             <p class="class-subtitle">Watcher-Taught Sorcerer</p>
             <p>The Magi wield forbidden knowledge taught by the fallen Watchers. Through arcane focuses and forbidden rituals, they channel destructive elemental forces. Their power comes at a price - corruption follows those who delve too deep into forbidden magic.</p>
@@ -507,7 +567,7 @@
         </div>
 
         <!-- Priest Class -->
-        <div class="class-section">
+        <div id="priest" class="class-section">
             <h2>✨ Priest</h2>
             <p class="class-subtitle">Keeper of Rituals</p>
             <p>Priests maintain the sacred traditions and invoke the power of the divine. They channel holy power through blessed implements and sacred words, bringing both divine wrath and healing to the battlefield.</p>
@@ -588,7 +648,7 @@
         </div>
 
         <!-- Artisan Class -->
-        <div class="class-section">
+        <div id="artisan" class="class-section">
             <h2>🔨 Artisan</h2>
             <p class="class-subtitle">Smith & Builder</p>
             <p>Descended from Tubal-Cain, the first metalworker, Artisans are masters of bronze and stone. They craft weapons and tools, and know how to use them in combat. Their practical knowledge makes them versatile and resourceful.</p>
@@ -663,7 +723,7 @@
         </div>
 
         <!-- Scribe Class -->
-        <div class="class-section">
+        <div id="scribe" class="class-section">
             <h2>📜 Scribe</h2>
             <p class="class-subtitle">Keeper of Tablets</p>
             <p>Scribes preserve ancient knowledge and unlock the secrets of forgotten texts. While not primarily warriors, their intelligence and forbidden learning make them dangerous opponents who can wield both weapons and arcane knowledge.</p>
