@@ -3,12 +3,16 @@ import React, { useState, useRef, useEffect } from 'react';
 const DiceRollerModal = ({ isOpen, onClose, diceType = 'd20', onResult }) => {
   const [rolling, setRolling] = useState(false);
   const [result, setResult] = useState(null);
+  const [iframeKey, setIframeKey] = useState(Date.now());
   const iframeRef = useRef(null);
 
   useEffect(() => {
     if (!isOpen) {
       setResult(null);
       setRolling(false);
+    } else {
+      // Force iframe to reload with new cache-busting key when modal opens
+      setIframeKey(Date.now());
     }
   }, [isOpen]);
 
@@ -83,8 +87,9 @@ const DiceRollerModal = ({ isOpen, onClose, diceType = 'd20', onResult }) => {
 
         {/* Embedded Dice Roller Iframe */}
         <iframe
+          key={iframeKey}
           ref={iframeRef}
-          src={`/dice.html?v=${Date.now()}`}
+          src={`/dice.html?v=${iframeKey}`}
           title="3D Dice Roller"
           className="w-full h-full border-none"
           allow="scripts"
