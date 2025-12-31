@@ -252,7 +252,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
   useEffect(() => {
     generateRandomName();
     generateRandomHeight();
-  }, [formData.lineage, formData.sex]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const generateRandomName = () => {
     const race = formData.lineage;
