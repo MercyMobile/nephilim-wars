@@ -121,9 +121,9 @@ export default function App() {
              {/* Floating back button specific for Dice view */}
              <button
                onClick={() => setCurrentView('home')}
-               className="absolute top-4 left-4 z-50 bg-amber-900/90 text-amber-100 border-2 border-amber-600 px-6 py-3 rounded-lg hover:bg-amber-800 transition font-cinzel font-bold shadow-[0_0_20px_rgba(245,158,11,0.4)] backdrop-blur-sm"
+               className="absolute bottom-4 left-4 z-50 bg-stone-900/80 text-stone-300 border border-amber-900 px-4 py-2 rounded hover:bg-black hover:text-amber-500 hover:border-amber-500 transition font-cinzel font-semibold text-sm shadow-md backdrop-blur-sm opacity-80 hover:opacity-100"
              >
-               🏛️ Return Home
+               🏛️ Home
              </button>
           </div>
         )}
