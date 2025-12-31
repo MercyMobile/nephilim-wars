@@ -70,18 +70,21 @@ export function removeFromStorage(key) {
 export function isValidCharacterData(data) {
   if (!data || typeof data !== 'object') return false;
 
-  // Required fields
-  const requiredFields = ['name', 'lineage', 'sex', 'STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
+  // Required top-level fields
+  const requiredFields = ['name', 'lineage', 'sex', 'attributes'];
 
   for (const field of requiredFields) {
     if (!(field in data)) return false;
   }
 
-  // Validate attribute ranges
+  // Validate attributes object exists and has required stats
+  if (!data.attributes || typeof data.attributes !== 'object') return false;
+
   const attributes = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
   for (const attr of attributes) {
-    const value = parseInt(data[attr], 10);
-    if (isNaN(value) || value < 3 || value > 20) return false;
+    if (!(attr in data.attributes)) return false;
+    const value = parseInt(data.attributes[attr], 10);
+    if (isNaN(value) || value < 3 || value > 30) return false; // Extended max to 30 for racial bonuses
   }
 
   return true;

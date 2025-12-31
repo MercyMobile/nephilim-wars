@@ -503,8 +503,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
   // === CHARACTER SHEET VIEW ===
   if (showSheet && finalCharacter) {
     return (
-      <div className="min-h-screen bg-[#0c0a09] text-[#d6d3d1] font-serif p-4">
-        <div className="max-w-5xl mx-auto border-2 border-[#78350f] bg-[#1c1917] rounded-lg overflow-hidden">
+      <div className="min-h-screen bg-[#0c0a09] text-[#d6d3d1] font-serif p-4 pb-8">
+        <div className="max-w-5xl mx-auto border-2 border-[#78350f] bg-[#1c1917] rounded-lg overflow-hidden mb-8">
 
           {/* Header */}
           <div className="bg-gradient-to-r from-[#78350f] to-[#92400e] p-6 text-center">
@@ -518,8 +518,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
 
             {/* Portrait */}
-            <div className="border-2 border-[#44403c] rounded overflow-hidden">
-              <img src={finalCharacter.portrait} alt={finalCharacter.name} className="w-full h-auto" />
+            <div className="border-2 border-[#44403c] rounded overflow-hidden self-start">
+              <img src={finalCharacter.portrait} alt={finalCharacter.name} className="w-full h-auto max-h-[600px] object-cover object-top" />
             </div>
 
             {/* Stats Column */}
