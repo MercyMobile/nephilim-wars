@@ -1,135 +1,402 @@
-import React, { useEffect, useState } from 'react';
-import { useCombatEngine } from '../hooks/useCombatEngine';
-import { resolveAttack } from '../utils/combatRules'; 
-import CharacterSheet from '../components/CharacterSheet'; 
-
-// Components (assuming these are in ../components/)
-import InitiativeRibbon from '../components/InitiativeRibbon';
-import ActionDeck from '../components/ActionDeck';
+import React, { useState, useEffect } from 'react';
 
 const CombatScreen = () => {
-  const engine = useCombatEngine();
-  const [showSheet, setShowSheet] = useState(false);
+  const [playerCharacter, setPlayerCharacter] = useState(null);
+  const [enemy, setEnemy] = useState(null);
+  const [bestiary, setBestiary] = useState([]);
+  const [selectedEnemyId, setSelectedEnemyId] = useState('');
+  const [battleLog, setBattleLog] = useState([]);
+  const [playerTurn, setPlayerTurn] = useState(true);
+  const [rolling, setRolling] = useState(false);
 
-  // 1. LOAD CHARACTERS
+  // Load player character and bestiary
   useEffect(() => {
-    // Attempt to load generated character from local storage
-    const savedChar = JSON.parse(localStorage.getItem('generatedCharacter'));
-    
-    const playerChar = savedChar ? {
-      ...savedChar,
-      id: 'p1', 
-      isPlayer: true,
-      // Ensure specific combat stats exist, defaulting if missing
-      hp: savedChar.hp || 45,
-      maxHp: savedChar.maxHp || 45,
-      defense: savedChar.defense || 14,
-      initiativeBonus: savedChar.initiativeBonus || 0,
-      actions: savedChar.actions || []
-    } : {
-      // Fallback "David" if no generated char exists
-      id: 'p1', name: 'David', isPlayer: true, hp: 45, maxHp: 45, defense: 14, initiativeBonus: 5, 
-      portrait: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=150&h=150',
-      actions: [{ id: 'a1', name: 'Sling Stone', type: 'ranged', cost: 1, toHitBonus: 6, damageDice: '1d6', damageBonus: 2, damageType: 'physical' }]
+    const loadData = async () => {
+      // Load player character from localStorage
+      const savedChar = localStorage.getItem('generatedCharacter');
+      if (savedChar) {
+        const char = JSON.parse(savedChar);
+        setPlayerCharacter({
+          ...char,
+          currentHp: char.hp || char.maxHp,
+          rp: char.rp || 10,
+          cp: char.cp || 0
+        });
+      }
+
+      // Load bestiary
+      try {
+        const response = await fetch('/data/combat-bestiary.json');
+        const data = await response.json();
+        setBestiary(data.enemies);
+      } catch (error) {
+        console.error('Failed to load bestiary:', error);
+      }
     };
 
-    engine.startBattle([
-      playerChar,
-      {
-        id: 'e1', name: 'Nephilim Warlord', isPlayer: false, hp: 120, maxHp: 120, defense: 16, initiativeBonus: 1, 
-        portrait: 'https://images.unsplash.com/photo-1594322436404-5a0526db4d13?fit=crop&w=150&h=150',
-        actions: [{ id: 'a2', name: 'Bronze Sword', type: 'melee', cost: 1, toHitBonus: 8, damageDice: '2d8', damageBonus: 4, damageType: 'slashing' }]
-      }
-    ]);
-  }, []); 
+    loadData();
+  }, []);
 
-  const activeChar = engine.combatants.find(c => c.id === engine.activeCombatantId);
-
-  // 2. HANDLE ACTIONS
-  const handleAction = (action) => {
-    const target = engine.combatants.find(c => c.id !== activeChar.id);
-    if (!target) return;
-
-    // Simulate Roll & Apply Rules
-    const d20Roll = Math.ceil(Math.random() * 20);
-    const result = resolveAttack(action, activeChar, target, d20Roll);
-
-    engine.executeAction({
-      ...action,
-      calculatedDamage: result.damage,
-      isHit: result.isHit,
-      logMessages: result.log
-    }, target.id);
-
-    setTimeout(() => engine.nextTurn(), 1000);
+  // Load enemy from bestiary
+  const handleEnemySelect = (enemyId) => {
+    setSelectedEnemyId(enemyId);
+    const selectedEnemy = bestiary.find(e => e.id === enemyId);
+    if (selectedEnemy) {
+      setEnemy({
+        ...selectedEnemy,
+        currentHp: selectedEnemy.stats.hp,
+        rp: 10,
+        cp: 0
+      });
+      setBattleLog([{
+        id: Date.now(),
+        message: `${selectedEnemy.name} enters the battlefield!`,
+        type: 'system'
+      }]);
+    }
   };
 
-  // --- 🔴 THE FIX IS HERE 🔴 ---
-  // If activeChar isn't ready yet, show a loading text instead of crashing.
-  if (!activeChar) {
+  // Dice roll simulator (d20)
+  const rollD20 = () => {
+    return Math.floor(Math.random() * 20) + 1;
+  };
+
+  // Damage dice roller
+  const rollDamage = (dice) => {
+    const [count, sides] = dice.split('d').map(Number);
+    let total = 0;
+    for (let i = 0; i < count; i++) {
+      total += Math.floor(Math.random() * sides) + 1;
+    }
+    return total;
+  };
+
+  // Handle attack
+  const handleAttack = (attacker, defender, action) => {
+    setRolling(true);
+
+    setTimeout(() => {
+      const d20 = rollD20();
+      const toHit = d20 + action.toHitBonus;
+      const isHit = toHit >= (defender.stats?.defense || defender.defense);
+
+      let damage = 0;
+      let logMessage = '';
+
+      if (d20 === 20) {
+        // Critical hit
+        damage = rollDamage(action.damageDice) * 2 + action.damageBonus;
+        logMessage = `🔥 CRITICAL HIT! ${attacker.name} rolled NAT 20! ${action.name} deals ${damage} ${action.damageType} damage!`;
+      } else if (d20 === 1) {
+        // Critical miss
+        logMessage = `💀 CRITICAL MISS! ${attacker.name} rolled NAT 1! ${action.name} fails completely!`;
+      } else if (isHit) {
+        // Normal hit
+        damage = rollDamage(action.damageDice) + action.damageBonus;
+        logMessage = `⚔️ ${attacker.name} rolled ${d20}+${action.toHitBonus}=${toHit} vs DEF ${defender.stats?.defense || defender.defense}. ${action.name} hits for ${damage} ${action.damageType} damage!`;
+      } else {
+        // Miss
+        logMessage = `🛡️ ${attacker.name} rolled ${d20}+${action.toHitBonus}=${toHit} vs DEF ${defender.stats?.defense || defender.defense}. ${action.name} misses!`;
+      }
+
+      // Apply damage
+      if (damage > 0) {
+        if (attacker === playerCharacter) {
+          setEnemy(prev => ({
+            ...prev,
+            currentHp: Math.max(0, prev.currentHp - damage)
+          }));
+        } else {
+          setPlayerCharacter(prev => ({
+            ...prev,
+            currentHp: Math.max(0, prev.currentHp - damage)
+          }));
+        }
+      }
+
+      // Add to battle log
+      setBattleLog(prev => [{
+        id: Date.now(),
+        message: logMessage,
+        type: isHit ? 'hit' : 'miss',
+        actor: attacker.name
+      }, ...prev].slice(0, 10));
+
+      setRolling(false);
+
+      // Switch turns
+      if (attacker === playerCharacter) {
+        setTimeout(() => {
+          setPlayerTurn(false);
+          // Enemy AI turn
+          setTimeout(() => enemyTurn(), 1500);
+        }, 1000);
+      } else {
+        setPlayerTurn(true);
+      }
+    }, 1000);
+  };
+
+  // Enemy AI turn
+  const enemyTurn = () => {
+    if (!enemy || !playerCharacter || enemy.currentHp <= 0 || playerCharacter.currentHp <= 0) return;
+
+    const randomAction = enemy.actions[Math.floor(Math.random() * enemy.actions.length)];
+    handleAttack(enemy, playerCharacter, randomAction);
+  };
+
+  // Reset combat
+  const resetCombat = () => {
+    if (enemy) {
+      setEnemy(prev => ({
+        ...prev,
+        currentHp: prev.stats.hp
+      }));
+    }
+    if (playerCharacter) {
+      setPlayerCharacter(prev => ({
+        ...prev,
+        currentHp: prev.maxHp
+      }));
+    }
+    setBattleLog([]);
+    setPlayerTurn(true);
+  };
+
+  // Check victory/defeat
+  const isVictory = enemy && enemy.currentHp <= 0;
+  const isDefeat = playerCharacter && playerCharacter.currentHp <= 0;
+
+  if (!playerCharacter) {
     return (
-      <div className="h-screen bg-gray-900 text-amber-500 font-serif flex items-center justify-center">
-        <div className="text-2xl animate-pulse">Summoning Combatants...</div>
+      <div className="h-full bg-[#0c0a09] text-[#d6d3d1] flex items-center justify-center font-serif">
+        <div className="text-center">
+          <div className="text-6xl mb-4 text-amber-500">⚔️</div>
+          <h2 className="text-2xl font-cinzel text-amber-500 mb-4">No Character Found</h2>
+          <p className="text-stone-400">Please create a character first.</p>
+        </div>
       </div>
     );
   }
-  // -----------------------------
 
   return (
-    <div className="h-screen flex flex-col bg-gray-900 overflow-hidden relative text-white">
-      
-      {/* View Sheet Button */}
-      <button 
-        onClick={() => setShowSheet(true)}
-        className="absolute top-28 left-4 z-40 bg-stone-800 border border-amber-600 px-4 py-2 rounded font-serif hover:bg-stone-700 transition-colors"
-      >
-        📜 View Character
-      </button>
+    <div className="h-full bg-[#0c0a09] text-[#d6d3d1] font-serif overflow-auto">
+      <div className="max-w-7xl mx-auto p-6">
 
-      {/* Character Sheet Modal */}
-      {showSheet && activeChar.isPlayer && (
-        <CharacterSheet character={activeChar} onClose={() => setShowSheet(false)} />
-      )}
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-cinzel font-bold text-amber-500 mb-2">COMBAT ARENA</h1>
+          <div className="h-1 w-48 bg-gradient-to-r from-transparent via-amber-700 to-transparent mx-auto"></div>
+        </div>
 
-      {/* Initiative & Action Components */}
-      <InitiativeRibbon queue={engine.turnQueue} combatants={engine.combatants} activeId={engine.activeCombatantId} />
-      
-      <div className="flex-1 flex items-center justify-center gap-20 p-8 relative">
-        {/* Render combatants using your existing engine mapping, or manual cards here */}
-        {engine.combatants.map(char => (
-           <div key={char.id} className={`relative transition-all duration-500 ${char.id === activeChar.id ? 'scale-110 z-10' : 'opacity-80'}`}>
-              <div className={`w-64 h-80 border-4 rounded-lg overflow-hidden bg-black relative ${char.id === activeChar.id ? 'border-amber-500 shadow-[0_0_30px_rgba(245,158,11,0.5)]' : 'border-stone-700'}`}>
-                  <img src={char.portrait} alt={char.name} className="w-full h-full object-cover" />
-                  
-                  {/* Floating Damage Text (if you have that feature) */}
-                  
-                  {/* Health Bar Overlay */}
-                  <div className="absolute bottom-0 w-full bg-black/80 p-2 border-t border-stone-600">
-                    <div className="text-center font-cinzel font-bold text-lg mb-1">{char.name}</div>
-                    <div className="w-full bg-stone-800 h-2 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-red-600 transition-all duration-500" 
-                        style={{ width: `${(char.hp / char.maxHp) * 100}%` }}
-                      />
-                    </div>
-                    <div className="text-xs text-center mt-1 text-stone-400">{char.hp} / {char.maxHp} HP</div>
-                  </div>
-              </div>
-           </div>
-        ))}
-      </div>
-
-      {/* Battle Log Overlay */}
-      <div className="absolute top-28 right-4 w-72 pointer-events-none flex flex-col gap-2 z-40 font-serif">
-        {engine.battleLog.slice(0, 5).map(log => (
-           <div key={log.id} className="bg-black/80 border-r-2 border-amber-500 p-3 rounded text-sm text-right text-stone-200 shadow-lg animate-fade-in-left">
-            <span className="text-amber-500 font-bold uppercase text-xs block mb-1">{log.sourceName}</span> 
-            {log.message}
+        {/* Enemy Selection */}
+        {!enemy && (
+          <div className="mb-8 max-w-2xl mx-auto">
+            <label className="block text-amber-500 font-cinzel font-bold text-xl mb-3 text-center">
+              SELECT YOUR OPPONENT
+            </label>
+            <select
+              value={selectedEnemyId}
+              onChange={(e) => handleEnemySelect(e.target.value)}
+              className="w-full bg-[#1c1917] border-2 border-[#78350f] text-[#fcd34d] p-4 font-cinzel text-lg rounded focus:outline-none focus:border-amber-500"
+            >
+              <option value="">-- Choose an Enemy --</option>
+              {bestiary.map(enemy => (
+                <option key={enemy.id} value={enemy.id}>
+                  {enemy.name} ({enemy.type}) - HP: {enemy.stats.hp}
+                </option>
+              ))}
+            </select>
           </div>
-        ))}
+        )}
+
+        {/* Combat Area */}
+        {enemy && (
+          <>
+            {/* Character Cards */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+
+              {/* Player Card */}
+              <CharacterCard
+                character={playerCharacter}
+                isPlayer={true}
+                isActive={playerTurn}
+                isVictory={isVictory}
+                isDefeat={isDefeat}
+              />
+
+              {/* Enemy Card */}
+              <CharacterCard
+                character={enemy}
+                isPlayer={false}
+                isActive={!playerTurn}
+                isVictory={isDefeat}
+                isDefeat={isVictory}
+              />
+            </div>
+
+            {/* Victory/Defeat Banner */}
+            {(isVictory || isDefeat) && (
+              <div className="text-center mb-8">
+                <div className={`text-6xl font-cinzel font-bold mb-4 ${isVictory ? 'text-green-500' : 'text-red-500'}`}>
+                  {isVictory ? '🏆 VICTORY!' : '💀 DEFEAT!'}
+                </div>
+                <button
+                  onClick={resetCombat}
+                  className="px-8 py-3 bg-amber-900 border-2 border-amber-600 text-amber-100 font-bold rounded hover:bg-amber-800 transition"
+                >
+                  Reset Combat
+                </button>
+              </div>
+            )}
+
+            {/* Action Buttons (Player Turn) */}
+            {playerTurn && !isVictory && !isDefeat && (
+              <div className="mb-8">
+                <h3 className="text-2xl font-cinzel font-bold text-amber-500 mb-4 text-center">
+                  YOUR ACTIONS
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                  {playerCharacter.actions.map(action => (
+                    <button
+                      key={action.id}
+                      onClick={() => handleAttack(playerCharacter, enemy, action)}
+                      disabled={rolling}
+                      className="bg-[#1c1917] border-2 border-[#78350f] p-4 rounded hover:border-amber-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <div className="text-amber-500 font-bold text-lg mb-2">{action.name}</div>
+                      <div className="text-sm text-stone-400">
+                        {action.type.toUpperCase()} • {action.damageDice}+{action.damageBonus}
+                      </div>
+                      <div className="text-xs text-stone-500 mt-1">
+                        To Hit: +{action.toHitBonus} • {action.damageType}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Enemy Turn Indicator */}
+            {!playerTurn && !isVictory && !isDefeat && (
+              <div className="mb-8 text-center">
+                <div className="text-2xl font-cinzel font-bold text-red-500 animate-pulse">
+                  ENEMY TURN...
+                </div>
+              </div>
+            )}
+
+            {/* Battle Log */}
+            <div className="max-w-4xl mx-auto">
+              <h3 className="text-2xl font-cinzel font-bold text-amber-500 mb-4 text-center">
+                BATTLE LOG
+              </h3>
+              <div className="bg-[#1c1917] border-2 border-[#78350f] rounded p-4 max-h-80 overflow-y-auto">
+                {battleLog.length === 0 ? (
+                  <div className="text-center text-stone-500 italic">No actions yet...</div>
+                ) : (
+                  battleLog.map(log => (
+                    <div
+                      key={log.id}
+                      className={`p-3 mb-2 border-l-4 ${
+                        log.type === 'hit' ? 'border-red-600 bg-red-900/20' :
+                        log.type === 'miss' ? 'border-stone-600 bg-stone-900/20' :
+                        'border-amber-600 bg-amber-900/20'
+                      }`}
+                    >
+                      <div className="text-sm">{log.message}</div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Character Card Component
+const CharacterCard = ({ character, isPlayer, isActive, isVictory, isDefeat }) => {
+  const hpPercent = ((character.currentHp || 0) / (character.maxHp || character.stats?.hp || 1)) * 100;
+
+  return (
+    <div className={`border-4 rounded-lg overflow-hidden transition-all ${
+      isActive ? 'border-amber-500 shadow-[0_0_30px_rgba(245,158,11,0.5)] scale-105' :
+      'border-[#78350f]'
+    }`}>
+      {/* Portrait */}
+      <div className="relative">
+        <img
+          src={character.portrait || 'https://via.placeholder.com/300'}
+          alt={character.name}
+          className={`w-full h-64 object-cover ${isDefeat ? 'grayscale opacity-50' : ''}`}
+        />
+        {isVictory && (
+          <div className="absolute inset-0 flex items-center justify-center bg-green-900/50">
+            <div className="text-6xl">🏆</div>
+          </div>
+        )}
+        {isDefeat && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/70">
+            <div className="text-6xl">💀</div>
+          </div>
+        )}
       </div>
 
-      <ActionDeck activeChar={activeChar} onAction={handleAction} />
+      {/* Stats */}
+      <div className="bg-[#1c1917] p-4">
+        <h3 className="text-2xl font-cinzel font-bold text-amber-500 text-center mb-2">
+          {character.name}
+        </h3>
+
+        {isPlayer && (
+          <div className="text-center text-sm text-stone-400 mb-3">
+            {character.lineage} • {character.class}
+          </div>
+        )}
+
+        {!isPlayer && (
+          <div className="text-center text-sm text-stone-400 mb-3">
+            {character.type}
+          </div>
+        )}
+
+        {/* HP Bar */}
+        <div className="mb-4">
+          <div className="flex justify-between text-xs text-stone-400 mb-1">
+            <span>HP</span>
+            <span>{character.currentHp} / {character.maxHp || character.stats?.hp}</span>
+          </div>
+          <div className="w-full bg-stone-800 h-4 rounded-full overflow-hidden border border-stone-700">
+            <div
+              className={`h-full transition-all duration-500 ${
+                hpPercent > 50 ? 'bg-green-600' :
+                hpPercent > 25 ? 'bg-yellow-600' :
+                'bg-red-600'
+              }`}
+              style={{ width: `${hpPercent}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Defense */}
+        <div className="grid grid-cols-2 gap-2 text-center">
+          <div className="bg-[#0c0a09] border border-[#44403c] p-2 rounded">
+            <div className="text-xs text-stone-500">DEFENSE</div>
+            <div className="text-xl font-bold text-amber-500">
+              {character.defense || character.stats?.defense}
+            </div>
+          </div>
+          <div className="bg-[#0c0a09] border border-[#44403c] p-2 rounded">
+            <div className="text-xs text-stone-500">INITIATIVE</div>
+            <div className="text-xl font-bold text-amber-500">
+              +{character.initiativeBonus || character.stats?.initiativeBonus}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
