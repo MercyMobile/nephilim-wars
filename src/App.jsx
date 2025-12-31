@@ -21,17 +21,17 @@ const MainMenu = ({ onNavigate }) => (
     {/* Full-screen background image */}
     <div
       className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
-      style={{ backgroundImage: "url('https://i.ibb.co/9gY8FJz/dead-sea-scroll.jpg')" }}
+      style={{ backgroundImage: "url('/dead-sea-scroll.jpg')" }}
     />
     {/* Dark overlay for better text contrast */}
     <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
 
     <div className="z-10 text-center space-y-8 p-8 border-4 border-double border-amber-900/50 bg-stone-950/80 rounded-lg shadow-2xl max-w-2xl w-full backdrop-blur-sm">
-      
+
       <div>
         <h1 className="text-6xl font-cinzel text-amber-500 mb-2 text-shadow-lg">NEPHILIM WARS</h1>
         <div className="h-1 w-32 bg-gradient-to-r from-transparent via-amber-700 to-transparent mx-auto"></div>
-        <p className="text-stone-400 font-serif italic mt-2">The Age of Myth & Steel</p>
+        <p className="text-stone-400 font-serif italic mt-2">Creation to Corruption</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
