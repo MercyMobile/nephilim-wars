@@ -131,7 +131,19 @@ export async function onRequest(context) {
 
     // 5. Handle Image Response
     const imageBlob = await hfResponse.arrayBuffer();
-    const base64 = btoa(String.fromCharCode(...new Uint8Array(imageBlob)));
+
+    // Convert ArrayBuffer to base64 without stack overflow
+    // Process in chunks to avoid "Maximum call stack size exceeded"
+    const uint8Array = new Uint8Array(imageBlob);
+    let binaryString = '';
+    const chunkSize = 8192; // Process 8KB at a time
+
+    for (let i = 0; i < uint8Array.length; i += chunkSize) {
+      const chunk = uint8Array.subarray(i, Math.min(i + chunkSize, uint8Array.length));
+      binaryString += String.fromCharCode.apply(null, chunk);
+    }
+
+    const base64 = btoa(binaryString);
 
     return new Response(
       JSON.stringify({ success: true, image: base64 }),
