@@ -104,12 +104,12 @@ export default function App() {
            /* DiceScreen handles its own layout, but we wrap it to ensure it fits */
           <div className="w-full h-full bg-black relative">
              <DiceScreen />
-             {/* Floating back button specific for Dice view if needed */}
-             <button 
+             {/* Floating back button specific for Dice view */}
+             <button
                onClick={() => setCurrentView('home')}
-               className="absolute top-4 left-4 z-50 bg-stone-900/80 text-amber-500 border border-amber-900 px-3 py-1 rounded hover:bg-black"
+               className="absolute top-4 left-4 z-50 bg-amber-900/90 text-amber-100 border-2 border-amber-600 px-6 py-3 rounded-lg hover:bg-amber-800 transition font-cinzel font-bold shadow-[0_0_20px_rgba(245,158,11,0.4)] backdrop-blur-sm"
              >
-               ← Back to Menu
+               🏛️ Return Home
              </button>
           </div>
         )}
