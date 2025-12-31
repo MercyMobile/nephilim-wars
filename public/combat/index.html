@@ -112,6 +112,10 @@
         .arrow { transition: transform 0.3s; }
         .arrow.open { transform: rotate(90deg); }
 
+        /* Hide nav elements when in iframe */
+        body.in-iframe .home-btn { display: none; }
+        body.in-iframe .nav-bar { justify-content: center; }
+
         /* Mobile Fixes */
         @media (max-width: 900px) {
             .home-btn { position: relative; width: 100%; justify-content: center; margin-bottom: 10px; left: 0; top: 0; }
@@ -332,6 +336,11 @@
     </div>
 
     <script>
+        // Detect if in iframe and hide home button
+        if (window.self !== window.top) {
+            document.body.classList.add('in-iframe');
+        }
+
         function showSection(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
