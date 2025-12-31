@@ -454,6 +454,31 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     }
   };
 
+  // === RESET TO CREATE NEW CHARACTER ===
+  const handleReset = () => {
+    setFormData({
+      name: '',
+      sex: 'Male',
+      lineage: 'Sethite',
+      charClass: 'Warrior',
+      height: '',
+      skinTone: 'olive',
+      eyeColor: 'brown',
+      hairColor: 'black',
+      hairLength: 'short',
+      distinguishingFeature: 'none',
+      customVisuals: '',
+      background: 'desert ruins',
+      vibe: 'epic',
+      attributes: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 }
+    });
+    setPortrait('');
+    setFinalCharacter(null);
+    setShowSheet(false);
+    setError('');
+    setLoading(false);
+  };
+
   // === CHARACTER SHEET VIEW ===
   if (showSheet && finalCharacter) {
     return (
@@ -578,12 +603,18 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
           </div>
 
           {/* Footer Buttons */}
-          <div className="p-6 bg-[#0c0a09] border-t border-[#44403c] flex gap-4 justify-center">
+          <div className="p-6 bg-[#0c0a09] border-t border-[#44403c] flex gap-4 justify-center flex-wrap">
             <button
               onClick={() => setShowSheet(false)}
               className="px-8 py-3 bg-[#44403c] border border-[#78716c] text-white font-bold rounded hover:bg-[#57534e] transition"
             >
               ← Back to Editor
+            </button>
+            <button
+              onClick={handleReset}
+              className="px-8 py-3 bg-[#78350f] border border-[#f59e0b] text-[#fcd34d] font-bold rounded hover:bg-[#92400e] transition"
+            >
+              ✨ Create Another Character
             </button>
             <button
               onClick={handleSave}

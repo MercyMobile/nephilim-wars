@@ -28,6 +28,10 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.8);
         }
 
+        /* Hide nav when in iframe */
+        body.in-iframe .nav-bar { display: none; }
+        body.in-iframe .container { margin-top: 20px; }
+
         .nav-link {
             color: #fcd34d; text-decoration: none; font-weight: bold;
             text-transform: uppercase; letter-spacing: 1px; font-size: 14px;
@@ -189,6 +193,11 @@
     <script src="data.js"></script>
 
     <script>
+        // Detect if in iframe and hide nav
+        if (window.self !== window.top) {
+            document.body.classList.add('in-iframe');
+        }
+
         // --- RENDER LOGIC ---
         // 'database' is now loaded from data.js
         const grid = document.getElementById('grid');
