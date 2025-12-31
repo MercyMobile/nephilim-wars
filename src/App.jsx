@@ -2,18 +2,10 @@ import React, { useState, useEffect } from 'react';
 
 // --- Imports ---
 // Make sure these match your actual folder structure!
-import CharacterGenerator from './pages/CharacterGenerator'; 
-import CombatScreen from './pages/CombatScreen';             
-import DiceScreen from './components/DiceScreen';            
-
-// Placeholder for Bestiary if you haven't created it yet
-const BestiaryPlaceholder = () => (
-  <div className="h-full bg-stone-900 text-amber-500 flex flex-col items-center justify-center font-serif">
-    <div className="text-6xl mb-4">📖</div>
-    <div className="text-3xl border-b-2 border-amber-700 pb-2">Tome of Beasts</div>
-    <p className="mt-4 text-stone-400">The archives are currently sealed.</p>
-  </div>
-);
+import CharacterGenerator from './pages/CharacterGenerator';
+import CombatScreen from './pages/CombatScreen';
+import BestiaryScreen from './pages/BestiaryScreen';
+import DiceScreen from './components/DiceScreen';
 
 // --- HOME MENU COMPONENT ---
 const MainMenu = ({ onNavigate }) => (
@@ -123,7 +115,7 @@ export default function App() {
         )}
 
         {currentView === 'bestiary' && (
-          <BestiaryPlaceholder />
+          <BestiaryScreen />
         )}
 
         {currentView === 'rules' && (
