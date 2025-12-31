@@ -207,6 +207,63 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     { value: "Scribe", label: "Scribe (Keeper of Tablets)" }
   ];
 
+  // === EQUIPMENT BY CLASS (D&D 5e Stats) ===
+  const EQUIPMENT = {
+    Warrior: [
+      { id: 'bronze_sword', name: 'Bronze Longsword', type: 'melee', useStat: 'STR', damageDice: '1d8', damageType: 'slashing', desc: 'Versatile bronze blade (1d10 two-handed)' },
+      { id: 'bronze_greatsword', name: 'Bronze Greatsword', type: 'melee', useStat: 'STR', damageDice: '2d6', damageType: 'slashing', desc: 'Massive two-handed weapon' },
+      { id: 'bronze_battleaxe', name: 'Bronze Battle Axe', type: 'melee', useStat: 'STR', damageDice: '1d8', damageType: 'slashing', desc: 'Heavy war axe (1d10 two-handed)' },
+      { id: 'spear_shield', name: 'Spear & Shield', type: 'melee', useStat: 'STR', damageDice: '1d6', damageType: 'piercing', desc: 'Versatile spear (1d8 two-handed), +2 AC from shield' },
+      { id: 'war_hammer', name: 'Bronze War Hammer', type: 'melee', useStat: 'STR', damageDice: '1d8', damageType: 'bludgeoning', desc: 'Crushing weapon (1d10 two-handed)' },
+      { id: 'flail', name: 'Bronze Flail', type: 'melee', useStat: 'STR', damageDice: '1d8', damageType: 'bludgeoning', desc: 'Chained weapon, ignores shields' }
+    ],
+    Gibbor: [
+      { id: 'hero_blade', name: "Hero's Greatsword", type: 'melee', useStat: 'STR', damageDice: '2d6', damageType: 'slashing', desc: 'Legendary bronze blade of champions' },
+      { id: 'maul', name: 'Giant Maul', type: 'melee', useStat: 'STR', damageDice: '2d6', damageType: 'bludgeoning', desc: 'Devastating two-handed crushing weapon' },
+      { id: 'glaive', name: 'Bronze Glaive', type: 'melee', useStat: 'STR', damageDice: '1d10', damageType: 'slashing', desc: 'Polearm with reach (10ft)' },
+      { id: 'greataxe', name: 'Bronze Greataxe', type: 'melee', useStat: 'STR', damageDice: '1d12', damageType: 'slashing', desc: 'Brutal two-handed axe' },
+      { id: 'lance', name: 'Bronze Lance', type: 'melee', useStat: 'STR', damageDice: '1d12', damageType: 'piercing', desc: 'Mounted weapon with reach' }
+    ],
+    Hunter: [
+      { id: 'longbow', name: 'Composite Longbow', type: 'ranged', useStat: 'DEX', damageDice: '1d8', damageType: 'piercing', desc: 'Range 150/600, powerful bow' },
+      { id: 'shortbow', name: 'Hunting Shortbow', type: 'ranged', useStat: 'DEX', damageDice: '1d6', damageType: 'piercing', desc: 'Range 80/320, quick to draw' },
+      { id: 'hand_crossbow', name: 'Hand Crossbow', type: 'ranged', useStat: 'DEX', damageDice: '1d6', damageType: 'piercing', desc: 'Range 30/120, one-handed' },
+      { id: 'sling', name: 'Leather Sling', type: 'ranged', useStat: 'DEX', damageDice: '1d4', damageType: 'bludgeoning', desc: 'Range 30/120, simple and silent' },
+      { id: 'javelin', name: 'Hunting Javelins', type: 'ranged', useStat: 'STR', damageDice: '1d6', damageType: 'piercing', desc: 'Range 30/120, throwable spear' },
+      { id: 'scimitar', name: 'Bronze Scimitar', type: 'melee', useStat: 'DEX', damageDice: '1d6', damageType: 'slashing', desc: 'Light, finesse blade' }
+    ],
+    Magi: [
+      { id: 'arcane_staff', name: 'Watcher-Carved Staff', type: 'spell', useStat: 'CHA', damageDice: '1d10', damageType: 'force', desc: 'Eldritch Blast - forbidden Watcher magic' },
+      { id: 'fire_wand', name: 'Wand of Fire', type: 'spell', useStat: 'CHA', damageDice: '1d10', damageType: 'fire', desc: 'Fire Bolt - flames of destruction' },
+      { id: 'frost_orb', name: 'Orb of Winter', type: 'spell', useStat: 'CHA', damageDice: '1d8', damageType: 'cold', desc: 'Ray of Frost - freezing magic' },
+      { id: 'shock_rod', name: 'Lightning Rod', type: 'spell', useStat: 'CHA', damageDice: '1d8', damageType: 'lightning', desc: 'Shocking Grasp - electric touch' },
+      { id: 'poison_focus', name: 'Serpent Focus', type: 'spell', useStat: 'CHA', damageDice: '1d12', damageType: 'poison', desc: 'Poison Spray - toxic cloud' },
+      { id: 'ritual_dagger', name: 'Ritual Dagger', type: 'melee', useStat: 'DEX', damageDice: '1d4', damageType: 'piercing', desc: 'Ceremonial blade, finesse' }
+    ],
+    Priest: [
+      { id: 'holy_staff', name: 'Blessed Bronze Staff', type: 'melee', useStat: 'STR', damageDice: '1d6', damageType: 'bludgeoning', desc: 'Inscribed with sacred names' },
+      { id: 'mace', name: 'Ceremonial Mace', type: 'melee', useStat: 'STR', damageDice: '1d6', damageType: 'bludgeoning', desc: 'Bronze holy weapon' },
+      { id: 'sacred_light', name: 'Sacred Flame', type: 'spell', useStat: 'WIS', damageDice: '1d8', damageType: 'radiant', desc: 'Divine fire from heaven' },
+      { id: 'divine_smite', name: 'Divine Word', type: 'spell', useStat: 'WIS', damageDice: '1d8', damageType: 'thunder', desc: 'Power of the spoken Name' },
+      { id: 'war_pick', name: "Priest's War Pick", type: 'melee', useStat: 'STR', damageDice: '1d8', damageType: 'piercing', desc: 'For holy warriors' },
+      { id: 'sling_stones', name: 'Blessed Sling', type: 'ranged', useStat: 'DEX', damageDice: '1d4', damageType: 'bludgeoning', desc: 'Range 30/120, like David' }
+    ],
+    Artisan: [
+      { id: 'smith_hammer', name: "Smith's War Hammer", type: 'melee', useStat: 'STR', damageDice: '1d8', damageType: 'bludgeoning', desc: 'Forged by Tubal-Cain (1d10 two-handed)' },
+      { id: 'battle_pick', name: 'Mining Pick', type: 'melee', useStat: 'STR', damageDice: '1d8', damageType: 'piercing', desc: 'Tool and weapon' },
+      { id: 'hand_axe', name: 'Bronze Hand Axe', type: 'melee', useStat: 'STR', damageDice: '1d6', damageType: 'slashing', desc: 'Light, throwable (20/60)' },
+      { id: 'light_crossbow', name: 'Engineering Crossbow', type: 'ranged', useStat: 'DEX', damageDice: '1d8', damageType: 'piercing', desc: 'Range 80/320, mechanical marvel' },
+      { id: 'quarterstaff', name: 'Reinforced Staff', type: 'melee', useStat: 'STR', damageDice: '1d6', damageType: 'bludgeoning', desc: 'Versatile (1d8 two-handed)' }
+    ],
+    Scribe: [
+      { id: 'quill_dagger', name: 'Scribe Dagger', type: 'melee', useStat: 'DEX', damageDice: '1d4', damageType: 'piercing', desc: 'Light, finesse, concealable' },
+      { id: 'quarterstaff', name: 'Walking Staff', type: 'melee', useStat: 'STR', damageDice: '1d6', damageType: 'bludgeoning', desc: 'Versatile (1d8 two-handed)' },
+      { id: 'dart', name: 'Poison Darts', type: 'ranged', useStat: 'DEX', damageDice: '1d4', damageType: 'piercing', desc: 'Range 20/60, finesse, throwable' },
+      { id: 'sling_scholar', name: "Scholar's Sling", type: 'ranged', useStat: 'DEX', damageDice: '1d4', damageType: 'bludgeoning', desc: 'Range 30/120, simple' },
+      { id: 'arcane_knowledge', name: 'Arcane Knowledge', type: 'spell', useStat: 'INT', damageDice: '1d10', damageType: 'psychic', desc: 'Mind Spike - forbidden knowledge' }
+    ]
+  };
+
   // === VISUAL OPTIONS ===
   const BACKGROUNDS = [
     { value: "ancient stone city", label: "Stone City (Enoch/Irad)" },
@@ -241,6 +298,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     background: 'ancient stone city',
     vibe: 'biblical epic',
     customVisuals: '',
+    equipment: 'bronze_sword', // Default equipment
     attributes: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 }
   });
 
@@ -405,33 +463,33 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     const maxHp = 10 + conMod + loreData.hpBonus;
     const defense = 10 + dexMod;
 
-    // Define Class Weapon
-    let mainAction = {};
-    if (formData.charClass === 'Hunter') {
-      mainAction = {
-        id: 'w1', name: 'Composite Bow', type: 'ranged', cost: 1,
-        toHitBonus: proficiency + dexMod,
-        damageDice: '1d8', damageBonus: dexMod, damageType: 'piercing'
-      };
-    } else if (formData.charClass === 'Priest') {
-      mainAction = {
-        id: 'w1', name: 'Bronze Staff', type: 'melee', cost: 1,
-        toHitBonus: proficiency + strMod,
-        damageDice: '1d6', damageBonus: strMod, damageType: 'bludgeoning'
-      };
-    } else if (formData.charClass === 'Magi') {
-      mainAction = {
-        id: 's1', name: 'Eldritch Blast', type: 'spell', cost: 1,
-        toHitBonus: proficiency + getMod(finalStats.CHA),
-        damageDice: '1d10', damageBonus: 0, damageType: 'force'
-      };
-    } else {
-      mainAction = {
-        id: 'w1', name: 'Bronze Khopesh', type: 'melee', cost: 1,
-        toHitBonus: proficiency + strMod,
-        damageDice: '1d8', damageBonus: strMod, damageType: 'slashing'
-      };
-    }
+    // Get selected equipment from class list
+    const classEquipment = EQUIPMENT[formData.charClass] || EQUIPMENT.Warrior;
+    const selectedEquipment = classEquipment.find(e => e.id === formData.equipment) || classEquipment[0];
+
+    // Calculate attack bonus based on equipment's stat requirement
+    const statMods = {
+      STR: strMod,
+      DEX: dexMod,
+      CON: conMod,
+      INT: getMod(finalStats.INT),
+      WIS: getMod(finalStats.WIS),
+      CHA: getMod(finalStats.CHA)
+    };
+
+    const attackMod = statMods[selectedEquipment.useStat] || 0;
+    const damageMod = selectedEquipment.type === 'spell' ? 0 : attackMod;
+
+    const mainAction = {
+      id: selectedEquipment.id,
+      name: selectedEquipment.name,
+      type: selectedEquipment.type,
+      cost: 1,
+      toHitBonus: proficiency + attackMod,
+      damageDice: selectedEquipment.damageDice,
+      damageBonus: damageMod,
+      damageType: selectedEquipment.damageType
+    };
 
     const character = {
       id: 'p1',
@@ -506,6 +564,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       customVisuals: '',
       background: 'desert ruins',
       vibe: 'epic',
+      equipment: 'bronze_sword',
       attributes: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 }
     };
 
@@ -748,13 +807,46 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
               <select
                 name="charClass"
                 value={formData.charClass}
-                onChange={handleChange}
+                onChange={(e) => {
+                  const newClass = e.target.value;
+                  setFormData(prev => ({
+                    ...prev,
+                    charClass: newClass,
+                    // Reset equipment to first option of new class
+                    equipment: EQUIPMENT[newClass]?.[0]?.id || 'bronze_sword'
+                  }));
+                }}
                 className="w-full bg-black border border-[#44403c] p-2 text-white outline-none text-sm"
               >
                 {CLASSES.map(cls => (
                   <option key={cls.value} value={cls.value}>{cls.label}</option>
                 ))}
               </select>
+            </div>
+
+            {/* EQUIPMENT/WEAPON */}
+            <div>
+              <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-1">
+                Equipment
+              </label>
+              <select
+                name="equipment"
+                value={formData.equipment}
+                onChange={handleChange}
+                className="w-full bg-black border border-[#44403c] p-2 text-white outline-none text-sm"
+              >
+                {(EQUIPMENT[formData.charClass] || EQUIPMENT.Warrior).map(item => (
+                  <option key={item.id} value={item.id}>
+                    {item.name} ({item.damageDice} {item.damageType})
+                  </option>
+                ))}
+              </select>
+              {/* Equipment Description */}
+              {formData.equipment && (
+                <div className="mt-1 text-[10px] text-[#78716c] italic">
+                  {(EQUIPMENT[formData.charClass] || EQUIPMENT.Warrior).find(e => e.id === formData.equipment)?.desc}
+                </div>
+              )}
             </div>
 
             {/* PHYSICAL APPEARANCE */}
