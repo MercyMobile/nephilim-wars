@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { validateCharacterName, validateAttribute, validateDescription } from '../utils/validation';
-import { setCharacterData } from '../utils/storage';
+import { setCharacterData, addToPartyRoster } from '../utils/storage';
 
 const CharacterGenerator = ({ onCharacterComplete }) => {
   // === COMPREHENSIVE RACE DATA FROM ENCYCLOPEDIA ===
@@ -467,10 +467,26 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
   const handleSave = () => {
     if (finalCharacter) {
       const success = setCharacterData(finalCharacter);
+      // Also add to party roster
+      addToPartyRoster(finalCharacter);
+
       if (success && onCharacterComplete) {
         onCharacterComplete();
       } else if (!success) {
         setError('Failed to save character data. Please try again.');
+      }
+    }
+  };
+
+  // === SAVE TO ROSTER ONLY ===
+  const handleSaveToRoster = () => {
+    if (finalCharacter) {
+      const success = addToPartyRoster(finalCharacter);
+      if (success) {
+        alert(`${finalCharacter.name} has been saved to your party roster!`);
+        handleReset(); // Reset to create another character
+      } else {
+        setError('Failed to save character to roster. Please try again.');
       }
     }
   };
@@ -627,19 +643,19 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
           <div className="p-6 bg-[#0c0a09] border-t border-[#44403c] flex gap-4 justify-center flex-wrap">
             <button
               onClick={() => setShowSheet(false)}
-              className="px-8 py-3 bg-[#44403c] border border-[#78716c] text-white font-bold rounded hover:bg-[#57534e] transition"
+              className="px-6 sm:px-8 py-3 bg-[#44403c] border border-[#78716c] text-white font-bold rounded hover:bg-[#57534e] transition text-sm sm:text-base"
             >
               ← Back to Editor
             </button>
             <button
-              onClick={handleReset}
-              className="px-8 py-3 bg-[#78350f] border border-[#f59e0b] text-[#fcd34d] font-bold rounded hover:bg-[#92400e] transition"
+              onClick={handleSaveToRoster}
+              className="px-6 sm:px-8 py-3 bg-blue-900 border border-blue-600 text-blue-100 font-bold rounded hover:bg-blue-800 transition text-sm sm:text-base"
             >
-              ✨ Create Another Character
+              💾 Save to Roster
             </button>
             <button
               onClick={handleSave}
-              className="px-8 py-3 bg-green-900 border border-green-600 text-green-100 font-bold rounded hover:bg-green-800 transition shadow-[0_0_20px_rgba(22,163,74,0.3)]"
+              className="px-6 sm:px-8 py-3 bg-green-900 border border-green-600 text-green-100 font-bold rounded hover:bg-green-800 transition shadow-[0_0_20px_rgba(22,163,74,0.3)] text-sm sm:text-base"
             >
               Save & Enter Combat →
             </button>

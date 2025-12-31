@@ -120,3 +120,77 @@ export function setCharacterData(characterData) {
 
   return setInStorage('generatedCharacter', characterData);
 }
+
+// ====== PARTY MANAGEMENT ======
+
+/**
+ * Get all saved characters (party roster)
+ * @returns {Array} - Array of character objects
+ */
+export function getPartyRoster() {
+  const roster = getFromStorage('partyRoster', []);
+  return Array.isArray(roster) ? roster.filter(isValidCharacterData) : [];
+}
+
+/**
+ * Add a character to the party roster
+ * @param {object} character - Character to add
+ * @returns {boolean} - True if successful
+ */
+export function addToPartyRoster(character) {
+  if (!isValidCharacterData(character)) {
+    console.error('Invalid character data');
+    return false;
+  }
+
+  const roster = getPartyRoster();
+
+  // Check if character already exists (by name)
+  const existingIndex = roster.findIndex(c => c.name === character.name);
+
+  if (existingIndex >= 0) {
+    // Update existing character
+    roster[existingIndex] = { ...character, id: roster[existingIndex].id || `char-${Date.now()}` };
+  } else {
+    // Add new character with unique ID
+    roster.push({ ...character, id: `char-${Date.now()}` });
+  }
+
+  return setInStorage('partyRoster', roster);
+}
+
+/**
+ * Remove a character from the party roster
+ * @param {string} characterId - ID of character to remove
+ * @returns {boolean} - True if successful
+ */
+export function removeFromPartyRoster(characterId) {
+  const roster = getPartyRoster();
+  const filtered = roster.filter(c => c.id !== characterId);
+  return setInStorage('partyRoster', filtered);
+}
+
+/**
+ * Get active party (characters selected for combat)
+ * @returns {Array} - Array of character IDs
+ */
+export function getActiveParty() {
+  const party = getFromStorage('activeParty', []);
+  return Array.isArray(party) ? party : [];
+}
+
+/**
+ * Set active party for combat
+ * @param {Array} characterIds - Array of character IDs
+ * @returns {boolean} - True if successful
+ */
+export function setActiveParty(characterIds) {
+  if (!Array.isArray(characterIds)) {
+    console.error('Active party must be an array');
+    return false;
+  }
+
+  // Limit to 8 characters
+  const limitedParty = characterIds.slice(0, 8);
+  return setInStorage('activeParty', limitedParty);
+}
