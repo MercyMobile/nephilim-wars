@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Obelisk of Shalmaneser III - Biblical Archaeology Encyclopedia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --sidebar-bg: #1a1a1a;
+            --text-color: #dcdcdc;
+            --header-gold: #c5a059;
+            --accent-red: #8a0303;
+            --link-hover: #ffffff;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            margin: 0;
+            background-color: var(--bg-color);
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #000;
+            padding: 1rem;
+            border-bottom: 1px solid #333;
+        }
+
+        nav a {
+            color: var(--header-gold);
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav a:hover {
+            color: var(--link-hover);
+            text-shadow: 0 0 8px var(--header-gold);
+        }
+
+        /* Main Layout */
+        .wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 3rem;
+            padding: 3rem;
+        }
+
+        @media (max-width: 850px) {
+            .wrapper {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+        }
+
+        /* Header */
+        header {
+            grid-column: 1 / -1;
+            border-bottom: 2px solid var(--accent-red);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 0.2rem;
+            color: var(--header-gold);
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        header p {
+            color: #888;
+            font-family: 'Cinzel', serif;
+            margin: 0;
+        }
+
+        h2 {
+            color: var(--header-gold);
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+            font-family: 'Cinzel', serif;
+            font-weight: 400;
+        }
+
+        h3 {
+            color: #eee;
+            font-family: 'Cinzel', serif;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            background-color: var(--sidebar-bg);
+            padding: 1.5rem;
+            border: 1px solid #333;
+            height: fit-content;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .fact-box {
+            margin-bottom: 2rem;
+        }
+
+        .fact-box h3 {
+            margin-top: 0;
+            background-color: #000;
+            color: var(--header-gold);
+            padding: 0.8rem;
+            text-align: center;
+            font-size: 1rem;
+            border: 1px solid var(--header-gold);
+            letter-spacing: 1px;
+        }
+
+        .fact-list {
+            list-style: none;
+            padding: 0;
+            font-size: 0.95rem;
+        }
+
+        .fact-list li {
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+            color: #bbb;
+        }
+
+        .fact-label {
+            font-weight: bold;
+            display: block;
+            color: var(--accent-red);
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
+        }
+
+        /* Inscription Box Styling */
+        .inscription-box {
+            background-color: #111;
+            color: #aaa;
+            border: 1px solid #444;
+            border-left: 4px solid var(--header-gold);
+            padding: 2rem;
+            font-family: 'Courier New', monospace;
+            margin: 2rem 0;
+            overflow-x: auto;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        /* Consensus Box */
+        .consensus-box {
+            background: linear-gradient(to bottom right, #1a1a1a, #0d0d0d);
+            border: 1px solid #333;
+            padding: 1.5rem;
+            border-radius: 2px;
+            margin-top: 2rem;
+        }
+
+        .consensus-box h3 {
+            margin-top: 0;
+            color: var(--header-gold);
+        }
+
+        .consensus-box ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+
+        .consensus-box li {
+            margin-bottom: 0.5rem;
+        }
+
+        strong {
+            color: white;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html">← Back to Index</a>
+</nav>
+
+<div class="wrapper">
+
+    <header>
+        <h1>Black Obelisk of Shalmaneser III</h1>
+        <p>9th century BCE Assyrian monument</p>
+    </header>
+
+    <main>
+        <h2>Overview</h2>
+        <p>The Black Obelisk of Shalmaneser III, discovered in 1846 by the British archaeologist Austen Henry Layard during excavations at Nimrud (ancient Kalhu) in northern Iraq, stands as a monumental testament to the political and military landscape of the ancient Near East. This towering basalt obelisk, standing at 1.98 meters tall and adorned with intricate carvings, commemorates the military campaigns of Shalmaneser III, the king of Assyria, and his victories over various neighboring kingdoms. Among the most significant depictions on the obelisk is the portrayal of a bearded figure prostrating himself before Shalmaneser, accompanied by Israelite servants carrying tribute. The inscription on the obelisk identifies this figure as 'Jehu, son of Omri,' a reference that has profound implications for our understanding of the biblical narrative. Jehu, who was actually the successor of Omri and not his son, reigned over the Northern Kingdom of Israel from 841 to 814 BCE, a period marked by political upheaval and military conflict. The obelisk's depiction of Jehu's submission to Assyrian dominance provides the only known contemporary visual representation of a Hebrew king from the biblical period, offering an invaluable glimpse into the complex dynamics of power and diplomacy in the ancient world. The significance of this artifact cannot be overstated, as it not only confirms the historical existence of Jehu but also provides tangible evidence of the tribute system that was prevalent between the kingdoms of Israel and Assyria during this period. The obelisk's discovery has had a lasting impact on the field of biblical archaeology, serving as a crucial piece of evidence that bridges the gap between textual accounts and material culture, and it continues to be a focal point for scholarly research and public interest alike.</p>
+
+        <h2>Inscription</h2>
+        <div class="inscription-box">
+            Tribute of Jehu, son of Omri: I received from him silver, gold, a golden bowl, a golden vase with pointed bottom, golden tumblers, golden buckets, tin, a staff for a king, and wooden staffs.
+        </div>
+
+        <div class="consensus-box">
+            <h3>Scholarly Consensus</h3>
+            <ul>
+                <li>Authentic 9th century BCE Assyrian monument</li>
+                <li>Date: c. 825 BCE</li>
+                <li>Depicts Jehu of Israel (841-814 BCE)</li>
+                <li>Only contemporary image of biblical Hebrew king</li>
+                <li>Confirms Assyrian-Israelite contact during 2 Kings period</li>
+            </ul>
+        </div>
+    </main>
+
+    <aside class="sidebar">
+        <div class="fact-box">
+            <h3>Discovery Info</h3>
+            <ul class="fact-list">
+                <li><span class="fact-label">Discovery:</span> 1846, Austen Henry Layard, Nimrud, Iraq</li>
+                <li><span class="fact-label">Current Location:</span> British Museum, London</li>
+            </ul>
+        </div>
+
+        <div class="fact-box">
+            <h3>Physical Specs</h3>
+            <ul class="fact-list">
+                <li><span class="fact-label">Material:</span> Black limestone</li>
+                <li><span class="fact-label">Dimensions:</span> 1.98 meters tall, four-sided obelisk</li>
+                <li><span class="fact-label">Script:</span> Akkadian cuneiform</li>
+                <li><span class="fact-label">Date:</span> c. 825 BCE</li>
+            </ul>
+        </div>
+
+        <div class="fact-box">
+            <h3>Significance</h3>
+            <p style="color: #bbb; font-size: 0.95rem; line-height: 1.6;">Only surviving image of a biblical Hebrew king</p>
+        </div>
+
+        <div class="fact-box">
+            <h3>Biblical Connections</h3>
+            <ul class="fact-list">
+                <li>2 Kings 9-10 (Jehu's reign)</li>
+                <li>2 Kings 10:32-33 (Hazael defeats Israel)</li>
+                <li>Hosea 1:4 (judgment on house of Jehu)</li>
+            </ul>
+        </div>
+    </aside>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Large Stone Structure - Biblical Archaeology Encyclopedia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --sidebar-bg: #1a1a1a;
+            --text-color: #dcdcdc;
+            --header-gold: #c5a059;
+            --accent-red: #8a0303;
+            --link-hover: #ffffff;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            margin: 0;
+            background-color: var(--bg-color);
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #000;
+            padding: 1rem;
+            border-bottom: 1px solid #333;
+        }
+
+        nav a {
+            color: var(--header-gold);
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav a:hover {
+            color: var(--link-hover);
+            text-shadow: 0 0 8px var(--header-gold);
+        }
+
+        /* Main Layout */
+        .wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 3rem;
+            padding: 3rem;
+        }
+
+        @media (max-width: 850px) {
+            .wrapper {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+        }
+
+        /* Header */
+        header {
+            grid-column: 1 / -1;
+            border-bottom: 2px solid var(--accent-red);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 0.2rem;
+            color: var(--header-gold);
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        header p {
+            color: #888;
+            font-family: 'Cinzel', serif;
+            margin: 0;
+        }
+
+        h2 {
+            color: var(--header-gold);
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+            font-family: 'Cinzel', serif;
+            font-weight: 400;
+        }
+
+        h3 {
+            color: #eee;
+            font-family: 'Cinzel', serif;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            background-color: var(--sidebar-bg);
+            padding: 1.5rem;
+            border: 1px solid #333;
+            height: fit-content;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .fact-box {
+            margin-bottom: 2rem;
+        }
+
+        .fact-box h3 {
+            margin-top: 0;
+            background-color: #000;
+            color: var(--header-gold);
+            padding: 0.8rem;
+            text-align: center;
+            font-size: 1rem;
+            border: 1px solid var(--header-gold);
+            letter-spacing: 1px;
+        }
+
+        .fact-list {
+            list-style: none;
+            padding: 0;
+            font-size: 0.95rem;
+        }
+
+        .fact-list li {
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+            color: #bbb;
+        }
+
+        .fact-label {
+            font-weight: bold;
+            display: block;
+            color: var(--accent-red);
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
+        }
+
+        /* Inscription Box Styling */
+        .inscription-box {
+            background-color: #111;
+            color: #aaa;
+            border: 1px solid #444;
+            border-left: 4px solid var(--header-gold);
+            padding: 2rem;
+            font-family: 'Courier New', monospace;
+            margin: 2rem 0;
+            overflow-x: auto;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        /* Consensus Box */
+        .consensus-box {
+            background: linear-gradient(to bottom right, #1a1a1a, #0d0d0d);
+            border: 1px solid #333;
+            padding: 1.5rem;
+            border-radius: 2px;
+            margin-top: 2rem;
+        }
+
+        .consensus-box h3 {
+            margin-top: 0;
+            color: var(--header-gold);
+        }
+
+        .consensus-box ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+
+        .consensus-box li {
+            margin-bottom: 0.5rem;
+        }
+
+        strong {
+            color: white;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html">← Back to Index</a>
+</nav>
+
+<div class="wrapper">
+
+    <header>
+        <h1>Large Stone Structure</h1>
+        <p>Potential Palace of David (10th century BCE)</p>
+    </header>
+
+    <main>
+        <h2>Overview</h2>
+        <p>The Large Stone Structure, discovered by archaeologist Eilat Mazar in 2005 during excavations in the City of David, represents a monumental building complex that has been interpreted as a potential palace of King David, offering a tangible connection to the biblical narrative of the United Monarchy. The structure, composed of massive ashlar stones arranged in a complex layout, dates to the 10th century BCE and exhibits architectural features that align with the described palace in 2 Samuel 5:11, where King David declares his intention to build a palace. The significance of this discovery lies in its location and chronology, as it is situated in the exact area where the biblical text places David's palace, and its construction period coincides with the reign of the United Monarchy. The architectural style of the Large Stone Structure, characterized by its massive stone blocks and sophisticated engineering, suggests a high level of craftsmanship and organization, indicative of a centralized authority capable of undertaking large-scale construction projects. This discovery has profound implications for our understanding of the early Israelite monarchy, providing tangible evidence of the wealth and power of King David's reign. The structure's design, which incorporates elements reminiscent of Phoenician architecture, also hints at the cultural and diplomatic connections that would have existed between Israel and neighboring kingdoms. Today, the Large Stone Structure is a focal point of the City of David archaeological park, where it continues to inspire further research and exploration, offering a glimpse into the ancient history of Jerusalem and the legacy of King David.</p>
+
+        <h2>Inscription</h2>
+        <div class="inscription-box">
+            N/A
+        </div>
+
+        <div class="consensus-box">
+            <h3>Scholarly Consensus</h3>
+            <ul>
+                <li>10th century BCE architectural complex</li>
+                <li>Located in City of David</li>
+                <li>Matches biblical description of David's palace</li>
+                <li>Phoenician-style elements suggest elite construction</li>
+                <li>Significant for understanding United Monarchy architecture</li>
+            </ul>
+        </div>
+    </main>
+
+    <aside class="sidebar">
+        <div class="fact-box">
+            <h3>Discovery Info</h3>
+            <ul class="fact-list">
+                <li><span class="fact-label">Discovery:</span> 2005, Eilat Mazar, Jerusalem</li>
+                <li><span class="fact-label">Current Location:</span> City of David, Jerusalem</li>
+            </ul>
+        </div>
+
+        <div class="fact-box">
+            <h3>Physical Specs</h3>
+            <ul class="fact-list">
+                <li><span class="fact-label">Material:</span> Large ashlar stones</li>
+                <li><span class="fact-label">Dimensions:</span> Approximately 30 meters long, 10 meters wide</li>
+                <li><span class="fact-label">Script:</span> N/A</li>
+                <li><span class="fact-label">Date:</span> c. 1000 BCE</li>
+            </ul>
+        </div>
+
+        <div class="fact-box">
+            <h3>Significance</h3>
+            <p style="color: #bbb; font-size: 0.95rem; line-height: 1.6;">Phoenician-style palace in correct location and time period</p>
+        </div>
+
+        <div class="fact-box">
+            <h3>Biblical Connections</h3>
+            <ul class="fact-list">
+                <li>2 Samuel 5:11 (David's palace)</li>
+                <li>1 Kings 5:1 (Solomon's alliance with Hiram)</li>
+                <li>1 Chronicles 14:1 (David's palace)</li>
+            </ul>
+        </div>
+    </aside>
+
+</div>
+
+</body>
+</html>

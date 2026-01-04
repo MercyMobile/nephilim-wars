@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baruch ben Neriah Bulla - Biblical Archaeology Encyclopedia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --sidebar-bg: #1a1a1a;
+            --text-color: #dcdcdc;
+            --header-gold: #c5a059;
+            --accent-red: #8a0303;
+            --link-hover: #ffffff;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            margin: 0;
+            background-color: var(--bg-color);
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #000;
+            padding: 1rem;
+            border-bottom: 1px solid #333;
+        }
+
+        nav a {
+            color: var(--header-gold);
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav a:hover {
+            color: var(--link-hover);
+            text-shadow: 0 0 8px var(--header-gold);
+        }
+
+        /* Main Layout */
+        .wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 3rem;
+            padding: 3rem;
+        }
+
+        @media (max-width: 850px) {
+            .wrapper {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+        }
+
+        /* Header */
+        header {
+            grid-column: 1 / -1;
+            border-bottom: 2px solid var(--accent-red);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 0.2rem;
+            color: var(--header-gold);
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        header p {
+            color: #888;
+            font-family: 'Cinzel', serif;
+            margin: 0;
+        }
+
+        h2 {
+            color: var(--header-gold);
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+            font-family: 'Cinzel', serif;
+            font-weight: 400;
+        }
+
+        h3 {
+            color: #eee;
+            font-family: 'Cinzel', serif;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            background-color: var(--sidebar-bg);
+            padding: 1.5rem;
+            border: 1px solid #333;
+            height: fit-content;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .fact-box {
+            margin-bottom: 2rem;
+        }
+
+        .fact-box h3 {
+            margin-top: 0;
+            background-color: #000;
+            color: var(--header-gold);
+            padding: 0.8rem;
+            text-align: center;
+            font-size: 1rem;
+            border: 1px solid var(--header-gold);
+            letter-spacing: 1px;
+        }
+
+        .fact-list {
+            list-style: none;
+            padding: 0;
+            font-size: 0.95rem;
+        }
+
+        .fact-list li {
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+            color: #bbb;
+        }
+
+        .fact-label {
+            font-weight: bold;
+            display: block;
+            color: var(--accent-red);
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
+        }
+
+        /* Inscription Box Styling */
+        .inscription-box {
+            background-color: #111;
+            color: #aaa;
+            border: 1px solid #444;
+            border-left: 4px solid var(--header-gold);
+            padding: 2rem;
+            font-family: 'Courier New', monospace;
+            margin: 2rem 0;
+            overflow-x: auto;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        /* Consensus Box */
+        .consensus-box {
+            background: linear-gradient(to bottom right, #1a1a1a, #0d0d0d);
+            border: 1px solid #333;
+            padding: 1.5rem;
+            border-radius: 2px;
+            margin-top: 2rem;
+        }
+
+        .consensus-box h3 {
+            margin-top: 0;
+            color: var(--header-gold);
+        }
+
+        .consensus-box ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+
+        .consensus-box li {
+            margin-bottom: 0.5rem;
+        }
+
+        strong {
+            color: white;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html">← Back to Index</a>
+</nav>
+
+<div class="wrapper">
+
+    <header>
+        <h1>Baruch ben Neriah Bulla</h1>
+        <p>7th century BCE scribe's seal</p>
+    </header>
+
+    <main>
+        <h2>Overview</h2>
+        <p>The Baruch ben Neriah Bulla, discovered in the antiquities market and subsequently authenticated in 1996, represents a remarkable archaeological find that provides a direct and tangible connection to one of the most important figures in the history of the Hebrew Bible. This small clay seal impression, which dates to the 7th century BCE, bears the inscription 'Belonging to Baruch, son of Neriah,' offering a rare glimpse into the administrative and literary practices of the late Kingdom of Judah. The significance of this discovery cannot be overstated, as it provides tangible evidence of the existence of Baruch, a figure who is prominently featured in the biblical narrative as the scribe and secretary to the prophet Jeremiah. The discovery of the bulla has profound implications for our understanding of the historical development of the Hebrew Bible, as it confirms the existence of a scribe who played a crucial role in the transmission of the prophetic texts. The bulla's inscription, which is written in an early form of the Hebrew script, also offers valuable insights into the evolution of the Hebrew language and the administrative practices of the time. Today, the Baruch ben Neriah Bulla is housed in a private collection, where it continues to attract the attention of scholars and visitors alike, serving as a tangible link to the ancient past and a testament to the enduring legacy of ancient Israelite civilization.</p>
+
+        <h2>Inscription</h2>
+        <div class="inscription-box">
+            Seal impression: 'Belonging to Baruch, son of Neriah'
+        </div>
+
+        <div class="consensus-box">
+            <h3>Scholarly Consensus</h3>
+            <ul>
+                <li>Authentic 7th century BCE administrative seal</li>
+                <li>Found in antiquities market, authenticated 1996</li>
+                <li>Matches biblical Baruch references</li>
+                <li>Supports Jeremiah's scribe tradition</li>
+                <li>Significant for understanding biblical textual transmission</li>
+            </ul>
+        </div>
+    </main>
+
+    <aside class="sidebar">
+        <div class="fact-box">
+            <h3>Discovery Info</h3>
+            <ul class="fact-list">
+                <li><span class="fact-label">Discovery:</span> 1975 (antiquities market), authenticated 1996</li>
+                <li><span class="fact-label">Current Location:</span> Private collection</li>
+            </ul>
+        </div>
+
+        <div class="fact-box">
+            <h3>Physical Specs</h3>
+            <ul class="fact-list">
+                <li><span class="fact-label">Material:</span> Clay seal impression</li>
+                <li><span class="fact-label">Dimensions:</span> Approximately 1.2 cm diameter</li>
+                <li><span class="fact-label">Script:</span> Ancient Hebrew</li>
+                <li><span class="fact-label">Date:</span> c. 600 BCE</li>
+            </ul>
+        </div>
+
+        <div class="fact-box">
+            <h3>Significance</h3>
+            <p style="color: #bbb; font-size: 0.95rem; line-height: 1.6;">Seal of Jeremiah's scribe Baruch</p>
+        </div>
+
+        <div class="fact-box">
+            <h3>Biblical Connections</h3>
+            <ul class="fact-list">
+                <li>Jeremiah 36 (Baruch as scribe)</li>
+                <li>Jeremiah 45 (Baruch's lament)</li>
+                <li>2 Kings 25 (Babylonian records)</li>
+            </ul>
+        </div>
+    </aside>
+
+</div>
+
+</body>
+</html>

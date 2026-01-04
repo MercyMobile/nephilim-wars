@@ -219,6 +219,17 @@ export default function App() {
                 <span className="hidden sm:inline">👥 Races & Peoples</span>
                 <span className="sm:hidden">👥 Races</span>
               </button>
+              <button
+                onClick={() => setLoreTab('archaeology')}
+                className={`px-3 sm:px-4 py-2 font-cinzel text-xs sm:text-sm uppercase tracking-widest rounded transition-all flex-1 sm:flex-initial ${
+                  loreTab === 'archaeology'
+                    ? 'bg-amber-900/40 text-amber-400 border border-amber-600/50'
+                    : 'text-stone-500 hover:text-amber-500 hover:bg-stone-900'
+                }`}
+              >
+                <span className="hidden sm:inline">🏺 Archaeology</span>
+                <span className="sm:hidden">🏺 Arch</span>
+              </button>
             </div>
 
             {/* Content Area */}
@@ -235,6 +246,13 @@ export default function App() {
                   src="/encyclopedia/nephilim_wars_races_and_peoples.html"
                   className="w-full h-full border-0"
                   title="Races & Peoples"
+                />
+              )}
+              {loreTab === 'archaeology' && (
+                <iframe
+                  src="/Archaeology/index.html"
+                  className="w-full h-full border-0"
+                  title="Archaeology"
                 />
               )}
             </div>

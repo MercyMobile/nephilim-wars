@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hezekiah's Broad Wall - Biblical Archaeology Encyclopedia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --sidebar-bg: #1a1a1a;
+            --text-color: #dcdcdc;
+            --header-gold: #c5a059;
+            --accent-red: #8a0303;
+            --link-hover: #ffffff;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            margin: 0;
+            background-color: var(--bg-color);
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #000;
+            padding: 1rem;
+            border-bottom: 1px solid #333;
+        }
+
+        nav a {
+            color: var(--header-gold);
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav a:hover {
+            color: var(--link-hover);
+            text-shadow: 0 0 8px var(--header-gold);
+        }
+
+        /* Main Layout */
+        .wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 3rem;
+            padding: 3rem;
+        }
+
+        @media (max-width: 850px) {
+            .wrapper {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+        }
+
+        /* Header */
+        header {
+            grid-column: 1 / -1;
+            border-bottom: 2px solid var(--accent-red);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 0.2rem;
+            color: var(--header-gold);
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        header p {
+            color: #888;
+            font-family: 'Cinzel', serif;
+            margin: 0;
+        }
+
+        h2 {
+            color: var(--header-gold);
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+            font-family: 'Cinzel', serif;
+            font-weight: 400;
+        }
+
+        h3 {
+            color: #eee;
+            font-family: 'Cinzel', serif;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            background-color: var(--sidebar-bg);
+            padding: 1.5rem;
+            border: 1px solid #333;
+            height: fit-content;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .fact-box {
+            margin-bottom: 2rem;
+        }
+
+        .fact-box h3 {
+            margin-top: 0;
+            background-color: #000;
+            color: var(--header-gold);
+            padding: 0.8rem;
+            text-align: center;
+            font-size: 1rem;
+            border: 1px solid var(--header-gold);
+            letter-spacing: 1px;
+        }
+
+        .fact-list {
+            list-style: none;
+            padding: 0;
+            font-size: 0.95rem;
+        }
+
+        .fact-list li {
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+            color: #bbb;
+        }
+
+        .fact-label {
+            font-weight: bold;
+            display: block;
+            color: var(--accent-red);
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
+        }
+
+        /* Inscription Box Styling */
+        .inscription-box {
+            background-color: #111;
+            color: #aaa;
+            border: 1px solid #444;
+            border-left: 4px solid var(--header-gold);
+            padding: 2rem;
+            font-family: 'Courier New', monospace;
+            margin: 2rem 0;
+            overflow-x: auto;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        /* Consensus Box */
+        .consensus-box {
+            background: linear-gradient(to bottom right, #1a1a1a, #0d0d0d);
+            border: 1px solid #333;
+            padding: 1.5rem;
+            border-radius: 2px;
+            margin-top: 2rem;
+        }
+
+        .consensus-box h3 {
+            margin-top: 0;
+            color: var(--header-gold);
+        }
+
+        .consensus-box ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+
+        .consensus-box li {
+            margin-bottom: 0.5rem;
+        }
+
+        strong {
+            color: white;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html">← Back to Index</a>
+</nav>
+
+<div class="wrapper">
+
+    <header>
+        <h1>Hezekiah's Broad Wall</h1>
+        <p>8th century BCE defensive wall</p>
+    </header>
+
+    <main>
+        <h2>Overview</h2>
+        <p>The Broad Wall, uncovered during excavations in the Jewish Quarter of Jerusalem in 1970 by the Israeli archaeologist Nahman Avigad, represents a monumental fortification that stands as a testament to the strategic foresight and engineering capabilities of the ancient Israelites. This massive defensive structure, which dates to the 8th century BCE, was discovered in a location that aligns precisely with the biblical description of Hezekiah's efforts to fortify Jerusalem in preparation for the impending Assyrian siege. The significance of this discovery lies in its potential connection to the biblical narrative, particularly in 2 Chronicles 32:5, where the construction of the Broad Wall is described as a critical component of Hezekiah's defensive strategy. The wall's impressive scale, with a thickness of up to eight meters and a height of several meters, reflects the considerable resources and organizational skills required to undertake such a massive construction project. The discovery of the Broad Wall has profound implications for our understanding of the early history of Jerusalem, demonstrating that the city was not merely a small settlement but a fortified urban center with sophisticated defensive capabilities. Today, the Broad Wall is a key feature of the archaeological landscape in Jerusalem, where it continues to attract visitors and researchers interested in the ancient history of the region, offering a glimpse into the engineering achievements of the ancient world.</p>
+
+        <h2>Inscription</h2>
+        <div class="inscription-box">
+            N/A
+        </div>
+
+        <div class="consensus-box">
+            <h3>Scholarly Consensus</h3>
+            <ul>
+                <li>Authentic 8th century BCE defensive wall</li>
+                <li>Located in Jewish Quarter, Jerusalem</li>
+                <li>Matches biblical Hezekiah wall description</li>
+                <li>Demonstrates early Jerusalem fortifications</li>
+                <li>Significant for understanding city defenses</li>
+            </ul>
+        </div>
+    </main>
+
+    <aside class="sidebar">
+        <div class="fact-box">
+            <h3>Discovery Info</h3>
+            <ul class="fact-list">
+                <li><span class="fact-label">Discovery:</span> 1970, Nahman Avigad, Jerusalem</li>
+                <li><span class="fact-label">Current Location:</span> Jewish Quarter, Jerusalem</li>
+            </ul>
+        </div>
+
+        <div class="fact-box">
+            <h3>Physical Specs</h3>
+            <ul class="fact-list">
+                <li><span class="fact-label">Material:</span> Stone blocks</li>
+                <li><span class="fact-label">Dimensions:</span> Up to 8 meters thick</li>
+                <li><span class="fact-label">Script:</span> N/A</li>
+                <li><span class="fact-label">Date:</span> c. 700 BCE</li>
+            </ul>
+        </div>
+
+        <div class="fact-box">
+            <h3>Significance</h3>
+            <p style="color: #bbb; font-size: 0.95rem; line-height: 1.6;">Massive defensive wall built before Assyrian siege</p>
+        </div>
+
+        <div class="fact-box">
+            <h3>Biblical Connections</h3>
+            <ul class="fact-list">
+                <li>2 Chronicles 32:5 (Broad Wall construction)</li>
+                <li>2 Kings 19:34 (Hezekiah's preparations)</li>
+                <li>Isaiah 37:36 (Divine protection)</li>
+            </ul>
+        </div>
+    </aside>
+
+</div>
+
+</body>
+</html>

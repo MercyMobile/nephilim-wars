@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capernaum Synagogue - Biblical Archaeology Encyclopedia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --sidebar-bg: #1a1a1a;
+            --text-color: #dcdcdc;
+            --header-gold: #c5a059;
+            --accent-red: #8a0303;
+            --link-hover: #ffffff;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            margin: 0;
+            background-color: var(--bg-color);
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #000;
+            padding: 1rem;
+            border-bottom: 1px solid #333;
+        }
+
+        nav a {
+            color: var(--header-gold);
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav a:hover {
+            color: var(--link-hover);
+            text-shadow: 0 0 8px var(--header-gold);
+        }
+
+        /* Main Layout */
+        .wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 3rem;
+            padding: 3rem;
+        }
+
+        @media (max-width: 850px) {
+            .wrapper {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+        }
+
+        /* Header */
+        header {
+            grid-column: 1 / -1;
+            border-bottom: 2px solid var(--accent-red);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 0.2rem;
+            color: var(--header-gold);
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        header p {
+            color: #888;
+            font-family: 'Cinzel', serif;
+            margin: 0;
+        }
+
+        h2 {
+            color: var(--header-gold);
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+            font-family: 'Cinzel', serif;
+            font-weight: 400;
+        }
+
+        h3 {
+            color: #eee;
+            font-family: 'Cinzel', serif;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            background-color: var(--sidebar-bg);
+            padding: 1.5rem;
+            border: 1px solid #333;
+            height: fit-content;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .fact-box {
+            margin-bottom: 2rem;
+        }
+
+        .fact-box h3 {
+            margin-top: 0;
+            background-color: #000;
+            color: var(--header-gold);
+            padding: 0.8rem;
+            text-align: center;
+            font-size: 1rem;
+            border: 1px solid var(--header-gold);
+            letter-spacing: 1px;
+        }
+
+        .fact-list {
+            list-style: none;
+            padding: 0;
+            font-size: 0.95rem;
+        }
+
+        .fact-list li {
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+            color: #bbb;
+        }
+
+        .fact-label {
+            font-weight: bold;
+            display: block;
+            color: var(--accent-red);
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
+        }
+
+        /* Inscription Box Styling */
+        .inscription-box {
+            background-color: #111;
+            color: #aaa;
+            border: 1px solid #444;
+            border-left: 4px solid var(--header-gold);
+            padding: 2rem;
+            font-family: 'Courier New', monospace;
+            margin: 2rem 0;
+            overflow-x: auto;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        /* Consensus Box */
+        .consensus-box {
+            background: linear-gradient(to bottom right, #1a1a1a, #0d0d0d);
+            border: 1px solid #333;
+            padding: 1.5rem;
+            border-radius: 2px;
+            margin-top: 2rem;
+        }
+
+        .consensus-box h3 {
+            margin-top: 0;
+            color: var(--header-gold);
+        }
+
+        .consensus-box ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+
+        .consensus-box li {
+            margin-bottom: 0.5rem;
+        }
+
+        strong {
+            color: white;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html">← Back to Index</a>
+</nav>
+
+<div class="wrapper">
+
+    <header>
+        <h1>Capernaum Synagogue</h1>
+        <p>4th century CE built on 1st century foundation</p>
+    </header>
+
+    <main>
+        <h2>Overview</h2>
+        <p>The Synagogue of Capernaum, discovered during excavations at the ancient site of Capernaum in the early 20th century, represents a remarkable architectural achievement that provides a direct and tangible connection to the life and ministry of Jesus Christ. This magnificent structure, which dates back to the 4th century CE, was built upon the foundations of an earlier synagogue that was constructed during the 1st century CE, a period that coincides with the time of Jesus' public ministry. The significance of this discovery cannot be overstated, as it provides tangible evidence of the religious practices and communal life of the Jewish people during the Second Temple period, as well as the profound impact of Jesus' teachings on the region. The synagogue's intricate design, featuring a central nave, side aisles, and a beautifully decorated ark, reflects the artistic and architectural achievements of the time, offering valuable insights into the cultural and religious landscape of the era. Today, the Synagogue of Capernaum stands as a testament to the enduring legacy of ancient Jerusalem, where it continues to attract visitors and researchers interested in the ancient history of the region, offering a glimpse into the complex dynamics of power and governance in the ancient world.</p>
+
+        <h2>Inscription</h2>
+        <div class="inscription-box">
+            N/A
+        </div>
+
+        <div class="consensus-box">
+            <h3>Scholarly Consensus</h3>
+            <ul>
+                <li>Authentic 4th century CE synagogue</li>
+                <li>Built atop 1st century foundation</li>
+                <li>Matches Gospel references to Capernaum synagogue</li>
+                <li>Significant for understanding early Christian context</li>
+                <li>Preserved archaeological remains</li>
+            </ul>
+        </div>
+    </main>
+
+    <aside class="sidebar">
+        <div class="fact-box">
+            <h3>Discovery Info</h3>
+            <ul class="fact-list">
+                <li><span class="fact-label">Discovery:</span> 1905+</li>
+                <li><span class="fact-label">Current Location:</span> In situ, Capernaum, Israel</li>
+            </ul>
+        </div>
+
+        <div class="fact-box">
+            <h3>Physical Specs</h3>
+            <ul class="fact-list">
+                <li><span class="fact-label">Material:</span> Stone and mosaic</li>
+                <li><span class="fact-label">Dimensions:</span> Approximately 20 meters long</li>
+                <li><span class="fact-label">Script:</span> N/A</li>
+                <li><span class="fact-label">Date:</span> c. 4th century CE</li>
+            </ul>
+        </div>
+
+        <div class="fact-box">
+            <h3>Significance</h3>
+            <p style="color: #bbb; font-size: 0.95rem; line-height: 1.6;">Built on foundation where Jesus taught</p>
+        </div>
+
+        <div class="fact-box">
+            <h3>Biblical Connections</h3>
+            <ul class="fact-list">
+                <li>Luke 7:5 (Jesus taught in Capernaum)</li>
+                <li>Mark 1:21 (Synagogue in Capernaum)</li>
+                <li>Matthew 4 (Jesus' ministry in Galilee)</li>
+            </ul>
+        </div>
+    </aside>
+
+</div>
+
+</body>
+</html>

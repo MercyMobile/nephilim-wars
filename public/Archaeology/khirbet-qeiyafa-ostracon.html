@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khirbet Qeiyafa Ostracon - Biblical Archaeology Encyclopedia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --sidebar-bg: #1a1a1a;
+            --text-color: #dcdcdc;
+            --header-gold: #c5a059;
+            --accent-red: #8a0303;
+            --link-hover: #ffffff;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            margin: 0;
+            background-color: var(--bg-color);
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #000;
+            padding: 1rem;
+            border-bottom: 1px solid #333;
+        }
+
+        nav a {
+            color: var(--header-gold);
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav a:hover {
+            color: var(--link-hover);
+            text-shadow: 0 0 8px var(--header-gold);
+        }
+
+        /* Main Layout */
+        .wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 3rem;
+            padding: 3rem;
+        }
+
+        @media (max-width: 850px) {
+            .wrapper {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+        }
+
+        /* Header */
+        header {
+            grid-column: 1 / -1;
+            border-bottom: 2px solid var(--accent-red);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 0.2rem;
+            color: var(--header-gold);
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        header p {
+            color: #888;
+            font-family: 'Cinzel', serif;
+            margin: 0;
+        }
+
+        h2 {
+            color: var(--header-gold);
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+            font-family: 'Cinzel', serif;
+            font-weight: 400;
+        }
+
+        h3 {
+            color: #eee;
+            font-family: 'Cinzel', serif;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            background-color: var(--sidebar-bg);
+            padding: 1.5rem;
+            border: 1px solid #333;
+            height: fit-content;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .fact-box {
+            margin-bottom: 2rem;
+        }
+
+        .fact-box h3 {
+            margin-top: 0;
+            background-color: #000;
+            color: var(--header-gold);
+            padding: 0.8rem;
+            text-align: center;
+            font-size: 1rem;
+            border: 1px solid var(--header-gold);
+            letter-spacing: 1px;
+        }
+
+        .fact-list {
+            list-style: none;
+            padding: 0;
+            font-size: 0.95rem;
+        }
+
+        .fact-list li {
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+            color: #bbb;
+        }
+
+        .fact-label {
+            font-weight: bold;
+            display: block;
+            color: var(--accent-red);
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
+        }
+
+        /* Inscription Box Styling */
+        .inscription-box {
+            background-color: #111;
+            color: #aaa;
+            border: 1px solid #444;
+            border-left: 4px solid var(--header-gold);
+            padding: 2rem;
+            font-family: 'Courier New', monospace;
+            margin: 2rem 0;
+            overflow-x: auto;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        /* Consensus Box */
+        .consensus-box {
+            background: linear-gradient(to bottom right, #1a1a1a, #0d0d0d);
+            border: 1px solid #333;
+            padding: 1.5rem;
+            border-radius: 2px;
+            margin-top: 2rem;
+        }
+
+        .consensus-box h3 {
+            margin-top: 0;
+            color: var(--header-gold);
+        }
+
+        .consensus-box ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+
+        .consensus-box li {
+            margin-bottom: 0.5rem;
+        }
+
+        strong {
+            color: white;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html">← Back to Index</a>
+</nav>
+
+<div class="wrapper">
+
+    <header>
+        <h1>Khirbet Qeiyafa Ostracon</h1>
+        <p>10th century BCE Hebrew inscription</p>
+    </header>
+
+    <main>
+        <h2>Overview</h2>
+        <p>The Khirbet Qeiyafa Ostracon, discovered in 2008 during excavations at the ancient fortress of Khirbet Qeiyafa in the Elah Valley, represents a groundbreaking archaeological find that provides compelling evidence of early Hebrew literacy during the 10th century BCE. The ostracon, a small pottery shard inscribed with ink, features a short text written in an early form of the Hebrew script, making it the earliest known example of Hebrew writing ever discovered. This artifact was unearthed by a team from the Hebrew University of Jerusalem, who were conducting excavations at the site as part of a broader investigation into the settlement patterns of the Iron Age II period. The significance of this discovery cannot be overstated, as it fundamentally alters our understanding of the development of writing and literacy in ancient Israel. Prior to this find, scholars had debated whether the Israelites possessed a written language during the time of King David, but the ostracon provides irrefutable proof that they did. The text, which consists of a short phrase that appears to be a fragment of a longer message, demonstrates that writing was not limited to elite scribes but was practiced by a broader segment of the population. This discovery has profound implications for our understanding of the biblical narrative, as it confirms that the cultural and administrative systems described in the texts of Samuel and Kings were grounded in historical reality. The ostracon's discovery also raises important questions about the spread of literacy in the ancient world, suggesting that writing may have been more widespread than previously thought. Today, the Khirbet Qeiyafa Ostracon is housed in the Israel Museum in Jerusalem, where it continues to attract the attention of scholars and enthusiasts alike, serving as a tangible link to the ancient past and the origins of the Hebrew language.</p>
+
+        <h2>Inscription</h2>
+        <div class="inscription-box">
+            Early Hebrew text (translation: '... to the king...')
+        </div>
+
+        <div class="consensus-box">
+            <h3>Scholarly Consensus</h3>
+            <ul>
+                <li>Authentic 10th century BCE Hebrew ostracon</li>
+                <li>Earliest known Hebrew writing</li>
+                <li>Proves literacy in David's time</li>
+                <li>Found at Khirbet Qeiyafa</li>
+                <li>Supports biblical administrative context</li>
+            </ul>
+        </div>
+    </main>
+
+    <aside class="sidebar">
+        <div class="fact-box">
+            <h3>Discovery Info</h3>
+            <ul class="fact-list">
+                <li><span class="fact-label">Discovery:</span> 2008, Hebrew University team, Khirbet Qeiyafa, Israel</li>
+                <li><span class="fact-label">Current Location:</span> Israel Museum, Jerusalem</li>
+            </ul>
+        </div>
+
+        <div class="fact-box">
+            <h3>Physical Specs</h3>
+            <ul class="fact-list">
+                <li><span class="fact-label">Material:</span> Pottery shard</li>
+                <li><span class="fact-label">Dimensions:</span> Approximately 8 cm long</li>
+                <li><span class="fact-label">Script:</span> Early Hebrew script</li>
+                <li><span class="fact-label">Date:</span> c. 1000 BCE</li>
+            </ul>
+        </div>
+
+        <div class="fact-box">
+            <h3>Significance</h3>
+            <p style="color: #bbb; font-size: 0.95rem; line-height: 1.6;">Earliest Hebrew writing, proves literacy in David's time</p>
+        </div>
+
+        <div class="fact-box">
+            <h3>Biblical Connections</h3>
+            <ul class="fact-list">
+                <li>Deuteronomy 6 (Teaching of the Law)</li>
+                <li>1 Samuel 13-14 (Saul's reign)</li>
+                <li>2 Samuel 5 (David's kingdom)</li>
+            </ul>
+        </div>
+    </aside>
+
+</div>
+
+</body>
+</html>

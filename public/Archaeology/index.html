@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblical Archaeology Encyclopedia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Nephilim Wars Palette */
+            --bg-color: #121212;             /* Very Dark Grey/Black */
+            --card-bg: #1e1e1e;              /* Dark Card Surface */
+            --primary-text: #e0e0e0;         /* Off-white/Silver for readability */
+            --header-gold: #c5a059;          /* Divine/Ancient Gold */
+            --accent-red: #8a0303;           /* Blood/War Red */
+            --border-color: #333333;
+            --hover-glow: rgba(197, 160, 89, 0.15);
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--primary-text);
+            background-image: radial-gradient(circle at top, #1a1a1a, #121212); /* Subtle gradient */
+        }
+
+        header {
+            background-color: #000000;
+            border-bottom: 2px solid var(--header-gold);
+            padding: 3rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 3rem;
+            font-family: 'Cinzel', serif;
+            color: var(--header-gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        header p {
+            font-family: 'Cinzel', serif;
+            color: #888;
+            margin-top: 0.5rem;
+            letter-spacing: 1px;
+            font-size: 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .period-section {
+            margin-bottom: 4rem;
+        }
+
+        .period-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: var(--primary-text);
+            border-bottom: 1px solid var(--accent-red);
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+            display: inline-block;
+        }
+
+        .discovery-list {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .discovery-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            border-left: 3px solid var(--header-gold);
+            position: relative;
+        }
+
+        .discovery-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px var(--hover-glow);
+            border-left: 3px solid var(--accent-red);
+            background: #252525;
+        }
+
+        .discovery-title {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+        }
+
+        .discovery-title a {
+            text-decoration: none;
+            color: var(--header-gold);
+            transition: color 0.2s;
+        }
+
+        .discovery-title a:hover {
+            color: #fff;
+            text-shadow: 0 0 5px var(--header-gold);
+        }
+
+        .meta-data {
+            font-size: 0.95rem;
+            color: #999;
+            margin-bottom: 1rem;
+            border-left: 1px solid #444;
+            padding-left: 10px;
+        }
+
+        .meta-label {
+            font-weight: bold;
+            color: var(--accent-red);
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+        }
+
+        .significance {
+            margin-top: 1rem;
+            font-size: 1rem;
+            color: #ccc;
+            font-style: italic;
+        }
+
+        strong {
+            color: var(--primary-text);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Biblical Archaeology Encyclopedia</h1>
+    <p>Archives of the Nephilim Wars & Ancient History</p>
+</header>
+
+<div class="container">
+
+    <section class="period-section" id="patriarchal">
+        <h2 class="period-title">Patriarchal Period (Genesis)</h2>
+        <ul class="discovery-list">
+            <li class="discovery-card">
+                <h3 class="discovery-title"><a href="nuzi-tablets.html">Nuzi Tablets (15th-14th century BCE)</a></h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Genesis patriarchal customs (adoption, inheritance, marriage)<br>
+                    <span class="meta-label">Discovery:</span> 1925-1931, Nuzi, Iraq<br>
+                    <span class="meta-label">Location:</span> Various museums
+                </div>
+                <p class="significance"><strong>Significance:</strong> Confirms cultural practices described in Genesis (Sarah/Hagar, Jacob/Rachel/Leah arrangements).</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title"><a href="mari-2.html">Mari Tablets (18th century BCE)</a></h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Genesis names, customs, tribal movements<br>
+                    <span class="meta-label">Discovery:</span> 1933+, Mari, Syria<br>
+                    <span class="meta-label">Location:</span> Louvre Museum, Damascus Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Contains names like Benjamin, references to Habiru (possibly Hebrews), confirms migration patterns.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title"><a href="ebla-tablets.html">Ebla Tablets (24th century BCE)</a></h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Genesis place names, personal names<br>
+                    <span class="meta-label">Discovery:</span> 1974-1976, Tell Mardikh, Syria<br>
+                    <span class="meta-label">Location:</span> Syria (some items)
+                </div>
+                <p class="significance"><strong>Significance:</strong> Contains cities of the plain (Sodom, Gomorrah, Admah, Zeboiim, Zoar), names like Abraham, Esau, Saul, David, Michael.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title"><a href="tall-el-hammam.html">Tall el-Hammam (Middle Bronze Age destruction)</a></h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Genesis 19 (Destruction of Sodom)<br>
+                    <span class="meta-label">Discovery:</span> 2005-present, Jordan<br>
+                    <span class="meta-label">Location:</span> In situ
+                </div>
+                <p class="significance"><strong>Significance:</strong> Massive airburst destruction layer, trinitite-like materials, sudden abandonment matching biblical timeline.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title"><a href="execration-texts.html">Egyptian Execration Texts (19th-18th century BCE)</a></h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Genesis place names<br>
+                    <span class="meta-label">Discovery:</span> Various dates, Egypt<br>
+                    <span class="meta-label">Location:</span> Various museums
+                </div>
+                <p class="significance"><strong>Significance:</strong> Mention Jerusalem, Shechem, Ashkelon - confirms city existence in patriarchal period.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title"><a href="beni-hasan.html">Beni Hasan Tomb Paintings (19th century BCE)</a></h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Genesis 37 (Joseph's brothers, Semitic traders)<br>
+                    <span class="meta-label">Discovery:</span> 1902, Egypt<br>
+                    <span class="meta-label">Location:</span> In situ, Egypt
+                </div>
+                <p class="significance"><strong>Significance:</strong> Shows Semitic people entering Egypt exactly as Genesis describes.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title"><a href="brooklyn-papyrus.html">Brooklyn Papyrus (Middle Kingdom Egypt)</a></h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Israelites in Egypt<br>
+                    <span class="meta-label">Discovery:</span> Brooklyn Museum<br>
+                    <span class="meta-label">Location:</span> Brooklyn Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Lists Semitic slaves in Egypt with Hebrew-type names.</p>
+            </li>
+        </ul>
+    </section>
+
+    <section class="period-section" id="exodus-conquest">
+        <h2 class="period-title">Exodus & Conquest Period</h2>
+        <ul class="discovery-list">
+            <li class="discovery-card">
+                <h3 class="discovery-title"><a href="merneptah-stele.html">Merneptah Stele (1208 BCE)</a></h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Exodus/Joshua (Israel in Canaan)<br>
+                    <span class="meta-label">Discovery:</span> 1896, Thebes, Egypt<br>
+                    <span class="meta-label">Location:</span> Cairo Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Earliest extra-biblical reference to "Israel" as a people in Canaan.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title"><a href="berlin-pedestal.html">Berlin Pedestal Relief (possibly 13th century BCE)</a></h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Israel in Canaan<br>
+                    <span class="meta-label">Discovery:</span> Berlin Museum archives<br>
+                    <span class="meta-label">Location:</span> Berlin Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> May contain earlier reference to Israel than Merneptah Stele.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title"><a href="jericho.html">Jericho Excavations (multiple layers)</a></h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Joshua 6<br>
+                    <span class="meta-label">Discovery:</span> 1930s (Garstang), 1950s (Kenyon), 1990s-present (Wood, Bimson)<br>
+                    <span class="meta-label">Location:</span> In situ, West Bank
+                </div>
+                <p class="significance"><strong>Significance:</strong> Destruction layer, collapsed walls, burned grain stores match biblical account timing (disputed dating).</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title"><a href="hazor.html">Hazor Destruction Layer (13th century BCE)</a></h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Joshua 11:10-13<br>
+                    <span class="meta-label">Discovery:</span> 1955-1958, 1990s-present, Northern Israel<br>
+                    <span class="meta-label">Location:</span> In situ, Israel
+                </div>
+                <p class="significance"><strong>Significance:</strong> Massive destruction of Canaanite city, only major city burned as Joshua describes.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title"><a href="ai-excavations.html">Ai (Et-Tell) Excavations (Bronze Age)</a></h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Joshua 7-8<br>
+                    <span class="meta-label">Discovery:</span> 1933-1935, various later excavations<br>
+                    <span class="meta-label">Location:</span> In situ, West Bank
+                </div>
+                <p class="significance"><strong>Significance:</strong> Debated - some see evidence for conquest, others cite chronological issues.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title"><a href="gezer-calendar.html">Gezer Calendar (10th century BCE)</a></h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Agricultural cycles mentioned in OT<br>
+                    <span class="meta-label">Discovery:</span> 1908, Gezer, Israel<br>
+                    <span class="meta-label">Location:</span> Istanbul Archaeological Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Ancient Hebrew inscription showing agricultural year.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title"><a href="ipuwer-papyrus.html">Ipuwer Papyrus (Middle Kingdom Egypt, 13th Dynasty copy)</a></h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Exodus plagues<br>
+                    <span class="meta-label">Discovery:</span> Early 19th century, Egypt<br>
+                    <span class="meta-label">Location:</span> Leiden Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Describes Egypt in chaos matching plague descriptions (disputed interpretation).</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title"><a href="soleb-inscription.html">Soleb Temple Inscription (Amenhotep III, 14th century BCE)</a></h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Early Israel/Shasu-Yhw<br>
+                    <span class="meta-label">Discovery:</span> Sudan<br>
+                    <span class="meta-label">Location:</span> In situ, Sudan
+                </div>
+                <p class="significance"><strong>Significance:</strong> Possible early reference to Yahweh worship among nomadic people.</p>
+            </li>
+        </ul>
+    </section>
+
+    <section class="period-section" id="united-monarchy">
+        <h2 class="period-title">United Monarchy Period</h2>
+        <ul class="discovery-list">
+            <li class="discovery-card">
+                <h3 class="discovery-title"><a href="tel-dan-stele.html">Tel Dan Stele (9th century BCE)</a></h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 2 Samuel, 1 Kings (House of David)<br>
+                    <span class="meta-label">Discovery:</span> 1993-94, Tel Dan, Northern Israel<br>
+                    <span class="meta-label">Location:</span> Israel Museum, Jerusalem
+                </div>
+                <p class="significance"><strong>Significance:</strong> First extra-biblical reference to "House of David," proving David's historical existence.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Mesha Stele/Moabite Stone (9th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 2 Kings 3 (Mesha king of Moab)<br>
+                    <span class="meta-label">Discovery:</span> 1868, Dhiban, Jordan<br>
+                    <span class="meta-label">Location:</span> Louvre Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Confirms Israelite-Moabite conflicts, mentions House of David (disputed reading), Omri.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Stepped Stone Structure, Jerusalem (10th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 2 Samuel 5:9 (Millo)<br>
+                    <span class="meta-label">Discovery:</span> 1923-1925, 1960s-present, Jerusalem<br>
+                    <span class="meta-label">Location:</span> In situ, City of David
+                </div>
+                <p class="significance"><strong>Significance:</strong> Massive fortification from David's time.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Large Stone Structure (Palace of David?) (10th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 2 Samuel 5:11<br>
+                    <span class="meta-label">Discovery:</span> 2005, Eilat Mazar, Jerusalem<br>
+                    <span class="meta-label">Location:</span> In situ, City of David
+                </div>
+                <p class="significance"><strong>Significance:</strong> Phoenician-style palace in correct location and time period.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Khirbet Qeiyafa Ostracon (10th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> David's kingdom literacy<br>
+                    <span class="meta-label">Discovery:</span> 2008, Khirbet Qeiyafa, Israel<br>
+                    <span class="meta-label">Location:</span> Israel Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Earliest Hebrew inscription, proves writing in David's time.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Khirbet Qeiyafa Fortifications (10th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 1 Samuel 17:52 (Shaaraim = "two gates")<br>
+                    <span class="meta-label">Discovery:</span> 2007-2013, Israel<br>
+                    <span class="meta-label">Location:</span> In situ, Israel
+                </div>
+                <p class="significance"><strong>Significance:</strong> Fortified city with two gates, rare design, on Judah-Philistine border.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Gezer Water System (10th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 1 Kings 9:15-17 (Solomon fortified Gezer)<br>
+                    <span class="meta-label">Discovery:</span> 1902-1909, later excavations<br>
+                    <span class="meta-label">Location:</span> In situ, Israel
+                </div>
+                <p class="significance"><strong>Significance:</strong> Massive engineering project from Solomon's era.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Megiddo Stables/Storehouses (10th-9th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 1 Kings 9:15, 10:26 (Solomon's chariot cities)<br>
+                    <span class="meta-label">Discovery:</span> 1920s-1930s, various later excavations<br>
+                    <span class="meta-label">Location:</span> In situ, Israel
+                </div>
+                <p class="significance"><strong>Significance:</strong> Massive administrative structures (disputed if Solomonic or later).</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Hazor Solomonic Gate (10th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 1 Kings 9:15<br>
+                    <span class="meta-label">Discovery:</span> Yigael Yadin, 1950s-1960s<br>
+                    <span class="meta-label">Location:</span> In situ, Israel
+                </div>
+                <p class="significance"><strong>Significance:</strong> Identical six-chambered gate design to Gezer and Megiddo.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Gezer Six-Chambered Gate (10th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 1 Kings 9:15<br>
+                    <span class="meta-label">Discovery:</span> R.A.S. Macalister, later Yadin<br>
+                    <span class="meta-label">Location:</span> In situ, Israel
+                </div>
+                <p class="significance"><strong>Significance:</strong> Matches Hazor and Megiddo gates, all mentioned in same verse.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Ophel Inscription (10th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Solomon's temple period<br>
+                    <span class="meta-label">Discovery:</span> 2012, Eilat Mazar, Jerusalem<br>
+                    <span class="meta-label">Location:</span> Israel
+                </div>
+                <p class="significance"><strong>Significance:</strong> Ancient Hebrew text near Temple Mount.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Solomon's Wall, Jerusalem (10th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 1 Kings 3:1, 9:15<br>
+                    <span class="meta-label">Discovery:</span> 2010, Eilat Mazar, Jerusalem<br>
+                    <span class="meta-label">Location:</span> In situ, Jerusalem
+                </div>
+                <p class="significance"><strong>Significance:</strong> Fortification matching biblical description.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Timna Copper Mines (10th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Solomon's wealth, Edomite territory<br>
+                    <span class="meta-label">Discovery:</span> 1930s-present<br>
+                    <span class="meta-label">Location:</span> In situ, Southern Israel
+                </div>
+                <p class="significance"><strong>Significance:</strong> Massive copper production in Solomon's era.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Ezion-Geber/Tell el-Kheleifeh (10th-9th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 1 Kings 9:26 (Solomon's port)<br>
+                    <span class="meta-label">Discovery:</span> 1938-1940, Nelson Glueck<br>
+                    <span class="meta-label">Location:</span> In situ, Jordan/Israel border
+                </div>
+                <p class="significance"><strong>Significance:</strong> Industrial site near Red Sea (interpretation debated).</p>
+            </li>
+        </ul>
+    </section>
+
+    <section class="period-section" id="divided-kingdom-israel">
+        <h2 class="period-title">Divided Kingdom - Israel (North)</h2>
+        <ul class="discovery-list">
+            <li class="discovery-card">
+                <h3 class="discovery-title">Black Obelisk of Shalmaneser III (9th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 2 Kings 9-10 (Jehu)<br>
+                    <span class="meta-label">Discovery:</span> 1846, Nimrud, Iraq<br>
+                    <span class="meta-label">Location:</span> British Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Shows "Jehu son of Omri" bowing to Assyrian king, only image of Hebrew king.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Kurkh Monolith (9th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 1 Kings 16-22 (Ahab)<br>
+                    <span class="meta-label">Discovery:</span> 1861, Turkey<br>
+                    <span class="meta-label">Location:</span> British Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Records Ahab of Israel at Battle of Qarqar (853 BCE).</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Ivory House Remains, Samaria (9th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 1 Kings 22:39 (Ahab's ivory house)<br>
+                    <span class="meta-label">Discovery:</span> 1931-1935, Samaria<br>
+                    <span class="meta-label">Location:</span> Rockefeller Museum, Jerusalem; Israel Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Hundreds of ivory inlays exactly as described.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Samaria Ostraca (8th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Administrative records of Northern Kingdom<br>
+                    <span class="meta-label">Discovery:</span> 1910, Samaria<br>
+                    <span class="meta-label">Location:</span> Rockefeller Museum, Istanbul
+                </div>
+                <p class="significance"><strong>Significance:</strong> Hebrew inscriptions mentioning biblical clans and wine/oil deliveries.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Tiglath-Pileser III Records (8th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 2 Kings 15:29 (Pekah, Menahem)<br>
+                    <span class="meta-label">Discovery:</span> 19th century, Iraq<br>
+                    <span class="meta-label">Location:</span> British Museum, Iraq Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Confirms Assyrian conquest of Northern Israel, tribute from Menahem.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Sargon II Palace Inscriptions (8th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Isaiah 20:1 (disputed - Sargon not in Kings)<br>
+                    <span class="meta-label">Discovery:</span> 1843, Khorsabad, Iraq<br>
+                    <span class="meta-label">Location:</span> Louvre, British Museum, Oriental Institute
+                </div>
+                <p class="significance"><strong>Significance:</strong> Only biblical mention of Sargon was doubted until palace found.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Sargon's Annals - Fall of Samaria (722-721 BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 2 Kings 17<br>
+                    <span class="meta-label">Discovery:</span> Iraq<br>
+                    <span class="meta-label">Location:</span> Iraq Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Confirms conquest of Samaria, deportation of 27,290 Israelites.</p>
+            </li>
+        </ul>
+    </section>
+
+    <section class="period-section" id="divided-kingdom-judah">
+        <h2 class="period-title">Divided Kingdom - Judah (South)</h2>
+        <ul class="discovery-list">
+            <li class="discovery-card">
+                <h3 class="discovery-title">Silver Amulets/Ketef Hinnom Scrolls (7th-6th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Numbers 6:24-26 (Priestly Blessing)<br>
+                    <span class="meta-label">Discovery:</span> 1979, Ketef Hinnom, Jerusalem<br>
+                    <span class="meta-label">Location:</span> Israel Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Oldest known biblical text, predates Dead Sea Scrolls by 400 years.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Hezekiah's Tunnel Inscription (8th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 2 Kings 20:20, 2 Chronicles 32:30<br>
+                    <span class="meta-label">Discovery:</span> 1880, Jerusalem<br>
+                    <span class="meta-label">Location:</span> Istanbul Archaeological Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Engineers' account of meeting underground, exactly as biblical text describes.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Hezekiah's Broad Wall (8th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 2 Chronicles 32:5<br>
+                    <span class="meta-label">Discovery:</span> 1970, Nahman Avigad, Jerusalem<br>
+                    <span class="meta-label">Location:</span> In situ, Jewish Quarter, Jerusalem
+                </div>
+                <p class="significance"><strong>Significance:</strong> Massive defensive wall built before Assyrian siege.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Pool of Siloam (8th century BCE, renovated 1st century)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> John 9 (Jesus heals blind man), 2 Kings 20:20<br>
+                    <span class="meta-label">Discovery:</span> 2004, Jerusalem<br>
+                    <span class="meta-label">Location:</span> In situ, City of David
+                </div>
+                <p class="significance"><strong>Significance:</strong> Actual location where Jesus performed miracle.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Lachish Letters (7th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Jeremiah 34:7<br>
+                    <span class="meta-label">Discovery:</span> 1935-1938, Lachish, Israel<br>
+                    <span class="meta-label">Location:</span> British Museum, Rockefeller Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Military correspondence during Babylonian invasion, mentions cities in Jeremiah.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Lachish Reliefs (701 BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 2 Kings 18:13-17<br>
+                    <span class="meta-label">Discovery:</span> 1845-1851, Nineveh, Iraq<br>
+                    <span class="meta-label">Location:</span> British Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Sennacherib's palace walls show siege of Lachish in detail.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Taylor Prism/Sennacherib Prism (701 BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 2 Kings 18-19, Isaiah 36-37<br>
+                    <span class="meta-label">Discovery:</span> 1830, Nineveh<br>
+                    <span class="meta-label">Location:</span> British Museum, Oriental Institute
+                </div>
+                <p class="significance"><strong>Significance:</strong> Sennacherib's account of siege of Jerusalem - confirms he trapped Hezekiah but couldn't conquer city.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Hezekiah Bulla (8th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 2 Kings 18-20<br>
+                    <span class="meta-label">Discovery:</span> 2009, 2015 publications, Ophel excavations<br>
+                    <span class="meta-label">Location:</span> Israel
+                </div>
+                <p class="significance"><strong>Significance:</strong> Royal seal impression "Belonging to Hezekiah [son of] Ahaz king of Judah".</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Isaiah Bulla (8th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Isaiah the prophet<br>
+                    <span class="meta-label">Discovery:</span> 2018 publication, Ophel excavations<br>
+                    <span class="meta-label">Location:</span> Israel
+                </div>
+                <p class="significance"><strong>Significance:</strong> Seal possibly reading "belonging to Isaiah the prophet" found near Hezekiah's seal.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Baruch ben Neriah Bulla (7th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Jeremiah 36 (Baruch, Jeremiah's scribe)<br>
+                    <span class="meta-label">Discovery:</span> 1975 (antiquities market), authenticated 1996<br>
+                    <span class="meta-label">Location:</span> Private collection
+                </div>
+                <p class="significance"><strong>Significance:</strong> Seal of Jeremiah's scribe exactly as described.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Jehoiachin's Rations Tablets (6th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 2 Kings 25:27-30<br>
+                    <span class="meta-label">Discovery:</span> 1930s, Babylon, Iraq<br>
+                    <span class="meta-label">Location:</span> Pergamon Museum, Berlin
+                </div>
+                <p class="significance"><strong>Significance:</strong> Babylonian records of oil rations for "Yaukin king of Judah".</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Babylonian Chronicles (6th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 2 Kings 24-25<br>
+                    <span class="meta-label">Discovery:</span> 19th-20th centuries, Iraq<br>
+                    <span class="meta-label">Location:</span> British Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Confirms Babylonian conquest of Jerusalem, 597 BCE date exact.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Nebuchadnezzar's Palace Inscriptions (6th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Daniel, 2 Kings 24-25<br>
+                    <span class="meta-label">Discovery:</span> 19th-20th centuries, Babylon<br>
+                    <span class="meta-label">Location:</span> Various museums
+                </div>
+                <p class="significance"><strong>Significance:</strong> Confirms Nebuchadnezzar's massive building projects.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Ishtar Gate (6th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Daniel, exilic period setting<br>
+                    <span class="meta-label">Discovery:</span> 1902-1914, Robert Koldewey, Babylon<br>
+                    <span class="meta-label">Location:</span> Pergamon Museum, Berlin (reconstruction)
+                </div>
+                <p class="significance"><strong>Significance:</strong> Massive gate the exiles would have seen.</p>
+            </li>
+        </ul>
+    </section>
+
+    <section class="period-section" id="exile-postexile">
+        <h2 class="period-title">Exile & Post-Exile Period</h2>
+        <ul class="discovery-list">
+            <li class="discovery-card">
+                <h3 class="discovery-title">Cyrus Cylinder (6th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> 2 Chronicles 36:22-23, Ezra 1:1-4<br>
+                    <span class="meta-label">Discovery:</span> 1879, Babylon, Iraq<br>
+                    <span class="meta-label">Location:</span> British Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Confirms Cyrus' policy of allowing captive peoples to return home and rebuild temples.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Elephantine Papyri (5th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Post-exilic Jewish community, Ezra-Nehemiah period<br>
+                    <span class="meta-label">Discovery:</span> 1893-1908, Egypt<br>
+                    <span class="meta-label">Location:</span> Various museums
+                </div>
+                <p class="significance"><strong>Significance:</strong> Jewish colony in Egypt, letters to Jerusalem, confirms Persian period details.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Nehemiah's Wall (5th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Nehemiah 2-6<br>
+                    <span class="meta-label">Discovery:</span> 2007, Eilat Mazar, Jerusalem<br>
+                    <span class="meta-label">Location:</span> In situ, City of David
+                </div>
+                <p class="significance"><strong>Significance:</strong> Hasty construction matching Nehemiah's 52-day rebuild.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Tobiah Inscription (3rd century BCE, refers to earlier period)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Nehemiah 2:10, 4:3<br>
+                    <span class="meta-label">Discovery:</span> Iraq al-Amir, Jordan<br>
+                    <span class="meta-label">Location:</span> In situ
+                </div>
+                <p class="significance"><strong>Significance:</strong> Confirms Tobiah family mentioned as Nehemiah's opponents.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Wadi Daliyeh Papyri (4th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Samaritan-Jewish relations post-exile<br>
+                    <span class="meta-label">Discovery:</span> 1962, West Bank<br>
+                    <span class="meta-label">Location:</span> Jordan
+                </div>
+                <p class="significance"><strong>Significance:</strong> Documents from Samaria showing Persian administration.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Persepolis Fortification Tablets (5th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Ezra, Nehemiah, Esther period<br>
+                    <span class="meta-label">Discovery:</span> 1930s, Iran<br>
+                    <span class="meta-label">Location:</span> Oriental Institute, Chicago (disputed)
+                </div>
+                <p class="significance"><strong>Significance:</strong> Persian administrative documents mentioning Jews.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Ahasuerus/Xerxes Inscriptions (5th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Book of Esther<br>
+                    <span class="meta-label">Discovery:</span> Various, Persepolis and elsewhere<br>
+                    <span class="meta-label">Location:</span> Various
+                </div>
+                <p class="significance"><strong>Significance:</strong> Confirms details of Persian court, royal building projects.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Susa Palace Remains (5th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Esther, Nehemiah 1:1, Daniel 8:2<br>
+                    <span class="meta-label">Discovery:</span> 1884+, Iran<br>
+                    <span class="meta-label">Location:</span> In situ, Iran; artifacts in Louvre
+                </div>
+                <p class="significance"><strong>Significance:</strong> Palace where Esther and Daniel narratives occur.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Murashû Archive (5th century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Jewish community in Babylon during exile<br>
+                    <span class="meta-label">Discovery:</span> 1893, Nippur, Iraq<br>
+                    <span class="meta-label">Location:</span> University of Pennsylvania
+                </div>
+                <p class="significance"><strong>Significance:</strong> Business documents with many Jewish names showing community life.</p>
+            </li>
+        </ul>
+    </section>
+
+    <section class="period-section" id="second-temple">
+        <h2 class="period-title">Second Temple Period</h2>
+        <ul class="discovery-list">
+            <li class="discovery-card">
+                <h3 class="discovery-title">Qumran/Dead Sea Scrolls (3rd century BCE - 1st century CE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Entire Old Testament (except Esther), biblical interpretation<br>
+                    <span class="meta-label">Discovery:</span> 1947-1956, Qumran Caves<br>
+                    <span class="meta-label">Location:</span> Israel Museum, various institutions
+                </div>
+                <p class="significance"><strong>Significance:</strong> Oldest biblical manuscripts by 1000 years, proves text transmission accuracy.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Isaiah Scroll (Great Isaiah Scroll) (2nd century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Book of Isaiah<br>
+                    <span class="meta-label">Discovery:</span> 1947, Cave 1, Qumran<br>
+                    <span class="meta-label">Location:</span> Israel Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Complete Isaiah scroll, 1000 years older than previous, virtually identical to modern text.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Temple Mount Platform (Herodian construction, 1st century BCE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Gospels, Herod's temple<br>
+                    <span class="meta-label">Discovery:</span> Always visible, various excavations<br>
+                    <span class="meta-label">Location:</span> In situ, Jerusalem
+                </div>
+                <p class="significance"><strong>Significance:</strong> Massive platform Jesus walked on.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Western Wall/Robinson's Arch (1st century BCE-CE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Gospels, temple period<br>
+                    <span class="meta-label">Discovery:</span> 1838 (Robinson's Arch), ongoing excavations<br>
+                    <span class="meta-label">Location:</span> In situ, Jerusalem
+                </div>
+                <p class="significance"><strong>Significance:</strong> Retaining wall of Temple Mount.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Pilate Inscription (1st century CE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> All four Gospels (Pontius Pilate)<br>
+                    <span class="meta-label">Discovery:</span> 1961, Caesarea Maritima<br>
+                    <span class="meta-label">Location:</span> Israel Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Only archaeological evidence of Pilate, confirms his title "Prefect of Judaea".</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Caiaphas Ossuary (1st century CE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Matthew 26, John 18 (High Priest Caiaphas)<br>
+                    <span class="meta-label">Discovery:</span> 1990, Jerusalem<br>
+                    <span class="meta-label">Location:</span> Israel Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Bone box inscribed "Joseph son of Caiaphas" - high priest who tried Jesus.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Bethesda Pool (1st century CE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> John 5:1-15 (healing miracle)<br>
+                    <span class="meta-label">Discovery:</span> 1888, Jerusalem<br>
+                    <span class="meta-label">Location:</span> In situ, Jerusalem
+                </div>
+                <p class="significance"><strong>Significance:</strong> Five-porticoed pool exactly as John describes.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Peter's House, Capernaum (1st century CE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Matthew 8:14-15, Mark 1:29-31<br>
+                    <span class="meta-label">Discovery:</span> 1968, Capernaum<br>
+                    <span class="meta-label">Location:</span> In situ, Capernaum
+                </div>
+                <p class="significance"><strong>Significance:</strong> House venerated as Peter's since 1st century, Christian symbols.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Capernaum Synagogue (4th century CE, built on 1st century foundation)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Luke 7:5, Mark 1:21<br>
+                    <span class="meta-label">Discovery:</span> 1905+<br>
+                    <span class="meta-label">Location:</span> In situ, Capernaum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Built on synagogue where Jesus taught.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Nazareth Village Excavations (1st century CE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Gospels (Jesus' hometown)<br>
+                    <span class="meta-label">Discovery:</span> 1996+, 2009 house discovery<br>
+                    <span class="meta-label">Location:</span> In situ
+                </div>
+                <p class="significance"><strong>Significance:</strong> Proves Nazareth existed in Jesus' time (was disputed).</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Magdala Synagogue (1st century CE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Mary Magdalene's hometown<br>
+                    <span class="meta-label">Discovery:</span> 2009, Sea of Galilee<br>
+                    <span class="meta-label">Location:</span> In situ
+                </div>
+                <p class="significance"><strong>Significance:</strong> Synagogue contemporary with Jesus, ornate stone with menorah.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Galilee Boat/Jesus Boat (1st century CE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Gospels (Sea of Galilee ministry)<br>
+                    <span class="meta-label">Discovery:</span> 1986, Sea of Galilee<br>
+                    <span class="meta-label">Location:</span> Yigal Allon Museum, Israel
+                </div>
+                <p class="significance"><strong>Significance:</strong> Type of boat disciples would have used.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Jehohanan Crucifixion Remains (1st century CE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Crucifixion practice (Gospels)<br>
+                    <span class="meta-label">Discovery:</span> 1968, Jerusalem<br>
+                    <span class="meta-label">Location:</span> Israel Antiquities Authority
+                </div>
+                <p class="significance"><strong>Significance:</strong> Only crucifixion victim found archaeologically, nail through heel bone.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Erastus Inscription, Corinth (1st century CE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Romans 16:23 (Erastus city treasurer)<br>
+                    <span class="meta-label">Discovery:</span> 1929, Corinth<br>
+                    <span class="meta-label">Location:</span> In situ, Corinth, Greece
+                </div>
+                <p class="significance"><strong>Significance:</strong> "Erastus laid this pavement at his own expense, in appreciation of his appointment as aedile".</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Politarch Inscription, Thessalonica (1st century CE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Acts 17:6-8 (city officials called "politarchs")<br>
+                    <span class="meta-label">Discovery:</span> 1876, Thessalonica<br>
+                    <span class="meta-label">Location:</span> British Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Confirms Luke's unusual but accurate title.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Gallio Inscription, Delphi (1st century CE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Acts 18:12-17 (Gallio proconsul of Achaia)<br>
+                    <span class="meta-label">Discovery:</span> 1905, Delphi, Greece<br>
+                    <span class="meta-label">Location:</span> Delphi Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Dates Paul's ministry accurately, confirms Acts narrative.</p>
+            </li>
+
+            <li class="discovery-card">
+                <h3 class="discovery-title">Sergius Paulus Inscription (1st century CE)</h3>
+                <div class="meta-data">
+                    <span class="meta-label">Biblical Connection:</span> Acts 13:7 (Proconsul of Cyprus)<br>
+                    <span class="meta-label">Discovery:</span> 1887, Cyprus<br>
+                    <span class="meta-label">Location:</span> Cyprus Museum
+                </div>
+                <p class="significance"><strong>Significance:</strong> Confirms proconsul mentioned in Acts.</p>
+            </li>
+        </ul>
+    </section>
+
+</div>
+
+</body>
+</html>
