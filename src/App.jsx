@@ -6,7 +6,7 @@ import CharacterGenerator from './pages/CharacterGenerator';
 import CombatScreen from './pages/CombatScreen';
 import BestiaryScreen from './pages/BestiaryScreen';
 import DiceScreen from './components/DiceScreen';
-import TabernacleViewer from './humble-tabernacle/src/TabernacleViewer';
+import TabernacleViewer from './humble-tabernacle/src/components/TabernacleViewer';
 import ErrorBoundary from './components/ErrorBoundary';
 
 // --- HOME MENU COMPONENT ---
