@@ -2,12 +2,12 @@
 import React from 'react';
 import './App.css';
 
-// Placeholder component for TabernacleViewer
+// Create a minimal placeholder for TabernacleViewer
 const TabernacleViewer = () => {
   return (
     <div className="tabernacle-viewer">
       <h1>Humble Tabernacle Viewer</h1>
-      <p>This is a placeholder for the TabernacleViewer component.</p>
+      <p>Component placeholder - awaiting full implementation.</p>
     </div>
   );
 };
