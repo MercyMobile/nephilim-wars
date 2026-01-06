@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nephilim Wars: The Ancient Annals</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ==============================================================
+   THEME: MYSTIC WARFARE (Darker, Grittier)
+   ============================================================== */
+:root {
+    --bg-base:      #1a1614;          /* Dark Soot/Stone */
+    --bg-card:      #26211e;          /* Darker Card */
+    --text-main:    #dcd6c0;          /* Bone White */
+    --text-muted:   #8c867a;          /* Ash */
+    
+    --accent-red:   #8a1c1c;          /* Archaeology / Blood */
+    --accent-gold:  #c5a059;          /* Scripture / Divine */
+    --accent-mystic:#7b4b94;          /* Apocrypha / Void */
+    
+    --line-color:   #3d3630;
+    
+    --font-title:   'Cinzel', serif;
+    --font-body:    'Merriweather', serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg-base);
+    background-image: url("https://www.transparenttextures.com/patterns/dark-matter.png");
+    color: var(--text-main);
+    line-height: 1.6;
+    padding-bottom: 5rem;
+}
+
+/* --- Header --- */
+header {
+    text-align: center;
+    padding: 4rem 1rem;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+    border-bottom: 2px solid var(--accent-gold);
+    margin-bottom: 3rem;
+}
+h1 {
+    font-family: var(--font-title);
+    font-size: 3.5rem;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 20px rgba(197, 160, 89, 0.3);
+}
+h2 {
+    font-family: var(--font-title);
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+/* Legend */
+.legend {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+.legend-item { display: flex; align-items: center; font-family: var(--font-title); font-size: 0.9rem; color: var(--text-muted); }
+.dot-legend { width: 12px; height: 12px; border-radius: 50%; margin-right: 10px; }
+.l-gold { background: var(--accent-gold); box-shadow: 0 0 8px var(--accent-gold); }
+.l-red { background: var(--accent-red); box-shadow: 0 0 8px var(--accent-red); }
+.l-purple { background: var(--accent-mystic); box-shadow: 0 0 8px var(--accent-mystic); }
+
+/* --- Timeline Layout --- */
+.timeline-container {
+    display: grid;
+    grid-template-columns: 1fr 4px 1fr;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    gap: 0;
+}
+
+/* Central Line */
+.timeline-line {
+    background: var(--line-color);
+    width: 4px;
+    border-radius: 2px;
+    position: relative;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+/* Items */
+.wrapper {
+    padding: 0 40px 60px 40px;
+    position: relative;
+}
+.wrapper.left { grid-column: 1; text-align: right; }
+.wrapper.right { grid-column: 3; text-align: left; }
+
+.card {
+    background: var(--bg-card);
+    padding: 1.5rem;
+    border-radius: 4px;
+    border: 1px solid #3d3630;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    position: relative;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: #555;
+}
+
+/* Categories */
+.card.scripture { border-top: 3px solid var(--accent-gold); }
+.card.artifact { border-top: 3px solid var(--accent-red); }
+.card.mystic { border-top: 3px solid var(--accent-mystic); background: linear-gradient(180deg, #2a1f2d 0%, #26211e 100%); }
+
+/* Typography */
+.date {
+    display: inline-block;
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+    padding: 2px 8px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+}
+.scripture .date { color: var(--accent-gold); background: rgba(197, 160, 89, 0.1); }
+.artifact .date { color: var(--accent-red); background: rgba(138, 28, 28, 0.1); }
+.mystic .date { color: var(--accent-mystic); background: rgba(123, 75, 148, 0.1); }
+
+h3 {
+    font-family: var(--font-title);
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
+}
+.scripture h3 { color: var(--accent-gold); }
+.artifact h3 { color: var(--accent-red); }
+.mystic h3 { color: #a87bc7; }
+
+p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.8rem; }
+
+.source-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 0;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    width: 100%;
+    margin-top: 0.5rem;
+    opacity: 0.7;
+}
+
+/* Dots on Line */
+.wrapper::after {
+    content: '';
+    position: absolute;
+    top: 24px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    z-index: 10;
+    border: 2px solid var(--bg-base);
+    background: #444;
+}
+.wrapper.left::after { right: -9px; } 
+.wrapper.right::after { left: -9px; }
+
+/* Dot Colors */
+.wrapper:has(.scripture)::after { background: var(--accent-gold); box-shadow: 0 0 10px var(--accent-gold); }
+.wrapper:has(.artifact)::after { background: var(--accent-red); box-shadow: 0 0 10px var(--accent-red); }
+.wrapper:has(.mystic)::after { background: var(--accent-mystic); box-shadow: 0 0 10px var(--accent-mystic); }
+
+/* Mobile */
+@media (max-width: 768px) {
+    .timeline-container { grid-template-columns: 1fr; padding-left: 20px; border-left: 2px solid #333; }
+    .timeline-line { display: none; }
+    .wrapper { grid-column: 1 !important; text-align: left !important; padding: 0 0 40px 20px; }
+    .wrapper::after { left: -29px !important; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Nephilim Wars</h1>
+    <h2>Campaign Chronology</h2>
+    <div class="legend">
+        <div class="legend-item"><div class="dot-legend l-gold"></div> Canon (NASB)</div>
+        <div class="legend-item"><div class="dot-legend l-purple"></div> Apocrypha / Lore</div>
+        <div class="legend-item"><div class="dot-legend l-red"></div> Archaeology</div>
+    </div>
+</header>
+
+<div class="timeline-container">
+    <div class="timeline-line" style="grid-column: 2; grid-row: 1 / span 100;"></div>
+
+    <div class="wrapper right">
+        <div class="card scripture">
+            <span class="date">4174 BC</span>
+            <h3>Creation Event</h3>
+            <p>Formation of Adam and Eve. The Garden established.</p>
+            <div class="source-badge">Source: NASB Gen 1-2</div>
+        </div>
+    </div>
+
+    <div class="wrapper right">
+        <div class="card scripture">
+            <span class="date">3544 BC</span>
+            <h3>Birth of Jared</h3>
+            <p>"For in his days the angels descended." The name Jared means 'Descent'.</p>
+            <div class="source-badge">Source: NASB Gen 5:15 / Jubilees 4:15</div>
+        </div>
+    </div>
+
+    <div class="wrapper left">
+        <div class="card mystic">
+            <span class="date">~3500 BC</span>
+            <h3>The Oath on Mt. Hermon</h3>
+            <p>200 Watchers (Grigori), led by Semjaza, descend onto the summit of Mount Hermon. They swear a curse to take human wives.</p>
+            <div class="source-badge">Source: 1 Enoch 6:1-6</div>
+        </div>
+    </div>
+
+    <div class="wrapper left">
+        <div class="card mystic">
+            <span class="date">~3450 BC</span>
+            <h3>Teaching of the Forbidden Arts</h3>
+            <p>Azazel teaches metallurgy (swords/shields). Semjaza teaches sorcery. Baraqijal teaches astrology. The corruption of mankind begins.</p>
+            <div class="source-badge">Source: 1 Enoch 8:1-3</div>
+        </div>
+    </div>
+
+    <div class="wrapper right">
+        <div class="card scripture">
+            <span class="date">~3400 BC</span>
+            <h3>Rise of the Nephilim</h3>
+            <p>"The Nephilim were on the earth in those days... the mighty men who were of old, men of renown."</p>
+            <div class="source-badge">Source: NASB Gen 6:4</div>
+        </div>
+    </div>
+
+    <div class="wrapper left">
+        <div class="card mystic">
+            <span class="date">~3200 BC</span>
+            <h3>The Great Corruption</h3>
+            <p>The Giants consume the produce of men. When that fails, they turn to cannibalism and drink blood. The Earth cries out.</p>
+            <div class="source-badge">Source: 1 Enoch 7:3-6</div>
+        </div>
+    </div>
+
+    <div class="wrapper right">
+        <div class="card scripture">
+            <span class="date">3013 BC</span>
+            <h3>Translation of Enoch</h3>
+            <p>Enoch walks with God and is taken. Before this, he acts as Scribe of Judgment against the Watchers.</p>
+            <div class="source-badge">Source: NASB Gen 5:24 / Jubilees 4</div>
+        </div>
+    </div>
+
+    <div class="wrapper left">
+        <div class="card mystic">
+            <span class="date">Pre-Flood</span>
+            <h3>Binding of the Arch-Watchers</h3>
+            <p>Raphael binds Azazel in the desert of Dudael, covering him with jagged rocks. Michael binds Semjaza in the valleys of the earth.</p>
+            <div class="source-badge">Source: 1 Enoch 10 / DSS 4Q203</div>
+        </div>
+    </div>
+
+    <div class="wrapper right">
+        <div class="card scripture">
+            <span class="date">2518 BC (Year of Flood)</span>
+            <h3>Death of Methuselah</h3>
+            <p>The oldest man dies seven days before the waters rise. His name prophesied: "When he dies, it shall be sent."</p>
+            <div class="source-badge">Source: NASB Gen 5 / Seder Olam</div>
+        </div>
+    </div>
+
+    <div class="wrapper right">
+        <div class="card scripture">
+            <span class="date">2518 BC</span>
+            <h3>The Great Flood</h3>
+            <p>The fountains of the deep burst open. Destruction of the First Age and the physical bodies of the Nephilim (creating demons).</p>
+            <div class="source-badge">Source: NASB Gen 7</div>
+        </div>
+    </div>
+
+    <div class="wrapper left">
+        <div class="card artifact">
+            <span class="date">~2350 BC</span>
+            <h3>Ebla Tablets</h3>
+            <p>Archives mentioning the "Cities of the Plain" (Sodom, Gomorrah) before their destruction.</p>
+            <div class="source-badge">Origin: Tell Mardikh, Syria</div>
+        </div>
+    </div>
+
+    <div class="wrapper right">
+        <div class="card scripture">
+            <span class="date">~2200 BC</span>
+            <h3>Nimrod & Babel</h3>
+            <p>Nimrod, a "mighty hunter," establishes Babylon. Jewish tradition calls him a Gibbor (Giant/Tyrant) attempting to storm heaven.</p>
+            <div class="source-badge">Source: NASB Gen 10-11 / Josephus</div>
+        </div>
+    </div>
+
+    <div class="wrapper right">
+        <div class="card scripture">
+            <span class="date">~2080 BC</span>
+            <h3>War of the Nine Kings</h3>
+            <p>Chedorlaomer smites the Rephaim in Ashteroth-karnaim, the Zuzim in Ham, and the Emim in Shaveh-kiriathaim (All Giant Clans).</p>
+            <div class="source-badge">Source: NASB Gen 14:5</div>
+        </div>
+    </div>
+
+    <div class="wrapper left">
+        <div class="card mystic">
+            <span class="date">Tradition</span>
+            <h3>The Survival of Og</h3>
+            <p>Talmudic legend states Og of Bashan rode the roof of the Ark or survived due to his size/lineage. He becomes the King of Bashan.</p>
+            <div class="source-badge">Source: Talmud Niddah 61a</div>
+        </div>
+    </div>
+
+    <div class="wrapper left">
+        <div class="card artifact">
+            <span class="date">~1700 BC</span>
+            <h3>Tall el-Hammam Event</h3>
+            <p>Destruction layer confirming a directed airburst event that vaporized brick and boiled pottery in the Jordan Valley.</p>
+            <div class="source-badge">Origin: Jordan Valley</div>
+        </div>
+    </div>
+
+    <div class="wrapper right">
+        <div class="card scripture">
+            <span class="date">1446 BC</span>
+            <h3>Report of the Spies</h3>
+            <p>"We saw the Nephilim there... and we became like grasshoppers in our own sight."</p>
+            <div class="source-badge">Source: NASB Num 13:33</div>
+        </div>
+    </div>
+
+    <div class="wrapper right">
+        <div class="card scripture">
+            <span class="date">1406 BC</span>
+            <h3>Defeat of Og</h3>
+            <p>Moses defeats Og, King of Bashan. "Only Og remained of the remnant of the Rephaim. His bed was 9 cubits long (approx 13ft)."</p>
+            <div class="source-badge">Source: NASB Deut 3:11</div>
+        </div>
+    </div>
+
+    <div class="wrapper left">
+        <div class="card mystic">
+            <span class="date">DSS Era</span>
+            <h3>The War Scroll (1QM)</h3>
+            <p>Qumran text describing the final 40-year war between the Sons of Light and the Sons of Darkness (Belial), mirroring the ancient Watcher wars.</p>
+            <div class="source-badge">Source: Dead Sea Scrolls</div>
+        </div>
+    </div>
+
+    <div class="wrapper right">
+        <div class="card scripture">
+            <span class="date">33 AD</span>
+            <h3>Victory over the Powers</h3>
+            <p>Crucifixion and Resurrection. "He disarmed the rulers and authorities... triumphing over them."</p>
+            <div class="source-badge">Source: NASB Col 2:15</div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

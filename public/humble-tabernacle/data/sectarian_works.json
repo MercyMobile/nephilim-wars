@@ -1,0 +1,22 @@
+{
+  "Book_of_Enoch": {
+    "description": "Popular apocalyptic literature among second-Temple Jews; cited by the Dead Sea Scrolls community.",
+    "why_it_might_have_been_present": "Fragments of 1 Enoch (e.g., 4Q203) were found at Qumran, suggesting that such works circulated among the priesthood.",
+    "evidence": "Fragments of 1 Enoch (e.g., 4Q203) were found at Qumran"
+  },
+  "Jubilees": {
+    "description": "2 Maccabean-style rewriting of Genesis. Emphasizes priestly authority and ritual purity; used by the Essenes as a liturgical guide.",
+    "why_it_might_have_been_present": "A Jubilees scroll (4Q364) was discovered at Qumran, indicating that Temple officials may have possessed copies.",
+    "evidence": "Jubilees scroll (4Q364) discovered at Qumran"
+  },
+  "Apocryphal_Psalms_Odes": {
+    "description": "Supplementary hymnody used in Temple worship.",
+    "why_it_might_have_been_present": "1Q161 (Psalm 151) is a unique scroll that likely originated in a Jerusalem liturgical context.",
+    "evidence": "1Q161 (Psalm 151) scroll found at Qumran"
+  },
+  "Legal_Tractates": {
+    "description": "Hypothetical priestly law codes that regulated Temple conduct.",
+    "why_it_might_have_been_present": "The Mishnah (Middot 2:3) mentions a 'scroll of the law of the Temple' that was stored in the Holy of Holies; no physical copy survives, but the textual tradition points to its existence.",
+    "evidence": "Mishnah (Middot 2:3) mentions the scroll"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "Hall_of_the_Scribes": {
+    "artifact_site": "Lishkat ha-Gazit - discovered beneath the Western Wall (first-century layers)",
+    "what_it_shows": "A dedicated room with clay seal impressions indicating sealed scroll containers—the physical space where the official biblical scrolls were kept.",
+    "evidence": "Sealed Clay Bullae (seal impressions) from the Temple Mount area"
+  },
+  "Sealed_Clay_Bullae": {
+    "artifact_site": "Temple Mount area",
+    "what_it_shows": "Priestly seals (e.g., 'the priest of the Most High') used to mark sacred documents.",
+    "evidence": "Priestly seals found in archaeological excavations"
+  },
+  "Papyrus_Fragments": {
+    "artifact_site": "City of David (e.g., the 'Heshbon Papyrus')",
+    "what_it_shows": "Demonstrate that paper-like writing material was used in Jerusalem in the late-first-century CE, confirming that scrolls could have been stored in the Temple.",
+    "evidence": "Papyrus fragments recovered from City of David"
+  },
+  "Qumran_Cave_4": {
+    "artifact_site": "Qumran Cave 4",
+    "what_it_shows": "Over 500 scrolls, many of which are biblical and liturgical. While Qumran itself was a community site, the dating (c. 200 BCE-70 CE) and textual affinities with Temple-style texts suggest a shared library culture among Jewish elites.",
+    "evidence": "Over 500 scrolls including biblical and liturgical texts"
+  }
+}

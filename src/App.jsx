@@ -6,6 +6,7 @@ import CharacterGenerator from './pages/CharacterGenerator';
 import CombatScreen from './pages/CombatScreen';
 import BestiaryScreen from './pages/BestiaryScreen';
 import DiceScreen from './components/DiceScreen';
+import TabernacleViewer from './humble-tabernacle/src/TabernacleViewer';
 import ErrorBoundary from './components/ErrorBoundary';
 
 // --- HOME MENU COMPONENT ---
@@ -230,6 +231,17 @@ export default function App() {
                 <span className="hidden sm:inline">🏺 Archaeology</span>
                 <span className="sm:hidden">🏺 Arch</span>
               </button>
+			  <button
+  onClick={() => setLoreTab('tabernacle')}
+  className={`px-3 sm:px-4 py-2 font-cinzel text-xs sm:text-sm uppercase tracking-widest rounded transition-all flex-1 sm:flex-initial ${loreTab === 'tabernacle' && (
+  <div className="w-full h-full bg-stone-900 flex flex-col">
+    <TabernacleViewer />
+  </div>
+)}`}
+>
+  <span className="hidden sm:inline">🏛️ Humble Tabernacle</span>
+  <span className="sm:hidden">🏛️ Tabernacle</span>
+</button>
             </div>
 
             {/* Content Area */}
@@ -255,6 +267,14 @@ export default function App() {
                   title="Archaeology"
                 />
               )}
+			  {loreTab === 'tabernacle' && (
+               <iframe
+                 src="/humble-tabernacle/index.html"
+                 className="w-full h-full border-0"
+                 title="Humble Tabernacle"
+               />
+              )}
+
             </div>
           </div>
         )}

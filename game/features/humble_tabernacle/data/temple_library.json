@@ -1,0 +1,24 @@
+
+{
+  "Canonical_Temple_Library": {
+    "Torah": {
+      "books": ["Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy"],
+      "description": "Required for the public reading on the Sabbath (Nehemiah 8-9). The Deuteronomic scrolls found at Qumran and in the Temple courtyard (e.g., 4QDeut) show that the Masoretic text was already in circulation.",
+      "evidence": "Deuteronomic scrolls found at Qumran and in the Temple courtyard"
+    },
+    "Prophets": {
+      "books": ["Joshua", "Judges", "Samuel", "Kings", "Isaiah", "Jeremiah", "Ezekiel", "Twelve Minor Prophets"],
+      "description": "The Book of Isaiah scroll (1QIsa) and several 4QProphetic fragments demonstrate that prophetic books were kept in the Temple's sacred storerooms (the Lishkat ha-Gazit).",
+      "evidence": "Book of Isaiah scroll (1QIsa) and 4QProphetic fragments"
+    },
+    "Writings": {
+      "books": ["Psalms", "Proverbs", "Job", "Song of Songs", "Ruth", "Lamentations", "Ecclesiastes", "Daniel", "Ezra-Nehemiah", "Chronicles"],
+      "description": "The Psalms (1QPs) and Deuteronomy fragments from Qumran are the earliest attestations of these books being treated as authoritative and stored in a central sanctuary.",
+      "evidence": "Psalms (1QPs) and Deuteronomy fragments from Qumran"
+    },
+    "Deuteronomic_Book_of_the_Law": {
+      "description": "A single, sealed copy of Deuteronomy kept in the Holy of Holies (cf. Deuteronomy 31:26).",
+      "evidence": "Talmudic tradition (Baba Metzia 8b) describes a 'scroll of the covenant' stored in the Temple; archaeological evidence of a sealed scroll case in the Western Wall Tunnel supports the practice."
+    }
+  }
+}

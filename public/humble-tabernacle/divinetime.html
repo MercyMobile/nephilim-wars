@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Literal Chronology & The Seed Promise</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ==============================================================
+   THEME: BLUEPRINT & ROYALTY
+   ============================================================== */
+:root {
+    --bg-color: #0f172a;          /* Deep Royal Blue Background */
+    --card-bg-royal: #1e293b;     /* Slate Blue (Seed) */
+    --card-bg-tech: #18202f;      /* Darker Slate (Math) */
+    
+    --text-primary: #f1f5f9;      /* White */
+    --text-secondary: #94a3b8;    /* Slate Grey */
+    --text-math: #64748b;         /* Dimmed Tech Text */
+    
+    --accent-seed: #fbbf24;       /* Gold (The Promise) */
+    --accent-time: #38bdf8;       /* Cyan (The Math/Chronology) */
+    --accent-cross: #f87171;      /* Red (The Cross) */
+    
+    --font-header: 'Cinzel', serif;
+    --font-body: 'Lato', sans-serif;
+    --font-tech: 'Roboto Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    padding: 2rem;
+    overflow-x: hidden;
+}
+
+/* --- Header --- */
+header {
+    text-align: center;
+    margin-bottom: 5rem;
+    border-bottom: 1px solid rgba(251, 191, 36, 0.2);
+    padding-bottom: 2rem;
+    position: relative;
+}
+
+h1 {
+    font-family: var(--font-header);
+    font-size: 3rem;
+    color: var(--accent-seed);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-family: var(--font-header);
+    font-size: 1.1rem;
+    color: var(--accent-time);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+/* Legend */
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
+    font-family: var(--font-tech);
+    font-size: 0.85rem;
+}
+.legend span { display: flex; align-items: center; }
+.dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 10px; }
+.l-cyan { background: var(--accent-time); box-shadow: 0 0 8px var(--accent-time); }
+.l-gold { background: var(--accent-seed); box-shadow: 0 0 8px var(--accent-seed); }
+
+/* --- Timeline Layout --- */
+.timeline {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* The Central Axis */
+.line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--accent-seed) 0%, rgba(148, 163, 184, 0.2) 10%, rgba(148, 163, 184, 0.2) 90%, var(--accent-cross) 100%);
+    transform: translateX(-50%);
+}
+
+/* Rows */
+.row {
+    display: flex;
+    justify-content: center; /* Default center for single items */
+    align-items: flex-start;
+    margin-bottom: 40px;
+    position: relative;
+    width: 100%;
+}
+
+/* Columns */
+.col-left {
+    width: 45%;
+    padding-right: 50px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.col-right {
+    width: 45%;
+    padding-left: 50px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* For empty slots to maintain grid */
+.empty { width: 45%; }
+
+/* --- Cards --- */
+.card {
+    background: var(--card-bg-royal);
+    padding: 20px;
+    border-radius: 4px;
+    position: relative;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* Left Side Styles (Chronology/Math) */
+.card.tech {
+    background: var(--card-bg-tech);
+    border-right: 3px solid var(--accent-time);
+    border-left: none;
+    border-top: none; 
+    border-bottom: none;
+}
+.tech h3 { color: var(--accent-time); font-family: var(--font-tech); font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+.tech .date { color: var(--accent-time); font-family: var(--font-tech); font-weight: 700; font-size: 1.1rem; }
+.tech .math {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(56, 189, 248, 0.2);
+    font-family: var(--font-tech);
+    font-size: 0.8rem;
+    color: var(--text-math);
+    line-height: 1.4;
+}
+.tech .highlight { color: #e2e8f0; font-weight: bold; }
+
+/* Right Side Styles (Seed/Narrative) */
+.card.royal {
+    background: var(--card-bg-royal);
+    border-left: 3px solid var(--accent-seed);
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+}
+.royal h3 { color: var(--accent-seed); font-family: var(--font-header); font-size: 1.4rem; }
+.royal .date { color: var(--accent-seed); font-size: 0.9rem; margin-bottom: 5px; display: block; opacity: 0.8; }
+.royal p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; }
+.royal .ref { display: block; margin-top: 8px; font-size: 0.8rem; font-style: italic; color: #64748b; }
+
+/* The Anchor (Cross) */
+.card.cross {
+    border-color: var(--accent-cross);
+    background: linear-gradient(135deg, rgba(248, 113, 113, 0.1) 0%, rgba(30, 41, 59, 0) 100%);
+}
+.cross h3, .cross .date { color: var(--accent-cross); }
+
+/* Center Dots */
+.center-dot {
+    position: absolute;
+    left: 50%;
+    top: 25px; /* Align with top of cards */
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--bg-color);
+    border: 2px solid var(--text-secondary);
+    transform: translateX(-50%);
+    z-index: 10;
+}
+.row:has(.tech) .center-dot { border-color: var(--accent-time); background: var(--accent-time); box-shadow: 0 0 10px rgba(56,189,248,0.3); }
+.row:has(.royal) .center-dot { border-color: var(--accent-seed); background: var(--accent-seed); box-shadow: 0 0 10px rgba(251,191,36,0.3); }
+.row:has(.cross) .center-dot { border-color: var(--accent-cross); background: var(--accent-cross); width: 16px; height: 16px; }
+.row:has(.tech):has(.royal) .center-dot { /* When both exist */
+    background: linear-gradient(90deg, var(--accent-time) 50%, var(--accent-seed) 50%);
+    border: none;
+    width: 14px; height: 14px;
+}
+
+/* Connectors */
+.col-left .card::after {
+    content: ''; position: absolute; right: -50px; top: 25px; width: 50px; height: 1px;
+    background: linear-gradient(90deg, rgba(56, 189, 248, 0.5) 0%, rgba(56, 189, 248, 0) 100%);
+}
+.col-right .card::after {
+    content: ''; position: absolute; left: -50px; top: 25px; width: 50px; height: 1px;
+    background: linear-gradient(90deg, rgba(251, 191, 36, 0) 0%, rgba(251, 191, 36, 0.5) 100%);
+}
+
+/* Responsive */
+@media (max-width: 850px) {
+    .line { left: 20px; }
+    .row { flex-direction: column; margin-bottom: 20px; }
+    .col-left, .col-right, .empty { width: 100%; padding: 0 0 0 50px; text-align: left; align-items: flex-start; margin-bottom: 10px; }
+    .card.tech { border-left: 3px solid var(--accent-time); border-right: none; }
+    .col-left .card::after, .col-right .card::after { display: none; }
+    .center-dot { left: 14px; top: 25px; }
+    .tech .math { text-align: left; }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <h1>The Divine Timeline</h1>
+    <h2>Literal Chronology & The Seed Promise</h2>
+    <div class="legend">
+        <span><div class="dot l-cyan"></div> Biblical Math (Left)</span>
+        <span><div class="dot l-gold"></div> The Royal Line (Right)</span>
+    </div>
+</header>
+
+<div class="timeline">
+    <div class="line"></div>
+
+    <div class="row">
+        <div class="col-left">
+            <div class="card tech">
+                <span class="date">4174 BC</span>
+                <h3>Creation Anchor</h3>
+                <div class="math">
+                    Calculation: <span class="highlight">2518 BC + 1656 years</span><br>
+                    Method: Summing Gen 5 generations (Adam to Noah).
+                </div>
+            </div>
+        </div>
+        <div class="center-dot"></div>
+        <div class="col-right">
+            <div class="card royal">
+                <span class="date">~4174 BC</span>
+                <h3>The First Promise</h3>
+                <p>The Fall of Man. God prophecies the "Seed of the Woman" will crush the Serpent.</p>
+                <span class="ref">Genesis 3:15 (The Protoevangelium)</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="empty"></div>
+        <div class="center-dot"></div>
+        <div class="col-right">
+            <div class="card royal">
+                <span class="date">3874 BC</span>
+                <h3>Seth Appointed</h3>
+                <p>"God has appointed me another offspring in place of Abel." The line is preserved.</p>
+                <span class="ref">Genesis 4:25</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="empty"></div>
+        <div class="center-dot"></div>
+        <div class="col-right">
+            <div class="card royal">
+                <span class="date">3118 BC</span>
+                <h3>Birth of Noah</h3>
+                <p>Prophesied by Lamech to bring rest from the curse.</p>
+                <span class="ref">Genesis 5:29</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-left">
+            <div class="card tech">
+                <span class="date">2518 BC</span>
+                <h3>The Flood</h3>
+                <div class="math">
+                    Calculation: <span class="highlight">2166 BC + 352 years</span><br>
+                    Method: Summing Gen 11 generations backwards from Abraham.
+                </div>
+            </div>
+        </div>
+        <div class="center-dot"></div>
+        <div class="col-right">
+            <div class="card royal">
+                <span class="date">2518 BC</span>
+                <h3>Judgment & Preservation</h3>
+                <p>The Seed is safely carried in the Ark. The line passes to Shem.</p>
+                <span class="ref">Genesis 7</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-left">
+            <div class="card tech">
+                <span class="date">2166 BC</span>
+                <h3>Birth of Abraham</h3>
+                <div class="math">
+                    Calculation Logic:<br>
+                    1. Jacob born 1876 + 130 = 2006 BC<br>
+                    2. Isaac born 2006 + 60 = 2066 BC<br>
+                    3. Abraham born 2066 + 100 = <span class="highlight">2166 BC</span>
+                </div>
+            </div>
+        </div>
+        <div class="center-dot"></div>
+        <div class="col-right">
+            <div class="card royal">
+                <span class="date">2166 BC</span>
+                <h3>The Call</h3>
+                <p>"In your seed all the nations of the earth shall be blessed."</p>
+                <span class="ref">Genesis 12:3</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="empty"></div>
+        <div class="center-dot"></div>
+        <div class="col-right">
+            <div class="card royal">
+                <span class="date">2006 BC</span>
+                <h3>Jacob (Israel)</h3>
+                <p>The Promise passes to the younger son. Father of the 12 Tribes.</p>
+                <span class="ref">Genesis 28:14</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-left">
+            <div class="card tech">
+                <span class="date">1876 BC</span>
+                <h3>Sojourn Begins</h3>
+                <div class="math">
+                    Calculation: <span class="highlight">1446 BC + 430 years</span><br>
+                    Scripture: Exodus 12:40 ("The time the sons of Israel lived in Egypt was 430 years").
+                </div>
+            </div>
+        </div>
+        <div class="center-dot"></div>
+        <div class="col-right">
+            <div class="card royal">
+                <span class="date">~1900 BC</span>
+                <h3>Scepter of Judah</h3>
+                <p>Prophecy that the Kingly line belongs to the tribe of Judah.</p>
+                <span class="ref">Genesis 49:10</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-left">
+            <div class="card tech">
+                <span class="date">1446 BC</span>
+                <h3>The Exodus</h3>
+                <div class="math">
+                    Calculation: <span class="highlight">966 BC + 480 years</span><br>
+                    Scripture: 1 Kings 6:1 ("In the 480th year after the sons of Israel came out of Egypt...").
+                </div>
+            </div>
+        </div>
+        <div class="center-dot"></div>
+        <div class="empty"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-left">
+            <div class="card tech">
+                <span class="date">966 BC</span>
+                <h3>Temple Started</h3>
+                <div class="math">
+                    Calculation: <span class="highlight">Solomon's 4th Year</span><br>
+                    Logic: Traced via regnal years of Kings back from the Exile.
+                </div>
+            </div>
+        </div>
+        <div class="center-dot"></div>
+        <div class="col-right">
+            <div class="card royal">
+                <span class="date">~1000 BC</span>
+                <h3>Davidic Covenant</h3>
+                <p>"I will establish the throne of his kingdom forever."</p>
+                <span class="ref">2 Samuel 7:12</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-left">
+            <div class="card tech">
+                <span class="date">444 BC</span>
+                <h3>Decree to Rebuild</h3>
+                <div class="math">
+                    Calculation: <span class="highlight">33 AD - 483 years</span><br>
+                    Logic: The 69 Weeks of Daniel 9:25.
+                </div>
+            </div>
+        </div>
+        <div class="center-dot"></div>
+        <div class="col-right">
+            <div class="card royal">
+                <span class="date">597 BC</span>
+                <h3>The Curse of Jeconiah</h3>
+                <p>The bloodline is cursed; no descendant shall sit on the throne. (Solved by Virgin Birth).</p>
+                <span class="ref">Jeremiah 22:30</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="empty"></div>
+        <div class="center-dot"></div>
+        <div class="col-right">
+            <div class="card royal">
+                <span class="date">~4 BC</span>
+                <h3>The Incarnation</h3>
+                <p>The Word becomes Flesh. The Seed arrives.</p>
+                <span class="ref">Luke 1:31</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-left">
+            <div class="card tech cross">
+                <span class="date">33 AD</span>
+                <h3>Chronological Anchor</h3>
+                <div class="math">
+                    Logic:<br>
+                    1. Friday Nisan 14 (Astronomy)<br>
+                    2. Lunar Eclipse (Acts 2)<br>
+                    3. Sejanus Context (John 19)
+                </div>
+            </div>
+        </div>
+        <div class="center-dot"></div>
+        <div class="col-right">
+            <div class="card royal cross">
+                <span class="date">April 3, 33 AD</span>
+                <h3>The Fulfillment</h3>
+                <p>The Serpent bruises the heel; The Seed crushes the head. Death is swallowed in victory.</p>
+                <span class="ref">John 19:30</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

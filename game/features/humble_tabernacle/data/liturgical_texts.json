@@ -1,0 +1,19 @@
+
+{
+  "Prayer_Book_of_the_Daily_Sacrifice": {
+    "function": "Liturgical formulae for the Tamid offering (morning & evening)",
+    "evidence": "The Mishnah (Tamid 1:1-5) and the Dead Sea Scroll 4QInstruction (a liturgical manual) show a standardized set of prayers recited by priests."
+  },
+  "Hymnals_Psalm_Choir": {
+    "function": "Collections of Hallel (Psalms 113-118, 145-150) and other communal songs",
+    "evidence": "4QPs and 4Q405 (a liturgical psalm) were found at Qumran, indicating a Temple-style repertoire."
+  },
+  "Purity_Codes_Sacrificial_Instructions": {
+    "function": "Detailed rules for ritual purity, sacrificial procedure, and temple service",
+    "evidence": "The Mishnah (Kelim, Taharot) preserves a tradition of written halakhic manuals that likely originated in a written 'Temple Code' kept in the Court of the Priests."
+  },
+  "Temple_Calendar_Festival_Liturgies": {
+    "function": "Fixed schedule of festivals (Passover, Shavuot, Sukkot, etc.) with specific sacrificial rites",
+    "evidence": "The Book of Jubilees (1 Enochic) and the Dead Sea Scroll 4QCalendar reflect an institutional calendar that the Temple would have used."
+  }
+}
