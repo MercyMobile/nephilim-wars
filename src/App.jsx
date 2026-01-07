@@ -270,10 +270,10 @@ export default function App() {
               )}
               {/* FIXED: This now properly renders the React Component */}
               {loreTab === 'tabernacle' && (
-                 <div className="w-full h-full bg-stone-900 flex flex-col">
-                   <TabernacleViewer />
-                 </div>
-              )}
+   <div className="w-full h-full bg-stone-900 flex flex-col overflow-y-auto">
+     <TabernacleViewer />
+   </div>
+)}
 
             </div>
           </div>
