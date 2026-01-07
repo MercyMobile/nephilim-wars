@@ -67,6 +67,7 @@ export default function App() {
     const saved = localStorage.getItem('generatedCharacter');
     if (saved) setCharacterExists(true);
   }, []);
+
   // Listen for messages from iframe (dice roller)
   useEffect(() => {
     const handleMessage = (event) => {
@@ -231,17 +232,17 @@ export default function App() {
                 <span className="hidden sm:inline">🏺 Archaeology</span>
                 <span className="sm:hidden">🏺 Arch</span>
               </button>
-			  <button
-  onClick={() => setLoreTab('tabernacle')}
-  className={`px-3 sm:px-4 py-2 font-cinzel text-xs sm:text-sm uppercase tracking-widest rounded transition-all flex-1 sm:flex-initial ${loreTab === 'tabernacle' && (
-  <div className="w-full h-full bg-stone-900 flex flex-col">
-    <TabernacleViewer />
-  </div>
-)}`}
->
-  <span className="hidden sm:inline">🏛️ Humble Tabernacle</span>
-  <span className="sm:hidden">🏛️ Tabernacle</span>
-</button>
+              <button
+                onClick={() => setLoreTab('tabernacle')}
+                className={`px-3 sm:px-4 py-2 font-cinzel text-xs sm:text-sm uppercase tracking-widest rounded transition-all flex-1 sm:flex-initial ${
+                  loreTab === 'tabernacle'
+                    ? 'bg-amber-900/40 text-amber-400 border border-amber-600/50'
+                    : 'text-stone-500 hover:text-amber-500 hover:bg-stone-900'
+                }`}
+              >
+                <span className="hidden sm:inline">🏛️ Humble Tabernacle</span>
+                <span className="sm:hidden">🏛️ Tabernacle</span>
+              </button>
             </div>
 
             {/* Content Area */}
@@ -267,12 +268,11 @@ export default function App() {
                   title="Archaeology"
                 />
               )}
-			  {loreTab === 'tabernacle' && (
-               <iframe
-                 src="/humble-tabernacle/index.html"
-                 className="w-full h-full border-0"
-                 title="Humble Tabernacle"
-               />
+              {/* FIXED: This now properly renders the React Component */}
+              {loreTab === 'tabernacle' && (
+                 <div className="w-full h-full bg-stone-900 flex flex-col">
+                   <TabernacleViewer />
+                 </div>
               )}
 
             </div>
