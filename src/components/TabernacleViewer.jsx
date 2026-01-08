@@ -34,7 +34,11 @@ const TabernacleViewer = () => {
         setRotation(prev => (prev + 0.5) % 360);
       }, 30);
     }
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
   }, [isOrbiting]);
 
   const Tabernacle3D = () => {
@@ -62,21 +66,21 @@ const TabernacleViewer = () => {
             transformStyle: 'preserve-3d'
           }}
         >
-          {/* FLOOR (Silver Sockets) */}
+          {/* FLOOR (Silver Sockets) - Bottom of the box */}
           <div className="absolute bg-stone-300 border border-stone-400"
                style={{ 
                  width: `${L}px`, 
                  height: `${W}px`,
                  left: 0,
                  top: `${H/2 - W/2}px`,
-                 transform: `rotateX(90deg)`,
+                 transform: `rotateX(90deg) translateZ(${H/2}px)`,
                  transformOrigin: '50% 50%',
                  boxShadow: 'inset 0 0 50px rgba(0,0,0,0.5)'
                }}>
                <div className="w-full h-full opacity-40 bg-[repeating-linear-gradient(90deg,transparent_0px,transparent_29px,#000_30px)]"></div>
           </div>
 
-          {/* TENT COVERING (Ram Skins) - Above the box */}
+          {/* TENT COVERING (Ram Skins) - TOP of the box */}
           <div className="absolute bg-gradient-to-br from-red-900 via-red-950 to-red-900 opacity-95"
                style={{ 
                  width: `${tentL}px`, 
@@ -90,8 +94,8 @@ const TabernacleViewer = () => {
                <div className="w-full h-full bg-[repeating-linear-gradient(0deg,rgba(0,0,0,0.3)_0px,transparent_1px,transparent_40px)]"></div>
           </div>
 
-          {/* FRONT WALL (NORTH) - Gold Boards */}
-          <div className="absolute bg-gradient-to-b from-yellow-500 via-yellow-600 to-yellow-800"
+          {/* FRONT WALL (NORTH) - Gold Boards - OPAQUE */}
+          <div className="absolute bg-gradient-to-b from-yellow-500 via-yellow-600 to-yellow-800 opacity-100"
                style={{ 
                  width: `${L}px`, 
                  height: `${H}px`,
@@ -102,8 +106,8 @@ const TabernacleViewer = () => {
                }}>
           </div>
 
-          {/* BACK WALL (SOUTH) - Gold Boards */}
-          <div className="absolute bg-gradient-to-b from-yellow-500 via-yellow-600 to-yellow-800"
+          {/* BACK WALL (SOUTH) - Gold Boards - OPAQUE */}
+          <div className="absolute bg-gradient-to-b from-yellow-500 via-yellow-600 to-yellow-800 opacity-100"
                style={{ 
                  width: `${L}px`, 
                  height: `${H}px`,
@@ -114,8 +118,8 @@ const TabernacleViewer = () => {
                }}>
           </div>
 
-          {/* RIGHT WALL (WEST - Rear End) - Gold Boards */}
-          <div className="absolute bg-gradient-to-b from-yellow-500 via-yellow-600 to-yellow-800"
+          {/* RIGHT WALL (WEST - Rear End) - Gold Boards - OPAQUE */}
+          <div className="absolute bg-gradient-to-b from-yellow-500 via-yellow-600 to-yellow-800 opacity-100"
                style={{ 
                  width: `${W}px`, 
                  height: `${H}px`,
@@ -127,8 +131,8 @@ const TabernacleViewer = () => {
                }}>
           </div>
 
-          {/* LEFT WALL (EAST - Entrance Veil) */}
-          <div className="absolute flex items-center justify-center overflow-hidden border-2 border-gold-400/50"
+          {/* LEFT WALL (EAST - Entrance Veil) - OPAQUE */}
+          <div className="absolute flex items-center justify-center overflow-hidden border-2 border-gold-400/50 opacity-100"
                style={{ 
                  width: `${W}px`, 
                  height: `${H}px`,
@@ -142,8 +146,8 @@ const TabernacleViewer = () => {
                <div className="absolute inset-0 opacity-20 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.1)_10px,rgba(255,255,255,0.1)_11px)]"></div>
           </div>
 
-          {/* INTERIOR VEIL (Dividing Holy Place from Holy of Holies) */}
-          <div className="absolute flex items-center justify-center overflow-hidden border border-purple-400/50"
+          {/* INTERIOR VEIL (Dividing Holy Place from Holy of Holies) - OPAQUE */}
+          <div className="absolute flex items-center justify-center overflow-hidden border border-purple-400/50 opacity-100"
                style={{ 
                  width: `${W}px`, 
                  height: `${H}px`,
@@ -169,7 +173,7 @@ const TabernacleViewer = () => {
                  height: `${W}px`,
                  left: `${L - holyOfHoliesLength}px`,
                  top: `${H/2 - W/2}px`,
-                 transform: `rotateX(90deg)`,
+                 transform: `rotateX(90deg) translateZ(${H/2}px)`,
                  transformOrigin: '50% 50%'
                }}>
           </div>
