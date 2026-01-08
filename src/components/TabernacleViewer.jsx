@@ -27,6 +27,8 @@ const TabernacleViewer = () => {
     { part: "The Blue Robe", detail: "Worn under the Ephod, with golden bells and pomegranates on the hem so the Priest's sound is heard in the Holy Place." }
   ];
 
+  // --- EFFICIENT ORBIT LOGIC ---
+  // Only restarts when 'isOrbiting' changes, not on every rotation update.
   useEffect(() => {
     let interval;
     if (isOrbiting) {
@@ -39,15 +41,16 @@ const TabernacleViewer = () => {
 
   const Tabernacle3D = () => {
     // --- GEOMETRY CONSTANTS ---
-    // The "World" scale
+    // The "World" scale: 10px approx 1 cubit
     const L = 300; // Length (Left-to-Right)
     const H = 100; // Height (Top-to-Bottom)
     const D = 100; // Depth (Front-to-Back)
 
     // Common style for all 3D faces to prevent clipping/hiding
+    // 'backfaceVisibility: visible' ensures we see the inside of the far walls
     const faceStyle = {
       position: 'absolute',
-      backfaceVisibility: 'visible', // CRITICAL: Prevents faces from disappearing when rotated
+      backfaceVisibility: 'visible', 
       transformStyle: 'preserve-3d',
       boxShadow: 'inset 0 0 30px rgba(0,0,0,0.6)' // Inner shadow for "box" feel
     };
@@ -59,6 +62,7 @@ const TabernacleViewer = () => {
         <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-amber-900/20 to-transparent blur-xl"></div>
         
         {/* --- SCENE ROTATOR --- */}
+        {/* We rotate this 0px container, and everything inside moves with it */}
         <div 
           className="relative preserve-3d transition-transform duration-100 ease-linear"
           style={{ 
@@ -67,9 +71,9 @@ const TabernacleViewer = () => {
             transform: `rotateX(-20deg) rotateY(${rotation}deg)` 
           }}
         >
-          {/* CONSTRUCTING THE BOX 
-             Origin (0,0,0) is in the exact center of the box.
-          */}
+          {/* ==========================
+              THE BOX FACES
+             ========================== */}
 
           {/* 1. FLOOR (Silver Sockets) */}
           <div style={{
@@ -77,7 +81,7 @@ const TabernacleViewer = () => {
             width: `${L}px`,
             height: `${D}px`,
             background: '#d6d3d1', // Stone color
-            // rotateX(-90deg) faces it DOWN relative to camera. translateZ moves it "down" to the floor position.
+            // Rotate X -90 to face DOWN. Translate Z to move it to the bottom.
             transform: `translate(-50%, -50%) rotateX(-90deg) translateZ(${H/2}px)`
           }}>
              {/* Sockets Grid */}
@@ -90,7 +94,7 @@ const TabernacleViewer = () => {
             width: `${L}px`,
             height: `${D}px`,
             background: '#7f1d1d', // Red color
-            // rotateX(90deg) faces it UP. translateZ moves it "up" to the ceiling position.
+            // Rotate X 90 to face UP. Translate Z to move it to the top.
             transform: `translate(-50%, -50%) rotateX(90deg) translateZ(${H/2}px)`,
             border: '1px solid #450a0a'
           }}>
@@ -195,7 +199,7 @@ const TabernacleViewer = () => {
           ))}
         </nav>
 
-        {/* Main Content */}
+        {/* Main Content Area */}
         <div className="lg:col-span-3 min-h-[600px]">
           {activeView === 'sanctuary' && <Tabernacle3D />}
 
