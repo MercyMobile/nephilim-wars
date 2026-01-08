@@ -38,106 +38,105 @@ const TabernacleViewer = () => {
   }, [isOrbiting]);
 
   const Tabernacle3D = () => {
-    // --- GEOMETRY CONFIGURATION ---
-    // Scale: 10px = 1 cubit (approx)
-    const L = 300; // Length
-    const W = 100; // Width
-    const H = 100; // Height
+    // --- GEOMETRY CONSTANTS ---
+    // The "World" scale
+    const L = 300; // Length (Left-to-Right)
+    const H = 100; // Height (Top-to-Bottom)
+    const D = 100; // Depth (Front-to-Back)
 
-    // Helper to center the face divs. 
-    // Since we are positioning absolute, we offset by -50% of dimension to center origin.
-    const centerStyle = {
+    // Common style for all 3D faces to prevent clipping/hiding
+    const faceStyle = {
       position: 'absolute',
-      top: '50%',
-      left: '50%',
+      backfaceVisibility: 'visible', // CRITICAL: Prevents faces from disappearing when rotated
       transformStyle: 'preserve-3d',
-      backfaceVisibility: 'visible' // Important so we can see inside if needed, or 'hidden' if solid
+      boxShadow: 'inset 0 0 30px rgba(0,0,0,0.6)' // Inner shadow for "box" feel
     };
 
     return (
       <div className="relative w-full h-[500px] bg-parchment-900 rounded-xl border-2 border-gold-700/30 overflow-hidden flex items-center justify-center perspective-1000 shadow-2xl">
-        {/* Background / Atmosphere */}
+        {/* Atmosphere */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#1c1917] to-[#292524] opacity-90"></div>
         <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-amber-900/20 to-transparent blur-xl"></div>
         
-        {/* --- SCENE CONTAINER (The Rotator) --- */}
+        {/* --- SCENE ROTATOR --- */}
         <div 
           className="relative preserve-3d transition-transform duration-100 ease-linear"
           style={{ 
-            width: '0px', // Zero width/height forces rotation around center point
+            width: '0px', 
             height: '0px',
-            transform: `rotateX(-25deg) rotateY(${rotation}deg)` 
+            transform: `rotateX(-20deg) rotateY(${rotation}deg)` 
           }}
         >
-          {/* ==========================
-              THE BOX FACES
-             ========================== */}
+          {/* CONSTRUCTING THE BOX 
+             Origin (0,0,0) is in the exact center of the box.
+          */}
 
           {/* 1. FLOOR (Silver Sockets) */}
           <div style={{
-            ...centerStyle,
+            ...faceStyle,
             width: `${L}px`,
-            height: `${W}px`,
-            background: '#d6d3d1', // stone-300
-            // Move center point: Rotate X 90 to lay flat, Push DOWN by half Height
-            transform: `translate(-50%, -50%) rotateX(90deg) translateZ(${H/2}px)`,
-            boxShadow: 'inset 0 0 40px rgba(0,0,0,0.8)'
+            height: `${D}px`,
+            background: '#d6d3d1', // Stone color
+            // rotateX(-90deg) faces it DOWN relative to camera. translateZ moves it "down" to the floor position.
+            transform: `translate(-50%, -50%) rotateX(-90deg) translateZ(${H/2}px)`
           }}>
-            <div className="w-full h-full opacity-50 bg-[repeating-linear-gradient(90deg,transparent_0px,transparent_29px,#44403c_30px)]"></div>
+             {/* Sockets Grid */}
+             <div className="w-full h-full opacity-60 bg-[repeating-linear-gradient(90deg,transparent_0px,transparent_29px,#44403c_30px)]"></div>
           </div>
 
-          {/* 2. ROOF (Red Ram Skins) */}
+          {/* 2. ROOF (Red Skins) */}
           <div style={{
-            ...centerStyle,
+            ...faceStyle,
             width: `${L}px`,
-            height: `${W}px`,
-            background: '#7f1d1d', // red-900
-            // Rotate X 90, Push UP (negative Z relative to rotation or simply opposite floor)
-            // Actually: rotateX(-90deg) faces UP. translateZ(H/2) pushes it "up" in Y-space relative to viewer
-            transform: `translate(-50%, -50%) rotateX(-90deg) translateZ(${H/2}px)`,
+            height: `${D}px`,
+            background: '#7f1d1d', // Red color
+            // rotateX(90deg) faces it UP. translateZ moves it "up" to the ceiling position.
+            transform: `translate(-50%, -50%) rotateX(90deg) translateZ(${H/2}px)`,
             border: '1px solid #450a0a'
-          }}></div>
+          }}>
+             <div className="w-full h-full bg-black/20 mix-blend-multiply"></div>
+          </div>
 
-          {/* 3. NORTH WALL (Gold) - Front Long Side */}
+          {/* 3. NORTH WALL (Front Long Side) */}
           <div style={{
-            ...centerStyle,
-            width: `${L}px`,
-            height: `${H}px`,
-            background: 'linear-gradient(to bottom, #facc15, #a16207)', // yellow-400 to yellow-700
-            // Push OUTward in Z
-            transform: `translate(-50%, -50%) translateZ(${W/2}px)`,
-            backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 15px)'
-          }}></div>
-
-          {/* 4. SOUTH WALL (Gold) - Back Long Side */}
-          <div style={{
-            ...centerStyle,
+            ...faceStyle,
             width: `${L}px`,
             height: `${H}px`,
             background: 'linear-gradient(to bottom, #facc15, #a16207)',
-            // Rotate 180 Y to face opposite, Push OUTward in Z
-            transform: `translate(-50%, -50%) rotateY(180deg) translateZ(${W/2}px)`,
+            // Push forward by half the Depth
+            transform: `translate(-50%, -50%) translateZ(${D/2}px)`,
+            backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 15px)'
+          }}></div>
+
+          {/* 4. SOUTH WALL (Back Long Side) */}
+          <div style={{
+            ...faceStyle,
+            width: `${L}px`,
+            height: `${H}px`,
+            background: 'linear-gradient(to bottom, #facc15, #a16207)',
+            // Rotate 180 to face back, push out by half Depth
+            transform: `translate(-50%, -50%) rotateY(180deg) translateZ(${D/2}px)`,
             backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 15px)'
           }}></div>
 
           {/* 5. WEST WALL (Rear Short Side) */}
           <div style={{
-            ...centerStyle,
-            width: `${W}px`,
+            ...faceStyle,
+            width: `${D}px`,
             height: `${H}px`,
             background: 'linear-gradient(to bottom, #facc15, #a16207)',
-            // Rotate -90 Y to face Left, Push OUTward by half LENGTH
+            // Rotate -90 to face Left, push out by half Length
             transform: `translate(-50%, -50%) rotateY(-90deg) translateZ(${L/2}px)`,
             backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 15px)'
           }}></div>
 
           {/* 6. EAST WALL (The Veil - Entrance) */}
           <div style={{
-            ...centerStyle,
-            width: `${W}px`,
+            ...faceStyle,
+            width: `${D}px`,
             height: `${H}px`,
-            background: '#312e81', // indigo-900
-            // Rotate 90 Y to face Right, Push OUTward by half LENGTH
+            background: '#312e81', // Indigo
+            // Rotate 90 to face Right, push out by half Length
             transform: `translate(-50%, -50%) rotateY(90deg) translateZ(${L/2}px)`,
             border: '2px solid rgba(250, 204, 21, 0.4)'
           }}>
@@ -146,11 +145,12 @@ const TabernacleViewer = () => {
                 <span className="text-3xl filter drop-shadow-lg opacity-80">⚔️</span>
              </div>
           </div>
-
         </div>
 
-        {/* --- UI CONTROLS --- */}
-        <div className="absolute top-6 left-6 font-cinzel text-amber-500 p-4 border border-amber-900/40 bg-black/80 backdrop-blur-sm rounded-lg max-w-[200px] z-10 shadow-lg">
+        {/* --- UI OVERLAYS --- */}
+        
+        {/* Divine Geometry Box */}
+        <div className="absolute top-6 left-6 font-cinzel text-amber-500 p-4 border border-amber-900/40 bg-black/80 backdrop-blur-sm rounded-lg max-w-[200px] z-10 shadow-lg pointer-events-none">
           <p className="text-[10px] tracking-widest uppercase mb-2 underline decoration-amber-700 font-bold">Divine Geometry</p>
           <p className="text-[11px] font-sans text-stone-300 leading-normal">
             <span className="text-amber-400 font-bold">φ (Phi) = 1.618</span><br/>
@@ -158,12 +158,13 @@ const TabernacleViewer = () => {
           </p>
         </div>
 
-        <div className="absolute bottom-10 flex items-center gap-6 bg-parchment-100 p-2 pl-4 pr-4 rounded-full border-2 border-amber-600 shadow-2xl z-10">
-          <button onClick={() => setRotation(r => r - 45)} className="text-stone-900 hover:text-amber-700 font-cinzel text-[10px] font-bold cursor-pointer">ROTATE L</button>
+        {/* Controls */}
+        <div className="absolute bottom-10 flex items-center gap-6 bg-parchment-100 p-2 pl-4 pr-4 rounded-full border-2 border-amber-600 shadow-2xl z-20">
+          <button onClick={() => setRotation(r => r - 45)} className="text-stone-900 hover:text-amber-700 font-cinzel text-[10px] font-bold cursor-pointer transition-colors">ROTATE L</button>
           <button onClick={() => setIsOrbiting(!isOrbiting)} className={`font-serif italic text-xl px-2 transition-all cursor-pointer ${isOrbiting ? 'text-red-700 animate-pulse' : 'text-stone-900'}`}>
             {isOrbiting ? 'Stop' : 'Orbit'}
           </button>
-          <button onClick={() => setRotation(r => r + 45)} className="text-stone-900 hover:text-amber-700 font-cinzel text-[10px] font-bold cursor-pointer">ROTATE R</button>
+          <button onClick={() => setRotation(r => r + 45)} className="text-stone-900 hover:text-amber-700 font-cinzel text-[10px] font-bold cursor-pointer transition-colors">ROTATE R</button>
         </div>
       </div>
     );
@@ -177,6 +178,7 @@ const TabernacleViewer = () => {
       </header>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-12">
+        {/* Navigation Tabs - High Contrast */}
         <nav className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible gap-2 border-b lg:border-b-0 border-stone-300 pb-4 lg:pb-0">
           {['sanctuary', 'elements', 'garments', 'archaeology'].map(tab => (
             <button
@@ -184,8 +186,8 @@ const TabernacleViewer = () => {
               onClick={() => setActiveView(tab)}
               className={`whitespace-nowrap lg:w-full text-left p-4 border-b-2 lg:border-b lg:border-l-2 transition-all font-cinzel text-xs tracking-widest ${
                 activeView === tab 
-                  ? 'border-amber-600 bg-amber-900/10 text-amber-900 font-black lg:translate-x-2' 
-                  : 'border-transparent lg:border-stone-300 text-stone-500 hover:text-amber-800 font-bold'
+                  ? 'border-amber-500 bg-stone-900 text-gold-400 font-black lg:translate-x-2 shadow-md' 
+                  : 'border-transparent lg:border-stone-300 text-stone-600 hover:text-amber-900 hover:bg-stone-300 font-bold'
               }`}
             >
               {tab.toUpperCase()}
@@ -193,6 +195,7 @@ const TabernacleViewer = () => {
           ))}
         </nav>
 
+        {/* Main Content */}
         <div className="lg:col-span-3 min-h-[600px]">
           {activeView === 'sanctuary' && <Tabernacle3D />}
 
