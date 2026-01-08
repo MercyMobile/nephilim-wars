@@ -63,8 +63,7 @@ const TabernacleViewer = () => {
                style={{ 
                  width: `${L}px`, 
                  height: `${W}px`,
-                 // rotateX(-90) points UP, so translateZ pushes it UP (which is visually down in this coord system? Let's check visually)
-                 // Actually, in CSS 3D: rotateX(90) makes Z point DOWN.
+                 // rotateX(90) makes Z point DOWN in CSS 3D space relative to the viewer
                  transform: `rotateX(90deg) translateZ(${H/2}px)`,
                  boxShadow: 'inset 0 0 50px rgba(0,0,0,0.5)'
                }}>
