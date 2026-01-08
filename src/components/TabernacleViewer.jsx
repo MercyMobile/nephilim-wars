@@ -4,6 +4,7 @@ const TabernacleViewer = () => {
   const [activeView, setActiveView] = useState('sanctuary');
   const [rotation, setRotation] = useState(-35);
   const [isOrbiting, setIsOrbiting] = useState(false);
+  const intervalRef = React.useRef(null);
 
   // --- DATA PRESETS ---
   const breastplateStones = [
@@ -28,15 +29,24 @@ const TabernacleViewer = () => {
   ];
 
   useEffect(() => {
-    let interval;
+    // Clear any existing interval
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    
+    // Start new interval if orbiting
     if (isOrbiting) {
-      interval = setInterval(() => {
+      intervalRef.current = setInterval(() => {
         setRotation(prev => (prev + 0.5) % 360);
       }, 30);
     }
+    
+    // Cleanup on unmount
     return () => {
-      if (interval) {
-        clearInterval(interval);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
       }
     };
   }, [isOrbiting]);
@@ -73,7 +83,7 @@ const TabernacleViewer = () => {
                  height: `${W}px`,
                  left: 0,
                  top: `${H/2 - W/2}px`,
-                 transform: `rotateX(90deg) translateZ(${H/2}px)`,
+                 transform: `rotateX(90deg) translateZ(${-H/2}px)`,
                  transformOrigin: '50% 50%',
                  boxShadow: 'inset 0 0 50px rgba(0,0,0,0.5)'
                }}>
@@ -87,7 +97,7 @@ const TabernacleViewer = () => {
                  height: `${tentW}px`,
                  left: `${(L - tentL) / 2}px`,
                  top: `${H/2 - tentW/2}px`,
-                 transform: `rotateX(90deg) translateZ(${-H/2 - 5}px)`,
+                 transform: `rotateX(90deg) translateZ(${H/2 + 5}px)`,
                  transformOrigin: '50% 50%'
                }}>
                <div className="w-full h-full bg-black/30 mix-blend-multiply"></div>
@@ -173,7 +183,7 @@ const TabernacleViewer = () => {
                  height: `${W}px`,
                  left: `${L - holyOfHoliesLength}px`,
                  top: `${H/2 - W/2}px`,
-                 transform: `rotateX(90deg) translateZ(${H/2}px)`,
+                 transform: `rotateX(90deg) translateZ(${-H/2}px)`,
                  transformOrigin: '50% 50%'
                }}>
           </div>
