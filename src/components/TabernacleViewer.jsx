@@ -39,83 +39,121 @@ const TabernacleViewer = () => {
   }, [isOrbiting]);
 
   // --- 3D SUB-COMPONENT ---
-  const Tabernacle3D = () => (
-    <div className="relative w-full h-[500px] bg-parchment-900 rounded-xl border-2 border-gold-700/30 overflow-hidden flex flex-col items-center justify-center perspective-1000 shadow-2xl">
-      {/* Ground Plane (Sand) */}
-      <div className="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-[#c2b280] to-[#e6d8b6] opacity-10 blur-md"></div>
-      
-      <div 
-        className="relative w-[200px] h-[120px] transition-transform duration-1000 ease-out preserve-3d"
-        style={{ transform: `rotateX(-10deg) rotateY(${rotation}deg)` }}
-      >
-        {/* -- THE STRUCTURE (Constructing the Box) -- */}
+  const Tabernacle3D = () => {
+    // GEOMETRY CONSTANTS (Scale: 10px = 1 cubit roughly)
+    // Length: 300px (30 cubits)
+    // Width: 100px (10 cubits)
+    // Height: 100px (10 cubits)
+    const LENGTH = 300;
+    const WIDTH = 100;
+    const HEIGHT = 100;
+
+    return (
+      <div className="relative w-full h-[500px] bg-parchment-900 rounded-xl border-2 border-gold-700/30 overflow-hidden flex flex-col items-center justify-center perspective-1000 shadow-2xl">
+        {/* Ground Plane (Sand) */}
+        <div className="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-[#c2b280] to-[#e6d8b6] opacity-10 blur-md"></div>
         
-        {/* Floor (Silver Sockets) */}
-        <div className="absolute inset-0 bg-stone-300 opacity-80" 
-             style={{ transform: 'rotateX(90deg) translateZ(-60px)', boxShadow: '0 0 40px rgba(0,0,0,0.5)' }}></div>
+        {/* The Rotatable Container */}
+        <div 
+          className="relative transition-transform duration-100 ease-out preserve-3d"
+          style={{ 
+            width: `${LENGTH}px`, 
+            height: `${HEIGHT}px`, 
+            transform: `rotateX(-15deg) rotateY(${rotation}deg)` 
+          }}
+        >
+          {/* -- FLOOR (Silver Sockets) -- */}
+          <div className="absolute bg-stone-300" 
+               style={{ 
+                 width: `${LENGTH}px`, 
+                 height: `${WIDTH}px`,
+                 transform: `rotateX(90deg) translateZ(${HEIGHT/2}px)`, // Pushed down
+                 boxShadow: '0 0 60px rgba(0,0,0,0.6)'
+               }}>
+            {/* Socket Grid Pattern */}
+            <div className="w-full h-full opacity-30 bg-[repeating-linear-gradient(90deg,transparent_0px,transparent_28px,#000_30px)]"></div>
+          </div>
 
-        {/* Ceiling (Ram Skins/Badger Skins - Red/Brown) */}
-        <div className="absolute inset-0 bg-gradient-to-b from-amber-900 to-red-900" 
-             style={{ transform: 'rotateX(90deg) translateZ(60px)' }}></div>
+          {/* -- CEILING (Ram Skins - Red) -- */}
+          <div className="absolute bg-red-900" 
+               style={{ 
+                 width: `${LENGTH}px`, 
+                 height: `${WIDTH}px`,
+                 transform: `rotateX(-90deg) translateZ(${HEIGHT/2}px)` // Pushed up
+               }}>
+          </div>
 
-        {/* North Wall (Gold Boards) */}
-        <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-gold-600 via-gold-400 to-gold-700"
-             style={{ 
-               transform: 'rotateY(0deg) translateZ(-50px)', 
-               backgroundImage: 'repeating-linear-gradient(90deg, transparent 0px, transparent 19px, rgba(0,0,0,0.3) 20px)' 
-             }}>
+          {/* -- NORTH WALL (Long Side 1) -- */}
+          <div className="absolute bg-gradient-to-b from-yellow-600 to-yellow-800"
+               style={{ 
+                 width: `${LENGTH}px`, 
+                 height: `${HEIGHT}px`,
+                 transform: `translateZ(-${WIDTH/2}px)`, // Push back
+                 backgroundImage: 'repeating-linear-gradient(90deg, transparent 0px, transparent 28px, rgba(0,0,0,0.4) 30px)'
+               }}>
+            <div className="absolute inset-0 bg-yellow-500 opacity-20 mix-blend-overlay"></div>
+          </div>
+
+          {/* -- SOUTH WALL (Long Side 2) -- */}
+          <div className="absolute bg-gradient-to-b from-yellow-600 to-yellow-800"
+               style={{ 
+                 width: `${LENGTH}px`, 
+                 height: `${HEIGHT}px`,
+                 transform: `rotateY(180deg) translateZ(-${WIDTH/2}px)`, // Flip and push back
+                 backgroundImage: 'repeating-linear-gradient(90deg, transparent 0px, transparent 28px, rgba(0,0,0,0.4) 30px)'
+               }}>
+            <div className="absolute inset-0 bg-yellow-500 opacity-20 mix-blend-overlay"></div>
+          </div>
+
+          {/* -- WEST WALL (Rear End) -- */}
+          <div className="absolute bg-gradient-to-b from-yellow-600 to-yellow-800"
+               style={{ 
+                 width: `${WIDTH}px`, 
+                 height: `${HEIGHT}px`,
+                 transform: `rotateY(-90deg) translateZ(${LENGTH/2}px)`, // Rotate and push left
+                 backgroundImage: 'repeating-linear-gradient(90deg, transparent 0px, transparent 18px, rgba(0,0,0,0.4) 20px)'
+               }}>
+          </div>
+
+          {/* -- EAST WALL (The Veil / Entrance) -- */}
+          <div className="absolute flex items-center justify-center overflow-hidden bg-indigo-900"
+               style={{ 
+                 width: `${WIDTH}px`, 
+                 height: `${HEIGHT}px`,
+                 transform: `rotateY(90deg) translateZ(${LENGTH/2}px)`, // Rotate and push right
+                 boxShadow: '0 0 30px rgba(100,100,255,0.2)'
+               }}>
+               {/* Veil Colors */}
+               <div className="absolute inset-0 bg-gradient-to-br from-blue-800 via-purple-800 to-red-800 opacity-90"></div>
+               {/* Cherubim Abstract */}
+               <div className="absolute w-12 h-12 border-2 border-gold-400/50 rounded-full opacity-60"></div>
+          </div>
+
+          {/* -- SHEKINAH GLOW (Interior Light) -- */}
+          <div className="absolute top-1/2 left-1/4 w-20 h-20 bg-amber-200/20 blur-[40px] rounded-full animate-pulse"
+               style={{ transform: 'translateY(-50%) translateZ(0)' }}>
+          </div>
+
         </div>
 
-        {/* South Wall (Gold Boards) */}
-        <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-gold-600 via-gold-400 to-gold-700"
-             style={{ 
-               transform: 'rotateY(180deg) translateZ(-50px)',
-               backgroundImage: 'repeating-linear-gradient(90deg, transparent 0px, transparent 19px, rgba(0,0,0,0.3) 20px)' 
-             }}>
+        {/* Golden Ratio Overlay */}
+        <div className="absolute top-6 left-6 font-cinzel text-gold-500/80 p-3 border border-gold-900/40 bg-black/40 backdrop-blur-sm rounded z-10">
+          <p className="text-[10px] tracking-widest uppercase mb-1 underline decoration-gold-700">Divine Geometry</p>
+          <p className="text-[11px] font-garamond italic text-parchment-200 leading-tight">
+            "The Ark: 2.5 cubits length x 1.5 cubits width"<br/>
+            φ Ratio: 1.666 (Approx. Golden Ratio 1.618)
+          </p>
         </div>
 
-        {/* West Wall (Back - Gold Boards) */}
-        <div className="absolute inset-y-0 left-0 w-[100px] h-full bg-gradient-to-r from-gold-600 via-gold-400 to-gold-700 origin-left"
-             style={{ 
-               transform: 'rotateY(90deg) translateZ(-100px) translateX(-50px)',
-               backgroundImage: 'repeating-linear-gradient(90deg, transparent 0px, transparent 19px, rgba(0,0,0,0.3) 20px)' 
-             }}>
+        {/* Control HUD */}
+        <div className="absolute bottom-10 flex items-center gap-6 bg-parchment-100 p-3 rounded-full border-2 border-gold-600 shadow-2xl z-20">
+          <button onClick={() => setRotation(r => r - 30)} className="text-parchment-900 hover:text-gold-700 font-cinzel text-[10px] font-bold px-3">LEFT</button>
+          <button onClick={() => setIsOrbiting(!isOrbiting)} className={`font-unifraktur text-2xl px-4 transition-all ${isOrbiting ? 'text-crimson scale-125' : 'text-parchment-900'}`}>{isOrbiting ? 'S' : 'O'}</button>
+          <button onClick={() => setRotation(r => r + 30)} className="text-parchment-900 hover:text-gold-700 font-cinzel text-[10px] font-bold px-3">RIGHT</button>
         </div>
-
-        {/* East Wall (THE VEIL / ENTRANCE) */}
-        <div className="absolute inset-y-0 right-0 w-[100px] h-full origin-right flex items-center justify-center overflow-hidden"
-             style={{ transform: 'rotateY(-90deg) translateZ(-100px) translateX(50px)' }}>
-            <div className="w-full h-full bg-sacred-blue opacity-90 relative">
-               {/* Veil Texture */}
-               <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-purple-900 to-red-900 opacity-80"></div>
-               {/* Embroidery effect */}
-               <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gold-400 to-transparent scale-50"></div>
-            </div>
-        </div>
-
-        {/* Pillar Overlay (Visual Depth) */}
-        <div className="absolute -left-2 -top-2 -bottom-2 w-4 bg-gradient-to-r from-amber-700 to-amber-900 rounded-full" style={{ transform: 'translateZ(55px)' }}></div>
-        <div className="absolute -right-2 -top-2 -bottom-2 w-4 bg-gradient-to-r from-amber-700 to-amber-900 rounded-full" style={{ transform: 'translateZ(55px)' }}></div>
-
       </div>
-
-      {/* Golden Ratio Overlay */}
-      <div className="absolute top-6 left-6 font-cinzel text-gold-500/80 p-3 border border-gold-900/40 bg-black/40 backdrop-blur-sm rounded">
-        <p className="text-[10px] tracking-widest uppercase mb-1 underline decoration-gold-700">Divine Geometry</p>
-        <p className="text-[11px] font-garamond italic text-parchment-200 leading-tight">
-          "The Ark: 2.5 cubits length x 1.5 cubits width"<br/>
-          φ Ratio: 1.666 (Approx. Golden Ratio 1.618)
-        </p>
-      </div>
-
-      {/* Control HUD */}
-      <div className="absolute bottom-10 flex items-center gap-6 bg-parchment-100 p-3 rounded-full border-2 border-gold-600 shadow-2xl z-10">
-        <button onClick={() => setRotation(r => r - 30)} className="text-parchment-900 hover:text-gold-700 font-cinzel text-[10px] font-bold px-3">LEFT</button>
-        <button onClick={() => setIsOrbiting(!isOrbiting)} className={`font-unifraktur text-2xl px-4 transition-all ${isOrbiting ? 'text-crimson scale-125' : 'text-parchment-900'}`}>{isOrbiting ? 'S' : 'O'}</button>
-        <button onClick={() => setRotation(r => r + 30)} className="text-parchment-900 hover:text-gold-700 font-cinzel text-[10px] font-bold px-3">RIGHT</button>
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen bg-parchment-200 p-4 md:p-8 font-garamond text-parchment-900 selection:bg-gold-500/30">
