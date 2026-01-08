@@ -50,8 +50,11 @@ const TabernacleViewer = () => {
     // 'backfaceVisibility: visible' ensures we see the inside of the far walls
     const faceStyle = {
       position: 'absolute',
-      backfaceVisibility: 'visible', 
+      backfaceVisibility: 'visible',
+      WebkitBackfaceVisibility: 'visible', // Safari/WebKit support
       transformStyle: 'preserve-3d',
+      WebkitTransformStyle: 'preserve-3d', // Safari/WebKit support
+      willChange: 'transform', // GPU acceleration hint
       boxShadow: 'inset 0 0 30px rgba(0,0,0,0.6)' // Inner shadow for "box" feel
     };
 
@@ -82,7 +85,8 @@ const TabernacleViewer = () => {
             height: `${D}px`,
             background: '#d6d3d1', // Stone color
             // Rotate X -90 to face DOWN. Translate Z to move it to the bottom.
-            transform: `translate(-50%, -50%) rotateX(-90deg) translateZ(${H/2}px)`
+            transform: `translate(-50%, -50%) rotateX(-90deg) translateZ(${H/2}px)`,
+            zIndex: 1
           }}>
              {/* Sockets Grid */}
              <div className="w-full h-full opacity-60 bg-[repeating-linear-gradient(90deg,transparent_0px,transparent_29px,#44403c_30px)]"></div>
@@ -96,7 +100,8 @@ const TabernacleViewer = () => {
             background: '#7f1d1d', // Red color
             // Rotate X 90 to face UP. Translate Z to move it to the top.
             transform: `translate(-50%, -50%) rotateX(90deg) translateZ(${H/2}px)`,
-            border: '1px solid #450a0a'
+            border: '1px solid #450a0a',
+            zIndex: 1
           }}>
              <div className="w-full h-full bg-black/20 mix-blend-multiply"></div>
           </div>
@@ -109,7 +114,8 @@ const TabernacleViewer = () => {
             background: 'linear-gradient(to bottom, #facc15, #a16207)',
             // Push forward by half the Depth
             transform: `translate(-50%, -50%) translateZ(${D/2}px)`,
-            backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 15px)'
+            backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 15px)',
+            zIndex: 2
           }}></div>
 
           {/* 4. SOUTH WALL (Back Long Side) */}
@@ -120,7 +126,8 @@ const TabernacleViewer = () => {
             background: 'linear-gradient(to bottom, #facc15, #a16207)',
             // Rotate 180 to face back, push out by half Depth
             transform: `translate(-50%, -50%) rotateY(180deg) translateZ(${D/2}px)`,
-            backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 15px)'
+            backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 15px)',
+            zIndex: 2
           }}></div>
 
           {/* 5. WEST WALL (Rear Short Side) */}
@@ -131,7 +138,8 @@ const TabernacleViewer = () => {
             background: 'linear-gradient(to bottom, #facc15, #a16207)',
             // Rotate -90 to face Left, push out by half Length
             transform: `translate(-50%, -50%) rotateY(-90deg) translateZ(${L/2}px)`,
-            backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 15px)'
+            backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 15px)',
+            zIndex: 2
           }}></div>
 
           {/* 6. EAST WALL (The Veil - Entrance) */}
@@ -142,7 +150,8 @@ const TabernacleViewer = () => {
             background: '#312e81', // Indigo
             // Rotate 90 to face Right, push out by half Length
             transform: `translate(-50%, -50%) rotateY(90deg) translateZ(${L/2}px)`,
-            border: '2px solid rgba(250, 204, 21, 0.4)'
+            border: '2px solid rgba(250, 204, 21, 0.4)',
+            zIndex: 2
           }}>
              <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-purple-900 to-red-900 opacity-100"></div>
              <div className="absolute inset-0 flex items-center justify-center">
