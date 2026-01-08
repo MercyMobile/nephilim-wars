@@ -39,153 +39,138 @@ const TabernacleViewer = () => {
 
   const Tabernacle3D = () => {
     // SCALE: 10px = 1 cubit
-    // Tabernacle Interior: 30 cubits long × 10 cubits wide × 10 cubits high
-    const L = 300; // Length (30 cubits)
-    const W = 100; // Width (10 cubits)  
-    const H = 100; // Height (10 cubits)
+    const L = 300; // Length: 30 cubits
+    const W = 100; // Width: 10 cubits
+    const H = 100; // Height: 10 cubits
     
-    // Tent covering extends beyond the structure
-    const tentL = 500; // 50 cubits (40 for covering + overhang)
-    const tentW = 140; // 14 cubits (10 + 2 on each side overhang)
+    const tentL = 500; // Tent extends 50 cubits
+    const tentW = 140; // Tent extends 14 cubits wide
     
-    // Holy of Holies is 10×10×10 cubits (a perfect cube)
-    const holyOfHoliesLength = 100; // 10 cubits
+    const holyOfHoliesLength = 100; // 10 cubits (perfect cube)
 
     return (
-      <div className="relative w-full h-[500px] bg-parchment-900 rounded-xl border-2 border-gold-700/30 overflow-hidden flex flex-col items-center justify-center perspective-1000 shadow-2xl">
+      <div className="relative w-full h-[500px] bg-parchment-900 rounded-xl border-2 border-gold-700/30 overflow-hidden flex flex-col items-center justify-center perspective-[1200px] shadow-2xl">
         <div className="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-[#c2b280] to-[#e6d8b6] opacity-10 blur-md"></div>
         
-        {/* ROTATION CONTAINER */}
+        {/* CENTERED BOX APPROACH - All faces positioned relative to center */}
         <div 
           className="relative preserve-3d transition-transform duration-100 ease-linear"
           style={{ 
             width: `${L}px`, 
             height: `${H}px`,
-            transform: `rotateX(-20deg) rotateY(${rotation}deg)` 
+            transform: `rotateX(-20deg) rotateY(${rotation}deg)`,
+            transformStyle: 'preserve-3d'
           }}
         >
-          {/* 1. FLOOR (Silver Sockets) - Bottom Plane */}
-          <div className="absolute bg-stone-300 border border-stone-400 opacity-100"
+          {/* FLOOR (Silver Sockets) */}
+          <div className="absolute bg-stone-300 border border-stone-400"
                style={{ 
                  width: `${L}px`, 
                  height: `${W}px`,
                  left: 0,
-                 top: 0,
-                 transformOrigin: 'center center',
-                 transform: `rotateX(90deg) translateZ(${H/2}px)`,
+                 top: `${H/2 - W/2}px`,
+                 transform: `rotateX(90deg)`,
+                 transformOrigin: '50% 50%',
                  boxShadow: 'inset 0 0 50px rgba(0,0,0,0.5)'
                }}>
-               {/* Grid Pattern for Silver Sockets */}
                <div className="w-full h-full opacity-40 bg-[repeating-linear-gradient(90deg,transparent_0px,transparent_29px,#000_30px)]"></div>
           </div>
 
-          {/* 2. TENT COVERING (Ram Skins) - Extended beyond walls */}
-          <div className="absolute bg-gradient-to-br from-red-900 via-red-950 to-red-900 border-b border-red-950 opacity-95"
+          {/* TENT COVERING (Ram Skins) - Above the box */}
+          <div className="absolute bg-gradient-to-br from-red-900 via-red-950 to-red-900 opacity-95"
                style={{ 
                  width: `${tentL}px`, 
                  height: `${tentW}px`,
                  left: `${(L - tentL) / 2}px`,
-                 top: `${(W - tentW) / 2}px`,
-                 transformOrigin: 'center center',
-                 transform: `rotateX(-90deg) translateZ(${H/2 + 5}px)`,
+                 top: `${H/2 - tentW/2}px`,
+                 transform: `rotateX(90deg) translateZ(${-H/2 - 5}px)`,
+                 transformOrigin: '50% 50%'
                }}>
-               {/* Leather Texture Effect */}
                <div className="w-full h-full bg-black/30 mix-blend-multiply"></div>
-               {/* Tent seams (11 curtains) */}
                <div className="w-full h-full bg-[repeating-linear-gradient(0deg,rgba(0,0,0,0.3)_0px,transparent_1px,transparent_40px)]"></div>
           </div>
 
-          {/* 3. NORTH WALL (Long Side) - Gold Boards */}
-          <div className="absolute bg-gradient-to-b from-yellow-500 via-yellow-600 to-yellow-800 opacity-100"
+          {/* FRONT WALL (NORTH) - Gold Boards */}
+          <div className="absolute bg-gradient-to-b from-yellow-500 via-yellow-600 to-yellow-800"
                style={{ 
                  width: `${L}px`, 
                  height: `${H}px`,
                  left: 0,
                  top: 0,
-                 transformOrigin: 'top center',
                  transform: `translateZ(${W/2}px)`,
                  backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 1px, transparent 1px, transparent 15px)'
                }}>
           </div>
 
-          {/* 4. SOUTH WALL (Long Side) - Gold Boards */}
-          <div className="absolute bg-gradient-to-b from-yellow-500 via-yellow-600 to-yellow-800 opacity-100"
+          {/* BACK WALL (SOUTH) - Gold Boards */}
+          <div className="absolute bg-gradient-to-b from-yellow-500 via-yellow-600 to-yellow-800"
                style={{ 
                  width: `${L}px`, 
                  height: `${H}px`,
                  left: 0,
                  top: 0,
-                 transformOrigin: 'top center',
-                 transform: `translateZ(-${W/2}px) rotateY(180deg)`,
+                 transform: `translateZ(${-W/2}px) rotateY(180deg)`,
                  backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 1px, transparent 1px, transparent 15px)'
                }}>
           </div>
 
-          {/* 5. WEST WALL (Rear End) - Gold Boards */}
-          <div className="absolute bg-gradient-to-b from-yellow-500 via-yellow-600 to-yellow-800 opacity-100"
+          {/* RIGHT WALL (WEST - Rear End) - Gold Boards */}
+          <div className="absolute bg-gradient-to-b from-yellow-500 via-yellow-600 to-yellow-800"
                style={{ 
                  width: `${W}px`, 
                  height: `${H}px`,
-                 left: 0,
+                 left: `${L/2 - W/2}px`,
                  top: 0,
-                 transformOrigin: 'top left',
-                 transform: `translateX(${L}px) rotateY(90deg)`,
+                 transform: `translateX(${L/2}px) rotateY(90deg)`,
+                 transformOrigin: '50% 50%',
                  backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 1px, transparent 1px, transparent 15px)'
                }}>
           </div>
 
-          {/* 6. ENTRANCE VEIL (East Wall) - Blue, Purple, Scarlet with Cherubim */}
-          <div className="absolute flex items-center justify-center overflow-hidden bg-indigo-900 border-2 border-gold-400/50 opacity-95"
+          {/* LEFT WALL (EAST - Entrance Veil) */}
+          <div className="absolute flex items-center justify-center overflow-hidden border-2 border-gold-400/50"
                style={{ 
                  width: `${W}px`, 
                  height: `${H}px`,
-                 left: 0,
+                 left: `${L/2 - W/2}px`,
                  top: 0,
-                 transformOrigin: 'top left',
-                 transform: `rotateY(90deg)`,
-                 backfaceVisibility: 'visible'
+                 transform: `translateX(${-L/2}px) rotateY(-90deg)`,
+                 transformOrigin: '50% 50%',
+                 background: 'linear-gradient(135deg, #1e3a8a 0%, #5b21b6 33%, #db2777 66%, #991b1b 100%)'
                }}>
-               <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-purple-900 to-red-900 opacity-90"></div>
-               {/* Cherubim Pattern */}
-               <div className="absolute text-gold-200 opacity-80 text-4xl drop-shadow-lg">
-                 ⚔️
-               </div>
-               {/* Decorative woven pattern */}
+               <div className="absolute text-gold-200 opacity-80 text-4xl drop-shadow-lg">⚔️</div>
                <div className="absolute inset-0 opacity-20 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.1)_10px,rgba(255,255,255,0.1)_11px)]"></div>
           </div>
 
-          {/* 7. THE VEIL (Dividing Holy Place from Holy of Holies) */}
-          {/* This is 20 cubits from the entrance (2/3 down the length) */}
-          <div className="absolute flex items-center justify-center overflow-hidden border border-purple-400/40"
+          {/* INTERIOR VEIL (Dividing Holy Place from Holy of Holies) */}
+          <div className="absolute flex items-center justify-center overflow-hidden border border-purple-400/50"
                style={{ 
                  width: `${W}px`, 
                  height: `${H}px`,
-                 left: `${L - holyOfHoliesLength}px`,
+                 left: `${L/2 - W/2}px`,
                  top: 0,
-                 transformOrigin: 'top left',
-                 transform: `rotateY(90deg)`,
+                 transform: `translateX(${L/2 - holyOfHoliesLength}px) rotateY(-90deg)`,
+                 transformOrigin: '50% 50%',
                  background: 'linear-gradient(135deg, #4c1d95 0%, #7e22ce 25%, #db2777 50%, #991b1b 75%, #1e3a8a 100%)'
                }}>
-               {/* Multiple Cherubim on the veil */}
-               <div className="grid grid-cols-2 gap-8 text-4xl opacity-70 text-gold-300">
+               <div className="grid grid-cols-2 gap-6 text-3xl opacity-70 text-gold-300">
                  <span>🔥</span>
                  <span>🔥</span>
                  <span>⚔️</span>
                  <span>⚔️</span>
                </div>
-               {/* Intricate weaving pattern */}
                <div className="absolute inset-0 opacity-30 mix-blend-overlay bg-[repeating-linear-gradient(0deg,transparent,transparent_5px,rgba(255,255,255,0.2)_5px,rgba(255,255,255,0.2)_6px)]"></div>
           </div>
 
-          {/* 8. HOLY OF HOLIES FLOOR MARKER (Semi-transparent gold) */}
+          {/* HOLY OF HOLIES FLOOR MARKER */}
           <div className="absolute bg-yellow-600/30 border-2 border-yellow-500/50"
                style={{ 
                  width: `${holyOfHoliesLength}px`, 
                  height: `${W}px`,
                  left: `${L - holyOfHoliesLength}px`,
-                 top: 0,
-                 transformOrigin: 'center center',
-                 transform: `rotateX(90deg) translateZ(${H/2}px)`,
+                 top: `${H/2 - W/2}px`,
+                 transform: `rotateX(90deg)`,
+                 transformOrigin: '50% 50%'
                }}>
           </div>
         </div>
