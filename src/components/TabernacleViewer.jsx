@@ -6,6 +6,14 @@ const TabernacleViewer = () => {
   const [isOrbiting, setIsOrbiting] = useState(false);
   const intervalRef = useRef(null);
 
+  // --- DIMENSIONS & SCALES (10px = 1 cubit) ---
+  const L = 300; // 30 cubits
+  const W = 100; // 10 cubits
+  const H = 100; // 10 cubits
+  const tentL = 500; // Tent extends 50 cubits
+  const tentW = 140; // Tent extends 14 cubits
+  const holyOfHoliesLength = 100; // 10 cubits
+
   // --- DATA PRESETS ---
   const breastplateStones = [
     { name: "Sardius", tribe: "Reuben", color: "bg-red-700" },
@@ -30,10 +38,8 @@ const TabernacleViewer = () => {
 
   // --- ORBIT LOGIC ---
   useEffect(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
+    // Clear existing interval on change or unmount
+    if (intervalRef.current) clearInterval(intervalRef.current);
 
     if (isOrbiting) {
       intervalRef.current = setInterval(() => {
@@ -42,167 +48,10 @@ const TabernacleViewer = () => {
     }
 
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
+      if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [isOrbiting]);
 
-  // --- 3D SUB-COMPONENT ---
-  const Tabernacle3D = () => {
-    // SCALE: 10px = 1 cubit
-    const L = 300; // Length: 30 cubits
-    const W = 100; // Width: 10 cubits
-    const H = 100; // Height: 10 cubits
-    const tentL = 500; // Tent extends 50 cubits
-    const tentW = 140; // Tent extends 14 cubits wide
-    const holyOfHoliesLength = 100; // 10 cubits (perfect cube)
-
-    return (
-      <div className="relative w-full h-[500px] bg-stone-900 rounded-xl border-4 border-double border-amber-700 overflow-hidden flex flex-col items-center justify-center perspective-[1200px] shadow-2xl">
-        {/* Ambient Light/Glow from bottom */}
-        <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-amber-900/40 to-transparent"></div>
-        
-        {/* CENTERED BOX APPROACH */}
-        <div 
-          className="relative preserve-3d transition-transform duration-100 ease-linear"
-          style={{ 
-            width: `${L}px`, 
-            height: `${H}px`,
-            transform: `rotateX(-20deg) rotateY(${rotation}deg)`,
-            transformStyle: 'preserve-3d'
-          }}
-        >
-          {/* FLOOR - Silver Sockets (Now more metallic) */}
-          <div className="absolute bg-slate-300 border-2 border-slate-400"
-               style={{ 
-                 width: `${L}px`, 
-                 height: `${W}px`,
-                 left: 0,
-                 top: `${H/2 - W/2}px`,
-                 transform: `rotateX(90deg) translateZ(${-H/2}px)`,
-                 transformOrigin: '50% 50%',
-                 boxShadow: 'inset 0 0 20px rgba(0,0,0,0.5)'
-               }}>
-               {/* Grid pattern for tiles */}
-               <div className="w-full h-full opacity-30 bg-[repeating-linear-gradient(90deg,transparent 0px,transparent 29px,#475569 30px)]"></div>
-          </div>
-
-          {/* TENT COVERING - Ram Skins (Red) - Lowered slightly to sit tight */}
-          <div className="absolute bg-red-900/90 border-b-4 border-red-950"
-               style={{ 
-                 width: `${tentL}px`, 
-                 height: `${tentW}px`,
-                 left: `${(L - tentL) / 2}px`,
-                 top: `${H/2 - tentW/2}px`,
-                 transform: `rotateX(90deg) translateZ(${H/2}px)`, 
-                 transformOrigin: '50% 50%',
-                 boxShadow: '0 20px 50px rgba(0,0,0,0.8)'
-               }}>
-               {/* Texture for the skins */}
-               <div className="w-full h-full bg-[url('https://www.transparenttextures.com/patterns/leather.png')] opacity-50 mix-blend-multiply"></div>
-          </div>
-
-          {/* FRONT WALL (NORTH) - Solid Gold Gradient */}
-          <div className="absolute border-2 border-yellow-700"
-               style={{ 
-                 width: `${L}px`, 
-                 height: `${H}px`,
-                 left: 0,
-                 top: 0,
-                 transform: `translateZ(${W/2}px)`,
-                 // Richer Gold Gradient
-                 background: 'linear-gradient(to bottom, #FCD34D, #B45309)',
-                 opacity: 0.95 
-               }}>
-               <div className="w-full h-full opacity-40 bg-[repeating-linear-gradient(90deg,transparent 0px,transparent 19px,#78350f 20px)]"></div>
-          </div>
-
-          {/* BACK WALL (SOUTH) - Solid Gold Gradient */}
-          <div className="absolute border-2 border-yellow-700"
-               style={{ 
-                 width: `${L}px`, 
-                 height: `${H}px`,
-                 left: 0,
-                 top: 0,
-                 transform: `translateZ(${-W/2}px) rotateY(180deg)`,
-                 background: 'linear-gradient(to bottom, #FCD34D, #B45309)',
-                 opacity: 0.95
-               }}>
-               <div className="w-full h-full opacity-40 bg-[repeating-linear-gradient(90deg,transparent 0px,transparent 19px,#78350f 20px)]"></div>
-          </div>
-
-          {/* RIGHT WALL (WEST - Rear End) - Solid Gold */}
-          <div className="absolute border-2 border-yellow-700"
-               style={{ 
-                 width: `${W}px`, 
-                 height: `${H}px`,
-                 left: `${L/2 - W/2}px`,
-                 top: 0,
-                 transform: `translateX(${L/2}px) rotateY(90deg)`,
-                 transformOrigin: '50% 50%',
-                 background: 'linear-gradient(to bottom, #FCD34D, #B45309)',
-                 opacity: 0.95
-               }}>
-          </div>
-
-          {/* LEFT WALL (EAST - Entrance Veil) */}
-          <div className="absolute flex items-center justify-center overflow-hidden border-4 border-amber-600 bg-blue-900/80"
-               style={{ 
-                 width: `${W}px`, 
-                 height: `${H}px`,
-                 left: `${L/2 - W/2}px`,
-                 top: 0,
-                 transform: `translateX(${-L/2}px) rotateY(-90deg)`,
-                 transformOrigin: '50% 50%',
-               }}>
-               <div className="absolute text-5xl drop-shadow-md brightness-150">⚔️</div>
-               {/* Veil Colors */}
-               <div className="absolute inset-0 -z-10 bg-gradient-to-br from-blue-900 via-purple-900 to-red-900 opacity-90"></div>
-          </div>
-
-          {/* INTERIOR VEIL (Dividing Holy Place) */}
-          <div className="absolute flex items-center justify-center overflow-hidden border-2 border-amber-500"
-               style={{ 
-                 width: `${W}px`, 
-                 height: `${H}px`,
-                 left: `${L/2 - holyOfHoliesLength}px`,
-                 top: 0,
-                 transform: `translateX(${L/2 - holyOfHoliesLength}px) rotateY(-90deg)`,
-                 transformOrigin: '50% 50%',
-               }}>
-               {/* Cherubim Icons */}
-               <div className="grid grid-cols-2 gap-4 text-2xl animate-pulse">
-                 <span>🦁</span><span>🦅</span>
-                 <span>🐂</span><span>👨</span>
-               </div>
-               <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-purple-900 via-red-900 to-blue-900 opacity-80"></div>
-          </div>
-        </div>
-
-        {/* INFO BOX - Moved to Bottom Left */}
-        <div className="absolute bottom-6 left-6 font-cinzel text-amber-500 p-4 border-l-2 border-amber-600 bg-black/80 rounded-r-lg max-w-[200px] z-20 backdrop-blur-sm">
-          <p className="text-[10px] tracking-widest uppercase mb-1 font-bold text-amber-700">Divine Geometry</p>
-          <p className="text-[11px] font-sans text-stone-300 leading-tight">
-            <span className="text-amber-400 font-bold">φ (Phi) = 1.618</span><br/>
-            The Ark's ratio (2.5 ÷ 1.5) is exactly 1.666. 
-          </p>
-        </div>
-
-        {/* CONTROLS - Right Side */}
-        <div className="absolute bottom-6 right-6 flex gap-2 items-center bg-stone-900/90 p-2 rounded-full border border-amber-900/50 shadow-xl z-20">
-          <button onClick={() => setRotation(r => r - 45)} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-amber-900 text-amber-500 transition-colors">↺</button>
-          <button onClick={() => setIsOrbiting(!isOrbiting)} className={`px-4 py-1 rounded-full text-xs font-bold tracking-widest transition-all ${isOrbiting ? 'bg-red-900 text-red-200' : 'bg-amber-900 text-amber-200'}`}>
-            {isOrbiting ? 'HALT' : 'ORBIT'}
-          </button>
-          <button onClick={() => setRotation(r => r + 45)} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-amber-900 text-amber-500 transition-colors">↻</button>
-        </div>
-      </div>
-    );
-  };
-
-  // --- MAIN RENDER ---
   return (
     <div className="min-h-screen bg-parchment-200 p-4 md:p-8 font-garamond text-stone-900">
       <header className="max-w-6xl mx-auto text-center mb-16">
@@ -211,6 +60,7 @@ const TabernacleViewer = () => {
       </header>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-12">
+        {/* NAVIGATION TABS */}
         <nav className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible gap-2 border-b lg:border-b-0 border-stone-300 pb-4 lg:pb-0">
           {['sanctuary', 'elements', 'garments', 'archaeology'].map(tab => (
             <button
@@ -227,9 +77,151 @@ const TabernacleViewer = () => {
           ))}
         </nav>
 
+        {/* MAIN CONTENT AREA */}
         <div className="lg:col-span-3 min-h-[600px]">
-          {activeView === 'sanctuary' && <Tabernacle3D />}
+          
+          {/* --- 3D VIEW --- */}
+          {activeView === 'sanctuary' && (
+            <div className="relative w-full h-[500px] bg-stone-900 rounded-xl border-4 border-double border-amber-700 overflow-hidden flex flex-col items-center justify-center perspective-[1200px] shadow-2xl">
+              {/* Ambient Glow */}
+              <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-amber-900/40 to-transparent"></div>
+              
+              {/* 3D SCENE CONTAINER */}
+              <div 
+                className="relative preserve-3d transition-transform duration-100 ease-linear pointer-events-none"
+                style={{ 
+                  width: `${L}px`, 
+                  height: `${H}px`,
+                  transform: `rotateX(-20deg) rotateY(${rotation}deg)`,
+                  transformStyle: 'preserve-3d'
+                }}
+              >
+                {/* FLOOR */}
+                <div className="absolute bg-slate-300 border-2 border-slate-400"
+                     style={{ 
+                       width: `${L}px`, 
+                       height: `${W}px`,
+                       left: 0,
+                       top: `${H/2 - W/2}px`,
+                       transform: `rotateX(90deg) translateZ(${-H/2}px)`,
+                       transformOrigin: '50% 50%',
+                       boxShadow: 'inset 0 0 20px rgba(0,0,0,0.5)'
+                     }}>
+                     <div className="w-full h-full opacity-30 bg-[repeating-linear-gradient(90deg,transparent 0px,transparent 29px,#475569 30px)]"></div>
+                </div>
 
+                {/* TENT COVERING (Red) */}
+                <div className="absolute bg-red-900/90 border-b-4 border-red-950"
+                     style={{ 
+                       width: `${tentL}px`, 
+                       height: `${tentW}px`,
+                       left: `${(L - tentL) / 2}px`,
+                       top: `${H/2 - tentW/2}px`,
+                       transform: `rotateX(90deg) translateZ(${H/2}px)`, 
+                       transformOrigin: '50% 50%',
+                       boxShadow: '0 20px 50px rgba(0,0,0,0.8)'
+                     }}>
+                     <div className="w-full h-full bg-[url('https://www.transparenttextures.com/patterns/leather.png')] opacity-50 mix-blend-multiply"></div>
+                </div>
+
+                {/* FRONT WALL (NORTH) */}
+                <div className="absolute border-2 border-yellow-700"
+                     style={{ 
+                       width: `${L}px`, 
+                       height: `${H}px`,
+                       left: 0,
+                       top: 0,
+                       transform: `translateZ(${W/2}px)`,
+                       background: 'linear-gradient(to bottom, #FCD34D, #B45309)',
+                       opacity: 0.95 
+                     }}>
+                     <div className="w-full h-full opacity-40 bg-[repeating-linear-gradient(90deg,transparent 0px,transparent 19px,#78350f 20px)]"></div>
+                </div>
+
+                {/* BACK WALL (SOUTH) */}
+                <div className="absolute border-2 border-yellow-700"
+                     style={{ 
+                       width: `${L}px`, 
+                       height: `${H}px`,
+                       left: 0,
+                       top: 0,
+                       transform: `translateZ(${-W/2}px) rotateY(180deg)`,
+                       background: 'linear-gradient(to bottom, #FCD34D, #B45309)',
+                       opacity: 0.95
+                     }}>
+                     <div className="w-full h-full opacity-40 bg-[repeating-linear-gradient(90deg,transparent 0px,transparent 19px,#78350f 20px)]"></div>
+                </div>
+
+                {/* RIGHT WALL (WEST) */}
+                <div className="absolute border-2 border-yellow-700"
+                     style={{ 
+                       width: `${W}px`, 
+                       height: `${H}px`,
+                       left: `${L/2 - W/2}px`,
+                       top: 0,
+                       transform: `translateX(${L/2}px) rotateY(90deg)`,
+                       transformOrigin: '50% 50%',
+                       background: 'linear-gradient(to bottom, #FCD34D, #B45309)',
+                       opacity: 0.95
+                     }}>
+                </div>
+
+                {/* LEFT WALL (EAST - Veil) */}
+                <div className="absolute flex items-center justify-center overflow-hidden border-4 border-amber-600 bg-blue-900/80"
+                     style={{ 
+                       width: `${W}px`, 
+                       height: `${H}px`,
+                       left: `${L/2 - W/2}px`,
+                       top: 0,
+                       transform: `translateX(${-L/2}px) rotateY(-90deg)`,
+                       transformOrigin: '50% 50%',
+                     }}>
+                     <div className="absolute text-5xl drop-shadow-md brightness-150">⚔️</div>
+                     <div className="absolute inset-0 -z-10 bg-gradient-to-br from-blue-900 via-purple-900 to-red-900 opacity-90"></div>
+                </div>
+
+                {/* INTERIOR VEIL */}
+                <div className="absolute flex items-center justify-center overflow-hidden border-2 border-amber-500"
+                     style={{ 
+                       width: `${W}px`, 
+                       height: `${H}px`,
+                       left: `${L/2 - holyOfHoliesLength}px`,
+                       top: 0,
+                       transform: `translateX(${L/2 - holyOfHoliesLength}px) rotateY(-90deg)`,
+                       transformOrigin: '50% 50%',
+                     }}>
+                     <div className="grid grid-cols-2 gap-4 text-2xl animate-pulse">
+                       <span>🦁</span><span>🦅</span>
+                       <span>🐂</span><span>👨</span>
+                     </div>
+                     <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-purple-900 via-red-900 to-blue-900 opacity-80"></div>
+                </div>
+              </div>
+
+              {/* INFO BOX (Z-Index 50 to sit ON TOP) */}
+              <div className="absolute bottom-6 left-6 font-cinzel text-amber-500 p-4 border-l-2 border-amber-600 bg-black/80 rounded-r-lg max-w-[200px] z-50 backdrop-blur-sm shadow-lg pointer-events-auto">
+                <p className="text-[10px] tracking-widest uppercase mb-1 font-bold text-amber-700">Divine Geometry</p>
+                <p className="text-[11px] font-sans text-stone-300 leading-tight">
+                  <span className="text-amber-400 font-bold">φ (Phi) = 1.618</span><br/>
+                  The Ark's ratio (2.5 ÷ 1.5) is exactly 1.666. 
+                </p>
+              </div>
+
+              {/* CONTROLS (Z-Index 50 to ensure clickability) */}
+              <div className="absolute bottom-6 right-6 flex gap-2 items-center bg-stone-900/90 p-2 rounded-full border border-amber-900/50 shadow-xl z-50 pointer-events-auto">
+                <button onClick={() => setRotation(r => r - 45)} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-amber-900 text-amber-500 transition-colors cursor-pointer">↺</button>
+                <button 
+                  onClick={() => setIsOrbiting(!isOrbiting)} 
+                  className={`px-4 py-1 rounded-full text-xs font-bold tracking-widest transition-all cursor-pointer ${isOrbiting ? 'bg-red-900 text-red-200 animate-pulse' : 'bg-amber-900 text-amber-200 hover:bg-amber-800'}`}
+                >
+                  {isOrbiting ? 'HALT' : 'ORBIT'}
+                </button>
+                <button onClick={() => setRotation(r => r + 45)} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-amber-900 text-amber-500 transition-colors cursor-pointer">↻</button>
+              </div>
+            </div>
+          )}
+
+          {/* --- ELEMENTS TAB --- */}
           {activeView === 'elements' && (
             <div className="animate-fadeIn space-y-6">
                 <div className="bg-parchment-100 p-6 rounded border-l-4 border-amber-600 shadow-sm">
@@ -258,6 +250,7 @@ const TabernacleViewer = () => {
             </div>
           )}
 
+          {/* --- GARMENTS TAB --- */}
           {activeView === 'garments' && (
             <div className="animate-fadeIn">
               <h2 className="font-cinzel text-amber-800 text-xl mb-6 uppercase tracking-[0.2em] text-center">Priestly Armor</h2>
@@ -283,6 +276,7 @@ const TabernacleViewer = () => {
             </div>
           )}
 
+          {/* --- ARCHAEOLOGY TAB --- */}
           {activeView === 'archaeology' && (
             <div className="animate-fadeIn space-y-6">
                 <div className="border-l-4 border-amber-600 pl-4 py-2">
