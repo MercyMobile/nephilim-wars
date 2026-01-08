@@ -198,4 +198,12 @@ const TabernacleViewer = () => {
 
         {/* CONTROLS */}
         <div className="absolute bottom-6 right-6 flex gap-4 items-center bg-parchment-200/90 p-3 rounded-lg border border-stone-400 shadow-xl z-20">
-          <button onClick={() => setRotation(r => r - 45)} className="text-stone-900 hover:text-gold-70
+          <button onClick={() => setRotation(r => r - 45)} className="text-stone-900 hover:text-gold-700 font-cinzel text-[10px] font-bold">ROTATE L</button>
+          <button onClick={() => setIsOrbiting(!isOrbiting)} className={`font-serif italic text-xl px-2 transition-all ${isOrbiting ? 'text-red-700 animate-pulse' : 'text-stone-900'}`}>
+            {isOrbiting ? 'Stop' : 'Orbit'}
+          </button>
+          <button onClick={() => setRotation(r => r + 45)} className="text-stone-900 hover:text-gold-700 font-cinzel text-[10px] font-bold">ROTATE R</button>
+        </div>
+      </div>
+    );
+  };
