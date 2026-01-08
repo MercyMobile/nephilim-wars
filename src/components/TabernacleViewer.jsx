@@ -39,10 +39,17 @@ const TabernacleViewer = () => {
 
   const Tabernacle3D = () => {
     // SCALE: 10px = 1 cubit
-    // Length: 300px (30 cubits) | Width: 100px (10 cubits) | Height: 100px (10 cubits)
-    const L = 300; 
-    const W = 100; 
-    const H = 100; 
+    // Tabernacle Interior: 30 cubits long × 10 cubits wide × 10 cubits high
+    const L = 300; // Length (30 cubits)
+    const W = 100; // Width (10 cubits)
+    const H = 100; // Height (10 cubits)
+    
+    // Tent covering extends beyond the structure
+    const tentL = 500; // 50 cubits (40 for covering + overhang)
+    const tentW = 140; // 14 cubits (10 + 2 on each side overhang)
+    
+    // Holy of Holies is 10×10×10 cubits (a perfect cube)
+    const holyOfHoliesLength = 100; // 10 cubits
 
     return (
       <div className="relative w-full h-[500px] bg-parchment-900 rounded-xl border-2 border-gold-700/30 overflow-hidden flex flex-col items-center justify-center perspective-1000 shadow-2xl">
@@ -58,75 +65,115 @@ const TabernacleViewer = () => {
           }}
         >
           {/* 1. FLOOR (Silver Sockets) - Bottom Plane */}
-          {/* Rotated 90deg X pushes it 'down' in 3D space relative to center */}
           <div className="absolute inset-0 bg-stone-300 border border-stone-400 opacity-100"
                style={{ 
                  width: `${L}px`, 
                  height: `${W}px`,
-                 transform: `rotateX(90deg) translateZ(${H/2}px)`,
+                 transform: `rotateX(90deg) translateZ(-${H/2}px)`,
                  boxShadow: 'inset 0 0 50px rgba(0,0,0,0.5)'
                }}>
-               {/* Grid Pattern */}
+               {/* Grid Pattern for Silver Sockets */}
                <div className="w-full h-full opacity-40 bg-[repeating-linear-gradient(90deg,transparent_0px,transparent_29px,#000_30px)]"></div>
           </div>
 
-          {/* 2. ROOF (Ram Skins) - Top Plane */}
-          {/* Rotated -90deg X pushes it 'up' */}
-          <div className="absolute inset-0 bg-red-900 border-b border-red-950 opacity-100"
+          {/* 2. TENT COVERING (Ram Skins) - Extended beyond walls */}
+          {/* The tent hangs over and extends past the structure */}
+          <div className="absolute bg-gradient-to-br from-red-900 via-red-950 to-red-900 border-b border-red-950 opacity-95"
                style={{ 
-                 width: `${L}px`, 
-                 height: `${W}px`,
-                 transform: `rotateX(-90deg) translateZ(${H/2}px)`
+                 width: `${tentL}px`, 
+                 height: `${tentW}px`,
+                 left: `${(L - tentL) / 2}px`,
+                 top: `${(W - tentW) / 2}px`,
+                 transform: `rotateX(-90deg) translateZ(-${H/2 + 5}px)`,
+                 transformOrigin: 'center'
                }}>
                {/* Leather Texture Effect */}
-               <div className="w-full h-full bg-black/20 mix-blend-multiply"></div>
+               <div className="w-full h-full bg-black/30 mix-blend-multiply"></div>
+               {/* Tent seams (11 curtains) */}
+               <div className="w-full h-full bg-[repeating-linear-gradient(0deg,rgba(0,0,0,0.3)_0px,transparent_1px,transparent_40px)]"></div>
           </div>
 
-          {/* 3. NORTH WALL (Long Side) - Solid Gold */}
+          {/* 3. NORTH WALL (Long Side) - Gold Boards */}
           <div className="absolute inset-0 bg-gradient-to-b from-yellow-500 via-yellow-600 to-yellow-800 opacity-100"
                style={{ 
                  width: `${L}px`, 
                  height: `${H}px`,
-                 transform: `translateZ(-${W/2}px)`,
+                 transform: `translateY(-${W/2}px) translateZ(0px)`,
                  backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 1px, transparent 1px, transparent 15px)'
                }}>
           </div>
 
-          {/* 4. SOUTH WALL (Long Side) - Solid Gold */}
+          {/* 4. SOUTH WALL (Long Side) - Gold Boards */}
           <div className="absolute inset-0 bg-gradient-to-b from-yellow-500 via-yellow-600 to-yellow-800 opacity-100"
                style={{ 
                  width: `${L}px`, 
                  height: `${H}px`,
-                 transform: `translateZ(${W/2}px)`,
+                 transform: `translateY(${W/2}px) translateZ(0px) rotateY(180deg)`,
                  backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 1px, transparent 1px, transparent 15px)'
                }}>
           </div>
 
-          {/* 5. WEST WALL (Rear End) - Solid Gold */}
-          <div className="absolute top-0 left-0 bg-gradient-to-b from-yellow-500 via-yellow-600 to-yellow-800 opacity-100"
+          {/* 5. WEST WALL (Rear End) - Gold Boards */}
+          <div className="absolute top-0 bg-gradient-to-b from-yellow-500 via-yellow-600 to-yellow-800 opacity-100"
                style={{ 
                  width: `${W}px`, 
                  height: `${H}px`,
-                 transformOrigin: 'center',
-                 transform: `rotateY(-90deg) translateZ(${L/2}px)`,
+                 left: `-${W/2}px`,
+                 transformOrigin: 'left center',
+                 transform: `translateX(${L}px) rotateY(-90deg)`,
                  backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 1px, transparent 1px, transparent 15px)'
                }}>
           </div>
 
-          {/* 6. EAST WALL (The Veil) - Entrance */}
-          <div className="absolute top-0 left-0 flex items-center justify-center overflow-hidden bg-indigo-900 border-2 border-gold-400/50 opacity-100"
+          {/* 6. ENTRANCE VEIL (East Wall) - Blue, Purple, Scarlet with Cherubim */}
+          <div className="absolute top-0 flex items-center justify-center overflow-hidden bg-indigo-900 border-2 border-gold-400/50 opacity-95"
                style={{ 
                  width: `${W}px`, 
                  height: `${H}px`,
-                 transformOrigin: 'center',
-                 transform: `rotateY(90deg) translateZ(${L/2}px)`,
+                 left: `-${W/2}px`,
+                 transformOrigin: 'left center',
+                 transform: `rotateY(-90deg)`,
                  backfaceVisibility: 'visible'
                }}>
                <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-purple-900 to-red-900 opacity-90"></div>
-               {/* Cherubim Icon */}
+               {/* Cherubim Pattern */}
                <div className="absolute text-gold-200 opacity-80 text-4xl drop-shadow-lg">
                  ⚔️
                </div>
+               {/* Decorative woven pattern */}
+               <div className="absolute inset-0 opacity-20 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.1)_10px,rgba(255,255,255,0.1)_11px)]"></div>
+          </div>
+
+          {/* 7. THE VEIL (Dividing Holy Place from Holy of Holies) */}
+          {/* This is 20 cubits from the entrance (2/3 down the length) */}
+          <div className="absolute top-0 flex items-center justify-center overflow-hidden border border-purple-400/40"
+               style={{ 
+                 width: `${W}px`, 
+                 height: `${H}px`,
+                 left: `${L - holyOfHoliesLength - W/2}px`,
+                 transformOrigin: 'left center',
+                 transform: `rotateY(-90deg)`,
+                 background: 'linear-gradient(135deg, #4c1d95 0%, #7e22ce 25%, #db2777 50%, #991b1b 75%, #1e3a8a 100%)'
+               }}>
+               {/* Multiple Cherubim on the veil */}
+               <div className="grid grid-cols-2 gap-8 text-4xl opacity-70 text-gold-300">
+                 <span>🔥</span>
+                 <span>🔥</span>
+                 <span>⚔️</span>
+                 <span>⚔️</span>
+               </div>
+               {/* Intricate weaving pattern */}
+               <div className="absolute inset-0 opacity-30 mix-blend-overlay bg-[repeating-linear-gradient(0deg,transparent,transparent_5px,rgba(255,255,255,0.2)_5px,rgba(255,255,255,0.2)_6px)]"></div>
+          </div>
+
+          {/* 8. HOLY OF HOLIES FLOOR MARKER (Semi-transparent gold) */}
+          <div className="absolute bg-yellow-600/30 border-2 border-yellow-500/50"
+               style={{ 
+                 width: `${holyOfHoliesLength}px`, 
+                 height: `${W}px`,
+                 left: `${L - holyOfHoliesLength}px`,
+                 transform: `rotateX(90deg) translateZ(-${H/2}px)`,
+               }}>
           </div>
         </div>
 
@@ -140,7 +187,7 @@ const TabernacleViewer = () => {
         </div>
 
         {/* CONTROLS */}
-        <div className="absolute bottom-10 flex items-center gap-6 bg-parchment-100 p-2 pl-4 pr-4 rounded-full border-2 border-gold-600 shadow-2xl z-20">
+        <div className="absolute bottom-6 right-6 flex gap-4 items-center bg-parchment-200/90 p-3 rounded-lg border border-stone-400 shadow-xl z-20">
           <button onClick={() => setRotation(r => r - 45)} className="text-stone-900 hover:text-gold-700 font-cinzel text-[10px] font-bold">ROTATE L</button>
           <button onClick={() => setIsOrbiting(!isOrbiting)} className={`font-serif italic text-xl px-2 transition-all ${isOrbiting ? 'text-red-700 animate-pulse' : 'text-stone-900'}`}>
             {isOrbiting ? 'Stop' : 'Orbit'}
@@ -199,7 +246,7 @@ const TabernacleViewer = () => {
                         <h3 className="font-cinzel text-gold-400 text-xs tracking-widest mb-2">THE SPINE (The Bars)</h3>
                         <p className="text-xs leading-relaxed opacity-80">
                            Five gold-plated bars locked the walls together. One special bar (the "Middle Bar") ran invisibly through the center of the boards 
-                           like a spine. It’s often seen as a symbol of the Spirit holding the believers together from the inside.
+                           like a spine. It's often seen as a symbol of the Spirit holding the believers together from the inside.
                         </p>
                     </div>
                 </div>
@@ -258,7 +305,7 @@ const TabernacleViewer = () => {
                         <h4 className="text-amber-600 text-[10px] font-bold uppercase mb-2">The Missing Walls</h4>
                         <p className="text-[11px] text-stone-400 font-sans">
                             Archaeologists found a rectangular perimeter cut into the bedrock on the northern plateau. The dimensions? 
-                            Exactly consistent with the courtyard walls described in Exodus. It’s like a footprint in stone.
+                            Exactly consistent with the courtyard walls described in Exodus. It's like a footprint in stone.
                         </p>
                     </div>
                     <div className="p-4 bg-black/70 border border-stone-800 rounded hover:border-amber-700 transition-colors">
