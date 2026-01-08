@@ -147,17 +147,45 @@ const TabernacleViewer = () => {
             </div>
           )}
 
-          {activeView === 'excavation' && (
-            <div className="animate-fadeIn space-y-4">
-              <h2 className="text-2xl font-cinzel text-amber-500">The Shiloh Context</h2>
-              <div className="h-48 bg-stone-800 rounded-lg flex items-center justify-center border border-stone-700 overflow-hidden">
-                 <div className="text-center p-8">
-                   <p className="text-stone-400 text-sm">Archaeological footprints at Ancient Shiloh reveal a platform consistent with the Tabernacle's dimensions, including rock-hewn holes for the poles.</p>
-                 </div>
-              </div>
-              <p className="text-xs text-stone-500 italic text-center uppercase tracking-widest">Bridging Faith and Soil</p>
-            </div>
-          )}
+          {activeView === 'archaeology' && (
+  <div className="animate-fadeIn space-y-6">
+    <div className="border-l-4 border-amber-600 pl-4 py-1">
+      <h2 className="text-2xl font-cinzel text-amber-500 uppercase tracking-widest">The Shiloh Horizon</h2>
+      <p className="text-stone-400 text-xs italic">"For the place where I caused My Name to dwell at the first..."</p>
+    </div>
+
+    {/* Featured Artifact: The Ceramic Pomegranate */}
+    <div className="bg-stone-800/50 p-6 rounded-lg border border-amber-900/20 relative overflow-hidden">
+      <div className="flex flex-col md:flex-row gap-6 items-center">
+        <div className="flex-1">
+          <h3 className="text-amber-200 font-cinzel mb-2">The Pomegranate of the Sanctuary</h3>
+          <p className="text-sm text-stone-300 leading-relaxed">
+            Discovered at Tel Shiloh, this artifact dates to the late Bronze/Early Iron Age. In the Torah, pomegranates were symbols of fruitfulness and were woven into the High Priest’s garments. Finding this in a cultic context at Shiloh bridges the gap between the nomadic Tabernacle and the eventual Temple.
+          </p>
+        </div>
+        <div className="w-20 h-20 bg-amber-900/10 border border-amber-500/30 rounded-full flex items-center justify-center text-3xl shadow-[0_0_20px_rgba(245,158,11,0.1)]">
+          🍎
+        </div>
+      </div>
+    </div>
+
+    {/* The Footprint Analysis */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="p-4 bg-black/40 border border-stone-800 rounded">
+        <h4 className="text-amber-600 text-[10px] font-bold uppercase mb-2">Architectural Ghosting</h4>
+        <p className="text-xs text-stone-400">
+          The northern plateau is the only leveled area at Shiloh large enough for the 100-cubit courtyard. The presence of rock-cut post holes suggests a "semi-permanent" setup where the Tabernacle stood for over 300 years.
+        </p>
+      </div>
+      <div className="p-4 bg-black/40 border border-stone-800 rounded">
+        <h4 className="text-amber-600 text-[10px] font-bold uppercase mb-2">The Faunal Record</h4>
+        <p className="text-xs text-stone-400">
+          Excavations in 2017–2023 uncovered thousands of sacrificial remains. The disproportionate amount of right-side bones confirms that the dietary laws of the Priesthood were strictly observed at this site.
+        </p>
+      </div>
+    </div>
+  </div>
+)}
           
           {activeView === 'elements' && (
   <div className="animate-fadeIn grid grid-cols-1 md:grid-cols-2 gap-6">
