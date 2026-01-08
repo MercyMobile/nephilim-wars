@@ -159,7 +159,45 @@ const TabernacleViewer = () => {
             </div>
           )}
           
-          {/* Default view content for 'elements' omitted for brevity but follows the same style */}
+          {activeView === 'elements' && (
+  <div className="animate-fadeIn grid grid-cols-1 md:grid-cols-2 gap-6">
+    {[
+      { 
+        name: "The Ark", 
+        ref: "Exodus 25:10", 
+        desc: "The heart of the Tabernacle. A chest of acacia wood and gold containing the Testimony.",
+        icon: "👑" 
+      },
+      { 
+        name: "The Menorah", 
+        ref: "Exodus 25:31", 
+        desc: "Beaten from a single talent of pure gold. It provided the only light in the Holy Place.",
+        icon: "🔥" 
+      },
+      { 
+        name: "The Table", 
+        ref: "Exodus 25:23", 
+        desc: "Holding the 'Bread of the Presence'. A symbol of constant fellowship and provision.",
+        icon: "🍞" 
+      },
+      { 
+        name: "The Altar", 
+        ref: "Exodus 30:1", 
+        desc: "The Altar of Incense. A place of sweet fragrance and intercession before the Veil.",
+        icon: "☁️" 
+      }
+    ].map((item, i) => (
+      <div key={i} className="p-6 bg-stone-800/40 border border-amber-900/20 rounded-lg group hover:border-amber-500/50 transition-all">
+        <div className="flex justify-between items-start mb-4">
+          <span className="text-3xl opacity-80 group-hover:opacity-100 transition-opacity">{item.icon}</span>
+          <span className="text-[10px] font-cinzel text-amber-600 uppercase tracking-widest">{item.ref}</span>
+        </div>
+        <h3 className="text-xl font-cinzel text-amber-200 mb-2">{item.name}</h3>
+        <p className="text-sm text-stone-400 leading-relaxed italic">{item.desc}</p>
+      </div>
+    ))}
+  </div>
+)}
 
         </div>
       </main>
