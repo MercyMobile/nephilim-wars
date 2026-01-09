@@ -46,8 +46,8 @@ const TabernacleViewer = () => {
 
     const faceStyle = {
       position: 'absolute',
-      top: '50%',   // <--- CRITICAL with your patch: moves origin to center
-      left: '50%',  // <--- CRITICAL with your patch
+      top: '50%',   // CRITICAL: Anchors face to center of container
+      left: '50%',  // CRITICAL: Anchors face to center of container
       backfaceVisibility: 'visible',
       transformStyle: 'preserve-3d',
       boxShadow: 'inset 0 0 40px rgba(0,0,0,0.5)' // Internal shadow for depth
@@ -59,7 +59,7 @@ const TabernacleViewer = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-[#1c1917] to-[#292524] opacity-90"></div>
         <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-amber-900/20 to-transparent blur-xl"></div>
         
-        {/* --- SCENE CONTAINER (YOUR PATCH APPLIED) --- */}
+        {/* --- SCENE CONTAINER --- */}
         <div 
           className="relative preserve-3d transition-transform duration-100 ease-linear"
           style={{ 
@@ -96,7 +96,7 @@ const TabernacleViewer = () => {
             ...faceStyle,
             width: `${L}px`,
             height: `${H}px`,
-            // FIX: Layering Lines AND Gold in one property so neither is deleted
+            // Layered Texture: Lines + Gold Gradient
             backgroundImage: `
               repeating-linear-gradient(90deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 15px),
               linear-gradient(to bottom, #facc15, #a16207)
@@ -190,7 +190,6 @@ const TabernacleViewer = () => {
 
         <div className="lg:col-span-3 min-h-[600px]">
           {activeView === 'sanctuary' && <Tabernacle3D />}
-          {/* ... other views remain the same ... */}
           {activeView === 'elements' && (
             <div className="animate-fadeIn space-y-6">
                 <div className="bg-parchment-100 p-6 rounded border-l-4 border-amber-600 shadow-sm">
