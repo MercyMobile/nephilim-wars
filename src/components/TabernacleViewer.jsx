@@ -44,14 +44,25 @@ const TabernacleViewer = () => {
     const H = 100; // Height
     const D = 100; // Width/Depth
 
+    // TEXTURE SETTINGS
+    // 20px planks divide evenly into 100 and 300, ensuring corners meet perfectly.
+    const PLANK_W = '20px'; 
+    const SOCKET_W = '20px'; // Match floor sockets to planks
+
     const faceStyle = {
       position: 'absolute',
-      top: '50%',   // CRITICAL: Anchors face to center of container
-      left: '50%',  // CRITICAL: Anchors face to center of container
+      top: '50%',
+      left: '50%',
       backfaceVisibility: 'visible',
       transformStyle: 'preserve-3d',
-      boxShadow: 'inset 0 0 40px rgba(0,0,0,0.5)' // Internal shadow for depth
+      boxShadow: 'inset 0 0 40px rgba(0,0,0,0.5)', // Internal shadow
     };
+
+    // Shared wall texture: Vertical lines (Planks) + Gold Gradient
+    const goldWallTexture = `
+      repeating-linear-gradient(90deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent ${PLANK_W}),
+      linear-gradient(to bottom, #facc15, #a16207)
+    `;
 
     return (
       <div className="relative w-full h-[500px] bg-parchment-900 rounded-xl border-2 border-gold-700/30 overflow-hidden flex items-center justify-center perspective-1000 shadow-2xl">
@@ -63,8 +74,8 @@ const TabernacleViewer = () => {
         <div 
           className="relative preserve-3d transition-transform duration-100 ease-linear"
           style={{ 
-            width: '300px', // Matches L
-            height: '100px', // Matches H
+            width: '300px', 
+            height: '100px', 
             transform: `rotateX(-25deg) rotateY(${rotation}deg)` 
           }}
         >
@@ -76,7 +87,10 @@ const TabernacleViewer = () => {
             background: '#d6d3d1',
             transform: `translate(-50%, -50%) rotateX(-90deg) translateZ(${H/2}px)`
           }}>
-             <div className="w-full h-full opacity-60 bg-[repeating-linear-gradient(90deg,transparent_0px,transparent_29px,#44403c_30px)]"></div>
+             {/* Sockets aligned to 20px to match planks */}
+             <div className="w-full h-full opacity-60" 
+                  style={{ backgroundImage: `repeating-linear-gradient(90deg, transparent 0px, transparent 19px, #44403c 20px)` }}>
+             </div>
           </div>
 
           {/* 2. ROOF (Red Skins) */}
@@ -96,12 +110,10 @@ const TabernacleViewer = () => {
             ...faceStyle,
             width: `${L}px`,
             height: `${H}px`,
-            // Layered Texture: Lines + Gold Gradient
-            backgroundImage: `
-              repeating-linear-gradient(90deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 15px),
-              linear-gradient(to bottom, #facc15, #a16207)
-            `,
-            transform: `translate(-50%, -50%) translateZ(${D/2}px)`
+            backgroundImage: goldWallTexture,
+            transform: `translate(-50%, -50%) translateZ(${D/2}px)`,
+            borderRight: '1px solid rgba(161, 98, 7, 0.5)', // Define corner
+            borderLeft: '1px solid rgba(161, 98, 7, 0.5)'
           }}></div>
 
           {/* 4. SOUTH WALL (Back Long Side) */}
@@ -109,11 +121,10 @@ const TabernacleViewer = () => {
             ...faceStyle,
             width: `${L}px`,
             height: `${H}px`,
-            backgroundImage: `
-              repeating-linear-gradient(90deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 15px),
-              linear-gradient(to bottom, #facc15, #a16207)
-            `,
-            transform: `translate(-50%, -50%) rotateY(180deg) translateZ(${D/2}px)`
+            backgroundImage: goldWallTexture,
+            transform: `translate(-50%, -50%) rotateY(180deg) translateZ(${D/2}px)`,
+            borderRight: '1px solid rgba(161, 98, 7, 0.5)',
+            borderLeft: '1px solid rgba(161, 98, 7, 0.5)'
           }}></div>
 
           {/* 5. WEST WALL (Rear Short Side) */}
@@ -121,11 +132,10 @@ const TabernacleViewer = () => {
             ...faceStyle,
             width: `${D}px`,
             height: `${H}px`,
-            backgroundImage: `
-              repeating-linear-gradient(90deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 15px),
-              linear-gradient(to bottom, #facc15, #a16207)
-            `,
-            transform: `translate(-50%, -50%) rotateY(-90deg) translateZ(${L/2}px)`
+            backgroundImage: goldWallTexture,
+            transform: `translate(-50%, -50%) rotateY(-90deg) translateZ(${L/2}px)`,
+            borderRight: '1px solid rgba(161, 98, 7, 0.5)',
+            borderLeft: '1px solid rgba(161, 98, 7, 0.5)'
           }}></div>
 
           {/* 6. EAST WALL (The Veil) */}
