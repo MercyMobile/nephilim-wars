@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Tabernacle3D from './Tabernacle3D';
 
 const TabernacleViewer = () => {
   const [activeView, setActiveView] = useState('sanctuary');
+  const [rotation, setRotation] = useState(-35);
+  const [isOrbiting, setIsOrbiting] = useState(false);
 
-  // --- EDUCATIONAL CONTENT ---
+  // --- 1. EDUCATIONAL CONTENT (Restored) ---
   const breastplateStones = [
     { name: "Sardius", tribe: "Reuben", color: "bg-red-700", meaning: "The Firstborn" },
     { name: "Topaz", tribe: "Simeon", color: "bg-yellow-400", meaning: "Hearing" },
@@ -26,6 +28,164 @@ const TabernacleViewer = () => {
     { part: "The Robe of the Ephod", detail: "Pure blue, symbolizing heaven. The hem was lined with alternating golden bells and pomegranates. The bells announced his movement; if the sound stopped, the people knew he had died in the Presence." },
     { part: "The Golden Plate (Tzitz)", detail: "A band of pure gold tied to the forehead, engraved with 'HOLINESS TO YHWH'. It atoned for errors in the holy offerings, allowing accepted worship despite human imperfection." }
   ];
+
+  // --- 2. ORBIT ENGINE ---
+  useEffect(() => {
+    let interval;
+    if (isOrbiting) {
+      interval = setInterval(() => {
+        setRotation(prev => (prev + 0.5) % 360);
+      }, 30);
+    }
+    return () => clearInterval(interval);
+  }, [isOrbiting]);
+
+// --- 3. 3D COMPONENT ---
+  const Tabernacle3D = () => {
+    // NEW SCALE: 5px = 1 cubit (Scaled down to fit Courtyard)
+    // Courtyard: 100 x 50 cubits -> 500px x 250px
+    const CW = 500; // Courtyard Width (Long side)
+    const CD = 250; // Courtyard Depth (Short side)
+    const CH = 25;  // Courtyard Fence Height (5 cubits)
+
+    // Tabernacle: 30 x 10 cubits -> 150px x 50px
+    const TW = 150; // Tabernacle Width
+    const TD = 50;  // Tabernacle Depth
+    const TH = 50;  // Tabernacle Height (10 cubits)
+
+    // Common styles
+    const faceStyle = {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      backfaceVisibility: 'hidden',
+      transformStyle: 'preserve-3d',
+    };
+    
+
+    return (
+      <div className="relative w-full h-[500px] bg-parchment-900 rounded-xl border-2 border-gold-700/30 overflow-hidden flex items-center justify-center perspective-1000 shadow-2xl">
+        {/* Environment */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1c1917] to-[#292524] opacity-90"></div>
+        <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-amber-900/20 to-transparent blur-xl"></div>
+        
+        {/* ROTATION CONTAINER */}
+        <div 
+          className="relative preserve-3d transition-transform duration-100 ease-linear"
+          style={{ 
+            width: '0px', height: '0px',
+            transform: `rotateX(-30deg) rotateY(${rotation}deg)` 
+          }}
+        >
+          {/* === A. THE COURTYARD (Outer Fence) === */}
+          
+          {/* Floor (Sand) */}
+          <div style={{
+            ...faceStyle, width: `${CW}px`, height: `${CD}px`,
+            background: '#d6d3d1', // Sand color base
+            transform: `translate(-50%, -50%) rotateX(90deg) translateZ(0px)`, // Floor at 0
+            boxShadow: '0 0 100px rgba(0,0,0,0.5)'
+          }}>
+            <div className="w-full h-full opacity-30 bg-[url('https://www.transparenttextures.com/patterns/sand.png')]"></div>
+          </div>
+
+          {/* Fence North (Long) */}
+          <div style={{
+            ...faceStyle, width: `${CW}px`, height: `${CH}px`,
+            background: '#e5e5e5', // White Linen
+            transform: `translate(-50%, -50%) translateY(-${CH/2}px) translateZ(-${CD/2}px)`,
+            backgroundImage: 'repeating-linear-gradient(90deg, transparent 0, transparent 24px, #78350f 25px)' // Bronze Pillars every 5 cubits
+          }}></div>
+
+          {/* Fence South (Long) */}
+          <div style={{
+            ...faceStyle, width: `${CW}px`, height: `${CH}px`,
+            background: '#e5e5e5',
+            transform: `translate(-50%, -50%) translateY(-${CH/2}px) rotateY(180deg) translateZ(-${CD/2}px)`,
+            backgroundImage: 'repeating-linear-gradient(90deg, transparent 0, transparent 24px, #78350f 25px)'
+          }}></div>
+
+          {/* Fence West (Rear Short) */}
+          <div style={{
+            ...faceStyle, width: `${CD}px`, height: `${CH}px`,
+            background: '#e5e5e5',
+            transform: `translate(-50%, -50%) translateY(-${CH/2}px) rotateY(-90deg) translateZ(-${CW/2}px)`,
+            backgroundImage: 'repeating-linear-gradient(90deg, transparent 0, transparent 24px, #78350f 25px)'
+          }}></div>
+
+          {/* Fence East (Gate) */}
+          <div style={{
+            ...faceStyle, width: `${CD}px`, height: `${CH}px`,
+            background: 'transparent',
+            transform: `translate(-50%, -50%) translateY(-${CH/2}px) rotateY(90deg) translateZ(-${CW/2}px)`,
+            border: '1px solid rgba(255,255,255,0.2)'
+          }}>
+            {/* The Gate Screen (Blue/Purple/Red) */}
+            <div className="absolute top-0 left-1/4 w-1/2 h-full bg-gradient-to-r from-blue-800 via-purple-800 to-red-800 opacity-80 border-2 border-amber-700"></div>
+          </div>
+
+          {/* === B. THE BRONZE ALTAR === */}
+          <div className="absolute preserve-3d" style={{ transform: `translateZ(${CW/4}px) translateY(-15px)` }}>
+              <div className="w-10 h-10 bg-amber-900 border border-amber-950 opacity-90 transform translate-x-[-50%] translate-y-[-50%] rotateX(0deg)"></div>
+          </div>
+
+          {/* === C. THE TABERNACLE (Inner Sanctuary) === */}
+          {/* Positioned in the West half (Negative X in this setup, or offset Z depending on rotation) */}
+          <div className="preserve-3d absolute" style={{ transform: `translateX(-100px) translateY(-${TH/2}px)` }}>
+            
+            {/* North Wall (Gold) */}
+            <div style={{
+               ...faceStyle, width: `${TW}px`, height: `${TH}px`,
+               backgroundImage: `repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 10px), linear-gradient(to bottom, #facc15, #a16207)`,
+               transform: `translate(-50%, -50%) translateZ(-${TD/2}px)`
+            }}></div>
+
+            {/* South Wall (Gold) */}
+            <div style={{
+               ...faceStyle, width: `${TW}px`, height: `${TH}px`,
+               backgroundImage: `repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 10px), linear-gradient(to bottom, #facc15, #a16207)`,
+               transform: `translate(-50%, -50%) rotateY(180deg) translateZ(-${TD/2}px)`
+            }}></div>
+
+            {/* West Wall (Gold) */}
+            <div style={{
+               ...faceStyle, width: `${TD}px`, height: `${TH}px`,
+               backgroundImage: `repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 10px), linear-gradient(to bottom, #facc15, #a16207)`,
+               transform: `translate(-50%, -50%) rotateY(-90deg) translateZ(-${TW/2}px)`
+            }}></div>
+
+            {/* Roof (Red Ram Skins) */}
+            <div style={{
+               ...faceStyle, width: `${TW}px`, height: `${TD}px`,
+               background: '#7f1d1d',
+               transform: `translate(-50%, -50%) rotateX(90deg) translateZ(${TH/2}px)` // Top
+            }}></div>
+
+             {/* Entrance (Veil) */}
+             <div style={{
+               ...faceStyle, width: `${TD}px`, height: `${TH}px`,
+               background: '#312e81',
+               transform: `translate(-50%, -50%) rotateY(90deg) translateZ(-${TW/2}px)`,
+               boxShadow: '0 0 15px rgba(250, 204, 21, 0.2)'
+            }}>
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-purple-900 to-red-900 opacity-90"></div>
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* CONTROLS */}
+        <div className="absolute bottom-6 flex items-center gap-6 bg-parchment-100 p-2 pl-4 pr-4 rounded-full border-2 border-amber-600 shadow-2xl z-20">
+          <button onClick={() => setRotation(r => r - 45)} className="text-stone-900 hover:text-amber-700 font-cinzel text-[10px] font-bold">ROTATE L</button>
+          <button onClick={() => setIsOrbiting(!isOrbiting)} className={`font-serif italic text-xl px-2 transition-all cursor-pointer ${isOrbiting ? 'text-red-700 animate-pulse' : 'text-stone-900'}`}>
+            {isOrbiting ? 'Stop' : 'Orbit'}
+          </button>
+          <button onClick={() => setRotation(r => r + 45)} className="text-stone-900 hover:text-amber-700 font-cinzel text-[10px] font-bold">ROTATE R</button>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-parchment-200 p-4 md:p-8 font-garamond text-stone-900 selection:bg-gold-500/30">
@@ -64,7 +224,7 @@ const TabernacleViewer = () => {
             </div>
           )}
 
-          {/* ELEMENTS TAB */}
+          {/* ELEMENTS TAB (Restored) */}
           {activeView === 'elements' && (
             <div className="animate-fadeIn space-y-6">
                 <div className="bg-parchment-100 p-6 rounded border-l-4 border-amber-600 shadow-sm">
@@ -93,7 +253,7 @@ const TabernacleViewer = () => {
             </div>
           )}
 
-          {/* GARMENTS TAB */}
+          {/* GARMENTS TAB (Restored) */}
           {activeView === 'garments' && (
             <div className="animate-fadeIn">
               <h2 className="font-cinzel text-amber-800 text-xl mb-6 uppercase tracking-[0.2em] text-center">Vestments of Glory</h2>
@@ -123,7 +283,7 @@ const TabernacleViewer = () => {
             </div>
           )}
 
-          {/* ARCHAEOLOGY TAB */}
+          {/* ARCHAEOLOGY TAB (Restored) */}
           {activeView === 'archaeology' && (
             <div className="animate-fadeIn space-y-6">
                 <div className="border-l-4 border-amber-600 pl-4 py-2 bg-amber-50">
