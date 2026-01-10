@@ -39,7 +39,7 @@ const TabernacleViewer = () => {
     return () => clearInterval(interval);
   }, [isOrbiting]);
 
-  // --- 3. 3D COMPONENT ---
+// --- 3. 3D COMPONENT ---
   const Tabernacle3D = () => {
     // NEW SCALE: 5px = 1 cubit (Scaled down to fit Courtyard)
     // Courtyard: 100 x 50 cubits -> 500px x 250px
@@ -60,6 +60,7 @@ const TabernacleViewer = () => {
       backfaceVisibility: 'hidden',
       transformStyle: 'preserve-3d',
     };
+    
 
     return (
       <div className="relative w-full h-[500px] bg-parchment-900 rounded-xl border-2 border-gold-700/30 overflow-hidden flex items-center justify-center perspective-1000 shadow-2xl">
