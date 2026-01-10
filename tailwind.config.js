@@ -38,7 +38,6 @@ export default {
         'parchment-gradient': 'linear-gradient(to bottom, #f4e8d0, #e8d7b8)',
         'dark-overlay': 'linear-gradient(135deg, #1a1410 0%, #2d2416 50%, #1a1410 100%)',
       },
-      // ADD THIS SECTION FOR THE FADE EFFECT
       keyframes: {
         fadeIn: {
           '0%': { opacity: '0', transform: 'translateY(10px)' },
