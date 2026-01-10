@@ -40,7 +40,6 @@ const TabernacleViewer = () => {
   }, [isOrbiting]);
 
   // --- 3. 3D COMPONENT ---
- // --- 3. 3D COMPONENT ---
   const Tabernacle3D = () => {
     // NEW SCALE: 5px = 1 cubit (Scaled down to fit Courtyard)
     // Courtyard: 100 x 50 cubits -> 500px x 250px
