@@ -30,7 +30,7 @@ const TabernacleViewer = () => {
   return (
     <div className="min-h-screen bg-parchment-200 p-4 md:p-8 font-garamond text-stone-900 selection:bg-gold-500/30">
       <header className="max-w-6xl mx-auto text-center mb-16">
-        <h1 className="font-unifraktur text-6xl text-stone-900 tracking-tight">The Mishkan</h1>
+        <h1 className="font-cinzel text-5xl text-amber-800 tracking-widest uppercase">The Mishkan</h1>
         <p className="font-cinzel text-xs tracking-[0.4em] text-amber-700 mt-2 uppercase italic">Pattern of the Heavenly</p>
       </header>
 
