@@ -57,12 +57,12 @@ const TabernacleViewer = () => {
           {/* 3D VIEWER */}
           {activeView === 'sanctuary' && (
             <div className="animate-fadeIn">
-                <div className={`relative ${is3DFullscreen ? 'fixed inset-0 z-50 bg-black' : ''}`}>
+                <div className={`relative ${is3DFullscreen ? 'fixed inset-0 z-50 bg-black w-screen h-screen' : ''}`}>
                     <iframe
                         src="/humble-tabernacle/gptab.html"
                         title="The Tabernacle of Moses - Interactive 3D Model"
-                        className={`${is3DFullscreen ? 'w-full h-full' : 'w-full h-[600px] rounded-xl border-2 border-amber-700/50'}`}
-                        style={{ border: 'none' }}
+                        className={`${is3DFullscreen ? 'w-screen h-screen' : 'w-full h-[600px] rounded-xl border-2 border-amber-700/50'}`}
+                        style={is3DFullscreen ? { border: 'none', position: 'absolute', top: 0, left: 0 } : { border: 'none' }}
                         allow="fullscreen"
                     />
                     <button
