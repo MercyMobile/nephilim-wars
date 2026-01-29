@@ -183,7 +183,7 @@ const TabernacleViewer = () => {
                 {breastplateStones.map((stone, i) => (
                   <div
                     key={i}
-                    className="aspect-square rounded-lg group relative overflow-hidden flex flex-col items-center justify-center cursor-help transition-transform hover:scale-105"
+                    className="aspect-square group relative overflow-hidden flex flex-col items-center justify-center cursor-help transition-transform hover:scale-105"
                     style={{
                       background: stone.gradient,
                       boxShadow: `
@@ -192,21 +192,55 @@ const TabernacleViewer = () => {
                         0 0 15px ${stone.glow},
                         0 4px 6px rgba(0,0,0,0.5)
                       `,
+                      clipPath: 'polygon(8% 0%, 92% 0%, 100% 8%, 100% 92%, 92% 100%, 8% 100%, 0% 92%, 0% 8%)',
                       border: '1px solid rgba(255,255,255,0.3)'
                     }}
                   >
-                     {/* Highlight shine effect */}
+                     {/* Facet overlay - top left */}
                      <div
-                       className="absolute top-1 left-1 w-3 h-3 rounded-full opacity-70"
+                       className="absolute top-0 left-0 w-1/2 h-1/2 opacity-30"
                        style={{
-                         background: 'radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 70%)'
+                         background: 'linear-gradient(135deg, rgba(255,255,255,0.6) 0%, transparent 50%)'
                        }}
                      />
-                     {/* Secondary highlight */}
+                     {/* Facet overlay - top right */}
                      <div
-                       className="absolute top-2 left-3 w-1.5 h-1.5 rounded-full opacity-50"
+                       className="absolute top-0 right-0 w-1/2 h-1/2 opacity-20"
                        style={{
-                         background: 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%)'
+                         background: 'linear-gradient(225deg, rgba(255,255,255,0.4) 0%, transparent 50%)'
+                       }}
+                     />
+                     {/* Facet overlay - bottom */}
+                     <div
+                       className="absolute bottom-0 left-0 right-0 h-1/2 opacity-40"
+                       style={{
+                         background: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%)'
+                       }}
+                     />
+                     {/* Center table facet */}
+                     <div
+                       className="absolute inset-[15%] opacity-20"
+                       style={{
+                         background: 'linear-gradient(145deg, rgba(255,255,255,0.5) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.3) 100%)',
+                         clipPath: 'polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%)'
+                       }}
+                     />
+                     {/* Primary highlight */}
+                     <div
+                       className="absolute top-1 left-1 w-3 h-3 rounded-full opacity-80"
+                       style={{
+                         background: 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 60%)'
+                       }}
+                     />
+                     {/* Secondary sparkle */}
+                     <div
+                       className="absolute top-3 left-4 w-1 h-1 rounded-full opacity-90 bg-white"
+                     />
+                     {/* Edge highlights */}
+                     <div
+                       className="absolute top-0 left-[10%] right-[10%] h-[2px] opacity-50"
+                       style={{
+                         background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)'
                        }}
                      />
                      <span className={`text-[7px] font-bold uppercase z-10 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] ${stone.textDark ? 'text-stone-800' : 'text-white/95'}`}>{stone.tribe}</span>
