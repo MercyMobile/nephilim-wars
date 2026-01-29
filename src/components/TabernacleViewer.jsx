@@ -66,18 +66,18 @@ const TabernacleViewer = () => {
 
   // --- EDUCATIONAL CONTENT ---
   const breastplateStones = [
-    { name: "Sardius", tribe: "Reuben", color: "bg-red-700", meaning: "The Firstborn" },
-    { name: "Topaz", tribe: "Simeon", color: "bg-yellow-400", meaning: "Hearing" },
-    { name: "Carbuncle", tribe: "Levi", color: "bg-red-900", meaning: "Joined" },
-    { name: "Emerald", tribe: "Judah", color: "bg-green-600", meaning: "Praise" },
-    { name: "Sapphire", tribe: "Issachar", color: "bg-blue-700", meaning: "Reward" },
-    { name: "Diamond", tribe: "Zebulun", color: "bg-slate-100 text-black", meaning: "Dwelling" },
-    { name: "Jacinth", tribe: "Dan", color: "bg-orange-500", meaning: "Judge" },
-    { name: "Agate", tribe: "Naphtali", color: "bg-stone-400", meaning: "Wrestling" },
-    { name: "Amethyst", tribe: "Gad", color: "bg-purple-600", meaning: "Troop" },
-    { name: "Beryl", tribe: "Asher", color: "bg-teal-500", meaning: "Happy" },
-    { name: "Onyx", tribe: "Joseph", color: "bg-black", meaning: "Adding" },
-    { name: "Jasper", tribe: "Benjamin", color: "bg-red-800", meaning: "Son of Right Hand" }
+    { name: "Sardius", tribe: "Reuben", gradient: "radial-gradient(ellipse at 30% 20%, #ff6b6b 0%, #dc2626 40%, #7f1d1d 100%)", glow: "rgba(220, 38, 38, 0.6)", meaning: "The Firstborn" },
+    { name: "Topaz", tribe: "Simeon", gradient: "radial-gradient(ellipse at 30% 20%, #fef08a 0%, #eab308 40%, #a16207 100%)", glow: "rgba(234, 179, 8, 0.6)", meaning: "Hearing" },
+    { name: "Carbuncle", tribe: "Levi", gradient: "radial-gradient(ellipse at 30% 20%, #f87171 0%, #991b1b 40%, #450a0a 100%)", glow: "rgba(153, 27, 27, 0.5)", meaning: "Joined" },
+    { name: "Emerald", tribe: "Judah", gradient: "radial-gradient(ellipse at 30% 20%, #6ee7b7 0%, #059669 40%, #064e3b 100%)", glow: "rgba(5, 150, 105, 0.6)", meaning: "Praise" },
+    { name: "Sapphire", tribe: "Issachar", gradient: "radial-gradient(ellipse at 30% 20%, #93c5fd 0%, #2563eb 40%, #1e3a8a 100%)", glow: "rgba(37, 99, 235, 0.6)", meaning: "Reward" },
+    { name: "Diamond", tribe: "Zebulun", gradient: "radial-gradient(ellipse at 30% 20%, #ffffff 0%, #e2e8f0 30%, #94a3b8 70%, #64748b 100%)", glow: "rgba(255, 255, 255, 0.8)", textDark: true, meaning: "Dwelling" },
+    { name: "Jacinth", tribe: "Dan", gradient: "radial-gradient(ellipse at 30% 20%, #fdba74 0%, #ea580c 40%, #7c2d12 100%)", glow: "rgba(234, 88, 12, 0.6)", meaning: "Judge" },
+    { name: "Agate", tribe: "Naphtali", gradient: "radial-gradient(ellipse at 30% 20%, #d6d3d1 0%, #78716c 40%, #44403c 100%)", glow: "rgba(120, 113, 108, 0.5)", meaning: "Wrestling" },
+    { name: "Amethyst", tribe: "Gad", gradient: "radial-gradient(ellipse at 30% 20%, #c4b5fd 0%, #7c3aed 40%, #4c1d95 100%)", glow: "rgba(124, 58, 237, 0.6)", meaning: "Troop" },
+    { name: "Beryl", tribe: "Asher", gradient: "radial-gradient(ellipse at 30% 20%, #5eead4 0%, #0d9488 40%, #134e4a 100%)", glow: "rgba(13, 148, 136, 0.6)", meaning: "Happy" },
+    { name: "Onyx", tribe: "Joseph", gradient: "radial-gradient(ellipse at 30% 20%, #525252 0%, #171717 40%, #000000 100%)", glow: "rgba(82, 82, 82, 0.4)", meaning: "Adding" },
+    { name: "Jasper", tribe: "Benjamin", gradient: "radial-gradient(ellipse at 30% 20%, #fca5a5 0%, #b91c1c 40%, #450a0a 100%)", glow: "rgba(185, 28, 28, 0.5)", meaning: "Son of Right Hand" }
   ];
 
   const garmentData = [
@@ -178,13 +178,40 @@ const TabernacleViewer = () => {
               <h2 className="font-cinzel text-amber-800 text-xl mb-6 uppercase tracking-[0.2em] text-center">Vestments of Glory</h2>
               
               {/* Breastplate Grid */}
-              <div className="max-w-sm mx-auto grid grid-cols-3 gap-2 bg-stone-900 p-4 rounded-lg border-2 border-amber-600 shadow-xl mb-8 relative">
+              <div className="max-w-sm mx-auto grid grid-cols-3 gap-3 bg-stone-900 p-5 rounded-lg border-2 border-amber-600 shadow-xl mb-8 relative">
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-600 text-white text-[9px] px-2 py-0.5 rounded uppercase font-bold tracking-widest">The Hoshen</div>
                 {breastplateStones.map((stone, i) => (
-                  <div key={i} className={`${stone.color} aspect-square rounded shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] border border-white/20 group relative overflow-hidden flex flex-col items-center justify-center cursor-help`}>
-                     <span className="text-[7px] font-bold text-white/90 uppercase z-10">{stone.tribe}</span>
-                     <div className="absolute inset-0 bg-black/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity p-1 text-center">
-                        <span className="text-[8px] text-gold-300 leading-tight">{stone.meaning}</span>
+                  <div
+                    key={i}
+                    className="aspect-square rounded-lg group relative overflow-hidden flex flex-col items-center justify-center cursor-help transition-transform hover:scale-105"
+                    style={{
+                      background: stone.gradient,
+                      boxShadow: `
+                        inset 0 -8px 12px rgba(0,0,0,0.4),
+                        inset 0 4px 8px rgba(255,255,255,0.25),
+                        0 0 15px ${stone.glow},
+                        0 4px 6px rgba(0,0,0,0.5)
+                      `,
+                      border: '1px solid rgba(255,255,255,0.3)'
+                    }}
+                  >
+                     {/* Highlight shine effect */}
+                     <div
+                       className="absolute top-1 left-1 w-3 h-3 rounded-full opacity-70"
+                       style={{
+                         background: 'radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 70%)'
+                       }}
+                     />
+                     {/* Secondary highlight */}
+                     <div
+                       className="absolute top-2 left-3 w-1.5 h-1.5 rounded-full opacity-50"
+                       style={{
+                         background: 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%)'
+                       }}
+                     />
+                     <span className={`text-[7px] font-bold uppercase z-10 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] ${stone.textDark ? 'text-stone-800' : 'text-white/95'}`}>{stone.tribe}</span>
+                     <div className="absolute inset-0 bg-black/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity p-1 text-center backdrop-blur-sm">
+                        <span className="text-[8px] text-gold-300 leading-tight font-semibold">{stone.meaning}</span>
                      </div>
                   </div>
                 ))}
