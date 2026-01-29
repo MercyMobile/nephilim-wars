@@ -1,8 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 
 const TabernacleViewer = () => {
   const [activeView, setActiveView] = useState('sanctuary');
   const [is3DFullscreen, setIs3DFullscreen] = useState(false);
+  const fullscreenContainerRef = useRef(null);
+
+  // Handle fullscreen state changes from browser
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const isFullscreen = !!(
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement
+      );
+      setIs3DFullscreen(isFullscreen);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
+    };
+  }, []);
+
+  // Toggle native fullscreen
+  const toggleFullscreen = useCallback(async () => {
+    const container = fullscreenContainerRef.current;
+    if (!container) return;
+
+    try {
+      if (!is3DFullscreen) {
+        // Enter fullscreen
+        if (container.requestFullscreen) {
+          await container.requestFullscreen();
+        } else if (container.webkitRequestFullscreen) {
+          await container.webkitRequestFullscreen();
+        } else if (container.mozRequestFullScreen) {
+          await container.mozRequestFullScreen();
+        } else if (container.msRequestFullscreen) {
+          await container.msRequestFullscreen();
+        }
+      } else {
+        // Exit fullscreen
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          await document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          await document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          await document.msExitFullscreen();
+        }
+      }
+    } catch (err) {
+      console.error('Fullscreen error:', err);
+    }
+  }, [is3DFullscreen]);
 
   // --- EDUCATIONAL CONTENT ---
   const breastplateStones = [
@@ -57,17 +117,20 @@ const TabernacleViewer = () => {
           {/* 3D VIEWER */}
           {activeView === 'sanctuary' && (
             <div className="animate-fadeIn">
-                <div className={`relative ${is3DFullscreen ? 'fixed inset-0 z-50 bg-black' : ''}`}>
+                <div
+                    ref={fullscreenContainerRef}
+                    className={`relative ${is3DFullscreen ? 'bg-black' : ''}`}
+                >
                     <iframe
                         src="/humble-tabernacle/gptab.html"
                         title="The Tabernacle of Moses - Interactive 3D Model"
-                        className={`${is3DFullscreen ? 'w-full h-full' : 'w-full h-[600px] rounded-xl border-2 border-amber-700/50'}`}
+                        className={`${is3DFullscreen ? 'w-screen h-screen' : 'w-full h-[600px] rounded-xl border-2 border-amber-700/50'}`}
                         style={{ border: 'none' }}
                         allow="fullscreen"
                     />
                     <button
-                        onClick={() => setIs3DFullscreen(!is3DFullscreen)}
-                        className={`absolute ${is3DFullscreen ? 'top-4 right-4' : 'top-2 right-2'} bg-stone-900/80 hover:bg-stone-800 text-gold-400 px-3 py-1.5 rounded-lg border border-amber-600/50 font-cinzel text-xs tracking-wide transition-all hover:scale-105`}
+                        onClick={toggleFullscreen}
+                        className={`absolute ${is3DFullscreen ? 'top-4 right-4' : 'top-2 right-2'} bg-stone-900/80 hover:bg-stone-800 text-gold-400 px-3 py-1.5 rounded-lg border border-amber-600/50 font-cinzel text-xs tracking-wide transition-all hover:scale-105 z-10`}
                     >
                         {is3DFullscreen ? '✕ EXIT' : '⛶ FULLSCREEN'}
                     </button>
