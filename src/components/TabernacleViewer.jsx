@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Tabernacle3D from './Tabernacle3D';
 
 const TabernacleViewer = () => {
   const [activeView, setActiveView] = useState('sanctuary');
+  const [is3DFullscreen, setIs3DFullscreen] = useState(false);
 
   // --- EDUCATIONAL CONTENT ---
   const breastplateStones = [
@@ -57,10 +57,26 @@ const TabernacleViewer = () => {
           {/* 3D VIEWER */}
           {activeView === 'sanctuary' && (
             <div className="animate-fadeIn">
-                <Tabernacle3D />
-                <div className="mt-6 p-4 border-l-4 border-amber-600 bg-parchment-100 text-sm text-stone-700 leading-relaxed">
-                    <p><strong>The Scale:</strong> You are viewing the Courtyard (100x50 cubits). Inside stands the Mishkan proper (30x10 cubits). The outer fence is white linen to symbolize purity, held up by bronze pillars (judgment). The inner house is gold (divinity) sitting on silver (redemption).</p>
+                <div className={`relative ${is3DFullscreen ? 'fixed inset-0 z-50 bg-black' : ''}`}>
+                    <iframe
+                        src="/humble-tabernacle/gptab.html"
+                        title="The Tabernacle of Moses - Interactive 3D Model"
+                        className={`${is3DFullscreen ? 'w-full h-full' : 'w-full h-[600px] rounded-xl border-2 border-amber-700/50'}`}
+                        style={{ border: 'none' }}
+                        allow="fullscreen"
+                    />
+                    <button
+                        onClick={() => setIs3DFullscreen(!is3DFullscreen)}
+                        className={`absolute ${is3DFullscreen ? 'top-4 right-4' : 'top-2 right-2'} bg-stone-900/80 hover:bg-stone-800 text-gold-400 px-3 py-1.5 rounded-lg border border-amber-600/50 font-cinzel text-xs tracking-wide transition-all hover:scale-105`}
+                    >
+                        {is3DFullscreen ? '✕ EXIT' : '⛶ FULLSCREEN'}
+                    </button>
                 </div>
+                {!is3DFullscreen && (
+                    <div className="mt-6 p-4 border-l-4 border-amber-600 bg-parchment-100 text-sm text-stone-700 leading-relaxed">
+                        <p><strong>Interactive 3D Model:</strong> Click on sacred objects to learn about their biblical significance. The Courtyard measures 100×50 cubits with white linen walls (purity) on bronze pillars (judgment). Inside stands the Mishkan (30×10 cubits) - gold (divinity) resting on silver (redemption).</p>
+                    </div>
+                )}
             </div>
           )}
 
