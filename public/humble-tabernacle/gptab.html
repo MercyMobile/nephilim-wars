@@ -268,8 +268,8 @@
             1000
         );
 
-        // Better camera positioning - further back to see the whole courtyard
-        camera.position.set(80, 50, 80);
+        // Better camera positioning - view from entrance side (east)
+        camera.position.set(-80, 50, -80);
 
         const renderer = new THREE.WebGLRenderer({
             antialias: true,
@@ -3025,7 +3025,7 @@ scene.add(redCarpet);
         // ================================================================
 
         document.getElementById('reset-view-btn').addEventListener('click', () => {
-            camera.position.set(80, 50, 80);
+            camera.position.set(-80, 50, -80);
             controls.target.set(0, 10, 0);
             controls.update();
         });
