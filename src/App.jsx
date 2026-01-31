@@ -65,7 +65,7 @@ const ScribeChat = () => {
       {/* Header */}
       <div className="p-4 text-center border-b border-[#5a4a3a] bg-[#1f1a15]">
         <h3 className="m-0 text-xl font-cinzel text-[#a89f91] uppercase tracking-widest">
-          The Archives of the Nephilim
+          The Scribe of The Way
         </h3>
       </div>
 
