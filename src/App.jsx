@@ -57,7 +57,7 @@ const ScribeChat = () => {
 
   useEffect(scrollToBottom, [messages]);
 
-  // --- ROBUST SPEECH LOGIC (The B+ Code) ---
+  // --- ROBUST SPEECH LOGIC ---
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
     
@@ -105,7 +105,6 @@ const ScribeChat = () => {
       setSpeaking(false);
     };
   }, [messages]);
-  // ------------------------------------------
 
   const handleSend = async (textOverride = null) => {
     const userText = textOverride || input;
@@ -126,7 +125,7 @@ const ScribeChat = () => {
 
       const data = await response.json();
       
-      // Add Scribe Message (This triggers the Speech Effect above)
+      // Add Scribe Message
       setMessages(prev => [...prev, { 
         role: 'scribe', 
         content: data.reply,
@@ -182,61 +181,6 @@ const ScribeChat = () => {
         )}
         
         {/* Message List */}
-        {messages.map((msg, idx) => (
-          <div 
-            key={idx} 
-            className={`p-4 mb-6 rounded-lg max-w-[85%] leading-relaxed shadow-lg ${
-              msg.role === 'user' 
-                ? 'self-end bg-[#2a2a2a] text-stone-200 border border-stone-700 ml-auto' 
-                : 'self-start bg-[#1a1510] border-l-4 border-[#8b0000] text-[#d4c4a8]'
-            }`}
-          >
-            <div className="whitespace-pre-wrap">{msg.content}</div>
-            
-            {/* Source Citations */}
-            {msg.sources && msg.sources.length > 0 && (
-              <div className="mt-3 pt-3 border-t border-stone-800 text-xs text-[#666] font-mono">
-                <span className="text-[#8b0000] font-bold uppercase mr-2">Sources:</span>
-                {[...new Set(msg.sources)].join(', ')}
-              </div>
-            )}
-          </div>
-        ))}
-
-        {loading && (
-          <div className="self-start bg-[#1a1510] border-l-4 border-[#8b0000] p-4 rounded-lg animate-pulse flex items-center gap-3">
-            <div className="w-2 h-2 bg-[#8b0000] rounded-full animate-bounce" />
-            <div className="w-2 h-2 bg-[#8b0000] rounded-full animate-bounce delay-75" />
-            <div className="w-2 h-2 bg-[#8b0000] rounded-full animate-bounce delay-150" />
-            <span className="text-stone-500 italic text-sm ml-2">Consulting the archives...</span>
-          </div>
-        )}
-        <div ref={chatEndRef} />
-      </div>
-
-      {/* Input Controls */}
-      <div className="p-4 border-t border-[#5a4a3a] bg-[#1f1a15] flex gap-2">
-        <input 
-          type="text" 
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-          placeholder="Inquire of the Scribe..." 
-          className="flex-1 p-4 bg-black border border-[#5a4a3a] text-white font-serif focus:outline-none focus:border-amber-600 transition-colors placeholder-stone-700"
-          disabled={loading}
-        />
-        <button 
-          onClick={() => handleSend()}
-          disabled={loading}
-          className="px-8 py-3 bg-[#8b0000] text-white font-bold font-cinzel uppercase hover:bg-[#a50000] disabled:bg-[#333] disabled:text-stone-600 transition-colors border border-red-900 shadow-[0_0_15px_rgba(139,0,0,0.3)]"
-        >
-          Inquire
-        </button>
-      </div>
-    </div>
-  );
-};
-        
         {messages.map((msg, idx) => (
           <div 
             key={idx} 
