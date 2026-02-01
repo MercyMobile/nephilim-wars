@@ -45,7 +45,9 @@ const ScribeChat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [speaking, setSpeaking] = useState(false); // State for Avatar animation
+  const [speaking, setSpeaking] = useState(false);
+  // NEW: Mute state
+  const [isMuted, setIsMuted] = useState(false);
   const chatEndRef = useRef(null);
   
   // 🔴 IMPORTANT: Ensure this matches your deployed Cloudflare Worker URL
@@ -57,8 +59,21 @@ const ScribeChat = () => {
 
   useEffect(scrollToBottom, [messages]);
 
+  // NEW: Helper to toggle mute and immediately stop talking if active
+  const toggleMute = () => {
+    if (!isMuted) {
+      // If we are about to mute, shut him up immediately
+      window.speechSynthesis.cancel();
+      setSpeaking(false);
+    }
+    setIsMuted(!isMuted);
+  };
+
 // --- TUNED SPEECH LOGIC (Less Robotic) ---
   useEffect(() => {
+    // NEW: Immediate exit if muted
+    if (isMuted) return;
+
     const lastMessage = messages[messages.length - 1];
     
     // 1. Safety Check: Only speak if it's a NEW message from the Scribe
@@ -72,26 +87,19 @@ const ScribeChat = () => {
     // 3. Robust Voice Selection (Prioritize "Natural" / High Quality)
     const setVoice = () => {
       const voices = window.speechSynthesis.getVoices();
-      
-      // Priority 1: Modern "Natural" voices (Edge/Chrome/Android)
-      // Priority 2: Specific High-Quality Humanoid names
-      // Priority 3: Any English voice
       const preferredVoice = voices.find(v => v.name.includes("Natural")) || 
                              voices.find(v => v.name.includes("Google UK English Male")) || 
-                             voices.find(v => v.name.includes("Daniel")) || // Mac High Quality
-                             voices.find(v => v.lang.startsWith("en-")); // Any English fallback
+                             voices.find(v => v.name.includes("Daniel")) || 
+                             voices.find(v => v.lang.startsWith("en-")); 
 
       if (preferredVoice) {
         utterance.voice = preferredVoice;
-        // console.log("Using voice:", preferredVoice.name); // Uncomment to debug
       }
       
-      // SETTINGS: Keeping pitch normal prevents the "Speak-n-Spell" effect
-      utterance.rate = 1.0;  // Normal speed (0.9 can sound draggable)
-      utterance.pitch = 1.0; // Artificial pitch shifting creates robotic artifacts
+      utterance.rate = 1.0; 
+      utterance.pitch = 1.0; 
     };
 
-    // Chrome loads voices asynchronously, so we must check both ways
     if (window.speechSynthesis.getVoices().length > 0) {
       setVoice();
     } else {
@@ -100,17 +108,18 @@ const ScribeChat = () => {
 
     // 4. Event Handlers for Animation Sync
     utterance.onstart = () => setSpeaking(true);
+    // NEW: Ensure we check mute state even during callback (edge case)
     utterance.onend = () => setSpeaking(false);
     utterance.onerror = () => setSpeaking(false);
 
     window.speechSynthesis.speak(utterance);
 
-    // 5. Cleanup: Stop talking if user leaves the page!
+    // 5. Cleanup
     return () => {
       window.speechSynthesis.cancel();
       setSpeaking(false);
     };
-  }, [messages]);
+  }, [messages, isMuted]); // Added isMuted to dependency array
 
   const handleSend = async (textOverride = null) => {
     const userText = textOverride || input;
@@ -149,22 +158,43 @@ const ScribeChat = () => {
   };
 
   return (
-    <div className="flex flex-col h-full max-w-5xl mx-auto border-x-2 border-amber-900/30 bg-[#0f0f0f] shadow-2xl font-serif text-[#d4c4a8]">
+    // FIX: Added 'w-full' to this container to prevent "narrow view" glitch
+    <div className="flex flex-col h-full w-full max-w-5xl mx-auto border-x-2 border-amber-900/30 bg-[#0f0f0f] shadow-2xl font-serif text-[#d4c4a8]">
+      
       {/* Header */}
-      <div className="p-6 text-center border-b border-[#5a4a3a] bg-[#1f1a15]">
-        <h3 className="m-0 text-xl font-cinzel text-[#a89f91] uppercase tracking-widest">
-          The Scribe of the Way
-        </h3>
-        <p className="text-xs text-[#666] mt-2 italic">
-          "Ask, and the annals of history shall be opened..."
-        </p>
+      <div className="p-4 flex items-center justify-between border-b border-[#5a4a3a] bg-[#1f1a15]">
+        {/* Empty div for spacing balance */}
+        <div className="w-10"></div> 
+
+        <div className="text-center">
+          <h3 className="m-0 text-xl font-cinzel text-[#a89f91] uppercase tracking-widest">
+            The Scribe of the Way
+          </h3>
+          <p className="text-xs text-[#666] mt-1 italic">
+            "Ask, and the annals of history shall be opened..."
+          </p>
+        </div>
+
+        {/* NEW: Audio Toggle Button */}
+        <button 
+          onClick={toggleMute}
+          className={`w-10 h-10 flex items-center justify-center rounded border transition-colors ${
+            isMuted 
+              ? "border-red-900/50 text-stone-600 bg-stone-900 hover:text-stone-400" 
+              : "border-amber-600 text-amber-500 bg-amber-900/20 hover:bg-amber-900/40"
+          }`}
+          title={isMuted ? "Enable Voice" : "Mute Voice"}
+        >
+          {isMuted ? "🔇" : "🔊"}
+        </button>
       </div>
 
       {/* Chat History */}
       <div className={`flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-amber-900 scrollbar-track-black ${messages.length === 0 ? 'flex flex-col justify-center' : ''}`}>
         
         {/* ✨ ALWAYS SHOW AVATAR AT TOP ✨ */}
-        <ScribeAvatar speaking={speaking} />
+        {/* Pass isMuted logic to stop animation if needed, though strictly visual is usually fine */}
+        <ScribeAvatar speaking={speaking && !isMuted} />
 
         {/* Empty State Instructions */}
         {messages.length === 0 && (
