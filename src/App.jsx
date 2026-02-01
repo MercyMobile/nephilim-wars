@@ -12,18 +12,17 @@ import ErrorBoundary from './components/ErrorBoundary';
 const ScribeAvatar = ({ speaking }) => (
   <div className="flex flex-col items-center justify-center mb-6 transition-all duration-500">
     <div className="relative group">
-      {/* Outer Glow Ring - Pulses only when speaking */}
+      {/* Outer Glow Ring */}
       <div className={`absolute inset-0 rounded-full blur-xl transition-opacity duration-300 ${speaking ? 'bg-amber-600/40 animate-pulse' : 'bg-transparent'}`}></div>
       
-      {/* The Scribe Icon Container */}
+      {/* Icon Container */}
       <div className={`relative z-10 w-24 h-24 rounded-full border-4 flex items-center justify-center bg-stone-950 transition-all duration-500 ${speaking ? 'border-amber-500 shadow-[0_0_30px_rgba(245,158,11,0.5)] scale-105' : 'border-stone-700 opacity-80'}`}>
-        {/* Icon */}
         <span className="text-4xl filter drop-shadow-lg select-none">
           {speaking ? "🗣️" : "✒️"}
         </span>
       </div>
       
-      {/* Sound Wave Animation (CSS Bars) - Only visible when speaking */}
+      {/* Sound Wave Animation */}
       {speaking && (
         <div className="absolute -right-12 top-1/2 -translate-y-1/2 flex gap-1 h-8 items-center">
           <div className="w-1 bg-amber-500 animate-[bounce_1s_infinite] h-4"></div>
@@ -33,7 +32,6 @@ const ScribeAvatar = ({ speaking }) => (
       )}
     </div>
     
-    {/* Status Text */}
     <div className={`mt-4 font-cinzel text-xs tracking-[0.2em] transition-colors ${speaking ? 'text-amber-400' : 'text-stone-600'}`}>
       {speaking ? "THE SCRIBE SPEAKS..." : "AWAITING INQUIRY"}
     </div>
@@ -46,7 +44,7 @@ const ScribeChat = () => {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [speaking, setSpeaking] = useState(false);
-  const [isMuted, setIsMuted] = useState(false); // Mute State
+  const [isMuted, setIsMuted] = useState(false);
   const chatEndRef = useRef(null);
   
   // 🔴 IMPORTANT: Ensure this matches your deployed Cloudflare Worker URL
@@ -139,7 +137,6 @@ const ScribeChat = () => {
 
   return (
     <div className="flex flex-col h-full w-full max-w-5xl mx-auto border-x-2 border-amber-900/30 bg-[#0f0f0f] shadow-2xl font-serif text-[#d4c4a8]">
-      {/* Header with Mute Button */}
       <div className="p-4 flex items-center justify-between border-b border-[#5a4a3a] bg-[#1f1a15]">
         <div className="w-10"></div> 
         <div className="text-center">
@@ -211,7 +208,7 @@ const MainMenu = ({ onNavigate }) => (
         <MenuButton onClick={() => onNavigate('rules')} icon="📜" title="Rules of Engagement" desc="Combat System" />
         <MenuButton onClick={() => onNavigate('lore')} icon="📚" title="Lore Codex" desc="History & Peoples" />
       </div>
-      <div className="text-xs text-stone-600 uppercase tracking-widest mt-8">Version 0.9.4 • Mercy Mobile</div>
+      <div className="text-xs text-stone-600 uppercase tracking-widest mt-8">Version 0.9.5 • Mercy Mobile</div>
     </div>
   </div>
 );
@@ -244,6 +241,7 @@ export default function App() {
   return (
     <ErrorBoundary>
       <div className="h-screen flex flex-col bg-black overflow-hidden font-serif">
+        {/* Navigation - Hidden on Dice Screen */}
         {currentView !== 'dice' && (
           <nav className="bg-stone-950 border-b border-amber-900/50 p-3 flex flex-wrap justify-center gap-2 z-50 shadow-2xl relative min-h-[60px]">
             <NavButton label="🏛️ Home" isActive={currentView === 'home'} onClick={() => setCurrentView('home')} />
@@ -256,65 +254,66 @@ export default function App() {
           </nav>
         )}
 
-        <div className="flex-1 relative overflow-y-auto overflow-x-hidden">
-          {currentView === 'home' && <MainMenu onNavigate={setCurrentView} />}
-          {currentView === 'generator' && <CharacterGenerator onCharacterComplete={handleCharacterReady} />}
-          {currentView === 'combat' && <CombatScreen />}
-          
-          {/* SEPARATED DICE ROLLER */}
-          {currentView === 'dice' && (
-            <div className="w-full h-full bg-black relative">
-               {/* We pass manual={true} here, but DiceScreen.jsx MUST be updated to read it (see instructions below) */}
-               <DiceScreen manual={true} />
-               <button
-                 onClick={() => setCurrentView('home')}
-                 className="absolute bottom-4 left-4 z-50 bg-stone-900/80 text-stone-300 border border-amber-900 px-4 py-2 rounded hover:bg-black hover:text-amber-500 hover:border-amber-500 transition font-cinzel font-semibold text-sm shadow-md backdrop-blur-sm opacity-80 hover:opacity-100"
-               >
-                 🏛️ Home
-               </button>
-            </div>
-          )}
+        {/* --- MAIN CONTENT AREA --- */}
+        {currentView === 'dice' ? (
+          // 🎲 DICE MODE: Renders OUTSIDE the scrollable container for pure full-screen
+          <div className="flex-1 w-full h-full bg-black overflow-hidden relative">
+             <DiceScreen manual={true} />
+             {/* Floating Home Button for Manual Mode */}
+             <button
+               onClick={() => setCurrentView('home')}
+               className="absolute bottom-6 left-6 z-50 bg-stone-900/80 text-stone-300 border border-amber-900 px-5 py-3 rounded hover:bg-black hover:text-amber-500 hover:border-amber-500 transition font-cinzel font-bold text-sm shadow-xl backdrop-blur-sm opacity-90 hover:opacity-100 uppercase tracking-widest"
+             >
+               🏛️ Return Home
+             </button>
+          </div>
+        ) : (
+          // 📄 STANDARD MODE: Renders inside scrollable container
+          <div className="flex-1 relative overflow-y-auto overflow-x-hidden">
+            {currentView === 'home' && <MainMenu onNavigate={setCurrentView} />}
+            {currentView === 'generator' && <CharacterGenerator onCharacterComplete={handleCharacterReady} />}
+            {currentView === 'combat' && <CombatScreen />}
+            {currentView === 'bestiary' && <BestiaryScreen />}
+            
+            {currentView === 'rules' && (
+              <div className="h-full w-full bg-stone-900 flex flex-col">
+                <div className="bg-stone-950 border-b border-amber-900/50 p-4 text-center">
+                  <h2 className="text-2xl font-cinzel font-bold text-amber-500">Rules of Engagement</h2>
+                </div>
+                <div className="flex flex-wrap gap-2 bg-stone-950 border-b border-stone-800 p-2">
+                  <TabButton active={rulesTab === 'combat'} onClick={() => setRulesTab('combat')} label="⚔️ Combat Rules" mobileLabel="⚔️ Combat" />
+                  <TabButton active={rulesTab === 'classes'} onClick={() => setRulesTab('classes')} label="📋 Class Guide" mobileLabel="📋 Classes" />
+                </div>
+                <div className="flex-1 overflow-hidden">
+                  {rulesTab === 'combat' && <iframe src="/combat/index.html" className="w-full h-full border-0" title="Combat Rules" />}
+                  {rulesTab === 'classes' && <iframe src="/rules/classes.html" className="w-full h-full border-0" title="Class Guide" />}
+                </div>
+              </div>
+            )}
 
-          {currentView === 'bestiary' && <BestiaryScreen />}
-          
-          {currentView === 'rules' && (
-            <div className="h-full w-full bg-stone-900 flex flex-col">
-              <div className="bg-stone-950 border-b border-amber-900/50 p-4 text-center">
-                <h2 className="text-2xl font-cinzel font-bold text-amber-500">Rules of Engagement</h2>
+            {currentView === 'lore' && (
+              <div className="h-full w-full bg-stone-900 flex flex-col">
+                <div className="bg-stone-950 border-b border-amber-900/50 p-4 text-center">
+                  <h2 className="text-2xl font-cinzel font-bold text-amber-500">Lore Codex</h2>
+                </div>
+                <div className="flex flex-wrap gap-2 bg-stone-950 border-b border-stone-800 p-2 justify-center">
+                  <TabButton active={loreTab === 'codex'} onClick={() => setLoreTab('codex')} label="📚 Codex Angelorum" mobileLabel="📚 Codex" />
+                  <TabButton active={loreTab === 'races'} onClick={() => setLoreTab('races')} label="👥 Races & Peoples" mobileLabel="👥 Races" />
+                  <TabButton active={loreTab === 'archaeology'} onClick={() => setLoreTab('archaeology')} label="🏺 Archaeology" mobileLabel="🏺 Arch" />
+                  <TabButton active={loreTab === 'tabernacle'} onClick={() => setLoreTab('tabernacle')} label="🏛️ Humble Tabernacle" mobileLabel="🏛️ Tabernacle" />
+                  <TabButton active={loreTab === 'scribe'} onClick={() => setLoreTab('scribe')} label="✒️ The Scribe" mobileLabel="✒️ Scribe" />
+                </div>
+                <div className="flex-1 overflow-hidden">
+                  {loreTab === 'codex' && <iframe src="/encyclopedia/index.html" className="w-full h-full border-0" title="Codex Angelorum" />}
+                  {loreTab === 'races' && <iframe src="/encyclopedia/nephilim_wars_races_and_peoples.html" className="w-full h-full border-0" title="Races & Peoples" />}
+                  {loreTab === 'archaeology' && <iframe src="/Archaeology/index.html" className="w-full h-full border-0" title="Archaeology" />}
+                  {loreTab === 'tabernacle' && <div className="w-full h-full bg-stone-900 flex flex-col overflow-y-auto"><TabernacleViewer /></div>}
+                  {loreTab === 'scribe' && <div className="w-full h-full p-4 bg-stone-900 flex justify-center"><ScribeChat /></div>}
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2 bg-stone-950 border-b border-stone-800 p-2">
-                <TabButton active={rulesTab === 'combat'} onClick={() => setRulesTab('combat')} label="⚔️ Combat Rules" mobileLabel="⚔️ Combat" />
-                <TabButton active={rulesTab === 'classes'} onClick={() => setRulesTab('classes')} label="📋 Class Guide" mobileLabel="📋 Classes" />
-              </div>
-              <div className="flex-1 overflow-hidden">
-                {rulesTab === 'combat' && <iframe src="/combat/index.html" className="w-full h-full border-0" title="Combat Rules" />}
-                {rulesTab === 'classes' && <iframe src="/rules/classes.html" className="w-full h-full border-0" title="Class Guide" />}
-              </div>
-            </div>
-          )}
-
-          {currentView === 'lore' && (
-            <div className="h-full w-full bg-stone-900 flex flex-col">
-              <div className="bg-stone-950 border-b border-amber-900/50 p-4 text-center">
-                <h2 className="text-2xl font-cinzel font-bold text-amber-500">Lore Codex</h2>
-              </div>
-              <div className="flex flex-wrap gap-2 bg-stone-950 border-b border-stone-800 p-2 justify-center">
-                <TabButton active={loreTab === 'codex'} onClick={() => setLoreTab('codex')} label="📚 Codex Angelorum" mobileLabel="📚 Codex" />
-                <TabButton active={loreTab === 'races'} onClick={() => setLoreTab('races')} label="👥 Races & Peoples" mobileLabel="👥 Races" />
-                <TabButton active={loreTab === 'archaeology'} onClick={() => setLoreTab('archaeology')} label="🏺 Archaeology" mobileLabel="🏺 Arch" />
-                <TabButton active={loreTab === 'tabernacle'} onClick={() => setLoreTab('tabernacle')} label="🏛️ Humble Tabernacle" mobileLabel="🏛️ Tabernacle" />
-                <TabButton active={loreTab === 'scribe'} onClick={() => setLoreTab('scribe')} label="✒️ The Scribe" mobileLabel="✒️ Scribe" />
-              </div>
-              <div className="flex-1 overflow-hidden">
-                {loreTab === 'codex' && <iframe src="/encyclopedia/index.html" className="w-full h-full border-0" title="Codex Angelorum" />}
-                {loreTab === 'races' && <iframe src="/encyclopedia/nephilim_wars_races_and_peoples.html" className="w-full h-full border-0" title="Races & Peoples" />}
-                {loreTab === 'archaeology' && <iframe src="/Archaeology/index.html" className="w-full h-full border-0" title="Archaeology" />}
-                {loreTab === 'tabernacle' && <div className="w-full h-full bg-stone-900 flex flex-col overflow-y-auto"><TabernacleViewer /></div>}
-                {loreTab === 'scribe' && <div className="w-full h-full p-4 bg-stone-900 flex justify-center"><ScribeChat /></div>}
-              </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
     </ErrorBoundary>
   );
