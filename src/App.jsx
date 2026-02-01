@@ -8,11 +8,44 @@ import DiceScreen from './components/DiceScreen';
 import TabernacleViewer from "./components/TabernacleViewer";
 import ErrorBoundary from './components/ErrorBoundary';
 
-// --- SCRIBE CHAT COMPONENT (NEW) ---
+// --- SCRIBE AVATAR COMPONENT (VISUALS) ---
+const ScribeAvatar = ({ speaking }) => (
+  <div className="flex flex-col items-center justify-center mb-6 transition-all duration-500">
+    <div className="relative group">
+      {/* Outer Glow Ring - Pulses only when speaking */}
+      <div className={`absolute inset-0 rounded-full blur-xl transition-opacity duration-300 ${speaking ? 'bg-amber-600/40 animate-pulse' : 'bg-transparent'}`}></div>
+      
+      {/* The Scribe Icon Container */}
+      <div className={`relative z-10 w-24 h-24 rounded-full border-4 flex items-center justify-center bg-stone-950 transition-all duration-500 ${speaking ? 'border-amber-500 shadow-[0_0_30px_rgba(245,158,11,0.5)] scale-105' : 'border-stone-700 opacity-80'}`}>
+        {/* Icon */}
+        <span className="text-4xl filter drop-shadow-lg select-none">
+          {speaking ? "🗣️" : "✒️"}
+        </span>
+      </div>
+      
+      {/* Sound Wave Animation (CSS Bars) - Only visible when speaking */}
+      {speaking && (
+        <div className="absolute -right-12 top-1/2 -translate-y-1/2 flex gap-1 h-8 items-center">
+          <div className="w-1 bg-amber-500 animate-[bounce_1s_infinite] h-4"></div>
+          <div className="w-1 bg-amber-500 animate-[bounce_1.2s_infinite] h-8"></div>
+          <div className="w-1 bg-amber-500 animate-[bounce_0.8s_infinite] h-6"></div>
+        </div>
+      )}
+    </div>
+    
+    {/* Status Text */}
+    <div className={`mt-4 font-cinzel text-xs tracking-[0.2em] transition-colors ${speaking ? 'text-amber-400' : 'text-stone-600'}`}>
+      {speaking ? "THE SCRIBE SPEAKS..." : "AWAITING INQUIRY"}
+    </div>
+  </div>
+);
+
+// --- SCRIBE CHAT COMPONENT (LOGIC & SPEECH) ---
 const ScribeChat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [speaking, setSpeaking] = useState(false); // State for Avatar animation
   const chatEndRef = useRef(null);
   
   // 🔴 IMPORTANT: Ensure this matches your deployed Cloudflare Worker URL
@@ -24,7 +57,56 @@ const ScribeChat = () => {
 
   useEffect(scrollToBottom, [messages]);
 
-  // UPDATED: Now accepts optional textOverride so buttons work
+  // --- ROBUST SPEECH LOGIC (The B+ Code) ---
+  useEffect(() => {
+    const lastMessage = messages[messages.length - 1];
+    
+    // 1. Safety Check: Only speak if it's a NEW message from the Scribe
+    if (!lastMessage || lastMessage.role !== 'scribe') return;
+
+    // 2. Cancel any existing speech to avoid overlap
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(lastMessage.content);
+    
+    // 3. Robust Voice Selection (Handles Async Loading)
+    const setVoice = () => {
+      const voices = window.speechSynthesis.getVoices();
+      // Try to find a deep/serious voice (Prioritize British Male for "Ancient" feel)
+      const preferredVoice = voices.find(v => 
+        v.name.includes("Google UK English Male") || 
+        v.name.includes("Daniel") || // Safari Mac
+        v.name.includes("Microsoft Ryan") // Windows
+      );
+      if (preferredVoice) utterance.voice = preferredVoice;
+      
+      // Slower rate for "Ancient" feel
+      utterance.rate = 0.9; 
+      utterance.pitch = 0.95;
+    };
+
+    // Chrome loads voices asynchronously, so we must check both ways
+    if (window.speechSynthesis.getVoices().length > 0) {
+      setVoice();
+    } else {
+      window.speechSynthesis.onvoiceschanged = setVoice;
+    }
+
+    // 4. Event Handlers for Animation Sync
+    utterance.onstart = () => setSpeaking(true);
+    utterance.onend = () => setSpeaking(false);
+    utterance.onerror = () => setSpeaking(false);
+
+    window.speechSynthesis.speak(utterance);
+
+    // 5. Cleanup: Stop talking if user leaves the page!
+    return () => {
+      window.speechSynthesis.cancel();
+      setSpeaking(false);
+    };
+  }, [messages]);
+  // ------------------------------------------
+
   const handleSend = async (textOverride = null) => {
     const userText = textOverride || input;
     if (!userText.trim()) return;
@@ -44,7 +126,7 @@ const ScribeChat = () => {
 
       const data = await response.json();
       
-      // Add Scribe Message
+      // Add Scribe Message (This triggers the Speech Effect above)
       setMessages(prev => [...prev, { 
         role: 'scribe', 
         content: data.reply,
@@ -76,14 +158,13 @@ const ScribeChat = () => {
       {/* Chat History */}
       <div className={`flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-amber-900 scrollbar-track-black ${messages.length === 0 ? 'flex flex-col justify-center' : ''}`}>
         
-        {/* --- NEW EMPTY STATE WITH BUTTONS --- */}
+        {/* ✨ ALWAYS SHOW AVATAR AT TOP ✨ */}
+        <ScribeAvatar speaking={speaking} />
+
+        {/* Empty State Instructions */}
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center space-y-8 w-full">
-            
-            <div className="text-stone-600 opacity-50 text-center">
-              <div className="text-5xl mb-4">✒️</div>
-              <p className="italic">The scroll is blank. Awaiting your inquiry.</p>
-            </div>
+          <div className="flex flex-col items-center justify-center space-y-8 w-full animate-fade-in">
+            <p className="italic text-stone-500 text-sm">Select a topic below or type your own inquiry.</p>
 
             {/* Suggestion Chips */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-lg">
@@ -99,6 +180,62 @@ const ScribeChat = () => {
             </div>
           </div>
         )}
+        
+        {/* Message List */}
+        {messages.map((msg, idx) => (
+          <div 
+            key={idx} 
+            className={`p-4 mb-6 rounded-lg max-w-[85%] leading-relaxed shadow-lg ${
+              msg.role === 'user' 
+                ? 'self-end bg-[#2a2a2a] text-stone-200 border border-stone-700 ml-auto' 
+                : 'self-start bg-[#1a1510] border-l-4 border-[#8b0000] text-[#d4c4a8]'
+            }`}
+          >
+            <div className="whitespace-pre-wrap">{msg.content}</div>
+            
+            {/* Source Citations */}
+            {msg.sources && msg.sources.length > 0 && (
+              <div className="mt-3 pt-3 border-t border-stone-800 text-xs text-[#666] font-mono">
+                <span className="text-[#8b0000] font-bold uppercase mr-2">Sources:</span>
+                {[...new Set(msg.sources)].join(', ')}
+              </div>
+            )}
+          </div>
+        ))}
+
+        {loading && (
+          <div className="self-start bg-[#1a1510] border-l-4 border-[#8b0000] p-4 rounded-lg animate-pulse flex items-center gap-3">
+            <div className="w-2 h-2 bg-[#8b0000] rounded-full animate-bounce" />
+            <div className="w-2 h-2 bg-[#8b0000] rounded-full animate-bounce delay-75" />
+            <div className="w-2 h-2 bg-[#8b0000] rounded-full animate-bounce delay-150" />
+            <span className="text-stone-500 italic text-sm ml-2">Consulting the archives...</span>
+          </div>
+        )}
+        <div ref={chatEndRef} />
+      </div>
+
+      {/* Input Controls */}
+      <div className="p-4 border-t border-[#5a4a3a] bg-[#1f1a15] flex gap-2">
+        <input 
+          type="text" 
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+          placeholder="Inquire of the Scribe..." 
+          className="flex-1 p-4 bg-black border border-[#5a4a3a] text-white font-serif focus:outline-none focus:border-amber-600 transition-colors placeholder-stone-700"
+          disabled={loading}
+        />
+        <button 
+          onClick={() => handleSend()}
+          disabled={loading}
+          className="px-8 py-3 bg-[#8b0000] text-white font-bold font-cinzel uppercase hover:bg-[#a50000] disabled:bg-[#333] disabled:text-stone-600 transition-colors border border-red-900 shadow-[0_0_15px_rgba(139,0,0,0.3)]"
+        >
+          Inquire
+        </button>
+      </div>
+    </div>
+  );
+};
         
         {messages.map((msg, idx) => (
           <div 
