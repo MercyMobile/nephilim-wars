@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getPartyRoster } from '../utils/storage';
 
-// FIX: Destructure 'manual' prop to toggle modes
 const DiceScreen = ({ manual }) => {
   // Default weapons when no characters exist
   const DEFAULT_WEAPONS = [
@@ -64,16 +63,6 @@ const DiceScreen = ({ manual }) => {
 
   const incrementModifier = () => setModifier(prev => Math.min(prev + 1, 20));
   const decrementModifier = () => setModifier(prev => Math.max(prev - 1, -20));
-
-  // --- MANUAL ROLL HANDLER (JUST PHYSICS) ---
-  const handleManualRoll = (dice) => {
-    if (iframeRef.current && iframeRef.current.contentWindow) {
-      iframeRef.current.contentWindow.postMessage({
-        action: 'roll',
-        diceType: dice
-      }, '*');
-    }
-  };
 
   // --- COMBAT ROLL HANDLER (CALCULATIONS + POPUP) ---
   const rollDamage = (dice) => {
@@ -168,35 +157,19 @@ const DiceScreen = ({ manual }) => {
   };
 
   // ------------------------------------------------------------------
-  // VIEW 1: MANUAL MODE (Clean, Full Screen Physics, No Math)
+  // VIEW 1: MANUAL MODE (Pure Full Screen Physics)
   // ------------------------------------------------------------------
   if (manual) {
     return (
-      <div className="relative w-full h-full bg-black overflow-hidden flex flex-col items-center justify-end">
-        {/* Full Screen Iframe Background */}
+      <div className="w-full h-full bg-black overflow-hidden">
+        {/* Full Screen Iframe - No Overlays */}
         <iframe
           ref={iframeRef}
           src="/dice.html"
           title="Manual 3D Dice Roller"
-          className="absolute inset-0 w-full h-full border-none z-0"
+          className="w-full h-full border-none"
           allow="scripts"
         />
-
-        {/* Floating Quick Controls */}
-        <div className="relative z-10 mb-20 p-4 bg-stone-900/80 border border-amber-900/50 rounded-xl backdrop-blur-md shadow-2xl animate-fade-in-up">
-          <div className="text-amber-500 font-cinzel text-xs text-center mb-2 tracking-widest font-bold">MANUAL ROLLER</div>
-          <div className="flex gap-2 sm:gap-4">
-            {['d4', 'd6', 'd8', 'd10', 'd12', 'd20'].map((dice) => (
-              <button
-                key={dice}
-                onClick={() => handleManualRoll(dice)}
-                className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-black border border-stone-700 text-stone-300 font-bold text-xs sm:text-sm rounded-full hover:border-amber-500 hover:text-amber-500 hover:scale-110 hover:shadow-[0_0_15px_rgba(245,158,11,0.5)] transition-all active:scale-95"
-              >
-                {dice.toUpperCase()}
-              </button>
-            ))}
-          </div>
-        </div>
       </div>
     );
   }
