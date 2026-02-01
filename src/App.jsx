@@ -57,7 +57,7 @@ const ScribeChat = () => {
 
   useEffect(scrollToBottom, [messages]);
 
-  // --- ROBUST SPEECH LOGIC ---
+// --- TUNED SPEECH LOGIC (Less Robotic) ---
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
     
@@ -69,20 +69,26 @@ const ScribeChat = () => {
 
     const utterance = new SpeechSynthesisUtterance(lastMessage.content);
     
-    // 3. Robust Voice Selection (Handles Async Loading)
+    // 3. Robust Voice Selection (Prioritize "Natural" / High Quality)
     const setVoice = () => {
       const voices = window.speechSynthesis.getVoices();
-      // Try to find a deep/serious voice (Prioritize British Male for "Ancient" feel)
-      const preferredVoice = voices.find(v => 
-        v.name.includes("Google UK English Male") || 
-        v.name.includes("Daniel") || // Safari Mac
-        v.name.includes("Microsoft Ryan") // Windows
-      );
-      if (preferredVoice) utterance.voice = preferredVoice;
       
-      // Slower rate for "Ancient" feel
-      utterance.rate = 0.9; 
-      utterance.pitch = 0.95;
+      // Priority 1: Modern "Natural" voices (Edge/Chrome/Android)
+      // Priority 2: Specific High-Quality Humanoid names
+      // Priority 3: Any English voice
+      const preferredVoice = voices.find(v => v.name.includes("Natural")) || 
+                             voices.find(v => v.name.includes("Google UK English Male")) || 
+                             voices.find(v => v.name.includes("Daniel")) || // Mac High Quality
+                             voices.find(v => v.lang.startsWith("en-")); // Any English fallback
+
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+        // console.log("Using voice:", preferredVoice.name); // Uncomment to debug
+      }
+      
+      // SETTINGS: Keeping pitch normal prevents the "Speak-n-Spell" effect
+      utterance.rate = 1.0;  // Normal speed (0.9 can sound draggable)
+      utterance.pitch = 1.0; // Artificial pitch shifting creates robotic artifacts
     };
 
     // Chrome loads voices asynchronously, so we must check both ways
