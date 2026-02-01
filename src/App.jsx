@@ -8,21 +8,14 @@ import DiceScreen from './components/DiceScreen';
 import TabernacleViewer from "./components/TabernacleViewer";
 import ErrorBoundary from './components/ErrorBoundary';
 
-// --- SCRIBE AVATAR COMPONENT (VISUALS) ---
+// --- SCRIBE AVATAR COMPONENT ---
 const ScribeAvatar = ({ speaking }) => (
   <div className="flex flex-col items-center justify-center mb-6 transition-all duration-500">
     <div className="relative group">
-      {/* Outer Glow Ring */}
       <div className={`absolute inset-0 rounded-full blur-xl transition-opacity duration-300 ${speaking ? 'bg-amber-600/40 animate-pulse' : 'bg-transparent'}`}></div>
-      
-      {/* Icon Container */}
       <div className={`relative z-10 w-24 h-24 rounded-full border-4 flex items-center justify-center bg-stone-950 transition-all duration-500 ${speaking ? 'border-amber-500 shadow-[0_0_30px_rgba(245,158,11,0.5)] scale-105' : 'border-stone-700 opacity-80'}`}>
-        <span className="text-4xl filter drop-shadow-lg select-none">
-          {speaking ? "🗣️" : "✒️"}
-        </span>
+        <span className="text-4xl filter drop-shadow-lg select-none">{speaking ? "🗣️" : "✒️"}</span>
       </div>
-      
-      {/* Sound Wave Animation */}
       {speaking && (
         <div className="absolute -right-12 top-1/2 -translate-y-1/2 flex gap-1 h-8 items-center">
           <div className="w-1 bg-amber-500 animate-[bounce_1s_infinite] h-4"></div>
@@ -31,14 +24,13 @@ const ScribeAvatar = ({ speaking }) => (
         </div>
       )}
     </div>
-    
     <div className={`mt-4 font-cinzel text-xs tracking-[0.2em] transition-colors ${speaking ? 'text-amber-400' : 'text-stone-600'}`}>
       {speaking ? "THE SCRIBE SPEAKS..." : "AWAITING INQUIRY"}
     </div>
   </div>
 );
 
-// --- SCRIBE CHAT COMPONENT (LOGIC & SPEECH) ---
+// --- SCRIBE CHAT COMPONENT ---
 const ScribeChat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -46,14 +38,9 @@ const ScribeChat = () => {
   const [speaking, setSpeaking] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const chatEndRef = useRef(null);
-  
-  // 🔴 IMPORTANT: Ensure this matches your deployed Cloudflare Worker URL
   const WORKER_URL = "https://scribe.cisco-velez76.workers.dev";
 
-  const scrollToBottom = () => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
+  const scrollToBottom = () => chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   useEffect(scrollToBottom, [messages]);
 
   const toggleMute = () => {
@@ -66,70 +53,36 @@ const ScribeChat = () => {
 
   useEffect(() => {
     if (isMuted) return;
-
     const lastMessage = messages[messages.length - 1];
     if (!lastMessage || lastMessage.role !== 'scribe') return;
-
     window.speechSynthesis.cancel();
-
     const utterance = new SpeechSynthesisUtterance(lastMessage.content);
-    
     const setVoice = () => {
       const voices = window.speechSynthesis.getVoices();
-      const preferredVoice = voices.find(v => v.name.includes("Natural")) || 
-                             voices.find(v => v.name.includes("Google UK English Male")) || 
-                             voices.find(v => v.name.includes("Daniel")) || 
-                             voices.find(v => v.lang.startsWith("en-")); 
-
+      const preferredVoice = voices.find(v => v.name.includes("Natural")) || voices.find(v => v.name.includes("Google")) || voices.find(v => v.lang.startsWith("en-")); 
       if (preferredVoice) utterance.voice = preferredVoice;
-      utterance.rate = 1.0; 
-      utterance.pitch = 1.0; 
     };
-
-    if (window.speechSynthesis.getVoices().length > 0) {
-      setVoice();
-    } else {
-      window.speechSynthesis.onvoiceschanged = setVoice;
-    }
-
+    if (window.speechSynthesis.getVoices().length > 0) setVoice();
+    else window.speechSynthesis.onvoiceschanged = setVoice;
     utterance.onstart = () => setSpeaking(true);
     utterance.onend = () => setSpeaking(false);
     utterance.onerror = () => setSpeaking(false);
-
     window.speechSynthesis.speak(utterance);
-
-    return () => {
-      window.speechSynthesis.cancel();
-      setSpeaking(false);
-    };
+    return () => { window.speechSynthesis.cancel(); setSpeaking(false); };
   }, [messages, isMuted]);
 
   const handleSend = async (textOverride = null) => {
     const userText = textOverride || input;
     if (!userText.trim()) return;
-    
     setInput('');
     setLoading(true);
     setMessages(prev => [...prev, { role: 'user', content: userText }]);
-
     try {
-      const response = await fetch(WORKER_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: userText })
-      });
-
+      const response = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question: userText }) });
       const data = await response.json();
-      setMessages(prev => [...prev, { 
-        role: 'scribe', 
-        content: data.reply,
-        sources: data.sources 
-      }]);
+      setMessages(prev => [...prev, { role: 'scribe', content: data.reply, sources: data.sources }]);
     } catch (error) {
-      setMessages(prev => [...prev, { 
-        role: 'scribe', 
-        content: "The connection to the archives has been severed." 
-      }]);
+      setMessages(prev => [...prev, { role: 'scribe', content: "The connection to the archives has been severed." }]);
     } finally {
       setLoading(false);
     }
@@ -143,45 +96,29 @@ const ScribeChat = () => {
           <h3 className="m-0 text-xl font-cinzel text-[#a89f91] uppercase tracking-widest">The Scribe of the Way</h3>
           <p className="text-xs text-[#666] mt-1 italic">"Ask, and the annals of history shall be opened..."</p>
         </div>
-        <button 
-          onClick={toggleMute}
-          className={`w-10 h-10 flex items-center justify-center rounded border transition-colors ${isMuted ? "border-red-900/50 text-stone-600 bg-stone-900" : "border-amber-600 text-amber-500 bg-amber-900/20"}`}
-        >
-          {isMuted ? "🔇" : "🔊"}
-        </button>
+        <button onClick={toggleMute} className={`w-10 h-10 flex items-center justify-center rounded border transition-colors ${isMuted ? "border-red-900/50 text-stone-600 bg-stone-900" : "border-amber-600 text-amber-500 bg-amber-900/20"}`}>{isMuted ? "🔇" : "🔊"}</button>
       </div>
-
       <div className={`flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-amber-900 scrollbar-track-black ${messages.length === 0 ? 'flex flex-col justify-center' : ''}`}>
         <ScribeAvatar speaking={speaking && !isMuted} />
-
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center space-y-8 w-full animate-fade-in">
             <p className="italic text-stone-500 text-sm">Select a topic below or type your own inquiry.</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-lg">
               {["Who is Enoch?", "The Watchers", "The Nephilim Wars", "Timeline of Events"].map((prompt) => (
-                <button key={prompt} onClick={() => handleSend(prompt)} className="px-4 py-3 text-sm border border-[#5a4a3a] bg-[#1a1510] hover:bg-[#2a221a] hover:border-[#8c7356] transition-colors rounded shadow-sm text-[#d4c5a3]">
-                  {prompt}
-                </button>
+                <button key={prompt} onClick={() => handleSend(prompt)} className="px-4 py-3 text-sm border border-[#5a4a3a] bg-[#1a1510] hover:bg-[#2a221a] hover:border-[#8c7356] transition-colors rounded shadow-sm text-[#d4c5a3]">{prompt}</button>
               ))}
             </div>
           </div>
         )}
-        
         {messages.map((msg, idx) => (
           <div key={idx} className={`p-4 mb-6 rounded-lg max-w-[85%] leading-relaxed shadow-lg ${msg.role === 'user' ? 'self-end bg-[#2a2a2a] text-stone-200 border border-stone-700 ml-auto' : 'self-start bg-[#1a1510] border-l-4 border-[#8b0000] text-[#d4c4a8]'}`}>
             <div className="whitespace-pre-wrap">{msg.content}</div>
-            {msg.sources && msg.sources.length > 0 && (
-              <div className="mt-3 pt-3 border-t border-stone-800 text-xs text-[#666] font-mono">
-                <span className="text-[#8b0000] font-bold uppercase mr-2">Sources:</span>
-                {[...new Set(msg.sources)].join(', ')}
-              </div>
-            )}
+            {msg.sources && msg.sources.length > 0 && <div className="mt-3 pt-3 border-t border-stone-800 text-xs text-[#666] font-mono"><span className="text-[#8b0000] font-bold uppercase mr-2">Sources:</span>{[...new Set(msg.sources)].join(', ')}</div>}
           </div>
         ))}
         {loading && <div className="self-start text-stone-500 italic text-sm ml-2">Consulting the archives...</div>}
         <div ref={chatEndRef} />
       </div>
-
       <div className="p-4 border-t border-[#5a4a3a] bg-[#1f1a15] flex gap-2">
         <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleSend()} placeholder="Inquire of the Scribe..." className="flex-1 p-4 bg-black border border-[#5a4a3a] text-white font-serif focus:outline-none focus:border-amber-600 transition-colors placeholder-stone-700" disabled={loading} />
         <button onClick={() => handleSend()} disabled={loading} className="px-8 py-3 bg-[#8b0000] text-white font-bold font-cinzel uppercase border border-red-900">Inquire</button>
@@ -190,6 +127,7 @@ const ScribeChat = () => {
   );
 };
 
+// --- MAIN MENU ---
 const MainMenu = ({ onNavigate }) => (
   <div className="h-full bg-black flex flex-col items-center justify-center relative overflow-hidden">
     <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30" style={{ backgroundImage: "url('/dead-sea-scroll.jpg')" }} />
@@ -208,7 +146,7 @@ const MainMenu = ({ onNavigate }) => (
         <MenuButton onClick={() => onNavigate('rules')} icon="📜" title="Rules of Engagement" desc="Combat System" />
         <MenuButton onClick={() => onNavigate('lore')} icon="📚" title="Lore Codex" desc="History & Peoples" />
       </div>
-      <div className="text-xs text-stone-600 uppercase tracking-widest mt-8">Version 0.9.5 • Mercy Mobile</div>
+      <div className="text-xs text-stone-600 uppercase tracking-widest mt-8">Version 0.9.6 • Mercy Mobile</div>
     </div>
   </div>
 );
@@ -223,6 +161,7 @@ const MenuButton = ({ onClick, icon, title, desc }) => (
   </button>
 );
 
+// --- MAIN APP COMPONENT ---
 export default function App() {
   const [currentView, setCurrentView] = useState('home');
   const [characterExists, setCharacterExists] = useState(false);
@@ -233,6 +172,17 @@ export default function App() {
     if (localStorage.getItem('generatedCharacter')) setCharacterExists(true);
   }, []);
 
+  // Listen for messages from Iframe (e.g. Return Home button inside Dice Roller)
+  useEffect(() => {
+    const handleMessage = (event) => {
+      if (event.data === 'returnHome') {
+        setCurrentView('home');
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
   const handleCharacterReady = () => {
     setCharacterExists(true);
     setCurrentView('combat');
@@ -240,10 +190,11 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <div className="h-screen flex flex-col bg-black overflow-hidden font-serif">
-        {/* Navigation - Hidden on Dice Screen */}
+      <div className="h-screen flex flex-col bg-black overflow-hidden font-serif relative">
+        
+        {/* Navigation - Always show UNLESS we are in Dice mode */}
         {currentView !== 'dice' && (
-          <nav className="bg-stone-950 border-b border-amber-900/50 p-3 flex flex-wrap justify-center gap-2 z-50 shadow-2xl relative min-h-[60px]">
+          <nav className="bg-stone-950 border-b border-amber-900/50 p-3 flex flex-wrap justify-center gap-2 z-40 shadow-2xl relative min-h-[60px]">
             <NavButton label="🏛️ Home" isActive={currentView === 'home'} onClick={() => setCurrentView('home')} />
             <NavButton label="✨ Create Character" isActive={currentView === 'generator'} onClick={() => setCurrentView('generator')} />
             <NavButton label="⚔️ Combat" isActive={currentView === 'combat'} onClick={() => setCurrentView('combat')} />
@@ -254,66 +205,67 @@ export default function App() {
           </nav>
         )}
 
-        {/* --- MAIN CONTENT AREA --- */}
-        {currentView === 'dice' ? (
-          // 🎲 DICE MODE: Renders OUTSIDE the scrollable container for pure full-screen
-          <div className="flex-1 w-full h-full bg-black overflow-hidden relative">
+        {/* --- CONTENT AREA --- */}
+        <div className="flex-1 relative overflow-y-auto overflow-x-hidden">
+          {currentView === 'home' && <MainMenu onNavigate={setCurrentView} />}
+          {currentView === 'generator' && <CharacterGenerator onCharacterComplete={handleCharacterReady} />}
+          {currentView === 'combat' && <CombatScreen />}
+          {currentView === 'bestiary' && <BestiaryScreen />}
+          
+          {currentView === 'rules' && (
+            <div className="h-full w-full bg-stone-900 flex flex-col">
+              <div className="bg-stone-950 border-b border-amber-900/50 p-4 text-center">
+                <h2 className="text-2xl font-cinzel font-bold text-amber-500">Rules of Engagement</h2>
+              </div>
+              <div className="flex flex-wrap gap-2 bg-stone-950 border-b border-stone-800 p-2">
+                <TabButton active={rulesTab === 'combat'} onClick={() => setRulesTab('combat')} label="⚔️ Combat Rules" mobileLabel="⚔️ Combat" />
+                <TabButton active={rulesTab === 'classes'} onClick={() => setRulesTab('classes')} label="📋 Class Guide" mobileLabel="📋 Classes" />
+              </div>
+              <div className="flex-1 overflow-hidden">
+                {rulesTab === 'combat' && <iframe src="/combat/index.html" className="w-full h-full border-0" title="Combat Rules" />}
+                {rulesTab === 'classes' && <iframe src="/rules/classes.html" className="w-full h-full border-0" title="Class Guide" />}
+              </div>
+            </div>
+          )}
+
+          {currentView === 'lore' && (
+            <div className="h-full w-full bg-stone-900 flex flex-col">
+              <div className="bg-stone-950 border-b border-amber-900/50 p-4 text-center">
+                <h2 className="text-2xl font-cinzel font-bold text-amber-500">Lore Codex</h2>
+              </div>
+              <div className="flex flex-wrap gap-2 bg-stone-950 border-b border-stone-800 p-2 justify-center">
+                <TabButton active={loreTab === 'codex'} onClick={() => setLoreTab('codex')} label="📚 Codex Angelorum" mobileLabel="📚 Codex" />
+                <TabButton active={loreTab === 'races'} onClick={() => setLoreTab('races')} label="👥 Races & Peoples" mobileLabel="👥 Races" />
+                <TabButton active={loreTab === 'archaeology'} onClick={() => setLoreTab('archaeology')} label="🏺 Archaeology" mobileLabel="🏺 Arch" />
+                <TabButton active={loreTab === 'tabernacle'} onClick={() => setLoreTab('tabernacle')} label="🏛️ Humble Tabernacle" mobileLabel="🏛️ Tabernacle" />
+                <TabButton active={loreTab === 'scribe'} onClick={() => setLoreTab('scribe')} label="✒️ The Scribe" mobileLabel="✒️ Scribe" />
+              </div>
+              <div className="flex-1 overflow-hidden">
+                {loreTab === 'codex' && <iframe src="/encyclopedia/index.html" className="w-full h-full border-0" title="Codex Angelorum" />}
+                {loreTab === 'races' && <iframe src="/encyclopedia/nephilim_wars_races_and_peoples.html" className="w-full h-full border-0" title="Races & Peoples" />}
+                {loreTab === 'archaeology' && <iframe src="/Archaeology/index.html" className="w-full h-full border-0" title="Archaeology" />}
+                {loreTab === 'tabernacle' && <div className="w-full h-full bg-stone-900 flex flex-col overflow-y-auto"><TabernacleViewer /></div>}
+                {loreTab === 'scribe' && <div className="w-full h-full p-4 bg-stone-900 flex justify-center"><ScribeChat /></div>}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* --- DICE SCREEN OVERLAY (The Fix) --- */}
+        {/* We place this OUTSIDE the content div and use FIXED positioning to force it full screen */}
+        {currentView === 'dice' && (
+          <div className="fixed inset-0 z-50 bg-black">
              <DiceScreen manual={true} />
-             {/* Floating Home Button for Manual Mode */}
+             {/* Note: If your dice roller has its own 'Return Home' button, this one acts as a backup */}
              <button
                onClick={() => setCurrentView('home')}
-               className="absolute bottom-6 left-6 z-50 bg-stone-900/80 text-stone-300 border border-amber-900 px-5 py-3 rounded hover:bg-black hover:text-amber-500 hover:border-amber-500 transition font-cinzel font-bold text-sm shadow-xl backdrop-blur-sm opacity-90 hover:opacity-100 uppercase tracking-widest"
+               className="absolute top-4 left-4 z-50 bg-stone-900/80 text-stone-300 border border-amber-900 px-4 py-2 rounded hover:bg-black hover:text-amber-500 hover:border-amber-500 transition font-cinzel font-semibold text-sm shadow-md backdrop-blur-sm opacity-80 hover:opacity-100"
              >
-               🏛️ Return Home
+               ⬅ HOME
              </button>
           </div>
-        ) : (
-          // 📄 STANDARD MODE: Renders inside scrollable container
-          <div className="flex-1 relative overflow-y-auto overflow-x-hidden">
-            {currentView === 'home' && <MainMenu onNavigate={setCurrentView} />}
-            {currentView === 'generator' && <CharacterGenerator onCharacterComplete={handleCharacterReady} />}
-            {currentView === 'combat' && <CombatScreen />}
-            {currentView === 'bestiary' && <BestiaryScreen />}
-            
-            {currentView === 'rules' && (
-              <div className="h-full w-full bg-stone-900 flex flex-col">
-                <div className="bg-stone-950 border-b border-amber-900/50 p-4 text-center">
-                  <h2 className="text-2xl font-cinzel font-bold text-amber-500">Rules of Engagement</h2>
-                </div>
-                <div className="flex flex-wrap gap-2 bg-stone-950 border-b border-stone-800 p-2">
-                  <TabButton active={rulesTab === 'combat'} onClick={() => setRulesTab('combat')} label="⚔️ Combat Rules" mobileLabel="⚔️ Combat" />
-                  <TabButton active={rulesTab === 'classes'} onClick={() => setRulesTab('classes')} label="📋 Class Guide" mobileLabel="📋 Classes" />
-                </div>
-                <div className="flex-1 overflow-hidden">
-                  {rulesTab === 'combat' && <iframe src="/combat/index.html" className="w-full h-full border-0" title="Combat Rules" />}
-                  {rulesTab === 'classes' && <iframe src="/rules/classes.html" className="w-full h-full border-0" title="Class Guide" />}
-                </div>
-              </div>
-            )}
-
-            {currentView === 'lore' && (
-              <div className="h-full w-full bg-stone-900 flex flex-col">
-                <div className="bg-stone-950 border-b border-amber-900/50 p-4 text-center">
-                  <h2 className="text-2xl font-cinzel font-bold text-amber-500">Lore Codex</h2>
-                </div>
-                <div className="flex flex-wrap gap-2 bg-stone-950 border-b border-stone-800 p-2 justify-center">
-                  <TabButton active={loreTab === 'codex'} onClick={() => setLoreTab('codex')} label="📚 Codex Angelorum" mobileLabel="📚 Codex" />
-                  <TabButton active={loreTab === 'races'} onClick={() => setLoreTab('races')} label="👥 Races & Peoples" mobileLabel="👥 Races" />
-                  <TabButton active={loreTab === 'archaeology'} onClick={() => setLoreTab('archaeology')} label="🏺 Archaeology" mobileLabel="🏺 Arch" />
-                  <TabButton active={loreTab === 'tabernacle'} onClick={() => setLoreTab('tabernacle')} label="🏛️ Humble Tabernacle" mobileLabel="🏛️ Tabernacle" />
-                  <TabButton active={loreTab === 'scribe'} onClick={() => setLoreTab('scribe')} label="✒️ The Scribe" mobileLabel="✒️ Scribe" />
-                </div>
-                <div className="flex-1 overflow-hidden">
-                  {loreTab === 'codex' && <iframe src="/encyclopedia/index.html" className="w-full h-full border-0" title="Codex Angelorum" />}
-                  {loreTab === 'races' && <iframe src="/encyclopedia/nephilim_wars_races_and_peoples.html" className="w-full h-full border-0" title="Races & Peoples" />}
-                  {loreTab === 'archaeology' && <iframe src="/Archaeology/index.html" className="w-full h-full border-0" title="Archaeology" />}
-                  {loreTab === 'tabernacle' && <div className="w-full h-full bg-stone-900 flex flex-col overflow-y-auto"><TabernacleViewer /></div>}
-                  {loreTab === 'scribe' && <div className="w-full h-full p-4 bg-stone-900 flex justify-center"><ScribeChat /></div>}
-                </div>
-              </div>
-            )}
-          </div>
         )}
+
       </div>
     </ErrorBoundary>
   );
