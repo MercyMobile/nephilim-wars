@@ -108,7 +108,7 @@ const ScribeChat = () => {
 
     // 4. Event Handlers for Animation Sync
     utterance.onstart = () => setSpeaking(true);
-    // NEW: Ensure we check mute state even during callback (edge case)
+    // NEW: Ensure we check mute state even during callback
     utterance.onend = () => setSpeaking(false);
     utterance.onerror = () => setSpeaking(false);
 
@@ -193,7 +193,7 @@ const ScribeChat = () => {
       <div className={`flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-amber-900 scrollbar-track-black ${messages.length === 0 ? 'flex flex-col justify-center' : ''}`}>
         
         {/* ✨ ALWAYS SHOW AVATAR AT TOP ✨ */}
-        {/* Pass isMuted logic to stop animation if needed, though strictly visual is usually fine */}
+        {/* Pass isMuted logic to stop animation if visual sync is desired */}
         <ScribeAvatar speaking={speaking && !isMuted} />
 
         {/* Empty State Instructions */}
@@ -368,7 +368,8 @@ export default function App() {
 
         {currentView === 'dice' && (
           <div className="w-full h-full bg-black relative">
-             <DiceScreen />
+             {/* FIX: Passed manual={true} to force the dice screen out of "combat overlay" mode */}
+             <DiceScreen manual={true} />
              <button
                onClick={() => setCurrentView('home')}
                className="absolute bottom-4 left-4 z-50 bg-stone-900/80 text-stone-300 border border-amber-900 px-4 py-2 rounded hover:bg-black hover:text-amber-500 hover:border-amber-500 transition font-cinzel font-semibold text-sm shadow-md backdrop-blur-sm opacity-80 hover:opacity-100"
