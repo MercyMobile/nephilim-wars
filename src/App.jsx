@@ -24,10 +24,11 @@ const ScribeChat = () => {
 
   useEffect(scrollToBottom, [messages]);
 
-  const handleSend = async () => {
-    if (!input.trim()) return;
+  // UPDATED: Now accepts optional textOverride so buttons work
+  const handleSend = async (textOverride = null) => {
+    const userText = textOverride || input;
+    if (!userText.trim()) return;
     
-    const userText = input;
     setInput('');
     setLoading(true);
 
@@ -73,20 +74,38 @@ const ScribeChat = () => {
       </div>
 
       {/* Chat History */}
-      <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6 scrollbar-thin scrollbar-thumb-amber-900 scrollbar-track-black">
+      <div className={`flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-amber-900 scrollbar-track-black ${messages.length === 0 ? 'flex flex-col justify-center' : ''}`}>
+        
+        {/* --- NEW EMPTY STATE WITH BUTTONS --- */}
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-stone-600 opacity-50">
-            <span className="text-4xl mb-4">✒️</span>
-            <span className="italic">The scroll is blank. Awaiting your inquiry.</span>
+          <div className="flex flex-col items-center justify-center space-y-8 w-full">
+            
+            <div className="text-stone-600 opacity-50 text-center">
+              <div className="text-5xl mb-4">✒️</div>
+              <p className="italic">The scroll is blank. Awaiting your inquiry.</p>
+            </div>
+
+            {/* Suggestion Chips */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-lg">
+              {["Who is Enoch?", "The Watchers", "The Nephilim Wars", "Timeline of Events"].map((prompt) => (
+                <button 
+                  key={prompt}
+                  onClick={() => handleSend(prompt)}
+                  className="px-4 py-3 text-sm border border-[#5a4a3a] bg-[#1a1510] hover:bg-[#2a221a] hover:border-[#8c7356] transition-colors rounded shadow-sm text-[#d4c5a3]"
+                >
+                  {prompt}
+                </button>
+              ))}
+            </div>
           </div>
         )}
         
         {messages.map((msg, idx) => (
           <div 
             key={idx} 
-            className={`p-4 rounded-lg max-w-[85%] leading-relaxed shadow-lg ${
+            className={`p-4 mb-6 rounded-lg max-w-[85%] leading-relaxed shadow-lg ${
               msg.role === 'user' 
-                ? 'self-end bg-[#2a2a2a] text-stone-200 border border-stone-700' 
+                ? 'self-end bg-[#2a2a2a] text-stone-200 border border-stone-700 ml-auto' 
                 : 'self-start bg-[#1a1510] border-l-4 border-[#8b0000] text-[#d4c4a8]'
             }`}
           >
@@ -125,7 +144,7 @@ const ScribeChat = () => {
           disabled={loading}
         />
         <button 
-          onClick={handleSend}
+          onClick={() => handleSend()}
           disabled={loading}
           className="px-8 py-3 bg-[#8b0000] text-white font-bold font-cinzel uppercase hover:bg-[#a50000] disabled:bg-[#333] disabled:text-stone-600 transition-colors border border-red-900 shadow-[0_0_15px_rgba(139,0,0,0.3)]"
         >
