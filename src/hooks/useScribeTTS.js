@@ -87,7 +87,7 @@ export function useScribeTTS() {
     setUseEnhancedVoice(prev => !prev);
   }, [stopSpeaking]);
 
-  // Speak with Kokoro.js
+  // Speak with Kokoro.js using streaming for long text
   const speakWithKokoro = useCallback(async (text) => {
     if (!kokoroRef.current) return false;
 
@@ -101,20 +101,48 @@ export function useScribeTTS() {
         await audioContext.resume();
       }
 
-      // Generate full audio (Kokoro handles long text internally)
-      const audio = await kokoroRef.current.generate(text, {
+      // Use streaming API to handle long text that exceeds model's max context length
+      const stream = kokoroRef.current.stream(text, {
         voice: "bm_lewis",  // Confident British male voice
         speed: 0.88         // Slower for aged wisdom
       });
 
-      // Get the audio data
-      const audioData = await audio.toBlob();
-      const arrayBuffer = await audioData.arrayBuffer();
-      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+      // Collect all audio chunks from the stream
+      const audioBuffers = [];
+      for await (const chunk of stream) {
+        const audioData = await chunk.audio.toBlob();
+        const arrayBuffer = await audioData.arrayBuffer();
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        audioBuffers.push(audioBuffer);
+      }
 
-      // Play the audio
+      if (audioBuffers.length === 0) {
+        setSpeaking(false);
+        return false;
+      }
+
+      // Concatenate all audio buffers into one
+      const totalLength = audioBuffers.reduce((sum, buf) => sum + buf.length, 0);
+      const combinedBuffer = audioContext.createBuffer(
+        audioBuffers[0].numberOfChannels,
+        totalLength,
+        audioBuffers[0].sampleRate
+      );
+
+      let offset = 0;
+      for (const buffer of audioBuffers) {
+        for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
+          combinedBuffer.getChannelData(channel).set(
+            buffer.getChannelData(channel),
+            offset
+          );
+        }
+        offset += buffer.length;
+      }
+
+      // Play the combined audio
       const source = audioContext.createBufferSource();
-      source.buffer = audioBuffer;
+      source.buffer = combinedBuffer;
 
       // Lower playback rate for deeper pitch
       source.playbackRate.value = 0.92;
