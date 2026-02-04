@@ -94,10 +94,10 @@ export function useScribeTTS() {
     try {
       setSpeaking(true);
 
-      // Generate audio with deep British male voice, slowed for aged wisdom
+      // Generate audio with confident British male voice, slowed for aged wisdom
       const audio = await kokoroRef.current.generate(text, {
-        voice: "bm_george", // Deep British male voice
-        speed: 0.92         // Slightly slower for gravitas
+        voice: "bm_lewis",  // Confident British male voice
+        speed: 0.88         // Slower for aged wisdom
       });
 
       // Get the audio data
@@ -117,7 +117,7 @@ export function useScribeTTS() {
       source.buffer = audioBuffer;
 
       // Lower playback rate for deeper pitch
-      source.playbackRate.value = 0.95;
+      source.playbackRate.value = 0.92;
 
       source.connect(audioContext.destination);
 
