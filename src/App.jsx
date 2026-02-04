@@ -7,6 +7,7 @@ import BestiaryScreen from './pages/BestiaryScreen';
 import DiceScreen from './components/DiceScreen';
 import TabernacleViewer from "./components/TabernacleViewer";
 import ErrorBoundary from './components/ErrorBoundary';
+import { useScribeTTS } from './hooks/useScribeTTS';
 
 // --- SCRIBE AVATAR COMPONENT ---
 const ScribeAvatar = ({ speaking }) => (
@@ -35,41 +36,31 @@ const ScribeChat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [speaking, setSpeaking] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
   const chatEndRef = useRef(null);
   const WORKER_URL = "https://scribe.cisco-velez76.workers.dev";
+
+  const {
+    speaking,
+    isMuted,
+    useEnhancedVoice,
+    kokoroLoading,
+    kokoroReady,
+    kokoroError,
+    speak,
+    toggleMute,
+    toggleEnhancedVoice
+  } = useScribeTTS();
 
   const scrollToBottom = () => chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   useEffect(scrollToBottom, [messages]);
 
-  const toggleMute = () => {
-    if (!isMuted) {
-      window.speechSynthesis.cancel();
-      setSpeaking(false);
-    }
-    setIsMuted(!isMuted);
-  };
-
+  // Speak when new scribe message arrives
   useEffect(() => {
-    if (isMuted) return;
     const lastMessage = messages[messages.length - 1];
-    if (!lastMessage || lastMessage.role !== 'scribe') return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(lastMessage.content);
-    const setVoice = () => {
-      const voices = window.speechSynthesis.getVoices();
-      const preferredVoice = voices.find(v => v.name.includes("Natural")) || voices.find(v => v.name.includes("Google")) || voices.find(v => v.lang.startsWith("en-")); 
-      if (preferredVoice) utterance.voice = preferredVoice;
-    };
-    if (window.speechSynthesis.getVoices().length > 0) setVoice();
-    else window.speechSynthesis.onvoiceschanged = setVoice;
-    utterance.onstart = () => setSpeaking(true);
-    utterance.onend = () => setSpeaking(false);
-    utterance.onerror = () => setSpeaking(false);
-    window.speechSynthesis.speak(utterance);
-    return () => { window.speechSynthesis.cancel(); setSpeaking(false); };
-  }, [messages, isMuted]);
+    if (lastMessage?.role === 'scribe') {
+      speak(lastMessage.content);
+    }
+  }, [messages, speak]);
 
   const handleSend = async (textOverride = null) => {
     const userText = textOverride || input;
@@ -91,10 +82,35 @@ const ScribeChat = () => {
   return (
     <div className="flex flex-col h-full w-full max-w-5xl mx-auto border-x-2 border-amber-900/30 bg-[#0f0f0f] shadow-2xl font-serif text-[#d4c4a8]">
       <div className="p-4 flex items-center justify-between border-b border-[#5a4a3a] bg-[#1f1a15]">
-        <div className="w-10"></div> 
-        <div className="text-center">
-          <h3 className="m-0 text-xl font-cinzel text-[#a89f91] uppercase tracking-widest">The Scribe of the Way</h3>
-          <p className="text-xs text-[#666] mt-1 italic">"Ask, and the annals of history shall be opened..."</p>
+        {/* Enhanced Voice Toggle */}
+        <button
+          onClick={toggleEnhancedVoice}
+          disabled={kokoroLoading}
+          className={`relative group px-3 py-2 text-xs rounded border transition-all ${
+            useEnhancedVoice
+              ? kokoroReady
+                ? "border-emerald-600 text-emerald-400 bg-emerald-900/20"
+                : "border-amber-600 text-amber-400 bg-amber-900/20 animate-pulse"
+              : "border-stone-700 text-stone-500 hover:border-stone-600 hover:text-stone-400"
+          }`}
+          title={useEnhancedVoice ? (kokoroReady ? "Neural voice active" : "Loading neural voice...") : "Enable neural voice (86MB download)"}
+        >
+          {kokoroLoading ? (
+            <span className="flex items-center gap-1">
+              <span className="animate-spin">⏳</span>
+              <span className="hidden sm:inline">Loading...</span>
+            </span>
+          ) : (
+            <span className="flex items-center gap-1">
+              <span>{useEnhancedVoice ? "🧠" : "🔤"}</span>
+              <span className="hidden sm:inline">{useEnhancedVoice ? "Neural" : "Standard"}</span>
+            </span>
+          )}
+        </button>
+        <div className="text-center flex-1 px-2">
+          <h3 className="m-0 text-lg sm:text-xl font-cinzel text-[#a89f91] uppercase tracking-widest">The Scribe of the Way</h3>
+          <p className="text-xs text-[#666] mt-1 italic hidden sm:block">"Ask, and the annals of history shall be opened..."</p>
+          {kokoroError && <p className="text-xs text-red-500 mt-1">{kokoroError}</p>}
         </div>
         <button onClick={toggleMute} className={`w-10 h-10 flex items-center justify-center rounded border transition-colors ${isMuted ? "border-red-900/50 text-stone-600 bg-stone-900" : "border-amber-600 text-amber-500 bg-amber-900/20"}`}>{isMuted ? "🔇" : "🔊"}</button>
       </div>
