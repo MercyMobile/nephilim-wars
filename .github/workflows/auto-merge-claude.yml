@@ -5,38 +5,28 @@ on:
     branches:
       - 'claude/**'
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
       - name: Create and merge PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Get branch name
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
 
-          # Create PR
-          PR_URL=$(gh pr create \
-            --title "Auto-merge: ${BRANCH_NAME}" \
-            --body "Automated merge from Claude Code session." \
-            --base main \
-            --head "$BRANCH_NAME" \
-            2>/dev/null || echo "exists")
+          # Check if PR already exists
+          EXISTING_PR=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$BRANCH_NAME" --json number -q '.[0].number' || echo "")
 
-          # If PR already exists, get its URL
-          if [ "$PR_URL" = "exists" ]; then
-            PR_URL=$(gh pr view "$BRANCH_NAME" --json url -q .url)
+          if [ -z "$EXISTING_PR" ]; then
+            gh pr create --repo "$GITHUB_REPOSITORY" \
+              --title "Auto-merge: ${BRANCH_NAME}" \
+              --body "Automated merge from Claude Code session." \
+              --base main \
+              --head "$BRANCH_NAME"
           fi
 
-          # Merge the PR
-          gh pr merge "$PR_URL" --squash --auto --delete-branch
+          gh pr merge "$BRANCH_NAME" --repo "$GITHUB_REPOSITORY" --squash --delete-branch

@@ -60,10 +60,14 @@ export function useScribeTTS() {
     // Stop Web Speech API
     window.speechSynthesis.cancel();
 
-    // Stop Kokoro audio
+    // Stop Kokoro audio (handles both single source and multi-source streaming)
     if (currentSourceRef.current) {
       try {
-        currentSourceRef.current.stop();
+        if (currentSourceRef.current.stop) {
+          currentSourceRef.current.stop();
+        } else if (currentSourceRef.current.sources) {
+          currentSourceRef.current.sources.forEach(s => { try { s.stop(); } catch(e) {} });
+        }
       } catch (e) {
         // Already stopped
       }
@@ -87,7 +91,7 @@ export function useScribeTTS() {
     setUseEnhancedVoice(prev => !prev);
   }, [stopSpeaking]);
 
-  // Speak with Kokoro.js
+  // Speak with Kokoro.js using streaming - plays chunks as they arrive
   const speakWithKokoro = useCallback(async (text) => {
     if (!kokoroRef.current) return false;
 
@@ -101,34 +105,53 @@ export function useScribeTTS() {
         await audioContext.resume();
       }
 
-      // Generate full audio (Kokoro handles long text internally)
-      const audio = await kokoroRef.current.generate(text, {
+      // Use streaming API to handle long text that exceeds model's max context length
+      const stream = kokoroRef.current.stream(text, {
         voice: "bm_lewis",  // Confident British male voice
         speed: 0.88         // Slower for aged wisdom
       });
 
-      // Get the audio data
-      const audioData = await audio.toBlob();
-      const arrayBuffer = await audioData.arrayBuffer();
-      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+      // Track scheduled playback time and sources for cleanup
+      let nextStartTime = audioContext.currentTime;
+      const sources = [];
+      let lastSource = null;
 
-      // Play the audio
-      const source = audioContext.createBufferSource();
-      source.buffer = audioBuffer;
+      // Play chunks progressively as they arrive
+      for await (const chunk of stream) {
+        const audioData = await chunk.audio.toBlob();
+        const arrayBuffer = await audioData.arrayBuffer();
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
 
-      // Lower playback rate for deeper pitch
-      source.playbackRate.value = 0.92;
+        const source = audioContext.createBufferSource();
+        source.buffer = audioBuffer;
+        source.playbackRate.value = 0.92;  // Deeper pitch
+        source.connect(audioContext.destination);
 
-      source.connect(audioContext.destination);
+        // Schedule this chunk to play after previous chunks
+        const startTime = Math.max(nextStartTime, audioContext.currentTime);
+        source.start(startTime);
 
-      currentSourceRef.current = source;
+        // Calculate when this chunk will finish (accounting for playback rate)
+        const duration = audioBuffer.duration / 0.92;
+        nextStartTime = startTime + duration;
 
-      source.onended = () => {
+        sources.push(source);
+        lastSource = source;
+      }
+
+      if (lastSource) {
+        // Store sources for stop functionality
+        currentSourceRef.current = { sources, stop: () => sources.forEach(s => { try { s.stop(); } catch(e) {} }) };
+
+        lastSource.onended = () => {
+          setSpeaking(false);
+          currentSourceRef.current = null;
+        };
+      } else {
         setSpeaking(false);
-        currentSourceRef.current = null;
-      };
+        return false;
+      }
 
-      source.start(0);
       return true;
     } catch (error) {
       console.error('Kokoro TTS error:', error);
