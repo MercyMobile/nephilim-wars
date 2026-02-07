@@ -19,7 +19,7 @@
  *   npm run ingest
  */
 
-import { readFileSync, readdirSync, existsSync, statSync } from 'fs';
+import { readFileSync, readdirSync, existsSync, statSync, writeFileSync } from 'fs';
 import { createHash } from 'crypto';
 import { basename, dirname, extname, join, relative, resolve } from 'path';
 import { fileURLToPath } from 'url';
@@ -48,7 +48,7 @@ function loadEnv() {
 // --- Configuration ---
 const CHUNK_SIZE = 2000;        // ~2000 chars per chunk (larger = fewer chunks, still good for retrieval)
 const CHUNK_OVERLAP = 200;      // overlap between chunks for context continuity
-const EMBED_BATCH_SIZE = 100;   // max texts per embedding API call
+const EMBED_BATCH_SIZE = 50;    // max texts per embedding API call (kept under 153k token model limit)
 const VECTORIZE_BATCH_SIZE = 1000; // max vectors per Vectorize insert
 const INDEX_NAME = 'nephilim-knowledge-base';
 
@@ -238,10 +238,45 @@ async function upsertVectors(vectors) {
   }
 }
 
+// --- Resume state ---
+
+const PROGRESS_FILE = resolve(ROOT, '.ingest-progress.json');
+
+function loadProgress() {
+  if (existsSync(PROGRESS_FILE)) {
+    try {
+      return JSON.parse(readFileSync(PROGRESS_FILE, 'utf-8'));
+    } catch { /* ignore corrupt file */ }
+  }
+  return null;
+}
+
+function saveProgress(embedBatch, upsertedCount) {
+  writeFileSync(PROGRESS_FILE, JSON.stringify({ embedBatch, upsertedCount, timestamp: Date.now() }));
+}
+
+// --- Retry helper ---
+
+async function withRetry(fn, label, maxRetries = 3) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      if (attempt === maxRetries) throw err;
+      const delay = Math.pow(2, attempt) * 1000;
+      console.log(`\n  ⚠ ${label} failed (attempt ${attempt}/${maxRetries}): ${err.message}`);
+      console.log(`    Retrying in ${delay / 1000}s...`);
+      await new Promise(r => setTimeout(r, delay));
+    }
+  }
+}
+
 // --- Main ---
 
 async function main() {
   loadEnv();
+
+  const resumeFlag = process.argv.includes('--resume');
 
   console.log('=== The Scribe — Knowledge Base Ingestion ===\n');
   console.log(`Texts directory: docs/scribe-texts/\n`);
@@ -271,15 +306,32 @@ async function main() {
   const totalEmbedBatches = Math.ceil(allChunks.length / EMBED_BATCH_SIZE);
   console.log(`Embedding in ${totalEmbedBatches} batches of ${EMBED_BATCH_SIZE}...\n`);
 
-  // 2. Generate all embeddings
+  // Check for resume
+  let startBatch = 0;
+  const progress = loadProgress();
+  if (resumeFlag && progress) {
+    startBatch = progress.embedBatch;
+    console.log(`Resuming from batch ${startBatch + 1}/${totalEmbedBatches} (${startBatch * EMBED_BATCH_SIZE} chunks already done)\n`);
+  } else if (progress && !resumeFlag) {
+    console.log(`Previous progress found (batch ${progress.embedBatch}). Use --resume to continue, or run without it to start fresh.\n`);
+  }
+
+  // 2. Generate all embeddings (with resume + retry)
   const allVectors = [];
   for (let i = 0; i < allChunks.length; i += EMBED_BATCH_SIZE) {
-    const batch = allChunks.slice(i, i + EMBED_BATCH_SIZE);
-    const batchNum = Math.floor(i / EMBED_BATCH_SIZE) + 1;
+    const batchNum = Math.floor(i / EMBED_BATCH_SIZE);
 
-    process.stdout.write(`  Embedding batch ${batchNum}/${totalEmbedBatches}...`);
+    // Skip already-completed batches when resuming
+    if (batchNum < startBatch) {
+      continue;
+    }
+
+    const batch = allChunks.slice(i, i + EMBED_BATCH_SIZE);
+    const displayNum = batchNum + 1;
+
+    process.stdout.write(`  Embedding batch ${displayNum}/${totalEmbedBatches}...`);
     const texts = batch.map(c => c.text);
-    const embeddings = await generateEmbeddings(texts);
+    const embeddings = await withRetry(() => generateEmbeddings(texts), `Batch ${displayNum}`);
 
     for (let j = 0; j < batch.length; j++) {
       allVectors.push({
@@ -292,23 +344,34 @@ async function main() {
       });
     }
 
-    console.log(` done (${allVectors.length}/${allChunks.length} vectors)`);
+    console.log(` done (${startBatch * EMBED_BATCH_SIZE + allVectors.length}/${allChunks.length} vectors)`);
+
+    // Save progress after each batch
+    saveProgress(batchNum + 1, allVectors.length);
+
+    // Upsert in streaming fashion once we have enough vectors
+    while (allVectors.length >= VECTORIZE_BATCH_SIZE) {
+      const upsertBatch = allVectors.splice(0, VECTORIZE_BATCH_SIZE);
+      process.stdout.write(`    ↳ Upserting ${upsertBatch.length} vectors...`);
+      await withRetry(() => upsertVectors(upsertBatch), 'Upsert');
+      console.log(' done');
+    }
   }
 
-  // 3. Upsert all vectors in large batches
-  const totalUpsertBatches = Math.ceil(allVectors.length / VECTORIZE_BATCH_SIZE);
-  console.log(`\nUpserting in ${totalUpsertBatches} batches of ${VECTORIZE_BATCH_SIZE}...\n`);
-
-  for (let i = 0; i < allVectors.length; i += VECTORIZE_BATCH_SIZE) {
-    const batch = allVectors.slice(i, i + VECTORIZE_BATCH_SIZE);
-    const batchNum = Math.floor(i / VECTORIZE_BATCH_SIZE) + 1;
-
-    process.stdout.write(`  Upsert batch ${batchNum}/${totalUpsertBatches} (${batch.length} vectors)...`);
-    await upsertVectors(batch);
+  // 3. Upsert remaining vectors
+  if (allVectors.length > 0) {
+    process.stdout.write(`  Upserting final ${allVectors.length} vectors...`);
+    await withRetry(() => upsertVectors(allVectors), 'Final upsert');
     console.log(' done');
   }
 
-  console.log(`\nDone. ${allVectors.length} vectors in index "${INDEX_NAME}".`);
+  // Clean up progress file
+  if (existsSync(PROGRESS_FILE)) {
+    const { unlinkSync } = await import('fs');
+    unlinkSync(PROGRESS_FILE);
+  }
+
+  console.log(`\nDone. All vectors in index "${INDEX_NAME}".`);
 }
 
 main().catch(err => {

@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "ingest": "node scripts/ingest-knowledge-base.js"
+    "ingest": "node scripts/ingest-knowledge-base.js",
+    "ingest:resume": "node scripts/ingest-knowledge-base.js --resume"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
