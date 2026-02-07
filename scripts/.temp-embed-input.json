@@ -1,0 +1,1 @@
+{"text":["Place your collected biblical and apocryphal texts here.\r\n\r\nSupported formats: .md, .txt, .json, .html\r\n\r\nAfter adding files, run:  npm run ingest\r\n\r\nThis will chunk the texts, generate embeddings, and upload them\r\nto the Cloudflare Vectorize knowledge base for The Scribe."]}

@@ -50,7 +50,6 @@ const CHUNK_SIZE = 2000;        // ~2000 chars per chunk (larger = fewer chunks,
 const CHUNK_OVERLAP = 200;      // overlap between chunks for context continuity
 const EMBED_BATCH_SIZE = 50;    // max texts per embedding API call (kept under 153k token model limit)
 const VECTORIZE_BATCH_SIZE = 1000; // max vectors per Vectorize insert
-const MAX_METADATA_BYTES = 10240;  // Vectorize per-vector metadata limit
 const INDEX_NAME = 'nephilim-knowledge-base';
 
 // --- File Discovery ---
@@ -209,13 +208,34 @@ async function generateEmbeddings(texts) {
 
 /**
  * Upsert vectors to Vectorize via REST API (no wrangler subprocess).
+ * Filters out any vectors with oversized metadata before sending.
  */
 async function upsertVectors(vectors) {
   const { accountId, apiToken } = getApiConfig();
   const url = `https://api.cloudflare.com/client/v4/accounts/${accountId}/vectorize/v2/indexes/${INDEX_NAME}/insert`;
 
+  // Filter out oversized vectors to prevent batch failure
+  const valid = [];
+  for (const v of vectors) {
+    const metaSize = Buffer.byteLength(JSON.stringify({ id: v.id, values: v.values, metadata: v.metadata }), 'utf-8');
+    if (metaSize > 50000) {
+      // Individual NDJSON line too large — re-truncate metadata text
+      const metaOnly = Buffer.byteLength(JSON.stringify(v.metadata), 'utf-8');
+      if (metaOnly > MAX_METADATA_BYTES) {
+        let text = v.metadata.text || '';
+        const { text: _, ...rest } = v.metadata;
+        while (Buffer.byteLength(JSON.stringify({ ...rest, text }), 'utf-8') > MAX_METADATA_BYTES && text.length > 100) {
+          text = text.slice(0, Math.floor(text.length * 0.7));
+        }
+        v.metadata = { ...rest, text };
+        console.log(`    (truncated oversized metadata for ${v.id})`);
+      }
+    }
+    valid.push(v);
+  }
+
   // Vectorize REST API expects NDJSON body
-  const ndjson = vectors
+  const ndjson = valid
     .map(v => JSON.stringify({ id: v.id, values: v.values, metadata: v.metadata }))
     .join('\n');
 
@@ -256,24 +276,6 @@ function saveProgress(embedBatch, upsertedCount) {
   writeFileSync(PROGRESS_FILE, JSON.stringify({ embedBatch, upsertedCount, timestamp: Date.now() }));
 }
 
-// --- Metadata sizing helper ---
-
-function fitMetadata(metadata, text) {
-  let truncated = text;
-  let meta = { ...metadata, text: truncated };
-  let size = Buffer.byteLength(JSON.stringify(meta), 'utf-8');
-
-  while (size > MAX_METADATA_BYTES && truncated.length > 100) {
-    // Cut aggressively based on how far over the limit we are
-    const ratio = Math.min(0.9, MAX_METADATA_BYTES / size);
-    truncated = truncated.slice(0, Math.floor(truncated.length * ratio));
-    meta = { ...metadata, text: truncated };
-    size = Buffer.byteLength(JSON.stringify(meta), 'utf-8');
-  }
-
-  return meta;
-}
-
 // --- Retry helper ---
 
 async function withRetry(fn, label, maxRetries = 3) {
@@ -281,9 +283,7 @@ async function withRetry(fn, label, maxRetries = 3) {
     try {
       return await fn();
     } catch (err) {
-      // Don't retry client errors (400) — they won't resolve on retry
-      const is400 = err.message.includes('(400)');
-      if (attempt === maxRetries || is400) throw err;
+      if (attempt === maxRetries) throw err;
       const delay = Math.pow(2, attempt) * 1000;
       console.log(`\n  ⚠ ${label} failed (attempt ${attempt}/${maxRetries}): ${err.message}`);
       console.log(`    Retrying in ${delay / 1000}s...`);
@@ -358,7 +358,10 @@ async function main() {
       allVectors.push({
         id: chunkId(batch[j].metadata.source, batch[j].metadata.chunkIndex),
         values: embeddings[j],
-        metadata: fitMetadata(batch[j].metadata, batch[j].text),
+        metadata: {
+          ...batch[j].metadata,
+          text: batch[j].text,
+        },
       });
     }
 
