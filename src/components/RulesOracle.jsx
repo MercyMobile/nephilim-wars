@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useScribeTTS } from '../hooks/useScribeTTS';
 
 const QUICK_QUESTIONS = [
   "How does the 3-action economy work?",
@@ -18,14 +19,36 @@ const RulesOracle = () => {
   const chatEndRef = useRef(null);
   const inputRef = useRef(null);
 
+  const {
+    speaking,
+    isMuted,
+    useEnhancedVoice,
+    kokoroLoading,
+    kokoroReady,
+    kokoroError,
+    speak,
+    stopSpeaking,
+    toggleMute,
+    toggleEnhancedVoice
+  } = useScribeTTS();
+
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Speak when new oracle message arrives
+  useEffect(() => {
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage?.role === 'oracle') {
+      speak(lastMessage.content);
+    }
+  }, [messages, speak]);
 
   const handleSend = async (textOverride = null) => {
     const question = (textOverride || input).trim();
     if (!question || loading) return;
 
+    stopSpeaking();
     setInput('');
     const userMsg = { role: 'user', content: question };
     setMessages(prev => [...prev, userMsg]);
@@ -66,11 +89,71 @@ const RulesOracle = () => {
 
   return (
     <div className="flex flex-col h-full w-full max-w-4xl mx-auto bg-[#0c0a09] font-serif text-[#d6d3d1]">
-      {/* Header */}
-      <div className="p-4 border-b border-[#44403c] bg-[#1c1917] text-center flex-shrink-0">
-        <h2 className="text-2xl font-cinzel font-bold text-amber-500">Oracle of Enoch</h2>
-        <p className="text-xs text-stone-500 mt-1">Ask about rules, lore, character creation, combat, or mechanics</p>
+      {/* Header with TTS controls */}
+      <div className="p-4 border-b border-[#44403c] bg-[#1c1917] flex items-center justify-between flex-shrink-0">
+        {/* Enhanced Voice Toggle */}
+        <button
+          onClick={toggleEnhancedVoice}
+          disabled={kokoroLoading}
+          className={`relative px-3 py-2 text-xs rounded border transition-all ${
+            useEnhancedVoice
+              ? kokoroReady
+                ? "border-emerald-600 text-emerald-400 bg-emerald-900/20"
+                : "border-amber-600 text-amber-400 bg-amber-900/20 animate-pulse"
+              : "border-stone-700 text-stone-500 hover:border-stone-600 hover:text-stone-400"
+          }`}
+          title={useEnhancedVoice ? (kokoroReady ? "Neural voice active" : "Loading neural voice...") : "Enable neural voice (86MB download)"}
+        >
+          {kokoroLoading ? (
+            <span className="flex items-center gap-1">
+              <span className="animate-spin">⏳</span>
+              <span className="hidden sm:inline">Loading...</span>
+            </span>
+          ) : (
+            <span className="flex items-center gap-1">
+              <span>{useEnhancedVoice ? "🧠" : "🔤"}</span>
+              <span className="hidden sm:inline">{useEnhancedVoice ? "Neural" : "Standard"}</span>
+            </span>
+          )}
+        </button>
+
+        {/* Title */}
+        <div className="text-center flex-1 px-2">
+          <h2 className="text-xl sm:text-2xl font-cinzel font-bold text-amber-500">Oracle of Enoch</h2>
+          <p className="text-xs text-stone-500 mt-1 hidden sm:block">Ask about rules, lore, character creation, combat, or mechanics</p>
+          {kokoroError && <p className="text-xs text-red-500 mt-1">{kokoroError}</p>}
+        </div>
+
+        {/* Mute Toggle */}
+        <button
+          onClick={toggleMute}
+          className={`w-10 h-10 flex items-center justify-center rounded border transition-colors ${
+            isMuted
+              ? "border-red-900/50 text-stone-600 bg-stone-900"
+              : "border-amber-600 text-amber-500 bg-amber-900/20"
+          }`}
+        >
+          {isMuted ? "🔇" : "🔊"}
+        </button>
       </div>
+
+      {/* Speaking indicator */}
+      {speaking && !isMuted && (
+        <div className="bg-amber-900/20 border-b border-amber-800/30 px-4 py-2 flex items-center justify-center gap-2 flex-shrink-0">
+          <div className="flex gap-1 h-4 items-center">
+            <div className="w-1 bg-amber-500 animate-[bounce_1s_infinite] h-2"></div>
+            <div className="w-1 bg-amber-500 animate-[bounce_1.2s_infinite] h-4"></div>
+            <div className="w-1 bg-amber-500 animate-[bounce_0.8s_infinite] h-3"></div>
+          </div>
+          <span className="text-xs text-amber-400 font-cinzel tracking-wider">THE ORACLE SPEAKS...</span>
+          <button
+            onClick={stopSpeaking}
+            className="text-xs text-stone-400 hover:text-red-400 transition ml-2"
+          >
+            ⏹ Stop
+          </button>
+        </div>
+      )}
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -151,7 +234,7 @@ const RulesOracle = () => {
         </div>
         {messages.length > 0 && (
           <button
-            onClick={() => setMessages([])}
+            onClick={() => { setMessages([]); stopSpeaking(); }}
             className="mt-2 text-xs text-stone-500 hover:text-stone-300 transition"
           >
             Clear conversation
