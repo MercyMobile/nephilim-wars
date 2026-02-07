@@ -4,6 +4,9 @@
 	"assets": {
 		"directory": "./dist"
 	},
+	"ai": {
+		"binding": "AI"
+	},
 	"vectorize": [
 		{
 			"binding": "VECTORIZE",
