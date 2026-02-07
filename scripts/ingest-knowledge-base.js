@@ -208,6 +208,25 @@ async function generateEmbeddings(texts) {
 }
 
 /**
+ * Embed texts with automatic batch splitting on context overflow (413).
+ * If a batch is too large, splits in half and retries each half.
+ */
+async function embedWithAutoSplit(texts) {
+  try {
+    return await generateEmbeddings(texts);
+  } catch (err) {
+    if (err.message.includes('(413)') && texts.length > 1) {
+      const mid = Math.ceil(texts.length / 2);
+      console.log(` context overflow — splitting into 2x${mid}...`);
+      const left = await embedWithAutoSplit(texts.slice(0, mid));
+      const right = await embedWithAutoSplit(texts.slice(mid));
+      return [...left, ...right];
+    }
+    throw err;
+  }
+}
+
+/**
  * Upsert vectors to Vectorize via REST API (no wrangler subprocess).
  * Filters out any vectors with oversized metadata before sending.
  */
@@ -291,9 +310,9 @@ async function withRetry(fn, label, maxRetries = 3) {
     try {
       return await fn();
     } catch (err) {
-      // Don't retry client errors (400) — they won't resolve on retry
-      const is400 = err.message.includes('(400)');
-      if (attempt === maxRetries || is400) throw err;
+      // Don't retry client errors (4xx) — they won't resolve on retry
+      const isClientError = /\(4\d{2}\)/.test(err.message);
+      if (attempt === maxRetries || isClientError) throw err;
       const delay = Math.pow(2, attempt) * 1000;
       console.log(`\n  ⚠ ${label} failed (attempt ${attempt}/${maxRetries}): ${err.message}`);
       console.log(`    Retrying in ${delay / 1000}s...`);
@@ -362,7 +381,7 @@ async function main() {
 
     process.stdout.write(`  Embedding batch ${displayNum}/${totalEmbedBatches}...`);
     const texts = batch.map(c => c.text);
-    const embeddings = await withRetry(() => generateEmbeddings(texts), `Batch ${displayNum}`);
+    const embeddings = await withRetry(() => embedWithAutoSplit(texts), `Batch ${displayNum}`);
 
     for (let j = 0; j < batch.length; j++) {
       allVectors.push({
