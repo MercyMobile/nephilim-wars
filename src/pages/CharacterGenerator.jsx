@@ -830,11 +830,6 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     // Compute final stats from PF2e boost system
     const finalStats = computeAttributes(formData);
 
-    // Apply Ability Flaw from ancestry (-2)
-    if (loreData.abilityFlaw && loreData.abilityFlaw !== "Free" && loreData.abilityFlaw !== null) {
-      finalStats[loreData.abilityFlaw] = (finalStats[loreData.abilityFlaw] || 10) - 2;
-    }
-
     // Calculate Modifiers
     const getMod = (score) => Math.floor((score - 10) / 2);
     const strMod = getMod(finalStats.STR);
