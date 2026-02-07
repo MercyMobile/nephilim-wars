@@ -1,20 +1,28 @@
 {
   "metadata": {
-    "version": "1.0",
-    "description": "Combat-Ready Bestiary for Nephilim Wars"
+    "version": "2.0",
+    "description": "Combat-Ready Bestiary for Nephilim Wars (PF2e-Compliant)",
+    "system": "Pathfinder 2e Adapted"
   },
   "enemies": [
     {
       "id": "nephilim_warrior",
       "name": "Nephilim Warrior",
       "type": "Giant",
+      "level": 8,
+      "size": "Large",
       "description": "Offspring of the Watchers and human women, standing 12-15 feet tall with immense strength.",
       "portrait": "/images/combat/nephilim_warrior.png",
       "stats": {
         "hp": 120,
         "maxHp": 120,
-        "defense": 16,
-        "initiativeBonus": 1,
+        "defense": 26,
+        "fortitude": 18,
+        "reflex": 12,
+        "will": 12,
+        "perception": 14,
+        "initiativeBonus": 4,
+        "speed": 25,
         "STR": 20,
         "DEX": 12,
         "CON": 18,
@@ -22,26 +30,29 @@
         "WIS": 10,
         "CHA": 12
       },
+      "actionsPerTurn": 3,
       "actions": [
         {
           "id": "bronze_sword",
           "name": "Bronze Greatsword",
           "type": "melee",
           "cost": 1,
-          "toHitBonus": 8,
-          "damageDice": "2d8",
-          "damageBonus": 5,
-          "damageType": "slashing"
+          "toHitBonus": 18,
+          "damageDice": "2d12",
+          "damageBonus": 8,
+          "damageType": "slashing",
+          "traits": ["reach 10", "sweep"]
         },
         {
           "id": "crushing_blow",
           "name": "Crushing Blow",
           "type": "melee",
           "cost": 2,
-          "toHitBonus": 8,
+          "toHitBonus": 18,
           "damageDice": "3d10",
-          "damageBonus": 5,
-          "damageType": "bludgeoning"
+          "damageBonus": 8,
+          "damageType": "bludgeoning",
+          "traits": ["reach 10"]
         }
       ]
     },
@@ -49,13 +60,20 @@
       "id": "rephaim_champion",
       "name": "Rephaim Champion",
       "type": "Giant",
+      "level": 10,
+      "size": "Large",
       "description": "Ancient giant warrior, remnant of the pre-flood world. Undying and merciless.",
       "portrait": "/images/combat/rephaim_champion.png",
       "stats": {
         "hp": 150,
         "maxHp": 150,
-        "defense": 18,
-        "initiativeBonus": 0,
+        "defense": 28,
+        "fortitude": 22,
+        "reflex": 14,
+        "will": 16,
+        "perception": 16,
+        "initiativeBonus": 6,
+        "speed": 25,
         "STR": 22,
         "DEX": 10,
         "CON": 20,
@@ -63,30 +81,40 @@
         "WIS": 12,
         "CHA": 8
       },
+      "actionsPerTurn": 3,
       "actions": [
         {
           "id": "war_club",
           "name": "Massive War Club",
           "type": "melee",
           "cost": 1,
-          "toHitBonus": 9,
-          "damageDice": "2d10",
-          "damageBonus": 6,
-          "damageType": "bludgeoning"
+          "toHitBonus": 22,
+          "damageDice": "2d12",
+          "damageBonus": 10,
+          "damageType": "bludgeoning",
+          "traits": ["reach 10", "forceful"]
         }
-      ]
+      ],
+      "specialAbilities": ["Spirit Sight", "Deathly Aura"]
     },
     {
       "id": "anakim_berserker",
       "name": "Anakim Berserker",
       "type": "Giant",
-      "description": "Descendants of Anak, fierce and battle-crazed warriors of Canaan.",
+      "level": 7,
+      "size": "Large",
+      "description": "Descendants of Anak, fierce and battle-crazed warriors. Chain masters.",
       "portrait": "/images/combat/anakim_berserker.png",
       "stats": {
         "hp": 100,
         "maxHp": 100,
-        "defense": 14,
+        "defense": 24,
+        "fortitude": 16,
+        "reflex": 14,
+        "will": 10,
+        "perception": 12,
         "initiativeBonus": 2,
+        "speed": 25,
         "STR": 18,
         "DEX": 14,
         "CON": 16,
@@ -94,26 +122,29 @@
         "WIS": 8,
         "CHA": 10
       },
+      "actionsPerTurn": 3,
       "actions": [
         {
           "id": "dual_axes",
           "name": "Dual Bronze Axes",
           "type": "melee",
           "cost": 1,
-          "toHitBonus": 7,
+          "toHitBonus": 17,
           "damageDice": "2d6",
-          "damageBonus": 4,
-          "damageType": "slashing"
+          "damageBonus": 6,
+          "damageType": "slashing",
+          "traits": ["sweep", "twin"]
         },
         {
           "id": "berserker_rage",
           "name": "Berserker Rage",
           "type": "melee",
-          "cost": 3,
-          "toHitBonus": 9,
+          "cost": 2,
+          "toHitBonus": 19,
           "damageDice": "3d8",
-          "damageBonus": 6,
-          "damageType": "slashing"
+          "damageBonus": 8,
+          "damageType": "slashing",
+          "traits": ["rage"]
         }
       ]
     },
@@ -121,13 +152,20 @@
       "id": "cainite_assassin",
       "name": "Cainite Assassin",
       "type": "Human",
+      "level": 5,
+      "size": "Medium",
       "description": "Descendant of Cain, marked by violence and cunning. Master of stealth and poison.",
       "portrait": "/images/combat/cainite_assassin.png",
       "stats": {
         "hp": 60,
         "maxHp": 60,
-        "defense": 16,
+        "defense": 22,
+        "fortitude": 10,
+        "reflex": 16,
+        "will": 12,
+        "perception": 14,
         "initiativeBonus": 4,
+        "speed": 25,
         "STR": 12,
         "DEX": 18,
         "CON": 14,
@@ -135,26 +173,29 @@
         "WIS": 12,
         "CHA": 10
       },
+      "actionsPerTurn": 3,
       "actions": [
         {
           "id": "poisoned_dagger",
           "name": "Poisoned Dagger",
           "type": "melee",
           "cost": 1,
-          "toHitBonus": 7,
+          "toHitBonus": 14,
           "damageDice": "1d4",
           "damageBonus": 4,
-          "damageType": "piercing"
+          "damageType": "piercing",
+          "traits": ["agile", "finesse", "poison"]
         },
         {
           "id": "shadow_strike",
           "name": "Shadow Strike",
           "type": "melee",
           "cost": 2,
-          "toHitBonus": 9,
+          "toHitBonus": 14,
           "damageDice": "2d6",
-          "damageBonus": 6,
-          "damageType": "piercing"
+          "damageBonus": 8,
+          "damageType": "piercing",
+          "traits": ["finesse", "sneak attack"]
         }
       ]
     },
@@ -162,40 +203,50 @@
       "id": "sorcerer_priest",
       "name": "Sorcerer-Priest of Babylon",
       "type": "Human",
+      "level": 6,
+      "size": "Medium",
       "description": "Wielder of forbidden knowledge, channeling demonic power through ancient rituals.",
       "portrait": "/images/combat/sorcerer_priest.png",
       "stats": {
         "hp": 70,
         "maxHp": 70,
-        "defense": 12,
-        "initiativeBonus": 2,
+        "defense": 20,
+        "fortitude": 10,
+        "reflex": 12,
+        "will": 16,
+        "perception": 14,
+        "initiativeBonus": 4,
+        "speed": 25,
         "STR": 10,
         "DEX": 14,
         "CON": 12,
-        "INT": 16,
+        "INT": 18,
         "WIS": 14,
         "CHA": 16
       },
+      "actionsPerTurn": 3,
       "actions": [
         {
           "id": "eldritch_bolt",
           "name": "Eldritch Bolt",
           "type": "spell",
-          "cost": 1,
-          "toHitBonus": 6,
-          "damageDice": "1d10",
-          "damageBonus": 3,
-          "damageType": "force"
+          "cost": 2,
+          "toHitBonus": 14,
+          "damageDice": "2d10",
+          "damageBonus": 4,
+          "damageType": "force",
+          "traits": ["occult", "evocation"]
         },
         {
           "id": "curse_weakness",
           "name": "Curse of Weakness",
           "type": "spell",
           "cost": 2,
-          "toHitBonus": 6,
+          "toHitBonus": 14,
           "damageDice": "2d8",
-          "damageBonus": 3,
-          "damageType": "necrotic"
+          "damageBonus": 4,
+          "damageType": "necrotic",
+          "traits": ["occult", "necromancy", "curse"]
         }
       ]
     },
@@ -203,13 +254,20 @@
       "id": "horim_tunneler",
       "name": "Horim Tunneler",
       "type": "Cave Dweller",
+      "level": 5,
+      "size": "Medium",
       "description": "Subterranean warriors who dwell in mountain caves. Adapted to darkness.",
       "portrait": "/images/combat/horim_tunneler.png",
       "stats": {
         "hp": 80,
         "maxHp": 80,
-        "defense": 15,
-        "initiativeBonus": 1,
+        "defense": 22,
+        "fortitude": 14,
+        "reflex": 12,
+        "will": 14,
+        "perception": 16,
+        "initiativeBonus": 6,
+        "speed": 25,
         "STR": 16,
         "DEX": 12,
         "CON": 16,
@@ -217,30 +275,40 @@
         "WIS": 14,
         "CHA": 8
       },
+      "actionsPerTurn": 3,
       "actions": [
         {
           "id": "stone_mace",
           "name": "Stone Mace",
           "type": "melee",
           "cost": 1,
-          "toHitBonus": 6,
+          "toHitBonus": 13,
           "damageDice": "1d8",
-          "damageBonus": 3,
-          "damageType": "bludgeoning"
+          "damageBonus": 5,
+          "damageType": "bludgeoning",
+          "traits": ["shove"]
         }
-      ]
+      ],
+      "specialAbilities": ["Superior Darkvision 120ft", "Stone Cunning"]
     },
     {
       "id": "gibborim_elite",
       "name": "Gibborim Elite Guard",
       "type": "Mighty One",
+      "level": 7,
+      "size": "Medium",
       "description": "The 'Mighty Men' of ancient legend. Warriors of renown, feared across nations.",
       "portrait": "/images/combat/gibborim_elite.png",
       "stats": {
         "hp": 110,
         "maxHp": 110,
-        "defense": 17,
-        "initiativeBonus": 3,
+        "defense": 25,
+        "fortitude": 16,
+        "reflex": 14,
+        "will": 14,
+        "perception": 14,
+        "initiativeBonus": 4,
+        "speed": 25,
         "STR": 19,
         "DEX": 15,
         "CON": 17,
@@ -248,40 +316,51 @@
         "WIS": 13,
         "CHA": 14
       },
+      "actionsPerTurn": 3,
       "actions": [
         {
           "id": "spear_thrust",
           "name": "Bronze Spear",
           "type": "melee",
           "cost": 1,
-          "toHitBonus": 8,
+          "toHitBonus": 17,
           "damageDice": "1d10",
-          "damageBonus": 4,
-          "damageType": "piercing"
+          "damageBonus": 6,
+          "damageType": "piercing",
+          "traits": ["reach 10"]
         },
         {
           "id": "shield_bash",
           "name": "Shield Bash",
           "type": "melee",
           "cost": 1,
-          "toHitBonus": 7,
+          "toHitBonus": 16,
           "damageDice": "1d6",
-          "damageBonus": 4,
-          "damageType": "bludgeoning"
+          "damageBonus": 6,
+          "damageType": "bludgeoning",
+          "traits": ["shove"]
         }
-      ]
+      ],
+      "specialAbilities": ["Powerful Build", "Heroic Blood"]
     },
     {
       "id": "desert_raider",
       "name": "Desert Raider",
       "type": "Human",
+      "level": 3,
+      "size": "Medium",
       "description": "Nomadic warrior from the wilderness, swift and deadly with bow and blade.",
       "portrait": "/images/combat/desert_raider.png",
       "stats": {
         "hp": 50,
         "maxHp": 50,
-        "defense": 14,
-        "initiativeBonus": 3,
+        "defense": 19,
+        "fortitude": 10,
+        "reflex": 14,
+        "will": 10,
+        "perception": 12,
+        "initiativeBonus": 2,
+        "speed": 30,
         "STR": 14,
         "DEX": 16,
         "CON": 12,
@@ -289,26 +368,29 @@
         "WIS": 12,
         "CHA": 10
       },
+      "actionsPerTurn": 3,
       "actions": [
         {
           "id": "composite_bow",
           "name": "Composite Bow",
           "type": "ranged",
           "cost": 1,
-          "toHitBonus": 6,
+          "toHitBonus": 12,
           "damageDice": "1d8",
           "damageBonus": 3,
-          "damageType": "piercing"
+          "damageType": "piercing",
+          "traits": ["deadly d10", "range 100"]
         },
         {
           "id": "scimitar",
           "name": "Curved Scimitar",
           "type": "melee",
           "cost": 1,
-          "toHitBonus": 5,
+          "toHitBonus": 10,
           "damageDice": "1d6",
-          "damageBonus": 2,
-          "damageType": "slashing"
+          "damageBonus": 3,
+          "damageType": "slashing",
+          "traits": ["forceful", "sweep"]
         }
       ]
     }
