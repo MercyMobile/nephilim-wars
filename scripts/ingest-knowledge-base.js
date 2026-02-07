@@ -50,6 +50,10 @@ const CHUNK_SIZE = 2000;        // ~2000 chars per chunk (larger = fewer chunks,
 const CHUNK_OVERLAP = 200;      // overlap between chunks for context continuity
 const EMBED_BATCH_SIZE = 50;    // max texts per embedding API call (kept under 153k token model limit)
 const VECTORIZE_BATCH_SIZE = 1000; // max vectors per Vectorize insert
+<<<<<<< HEAD
+const MAX_METADATA_BYTES = 10240;  // Vectorize per-vector metadata limit
+=======
+>>>>>>> origin/main
 const INDEX_NAME = 'nephilim-knowledge-base';
 
 // --- File Discovery ---
@@ -207,6 +211,28 @@ async function generateEmbeddings(texts) {
 }
 
 /**
+<<<<<<< HEAD
+ * Embed texts with automatic batch splitting on context overflow (413).
+ * If a batch is too large, splits in half and retries each half.
+ */
+async function embedWithAutoSplit(texts) {
+  try {
+    return await generateEmbeddings(texts);
+  } catch (err) {
+    if (err.message.includes('(413)') && texts.length > 1) {
+      const mid = Math.ceil(texts.length / 2);
+      console.log(` context overflow — splitting into 2x${mid}...`);
+      const left = await embedWithAutoSplit(texts.slice(0, mid));
+      const right = await embedWithAutoSplit(texts.slice(mid));
+      return [...left, ...right];
+    }
+    throw err;
+  }
+}
+
+/**
+=======
+>>>>>>> origin/main
  * Upsert vectors to Vectorize via REST API (no wrangler subprocess).
  * Filters out any vectors with oversized metadata before sending.
  */
@@ -214,6 +240,20 @@ async function upsertVectors(vectors) {
   const { accountId, apiToken } = getApiConfig();
   const url = `https://api.cloudflare.com/client/v4/accounts/${accountId}/vectorize/v2/indexes/${INDEX_NAME}/insert`;
 
+<<<<<<< HEAD
+  // Safety net: re-check and truncate any oversized metadata
+  for (const v of vectors) {
+    const metaSize = Buffer.byteLength(JSON.stringify(v.metadata), 'utf-8');
+    if (metaSize > MAX_METADATA_BYTES) {
+      const { text: origText, ...rest } = v.metadata;
+      v.metadata = truncateTextToFit(rest, origText || '');
+      console.log(`    (truncated oversized metadata for ${v.id})`);
+    }
+  }
+
+  // Vectorize REST API expects NDJSON body
+  const ndjson = vectors
+=======
   // Filter out oversized vectors to prevent batch failure
   const valid = [];
   for (const v of vectors) {
@@ -236,6 +276,7 @@ async function upsertVectors(vectors) {
 
   // Vectorize REST API expects NDJSON body
   const ndjson = valid
+>>>>>>> origin/main
     .map(v => JSON.stringify({ id: v.id, values: v.values, metadata: v.metadata }))
     .join('\n');
 
@@ -276,6 +317,26 @@ function saveProgress(embedBatch, upsertedCount) {
   writeFileSync(PROGRESS_FILE, JSON.stringify({ embedBatch, upsertedCount, timestamp: Date.now() }));
 }
 
+<<<<<<< HEAD
+// --- Metadata sizing helper ---
+
+function truncateTextToFit(metadata, text) {
+  let truncated = text;
+  let meta = { ...metadata, text: truncated };
+  let size = Buffer.byteLength(JSON.stringify(meta), 'utf-8');
+
+  while (size > MAX_METADATA_BYTES && truncated.length > 100) {
+    const ratio = Math.min(0.9, MAX_METADATA_BYTES / size);
+    truncated = truncated.slice(0, Math.floor(truncated.length * ratio));
+    meta = { ...metadata, text: truncated };
+    size = Buffer.byteLength(JSON.stringify(meta), 'utf-8');
+  }
+
+  return meta;
+}
+
+=======
+>>>>>>> origin/main
 // --- Retry helper ---
 
 async function withRetry(fn, label, maxRetries = 3) {
@@ -283,7 +344,13 @@ async function withRetry(fn, label, maxRetries = 3) {
     try {
       return await fn();
     } catch (err) {
+<<<<<<< HEAD
+      // Don't retry client errors (4xx) — they won't resolve on retry
+      const isClientError = /\(4\d{2}\)/.test(err.message);
+      if (attempt === maxRetries || isClientError) throw err;
+=======
       if (attempt === maxRetries) throw err;
+>>>>>>> origin/main
       const delay = Math.pow(2, attempt) * 1000;
       console.log(`\n  ⚠ ${label} failed (attempt ${attempt}/${maxRetries}): ${err.message}`);
       console.log(`    Retrying in ${delay / 1000}s...`);
@@ -352,16 +419,24 @@ async function main() {
 
     process.stdout.write(`  Embedding batch ${displayNum}/${totalEmbedBatches}...`);
     const texts = batch.map(c => c.text);
+<<<<<<< HEAD
+    const embeddings = await withRetry(() => embedWithAutoSplit(texts), `Batch ${displayNum}`);
+=======
     const embeddings = await withRetry(() => generateEmbeddings(texts), `Batch ${displayNum}`);
+>>>>>>> origin/main
 
     for (let j = 0; j < batch.length; j++) {
       allVectors.push({
         id: chunkId(batch[j].metadata.source, batch[j].metadata.chunkIndex),
         values: embeddings[j],
+<<<<<<< HEAD
+        metadata: truncateTextToFit(batch[j].metadata, batch[j].text),
+=======
         metadata: {
           ...batch[j].metadata,
           text: batch[j].text,
         },
+>>>>>>> origin/main
       });
     }
 
