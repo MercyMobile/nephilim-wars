@@ -7,6 +7,7 @@ import BestiaryScreen from './pages/BestiaryScreen';
 import DiceScreen from './components/DiceScreen';
 import TabernacleViewer from "./components/TabernacleViewer";
 import ErrorBoundary from './components/ErrorBoundary';
+import RulesOracle from './components/RulesOracle';
 import { useScribeTTS } from './hooks/useScribeTTS';
 
 // --- SCRIBE AVATAR COMPONENT ---
@@ -237,11 +238,13 @@ export default function App() {
                 <TabButton active={rulesTab === 'combat'} onClick={() => setRulesTab('combat')} label="⚔️ Combat Rules" mobileLabel="⚔️ Combat" />
                 <TabButton active={rulesTab === 'classes'} onClick={() => setRulesTab('classes')} label="📋 Class Guide" mobileLabel="📋 Classes" />
                 <TabButton active={rulesTab === 'manual'} onClick={() => setRulesTab('manual')} label="📖 Full Manual" mobileLabel="📖 Manual" />
+                <TabButton active={rulesTab === 'oracle'} onClick={() => setRulesTab('oracle')} label="📜 Oracle" mobileLabel="📜 Oracle" />
               </div>
               <div className="flex-1 overflow-hidden">
                 {rulesTab === 'combat' && <iframe src="/combat/index.html" className="w-full h-full border-0" title="Combat Rules" />}
                 {rulesTab === 'classes' && <iframe src="/rules/classes.html" className="w-full h-full border-0" title="Class Guide" />}
                 {rulesTab === 'manual' && <iframe src="/rules/manual.html" className="w-full h-full border-0" title="Full Manual" />}
+                {rulesTab === 'oracle' && <RulesOracle />}
               </div>
             </div>
           )}
