@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import DiceRollerModal from '../components/DiceRollerModal';
 import PartyManager from '../components/PartyManager';
 import { getPartyRoster, getActiveParty } from '../utils/storage';
@@ -15,6 +15,9 @@ const CombatScreen = () => {
   const [pendingAttack, setPendingAttack] = useState(null);
   const [showPartyManager, setShowPartyManager] = useState(false);
   const [combatStarted, setCombatStarted] = useState(false);
+  const [actionsRemaining, setActionsRemaining] = useState(3);
+  const [defendingIds, setDefendingIds] = useState([]); // IDs of combatants currently Defending
+  const actionsRef = useRef(3); // ref to track actions for close handler
 
   // Load party and bestiary on mount
   useEffect(() => {
@@ -97,6 +100,14 @@ const CombatScreen = () => {
   const nextTurn = () => {
     const nextIndex = (currentTurnIndex + 1) % turnOrder.length;
     setCurrentTurnIndex(nextIndex);
+    setActionsRemaining(3); // PF2e: 3 actions per turn
+    actionsRef.current = 3;
+
+    // Clear defend status for the combatant whose turn is starting
+    const nextCombatant = turnOrder[nextIndex];
+    if (nextCombatant) {
+      setDefendingIds(prev => prev.filter(id => id !== nextCombatant.id));
+    }
 
     // Update turn order with current HP
     const updated = turnOrder.map(c => {
@@ -131,17 +142,69 @@ const CombatScreen = () => {
     return total;
   };
 
-  // Handle attack
+  // Handle attack (costs 1 action)
   const handleAttack = (attacker, defender, action) => {
+    if (actionsRemaining <= 0) return;
     setPendingAttack({ attacker, defender, action });
     setShowDiceRoller(true);
   };
 
-  // Handle dice roller close - advance turn
+  // Helper to consume an action and auto-advance if none left
+  const consumeAction = () => {
+    const remaining = actionsRef.current - 1;
+    actionsRef.current = remaining;
+    setActionsRemaining(remaining);
+    if (remaining <= 0) {
+      setTimeout(() => nextTurn(), 600);
+    }
+  };
+
+  // Handle Defend action (Raise Shield / defensive stance - costs 1 action, +2 AC until next turn)
+  const handleDefend = (member) => {
+    if (actionsRef.current <= 0) return;
+    setDefendingIds(prev => [...prev, member.id]);
+    addLog(`🛡️ ${member.name} takes a defensive stance! (+2 AC until next turn)`, 'system');
+    consumeAction();
+  };
+
+  // Handle Stride action (move - costs 1 action, narrative only)
+  const handleStride = (member) => {
+    if (actionsRef.current <= 0) return;
+    addLog(`🏃 ${member.name} moves to a new position.`, 'system');
+    consumeAction();
+  };
+
+  // Handle Demoralize action (Intimidation check vs enemy Will DC - costs 1 action)
+  const handleDemoralize = (member) => {
+    if (actionsRef.current <= 0) return;
+    const roll = rollD20();
+    const intimidationBonus = Math.floor(((member.stats?.cha || member.cha || 10) - 10) / 2) + 2;
+    const total = roll + intimidationBonus;
+    const dc = 15; // base Will DC
+    if (roll === 20 || total >= dc + 10) {
+      addLog(`😨 ${member.name} CRITICALLY demoralizes ${enemy.name}! (Rolled ${roll}+${intimidationBonus}=${total} vs DC ${dc}) Frightened 2!`, 'hit');
+    } else if (total >= dc) {
+      addLog(`😰 ${member.name} demoralizes ${enemy.name}! (Rolled ${roll}+${intimidationBonus}=${total} vs DC ${dc}) Frightened 1!`, 'hit');
+    } else {
+      addLog(`💪 ${enemy.name} resists ${member.name}'s intimidation. (Rolled ${roll}+${intimidationBonus}=${total} vs DC ${dc})`, 'miss');
+    }
+    consumeAction();
+  };
+
+  // Handle End Turn (pass remaining actions)
+  const handleEndTurn = () => {
+    const current = getCurrentCombatant();
+    if (current) {
+      addLog(`⏭️ ${current.name} ends their turn.`, 'system');
+    }
+    nextTurn();
+  };
+
+  // Handle dice roller close - advance turn if no actions left
   const handleDiceRollerClose = () => {
     setShowDiceRoller(false);
-    // Only advance turn if an attack was processed
-    if (pendingAttack === null) {
+    // If attack was processed (pendingAttack cleared), check remaining actions via ref
+    if (pendingAttack === null && actionsRef.current <= 0) {
       nextTurn();
     }
   };
@@ -150,8 +213,18 @@ const CombatScreen = () => {
   const processAttackResult = (d20) => {
     const { attacker, defender, action } = pendingAttack;
     const toHit = d20 + action.toHitBonus;
-    const defenderDef = defender.stats?.defense || defender.defense;
+    // Apply defend bonus if defender is in defensive stance
+    const baseDefense = defender.stats?.defense || defender.defense;
+    const defendBonus = defendingIds.includes(defender.id) ? 2 : 0;
+    const defenderDef = baseDefense + defendBonus;
     const isHit = toHit >= defenderDef;
+
+    // Consume action
+    setActionsRemaining(prev => {
+      const next = prev - 1;
+      actionsRef.current = next;
+      return next;
+    });
 
     let damage = 0;
     let logMessage = '';
@@ -200,30 +273,62 @@ const CombatScreen = () => {
     }
   };
 
-  // Enemy AI turn
+  // Enemy AI turn - uses all 3 actions to attack (with MAP: -0, -5, -10)
   useEffect(() => {
     const currentCombatant = getCurrentCombatant();
     if (currentCombatant && !currentCombatant.isPlayer && combatStarted) {
-      // Enemy's turn - auto-attack after 1 second
-      const timer = setTimeout(() => {
-        // Pick random alive party member
-        const aliveParty = party.filter(p => p.currentHp > 0);
-        if (aliveParty.length === 0) return;
+      const aliveParty = party.filter(p => p.currentHp > 0);
+      if (aliveParty.length === 0) return;
 
-        const target = aliveParty[Math.floor(Math.random() * aliveParty.length)];
-        const enemyActions = enemy.stats?.actions || [];
-        const action = enemyActions[0] || {
-          name: 'Attack',
-          toHitBonus: 5,
-          damageDice: '1d8',
-          damageBonus: 2,
-          damageType: 'bludgeoning'
-        };
+      const enemyActions = enemy?.stats?.actions || [];
+      const baseAction = enemyActions[0] || {
+        name: 'Attack',
+        toHitBonus: 5,
+        damageDice: '1d8',
+        damageBonus: 2,
+        damageType: 'bludgeoning'
+      };
 
-        handleAttack(currentCombatant, target, action);
-      }, 1000);
+      // Enemy gets 3 attacks with MAP: 0, -5, -10
+      const mapPenalties = [0, -5, -10];
+      const delay = 800;
+      const timers = [];
 
-      return () => clearTimeout(timer);
+      mapPenalties.forEach((penalty, i) => {
+        const timer = setTimeout(() => {
+          const target = aliveParty[Math.floor(Math.random() * aliveParty.length)];
+          const d20 = rollD20();
+          const toHit = d20 + baseAction.toHitBonus + penalty;
+          const baseDefense = target.stats?.defense || target.defense;
+          const defendBonus = defendingIds.includes(target.id) ? 2 : 0;
+          const defenderDef = baseDefense + defendBonus;
+          const mapLabel = penalty !== 0 ? ` (MAP ${penalty})` : '';
+
+          let damage = 0;
+          if (d20 === 20 || toHit >= defenderDef + 10) {
+            damage = rollDamage(baseAction.damageDice) * 2 + baseAction.damageBonus;
+            addLog(`🔥 CRITICAL! ${currentCombatant.name} rolls ${d20}${mapLabel}, ${baseAction.name} deals ${damage} to ${target.name}!`, 'hit');
+            updateHp(target, -damage);
+          } else if (d20 === 1 || toHit < defenderDef - 10) {
+            addLog(`💀 FUMBLE! ${currentCombatant.name} rolls ${d20}${mapLabel}, ${baseAction.name} fails completely!`, 'miss');
+          } else if (toHit >= defenderDef) {
+            damage = rollDamage(baseAction.damageDice) + baseAction.damageBonus;
+            addLog(`⚔️ ${currentCombatant.name} rolls ${d20}${mapLabel}, hits ${target.name} with ${baseAction.name} for ${damage}! (needed ${defenderDef})`, 'hit');
+            updateHp(target, -damage);
+          } else {
+            addLog(`🛡️ ${currentCombatant.name} rolls ${d20}${mapLabel}, ${baseAction.name} misses ${target.name}. (needed ${defenderDef})`, 'miss');
+          }
+
+          // Advance turn after last attack
+          if (i === mapPenalties.length - 1) {
+            setTimeout(() => nextTurn(), 600);
+          }
+        }, delay * (i + 1));
+
+        timers.push(timer);
+      });
+
+      return () => timers.forEach(t => clearTimeout(t));
     }
   }, [currentTurnIndex, combatStarted]);
 
@@ -242,6 +347,9 @@ const CombatScreen = () => {
     setCurrentTurnIndex(0);
     setCombatStarted(false);
     setTurnOrder([]);
+    setActionsRemaining(3);
+    actionsRef.current = 3;
+    setDefendingIds([]);
   };
 
   // Handle party selection
@@ -354,6 +462,19 @@ const CombatScreen = () => {
                       {currentCombatant.name}
                       <span className="text-sm ml-2 text-stone-400">(Initiative: {currentCombatant.initiative})</span>
                     </div>
+                    {currentCombatant.isPlayer && (
+                      <div className="flex items-center justify-center gap-1 mt-2">
+                        {[1, 2, 3].map(i => (
+                          <div
+                            key={i}
+                            className={`w-3 h-3 rounded-full ${
+                              i <= actionsRemaining ? 'bg-amber-400' : 'bg-stone-700'
+                            }`}
+                          />
+                        ))}
+                        <span className="text-xs text-stone-400 ml-2">{actionsRemaining}/3 actions</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -411,16 +532,74 @@ const CombatScreen = () => {
 
                               {/* Actions (only show on their turn) */}
                               {isCurrentTurn && member.currentHp > 0 && (
-                                <div className="flex gap-2 flex-wrap">
-                                  {member.actions.map((action, i) => (
+                                <div className="mt-1">
+                                  {/* Actions remaining indicator */}
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <span className="text-xs text-stone-400 uppercase tracking-wider">Actions:</span>
+                                    <div className="flex gap-1">
+                                      {[1, 2, 3].map(i => (
+                                        <div
+                                          key={i}
+                                          className={`w-5 h-5 rounded-full border-2 transition-all ${
+                                            i <= actionsRemaining
+                                              ? 'bg-amber-500 border-amber-400 shadow-[0_0_6px_rgba(245,158,11,0.5)]'
+                                              : 'bg-stone-800 border-stone-600'
+                                          }`}
+                                        />
+                                      ))}
+                                    </div>
+                                    <span className="text-xs text-amber-400 font-bold">{actionsRemaining} remaining</span>
+                                  </div>
+
+                                  {/* Action buttons */}
+                                  <div className="flex gap-2 flex-wrap">
+                                    {/* Weapon attacks */}
+                                    {member.actions?.map((action, i) => (
+                                      <button
+                                        key={i}
+                                        onClick={() => handleAttack(member, enemy, action)}
+                                        disabled={actionsRemaining <= 0}
+                                        className="px-3 py-2 bg-red-900/30 border border-red-700 text-red-300 text-sm font-bold rounded hover:bg-red-900/50 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                                      >
+                                        ⚔️ {action.name}
+                                      </button>
+                                    ))}
+
+                                    {/* Defend */}
                                     <button
-                                      key={i}
-                                      onClick={() => handleAttack(member, enemy, action)}
-                                      className="px-3 py-2 bg-red-900/30 border border-red-700 text-red-300 text-sm font-bold rounded hover:bg-red-900/50 transition"
+                                      onClick={() => handleDefend(member)}
+                                      disabled={actionsRemaining <= 0 || defendingIds.includes(member.id)}
+                                      className="px-3 py-2 bg-blue-900/30 border border-blue-700 text-blue-300 text-sm font-bold rounded hover:bg-blue-900/50 transition disabled:opacity-40 disabled:cursor-not-allowed"
                                     >
-                                      ⚔️ {action.name}
+                                      🛡️ Defend
                                     </button>
-                                  ))}
+
+                                    {/* Stride */}
+                                    <button
+                                      onClick={() => handleStride(member)}
+                                      disabled={actionsRemaining <= 0}
+                                      className="px-3 py-2 bg-green-900/30 border border-green-700 text-green-300 text-sm font-bold rounded hover:bg-green-900/50 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                                    >
+                                      🏃 Stride
+                                    </button>
+
+                                    {/* Demoralize */}
+                                    <button
+                                      onClick={() => handleDemoralize(member)}
+                                      disabled={actionsRemaining <= 0}
+                                      className="px-3 py-2 bg-purple-900/30 border border-purple-700 text-purple-300 text-sm font-bold rounded hover:bg-purple-900/50 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                                    >
+                                      😤 Demoralize
+                                    </button>
+
+                                    {/* End Turn */}
+                                    <button
+                                      onClick={handleEndTurn}
+                                      className="px-3 py-2 bg-stone-800/50 border border-stone-600 text-stone-300 text-sm font-bold rounded hover:bg-stone-700/50 transition ml-auto"
+                                    >
+                                      ⏭️ End Turn
+                                    </button>
+                                  </div>
                                 </div>
                               )}
                             </div>
