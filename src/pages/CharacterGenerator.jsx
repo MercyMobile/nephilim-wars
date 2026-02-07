@@ -195,26 +195,26 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
   ];
 
   const HAIR_COLORS = [
-    { value: "black", label: "Black" },
+    { value: "jet black", label: "Black" },
     { value: "dark brown", label: "Dark Brown" },
     { value: "brown", label: "Brown" },
-    { value: "auburn", label: "Auburn/Reddish" },
-    { value: "golden", label: "Golden" },
-    { value: "grey", label: "Grey (Elder)" },
-    { value: "white", label: "White (Ancient)" },
-    { value: "silver", label: "Silver (Unnatural)" },
-    { value: "raven blue", label: "Raven Blue (Dark Sheen)" }
+    { value: "auburn reddish", label: "Auburn/Reddish" },
+    { value: "bright golden blonde", label: "Golden" },
+    { value: "iron grey", label: "Grey (Elder)" },
+    { value: "pure white", label: "White (Ancient)" },
+    { value: "metallic silver", label: "Silver (Unnatural)" },
+    { value: "dark blue-black with vivid blue sheen and blue highlights", label: "Raven Blue (Dark Sheen)" }
   ];
 
   const HAIR_LENGTHS = [
-    { value: "bald", label: "Bald/Shaven" },
-    { value: "short cropped", label: "Short Cropped" },
-    { value: "shoulder length", label: "Shoulder Length" },
-    { value: "long flowing", label: "Long Flowing" },
-    { value: "braided", label: "Braided" },
-    { value: "wild mane", label: "Wild Mane" },
-    { value: "waist length", label: "Waist Length" },
-    { value: "floor length", label: "Floor Length (Nazarite)" }
+    { value: "completely bald shaved head", label: "Bald/Shaven" },
+    { value: "very short cropped close to scalp", label: "Short Cropped" },
+    { value: "shoulder length hair ending exactly at the shoulders", label: "Shoulder Length" },
+    { value: "long flowing hair past the shoulders to mid-back", label: "Long Flowing" },
+    { value: "tightly braided hair in multiple braids", label: "Braided" },
+    { value: "wild untamed mane of hair in all directions", label: "Wild Mane" },
+    { value: "very long hair reaching down to the waist", label: "Waist Length" },
+    { value: "extremely long hair reaching the floor", label: "Floor Length (Nazarite)" }
   ];
 
   const BODY_BUILDS = [
@@ -699,15 +699,25 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     const raceData = RACES[formData.lineage];
     const customDesc = formData.customVisuals.trim();
 
-    // Phenotype mapping to fix SD rendering issues
-    let cleanSkin = formData.skinTone;
-    if (cleanSkin === 'olive') cleanSkin = 'olive Mediterranean Middle Eastern skin';
-    if (cleanSkin === 'bronze') cleanSkin = 'golden sun-tanned Middle Eastern skin';
-    if (cleanSkin === 'copper') cleanSkin = 'warm copper-toned skin';
-    if (cleanSkin === 'tan') cleanSkin = 'tan Levantine Middle Eastern skin';
-    if (cleanSkin === 'light brown') cleanSkin = 'light brown Mesopotamian skin';
-    if (cleanSkin === 'dark brown') cleanSkin = 'dark brown Cushite skin';
-    if (cleanSkin === 'pale') cleanSkin = 'pale northern skin';
+    // Skin tone mapping — explicit descriptions so image model renders correct ethnicity
+    const SKIN_MAP = {
+      'olive': 'light olive-toned Mediterranean Middle Eastern skin NOT dark NOT black',
+      'bronze': 'warm golden sun-tanned bronze Middle Eastern skin',
+      'copper': 'warm copper-toned reddish-brown skin',
+      'tan': 'light tan Levantine Middle Eastern skin',
+      'light brown': 'light brown Mesopotamian skin',
+      'dark brown': 'deep dark brown Nubian African skin',
+      'alabaster': 'extremely pale white translucent alabaster skin',
+      'obsidian': 'very deep black-purple obsidian dark skin',
+      'red clay': 'warm reddish clay-colored earthy skin',
+      'ashen grey': 'grey ashen deathly pale skin with grey undertone',
+      'copper patina': 'greenish oxidized copper-patina tinted skin',
+      'marble': 'pale white marble-like skin with visible veining',
+      'gold-dust': 'warm golden shimmering luminous skin',
+      'pale': 'pale light-skinned northern complexion',
+      'unnaturally pale': 'extremely pale almost white ghostly skin'
+    };
+    let cleanSkin = SKIN_MAP[formData.skinTone] || formData.skinTone;
 
     // Hair texture and phenotype by ancestry (sex-aware per manual physical descriptions)
     const raceKey = formData.lineage.toLowerCase();
@@ -776,9 +786,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       bodyBuild = types[Math.floor(Math.random() * types.length)];
     }
 
-    // Hair length fix for SD
+    // Hair length (values are already descriptive for image model)
     let cleanHairLen = formData.hairLength;
-    if (cleanHairLen === 'short cropped') cleanHairLen = 'military short curly';
 
     // Height context
     const safeHeight = formData.height.replace(/'/g, "ft ").replace(/"/g, "in").trim();
@@ -789,13 +798,17 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     // Mount
     const mountDesc = formData.mount !== 'none' ? `, ${formData.mount}` : '';
 
-    // Appearance assembly
-    let appearance = `${cleanSkin}, ${phenotype}, ${bodyBuild} build, ${formData.eyeColor} eyes, ${cleanHairLen} ${formData.hairColor} ${hairTexture} hair${featureDesc}`;
+    // Hair descriptor — combine length, color, and texture explicitly
+    const hairDesc = `${cleanHairLen} ${formData.hairColor} colored ${hairTexture} hair`;
+
+    // Appearance assembly — skin tone first and emphasized
+    let appearance = `${cleanSkin}, ${phenotype}, ${bodyBuild} build, ${formData.eyeColor} eyes, ${hairDesc}${featureDesc}`;
 
     if (customDesc) appearance += `, ${customDesc}`;
 
     // Photorealistic prompt style - biblical bronze-age human characters, NOT fantasy creatures
-    const prompt = `wide angle full body cinematic shot of a ${formData.sex} ${formData.lineage} ${formData.charClass}, ${appearance}, wearing ${raceData.visuals}, fully clothed modest ancient clothing, ${safeHeight} tall${mountDesc}, standing in ${formData.background}, ${formData.vibe} atmosphere, ancient bronze-age biblical Hebrew setting, historical realism, dramatic lighting, 8k, photorealistic, masterpiece, wide view, detailed background, NO horns, NO wings, NO demon features, NO fantasy creature, NO nudity, NO bare chest, NO exposed skin, fully covered, PG-13, human character`;
+    // Skin tone repeated at end for emphasis since image models tend to ignore early tokens
+    const prompt = `wide angle full body cinematic shot of a ${formData.sex} ${formData.lineage} ${formData.charClass}, ${appearance}, wearing ${raceData.visuals}, fully clothed modest ancient clothing, ${safeHeight} tall${mountDesc}, standing in ${formData.background}, ${formData.vibe} atmosphere, ancient bronze-age biblical Hebrew setting, historical realism, dramatic lighting, 8k, photorealistic, masterpiece, wide view, detailed background, MUST HAVE ${cleanSkin}, MUST HAVE ${hairDesc}, NO horns, NO wings, NO demon features, NO fantasy creature, NO nudity, NO bare chest, NO exposed skin, fully covered, PG-13, human character`;
 
     // Clean up any parentheses/quotes that may cause SD issues
     return prompt.replace(/[()"]/g, "").replace(/,\s*,/g, ',').trim();
