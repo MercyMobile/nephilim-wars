@@ -3,28 +3,34 @@ import { validateCharacterName, validateAttribute, validateDescription } from '.
 import { setCharacterData, addToPartyRoster } from '../utils/storage';
 
 const CharacterGenerator = ({ onCharacterComplete }) => {
-  // === COMPREHENSIVE RACE DATA FROM ENCYCLOPEDIA ===
+  // === COMPREHENSIVE ANCESTRY DATA (PF2e-Compliant per Manual) ===
   const RACES = {
     Sethite: {
       name: "Sethite (Righteous Line)",
       desc: "Descendants of Seth. Keepers of the original faith and pre-fall history.",
-      stats: { WIS: 2, CHA: 1 },
-      traits: ["Blessed Heritage (Advantage on Religion)", "Divine Favor (1/Long Rest Reroll)"],
+      abilityBoosts: ["Free", "Free"], // Two free boosts
+      abilityFlaw: "Free", // One free flaw (optional)
+      ancestryHP: 8,
+      size: "Medium",
+      speed: 25,
+      traits: ["Blessed Heritage (+1 Religion)", "Divine Favor (Detect Evil 1/day)", "Low-Light Vision"],
       startingRP: 2,
       startingCP: 0,
-      hpBonus: 0,
-      heightRange: { male: [65, 72], female: [60, 67] }, // inches
+      heightRange: { male: [65, 72], female: [60, 67] },
       accessory: "prayer shawl, scroll case, or holy phylactery",
       visuals: "simple robes, prayer shawl, serene expression, holding scroll or staff, semitic features, ancient hebrew"
     },
     Cainite: {
       name: "Cainite (City Builder)",
       desc: "Descendants of the first murderer. Masters of metallurgy, music, and urbanization.",
-      stats: { INT: 2, CON: 1 },
-      traits: ["Mark of Cain (Protection from vengeance)", "City Born (Urban Advantage)", "Builder's Heritage"],
+      abilityBoosts: ["Free", "Free"], // Two free boosts
+      abilityFlaw: "Free", // One free flaw (optional)
+      ancestryHP: 8,
+      size: "Medium",
+      speed: 25,
+      traits: ["City Born (+1 Urban Recall Knowledge)", "Mark of Cain (Protection)", "Builder's Heritage"],
       startingRP: 0,
       startingCP: 1,
-      hpBonus: 0,
       heightRange: { male: [66, 73], female: [61, 68] },
       accessory: "bronze jewelry, musical instrument (lyre/flute), or artisan's hammer",
       visuals: "adorned in gold and brass jewelry, fine dyed clothes, musical instrument or hammer, elaborate hair, sharp features"
@@ -32,11 +38,14 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     Wanderer: {
       name: "Wanderer (Nomad)",
       desc: "Those who rejected both the cities of Cain and the strictures of Seth.",
-      stats: { DEX: 2, WIS: 1 },
-      traits: ["Survivalist", "Swift Footed (35ft Speed)"],
+      abilityBoosts: ["Free", "Free"], // Two free boosts
+      abilityFlaw: "Free", // One free flaw (optional)
+      ancestryHP: 10,
+      size: "Medium",
+      speed: 30,
+      traits: ["Survivalist (+1 Subsist/Survival)", "Swift Footed (30ft base Speed)"],
       startingRP: 0,
       startingCP: 0,
-      hpBonus: 0,
       heightRange: { male: [64, 71], female: [59, 66] },
       accessory: "tribal totems, bone necklace, or hunting fetish",
       visuals: "weather-beaten skin, animal furs, tribal tattoos, bow on back, wild hair, dust covered"
@@ -44,71 +53,104 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     Nephilim: {
       name: "Nephilim (1st Gen Giant)",
       desc: "Direct offspring of Watchers and Humans. Titans of the ancient world.",
-      stats: { STR: 4, CON: 2, DEX: -2 },
-      traits: ["Large Size (12-15ft)", "Angelic Resistance (Radiant)", "Insatiable Hunger", "Powerful Build"],
+      abilityBoosts: ["STR", "CON", "Free"], // STR, CON, one free
+      abilityFlaw: "DEX",
+      ancestryHP: 12,
+      size: "Large",
+      speed: 25,
+      traits: ["Angelic Resistance (Radiant 5)", "Insatiable Hunger", "Powerful Build", "Large Size (10ft reach)"],
       startingRP: 0,
       startingCP: 3,
-      hpBonus: 10,
-      heightRange: { male: [144, 180], female: [132, 168] }, // 12-15ft
+      heightRange: { male: [144, 180], female: [132, 168] },
       accessory: "massive bronze armor plates, giant's chain, or trophy skulls",
       visuals: "massive 12ft tall giant, glowing eyes, unnatural muscles, wearing heavy bronze armor, carrying massive weapon, imposing presence"
     },
     Rephaim: {
       name: "Rephaim (Shade/Giant)",
-      desc: "Later generations of giants, often associated with the dead.",
-      stats: { STR: 2, CON: 2 },
-      traits: ["Spirit Sight", "Intimidating Presence"],
+      desc: "Later generations of giants, often associated with the dead and the underworld.",
+      abilityBoosts: ["STR", "CON", "Free"], // STR, CON, one free
+      abilityFlaw: "CHA",
+      ancestryHP: 10,
+      size: "Large",
+      speed: 25,
+      traits: ["Spirit Sight (See Invisibility)", "Deathly Aura (-1 fear saves 10ft)", "Intimidating Presence (+1 Intimidation)"],
       startingRP: 0,
       startingCP: 2,
-      hpBonus: 5,
-      heightRange: { male: [108, 132], female: [102, 126] }, // 9-11ft
+      heightRange: { male: [108, 132], female: [102, 126] },
       accessory: "death shroud, spirit talisman, or ancient burial mask",
       visuals: "tall gaunt figure, pale grey skin, shadowy aura, ancient rusted armor, haunting eyes"
     },
     Anakim: {
       name: "Anakim (Noble Giant)",
-      desc: "The 'Long-Necked Ones'. A race of giants known for wearing heavy chains.",
-      stats: { STR: 3, CHA: 1, DEX: -1 },
-      traits: ["Chain Master", "Noble Bearing"],
+      desc: "The 'Long-Necked Ones'. Noble giants known for chain weapons and regal bearing.",
+      abilityBoosts: ["STR", "CHA", "Free"], // STR, CHA, one free
+      abilityFlaw: "DEX",
+      ancestryHP: 12,
+      size: "Large",
+      speed: 25,
+      traits: ["Chain Master (15ft grapple reach)", "Noble Bearing (+1 Diplomacy vs giants)", "Long-Necked (+1 Perception)"],
       startingRP: 0,
       startingCP: 2,
-      hpBonus: 8,
-      heightRange: { male: [120, 156], female: [114, 144] }, // 10-13ft
+      heightRange: { male: [120, 156], female: [114, 144] },
       accessory: "heavy gold chains (neck/wrist), royal signet, or ceremonial shackles",
       visuals: "giant stature, wearing heavy gold chains around neck, regal posture, clean shaven head, royal bearing"
     },
     Gibborim: {
       name: "Gibborim (Mighty Man)",
-      desc: "Human-Giant hybrids. The 'Mighty Men of Old' - heroic warriors.",
-      stats: { STR: 2, CON: 1 },
-      traits: ["Powerful Build", "Martial Proficiency", "Heroic Feat"],
+      desc: "Human-Giant hybrids. The 'Mighty Men of Old' - heroic warriors of renown.",
+      abilityBoosts: ["STR", "CON", "Free"], // STR, CON, one free
+      abilityFlaw: null, // None
+      ancestryHP: 10,
+      size: "Medium",
+      speed: 25,
+      traits: ["Powerful Build (counts as Large for carry/push)", "Martial Training (+1 Athletics)", "Heroic Blood (+1 vs fear)"],
       startingRP: 0,
       startingCP: 1,
-      hpBonus: 3,
-      heightRange: { male: [78, 96], female: [72, 90] }, // 6.5-8ft
+      heightRange: { male: [78, 96], female: [72, 90] },
       accessory: "lion pelt cloak, hero's bronze bracers, or trophy weapon",
       visuals: "7ft tall, extremely muscular human, lion skin cloak, heroic pose, holding spear, warrior build"
     },
     Horim: {
       name: "Horim (Cave Dweller)",
-      desc: "Giant-kin adapted to underground life.",
-      stats: { DEX: 2, WIS: 1 },
-      traits: ["Superior Darkvision", "Sunlight Sensitivity", "Stone Cunning"],
+      desc: "Giant-kin adapted to underground life. Masters of stone and darkness.",
+      abilityBoosts: ["DEX", "WIS", "Free"], // DEX, WIS, one free
+      abilityFlaw: "CHA",
+      ancestryHP: 8,
+      size: "Medium",
+      speed: 25,
+      traits: ["Superior Darkvision (120ft)", "Stone Cunning (+1 stonework/geology)", "Sunlight Sensitivity (dazzled in sunlight)"],
       startingRP: 0,
       startingCP: 1,
-      hpBonus: 2,
-      heightRange: { male: [70, 82], female: [65, 77] }, // 6-7ft
+      heightRange: { male: [70, 82], female: [65, 77] },
       accessory: "stone carving tools, luminescent fungi, or cave crystals",
       visuals: "pale skin, large black eyes, crouched posture, primitive stone tools, cave background, nocturnal"
+    },
+    Elioud: {
+      name: "Elioud (Third-Gen Giant-Kin)",
+      desc: "Third-generation giant descendants who can pass as large humans. Bridge between worlds.",
+      abilityBoosts: ["STR", "Free"], // STR, one free
+      abilityFlaw: null, // None
+      ancestryHP: 8,
+      size: "Medium",
+      speed: 25,
+      traits: ["Diluted Blood (pass as human DC 15)", "Ancestral Echo (1/day +2 STR checks 1 min)", "Mighty Heritage (+1 Grapple/Shove/Trip)"],
+      startingRP: 0,
+      startingCP: 1,
+      heightRange: { male: [74, 86], female: [70, 82] },
+      accessory: "ancestral amulet, oversized bronze bracers, or giant-blood tattoos",
+      visuals: "tall muscular human, subtle giant features, broad shoulders, intense eyes, wearing mixed human-giant attire"
     },
     Sorcerer: {
       name: "Sorcerer Clan (Watcher-Taught)",
       desc: "Humans initiated into Watcher mysteries like root-cutting and astrology.",
-      stats: { INT: 2, CHA: 1 },
-      traits: ["Dark Insight (Detect Magic)", "Blood Magic", "Watcher's Mark"],
+      abilityBoosts: ["Free", "Free"], // Two free boosts
+      abilityFlaw: "Free", // One free flaw (optional)
+      ancestryHP: 6,
+      size: "Medium",
+      speed: 25,
+      traits: ["Dark Insight (Detect Magic 1/day)", "Watcher's Mark", "Forbidden Knowledge"],
       startingRP: 0,
       startingCP: 2,
-      hpBonus: 0,
       heightRange: { male: [65, 72], female: [60, 67] },
       accessory: "star charts, ritual dagger, dried herbs pouch, or crystal focus",
       visuals: "robes covered in constellations, glowing runes on skin, holding strange herbs or crystals, purple magical aura, mystical"
@@ -196,15 +238,39 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     }
   };
 
-  // === CLASSES ===
+  // === CLASSES (PF2e-Compliant per Manual) ===
   const CLASSES = [
-    { value: "Warrior", label: "Warrior (Tribal Fighter)" },
-    { value: "Gibbor", label: "Gibbor (Mighty Hero)" },
-    { value: "Hunter", label: "Hunter (Wilderness)" },
-    { value: "Magi", label: "Magi (Watcher-Taught Sorcerer)" },
-    { value: "Priest", label: "Priest (Keeper of Rituals)" },
-    { value: "Artisan", label: "Artisan (Smith/Builder)" },
-    { value: "Scribe", label: "Scribe (Keeper of Tablets)" }
+    { value: "Warrior", label: "Warrior (Tribal Fighter)", classHP: 10, keyAbility: "STR or DEX" },
+    { value: "Gibbor", label: "Gibbor (Mighty Hero)", classHP: 12, keyAbility: "STR" },
+    { value: "Hunter", label: "Hunter (Wilderness)", classHP: 8, keyAbility: "DEX" },
+    { value: "Magi", label: "Magi (Watcher-Taught Sorcerer)", classHP: 6, keyAbility: "INT" },
+    { value: "Priest", label: "Priest (Keeper of Rituals)", classHP: 8, keyAbility: "WIS" },
+    { value: "Artisan", label: "Artisan (Smith/Builder)", classHP: 8, keyAbility: "INT or STR" },
+    { value: "Scribe", label: "Scribe (Keeper of Tablets)", classHP: 6, keyAbility: "INT" }
+  ];
+
+  // === GAME BACKGROUNDS (from Manual Chapter 3) ===
+  const GAME_BACKGROUNDS = [
+    { value: "watchers_apprentice", label: "Watcher's Apprentice", boost: "INT", skill: "Arcana", lore: "Forbidden Lore" },
+    { value: "tribal_elder", label: "Tribal Elder", boost: "WIS", skill: "Diplomacy", lore: "Tribal Lore" },
+    { value: "bronze_smith", label: "Bronze Smith", boost: "INT or STR", skill: "Crafting", lore: "Metallurgy Lore" },
+    { value: "temple_servant", label: "Temple Servant", boost: "WIS", skill: "Religion", lore: "Temple Lore" },
+    { value: "giants_thrall", label: "Giant's Thrall", boost: "CON", skill: "Survival", lore: "Giant Lore" },
+    { value: "wandering_prophet", label: "Wandering Prophet", boost: "WIS", skill: "Religion", lore: "Prophecy Lore" },
+    { value: "merchant_of_enoch", label: "Merchant of Enoch", boost: "CHA", skill: "Diplomacy", lore: "Trade Lore" },
+    { value: "beast_tamer", label: "Beast Tamer", boost: "WIS", skill: "Nature", lore: "Animal Lore" },
+    { value: "star_reader", label: "Star Reader", boost: "INT", skill: "Occultism", lore: "Astrology Lore" },
+    { value: "herb_cutter", label: "Herb Cutter", boost: "INT or WIS", skill: "Nature", lore: "Herbalism Lore" },
+    { value: "flood_plains_survivor", label: "Survivor of the Flood Plains", boost: "CON", skill: "Survival", lore: "Weather Lore" },
+    { value: "nephilim_offspring", label: "Nephilim Offspring", boost: "STR or CHA", skill: "Intimidation", lore: "Giant Heritage Lore" },
+    { value: "keeper_of_scrolls", label: "Keeper of the Scrolls", boost: "INT", skill: "Society", lore: "Ancient History Lore" },
+    { value: "hunter_of_abominations", label: "Hunter of Abominations", boost: "WIS", skill: "Survival", lore: "Monster Lore" },
+    { value: "penitent_cultist", label: "Penitent Cultist", boost: "WIS", skill: "Occultism", lore: "Cult Lore" },
+    { value: "desert_nomad", label: "Desert Nomad", boost: "CON", skill: "Survival", lore: "Desert Lore" },
+    { value: "river_fisher", label: "River Fisher", boost: "WIS", skill: "Survival", lore: "Fishing Lore" },
+    { value: "stone_mason", label: "Stone Mason", boost: "STR or INT", skill: "Crafting", lore: "Architecture Lore" },
+    { value: "tribal_scout", label: "Tribal Scout", boost: "DEX", skill: "Stealth", lore: "Scouting Lore" },
+    { value: "sacred_dancer", label: "Sacred Dancer", boost: "DEX or CHA", skill: "Performance", lore: "Dance Lore" }
   ];
 
   // === EQUIPMENT BY CLASS (D&D 5e Stats) ===
@@ -233,11 +299,11 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       { id: 'scimitar', name: 'Bronze Scimitar', type: 'melee', useStat: 'DEX', damageDice: '1d6', damageType: 'slashing', desc: 'Light, finesse blade' }
     ],
     Magi: [
-      { id: 'arcane_staff', name: 'Watcher-Carved Staff', type: 'spell', useStat: 'CHA', damageDice: '1d10', damageType: 'force', desc: 'Eldritch Blast - forbidden Watcher magic' },
-      { id: 'fire_wand', name: 'Wand of Fire', type: 'spell', useStat: 'CHA', damageDice: '1d10', damageType: 'fire', desc: 'Fire Bolt - flames of destruction' },
-      { id: 'frost_orb', name: 'Orb of Winter', type: 'spell', useStat: 'CHA', damageDice: '1d8', damageType: 'cold', desc: 'Ray of Frost - freezing magic' },
-      { id: 'shock_rod', name: 'Lightning Rod', type: 'spell', useStat: 'CHA', damageDice: '1d8', damageType: 'lightning', desc: 'Shocking Grasp - electric touch' },
-      { id: 'poison_focus', name: 'Serpent Focus', type: 'spell', useStat: 'CHA', damageDice: '1d12', damageType: 'poison', desc: 'Poison Spray - toxic cloud' },
+      { id: 'arcane_staff', name: 'Watcher-Carved Staff', type: 'spell', useStat: 'INT', damageDice: '1d10', damageType: 'force', desc: 'Eldritch Blast - forbidden Watcher magic' },
+      { id: 'fire_wand', name: 'Wand of Fire', type: 'spell', useStat: 'INT', damageDice: '1d10', damageType: 'fire', desc: 'Fire Bolt - flames of destruction' },
+      { id: 'frost_orb', name: 'Orb of Winter', type: 'spell', useStat: 'INT', damageDice: '1d8', damageType: 'cold', desc: 'Ray of Frost - freezing magic' },
+      { id: 'shock_rod', name: 'Lightning Rod', type: 'spell', useStat: 'INT', damageDice: '1d8', damageType: 'lightning', desc: 'Shocking Grasp - electric touch' },
+      { id: 'poison_focus', name: 'Serpent Focus', type: 'spell', useStat: 'INT', damageDice: '1d12', damageType: 'poison', desc: 'Poison Spray - toxic cloud' },
       { id: 'ritual_dagger', name: 'Ritual Dagger', type: 'melee', useStat: 'DEX', damageDice: '1d4', damageType: 'piercing', desc: 'Ceremonial blade, finesse' }
     ],
     Priest: [
@@ -288,6 +354,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     name: '',
     lineage: 'Sethite',
     charClass: 'Warrior',
+    level: 1,
+    gameBackground: 'watchers_apprentice',
     sex: 'Male',
     height: '',
     skinTone: 'olive',
@@ -320,7 +388,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     const sex = formData.sex;
 
     let namePool;
-    if (race === 'Nephilim' || race === 'Rephaim' || race === 'Anakim' || race === 'Gibborim') {
+    if (race === 'Nephilim' || race === 'Rephaim' || race === 'Anakim' || race === 'Gibborim' || race === 'Elioud') {
       namePool = NAMES[sex].Giant;
     } else if (race === 'Sethite') {
       namePool = NAMES[sex].Sethite;
@@ -445,12 +513,24 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     }
 
     const loreData = RACES[formData.lineage];
+    const classData = CLASSES.find(c => c.value === formData.charClass) || CLASSES[0];
+    const bgData = GAME_BACKGROUNDS.find(b => b.value === formData.gameBackground);
+    const level = formData.level || 1;
 
-    // Apply Racial Stat Bonuses
+    // Apply PF2e Ability Boosts from ancestry (fixed boosts add +2)
     const finalStats = { ...formData.attributes };
-    Object.entries(loreData.stats).forEach(([stat, bonus]) => {
-      finalStats[stat] = (finalStats[stat] || 10) + bonus;
+    loreData.abilityBoosts.forEach(boost => {
+      if (boost !== "Free" && finalStats[boost] !== undefined) {
+        finalStats[boost] = finalStats[boost] >= 18
+          ? finalStats[boost] + 1
+          : finalStats[boost] + 2;
+      }
     });
+
+    // Apply Ability Flaw from ancestry (-2)
+    if (loreData.abilityFlaw && loreData.abilityFlaw !== "Free" && loreData.abilityFlaw !== null) {
+      finalStats[loreData.abilityFlaw] = (finalStats[loreData.abilityFlaw] || 10) - 2;
+    }
 
     // Calculate Modifiers
     const getMod = (score) => Math.floor((score - 10) / 2);
@@ -458,10 +538,10 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     const dexMod = getMod(finalStats.DEX);
     const conMod = getMod(finalStats.CON);
 
-    // Calculate Derived Stats
-    const proficiency = 2;
-    const maxHp = 10 + conMod + loreData.hpBonus;
-    const defense = 10 + dexMod;
+    // Calculate Derived Stats (PF2e: Ancestry HP + Class HP per level + CON mod per level)
+    const proficiency = 2 + Math.floor((level - 1) / 2); // PF2e proficiency scales with level
+    const maxHp = loreData.ancestryHP + (classData.classHP + conMod) * level;
+    const defense = 10 + dexMod; // Base AC (armor adds more in PF2e)
 
     // Get selected equipment from class list
     const classEquipment = EQUIPMENT[formData.charClass] || EQUIPMENT.Warrior;
@@ -498,6 +578,10 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       portrait: portrait,
       lineage: formData.lineage,
       class: formData.charClass,
+      level: level,
+      gameBackground: bgData ? bgData.label : 'None',
+      size: loreData.size,
+      speed: loreData.speed,
       sex: formData.sex,
       height: formData.height,
       skinTone: formData.skinTone,
@@ -513,6 +597,9 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       initiativeBonus: dexMod,
       rp: loreData.startingRP,
       cp: loreData.startingCP,
+      ancestryHP: loreData.ancestryHP,
+      classHP: classData.classHP,
+      keyAbility: classData.keyAbility,
       actions: [mainAction]
     };
 
@@ -555,6 +642,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       sex: 'Male',
       lineage: 'Sethite',
       charClass: 'Warrior',
+      level: 1,
+      gameBackground: 'watchers_apprentice',
       height: '',
       skinTone: 'olive',
       eyeColor: 'brown',
@@ -562,8 +651,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       hairLength: 'short',
       distinguishingFeature: 'none',
       customVisuals: '',
-      background: 'desert ruins',
-      vibe: 'epic',
+      background: 'ancient stone city',
+      vibe: 'biblical epic',
       equipment: 'bronze_sword',
       attributes: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 }
     };
@@ -589,9 +678,14 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
           <div className="bg-gradient-to-r from-[#78350f] to-[#92400e] p-4 sm:p-6 text-center">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-cinzel font-bold text-[#fcd34d] mb-2">{finalCharacter.name}</h1>
             <div className="text-[#d6d3d1] text-base sm:text-lg">
-              {finalCharacter.sex} {raceData.name} • {finalCharacter.class}
+              {finalCharacter.sex} {raceData.name} • {finalCharacter.class} (Level {finalCharacter.level})
             </div>
-            <div className="text-[#a8a29e] text-sm mt-1">{finalCharacter.height} tall</div>
+            <div className="text-[#a8a29e] text-sm mt-1">
+              {finalCharacter.height} tall • {finalCharacter.size} • Speed {finalCharacter.speed} ft
+              {finalCharacter.gameBackground && finalCharacter.gameBackground !== 'None' && (
+                <span> • {finalCharacter.gameBackground}</span>
+              )}
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
@@ -796,7 +890,13 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
             <div className="bg-[#292524] p-3 border-l-2 border-[#f59e0b] text-xs">
               <p className="text-[#d6d3d1] mb-1">{RACES[formData.lineage].desc}</p>
               <p className="text-[#fcd34d] font-bold">
-                Bonuses: {Object.entries(RACES[formData.lineage].stats).map(([k,v]) => `${v>0?'+':''}${v} ${k}`).join(', ')}
+                Boosts: {RACES[formData.lineage].abilityBoosts.join(', ')}
+                {RACES[formData.lineage].abilityFlaw && RACES[formData.lineage].abilityFlaw !== "Free" && RACES[formData.lineage].abilityFlaw !== null && (
+                  <span className="text-red-400"> | Flaw: {RACES[formData.lineage].abilityFlaw}</span>
+                )}
+              </p>
+              <p className="text-[#a8a29e] text-xs mt-1">
+                HP: {RACES[formData.lineage].ancestryHP} | Size: {RACES[formData.lineage].size} | Speed: {RACES[formData.lineage].speed} ft
               </p>
               <p className="text-blue-400 text-xs mt-1">RP: {RACES[formData.lineage].startingRP} | <span className="text-red-400">CP: {RACES[formData.lineage].startingCP}</span></p>
             </div>
@@ -823,6 +923,52 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                 ))}
               </select>
             </div>
+
+            {/* LEVEL & BACKGROUND */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-1">Level</label>
+                <select
+                  name="level"
+                  value={formData.level}
+                  onChange={(e) => setFormData(prev => ({ ...prev, level: parseInt(e.target.value) }))}
+                  className="w-full bg-black border border-[#44403c] p-2 text-white outline-none text-sm"
+                >
+                  {Array.from({ length: 20 }, (_, i) => i + 1).map(lvl => (
+                    <option key={lvl} value={lvl}>Level {lvl}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-1">Background</label>
+                <select
+                  name="gameBackground"
+                  value={formData.gameBackground}
+                  onChange={handleChange}
+                  className="w-full bg-black border border-[#44403c] p-2 text-white outline-none text-sm"
+                >
+                  {GAME_BACKGROUNDS.map(bg => (
+                    <option key={bg.value} value={bg.value}>{bg.label}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Background Info */}
+            {formData.gameBackground && (
+              <div className="bg-[#292524] p-2 border-l-2 border-blue-600 text-xs">
+                {(() => {
+                  const bg = GAME_BACKGROUNDS.find(b => b.value === formData.gameBackground);
+                  return bg ? (
+                    <>
+                      <span className="text-blue-400">Boost: {bg.boost}</span>
+                      <span className="text-[#a8a29e]"> | Skill: {bg.skill}</span>
+                      <span className="text-[#78716c]"> | Lore: {bg.lore}</span>
+                    </>
+                  ) : null;
+                })()}
+              </div>
+            )}
 
             {/* EQUIPMENT/WEAPON */}
             <div>

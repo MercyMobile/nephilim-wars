@@ -115,7 +115,7 @@ export function validateDefense(value) {
  * @returns {string} - Valid lineage or default
  */
 export function validateLineage(lineage) {
-  const validLineages = ['Sethite', 'Cainite', 'Nephilim', 'Rephaim', 'Gibborim'];
+  const validLineages = ['Sethite', 'Cainite', 'Wanderer', 'Nephilim', 'Rephaim', 'Anakim', 'Gibborim', 'Horim', 'Elioud', 'Sorcerer'];
 
   if (validLineages.includes(lineage)) {
     return lineage;
