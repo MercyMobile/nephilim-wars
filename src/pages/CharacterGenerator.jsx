@@ -18,7 +18,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 0,
       heightRange: { male: [65, 72], female: [60, 67] },
       accessory: "prayer shawl, scroll case, or holy phylactery",
-      visuals: "simple robes, prayer shawl, serene expression, holding scroll or staff, semitic features, ancient hebrew"
+      visuals: "simple robes of wool and linen, prayer shawl, holding scroll or staff"
     },
     Cainite: {
       name: "Cainite (City Builder)",
@@ -33,7 +33,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 1,
       heightRange: { male: [66, 73], female: [61, 68] },
       accessory: "bronze jewelry, musical instrument (lyre/flute), or artisan's hammer",
-      visuals: "adorned in gold and brass jewelry, fine dyed clothes, musical instrument or hammer, elaborate hair, sharp features"
+      visuals: "elaborate dyed fabrics, bronze ornaments, gold and brass jewelry, practical stylish clothing"
     },
     Wanderer: {
       name: "Wanderer (Nomad)",
@@ -48,7 +48,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 0,
       heightRange: { male: [64, 71], female: [59, 66] },
       accessory: "tribal totems, bone necklace, or hunting fetish",
-      visuals: "weather-beaten skin, animal furs, tribal tattoos, bow on back, wild hair, dust covered"
+      visuals: "practical leather and fur clothing, tribal bead and feather decorations, animal hide garments"
     },
     Nephilim: {
       name: "Nephilim (1st Gen Giant)",
@@ -63,7 +63,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 3,
       heightRange: { male: [144, 180], female: [132, 168] },
       accessory: "massive bronze armor plates, giant's chain, or trophy skulls",
-      visuals: "massive 12ft tall giant, glowing eyes, unnatural muscles, wearing heavy bronze armor, carrying massive weapon, imposing presence"
+      visuals: "massive bronze armor plates, heavy bronze weaponry, clothing and equipment scaled to immense size"
     },
     Rephaim: {
       name: "Rephaim (Shade/Giant)",
@@ -78,7 +78,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 2,
       heightRange: { male: [108, 132], female: [102, 126] },
       accessory: "death shroud, spirit talisman, or ancient burial mask",
-      visuals: "tall gaunt figure, pale grey skin, shadowy aura, ancient rusted armor, haunting eyes"
+      visuals: "dark clothing and armor, bones and skulls and death motifs incorporated into appearance"
     },
     Anakim: {
       name: "Anakim (Noble Giant)",
@@ -93,11 +93,11 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 2,
       heightRange: { male: [120, 156], female: [114, 144] },
       accessory: "heavy gold chains (neck/wrist), royal signet, or ceremonial shackles",
-      visuals: "giant stature, wearing heavy gold chains around neck, regal posture, clean shaven head, royal bearing"
+      visuals: "massive bronze chain links across shoulders and chest, bronze rings woven in braided hair, regal noble attire"
     },
     Gibborim: {
-      name: "Gibborim (Mighty Man)",
-      desc: "Human-Giant hybrids. The 'Mighty Men of Old' - heroic warriors of renown.",
+      name: "Gibborim (Mighty One)",
+      desc: "Human-Giant hybrids. The 'Mighty Ones of Old' - heroic warriors of renown.",
       abilityBoosts: ["STR", "CON", "Free"], // STR, CON, one free
       abilityFlaw: null, // None
       ancestryHP: 10,
@@ -108,7 +108,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 1,
       heightRange: { male: [78, 96], female: [72, 90] },
       accessory: "lion pelt cloak, hero's bronze bracers, or trophy weapon",
-      visuals: "7ft tall, extremely muscular human, lion skin cloak, heroic pose, holding spear, warrior build"
+      visuals: "practical well-made armor, lion pelt cloak, bronze rings and beads of victory in hair"
     },
     Horim: {
       name: "Horim (Cave Dweller)",
@@ -121,9 +121,9 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       traits: ["Superior Darkvision (120ft)", "Stone Cunning (+1 stonework/geology)", "Sunlight Sensitivity (dazzled in sunlight)"],
       startingRP: 0,
       startingCP: 1,
-      heightRange: { male: [70, 82], female: [65, 77] },
+      heightRange: { male: [72, 82], female: [65, 77] },
       accessory: "stone carving tools, luminescent fungi, or cave crystals",
-      visuals: "pale skin, large black eyes, crouched posture, primitive stone tools, cave background, nocturnal"
+      visuals: "simple leather and fur garments, stone and crystal and bronze ornaments, cave-dweller clothing"
     },
     Elioud: {
       name: "Elioud (Third-Gen Giant-Kin)",
@@ -136,9 +136,9 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       traits: ["Diluted Blood (pass as human DC 15)", "Ancestral Echo (1/day +2 STR checks 1 min)", "Mighty Heritage (+1 Grapple/Shove/Trip)"],
       startingRP: 0,
       startingCP: 1,
-      heightRange: { male: [74, 86], female: [70, 82] },
+      heightRange: { male: [74, 84], female: [70, 80] },
       accessory: "ancestral amulet, oversized bronze bracers, or giant-blood tattoos",
-      visuals: "tall athletic human, broad shoulders, intense piercing eyes, wearing bronze-age leather armor with fine craftsmanship, human appearance"
+      visuals: "practical clothing that blends into human society, bronze-age leather armor with fine craftsmanship"
     },
     Sorcerer: {
       name: "Sorcerer Clan (Watcher-Taught)",
@@ -153,7 +153,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 2,
       heightRange: { male: [65, 72], female: [60, 67] },
       accessory: "star charts, ritual dagger, dried herbs pouch, or crystal focus",
-      visuals: "robes covered in constellations, glowing runes on skin, holding strange herbs or crystals, purple magical aura, mystical"
+      visuals: "robes concealing mystical marks, star charts and dried herbs, crystal focus, Watchers Mark brand on skin"
     }
   };
 
@@ -709,40 +709,63 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     if (cleanSkin === 'dark brown') cleanSkin = 'dark brown Cushite skin';
     if (cleanSkin === 'pale') cleanSkin = 'pale northern skin';
 
-    // Hair texture and phenotype by ancestry
+    // Hair texture and phenotype by ancestry (sex-aware per manual physical descriptions)
     const raceKey = formData.lineage.toLowerCase();
-    let phenotype = "Middle Eastern Semitic features, aquiline nose, ancient Hebrew biblical era";
+    const isFemale = formData.sex === 'Female';
+    let phenotype = isFemale
+      ? "woman, Middle Eastern Semitic features, ancient Hebrew biblical era"
+      : "man, Middle Eastern Semitic features, aquiline nose, ancient Hebrew biblical era";
     let hairTexture = "thick wavy";
 
     if (raceKey === 'nephilim') {
-      phenotype = "towering 12ft giant, massively muscular, inhuman proportions, rigid angular face, Middle Eastern features, ancient bronze-age warrior";
+      phenotype = isFemale
+        ? "towering 12ft giantess woman, massively powerful build, broad shoulders, thick limbs, angular face with celestial features, Middle Eastern features, ancient bronze-age warrior woman"
+        : "towering 12ft giant man, massively muscular, inhuman proportions, rigid angular face, Middle Eastern features, ancient bronze-age warrior";
       hairTexture = "thick wild";
     } else if (raceKey === 'rephaim') {
-      phenotype = "tall 10ft gaunt giant, pale grey complexion, hollow cheekbones, haunted ancient warrior, spectral presence";
+      phenotype = isFemale
+        ? "tall 9ft gaunt giantess woman, pale ashen complexion, hollow cheekbones, deep-set shadowed eyes, skeletal angular features, spectral haunting presence"
+        : "tall 10ft gaunt giant man, pale grey complexion, hollow cheekbones, haunted ancient warrior, spectral presence";
       hairTexture = "thin wispy";
     } else if (raceKey === 'anakim') {
-      phenotype = "tall 11ft giant, regal bearing, long neck, noble ancient warrior-king, Middle Eastern features, adorned with heavy chains";
+      phenotype = isFemale
+        ? "tall 10ft giantess woman, regal bearing, elongated neck, high cheekbones, sharp refined features, piercing eyes, noble ancient warrior queen, Middle Eastern features, adorned with heavy bronze chains"
+        : "tall 11ft giant man, regal bearing, long neck, noble ancient warrior-king, Middle Eastern features, adorned with heavy chains";
       hairTexture = "thick braided";
     } else if (raceKey === 'gibborim') {
-      phenotype = "tall 7ft powerfully muscular human warrior, heroic proportions, strong jaw, Middle Eastern features, ancient legendary hero";
+      phenotype = isFemale
+        ? "tall 7ft powerfully built woman warrior, well-proportioned athletic build, broad shoulders, intense eyes, striking strong features, Middle Eastern features, ancient legendary heroine"
+        : "tall 7ft powerfully muscular man warrior, heroic proportions, strong jaw, Middle Eastern features, ancient legendary hero";
       hairTexture = "thick wavy";
     } else if (raceKey === 'elioud') {
-      phenotype = "tall 7ft athletic human, subtle inhuman beauty, striking intense eyes, Middle Eastern features, passing as human but uncanny, ancient warrior-scholar";
+      phenotype = isFemale
+        ? "tall 6ft5 athletic woman, powerful well-proportioned build, broader shoulders, unusually intense eyes, subtle giant characteristics, Middle Eastern features, passing as human but uncanny, ancient warrior woman"
+        : "tall 7ft athletic man, subtle inhuman beauty, striking intense eyes, Middle Eastern features, passing as human but uncanny, ancient warrior-scholar";
       hairTexture = "thick flowing";
     } else if (raceKey === 'horim') {
-      phenotype = "pale skin, wide dark eyes, wiry compact build, cave-dweller, primal ancient features";
+      phenotype = isFemale
+        ? "pale translucent skin woman, large luminous eyes, lean wiry build, cave-dweller, visible blue veins, primal ancient features"
+        : "pale skin man, wide dark eyes, wiry compact build, cave-dweller, primal ancient features";
       hairTexture = "coarse matted";
     } else if (raceKey === 'cainite') {
-      phenotype = "weathered nomadic appearance, sharp cunning eyes, Middle Eastern Semitic features, ancient wanderer";
+      phenotype = isFemale
+        ? "urban sophisticated woman, calloused hands, trade-marked features, elaborate dyed clothing, Middle Eastern Semitic features, ancient city-dweller"
+        : "urban robust man, calloused hands, trade-marked features, sharp cunning eyes, Middle Eastern Semitic features, ancient city-builder";
       hairTexture = "thick coarse";
     } else if (raceKey === 'sethite') {
-      phenotype = "noble bearing, serene expression, Middle Eastern Semitic features, priestly ancient lineage";
+      phenotype = isFemale
+        ? "dignified woman, refined features, thoughtful contemplative expression, Middle Eastern Semitic features, priestly ancient lineage, simple wool and linen garments"
+        : "noble bearing man, serene expression, refined features, Middle Eastern Semitic features, priestly ancient lineage";
       hairTexture = "thick wavy";
     } else if (raceKey === 'wanderer') {
-      phenotype = "rugged traveler, sun-weathered face, Middle Eastern Semitic features, ancient nomad";
+      phenotype = isFemale
+        ? "lean weathered woman traveler, sun-darkened skin, wind-tousled hair, scarred calloused hands, lean muscular, Middle Eastern Semitic features, ancient nomad"
+        : "rugged man traveler, sun-weathered face, Middle Eastern Semitic features, ancient nomad";
       hairTexture = "thick windswept";
     } else if (raceKey === 'sorcerer clan') {
-      phenotype = "intense mystical gaze, sharp angular face, Middle Eastern features, ancient occult scholar";
+      phenotype = isFemale
+        ? "mystical woman, intense unnatural gaze, faint Watcher mark on skin, eyes with faint luminescence, Middle Eastern features, ancient occult sorceress"
+        : "intense mystical man, sharp angular face, Middle Eastern features, ancient occult scholar";
       hairTexture = "thick straight";
     }
 
