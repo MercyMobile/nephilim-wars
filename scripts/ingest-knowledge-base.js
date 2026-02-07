@@ -1,48 +1,130 @@
 #!/usr/bin/env node
 
 /**
- * Nephilim Wars Knowledge Base Ingestion Script
+ * Nephilim Wars — Scribe Knowledge Base Ingestion
  *
- * Chunks the game manual and system docs, generates embeddings via
- * Cloudflare Workers AI, and upserts them into the Vectorize index.
+ * Reads all texts from docs/scribe-texts/, chunks them, generates
+ * embeddings via Cloudflare Workers AI REST API, and uploads to Vectorize.
+ *
+ * Supported file formats: .md, .txt, .json, .html
  *
  * Prerequisites:
- *   - `npx wrangler login` (authenticated with Cloudflare)
- *   - Vectorize index "nephilim-knowledge-base" exists
- *     (create with: npx wrangler vectorize create nephilim-knowledge-base --dimensions=768 --metric=cosine)
+ *   1. Create a .env file in the project root with:
+ *        CLOUDFLARE_ACCOUNT_ID=your_account_id
+ *        CLOUDFLARE_API_TOKEN=your_api_token
+ *
+ *   2. Vectorize index "nephilim-knowledge-base" must exist (768 dimensions, cosine metric)
  *
  * Usage:
- *   node scripts/ingest-knowledge-base.js
- *
- * The script uses wrangler CLI under the hood to interact with Cloudflare APIs.
+ *   npm run ingest
  */
 
-import { readFileSync, writeFileSync } from 'fs';
-import { execSync } from 'child_process';
+import { readFileSync, readdirSync, existsSync, statSync, writeFileSync } from 'fs';
 import { createHash } from 'crypto';
-import { dirname, resolve } from 'path';
+import { basename, dirname, extname, join, relative, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
+const TEXTS_DIR = resolve(ROOT, 'docs/scribe-texts');
+
+// --- Load .env ---
+function loadEnv() {
+  const envPath = resolve(ROOT, '.env');
+  if (!existsSync(envPath)) {
+    console.error('Missing .env file in project root.');
+    console.error('Create one with:');
+    console.error('  CLOUDFLARE_ACCOUNT_ID=your_account_id');
+    console.error('  CLOUDFLARE_API_TOKEN=your_api_token');
+    process.exit(1);
+  }
+  const lines = readFileSync(envPath, 'utf-8').split('\n');
+  for (const line of lines) {
+    const match = line.match(/^\s*([\w]+)\s*=\s*(.+?)\s*$/);
+    if (match) process.env[match[1]] = match[2];
+  }
+}
 
 // --- Configuration ---
-const CHUNK_SIZE = 800;       // ~800 tokens per chunk (chars as rough proxy)
-const CHUNK_OVERLAP = 100;    // overlap between chunks for context continuity
-const BATCH_SIZE = 20;        // vectors per upsert batch (Vectorize limit: 1000)
+const CHUNK_SIZE = 2000;        // ~2000 chars per chunk (larger = fewer chunks, still good for retrieval)
+const CHUNK_OVERLAP = 200;      // overlap between chunks for context continuity
+const EMBED_BATCH_SIZE = 50;    // max texts per embedding API call (kept under 153k token model limit)
+const VECTORIZE_BATCH_SIZE = 1000; // max vectors per Vectorize insert
+const MAX_METADATA_BYTES = 10240;  // Vectorize per-vector metadata limit
 const INDEX_NAME = 'nephilim-knowledge-base';
 
-// Docs to ingest
-const DOCS = [
-  { path: 'docs/manual.md', source: 'game-manual' },
-  { path: 'docs/NEPHILIM_WARS_GAME_SYSTEM.md', source: 'game-system' },
-];
+// --- File Discovery ---
+
+function discoverTexts(dir = TEXTS_DIR) {
+  const supported = ['.md', '.txt', '.json', '.html'];
+  const results = [];
+
+  for (const entry of readdirSync(dir)) {
+    if (entry === 'README.txt') continue;
+    const fullPath = join(dir, entry);
+    const stat = statSync(fullPath);
+
+    if (stat.isDirectory()) {
+      results.push(...discoverTexts(fullPath));
+    } else if (supported.includes(extname(entry).toLowerCase())) {
+      const relPath = relative(TEXTS_DIR, fullPath);
+      const source = relPath.replace(/\\/g, '/').replace(extname(entry), '');
+      results.push({
+        path: fullPath,
+        filename: relPath.replace(/\\/g, '/'),
+        source,
+      });
+    }
+  }
+
+  return results;
+}
+
+function extractText(filePath) {
+  const ext = extname(filePath).toLowerCase();
+  const raw = readFileSync(filePath, 'utf-8');
+
+  switch (ext) {
+    case '.md':
+    case '.txt':
+      return raw;
+
+    case '.json': {
+      const data = JSON.parse(raw);
+      return flattenJson(data);
+    }
+
+    case '.html': {
+      return raw
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/&[a-z]+;/gi, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    default:
+      return raw;
+  }
+}
+
+function flattenJson(obj, depth = 0) {
+  if (typeof obj === 'string') return obj;
+  if (Array.isArray(obj)) return obj.map(item => flattenJson(item, depth + 1)).join('\n');
+  if (typeof obj === 'object' && obj !== null) {
+    return Object.entries(obj)
+      .map(([key, val]) => {
+        const text = flattenJson(val, depth + 1);
+        return depth < 3 ? `${key}: ${text}` : text;
+      })
+      .join('\n');
+  }
+  return String(obj);
+}
 
 // --- Chunking ---
 
-/**
- * Split a document into overlapping chunks, preserving section headings.
- */
 function chunkDocument(text, source) {
   const lines = text.split('\n');
   const chunks = [];
@@ -51,7 +133,6 @@ function chunkDocument(text, source) {
   let chunkIndex = 0;
 
   for (const line of lines) {
-    // Track the nearest markdown heading for metadata
     if (/^#{1,4}\s/.test(line)) {
       currentHeading = line.replace(/^#+\s*/, '').trim();
     }
@@ -61,13 +142,8 @@ function chunkDocument(text, source) {
     if (candidate.length > CHUNK_SIZE && currentChunk.length > 0) {
       chunks.push({
         text: currentChunk.trim(),
-        metadata: {
-          source,
-          section: currentHeading,
-          chunkIndex: chunkIndex++,
-        },
+        metadata: { source, section: currentHeading, chunkIndex: chunkIndex++ },
       });
-      // Start next chunk with overlap from end of previous
       const overlapStart = Math.max(0, currentChunk.length - CHUNK_OVERLAP);
       currentChunk = currentChunk.slice(overlapStart) + line + '\n';
     } else {
@@ -75,149 +151,244 @@ function chunkDocument(text, source) {
     }
   }
 
-  // Final chunk
   if (currentChunk.trim().length > 50) {
     chunks.push({
       text: currentChunk.trim(),
-      metadata: {
-        source,
-        section: currentHeading,
-        chunkIndex: chunkIndex++,
-      },
+      metadata: { source, section: currentHeading, chunkIndex: chunkIndex++ },
     });
   }
 
   return chunks;
 }
 
-/**
- * Generate a deterministic ID for a chunk so re-runs update rather than duplicate.
- */
 function chunkId(source, index) {
   const hash = createHash('md5').update(`${source}:${index}`).digest('hex').slice(0, 12);
   return `${source}-${index}-${hash}`;
 }
 
-// --- Embedding via Workers AI (through a temporary Worker) ---
+// --- Cloudflare REST API ---
 
-/**
- * Generate embeddings by calling the Cloudflare Workers AI REST API via wrangler.
- * We use the bge-base-en-v1.5 model which outputs 768-dimensional vectors,
- * matching the Vectorize index configuration.
- */
-async function generateEmbeddings(texts) {
-  // Write texts to a temp file to avoid shell argument limits
-  const tempInput = resolve(ROOT, 'scripts/.temp-embed-input.json');
-  const tempOutput = resolve(ROOT, 'scripts/.temp-embed-output.json');
-  writeFileSync(tempInput, JSON.stringify({ text: texts }));
+function getApiConfig() {
+  const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+  const apiToken = process.env.CLOUDFLARE_API_TOKEN;
 
-  // Use the Workers AI REST API via wrangler
-  // First, get account ID
-  const accountId = execSync('npx wrangler whoami 2>/dev/null | grep -oP "(?<=account )[a-f0-9]+" || npx wrangler whoami 2>&1 | grep -oP "[a-f0-9]{32}"', {
-    cwd: ROOT,
-    encoding: 'utf-8',
-  }).trim();
-
-  if (!accountId) {
-    throw new Error('Could not determine Cloudflare account ID. Run `npx wrangler login` first.');
+  if (!accountId || !apiToken) {
+    console.error('Missing CLOUDFLARE_ACCOUNT_ID or CLOUDFLARE_API_TOKEN in .env');
+    process.exit(1);
   }
 
-  // Call Workers AI embedding model via REST API
-  const curlCmd = `npx wrangler ai run @cf/baai/bge-base-en-v1.5 --file=${tempInput}`;
-
-  try {
-    const result = execSync(curlCmd, {
-      cwd: ROOT,
-      encoding: 'utf-8',
-      maxBuffer: 50 * 1024 * 1024, // 50MB buffer for large embedding responses
-    });
-    const parsed = JSON.parse(result);
-    return parsed.data || parsed;
-  } catch (error) {
-    console.error('Embedding API call failed:', error.message);
-    throw error;
-  }
+  return { accountId, apiToken };
 }
 
-// --- Vectorize Upsert ---
+async function generateEmbeddings(texts) {
+  const { accountId, apiToken } = getApiConfig();
+  const url = `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/baai/bge-base-en-v1.5`;
 
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ text: texts }),
+  });
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(`Embedding API error (${response.status}): ${err}`);
+  }
+
+  const json = await response.json();
+
+  if (!json.success) {
+    throw new Error(`Embedding API failed: ${JSON.stringify(json.errors)}`);
+  }
+
+  return json.result.data;
+}
+
+/**
+ * Upsert vectors to Vectorize via REST API (no wrangler subprocess).
+ */
 async function upsertVectors(vectors) {
-  // Write vectors to NDJSON format that wrangler vectorize expects
-  const tempFile = resolve(ROOT, 'scripts/.temp-vectors.ndjson');
+  const { accountId, apiToken } = getApiConfig();
+  const url = `https://api.cloudflare.com/client/v4/accounts/${accountId}/vectorize/v2/indexes/${INDEX_NAME}/insert`;
+
+  // Vectorize REST API expects NDJSON body
   const ndjson = vectors
     .map(v => JSON.stringify({ id: v.id, values: v.values, metadata: v.metadata }))
     .join('\n');
-  writeFileSync(tempFile, ndjson);
 
-  try {
-    const result = execSync(
-      `npx wrangler vectorize insert ${INDEX_NAME} --file=${tempFile}`,
-      { cwd: ROOT, encoding: 'utf-8', timeout: 60000 }
-    );
-    console.log(`  Upserted ${vectors.length} vectors`);
-    return result;
-  } catch (error) {
-    console.error('Vectorize upsert failed:', error.message);
-    throw error;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiToken}`,
+      'Content-Type': 'application/x-ndjson',
+    },
+    body: ndjson,
+  });
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(`Vectorize insert error (${response.status}): ${err}`);
+  }
+
+  const json = await response.json();
+  if (!json.success) {
+    throw new Error(`Vectorize insert failed: ${JSON.stringify(json.errors)}`);
+  }
+}
+
+// --- Resume state ---
+
+const PROGRESS_FILE = resolve(ROOT, '.ingest-progress.json');
+
+function loadProgress() {
+  if (existsSync(PROGRESS_FILE)) {
+    try {
+      return JSON.parse(readFileSync(PROGRESS_FILE, 'utf-8'));
+    } catch { /* ignore corrupt file */ }
+  }
+  return null;
+}
+
+function saveProgress(embedBatch, upsertedCount) {
+  writeFileSync(PROGRESS_FILE, JSON.stringify({ embedBatch, upsertedCount, timestamp: Date.now() }));
+}
+
+// --- Metadata sizing helper ---
+
+function fitMetadata(metadata, text) {
+  const meta = { ...metadata, text };
+  const size = Buffer.byteLength(JSON.stringify(meta), 'utf-8');
+  if (size <= MAX_METADATA_BYTES) return meta;
+
+  // Truncate text to fit under the limit
+  const overhead = Buffer.byteLength(JSON.stringify({ ...metadata, text: '' }), 'utf-8');
+  const maxTextBytes = MAX_METADATA_BYTES - overhead - 50; // 50 bytes safety margin
+  let truncated = text;
+  while (Buffer.byteLength(truncated, 'utf-8') > maxTextBytes) {
+    truncated = truncated.slice(0, Math.floor(truncated.length * 0.9));
+  }
+  return { ...metadata, text: truncated };
+}
+
+// --- Retry helper ---
+
+async function withRetry(fn, label, maxRetries = 3) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      // Don't retry client errors (400) — they won't resolve on retry
+      const is400 = err.message.includes('(400)');
+      if (attempt === maxRetries || is400) throw err;
+      const delay = Math.pow(2, attempt) * 1000;
+      console.log(`\n  ⚠ ${label} failed (attempt ${attempt}/${maxRetries}): ${err.message}`);
+      console.log(`    Retrying in ${delay / 1000}s...`);
+      await new Promise(r => setTimeout(r, delay));
+    }
   }
 }
 
 // --- Main ---
 
 async function main() {
-  console.log('=== Nephilim Wars Knowledge Base Ingestion ===\n');
+  loadEnv();
 
-  // 1. Read and chunk all documents
+  const resumeFlag = process.argv.includes('--resume');
+
+  console.log('=== The Scribe — Knowledge Base Ingestion ===\n');
+  console.log(`Texts directory: docs/scribe-texts/\n`);
+
+  const docs = discoverTexts();
+
+  if (docs.length === 0) {
+    console.error('No text files found in docs/scribe-texts/');
+    console.error('Add your biblical and apocryphal texts there (.md, .txt, .json, .html)');
+    process.exit(1);
+  }
+
+  console.log(`Found ${docs.length} text(s):`);
+  docs.forEach(d => console.log(`  - ${d.filename}`));
+  console.log();
+
+  // 1. Read, extract, and chunk all documents
   const allChunks = [];
-  for (const doc of DOCS) {
-    const fullPath = resolve(ROOT, doc.path);
-    console.log(`Reading ${doc.path}...`);
-    const text = readFileSync(fullPath, 'utf-8');
+  for (const doc of docs) {
+    const text = extractText(doc.path);
     const chunks = chunkDocument(text, doc.source);
-    console.log(`  → ${chunks.length} chunks\n`);
+    console.log(`  ${doc.filename} → ${chunks.length} chunks`);
     allChunks.push(...chunks);
   }
 
-  console.log(`Total chunks: ${allChunks.length}\n`);
+  console.log(`\nTotal chunks: ${allChunks.length}`);
+  const totalEmbedBatches = Math.ceil(allChunks.length / EMBED_BATCH_SIZE);
+  console.log(`Embedding in ${totalEmbedBatches} batches of ${EMBED_BATCH_SIZE}...\n`);
 
-  // 2. Generate embeddings and upsert in batches
-  for (let i = 0; i < allChunks.length; i += BATCH_SIZE) {
-    const batch = allChunks.slice(i, i + BATCH_SIZE);
-    const batchNum = Math.floor(i / BATCH_SIZE) + 1;
-    const totalBatches = Math.ceil(allChunks.length / BATCH_SIZE);
-    console.log(`Processing batch ${batchNum}/${totalBatches} (${batch.length} chunks)...`);
+  // Check for resume
+  let startBatch = 0;
+  const progress = loadProgress();
+  if (resumeFlag && progress) {
+    startBatch = progress.embedBatch;
+    console.log(`Resuming from batch ${startBatch + 1}/${totalEmbedBatches} (${startBatch * EMBED_BATCH_SIZE} chunks already done)\n`);
+  } else if (progress && !resumeFlag) {
+    console.log(`Previous progress found (batch ${progress.embedBatch}). Use --resume to continue, or run without it to start fresh.\n`);
+  }
 
-    // Generate embeddings for this batch
+  // 2. Generate all embeddings (with resume + retry)
+  const allVectors = [];
+  for (let i = 0; i < allChunks.length; i += EMBED_BATCH_SIZE) {
+    const batchNum = Math.floor(i / EMBED_BATCH_SIZE);
+
+    // Skip already-completed batches when resuming
+    if (batchNum < startBatch) {
+      continue;
+    }
+
+    const batch = allChunks.slice(i, i + EMBED_BATCH_SIZE);
+    const displayNum = batchNum + 1;
+
+    process.stdout.write(`  Embedding batch ${displayNum}/${totalEmbedBatches}...`);
     const texts = batch.map(c => c.text);
-    const embeddings = await generateEmbeddings(texts);
+    const embeddings = await withRetry(() => generateEmbeddings(texts), `Batch ${displayNum}`);
 
-    // Build vector objects
-    const vectors = batch.map((chunk, j) => ({
-      id: chunkId(chunk.metadata.source, chunk.metadata.chunkIndex),
-      values: embeddings[j],
-      metadata: {
-        ...chunk.metadata,
-        text: chunk.text, // Store text in metadata for retrieval
-      },
-    }));
+    for (let j = 0; j < batch.length; j++) {
+      allVectors.push({
+        id: chunkId(batch[j].metadata.source, batch[j].metadata.chunkIndex),
+        values: embeddings[j],
+        metadata: fitMetadata(batch[j].metadata, batch[j].text),
+      });
+    }
 
-    // Upsert to Vectorize
-    await upsertVectors(vectors);
+    console.log(` done (${startBatch * EMBED_BATCH_SIZE + allVectors.length}/${allChunks.length} vectors)`);
 
-    // Small delay to avoid rate limits
-    if (i + BATCH_SIZE < allChunks.length) {
-      await new Promise(r => setTimeout(r, 500));
+    // Save progress after each batch
+    saveProgress(batchNum + 1, allVectors.length);
+
+    // Upsert in streaming fashion once we have enough vectors
+    while (allVectors.length >= VECTORIZE_BATCH_SIZE) {
+      const upsertBatch = allVectors.splice(0, VECTORIZE_BATCH_SIZE);
+      process.stdout.write(`    ↳ Upserting ${upsertBatch.length} vectors...`);
+      await withRetry(() => upsertVectors(upsertBatch), 'Upsert');
+      console.log(' done');
     }
   }
 
-  console.log('\n✓ Knowledge base ingestion complete!');
-  console.log(`  Index: ${INDEX_NAME}`);
-  console.log(`  Total vectors: ${allChunks.length}`);
+  // 3. Upsert remaining vectors
+  if (allVectors.length > 0) {
+    process.stdout.write(`  Upserting final ${allVectors.length} vectors...`);
+    await withRetry(() => upsertVectors(allVectors), 'Final upsert');
+    console.log(' done');
+  }
 
-  // Cleanup temp files
-  try {
-    execSync('rm -f scripts/.temp-embed-input.json scripts/.temp-embed-output.json scripts/.temp-vectors.ndjson', { cwd: ROOT });
-  } catch { /* ignore */ }
+  // Clean up progress file
+  if (existsSync(PROGRESS_FILE)) {
+    const { unlinkSync } = await import('fs');
+    unlinkSync(PROGRESS_FILE);
+  }
+
+  console.log(`\nDone. All vectors in index "${INDEX_NAME}".`);
 }
 
 main().catch(err => {
