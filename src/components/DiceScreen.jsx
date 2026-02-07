@@ -85,13 +85,6 @@ const DiceScreen = ({ manual }) => {
     setResult(null);
     setDamageResult(null);
 
-    if (iframeRef.current && iframeRef.current.contentWindow) {
-      iframeRef.current.contentWindow.postMessage({
-        action: 'roll',
-        diceType: 'd20'
-      }, '*');
-    }
-
     setTimeout(() => {
       const d20Roll = Math.floor(Math.random() * 20) + 1;
       const totalToHit = d20Roll + (selectedAction.toHitBonus || 0) + modifier;
@@ -127,13 +120,6 @@ const DiceScreen = ({ manual }) => {
     setRolling(true);
     setResult(null);
     setDamageResult(null);
-
-    if (iframeRef.current && iframeRef.current.contentWindow) {
-      iframeRef.current.contentWindow.postMessage({
-        action: 'roll',
-        diceType: dice
-      }, '*');
-    }
 
     setTimeout(() => {
       const sides = parseInt(dice.replace('d', ''));
@@ -300,44 +286,114 @@ const DiceScreen = ({ manual }) => {
         </div>
       </div>
 
-      {/* OVERLAY MODAL FOR COMBAT ROLLS (Only used in Combat Mode) */}
+      {/* OVERLAY MODAL FOR COMBAT ROLLS (Clean - no 3D iframe) */}
       {showRoller && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm">
-          <div className="relative w-full h-full max-w-6xl max-h-[90vh] bg-[#0c0a09] border-4 border-amber-900 rounded-lg overflow-hidden shadow-[0_0_50px_rgba(245,158,11,0.3)]">
+          <div className="relative w-full max-w-lg mx-4">
 
             {/* Close Button */}
             <button
               onClick={closeRoller}
-              className="absolute top-4 right-4 z-50 bg-stone-900/80 text-amber-500 border border-amber-900 px-4 py-2 rounded hover:bg-black transition font-cinzel font-bold text-sm sm:text-base"
+              className="absolute -top-2 -right-2 z-50 bg-stone-900 text-amber-500 border-2 border-amber-900 w-10 h-10 rounded-full hover:bg-black transition font-bold text-lg"
             >
-              ✕ Close
+              X
             </button>
 
-            {/* Result Display Logic... */}
-            {result && !rolling && (
-              <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-40 pointer-events-none w-full px-4">
-                <div className="bg-black/90 border-4 border-amber-500 rounded-lg p-4 sm:p-8 shadow-[0_0_50px_rgba(245,158,11,0.8)] max-w-2xl mx-auto text-center">
-                  <div className="text-amber-500 font-cinzel font-bold text-base sm:text-xl mb-2">
-                     {selectedAction ? (result.isCrit ? '🔥 CRITICAL HIT!' : result.isFail ? '💀 CRITICAL MISS!' : '🎯 ATTACK ROLL') : `ROLLED ${diceType.toUpperCase()}`}
-                  </div>
-                  <div className="text-amber-400 font-cinzel font-bold text-5xl sm:text-8xl mb-2">
-                    {result.d20}
-                  </div>
-                  <div className="text-stone-300 text-sm sm:text-lg">
-                    Result: {result.total} {damageResult && `| Damage: ${damageResult.total}`}
-                  </div>
+            <div className="bg-[#0c0a09] border-4 border-amber-900 rounded-xl overflow-hidden shadow-[0_0_60px_rgba(245,158,11,0.2)]">
+
+              {/* Header */}
+              <div className="bg-amber-900/30 border-b border-amber-900 px-6 py-4 text-center">
+                <div className="text-amber-500 font-cinzel font-bold text-xl tracking-wider">
+                  {selectedAction ? selectedAction.name.toUpperCase() : diceType.toUpperCase()}
+                </div>
+                <div className="text-stone-400 text-sm mt-1">
+                  {selectedAction ? `To Hit: +${(selectedAction.toHitBonus || 0) + modifier} | Damage: ${selectedAction.damageDice}` : 'Quick Roll'}
                 </div>
               </div>
-            )}
 
-            <iframe
-              ref={iframeRef}
-              src="/dice.html"
-              title="3D Dice Roller"
-              className="w-full h-full border-none"
-              allow="scripts"
-            />
+              {/* Result Display */}
+              <div className="px-6 py-10 flex flex-col items-center justify-center min-h-[280px]">
+
+                {/* Rolling animation */}
+                {rolling && (
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="w-36 h-36 bg-gradient-to-br from-amber-900 to-amber-950 border-4 border-amber-500 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(245,158,11,0.5)]" style={{ animation: 'spin-slow 0.6s ease-in-out infinite' }}>
+                      <span className="text-amber-300 font-cinzel font-bold text-6xl">
+                        {Math.floor(Math.random() * 20) + 1}
+                      </span>
+                    </div>
+                    <div className="text-amber-400 font-cinzel font-bold text-lg">
+                      Rolling...
+                    </div>
+                  </div>
+                )}
+
+                {/* Final result */}
+                {result && !rolling && (
+                  <div className="flex flex-col items-center gap-4" style={{ animation: 'fade-in 0.4s ease-out' }}>
+                    <div className={`w-40 h-40 rounded-2xl flex items-center justify-center border-4 shadow-lg ${
+                      result.isCrit ? 'bg-gradient-to-br from-yellow-700 to-amber-900 border-yellow-400 shadow-[0_0_60px_rgba(250,204,21,0.6)]' :
+                      result.isFail ? 'bg-gradient-to-br from-red-900 to-red-950 border-red-500 shadow-[0_0_60px_rgba(220,38,38,0.6)]' :
+                      'bg-gradient-to-br from-amber-900 to-amber-950 border-amber-500 shadow-[0_0_40px_rgba(245,158,11,0.4)]'
+                    }`}>
+                      <span className={`font-cinzel font-bold text-7xl ${
+                        result.isCrit ? 'text-yellow-300' :
+                        result.isFail ? 'text-red-400' :
+                        'text-amber-300'
+                      }`}>
+                        {result.d20}
+                      </span>
+                    </div>
+
+                    {/* Label */}
+                    <div className={`font-cinzel font-bold text-2xl ${
+                      result.isCrit ? 'text-yellow-400' :
+                      result.isFail ? 'text-red-500' :
+                      'text-amber-400'
+                    }`}>
+                      {result.isCrit ? 'CRITICAL HIT!' : result.isFail ? 'CRITICAL MISS!' : selectedAction ? 'ATTACK ROLL' : `ROLLED ${diceType.toUpperCase()}`}
+                    </div>
+
+                    {/* Breakdown */}
+                    <div className="text-stone-300 text-center space-y-1">
+                      <div className="text-lg">
+                        d20: {result.d20} + {result.toHitBonus} = <span className="text-amber-400 font-bold">{result.total}</span>
+                      </div>
+                      {damageResult && (
+                        <div className="text-lg">
+                          Damage: <span className={`font-bold ${result.isCrit ? 'text-yellow-400' : 'text-red-400'}`}>{damageResult.total}</span>
+                          <span className="text-stone-500 text-sm ml-1">({damageResult.dice}: {damageResult.rolls.join('+')} +{damageResult.bonus}{result.isCrit ? ' x2' : ''})</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Footer */}
+              {result && !rolling && (
+                <div className="border-t border-amber-900/50 px-6 py-4 text-center">
+                  <button
+                    onClick={closeRoller}
+                    className="px-8 py-3 bg-amber-900 border border-amber-600 text-amber-100 font-cinzel font-bold rounded hover:bg-amber-800 transition"
+                  >
+                    CLOSE
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
+
+          <style>{`
+            @keyframes fade-in {
+              from { opacity: 0; transform: scale(0.8); }
+              to { opacity: 1; transform: scale(1); }
+            }
+            @keyframes spin-slow {
+              from { transform: rotate(0deg); }
+              to { transform: rotate(360deg); }
+            }
+          `}</style>
         </div>
       )}
     </div>
