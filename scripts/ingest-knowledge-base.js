@@ -24,10 +24,10 @@
  *   npm run ingest
  */
 
-import { readFileSync, readdirSync, writeFileSync, existsSync } from 'fs';
+import { readFileSync, readdirSync, writeFileSync, existsSync, statSync } from 'fs';
 import { execSync } from 'child_process';
 import { createHash } from 'crypto';
-import { basename, dirname, extname, resolve } from 'path';
+import { basename, dirname, extname, join, relative, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -59,17 +59,31 @@ const INDEX_NAME = 'nephilim-knowledge-base';
 
 // --- File Discovery ---
 
-function discoverTexts() {
+function discoverTexts(dir = TEXTS_DIR) {
   const supported = ['.md', '.txt', '.json', '.html'];
-  const files = readdirSync(TEXTS_DIR);
-  return files
-    .filter(f => supported.includes(extname(f).toLowerCase()))
-    .filter(f => f !== 'README.txt') // skip the readme
-    .map(f => ({
-      path: resolve(TEXTS_DIR, f),
-      filename: f,
-      source: basename(f, extname(f)),
-    }));
+  const results = [];
+
+  for (const entry of readdirSync(dir)) {
+    if (entry === 'README.txt') continue;
+    const fullPath = join(dir, entry);
+    const stat = statSync(fullPath);
+
+    if (stat.isDirectory()) {
+      // Recurse into subdirectories (alc/, bib/, jud/, etc.)
+      results.push(...discoverTexts(fullPath));
+    } else if (supported.includes(extname(entry).toLowerCase())) {
+      // Use subfolder/filename as source label, e.g. "bib/genesis" or "jud/1-enoch"
+      const relPath = relative(TEXTS_DIR, fullPath);
+      const source = relPath.replace(/\\/g, '/').replace(extname(entry), '');
+      results.push({
+        path: fullPath,
+        filename: relPath.replace(/\\/g, '/'),
+        source,
+      });
+    }
+  }
+
+  return results;
 }
 
 /**
