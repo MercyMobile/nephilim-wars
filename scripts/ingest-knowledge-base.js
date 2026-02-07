@@ -208,13 +208,34 @@ async function generateEmbeddings(texts) {
 
 /**
  * Upsert vectors to Vectorize via REST API (no wrangler subprocess).
+ * Filters out any vectors with oversized metadata before sending.
  */
 async function upsertVectors(vectors) {
   const { accountId, apiToken } = getApiConfig();
   const url = `https://api.cloudflare.com/client/v4/accounts/${accountId}/vectorize/v2/indexes/${INDEX_NAME}/insert`;
 
+  // Filter out oversized vectors to prevent batch failure
+  const valid = [];
+  for (const v of vectors) {
+    const metaSize = Buffer.byteLength(JSON.stringify({ id: v.id, values: v.values, metadata: v.metadata }), 'utf-8');
+    if (metaSize > 50000) {
+      // Individual NDJSON line too large — re-truncate metadata text
+      const metaOnly = Buffer.byteLength(JSON.stringify(v.metadata), 'utf-8');
+      if (metaOnly > MAX_METADATA_BYTES) {
+        let text = v.metadata.text || '';
+        const { text: _, ...rest } = v.metadata;
+        while (Buffer.byteLength(JSON.stringify({ ...rest, text }), 'utf-8') > MAX_METADATA_BYTES && text.length > 100) {
+          text = text.slice(0, Math.floor(text.length * 0.7));
+        }
+        v.metadata = { ...rest, text };
+        console.log(`    (truncated oversized metadata for ${v.id})`);
+      }
+    }
+    valid.push(v);
+  }
+
   // Vectorize REST API expects NDJSON body
-  const ndjson = vectors
+  const ndjson = valid
     .map(v => JSON.stringify({ id: v.id, values: v.values, metadata: v.metadata }))
     .join('\n');
 
