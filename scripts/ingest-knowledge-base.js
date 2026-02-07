@@ -50,6 +50,7 @@ const CHUNK_SIZE = 2000;        // ~2000 chars per chunk (larger = fewer chunks,
 const CHUNK_OVERLAP = 200;      // overlap between chunks for context continuity
 const EMBED_BATCH_SIZE = 50;    // max texts per embedding API call (kept under 153k token model limit)
 const VECTORIZE_BATCH_SIZE = 1000; // max vectors per Vectorize insert
+const MAX_METADATA_BYTES = 10240;  // Vectorize per-vector metadata limit
 const INDEX_NAME = 'nephilim-knowledge-base';
 
 // --- File Discovery ---
@@ -255,6 +256,23 @@ function saveProgress(embedBatch, upsertedCount) {
   writeFileSync(PROGRESS_FILE, JSON.stringify({ embedBatch, upsertedCount, timestamp: Date.now() }));
 }
 
+// --- Metadata sizing helper ---
+
+function fitMetadata(metadata, text) {
+  const meta = { ...metadata, text };
+  const size = Buffer.byteLength(JSON.stringify(meta), 'utf-8');
+  if (size <= MAX_METADATA_BYTES) return meta;
+
+  // Truncate text to fit under the limit
+  const overhead = Buffer.byteLength(JSON.stringify({ ...metadata, text: '' }), 'utf-8');
+  const maxTextBytes = MAX_METADATA_BYTES - overhead - 50; // 50 bytes safety margin
+  let truncated = text;
+  while (Buffer.byteLength(truncated, 'utf-8') > maxTextBytes) {
+    truncated = truncated.slice(0, Math.floor(truncated.length * 0.9));
+  }
+  return { ...metadata, text: truncated };
+}
+
 // --- Retry helper ---
 
 async function withRetry(fn, label, maxRetries = 3) {
@@ -262,7 +280,9 @@ async function withRetry(fn, label, maxRetries = 3) {
     try {
       return await fn();
     } catch (err) {
-      if (attempt === maxRetries) throw err;
+      // Don't retry client errors (400) — they won't resolve on retry
+      const is400 = err.message.includes('(400)');
+      if (attempt === maxRetries || is400) throw err;
       const delay = Math.pow(2, attempt) * 1000;
       console.log(`\n  ⚠ ${label} failed (attempt ${attempt}/${maxRetries}): ${err.message}`);
       console.log(`    Retrying in ${delay / 1000}s...`);
@@ -337,10 +357,7 @@ async function main() {
       allVectors.push({
         id: chunkId(batch[j].metadata.source, batch[j].metadata.chunkIndex),
         values: embeddings[j],
-        metadata: {
-          ...batch[j].metadata,
-          text: batch[j].text,
-        },
+        metadata: fitMetadata(batch[j].metadata, batch[j].text),
       });
     }
 
