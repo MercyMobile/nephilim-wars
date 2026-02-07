@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nephilim Wars - Full Manual</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'EB Garamond', serif;
+            background: linear-gradient(135deg, #0c0a09 0%, #1c1917 100%);
+            color: #d6d3d1;
+            line-height: 1.8;
+        }
+
+        /* --- SIDEBAR TOC --- */
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            min-width: 280px;
+            background: #0c0a09;
+            border-right: 2px solid #78350f;
+            padding: 20px 0;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .sidebar h2 {
+            font-family: 'Cinzel', serif;
+            color: #fcd34d;
+            font-size: 1rem;
+            padding: 0 16px 12px;
+            border-bottom: 1px solid #78350f;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 6px 16px;
+            color: #a8a29e;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar a:hover {
+            color: #fcd34d;
+            background: rgba(120, 53, 15, 0.2);
+            border-left-color: #f59e0b;
+        }
+
+        .sidebar a.chapter {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            color: #f59e0b;
+            font-size: 0.9rem;
+            padding-top: 12px;
+            padding-bottom: 4px;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 40px 80px;
+        }
+
+        .manual-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #78350f;
+        }
+
+        .manual-header h1 {
+            font-family: 'Cinzel', serif;
+            color: #fcd34d;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(252, 211, 77, 0.3);
+            margin-bottom: 8px;
+        }
+
+        .manual-header p {
+            color: #a8a29e;
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+
+        /* --- MARKDOWN RENDERED STYLES --- */
+        #manual-body h1 {
+            font-family: 'Cinzel', serif;
+            color: #fcd34d;
+            font-size: 2rem;
+            margin-top: 60px;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #78350f;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        #manual-body h2 {
+            font-family: 'Cinzel', serif;
+            color: #f59e0b;
+            font-size: 1.6rem;
+            margin-top: 40px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #44403c;
+        }
+
+        #manual-body h3 {
+            font-family: 'Cinzel', serif;
+            color: #fbbf24;
+            font-size: 1.3rem;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        #manual-body h4 {
+            font-family: 'Cinzel', serif;
+            color: #d6d3d1;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+
+        #manual-body p {
+            margin-bottom: 12px;
+            line-height: 1.8;
+        }
+
+        #manual-body ul, #manual-body ol {
+            margin: 10px 0 16px 24px;
+        }
+
+        #manual-body li {
+            margin-bottom: 6px;
+            line-height: 1.7;
+        }
+
+        #manual-body strong {
+            color: #fbbf24;
+        }
+
+        #manual-body em {
+            color: #a8a29e;
+        }
+
+        #manual-body blockquote {
+            border-left: 4px solid #78350f;
+            padding: 12px 20px;
+            margin: 16px 0;
+            background: rgba(28, 25, 23, 0.6);
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #a8a29e;
+        }
+
+        #manual-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            background: rgba(0, 0, 0, 0.2);
+            font-size: 0.95rem;
+        }
+
+        #manual-body th {
+            background: rgba(120, 53, 15, 0.4);
+            color: #fcd34d;
+            padding: 10px 12px;
+            text-align: left;
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            border: 1px solid #44403c;
+        }
+
+        #manual-body td {
+            padding: 8px 12px;
+            border: 1px solid #292524;
+        }
+
+        #manual-body tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        #manual-body hr {
+            border: none;
+            border-top: 1px solid #44403c;
+            margin: 30px 0;
+        }
+
+        #manual-body code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #fbbf24;
+        }
+
+        #manual-body pre {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #44403c;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+
+        #manual-body pre code {
+            background: none;
+            padding: 0;
+        }
+
+        /* --- SEARCH --- */
+        .search-bar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #0c0a09;
+            padding: 16px;
+            border-bottom: 1px solid #44403c;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 14px;
+            background: #1c1917;
+            border: 1px solid #44403c;
+            color: #d6d3d1;
+            font-family: 'EB Garamond', serif;
+            font-size: 0.95rem;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        .search-bar input:focus {
+            border-color: #f59e0b;
+        }
+
+        .search-bar input::placeholder {
+            color: #57534e;
+        }
+
+        /* --- BACK TO TOP --- */
+        .back-to-top {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 44px;
+            height: 44px;
+            background: #78350f;
+            color: #fcd34d;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .back-to-top:hover {
+            background: #f59e0b;
+            color: #000;
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        /* --- LOADING --- */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #a8a29e;
+            font-style: italic;
+        }
+
+        .loading .spinner {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border: 3px solid #44403c;
+            border-top-color: #f59e0b;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 900px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                padding: 20px 16px 60px;
+            }
+
+            .manual-header h1 {
+                font-size: 1.8rem;
+            }
+
+            #manual-body h1 {
+                font-size: 1.5rem;
+            }
+
+            #manual-body h2 {
+                font-size: 1.3rem;
+            }
+
+            #manual-body table {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar" id="sidebar">
+            <h2>Table of Contents</h2>
+            <div class="search-bar">
+                <input type="text" id="toc-search" placeholder="Search chapters..." />
+            </div>
+            <nav id="toc-nav"></nav>
+        </aside>
+
+        <div class="main-content">
+            <div class="manual-header">
+                <h1>Nephilim Wars</h1>
+                <p>Complete Game Manual &mdash; Pathfinder 2e</p>
+            </div>
+
+            <div id="manual-body">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading the ancient scrolls...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0, behavior:'smooth'})">&#9650;</button>
+
+    <script>
+        // Load and render manual.md
+        async function loadManual() {
+            try {
+                const response = await fetch('/docs/manual.md');
+                if (!response.ok) throw new Error('Failed to load manual');
+                const markdown = await response.text();
+
+                // Configure marked
+                marked.setOptions({
+                    breaks: true,
+                    gfm: true
+                });
+
+                // Render markdown to HTML
+                const html = marked.parse(markdown);
+                document.getElementById('manual-body').innerHTML = html;
+
+                // Generate TOC from rendered headings
+                generateTOC();
+
+                // Add IDs to headings for anchor links
+                addHeadingIDs();
+
+            } catch (error) {
+                document.getElementById('manual-body').innerHTML =
+                    '<p style="color: #dc2626; text-align: center; padding: 40px;">Failed to load manual. Please try refreshing the page.</p>';
+                console.error('Error loading manual:', error);
+            }
+        }
+
+        function addHeadingIDs() {
+            const headings = document.querySelectorAll('#manual-body h1, #manual-body h2, #manual-body h3');
+            headings.forEach((heading, index) => {
+                const id = 'section-' + index + '-' + heading.textContent
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/(^-|-$)/g, '')
+                    .substring(0, 50);
+                heading.id = id;
+            });
+        }
+
+        function generateTOC() {
+            const headings = document.querySelectorAll('#manual-body h1, #manual-body h2');
+            const nav = document.getElementById('toc-nav');
+            let tocHTML = '';
+
+            headings.forEach((heading, index) => {
+                const id = 'section-' + index + '-' + heading.textContent
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/(^-|-$)/g, '')
+                    .substring(0, 50);
+                heading.id = id;
+
+                const isChapter = heading.tagName === 'H1' || heading.textContent.startsWith('Chapter');
+                const className = isChapter ? 'chapter' : '';
+                tocHTML += `<a href="#${id}" class="${className}" data-text="${heading.textContent.toLowerCase()}">${heading.textContent}</a>`;
+            });
+
+            nav.innerHTML = tocHTML;
+        }
+
+        // TOC search filter
+        document.getElementById('toc-search').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            const links = document.querySelectorAll('#toc-nav a');
+            links.forEach(link => {
+                const text = link.getAttribute('data-text') || link.textContent.toLowerCase();
+                link.style.display = text.includes(query) ? 'block' : 'none';
+            });
+        });
+
+        // Back to top button
+        window.addEventListener('scroll', function() {
+            const btn = document.getElementById('backToTop');
+            if (window.scrollY > 400) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        });
+
+        // Load on page ready
+        loadManual();
+    </script>
+</body>
+</html>
