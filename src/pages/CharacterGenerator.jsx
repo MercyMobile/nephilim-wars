@@ -420,7 +420,14 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     vibe: 'biblical epic',
     customVisuals: '',
     equipment: 'bronze_sword', // Default equipment
-    attributes: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 }
+    attributes: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 },
+    // PF2e Boost Allocations
+    ancestryFreeBoosts: [],    // Which stats the player chose for ancestry free boosts
+    ancestryFlaw: '',          // Which stat for free flaw (Sethite, Cainite, Wanderer, Sorcerer Clan)
+    bgFixedChoice: '',         // For "or" backgrounds (e.g., "INT or STR"), which one they picked
+    bgFreeBoost: '',           // Which stat for background free boost
+    classKeyChoice: '',        // For "or" classes (e.g., Warrior "STR or DEX"), which one they picked
+    freeBoosts: []             // 4 free boosts (each to a different stat)
   });
 
   const [loading, setLoading] = useState(false);
@@ -471,24 +478,55 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
   // === SUMMON RANDOM LEGEND ===
   const summonRandomLegend = () => {
     const randomFrom = (arr) => arr[Math.floor(Math.random() * arr.length)];
-    const roll4d6 = () => {
-      const rolls = Array.from({ length: 4 }, () => Math.floor(Math.random() * 6) + 1);
-      rolls.sort((a, b) => a - b).shift();
-      return rolls.reduce((a, b) => a + b, 0);
-    };
+    const allStats = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
 
     const raceKeys = Object.keys(RACES);
     const randomRace = randomFrom(raceKeys);
     const randomSex = randomFrom(['Male', 'Female']);
     const randomClass = randomFrom(CLASSES).value;
+    const randomBg = randomFrom(GAME_BACKGROUNDS).value;
+
+    // Randomly allocate boosts per PF2e rules
+    const raceData = RACES[randomRace];
+    const classData = CLASSES.find(c => c.value === randomClass) || CLASSES[0];
+    const bgData = GAME_BACKGROUNDS.find(b => b.value === randomBg);
+
+    // Ancestry free boosts
+    const freeCount = raceData.abilityBoosts.filter(b => b === 'Free').length;
+    const shuffled = [...allStats].sort(() => Math.random() - 0.5);
+    const ancestryFreeBoosts = shuffled.slice(0, freeCount);
+
+    // Ancestry flaw (if free)
+    const ancestryFlaw = raceData.abilityFlaw === 'Free' ? randomFrom(allStats) : '';
+
+    // Background fixed choice (for "or" type)
+    let bgFixedChoice = '';
+    if (bgData && bgData.boost.includes(' or ')) {
+      const opts = bgData.boost.split(' or ');
+      bgFixedChoice = randomFrom(opts);
+    }
+
+    // Background free boost
+    const bgFreeBoost = randomFrom(allStats);
+
+    // Class key choice (for "or" type)
+    let classKeyChoice = '';
+    if (classData.keyAbility.includes(' or ')) {
+      const opts = classData.keyAbility.split(' or ');
+      classKeyChoice = randomFrom(opts);
+    }
+
+    // 4 free boosts (each to different stat)
+    const freeShuffled = [...allStats].sort(() => Math.random() - 0.5);
+    const freeBoosts = freeShuffled.slice(0, 4);
 
     setFormData(prev => ({
       ...prev,
       lineage: randomRace,
       sex: randomSex,
       charClass: randomClass,
-      level: Math.floor(Math.random() * 5) + 1, // Level 1-5
-      gameBackground: randomFrom(GAME_BACKGROUNDS).value,
+      level: Math.floor(Math.random() * 5) + 1,
+      gameBackground: randomBg,
       skinTone: randomFrom(SKIN_TONES).value,
       eyeColor: randomFrom(EYE_COLORS).value,
       hairColor: randomFrom(HAIR_COLORS).value,
@@ -499,10 +537,13 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       background: randomFrom(BACKGROUNDS).value,
       vibe: randomFrom(VIBES).value,
       equipment: EQUIPMENT[randomClass]?.[Math.floor(Math.random() * (EQUIPMENT[randomClass]?.length || 1))]?.id || 'bronze_sword',
-      attributes: {
-        STR: roll4d6(), DEX: roll4d6(), CON: roll4d6(),
-        INT: roll4d6(), WIS: roll4d6(), CHA: roll4d6()
-      }
+      attributes: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 },
+      ancestryFreeBoosts,
+      ancestryFlaw,
+      bgFixedChoice,
+      bgFreeBoost,
+      classKeyChoice,
+      freeBoosts
     }));
 
     // Generate name after state update
@@ -526,6 +567,14 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       const sanitized = validateDescription(value, 500);
       setFormData({ ...formData, [name]: sanitized });
     }
+    // Reset boost allocations when ancestry/class/background changes
+    else if (name === 'lineage') {
+      setFormData({ ...formData, [name]: value, ancestryFreeBoosts: [], ancestryFlaw: '' });
+    } else if (name === 'charClass') {
+      setFormData({ ...formData, [name]: value, classKeyChoice: '' });
+    } else if (name === 'gameBackground') {
+      setFormData({ ...formData, [name]: value, bgFixedChoice: '', bgFreeBoost: '' });
+    }
     // All other fields
     else {
       setFormData({ ...formData, [name]: value });
@@ -539,6 +588,111 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       attributes: { ...prev.attributes, [attr]: validatedValue }
     }));
   };
+
+  // === PF2e BOOST SYSTEM ===
+  const STATS = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
+
+  // Apply a single boost to a score: +2 (or +1 if 18+)
+  const applyBoost = (scores, stat) => {
+    if (!stat || !scores[stat] === undefined) return;
+    scores[stat] = scores[stat] >= 18 ? scores[stat] + 1 : scores[stat] + 2;
+  };
+
+  // Compute final attributes from all boost sources
+  const computeAttributes = (data) => {
+    const scores = { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 };
+    const raceData = RACES[data.lineage];
+    const classData = CLASSES.find(c => c.value === data.charClass) || CLASSES[0];
+    const bgData = GAME_BACKGROUNDS.find(b => b.value === data.gameBackground);
+
+    // 1. Ancestry fixed boosts
+    raceData.abilityBoosts.forEach(boost => {
+      if (boost !== 'Free') applyBoost(scores, boost);
+    });
+
+    // 2. Ancestry free boosts
+    (data.ancestryFreeBoosts || []).forEach(stat => applyBoost(scores, stat));
+
+    // 3. Ancestry flaw
+    if (raceData.abilityFlaw && raceData.abilityFlaw !== 'Free' && raceData.abilityFlaw !== null) {
+      scores[raceData.abilityFlaw] = (scores[raceData.abilityFlaw] || 10) - 2;
+    } else if (raceData.abilityFlaw === 'Free' && data.ancestryFlaw) {
+      scores[data.ancestryFlaw] = (scores[data.ancestryFlaw] || 10) - 2;
+    }
+
+    // 4. Background fixed boost
+    if (bgData) {
+      const bgBoostStr = bgData.boost;
+      if (bgBoostStr.includes(' or ')) {
+        // Player chose one
+        if (data.bgFixedChoice) applyBoost(scores, data.bgFixedChoice);
+      } else {
+        applyBoost(scores, bgBoostStr);
+      }
+    }
+
+    // 5. Background free boost
+    if (data.bgFreeBoost) applyBoost(scores, data.bgFreeBoost);
+
+    // 6. Class key ability boost
+    const keyAbility = classData.keyAbility;
+    if (keyAbility.includes(' or ')) {
+      if (data.classKeyChoice) applyBoost(scores, data.classKeyChoice);
+    } else {
+      applyBoost(scores, keyAbility);
+    }
+
+    // 7. Four free boosts (each to a different stat)
+    (data.freeBoosts || []).forEach(stat => applyBoost(scores, stat));
+
+    return scores;
+  };
+
+  // Get number of ancestry free boost slots
+  const getAncestryFreeCount = () => {
+    const raceData = RACES[formData.lineage];
+    return raceData.abilityBoosts.filter(b => b === 'Free').length;
+  };
+
+  // Get whether ancestry flaw is free choice
+  const isAncestryFlawFree = () => {
+    const raceData = RACES[formData.lineage];
+    return raceData.abilityFlaw === 'Free';
+  };
+
+  // Get background boost options (for "or" type)
+  const getBgBoostOptions = () => {
+    const bgData = GAME_BACKGROUNDS.find(b => b.value === formData.gameBackground);
+    if (!bgData) return null;
+    if (bgData.boost.includes(' or ')) {
+      return bgData.boost.split(' or ');
+    }
+    return null; // Fixed, no choice needed
+  };
+
+  // Get class key ability options (for "or" type)
+  const getClassKeyOptions = () => {
+    const classData = CLASSES.find(c => c.value === formData.charClass) || CLASSES[0];
+    if (classData.keyAbility.includes(' or ')) {
+      return classData.keyAbility.split(' or ');
+    }
+    return null; // Fixed, no choice needed
+  };
+
+  // Toggle a stat in an array-based boost list
+  const toggleBoost = (field, stat, maxCount) => {
+    setFormData(prev => {
+      const current = prev[field] || [];
+      if (current.includes(stat)) {
+        return { ...prev, [field]: current.filter(s => s !== stat) };
+      }
+      if (current.length >= maxCount) return prev; // Already at max
+      return { ...prev, [field]: [...current, stat] };
+    });
+  };
+
+  // Computed attributes (reactive)
+  const computedAttrs = computeAttributes(formData);
 
   // === BUILD PHOTOREALISTIC IMAGE PROMPT ===
   const buildImagePrompt = () => {
@@ -673,20 +827,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     const bgData = GAME_BACKGROUNDS.find(b => b.value === formData.gameBackground);
     const level = formData.level || 1;
 
-    // Apply PF2e Ability Boosts from ancestry (fixed boosts add +2)
-    const finalStats = { ...formData.attributes };
-    loreData.abilityBoosts.forEach(boost => {
-      if (boost !== "Free" && finalStats[boost] !== undefined) {
-        finalStats[boost] = finalStats[boost] >= 18
-          ? finalStats[boost] + 1
-          : finalStats[boost] + 2;
-      }
-    });
-
-    // Apply Ability Flaw from ancestry (-2)
-    if (loreData.abilityFlaw && loreData.abilityFlaw !== "Free" && loreData.abilityFlaw !== null) {
-      finalStats[loreData.abilityFlaw] = (finalStats[loreData.abilityFlaw] || 10) - 2;
-    }
+    // Compute final stats from PF2e boost system
+    const finalStats = computeAttributes(formData);
 
     // Calculate Modifiers
     const getMod = (score) => Math.floor((score - 10) / 2);
@@ -1283,23 +1425,181 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
               </div>
             </div>
 
-            {/* ATTRIBUTES */}
+            {/* PF2e ABILITY BOOST SYSTEM */}
             <div className="border-t border-[#44403c] pt-4">
-              <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-2">Base Attributes</label>
-              <div className="grid grid-cols-6 gap-2">
-                {Object.keys(formData.attributes).map(attr => (
-                  <div key={attr} className="text-center">
-                    <span className="block text-[9px] text-[#78716c] font-bold mb-1">{attr}</span>
-                    <input
-                      type="number"
-                      min={3}
-                      max={20}
-                      value={formData.attributes[attr]}
-                      onChange={(e) => handleAttrChange(attr, e.target.value)}
-                      className="w-full bg-black border border-[#44403c] p-1 text-center text-[#fcd34d] font-bold focus:border-[#f59e0b] outline-none text-sm"
-                    />
+              <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-3">Ability Scores (PF2e Boosts)</label>
+
+              {/* Final Scores Display */}
+              <div className="grid grid-cols-6 gap-2 mb-4">
+                {STATS.map(attr => {
+                  const val = computedAttrs[attr];
+                  const mod = Math.floor((val - 10) / 2);
+                  return (
+                    <div key={attr} className="text-center bg-black border border-[#44403c] rounded p-2">
+                      <span className="block text-[9px] text-[#78716c] font-bold">{attr}</span>
+                      <span className="block text-lg text-[#fcd34d] font-bold">{val}</span>
+                      <span className={`block text-[10px] font-bold ${mod >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                        {mod >= 0 ? `+${mod}` : mod}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Step 1: Ancestry Free Boosts */}
+              {getAncestryFreeCount() > 0 && (
+                <div className="mb-3 p-3 bg-[#1c1917] border border-[#44403c] rounded">
+                  <div className="text-[10px] text-amber-400 font-bold uppercase mb-1">
+                    Ancestry Free Boosts ({formData.ancestryFreeBoosts.length}/{getAncestryFreeCount()})
                   </div>
-                ))}
+                  <div className="flex gap-1 flex-wrap">
+                    {STATS.map(stat => (
+                      <button
+                        key={stat}
+                        type="button"
+                        onClick={() => toggleBoost('ancestryFreeBoosts', stat, getAncestryFreeCount())}
+                        className={`px-2 py-1 text-[10px] font-bold rounded border transition ${
+                          formData.ancestryFreeBoosts.includes(stat)
+                            ? 'bg-amber-700 border-amber-500 text-white'
+                            : 'bg-black border-[#44403c] text-stone-400 hover:border-amber-600'
+                        }`}
+                      >
+                        {stat}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Step 1b: Ancestry Free Flaw */}
+              {isAncestryFlawFree() && (
+                <div className="mb-3 p-3 bg-[#1c1917] border border-[#44403c] rounded">
+                  <div className="text-[10px] text-red-400 font-bold uppercase mb-1">
+                    Ancestry Flaw (choose 1)
+                  </div>
+                  <div className="flex gap-1 flex-wrap">
+                    {STATS.map(stat => (
+                      <button
+                        key={stat}
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, ancestryFlaw: prev.ancestryFlaw === stat ? '' : stat }))}
+                        className={`px-2 py-1 text-[10px] font-bold rounded border transition ${
+                          formData.ancestryFlaw === stat
+                            ? 'bg-red-800 border-red-500 text-white'
+                            : 'bg-black border-[#44403c] text-stone-400 hover:border-red-600'
+                        }`}
+                      >
+                        {stat}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Step 2: Background Boost */}
+              <div className="mb-3 p-3 bg-[#1c1917] border border-[#44403c] rounded">
+                <div className="text-[10px] text-blue-400 font-bold uppercase mb-1">
+                  Background Boosts
+                </div>
+                {/* Fixed boost (or choice) */}
+                {getBgBoostOptions() ? (
+                  <div className="mb-2">
+                    <span className="text-[9px] text-stone-500 mr-2">Fixed:</span>
+                    {getBgBoostOptions().map(opt => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, bgFixedChoice: opt }))}
+                        className={`px-2 py-1 text-[10px] font-bold rounded border transition mr-1 ${
+                          formData.bgFixedChoice === opt
+                            ? 'bg-blue-700 border-blue-500 text-white'
+                            : 'bg-black border-[#44403c] text-stone-400 hover:border-blue-600'
+                        }`}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="mb-2 text-[9px] text-stone-500">
+                    Fixed: {GAME_BACKGROUNDS.find(b => b.value === formData.gameBackground)?.boost || '—'}
+                  </div>
+                )}
+                {/* Free boost */}
+                <div>
+                  <span className="text-[9px] text-stone-500 mr-2">Free:</span>
+                  <div className="flex gap-1 flex-wrap mt-1">
+                    {STATS.map(stat => (
+                      <button
+                        key={stat}
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, bgFreeBoost: prev.bgFreeBoost === stat ? '' : stat }))}
+                        className={`px-2 py-1 text-[10px] font-bold rounded border transition ${
+                          formData.bgFreeBoost === stat
+                            ? 'bg-blue-700 border-blue-500 text-white'
+                            : 'bg-black border-[#44403c] text-stone-400 hover:border-blue-600'
+                        }`}
+                      >
+                        {stat}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Step 3: Class Key Ability */}
+              <div className="mb-3 p-3 bg-[#1c1917] border border-[#44403c] rounded">
+                <div className="text-[10px] text-green-400 font-bold uppercase mb-1">
+                  Class Key Ability Boost
+                </div>
+                {getClassKeyOptions() ? (
+                  <div className="flex gap-1">
+                    {getClassKeyOptions().map(opt => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, classKeyChoice: opt }))}
+                        className={`px-2 py-1 text-[10px] font-bold rounded border transition ${
+                          formData.classKeyChoice === opt
+                            ? 'bg-green-700 border-green-500 text-white'
+                            : 'bg-black border-[#44403c] text-stone-400 hover:border-green-600'
+                        }`}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-[9px] text-stone-500">
+                    Fixed: {(CLASSES.find(c => c.value === formData.charClass) || CLASSES[0]).keyAbility}
+                  </div>
+                )}
+              </div>
+
+              {/* Step 4: Four Free Boosts */}
+              <div className="mb-3 p-3 bg-[#1c1917] border border-[#44403c] rounded">
+                <div className="text-[10px] text-purple-400 font-bold uppercase mb-1">
+                  Free Boosts ({formData.freeBoosts.length}/4) — each to a different score
+                </div>
+                <div className="flex gap-1 flex-wrap">
+                  {STATS.map(stat => (
+                    <button
+                      key={stat}
+                      type="button"
+                      onClick={() => toggleBoost('freeBoosts', stat, 4)}
+                      disabled={!formData.freeBoosts.includes(stat) && formData.freeBoosts.length >= 4}
+                      className={`px-2 py-1 text-[10px] font-bold rounded border transition ${
+                        formData.freeBoosts.includes(stat)
+                          ? 'bg-purple-700 border-purple-500 text-white'
+                          : formData.freeBoosts.length >= 4
+                            ? 'bg-black border-[#44403c] text-stone-600 cursor-not-allowed'
+                            : 'bg-black border-[#44403c] text-stone-400 hover:border-purple-600'
+                      }`}
+                    >
+                      {stat}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
