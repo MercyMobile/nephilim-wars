@@ -13,19 +13,13 @@
  *        CLOUDFLARE_ACCOUNT_ID=your_account_id
  *        CLOUDFLARE_API_TOKEN=your_api_token
  *
- *      To get these:
- *        - Account ID: Cloudflare dashboard → any zone → right sidebar → "Account ID"
- *        - API Token: https://dash.cloudflare.com/profile/api-tokens → Create Token
- *          Use the "Edit Cloudflare Workers" template (needs Workers AI + Vectorize permissions)
- *
  *   2. Vectorize index "nephilim-knowledge-base" must exist (768 dimensions, cosine metric)
  *
  * Usage:
  *   npm run ingest
  */
 
-import { readFileSync, readdirSync, writeFileSync, existsSync, statSync } from 'fs';
-import { execSync } from 'child_process';
+import { readFileSync, readdirSync, existsSync, statSync } from 'fs';
 import { createHash } from 'crypto';
 import { basename, dirname, extname, join, relative, resolve } from 'path';
 import { fileURLToPath } from 'url';
@@ -52,9 +46,10 @@ function loadEnv() {
 }
 
 // --- Configuration ---
-const CHUNK_SIZE = 800;       // ~800 chars per chunk
-const CHUNK_OVERLAP = 100;    // overlap between chunks for context continuity
-const BATCH_SIZE = 20;        // vectors per upsert batch (API max is 100)
+const CHUNK_SIZE = 2000;        // ~2000 chars per chunk (larger = fewer chunks, still good for retrieval)
+const CHUNK_OVERLAP = 200;      // overlap between chunks for context continuity
+const EMBED_BATCH_SIZE = 100;   // max texts per embedding API call
+const VECTORIZE_BATCH_SIZE = 1000; // max vectors per Vectorize insert
 const INDEX_NAME = 'nephilim-knowledge-base';
 
 // --- File Discovery ---
@@ -69,10 +64,8 @@ function discoverTexts(dir = TEXTS_DIR) {
     const stat = statSync(fullPath);
 
     if (stat.isDirectory()) {
-      // Recurse into subdirectories (alc/, bib/, jud/, etc.)
       results.push(...discoverTexts(fullPath));
     } else if (supported.includes(extname(entry).toLowerCase())) {
-      // Use subfolder/filename as source label, e.g. "bib/genesis" or "jud/1-enoch"
       const relPath = relative(TEXTS_DIR, fullPath);
       const source = relPath.replace(/\\/g, '/').replace(extname(entry), '');
       results.push({
@@ -86,9 +79,6 @@ function discoverTexts(dir = TEXTS_DIR) {
   return results;
 }
 
-/**
- * Extract plain text from different file formats.
- */
 function extractText(filePath) {
   const ext = extname(filePath).toLowerCase();
   const raw = readFileSync(filePath, 'utf-8');
@@ -118,9 +108,6 @@ function extractText(filePath) {
   }
 }
 
-/**
- * Recursively extract string values from a JSON structure.
- */
 function flattenJson(obj, depth = 0) {
   if (typeof obj === 'string') return obj;
   if (Array.isArray(obj)) return obj.map(item => flattenJson(item, depth + 1)).join('\n');
@@ -192,9 +179,6 @@ function getApiConfig() {
   return { accountId, apiToken };
 }
 
-/**
- * Generate embeddings via Cloudflare Workers AI REST API.
- */
 async function generateEmbeddings(texts) {
   const { accountId, apiToken } = getApiConfig();
   const url = `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/baai/bge-base-en-v1.5`;
@@ -223,24 +207,34 @@ async function generateEmbeddings(texts) {
 }
 
 /**
- * Upsert vectors to Vectorize via wrangler CLI (which handles auth via login).
+ * Upsert vectors to Vectorize via REST API (no wrangler subprocess).
  */
 async function upsertVectors(vectors) {
-  const tempFile = resolve(ROOT, 'scripts/.temp-vectors.ndjson');
+  const { accountId, apiToken } = getApiConfig();
+  const url = `https://api.cloudflare.com/client/v4/accounts/${accountId}/vectorize/v2/indexes/${INDEX_NAME}/insert`;
+
+  // Vectorize REST API expects NDJSON body
   const ndjson = vectors
     .map(v => JSON.stringify({ id: v.id, values: v.values, metadata: v.metadata }))
     .join('\n');
-  writeFileSync(tempFile, ndjson);
 
-  try {
-    execSync(
-      `npx wrangler vectorize insert ${INDEX_NAME} --file="${tempFile}"`,
-      { cwd: ROOT, encoding: 'utf-8', timeout: 60000 }
-    );
-    console.log(`  Upserted ${vectors.length} vectors`);
-  } catch (error) {
-    console.error('Vectorize upsert failed:', error.message);
-    throw error;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiToken}`,
+      'Content-Type': 'application/x-ndjson',
+    },
+    body: ndjson,
+  });
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(`Vectorize insert error (${response.status}): ${err}`);
+  }
+
+  const json = await response.json();
+  if (!json.success) {
+    throw new Error(`Vectorize insert failed: ${JSON.stringify(json.errors)}`);
   }
 }
 
@@ -252,7 +246,6 @@ async function main() {
   console.log('=== The Scribe — Knowledge Base Ingestion ===\n');
   console.log(`Texts directory: docs/scribe-texts/\n`);
 
-  // 1. Discover files
   const docs = discoverTexts();
 
   if (docs.length === 0) {
@@ -265,53 +258,57 @@ async function main() {
   docs.forEach(d => console.log(`  - ${d.filename}`));
   console.log();
 
-  // 2. Read, extract, and chunk all documents
+  // 1. Read, extract, and chunk all documents
   const allChunks = [];
   for (const doc of docs) {
-    console.log(`Processing ${doc.filename}...`);
     const text = extractText(doc.path);
     const chunks = chunkDocument(text, doc.source);
-    console.log(`  → ${chunks.length} chunks`);
+    console.log(`  ${doc.filename} → ${chunks.length} chunks`);
     allChunks.push(...chunks);
   }
 
-  console.log(`\nTotal chunks: ${allChunks.length}\n`);
+  console.log(`\nTotal chunks: ${allChunks.length}`);
+  const totalEmbedBatches = Math.ceil(allChunks.length / EMBED_BATCH_SIZE);
+  console.log(`Embedding in ${totalEmbedBatches} batches of ${EMBED_BATCH_SIZE}...\n`);
 
-  // 3. Generate embeddings and upsert in batches
-  for (let i = 0; i < allChunks.length; i += BATCH_SIZE) {
-    const batch = allChunks.slice(i, i + BATCH_SIZE);
-    const batchNum = Math.floor(i / BATCH_SIZE) + 1;
-    const totalBatches = Math.ceil(allChunks.length / BATCH_SIZE);
-    console.log(`Batch ${batchNum}/${totalBatches} (${batch.length} chunks)...`);
+  // 2. Generate all embeddings
+  const allVectors = [];
+  for (let i = 0; i < allChunks.length; i += EMBED_BATCH_SIZE) {
+    const batch = allChunks.slice(i, i + EMBED_BATCH_SIZE);
+    const batchNum = Math.floor(i / EMBED_BATCH_SIZE) + 1;
 
+    process.stdout.write(`  Embedding batch ${batchNum}/${totalEmbedBatches}...`);
     const texts = batch.map(c => c.text);
     const embeddings = await generateEmbeddings(texts);
 
-    const vectors = batch.map((chunk, j) => ({
-      id: chunkId(chunk.metadata.source, chunk.metadata.chunkIndex),
-      values: embeddings[j],
-      metadata: {
-        ...chunk.metadata,
-        text: chunk.text,
-      },
-    }));
-
-    await upsertVectors(vectors);
-
-    // Small delay to avoid rate limits
-    if (i + BATCH_SIZE < allChunks.length) {
-      await new Promise(r => setTimeout(r, 500));
+    for (let j = 0; j < batch.length; j++) {
+      allVectors.push({
+        id: chunkId(batch[j].metadata.source, batch[j].metadata.chunkIndex),
+        values: embeddings[j],
+        metadata: {
+          ...batch[j].metadata,
+          text: batch[j].text,
+        },
+      });
     }
+
+    console.log(` done (${allVectors.length}/${allChunks.length} vectors)`);
   }
 
-  console.log('\nDone.');
-  console.log(`  Index: ${INDEX_NAME}`);
-  console.log(`  Total vectors: ${allChunks.length}`);
+  // 3. Upsert all vectors in large batches
+  const totalUpsertBatches = Math.ceil(allVectors.length / VECTORIZE_BATCH_SIZE);
+  console.log(`\nUpserting in ${totalUpsertBatches} batches of ${VECTORIZE_BATCH_SIZE}...\n`);
 
-  // Cleanup temp files
-  try {
-    execSync('rm -f scripts/.temp-vectors.ndjson', { cwd: ROOT });
-  } catch { /* ignore */ }
+  for (let i = 0; i < allVectors.length; i += VECTORIZE_BATCH_SIZE) {
+    const batch = allVectors.slice(i, i + VECTORIZE_BATCH_SIZE);
+    const batchNum = Math.floor(i / VECTORIZE_BATCH_SIZE) + 1;
+
+    process.stdout.write(`  Upsert batch ${batchNum}/${totalUpsertBatches} (${batch.length} vectors)...`);
+    await upsertVectors(batch);
+    console.log(' done');
+  }
+
+  console.log(`\nDone. ${allVectors.length} vectors in index "${INDEX_NAME}".`);
 }
 
 main().catch(err => {
