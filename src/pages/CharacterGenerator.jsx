@@ -160,12 +160,19 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
   // === PHYSICAL APPEARANCE OPTIONS ===
   const SKIN_TONES = [
     { value: "olive", label: "Olive (Semitic)" },
+    { value: "bronze", label: "Bronze (Sun-Kissed)" },
+    { value: "copper", label: "Copper (Reddish)" },
     { value: "tan", label: "Tan (Levantine)" },
     { value: "light brown", label: "Light Brown (Mesopotamian)" },
-    { value: "bronze", label: "Bronze (Desert Nomad)" },
-    { value: "dark brown", label: "Dark Brown (Cushite/African)" },
+    { value: "dark brown", label: "Dark Brown (Nubian)" },
+    { value: "alabaster", label: "Alabaster (Translucent White)" },
+    { value: "obsidian", label: "Obsidian (Deep Black/Purple)" },
+    { value: "red clay", label: "Red Clay (Adamah)" },
+    { value: "ashen grey", label: "Ash Grey (Deathly)" },
+    { value: "copper patina", label: "Copper Patina (Oxidized)" },
+    { value: "marble", label: "Marble (Veined Stone)" },
+    { value: "gold-dust", label: "Gold-Dust (Shimmering)" },
     { value: "pale", label: "Pale (Cave Dweller/Northern)" },
-    { value: "ashen grey", label: "Ashen Grey (Rephaim/Undead)" },
     { value: "unnaturally pale", label: "Unnaturally Pale (Nephilim)" }
   ];
 
@@ -176,8 +183,14 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     { value: "hazel", label: "Hazel" },
     { value: "green", label: "Green (Rare)" },
     { value: "grey", label: "Grey" },
-    { value: "blue-grey", label: "Blue-Grey (Rare)" },
+    { value: "molten gold", label: "Molten Gold (Glowing)" },
+    { value: "void black", label: "Void Black (No Sclera)" },
+    { value: "nebula violet", label: "Nebula Violet (Swirling)" },
+    { value: "blind white", label: "Blind White (Seer)" },
+    { value: "burning ember", label: "Burning Ember (Internal Light)" },
+    { value: "quicksilver", label: "Quicksilver (Liquid Metal)" },
     { value: "glowing amber", label: "Glowing Amber (Nephilim)" },
+    { value: "glowing blue", label: "Glowing Blue (Watcher Blood)" },
     { value: "black voids", label: "Black Voids (Corrupted)" }
   ];
 
@@ -186,55 +199,82 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     { value: "dark brown", label: "Dark Brown" },
     { value: "brown", label: "Brown" },
     { value: "auburn", label: "Auburn/Reddish" },
+    { value: "golden", label: "Golden" },
     { value: "grey", label: "Grey (Elder)" },
     { value: "white", label: "White (Ancient)" },
-    { value: "silver", label: "Silver (Unnatural)" }
+    { value: "silver", label: "Silver (Unnatural)" },
+    { value: "raven blue", label: "Raven Blue (Dark Sheen)" }
   ];
 
   const HAIR_LENGTHS = [
     { value: "bald", label: "Bald/Shaven" },
-    { value: "very short", label: "Very Short (< 2 inches)" },
-    { value: "short", label: "Short (2-4 inches)" },
+    { value: "short cropped", label: "Short Cropped" },
     { value: "shoulder length", label: "Shoulder Length" },
-    { value: "mid-back", label: "Mid-Back" },
+    { value: "long flowing", label: "Long Flowing" },
+    { value: "braided", label: "Braided" },
+    { value: "wild mane", label: "Wild Mane" },
     { value: "waist length", label: "Waist Length" },
     { value: "floor length", label: "Floor Length (Nazarite)" }
   ];
 
-  const DISTINGUISHING_FEATURES = [
-    { value: "none", label: "None" },
-    { value: "battle scar across face", label: "Battle Scar (Face)" },
-    { value: "missing eye", label: "Missing Eye" },
-    { value: "eyepatch", label: "Eyepatch" },
-    { value: "blind milky eyes", label: "Blind (Milky Eyes)" },
-    { value: "ritual scarification", label: "Ritual Scarification" },
-    { value: "tribal tattoos", label: "Tribal Tattoos" },
-    { value: "burn scars", label: "Burn Scars" },
-    { value: "missing hand/arm", label: "Missing Hand/Arm" },
-    { value: "peg leg", label: "Peg Leg" },
-    { value: "hunched back", label: "Hunchback" },
-    { value: "leprosy scars", label: "Leprosy (Scars)" },
-    { value: "facial deformity", label: "Facial Deformity" },
-    { value: "branded mark", label: "Branded Mark" },
-    { value: "six fingers", label: "Six Fingers (Giant Blood)" },
-    { value: "unnaturally tall", label: "Unnaturally Tall" },
-    { value: "glowing runes", label: "Glowing Runes (Sorcerer)" },
-    { value: "prophet's beard", label: "Long Prophet's Beard" }
+  const BODY_BUILDS = [
+    { value: "random", label: "Random" },
+    { value: "gaunt", label: "Gaunt / Emaciated" },
+    { value: "lean", label: "Lean / Wiry" },
+    { value: "athletic", label: "Athletic / Muscular" },
+    { value: "stocky", label: "Stocky / Broad" },
+    { value: "heavyset", label: "Heavyset / Fat" },
+    { value: "towering", label: "Towering / Giant-Blooded" }
   ];
 
-  // === NAME DATABASES ===
+  const DISTINGUISHING_FEATURES = [
+    { value: "none", label: "None" },
+    { value: "battle scar across face", label: "Facial Scar" },
+    { value: "tribal tattoos", label: "Tribal Tattoos" },
+    { value: "gold piercings", label: "Gold Piercings" },
+    { value: "blind eye", label: "Blind Eye" },
+    { value: "glowing runes", label: "Glowing Runes" },
+    { value: "six fingers on each hand", label: "Polydactyly (Six Fingers)" },
+    { value: "luminous glowing veins", label: "Luminous Veins" },
+    { value: "vestigial wing stubs", label: "Vestigial Wings" },
+    { value: "small obsidian horns", label: "Obsidian Horns" },
+    { value: "patches of scales", label: "Scale Patches" },
+    { value: "heterochromia mismatched eyes", label: "Heterochromia (Mismatched Eyes)" },
+    { value: "ritual scarification", label: "Ritual Scarification" },
+    { value: "faint halo of light", label: "Halo of Faint Light" },
+    { value: "living tattoos with moving ink", label: "Living Tattoos (Moving Ink)" },
+    { value: "ornate bronze mask", label: "Bronze Mask" },
+    { value: "burn scars", label: "Burn Scars" },
+    { value: "branded mark", label: "Branded Mark" },
+    { value: "prophet's long beard", label: "Long Prophet's Beard" },
+    { value: "missing hand or arm", label: "Missing Hand/Arm" }
+  ];
+
+  const MOUNTS = [
+    { value: "none", label: "None" },
+    { value: "riding a Behemoth (Sauropod)", label: "Behemoth (Sauropod)" },
+    { value: "riding a War Elephant", label: "War Elephant" },
+    { value: "riding a Dire Lion", label: "Dire Lion" },
+    { value: "riding a Leviathan Spawn (Serpent)", label: "Leviathan Spawn (Serpent)" },
+    { value: "riding a Cherubim Steed (Winged Bull)", label: "Cherubim Steed (Winged Bull)" },
+    { value: "accompanied by a Hunting Drake", label: "Hunting Drake (Companion)" }
+  ];
+
+  // === NAME DATABASES (Expanded) ===
   const NAMES = {
     Male: {
-      Sethite: ["Enosh", "Kenan", "Mahalalel", "Jared", "Methuselah", "Lamech", "Noah", "Seth"],
-      Cainite: ["Enoch", "Irad", "Mehujael", "Lamech", "Jabal", "Jubal", "Tubal-Cain"],
-      Wanderer: ["Zorah", "Nahor", "Terah", "Eber", "Peleg"],
-      Giant: ["Og", "Sihon", "Ahiman", "Sheshai", "Talmai", "Arba", "Goliath", "Lahmi", "Anak"]
+      Sethite: ["Enosh", "Kenan", "Mahalalel", "Jared", "Methuselah", "Lamech", "Noah", "Seth", "Shem", "Ham", "Japheth", "Adam", "Abel", "Enoch the Righteous"],
+      Cainite: ["Enoch", "Irad", "Mehujael", "Methusael", "Lamech", "Jabal", "Jubal", "Tubal-Cain", "Nimrod", "Ashur", "Cush"],
+      Wanderer: ["Zorah", "Nahor", "Terah", "Eber", "Peleg", "Reu", "Serug", "Shelah", "Arpachshad"],
+      Giant: ["Og", "Sihon", "Ahiman", "Sheshai", "Talmai", "Arba", "Goliath", "Lahmi", "Anak", "Gilgamesh", "Enkidu", "Ohya", "Mahway", "Hahyah"],
+      Sorcerer: ["Azazel-Kin", "Baraqel", "Kokabiel", "Penemue", "Sariel", "Armaros", "Gadreel"]
     },
     Female: {
-      Sethite: ["Naamah", "Azura", "Awan", "Dina", "Norea"],
-      Cainite: ["Adah", "Zillah", "Naamah"],
-      Wanderer: ["Sarai", "Milcah", "Iscah"],
-      Giant: ["Noa", "Hoglah", "Tirzah"]
+      Sethite: ["Naamah", "Azura", "Awan", "Dina", "Norea", "Emzara", "Sedeqetelebab", "Baraka"],
+      Cainite: ["Adah", "Zillah", "Naamah", "Elisheba", "Basemath", "Mahalath"],
+      Wanderer: ["Sarai", "Milcah", "Iscah", "Reumah", "Keturah", "Hagar"],
+      Giant: ["Noa", "Hoglah", "Tirzah", "Mahlah", "Ahinoam", "Rizpah"],
+      Sorcerer: ["Ishtahar", "Lilith-Born", "Naamah the Enchantress", "Astarte", "Inanna"]
     }
   };
 
@@ -337,6 +377,13 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     { value: "arid desert wasteland", label: "Desert Wasteland" },
     { value: "lush hanging gardens", label: "Hanging Gardens" },
     { value: "dark ritual cavern", label: "Dark Cavern" },
+    { value: "ziggurat temple", label: "Ziggurat Temple" },
+    { value: "mount hermon summit snowy peaks", label: "Mount Hermon Summit (Snowy)" },
+    { value: "ancient cedar forest", label: "Cedar Forests (Ancient)" },
+    { value: "coastal waters fountains of the deep", label: "Fountains of the Deep (Coastal)" },
+    { value: "iron furnace industrial", label: "Iron Furnace (Industrial)" },
+    { value: "wasteland of nod red sky", label: "Wasteland of Nod (Red Sky)" },
+    { value: "underground catacomb", label: "Underground Catacomb" },
     { value: "tribal encampment", label: "Nomadic Camp" },
     { value: "bronze age forge", label: "Ancient Forge" }
   ];
@@ -346,6 +393,10 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     { value: "dark fantasy", label: "Dark Fantasy" },
     { value: "ethereal and holy", label: "Ethereal/Holy" },
     { value: "savage and primal", label: "Savage/Primal" },
+    { value: "cosmic horror lovecraftian", label: "Cosmic Horror (Lovecraftian)" },
+    { value: "renaissance oil painting dramatic", label: "Renaissance Oil (Dramatic)" },
+    { value: "frazetta fantasy pulp", label: "Frazetta Fantasy (Pulp)" },
+    { value: "ancient mystery foggy", label: "Ancient Mystery (Foggy)" },
     { value: "ancient mesopotamian", label: "Ancient Near East" }
   ];
 
@@ -362,7 +413,9 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     eyeColor: 'dark brown',
     hairColor: 'black',
     hairLength: 'shoulder length',
+    bodyBuild: 'athletic',
     distinguishingFeature: 'none',
+    mount: 'none',
     background: 'ancient stone city',
     vibe: 'biblical epic',
     customVisuals: '',
@@ -394,6 +447,10 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       namePool = NAMES[sex].Sethite;
     } else if (race === 'Cainite') {
       namePool = NAMES[sex].Cainite;
+    } else if (race === 'Sorcerer') {
+      namePool = NAMES[sex].Sorcerer;
+    } else if (race === 'Horim') {
+      namePool = NAMES[sex].Giant; // Horim use giant-kin names
     } else {
       namePool = NAMES[sex].Wanderer;
     }
@@ -409,6 +466,50 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     const feet = Math.floor(randomHeight / 12);
     const inches = randomHeight % 12;
     setFormData(prev => ({ ...prev, height: `${feet}'${inches}"` }));
+  };
+
+  // === SUMMON RANDOM LEGEND ===
+  const summonRandomLegend = () => {
+    const randomFrom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const roll4d6 = () => {
+      const rolls = Array.from({ length: 4 }, () => Math.floor(Math.random() * 6) + 1);
+      rolls.sort((a, b) => a - b).shift();
+      return rolls.reduce((a, b) => a + b, 0);
+    };
+
+    const raceKeys = Object.keys(RACES);
+    const randomRace = randomFrom(raceKeys);
+    const randomSex = randomFrom(['Male', 'Female']);
+    const randomClass = randomFrom(CLASSES).value;
+
+    setFormData(prev => ({
+      ...prev,
+      lineage: randomRace,
+      sex: randomSex,
+      charClass: randomClass,
+      level: Math.floor(Math.random() * 5) + 1, // Level 1-5
+      gameBackground: randomFrom(GAME_BACKGROUNDS).value,
+      skinTone: randomFrom(SKIN_TONES).value,
+      eyeColor: randomFrom(EYE_COLORS).value,
+      hairColor: randomFrom(HAIR_COLORS).value,
+      hairLength: randomFrom(HAIR_LENGTHS).value,
+      bodyBuild: randomFrom(BODY_BUILDS).value,
+      distinguishingFeature: randomFrom(DISTINGUISHING_FEATURES).value,
+      mount: Math.random() > 0.7 ? randomFrom(MOUNTS.filter(m => m.value !== 'none')).value : 'none',
+      background: randomFrom(BACKGROUNDS).value,
+      vibe: randomFrom(VIBES).value,
+      equipment: EQUIPMENT[randomClass]?.[Math.floor(Math.random() * (EQUIPMENT[randomClass]?.length || 1))]?.id || 'bronze_sword',
+      attributes: {
+        STR: roll4d6(), DEX: roll4d6(), CON: roll4d6(),
+        INT: roll4d6(), WIS: roll4d6(), CHA: roll4d6()
+      }
+    }));
+
+    // Generate name after state update
+    setTimeout(() => {
+      generateRandomName();
+      generateRandomHeight();
+    }, 50);
   };
 
   // === HANDLERS ===
@@ -439,33 +540,61 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     }));
   };
 
-  // === BUILD INTELLIGENT IMAGE PROMPT ===
+  // === BUILD PHOTOREALISTIC IMAGE PROMPT ===
   const buildImagePrompt = () => {
     const raceData = RACES[formData.lineage];
     const customDesc = formData.customVisuals.trim();
 
-    const basePrompt = `Fantasy character portrait of a ${formData.sex} ${raceData.name}, ${formData.charClass} class`;
+    // Phenotype mapping to fix SD rendering issues
+    let cleanSkin = formData.skinTone;
+    if (cleanSkin === 'olive') cleanSkin = 'Mediterranean skin tone';
+    if (cleanSkin === 'bronze') cleanSkin = 'Golden sun-tanned skin';
+    if (cleanSkin === 'copper') cleanSkin = 'Warm copper-toned skin';
+    if (cleanSkin === 'dark brown') cleanSkin = 'Rich dark brown Nubian skin';
 
-    // Physical description
-    const physicalDesc = `${formData.skinTone} skin, ${formData.eyeColor} eyes, ${formData.hairLength} ${formData.hairColor} hair`;
+    // Hair texture by phenotype
+    const raceKey = formData.lineage.toLowerCase();
+    let phenotype = "Ancient Levantine facial features, aquiline nose, historical biblical era";
+    let hairTexture = "thick wavy";
 
-    // Distinguishing feature
-    const featureDesc = formData.distinguishingFeature !== 'none' ? formData.distinguishingFeature : '';
+    if (['nephilim', 'anakim', 'rephaim', 'gibborim', 'elioud'].includes(raceKey)) {
+      phenotype = "towering height, unnatural muscular definition, rigid facial structure, ancient brutalism";
+      hairTexture = "thick straggly";
+    } else if (['dark brown', 'obsidian'].includes(formData.skinTone)) {
+      phenotype = "Nubian features, Sub-Saharan, Ancient Kushite royal";
+      hairTexture = "coarse";
+    }
 
-    // Race visuals
-    const raceVisuals = raceData.visuals;
+    // Body build
+    let bodyBuild = formData.bodyBuild;
+    if (bodyBuild === 'random') {
+      const types = ['gaunt', 'lean', 'athletic', 'stocky', 'heavyset'];
+      bodyBuild = types[Math.floor(Math.random() * types.length)];
+    }
+
+    // Hair length fix for SD
+    let cleanHairLen = formData.hairLength;
+    if (cleanHairLen === 'short cropped') cleanHairLen = 'military short curly';
 
     // Height context
-    const heightDesc = formData.height.includes("'") && parseInt(formData.height) > 8 ? "towering giant stature" : "";
+    const safeHeight = formData.height.replace(/'/g, "ft ").replace(/"/g, "in").trim();
 
-    const settingDesc = `${formData.vibe} atmosphere, ${formData.background} background`;
-    const styleDesc = "detailed biblical fantasy art, dramatic lighting, 8k resolution, oil painting style, historically accurate ancient near east";
+    // Feature
+    const featureDesc = formData.distinguishingFeature !== 'none' ? `, with ${formData.distinguishingFeature}` : '';
 
-    if (customDesc) {
-      return `${basePrompt}, ${physicalDesc}, ${featureDesc}, ${customDesc}, ${heightDesc}, ${settingDesc}, ${styleDesc}`.replace(/,\s*,/g, ',').trim();
-    } else {
-      return `${basePrompt}, ${physicalDesc}, ${featureDesc}, ${raceVisuals}, ${heightDesc}, ${settingDesc}, ${styleDesc}`.replace(/,\s*,/g, ',').trim();
-    }
+    // Mount
+    const mountDesc = formData.mount !== 'none' ? `, ${formData.mount}` : '';
+
+    // Appearance assembly
+    let appearance = `${cleanSkin}, ${phenotype}, ${bodyBuild} build, ${formData.eyeColor} eyes, ${cleanHairLen} ${formData.hairColor} ${hairTexture} hair${featureDesc}`;
+
+    if (customDesc) appearance += `, ${customDesc}`;
+
+    // Photorealistic prompt style
+    const prompt = `wide angle full body cinematic shot of a ${formData.sex} ${formData.lineage} ${formData.charClass}, ${appearance}, wearing ${raceData.visuals}, ${safeHeight} tall${mountDesc}, standing in ${formData.background}, ${formData.vibe} atmosphere, detailed fantasy art, dramatic lighting, 8k, photorealistic, masterpiece, wide view, detailed background`;
+
+    // Clean up any parentheses/quotes that may cause SD issues
+    return prompt.replace(/[()"]/g, "").replace(/,\s*,/g, ',').trim();
   };
 
   // === GENERATE IMAGE ===
@@ -649,7 +778,9 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       eyeColor: 'brown',
       hairColor: 'black',
       hairLength: 'short',
+      bodyBuild: 'athletic',
       distinguishingFeature: 'none',
+      mount: 'none',
       customVisuals: '',
       background: 'ancient stone city',
       vibe: 'biblical epic',
@@ -1093,6 +1224,36 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   </select>
                 </div>
               </div>
+
+              {/* Body Build & Mount */}
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                  <label className="block text-[#78716c] text-[10px] font-bold mb-1">BODY BUILD</label>
+                  <select
+                    name="bodyBuild"
+                    value={formData.bodyBuild}
+                    onChange={handleChange}
+                    className="w-full bg-black border border-[#44403c] p-2 text-white text-sm outline-none"
+                  >
+                    {BODY_BUILDS.map(b => (
+                      <option key={b.value} value={b.value}>{b.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[#78716c] text-[10px] font-bold mb-1">MOUNT / COMPANION</label>
+                  <select
+                    name="mount"
+                    value={formData.mount}
+                    onChange={handleChange}
+                    className="w-full bg-black border border-[#44403c] p-2 text-white text-sm outline-none"
+                  >
+                    {MOUNTS.map(m => (
+                      <option key={m.value} value={m.value}>{m.label}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </div>
 
             {/* ATTRIBUTES */}
@@ -1160,6 +1321,15 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                 />
               </div>
             </div>
+
+            {/* RANDOM LEGEND BUTTON */}
+            <button
+              onClick={summonRandomLegend}
+              disabled={loading}
+              className="w-full py-3 font-cinzel font-bold text-base uppercase tracking-widest transition-all border border-[#44403c] bg-[#1a1a25] hover:bg-[#2a2a35] hover:border-[#78716c] text-[#a8a29e] mb-3"
+            >
+              Summon Random Legend
+            </button>
 
             {/* GENERATE BUTTON */}
             <button
