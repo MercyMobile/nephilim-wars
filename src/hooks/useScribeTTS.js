@@ -108,7 +108,7 @@ export function useScribeTTS() {
       // Use streaming API to handle long text that exceeds model's max context length
       const stream = kokoroRef.current.stream(text, {
         voice: "bm_lewis",  // Confident British male voice
-        speed: 0.88         // Slower for aged wisdom
+        speed: 1.1          // Brisk authoritative pace
       });
 
       // Track scheduled playback time and sources for cleanup
@@ -124,15 +124,15 @@ export function useScribeTTS() {
 
         const source = audioContext.createBufferSource();
         source.buffer = audioBuffer;
-        source.playbackRate.value = 0.92;  // Deeper pitch
+        source.playbackRate.value = 1.0;  // Natural pitch
         source.connect(audioContext.destination);
 
         // Schedule this chunk to play after previous chunks
         const startTime = Math.max(nextStartTime, audioContext.currentTime);
         source.start(startTime);
 
-        // Calculate when this chunk will finish (accounting for playback rate)
-        const duration = audioBuffer.duration / 0.92;
+        // Calculate when this chunk will finish
+        const duration = audioBuffer.duration;
         nextStartTime = startTime + duration;
 
         sources.push(source);
@@ -166,9 +166,9 @@ export function useScribeTTS() {
 
     const utterance = new SpeechSynthesisUtterance(text);
 
-    // Old wise man voice settings
-    utterance.pitch = 0.75;
-    utterance.rate = 0.85;
+    // Authoritative voice settings
+    utterance.pitch = 0.8;
+    utterance.rate = 1.0;
 
     const setVoice = () => {
       const voices = window.speechSynthesis.getVoices();
