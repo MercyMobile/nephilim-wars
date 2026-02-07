@@ -259,18 +259,19 @@ function saveProgress(embedBatch, upsertedCount) {
 // --- Metadata sizing helper ---
 
 function fitMetadata(metadata, text) {
-  const meta = { ...metadata, text };
-  const size = Buffer.byteLength(JSON.stringify(meta), 'utf-8');
-  if (size <= MAX_METADATA_BYTES) return meta;
-
-  // Truncate text to fit under the limit
-  const overhead = Buffer.byteLength(JSON.stringify({ ...metadata, text: '' }), 'utf-8');
-  const maxTextBytes = MAX_METADATA_BYTES - overhead - 50; // 50 bytes safety margin
   let truncated = text;
-  while (Buffer.byteLength(truncated, 'utf-8') > maxTextBytes) {
-    truncated = truncated.slice(0, Math.floor(truncated.length * 0.9));
+  let meta = { ...metadata, text: truncated };
+  let size = Buffer.byteLength(JSON.stringify(meta), 'utf-8');
+
+  while (size > MAX_METADATA_BYTES && truncated.length > 100) {
+    // Cut aggressively based on how far over the limit we are
+    const ratio = Math.min(0.9, MAX_METADATA_BYTES / size);
+    truncated = truncated.slice(0, Math.floor(truncated.length * ratio));
+    meta = { ...metadata, text: truncated };
+    size = Buffer.byteLength(JSON.stringify(meta), 'utf-8');
   }
-  return { ...metadata, text: truncated };
+
+  return meta;
 }
 
 // --- Retry helper ---
