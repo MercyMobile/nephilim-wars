@@ -138,7 +138,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 1,
       heightRange: { male: [74, 86], female: [70, 82] },
       accessory: "ancestral amulet, oversized bronze bracers, or giant-blood tattoos",
-      visuals: "tall muscular human, subtle giant features, broad shoulders, intense eyes, wearing mixed human-giant attire"
+      visuals: "tall athletic human, broad shoulders, intense piercing eyes, wearing bronze-age leather armor with fine craftsmanship, human appearance"
     },
     Sorcerer: {
       name: "Sorcerer Clan (Watcher-Taught)",
@@ -552,14 +552,29 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     if (cleanSkin === 'copper') cleanSkin = 'Warm copper-toned skin';
     if (cleanSkin === 'dark brown') cleanSkin = 'Rich dark brown Nubian skin';
 
-    // Hair texture by phenotype
+    // Hair texture and phenotype by ancestry
     const raceKey = formData.lineage.toLowerCase();
     let phenotype = "Ancient Levantine facial features, aquiline nose, historical biblical era";
     let hairTexture = "thick wavy";
 
-    if (['nephilim', 'anakim', 'rephaim', 'gibborim', 'elioud'].includes(raceKey)) {
-      phenotype = "towering height, unnatural muscular definition, rigid facial structure, ancient brutalism";
-      hairTexture = "thick straggly";
+    if (raceKey === 'nephilim') {
+      phenotype = "towering 12ft giant, massively muscular, inhuman proportions, rigid angular face, ancient bronze-age warrior";
+      hairTexture = "thick wild";
+    } else if (raceKey === 'rephaim') {
+      phenotype = "tall 10ft gaunt giant, pale grey complexion, hollow cheekbones, haunted ancient warrior, spectral presence";
+      hairTexture = "thin wispy";
+    } else if (raceKey === 'anakim') {
+      phenotype = "tall 11ft giant, regal bearing, long neck, noble ancient warrior-king, adorned with heavy chains";
+      hairTexture = "thick braided";
+    } else if (raceKey === 'gibborim') {
+      phenotype = "tall 7ft powerfully muscular human warrior, heroic proportions, strong jaw, ancient legendary hero";
+      hairTexture = "thick wavy";
+    } else if (raceKey === 'elioud') {
+      phenotype = "tall 7ft athletic human, subtle inhuman beauty, striking intense eyes, passing as human but uncanny, ancient warrior-scholar";
+      hairTexture = "thick flowing";
+    } else if (raceKey === 'horim') {
+      phenotype = "pale skin, wide dark eyes, wiry compact build, cave-dweller, primal ancient features";
+      hairTexture = "coarse matted";
     } else if (['dark brown', 'obsidian'].includes(formData.skinTone)) {
       phenotype = "Nubian features, Sub-Saharan, Ancient Kushite royal";
       hairTexture = "coarse";
@@ -590,8 +605,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
 
     if (customDesc) appearance += `, ${customDesc}`;
 
-    // Photorealistic prompt style
-    const prompt = `wide angle full body cinematic shot of a ${formData.sex} ${formData.lineage} ${formData.charClass}, ${appearance}, wearing ${raceData.visuals}, ${safeHeight} tall${mountDesc}, standing in ${formData.background}, ${formData.vibe} atmosphere, detailed fantasy art, dramatic lighting, 8k, photorealistic, masterpiece, wide view, detailed background`;
+    // Photorealistic prompt style - biblical bronze-age human characters, NOT fantasy creatures
+    const prompt = `wide angle full body cinematic shot of a ${formData.sex} ${formData.lineage} ${formData.charClass}, ${appearance}, wearing ${raceData.visuals}, ${safeHeight} tall${mountDesc}, standing in ${formData.background}, ${formData.vibe} atmosphere, ancient bronze-age biblical setting, historical realism, dramatic lighting, 8k, photorealistic, masterpiece, wide view, detailed background, NO horns, NO wings, NO demon features, NO fantasy creature, human character`;
 
     // Clean up any parentheses/quotes that may cause SD issues
     return prompt.replace(/[()"]/g, "").replace(/,\s*,/g, ',').trim();
