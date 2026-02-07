@@ -287,8 +287,8 @@ const CombatScreen = () => {
   useEffect(() => {
     const currentCombatant = getCurrentCombatant();
     if (currentCombatant && !currentCombatant.isPlayer && combatStarted) {
-      const aliveParty = party.filter(p => p.currentHp > 0);
-      if (aliveParty.length === 0) return;
+      const initialAlive = party.filter(p => p.currentHp > 0);
+      if (initialAlive.length === 0) return;
 
       const enemyActions = enemy?.stats?.actions || [];
       const baseAction = enemyActions[0] || {
@@ -299,14 +299,24 @@ const CombatScreen = () => {
         damageType: 'bludgeoning'
       };
 
-      // Enemy gets 3 attacks with MAP: 0, -5, -10
+      // Track HP changes locally so subsequent attacks see kills
+      const hpTracker = {};
+      party.forEach(p => { hpTracker[p.id] = p.currentHp; });
+
       const mapPenalties = [0, -5, -10];
       const delay = 800;
       const timers = [];
 
       mapPenalties.forEach((penalty, i) => {
         const timer = setTimeout(() => {
-          const target = aliveParty[Math.floor(Math.random() * aliveParty.length)];
+          // Re-check alive using local tracker
+          const aliveNow = party.filter(p => (hpTracker[p.id] ?? p.currentHp) > 0);
+          if (aliveNow.length === 0) {
+            nextTurn();
+            return;
+          }
+
+          const target = aliveNow[Math.floor(Math.random() * aliveNow.length)];
           const d20 = rollD20();
           const toHit = d20 + baseAction.toHitBonus + penalty;
           const baseDefense = target.stats?.defense || target.defense;
@@ -319,12 +329,14 @@ const CombatScreen = () => {
             damage = rollDamage(baseAction.damageDice) * 2 + baseAction.damageBonus;
             addLog(`🔥 CRITICAL! ${currentCombatant.name} rolls ${d20}${mapLabel}, ${baseAction.name} deals ${damage} to ${target.name}!`, 'hit');
             updateHp(target, -damage);
+            hpTracker[target.id] = Math.max(0, (hpTracker[target.id] ?? target.currentHp) - damage);
           } else if (d20 === 1 || toHit < defenderDef - 10) {
             addLog(`💀 FUMBLE! ${currentCombatant.name} rolls ${d20}${mapLabel}, ${baseAction.name} fails completely!`, 'miss');
           } else if (toHit >= defenderDef) {
             damage = rollDamage(baseAction.damageDice) + baseAction.damageBonus;
             addLog(`⚔️ ${currentCombatant.name} rolls ${d20}${mapLabel}, hits ${target.name} with ${baseAction.name} for ${damage}! (needed ${defenderDef})`, 'hit');
             updateHp(target, -damage);
+            hpTracker[target.id] = Math.max(0, (hpTracker[target.id] ?? target.currentHp) - damage);
           } else {
             addLog(`🛡️ ${currentCombatant.name} rolls ${d20}${mapLabel}, ${baseAction.name} misses ${target.name}. (needed ${defenderDef})`, 'miss');
           }
