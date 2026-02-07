@@ -96,29 +96,39 @@ const CombatScreen = () => {
     return turnOrder[currentTurnIndex];
   };
 
-  // Advance to next turn
+  // Advance to next turn, skipping dead combatants
   const nextTurn = () => {
-    const nextIndex = (currentTurnIndex + 1) % turnOrder.length;
-    setCurrentTurnIndex(nextIndex);
-    setActionsRemaining(3); // PF2e: 3 actions per turn
-    actionsRef.current = 3;
-
-    // Clear defend status for the combatant whose turn is starting
-    const nextCombatant = turnOrder[nextIndex];
-    if (nextCombatant) {
-      setDefendingIds(prev => prev.filter(id => id !== nextCombatant.id));
-    }
-
-    // Update turn order with current HP
+    // Update turn order with current HP first
     const updated = turnOrder.map(c => {
       if (c.isPlayer) {
         const partyMember = party.find(p => p.id === c.id);
         return partyMember ? { ...c, currentHp: partyMember.currentHp } : c;
       } else {
-        return { ...c, currentHp: enemy.currentHp };
+        return { ...c, currentHp: enemy?.currentHp ?? 0 };
       }
     });
     setTurnOrder(updated);
+
+    // Find next alive combatant (skip dead ones)
+    let nextIndex = (currentTurnIndex + 1) % updated.length;
+    let attempts = 0;
+    while (updated[nextIndex]?.currentHp <= 0 && attempts < updated.length) {
+      nextIndex = (nextIndex + 1) % updated.length;
+      attempts++;
+    }
+
+    // If everyone is dead, don't advance (victory/defeat will show)
+    if (attempts >= updated.length) return;
+
+    setCurrentTurnIndex(nextIndex);
+    setActionsRemaining(3); // PF2e: 3 actions per turn
+    actionsRef.current = 3;
+
+    // Clear defend status for the combatant whose turn is starting
+    const nextCombatant = updated[nextIndex];
+    if (nextCombatant) {
+      setDefendingIds(prev => prev.filter(id => id !== nextCombatant.id));
+    }
   };
 
   // Add battle log entry
