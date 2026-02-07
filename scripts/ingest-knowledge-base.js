@@ -1,42 +1,103 @@
 #!/usr/bin/env node
 
 /**
- * Nephilim Wars Knowledge Base Ingestion Script
+ * Nephilim Wars — Scribe Knowledge Base Ingestion
  *
- * Chunks the game manual and system docs, generates embeddings via
- * Cloudflare Workers AI, and upserts them into the Vectorize index.
+ * Reads all texts from docs/scribe-texts/, chunks them, generates
+ * embeddings via Cloudflare Workers AI, and uploads to Vectorize.
+ *
+ * Supported file formats: .md, .txt, .json, .html
  *
  * Prerequisites:
- *   - `npx wrangler login` (authenticated with Cloudflare)
- *   - Vectorize index "nephilim-knowledge-base" exists
- *     (create with: npx wrangler vectorize create nephilim-knowledge-base --dimensions=768 --metric=cosine)
+ *   - npx wrangler login
+ *   - Vectorize index exists:
+ *     npx wrangler vectorize create nephilim-knowledge-base --dimensions=768 --metric=cosine
  *
  * Usage:
- *   node scripts/ingest-knowledge-base.js
- *
- * The script uses wrangler CLI under the hood to interact with Cloudflare APIs.
+ *   npm run ingest
  */
 
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, readdirSync, writeFileSync } from 'fs';
 import { execSync } from 'child_process';
 import { createHash } from 'crypto';
-import { dirname, resolve } from 'path';
+import { basename, dirname, extname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
+const TEXTS_DIR = resolve(ROOT, 'docs/scribe-texts');
 
 // --- Configuration ---
-const CHUNK_SIZE = 800;       // ~800 tokens per chunk (chars as rough proxy)
+const CHUNK_SIZE = 800;       // ~800 chars per chunk
 const CHUNK_OVERLAP = 100;    // overlap between chunks for context continuity
-const BATCH_SIZE = 20;        // vectors per upsert batch (Vectorize limit: 1000)
+const BATCH_SIZE = 20;        // vectors per upsert batch
 const INDEX_NAME = 'nephilim-knowledge-base';
 
-// Docs to ingest
-const DOCS = [
-  { path: 'docs/manual.md', source: 'game-manual' },
-  { path: 'docs/NEPHILIM_WARS_GAME_SYSTEM.md', source: 'game-system' },
-];
+// --- File Discovery ---
+
+function discoverTexts() {
+  const supported = ['.md', '.txt', '.json', '.html'];
+  const files = readdirSync(TEXTS_DIR);
+  return files
+    .filter(f => supported.includes(extname(f).toLowerCase()))
+    .map(f => ({
+      path: resolve(TEXTS_DIR, f),
+      filename: f,
+      source: basename(f, extname(f)), // e.g. "1-enoch" from "1-enoch.txt"
+    }));
+}
+
+/**
+ * Extract plain text from different file formats.
+ */
+function extractText(filePath) {
+  const ext = extname(filePath).toLowerCase();
+  const raw = readFileSync(filePath, 'utf-8');
+
+  switch (ext) {
+    case '.md':
+    case '.txt':
+      return raw;
+
+    case '.json': {
+      // Try to extract text content from JSON structures
+      const data = JSON.parse(raw);
+      return flattenJson(data);
+    }
+
+    case '.html': {
+      // Strip HTML tags, keep text content
+      return raw
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/&[a-z]+;/gi, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    default:
+      return raw;
+  }
+}
+
+/**
+ * Recursively extract string values from a JSON structure.
+ */
+function flattenJson(obj, depth = 0) {
+  if (typeof obj === 'string') return obj;
+  if (Array.isArray(obj)) return obj.map(item => flattenJson(item, depth + 1)).join('\n');
+  if (typeof obj === 'object' && obj !== null) {
+    return Object.entries(obj)
+      .map(([key, val]) => {
+        const text = flattenJson(val, depth + 1);
+        // Include the key as a heading for context
+        return depth < 3 ? `${key}: ${text}` : text;
+      })
+      .join('\n');
+  }
+  return String(obj);
+}
 
 // --- Chunking ---
 
@@ -91,45 +152,26 @@ function chunkDocument(text, source) {
 }
 
 /**
- * Generate a deterministic ID for a chunk so re-runs update rather than duplicate.
+ * Deterministic ID so re-runs update rather than duplicate.
  */
 function chunkId(source, index) {
   const hash = createHash('md5').update(`${source}:${index}`).digest('hex').slice(0, 12);
   return `${source}-${index}-${hash}`;
 }
 
-// --- Embedding via Workers AI (through a temporary Worker) ---
+// --- Embedding via Workers AI ---
 
-/**
- * Generate embeddings by calling the Cloudflare Workers AI REST API via wrangler.
- * We use the bge-base-en-v1.5 model which outputs 768-dimensional vectors,
- * matching the Vectorize index configuration.
- */
 async function generateEmbeddings(texts) {
-  // Write texts to a temp file to avoid shell argument limits
   const tempInput = resolve(ROOT, 'scripts/.temp-embed-input.json');
-  const tempOutput = resolve(ROOT, 'scripts/.temp-embed-output.json');
   writeFileSync(tempInput, JSON.stringify({ text: texts }));
 
-  // Use the Workers AI REST API via wrangler
-  // First, get account ID
-  const accountId = execSync('npx wrangler whoami 2>/dev/null | grep -oP "(?<=account )[a-f0-9]+" || npx wrangler whoami 2>&1 | grep -oP "[a-f0-9]{32}"', {
-    cwd: ROOT,
-    encoding: 'utf-8',
-  }).trim();
-
-  if (!accountId) {
-    throw new Error('Could not determine Cloudflare account ID. Run `npx wrangler login` first.');
-  }
-
-  // Call Workers AI embedding model via REST API
   const curlCmd = `npx wrangler ai run @cf/baai/bge-base-en-v1.5 --file=${tempInput}`;
 
   try {
     const result = execSync(curlCmd, {
       cwd: ROOT,
       encoding: 'utf-8',
-      maxBuffer: 50 * 1024 * 1024, // 50MB buffer for large embedding responses
+      maxBuffer: 50 * 1024 * 1024,
     });
     const parsed = JSON.parse(result);
     return parsed.data || parsed;
@@ -142,7 +184,6 @@ async function generateEmbeddings(texts) {
 // --- Vectorize Upsert ---
 
 async function upsertVectors(vectors) {
-  // Write vectors to NDJSON format that wrangler vectorize expects
   const tempFile = resolve(ROOT, 'scripts/.temp-vectors.ndjson');
   const ndjson = vectors
     .map(v => JSON.stringify({ id: v.id, values: v.values, metadata: v.metadata }))
@@ -165,58 +206,67 @@ async function upsertVectors(vectors) {
 // --- Main ---
 
 async function main() {
-  console.log('=== Nephilim Wars Knowledge Base Ingestion ===\n');
+  console.log('=== The Scribe — Knowledge Base Ingestion ===\n');
+  console.log(`Texts directory: docs/scribe-texts/\n`);
 
-  // 1. Read and chunk all documents
+  // 1. Discover files
+  const docs = discoverTexts();
+
+  if (docs.length === 0) {
+    console.error('No text files found in docs/scribe-texts/');
+    console.error('Add your biblical and apocryphal texts there (.md, .txt, .json, .html)');
+    process.exit(1);
+  }
+
+  console.log(`Found ${docs.length} text(s):`);
+  docs.forEach(d => console.log(`  - ${d.filename}`));
+  console.log();
+
+  // 2. Read, extract, and chunk all documents
   const allChunks = [];
-  for (const doc of DOCS) {
-    const fullPath = resolve(ROOT, doc.path);
-    console.log(`Reading ${doc.path}...`);
-    const text = readFileSync(fullPath, 'utf-8');
+  for (const doc of docs) {
+    console.log(`Processing ${doc.filename}...`);
+    const text = extractText(doc.path);
     const chunks = chunkDocument(text, doc.source);
-    console.log(`  → ${chunks.length} chunks\n`);
+    console.log(`  → ${chunks.length} chunks`);
     allChunks.push(...chunks);
   }
 
-  console.log(`Total chunks: ${allChunks.length}\n`);
+  console.log(`\nTotal chunks: ${allChunks.length}\n`);
 
-  // 2. Generate embeddings and upsert in batches
+  // 3. Generate embeddings and upsert in batches
   for (let i = 0; i < allChunks.length; i += BATCH_SIZE) {
     const batch = allChunks.slice(i, i + BATCH_SIZE);
     const batchNum = Math.floor(i / BATCH_SIZE) + 1;
     const totalBatches = Math.ceil(allChunks.length / BATCH_SIZE);
-    console.log(`Processing batch ${batchNum}/${totalBatches} (${batch.length} chunks)...`);
+    console.log(`Batch ${batchNum}/${totalBatches} (${batch.length} chunks)...`);
 
-    // Generate embeddings for this batch
     const texts = batch.map(c => c.text);
     const embeddings = await generateEmbeddings(texts);
 
-    // Build vector objects
     const vectors = batch.map((chunk, j) => ({
       id: chunkId(chunk.metadata.source, chunk.metadata.chunkIndex),
       values: embeddings[j],
       metadata: {
         ...chunk.metadata,
-        text: chunk.text, // Store text in metadata for retrieval
+        text: chunk.text,
       },
     }));
 
-    // Upsert to Vectorize
     await upsertVectors(vectors);
 
-    // Small delay to avoid rate limits
     if (i + BATCH_SIZE < allChunks.length) {
       await new Promise(r => setTimeout(r, 500));
     }
   }
 
-  console.log('\n✓ Knowledge base ingestion complete!');
+  console.log('\nDone.');
   console.log(`  Index: ${INDEX_NAME}`);
   console.log(`  Total vectors: ${allChunks.length}`);
 
   // Cleanup temp files
   try {
-    execSync('rm -f scripts/.temp-embed-input.json scripts/.temp-embed-output.json scripts/.temp-vectors.ndjson', { cwd: ROOT });
+    execSync('rm -f scripts/.temp-embed-input.json scripts/.temp-vectors.ndjson', { cwd: ROOT });
   } catch { /* ignore */ }
 }
 
