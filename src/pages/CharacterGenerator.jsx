@@ -252,12 +252,12 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
 
   const MOUNTS = [
     { value: "none", label: "None" },
-    { value: "riding a Behemoth (Sauropod)", label: "Behemoth (Sauropod)" },
-    { value: "riding a War Elephant", label: "War Elephant" },
-    { value: "riding a Dire Lion", label: "Dire Lion" },
-    { value: "riding a Leviathan Spawn (Serpent)", label: "Leviathan Spawn (Serpent)" },
-    { value: "riding a Cherubim Steed (Winged Bull)", label: "Cherubim Steed (Winged Bull)" },
-    { value: "accompanied by a Hunting Drake", label: "Hunting Drake (Companion)" }
+    { value: "sitting astride a massive long-necked sauropod dinosaur with thick grey hide and a wooden howdah saddle on its back", label: "Behemoth (Sauropod)" },
+    { value: "mounted on a huge armored war elephant with bronze plate barding and tusks wrapped in leather", label: "War Elephant" },
+    { value: "riding a giant maned lion the size of a horse with golden fur and fierce amber eyes", label: "Dire Lion" },
+    { value: "standing beside a massive coiled sea serpent with dark green scales and glowing yellow eyes rising from water", label: "Leviathan Spawn (Serpent)" },
+    { value: "mounted on a muscular winged bull with eagle wings and bronze hooves flying above the ground", label: "Cherubim Steed (Winged Bull)" },
+    { value: "accompanied by a large scaly monitor-lizard-like drake companion with thick armored hide and a spiked tail standing at waist height", label: "Hunting Drake (Companion)" }
   ];
 
   // === NAME DATABASES (Expanded) ===
