@@ -110,9 +110,12 @@ export async function onRequest(context) {
     }
 
     // Call Workers AI — models have different params and response formats
-    const aiParams = { prompt };
+    const aiParams = { prompt: body.prompt };
+    if (body.negative_prompt) {
+      aiParams.negative_prompt = body.negative_prompt;
+    }
     if (modelKey === 'flux-schnell') {
-      aiParams.num_steps = 4; // Required for FLUX models
+      aiParams.num_steps = 8;
     }
 
     const aiResponse = await ai.run(modelId, aiParams);
