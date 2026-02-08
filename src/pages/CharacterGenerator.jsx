@@ -419,6 +419,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     background: 'ancient stone city',
     vibe: 'biblical epic',
     customVisuals: '',
+    imageModel: 'sdxl-lightning', // 'sdxl-lightning' (free) or 'flux-schnell' (better quality)
     equipment: 'bronze_sword', // Default equipment
     attributes: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 },
     // PF2e Boost Allocations
@@ -862,7 +863,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       const response = await fetch('/generate-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: fullPrompt })
+        body: JSON.stringify({ prompt: fullPrompt, model: formData.imageModel })
       });
 
       const data = await response.json();
@@ -1706,6 +1707,19 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                     ))}
                   </select>
                 </div>
+              </div>
+
+              <div className="mb-3">
+                <label className="block text-[#78716c] text-[10px] font-bold mb-1">IMAGE MODEL</label>
+                <select
+                  name="imageModel"
+                  value={formData.imageModel}
+                  onChange={handleChange}
+                  className="w-full bg-black border border-[#44403c] p-2 text-white text-sm outline-none"
+                >
+                  <option value="sdxl-lightning">SDXL Lightning (Free)</option>
+                  <option value="flux-schnell">FLUX.1 Schnell (Better Quality)</option>
+                </select>
               </div>
 
               <div>
