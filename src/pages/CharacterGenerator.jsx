@@ -807,11 +807,48 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     if (customDesc) appearance += `, ${customDesc}`;
 
     // Photorealistic prompt style - biblical bronze-age human characters, NOT fantasy creatures
-    // Skin tone repeated at end for emphasis since image models tend to ignore early tokens
-    const prompt = `wide angle full body cinematic shot of a ${formData.sex} ${formData.lineage} ${formData.charClass}, ${appearance}, wearing ${raceData.visuals}, fully clothed modest ancient clothing, ${safeHeight} tall${mountDesc}, standing in ${formData.background}, ${formData.vibe} atmosphere, ancient bronze-age biblical Hebrew setting, historical realism, dramatic lighting, 8k, photorealistic, masterpiece, wide view, detailed background, MUST HAVE ${cleanSkin}, MUST HAVE ${hairDesc}, NO horns, NO wings, NO demon features, NO fantasy creature, NO nudity, NO bare chest, NO exposed skin, fully covered, PG-13, human character`;
+    // Build prompt in priority order so truncation removes least important parts first
+    const coreParts = [
+      `full body cinematic shot of a ${formData.sex} ${formData.lineage} ${formData.charClass}`,
+      appearance,
+      `wearing ${raceData.visuals}`,
+      `fully clothed modest ancient clothing`,
+      `${safeHeight} tall${mountDesc}`,
+      `standing in ${formData.background}`,
+      `${formData.vibe} atmosphere`,
+      `ancient bronze-age biblical Hebrew setting`,
+      `dramatic lighting, 8k, photorealistic`,
+    ];
+    const emphasisParts = [
+      `MUST HAVE ${cleanSkin}`,
+      `MUST HAVE ${hairDesc}`,
+    ];
+    const negativeParts = [
+      `NO horns, NO wings, NO demon features, NO fantasy creature`,
+      `NO nudity, NO bare chest, NO exposed skin, fully covered, PG-13`,
+    ];
 
-    // Clean up any parentheses/quotes that may cause SD issues
-    return prompt.replace(/[()"]/g, "").replace(/,\s*,/g, ',').trim();
+    // Assemble and trim to fit within 1000 character API limit
+    const MAX_PROMPT_LENGTH = 1000;
+    const allParts = [...coreParts, ...emphasisParts, ...negativeParts];
+    let prompt = allParts.join(', ');
+    prompt = prompt.replace(/[()"]/g, "").replace(/,\s*,/g, ',').trim();
+
+    if (prompt.length > MAX_PROMPT_LENGTH) {
+      // Drop sections from the end (least important first) until it fits
+      const parts = [...coreParts, ...emphasisParts, ...negativeParts];
+      while (parts.length > 1) {
+        parts.pop();
+        prompt = parts.join(', ').replace(/[()"]/g, "").replace(/,\s*,/g, ',').trim();
+        if (prompt.length <= MAX_PROMPT_LENGTH) break;
+      }
+      // Final hard truncate if a single section is still too long
+      if (prompt.length > MAX_PROMPT_LENGTH) {
+        prompt = prompt.slice(0, MAX_PROMPT_LENGTH);
+      }
+    }
+
+    return prompt;
   };
 
   // === GENERATE IMAGE ===
