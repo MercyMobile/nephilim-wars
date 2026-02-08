@@ -154,6 +154,21 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       heightRange: { male: [65, 72], female: [60, 67] },
       accessory: "star charts, ritual dagger, dried herbs pouch, or crystal focus",
       visuals: "robes concealing mystical marks, star charts and dried herbs, crystal focus, Watchers Mark brand on skin"
+    },
+    Gammadim: {
+      name: "Gammadim (Under-Walker)",
+      desc: "The hidden little people. When the giants claimed the peaks and humans the valleys, the Gammadim claimed the deep places beneath.",
+      abilityBoosts: ["DEX", "WIS", "Free"], // DEX, WIS, one free
+      abilityFlaw: "STR",
+      ancestryHP: 6,
+      size: "Small",
+      speed: 25,
+      traits: ["Tunnel Fighter (+1 attack in confined spaces)", "Shadow of the Titans (+2 Stealth near Large+ creatures)", "Earth Sense (Tremorsense 15ft)", "Small Size"],
+      startingRP: 2,
+      startingCP: 0,
+      heightRange: { male: [36, 48], female: [34, 45] },
+      accessory: "sling stones, tunnel-pick, clay lamp, or carved bone fetish",
+      visuals: "small stature, practical earth-toned clothing, leather wraps, stone and bone tools, clay lamp"
     }
   };
 
@@ -267,14 +282,16 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       Cainite: ["Enoch", "Irad", "Mehujael", "Methusael", "Lamech", "Jabal", "Jubal", "Tubal-Cain", "Nimrod", "Ashur", "Cush"],
       Wanderer: ["Zorah", "Nahor", "Terah", "Eber", "Peleg", "Reu", "Serug", "Shelah", "Arpachshad"],
       Giant: ["Og", "Sihon", "Ahiman", "Sheshai", "Talmai", "Arba", "Goliath", "Lahmi", "Anak", "Gilgamesh", "Enkidu", "Ohya", "Mahway", "Hahyah"],
-      Sorcerer: ["Azazel-Kin", "Baraqel", "Kokabiel", "Penemue", "Sariel", "Armaros", "Gadreel"]
+      Sorcerer: ["Azazel-Kin", "Baraqel", "Kokabiel", "Penemue", "Sariel", "Armaros", "Gadreel"],
+      Gammadim: ["Gomed", "Tzair", "Katan", "Dalil", "Amad", "Shaphel", "Chafor", "Miklat", "Zur", "Noked"]
     },
     Female: {
       Sethite: ["Naamah", "Azura", "Awan", "Dina", "Norea", "Emzara", "Sedeqetelebab", "Baraka"],
       Cainite: ["Adah", "Zillah", "Naamah", "Elisheba", "Basemath", "Mahalath"],
       Wanderer: ["Sarai", "Milcah", "Iscah", "Reumah", "Keturah", "Hagar"],
       Giant: ["Noa", "Hoglah", "Tirzah", "Mahlah", "Ahinoam", "Rizpah"],
-      Sorcerer: ["Ishtahar", "Lilith-Born", "Naamah the Enchantress", "Astarte", "Inanna"]
+      Sorcerer: ["Ishtahar", "Lilith-Born", "Naamah the Enchantress", "Astarte", "Inanna"],
+      Gammadim: ["Ketanah", "Dalilah", "Tzeirah", "Adamah", "Shafela", "Chaforah", "Nerah", "Migdalit"]
     }
   };
 
@@ -459,6 +476,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       namePool = NAMES[sex].Sorcerer;
     } else if (race === 'Horim') {
       namePool = NAMES[sex].Giant; // Horim use giant-kin names
+    } else if (race === 'Gammadim') {
+      namePool = NAMES[sex].Gammadim;
     } else {
       namePool = NAMES[sex].Wanderer;
     }
@@ -778,6 +797,11 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
         ? "mystical woman, intense unnatural gaze, luminous eyes, Middle Eastern sorceress"
         : "intense mystical man, sharp angular face, Middle Eastern occult scholar";
       hairTexture = "thick straight";
+    } else if (raceKey === 'gammadim') {
+      phenotype = isFemale
+        ? "very short 3ft woman, weathered face, bright clever eyes, earth-stained, tunnel-dweller"
+        : "very short 3ft man, compact sturdy build, bright clever eyes, earth-stained, tunnel-dweller";
+      hairTexture = "coarse short-cropped";
     }
 
     // Body build
