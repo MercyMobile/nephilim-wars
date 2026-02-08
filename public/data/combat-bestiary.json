@@ -350,7 +350,7 @@
       "level": 4,
       "size": "Small",
       "description": "The hidden little people. Tunnel-fighters and survivors who claimed the deep places beneath the world of giants.",
-      "portrait": null,
+      "portrait": "/images/combat/Gammadim.png",
       "stats": {
         "hp": 55,
         "maxHp": 55,
