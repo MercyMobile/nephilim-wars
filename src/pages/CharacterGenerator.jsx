@@ -843,7 +843,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
 
     // Build prompt in priority order — subject first, then appearance, then setting
     const coreParts = [
-      `cinematic portrait, dramatic lighting, highly detailed, 8k`,
+      `epic fantasy character portrait, detailed fantasy art, oil painting style, dramatic lighting`,
       `${phenotype}`,
       `${cleanSkin}, ${formData.eyeColor} eyes, ${hairDesc}`,
       `${bodyBuild} build`,
@@ -857,7 +857,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     if (customDesc) coreParts.push(customDesc);
 
     // Negative prompt — passed as separate parameter to the model
-    const negativePrompt = 'European features, Nordic features, Viking, pale blue eyes, blonde eyebrows, extra limbs, extra arms, extra fingers, deformed hands, mutated, disfigured, blurry, bad anatomy, nudity, text, watermark, signature, cartoon, anime, 3d render';
+    const negativePrompt = 'European features, Nordic features, Viking, pale blue eyes, blonde eyebrows, photograph, photo, photorealistic, extra limbs, extra arms, extra fingers, deformed hands, mutated, disfigured, blurry, bad anatomy, nudity, text, watermark, signature, cartoon, anime, 3d render';
 
     // Assemble and trim to fit within 1000 character API limit
     const MAX_PROMPT_LENGTH = 1000;

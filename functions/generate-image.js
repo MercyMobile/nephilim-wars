@@ -116,6 +116,8 @@ export async function onRequest(context) {
     }
     if (modelKey === 'flux-schnell') {
       aiParams.num_steps = 8;
+    } else if (modelKey === 'sdxl-lightning') {
+      aiParams.guidance = 7.5;   // Higher guidance = stronger prompt adherence
     }
 
     const aiResponse = await ai.run(modelId, aiParams);
