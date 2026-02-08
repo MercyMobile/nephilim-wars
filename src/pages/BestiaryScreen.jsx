@@ -20,7 +20,7 @@ const BESTIARY_DATA = {
       },
       {
         name: "Nephilim Warrior",
-        image: null,
+        image: "/images/bestiary/nephilim_warrior.png",
         level: 12, hp: 220, ac: 32,
         attack: "Bronze Greatsword +28 (2d12+14 slashing)",
         special: "Crushing Blow, Titanic Presence (30ft), Earth-Shaking Step, Watcher's Legacy",
@@ -84,7 +84,7 @@ const BESTIARY_DATA = {
       },
       {
         name: "Rephaim Champion",
-        image: null,
+        image: "/images/bestiary/rephaim_champion.png",
         level: 12, hp: 210, ac: 32,
         attack: "Masterwork Bronze Flail +28 (2d8+13 bludgeoning)",
         special: "Death Strike (+2d6 negative, DC 28), Death Lord's Aura (30ft), Command the Dead, Animate Dead 1/day",
@@ -115,7 +115,7 @@ const BESTIARY_DATA = {
       },
       {
         name: "Anakim Chain-Bearer",
-        image: null,
+        image: "/images/bestiary/anakim_berserker.png",
         level: 11, hp: 190, ac: 30,
         attack: "Masterwork Bronze Greatsword +27 (2d12+14 slashing + 1d6 radiant)",
         special: "Chain Whirlwind (20ft reach), Crushing Chains (free grapple damage), Chain of Azazel (+1d6 fire)",
@@ -167,7 +167,7 @@ const BESTIARY_DATA = {
       },
       {
         name: "Horim Cave-Dweller",
-        image: null,
+        image: "/images/bestiary/horim_tunneler.png",
         level: 5, hp: 85, ac: 20,
         attack: "Stone Dagger +13 (1d4+5 piercing)",
         special: "Earth Sense (+2 Perception underground), Tunnel Fighter, Stone Skin (resist 5 bludgeoning), Climb 20ft",
@@ -310,7 +310,7 @@ const BESTIARY_DATA = {
       },
       {
         name: "Baal-Priest",
-        image: null,
+        image: "/images/bestiary/sorcerer_priest.png",
         level: 6, hp: 90, ac: 22,
         attack: "Sacrificial Bronze Dagger +14 (1d4+5 piercing + 1d6 negative)",
         special: "Blood Curse (DC 21, +3d6 negative), Sacrificial Ritual (heal 4d8), Demonic Communion, Spellcasting (DC 23)",
@@ -330,7 +330,7 @@ const BESTIARY_DATA = {
       },
       {
         name: "Cainite Warrior",
-        image: null,
+        image: "/images/bestiary/cainite_assassin.png",
         level: 3, hp: 50, ac: 18,
         attack: "Bronze Sword +10 (1d8+4 slashing)",
         special: "Shield Block (reduce 5), Mark of Cain (divine retribution on killer)",
