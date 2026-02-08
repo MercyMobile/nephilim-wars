@@ -21,7 +21,7 @@ ABILITY SCORES (PF2e Boost System):
 - Apply 4 free boosts (each to a different score)
 - Each boost = +2 (or +1 if score is already 18+)
 
-10 PLAYABLE ANCESTRIES:
+11 PLAYABLE ANCESTRIES:
 Human Lineages:
 1. Sethite - Righteous line of Seth. HP 8, Size M, Speed 25. Boosts: Two free. Flaw: One free. Starting RP +2, CP 0.
 2. Cainite - City builders, metalworkers. HP 8, Size M, Speed 25. Boosts: Two free. Flaw: One free. Starting RP 0, CP +1.
@@ -35,6 +35,7 @@ Giant Lineages:
 8. Gibborim - Mighty men, human-giant hybrids (6.5-8ft). HP 10, Size M, Speed 25. Boosts: STR, CON, one free. Flaw: None. Starting RP 0, CP +1.
 9. Horim - Cave-dwelling giant-kin (6-7ft). HP 8, Size M, Speed 25. Boosts: DEX, WIS, one free. Flaw: CHA. Starting RP 0, CP +1.
 10. Elioud - 3rd gen, pass as human (6.2-7ft). HP 8, Size M, Speed 25. Boosts: STR, one free. Flaw: None. Starting RP 0, CP +1.
+11. Gammadim - Hidden tunnel-dwelling little people (3-4ft). HP 6, Size S, Speed 25. Boosts: DEX, WIS, one free. Flaw: STR. Starting RP +2, CP 0. Traits: Tunnel Fighter (+1 attack in confined spaces), Shadow of the Titans (+2 Stealth near Large+ creatures), Earth Sense (Tremorsense 15ft), Small Size. When giants claimed the peaks and humans the valleys, the Gammadim claimed the deep places beneath.
 
 7 CLASSES:
 1. Warrior - Frontline fighter. Key: STR or DEX. HP 10+CON/lvl. All armor, all melee weapons.
