@@ -826,31 +826,30 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     // Hair descriptor — combine length, color, and texture
     const hairDesc = `${cleanHairLen} ${formData.hairColor} ${hairTexture} hair`;
 
-    // Build prompt in priority order — style first, then character, then negatives
+    // Build prompt in priority order — subject first, then appearance, then setting
     const coreParts = [
-      `photorealistic portrait, dramatic lighting, 8k, oil painting`,
-      `${formData.sex} ${formData.lineage} ${formData.charClass}`,
-      `${cleanSkin}, ${phenotype}`,
-      `${bodyBuild} build, ${formData.eyeColor} eyes, ${hairDesc}`,
+      `cinematic portrait, dramatic lighting, highly detailed, 8k`,
+      `${phenotype}`,
+      `${cleanSkin}, ${formData.eyeColor} eyes, ${hairDesc}`,
+      `${bodyBuild} build`,
       `wearing ${raceData.visuals}`,
-      `${formData.background}, ${formData.vibe} atmosphere`,
-      `ancient bronze-age biblical setting`,
+      `${formData.charClass}`,
+      `ancient bronze-age biblical setting, ${formData.background}, ${formData.vibe} atmosphere`,
     ];
     if (featureDesc) coreParts.push(featureDesc.replace(/^,\s*/, ''));
     if (customDesc) coreParts.push(customDesc);
-    const negativeParts = [
-      `NO extra limbs, NO extra arms, NO horns, NO wings, NO nudity`,
-    ];
+
+    // Negative prompt — passed as separate parameter to the model
+    const negativePrompt = 'extra limbs, extra arms, extra fingers, deformed hands, mutated, disfigured, blurry, bad anatomy, nudity, text, watermark, signature, cartoon, anime, 3d render';
 
     // Assemble and trim to fit within 1000 character API limit
     const MAX_PROMPT_LENGTH = 1000;
-    const allParts = [...coreParts, ...negativeParts];
-    let prompt = allParts.join(', ');
+    let prompt = coreParts.join(', ');
     prompt = prompt.replace(/[()"]/g, "").replace(/,\s*,/g, ',').trim();
 
     if (prompt.length > MAX_PROMPT_LENGTH) {
       // Drop sections from the end (least important first) until it fits
-      const parts = [...coreParts, ...negativeParts];
+      const parts = [...coreParts];
       while (parts.length > 1) {
         parts.pop();
         prompt = parts.join(', ').replace(/[()"]/g, "").replace(/,\s*,/g, ',').trim();
@@ -861,7 +860,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       }
     }
 
-    return prompt;
+    return { prompt, negativePrompt };
   };
 
   // === GENERATE IMAGE ===
@@ -870,13 +869,14 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     setError('');
 
     try {
-      const fullPrompt = buildImagePrompt();
+      const { prompt: fullPrompt, negativePrompt } = buildImagePrompt();
       console.log('Generating image with prompt:', fullPrompt);
+      console.log('Negative prompt:', negativePrompt);
 
       const response = await fetch('/generate-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: fullPrompt, model: formData.imageModel })
+        body: JSON.stringify({ prompt: fullPrompt, negative_prompt: negativePrompt, model: formData.imageModel })
       });
 
       const data = await response.json();
