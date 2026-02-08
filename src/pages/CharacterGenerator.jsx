@@ -809,12 +809,11 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     // Photorealistic prompt style - biblical bronze-age human characters, NOT fantasy creatures
     // Build prompt in priority order so truncation removes least important parts first
     const coreParts = [
-      `full body cinematic shot of a ${formData.sex} ${formData.lineage} ${formData.charClass}`,
+      `close-up portrait headshot of a ${formData.sex} ${formData.lineage} ${formData.charClass}`,
       appearance,
       `wearing ${raceData.visuals}`,
       `fully clothed modest ancient clothing`,
-      `${safeHeight} tall${mountDesc}`,
-      `standing in ${formData.background}`,
+      `${formData.background} background`,
       `${formData.vibe} atmosphere`,
       `ancient bronze-age biblical Hebrew setting`,
       `dramatic lighting, 8k, photorealistic`,
@@ -824,8 +823,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       `MUST HAVE ${hairDesc}`,
     ];
     const negativeParts = [
-      `NO horns, NO wings, NO demon features, NO fantasy creature`,
-      `NO nudity, NO bare chest, NO exposed skin, fully covered, PG-13`,
+      `NO extra limbs, NO extra arms, NO extra fingers, NO horns, NO wings`,
+      `NO nudity, NO bare chest, fully covered, PG-13`,
     ];
 
     // Assemble and trim to fit within 1000 character API limit
