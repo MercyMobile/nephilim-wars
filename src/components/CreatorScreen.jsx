@@ -130,7 +130,7 @@ const CreatorScreen = () => {
       const response = await fetch('/generate-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: imgPrompt, model: 'flux-schnell' })
+        body: JSON.stringify({ prompt: imgPrompt, model: 'sdxl-lightning' })
       });
 
       if (response.ok) {
