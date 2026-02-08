@@ -436,7 +436,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     background: 'ancient stone city',
     vibe: 'biblical epic',
     customVisuals: '',
-    imageModel: 'sdxl-lightning', // 'sdxl-lightning' (free) or 'flux-schnell' (better quality)
+    imageModel: 'flux-schnell',
     equipment: 'bronze_sword', // Default equipment
     attributes: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 },
     // PF2e Boost Allocations
@@ -833,7 +833,57 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     // Equipment — find the selected weapon name
     const classEquipment = EQUIPMENT[formData.charClass] || [];
     const selectedWeapon = classEquipment.find(e => e.id === formData.equipment);
-    const weaponDesc = selectedWeapon ? selectedWeapon.name.replace('Bronze ', 'bronze ').replace("Hero's ", 'heroic ') : '';
+    // Map weapon IDs to visual descriptions the image model can understand
+    const WEAPON_VISUALS = {
+      // Warrior
+      'bronze_sword': 'long bronze sword with leather grip',
+      'bronze_greatsword': 'massive two-handed bronze greatsword',
+      'bronze_battleaxe': 'heavy bronze battle axe',
+      'spear_shield': 'bronze-tipped spear and round bronze shield',
+      'war_hammer': 'heavy bronze war hammer',
+      'flail': 'bronze spiked flail on chain',
+      // Gibbor
+      'hero_blade': 'legendary ornate bronze greatsword',
+      'maul': 'massive stone and bronze war maul',
+      'glaive': 'long bronze-bladed polearm glaive',
+      'greataxe': 'brutal two-handed bronze great axe',
+      'lance': 'long bronze-tipped cavalry lance',
+      // Hunter
+      'longbow': 'tall composite longbow with quiver of arrows on back',
+      'shortbow': 'short wooden recurve bow with quiver of arrows',
+      'hand_crossbow': 'small wooden and bronze hand-held crossbow with trigger mechanism',
+      'sling': 'leather sling with stone pouch',
+      'javelin': 'bronze-tipped throwing javelin',
+      'scimitar': 'curved bronze scimitar blade',
+      // Magi
+      'arcane_staff': 'tall dark wooden staff carved with eldritch runes',
+      'fire_wand': 'slender bronze wand wreathed in flame',
+      'frost_orb': 'glowing pale blue crystal orb',
+      'shock_rod': 'crackling bronze rod with lightning',
+      'poison_focus': 'serpent-shaped bronze focus with green glow',
+      'ritual_dagger': 'ornate bronze ritual dagger',
+      // Priest
+      'holy_staff': 'tall bronze staff inscribed with sacred text',
+      'mace': 'ornate bronze ceremonial mace',
+      'sacred_light': 'hands glowing with divine radiant fire',
+      'divine_smite': 'aura of divine power and holy light',
+      'war_pick': 'bronze war pick with inscribed handle',
+      'sling_stones': 'leather sling with blessed stones',
+      // Artisan
+      'smith_hammer': 'heavy bronze smithing war hammer',
+      'battle_pick': 'bronze-tipped mining pick',
+      'hand_axe': 'small bronze hand axe',
+      'light_crossbow': 'engineered bronze crossbow with wooden stock and mechanical trigger',
+      'quarterstaff': 'reinforced wooden staff',
+      // Scribe
+      'quill_dagger': 'concealed bronze dagger',
+      'dart': 'handful of small throwing darts',
+      'sling_scholar': 'simple leather sling',
+      'arcane_knowledge': 'ancient scroll glowing with arcane symbols',
+    };
+    const weaponDesc = selectedWeapon
+      ? (WEAPON_VISUALS[selectedWeapon.id] || selectedWeapon.name.replace('Bronze ', 'bronze ').replace("Hero's ", 'heroic '))
+      : '';
 
     // Class visuals
     const classVisual = CLASS_VISUALS[formData.charClass] || '';
@@ -846,7 +896,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
 
     // Build prompt in priority order — subject first, then appearance, then setting
     const coreParts = [
-      `epic fantasy character portrait, detailed fantasy art, oil painting style, dramatic lighting`,
+      `dark gritty fantasy character portrait, detailed fantasy art, oil painting style, dramatic chiaroscuro lighting, weathered and battle-worn`,
       `${phenotype}`,
       `${cleanSkin}, ${formData.eyeColor} eyes, ${hairDesc}`,
       `${bodyBuild} build`,
@@ -1742,18 +1792,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                 </div>
               </div>
 
-              <div className="mb-3">
-                <label className="block text-[#78716c] text-[10px] font-bold mb-1">IMAGE MODEL</label>
-                <select
-                  name="imageModel"
-                  value={formData.imageModel}
-                  onChange={handleChange}
-                  className="w-full bg-black border border-[#44403c] p-2 text-white text-sm outline-none"
-                >
-                  <option value="sdxl-lightning">SDXL Lightning (Free)</option>
-                  <option value="flux-schnell">FLUX.1 Schnell (Better Quality)</option>
-                </select>
-              </div>
+              {/* Image model fixed to FLUX.1 Schnell */}
 
               <div>
                 <label className="block text-[#78716c] text-[10px] font-bold mb-1">CUSTOM DESCRIPTION (OPTIONAL)</label>
