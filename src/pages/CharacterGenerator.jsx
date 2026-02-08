@@ -824,8 +824,11 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       bodyBuild = types[Math.floor(Math.random() * types.length)];
     }
 
-    // Hair descriptor
-    const hairDesc = `${formData.hairLength} ${formData.hairColor} ${hairTexture} hair`;
+    // Hair descriptor — handle bald as special case
+    const isBald = formData.hairLength.toLowerCase().includes('bald');
+    const hairDesc = isBald
+      ? 'completely bald shaved head, no hair'
+      : `${formData.hairLength} ${formData.hairColor} ${hairTexture} hair`;
 
     // Equipment — find the selected weapon name
     const classEquipment = EQUIPMENT[formData.charClass] || [];
