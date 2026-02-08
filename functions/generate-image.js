@@ -109,22 +109,34 @@ export async function onRequest(context) {
       );
     }
 
-    // Call Workers AI
-    const aiResponse = await ai.run(modelId, { prompt });
-
-    // Workers AI image models return a ReadableStream of the image bytes
-    // Convert to base64 for the client
-    const arrayBuffer = await new Response(aiResponse).arrayBuffer();
-    const uint8Array = new Uint8Array(arrayBuffer);
-    let binaryString = '';
-    const chunkSize = 8192; // Process 8KB at a time to avoid stack overflow
-
-    for (let i = 0; i < uint8Array.length; i += chunkSize) {
-      const chunk = uint8Array.subarray(i, Math.min(i + chunkSize, uint8Array.length));
-      binaryString += String.fromCharCode.apply(null, chunk);
+    // Call Workers AI — models have different params and response formats
+    const aiParams = { prompt };
+    if (modelKey === 'flux-schnell') {
+      aiParams.num_steps = 4; // Required for FLUX models
     }
 
-    const base64 = btoa(binaryString);
+    const aiResponse = await ai.run(modelId, aiParams);
+
+    let base64;
+    if (modelKey === 'flux-schnell') {
+      // FLUX returns JSON: { image: "<base64 string>" }
+      base64 = aiResponse.image;
+    } else {
+      // SDXL Lightning returns a ReadableStream of binary image data
+      const arrayBuffer = await new Response(aiResponse).arrayBuffer();
+      const uint8Array = new Uint8Array(arrayBuffer);
+      let binaryString = '';
+      const chunkSize = 8192;
+      for (let i = 0; i < uint8Array.length; i += chunkSize) {
+        const chunk = uint8Array.subarray(i, Math.min(i + chunkSize, uint8Array.length));
+        binaryString += String.fromCharCode.apply(null, chunk);
+      }
+      base64 = btoa(binaryString);
+    }
+
+    if (!base64) {
+      throw new Error('No image data returned from model');
+    }
 
     return new Response(
       JSON.stringify({ success: true, image: base64, model: modelKey }),
