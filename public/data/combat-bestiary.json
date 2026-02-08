@@ -344,6 +344,58 @@
       "specialAbilities": ["Powerful Build", "Heroic Blood"]
     },
     {
+      "id": "gammadim_tunnelfighter",
+      "name": "Gammadim Tunnel-Fighter",
+      "type": "Under-Walker",
+      "level": 4,
+      "size": "Small",
+      "description": "The hidden little people. Tunnel-fighters and survivors who claimed the deep places beneath the world of giants.",
+      "portrait": null,
+      "stats": {
+        "hp": 55,
+        "maxHp": 55,
+        "defense": 20,
+        "fortitude": 10,
+        "reflex": 14,
+        "will": 12,
+        "perception": 16,
+        "initiativeBonus": 6,
+        "speed": 25,
+        "STR": 10,
+        "DEX": 18,
+        "CON": 12,
+        "INT": 12,
+        "WIS": 16,
+        "CHA": 8
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "tunnel_pick",
+          "name": "Tunnel-Pick",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 12,
+          "damageDice": "1d6",
+          "damageBonus": 3,
+          "damageType": "piercing",
+          "traits": ["agile", "finesse"]
+        },
+        {
+          "id": "sling_stone",
+          "name": "Sling Stone",
+          "type": "ranged",
+          "cost": 1,
+          "toHitBonus": 12,
+          "damageDice": "1d6",
+          "damageBonus": 2,
+          "damageType": "bludgeoning",
+          "traits": ["range 50", "propulsive"]
+        }
+      ],
+      "specialAbilities": ["Tunnel Fighter (+1 attack in confined spaces)", "Shadow of the Titans (+2 Stealth near Large+ creatures)", "Earth Sense (Tremorsense 15ft)", "Small Size"]
+    },
+    {
       "id": "desert_raider",
       "name": "Desert Raider",
       "type": "Human",

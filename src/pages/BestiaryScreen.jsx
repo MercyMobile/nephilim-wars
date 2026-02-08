@@ -186,6 +186,27 @@ const BESTIARY_DATA = {
         saves: "Fort +19, Ref +16, Will +16"
       },
       {
+        name: "Gammadim Tunnel-Fighter",
+        image: null,
+        level: 4, hp: 55, ac: 20,
+        attack: "Tunnel-Pick +12 (1d6+3 piercing)",
+        special: "Tunnel Fighter (+1 attack in confined spaces), Shadow of the Titans (+2 Stealth near Large+ creatures), Earth Sense (Tremorsense 15ft), Sling Mastery",
+        desc: "The hidden little people. 3-4 feet tall. Survivors who claimed the deep places beneath the world of giants.",
+        lore: "The Gammadim (Ezekiel 27:11) are the 'Under-Walkers' — a diminutive people who retreated into the vast tunnel networks beneath the earth when the giants rose to power. Standing only 3-4 feet tall, they are masters of confined-space combat, using their small size to devastating advantage in narrow tunnels where giants cannot follow. Their Earth Sense grants tremorsense within 15 feet, and their Shadow of the Titans trait gives +2 to Stealth checks when near Large or larger creatures. They carry sling stones, tunnel-picks, clay lamps, and carved bone fetishes. Despite their size, they are fierce and clever — many a giant has underestimated a Gammadim ambush. Starts at 0 CP.",
+        saves: "Fort +10, Ref +14, Will +12"
+      },
+      {
+        name: "Gammadim Earth-Speaker",
+        image: null,
+        level: 6, hp: 70, ac: 22,
+        attack: "Stone Staff +14 (1d6+4 bludgeoning + 1d4 force)",
+        special: "Earth Glide (10ft), Tremorsense 30ft, Stone Ward (resist 5 physical), Crystal Light (30ft bright, dispels magical darkness)",
+        desc: "Spiritual leaders of the Gammadim. They commune with the deep earth and shape stone with prayer.",
+        lore: "Earth-Speakers are the most revered among the Gammadim, those who hear the voice of the Creator in the deep stone. They can glide through earth for short distances, sense vibrations through 30 feet of solid rock, and create wards of living stone that resist physical damage. Their Crystal Light ability produces bright illumination from special crystals that can even pierce magical darkness — a vital defense against Refa'im spirits in the deep tunnels. They maintain the sacred caverns where the Gammadim preserve ancient knowledge predating the giants' rise. Starts at 0 CP.",
+        legendary: true,
+        saves: "Fort +12, Ref +14, Will +16"
+      },
+      {
         name: "Elioud Deceiver",
         image: "/images/bestiary/ElioudDeceiver.jpg",
         level: 4, hp: 65, ac: 18,
