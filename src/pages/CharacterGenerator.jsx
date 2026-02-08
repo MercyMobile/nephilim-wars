@@ -715,22 +715,33 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
   const computedAttrs = computeAttributes(formData);
 
   // === BUILD PHOTOREALISTIC IMAGE PROMPT ===
+  // === CLASS VISUAL DESCRIPTIONS (for image prompt) ===
+  const CLASS_VISUALS = {
+    Warrior: "bronze plate armor, leather battle skirt, bronze greaves and vambraces",
+    Gibbor: "heavy bronze champion armor, lion pelt draped over shoulders, bronze bracers engraved with victories",
+    Hunter: "light leather armor, animal hide cloak, quiver of arrows, fur-lined boots",
+    Magi: "dark layered robes with arcane symbols, ritual focus hanging from belt, mystical sigils on cloth",
+    Priest: "white linen robes with bronze holy symbols, prayer shawl, sacred vestments",
+    Artisan: "thick leather apron over sturdy clothing, bronze tool belt, burn-scarred forearms",
+    Scribe: "scholar robes with ink-stained sleeves, scroll case at hip, reed stylus behind ear"
+  };
+
   const buildImagePrompt = () => {
     const raceData = RACES[formData.lineage];
     const customDesc = formData.customVisuals.trim();
 
     // Skin tone mapping — concise descriptions for image models
     const SKIN_MAP = {
-      'olive': 'olive Mediterranean skin',
-      'bronze': 'warm bronze sun-tanned skin',
+      'olive': 'olive skin',
+      'bronze': 'bronze sun-tanned skin',
       'copper': 'copper reddish-brown skin',
-      'tan': 'tan Middle Eastern skin',
+      'tan': 'tan skin',
       'light brown': 'light brown skin',
-      'dark brown': 'deep dark brown African skin',
-      'alabaster': 'pale alabaster white skin',
-      'obsidian': 'deep black obsidian skin',
-      'red clay': 'reddish clay-colored skin',
-      'ashen grey': 'grey ashen pale skin',
+      'dark brown': 'deep dark brown skin',
+      'alabaster': 'pale alabaster skin',
+      'obsidian': 'deep black skin',
+      'red clay': 'reddish clay skin',
+      'ashen grey': 'grey ashen skin',
       'copper patina': 'greenish copper-tinted skin',
       'marble': 'pale marble-white skin',
       'gold-dust': 'golden luminous skin',
@@ -739,38 +750,38 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     };
     let cleanSkin = SKIN_MAP[formData.skinTone] || formData.skinTone;
 
-    // Hair texture and phenotype by ancestry (sex-aware per manual physical descriptions)
+    // Hair texture and phenotype by ancestry (sex-aware)
     const raceKey = formData.lineage.toLowerCase();
     const isFemale = formData.sex === 'Female';
     let phenotype = isFemale
-      ? "woman, Middle Eastern features, ancient biblical era"
-      : "man, Middle Eastern features, ancient biblical era";
+      ? "woman, Middle Eastern features"
+      : "man, Middle Eastern features";
     let hairTexture = "thick wavy";
 
     if (raceKey === 'nephilim') {
       phenotype = isFemale
-        ? "towering giant woman, massive powerful build, angular celestial face, Middle Eastern"
-        : "towering giant man, massively muscular, angular face, Middle Eastern";
+        ? "towering giant woman, 15ft tall, massive powerful build, angular celestial face"
+        : "towering giant man, 15ft tall, massively muscular, angular celestial face";
       hairTexture = "thick wild";
     } else if (raceKey === 'rephaim') {
       phenotype = isFemale
         ? "tall gaunt woman, hollow cheekbones, shadowed eyes, spectral haunting presence"
-        : "tall gaunt man, hollow cheekbones, pale grey, haunted spectral presence";
+        : "tall gaunt man, hollow cheekbones, haunted spectral presence";
       hairTexture = "thin wispy";
     } else if (raceKey === 'anakim') {
       phenotype = isFemale
-        ? "tall regal woman, elongated neck, sharp refined features, piercing eyes, bronze chains"
-        : "tall regal man, long neck, noble bearing, Middle Eastern, heavy bronze chains";
+        ? "tall regal woman, elongated neck, sharp refined features, piercing eyes"
+        : "tall regal man, long neck, noble bearing, heavy bronze chains";
       hairTexture = "thick braided";
     } else if (raceKey === 'gibborim') {
       phenotype = isFemale
-        ? "tall powerful woman warrior, athletic build, intense eyes, Middle Eastern"
-        : "tall powerful man warrior, heroic proportions, strong jaw, Middle Eastern";
+        ? "tall powerful woman, heroic athletic build, intense eyes"
+        : "tall powerful man, heroic proportions, strong jaw";
       hairTexture = "thick wavy";
     } else if (raceKey === 'elioud') {
       phenotype = isFemale
-        ? "tall athletic woman, intense eyes, subtle inhuman beauty, Middle Eastern"
-        : "tall athletic man, striking intense eyes, subtle inhuman beauty, Middle Eastern";
+        ? "tall athletic woman, intense eyes, subtle inhuman beauty"
+        : "tall athletic man, striking intense eyes, subtle inhuman beauty";
       hairTexture = "thick flowing";
     } else if (raceKey === 'horim') {
       phenotype = isFemale
@@ -779,28 +790,28 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       hairTexture = "coarse matted";
     } else if (raceKey === 'cainite') {
       phenotype = isFemale
-        ? "urban woman, calloused hands, elaborate clothing, Middle Eastern, city-dweller"
-        : "urban robust man, calloused hands, sharp cunning eyes, Middle Eastern, city-builder";
+        ? "urban woman, calloused hands, sharp cunning eyes, city-dweller"
+        : "urban robust man, calloused hands, sharp cunning eyes, city-builder";
       hairTexture = "thick coarse";
     } else if (raceKey === 'sethite') {
       phenotype = isFemale
-        ? "dignified woman, refined features, contemplative, Middle Eastern, priestly lineage"
-        : "noble man, serene expression, refined features, Middle Eastern, priestly lineage";
+        ? "dignified woman, refined features, contemplative expression"
+        : "noble man, serene expression, refined features";
       hairTexture = "thick wavy";
     } else if (raceKey === 'wanderer') {
       phenotype = isFemale
-        ? "lean weathered woman, sun-darkened skin, scarred hands, Middle Eastern nomad"
-        : "rugged weathered man, sun-darkened face, Middle Eastern nomad";
+        ? "lean weathered woman, sun-darkened skin, scarred hands, nomad"
+        : "rugged weathered man, sun-darkened face, nomad";
       hairTexture = "thick windswept";
-    } else if (raceKey === 'sorcerer clan') {
+    } else if (raceKey === 'sorcerer') {
       phenotype = isFemale
-        ? "mystical woman, intense unnatural gaze, luminous eyes, Middle Eastern sorceress"
-        : "intense mystical man, sharp angular face, Middle Eastern occult scholar";
+        ? "mystical woman, intense unnatural gaze, luminous eyes, sorceress"
+        : "intense mystical man, sharp angular face, occult scholar";
       hairTexture = "thick straight";
     } else if (raceKey === 'gammadim') {
       phenotype = isFemale
-        ? "very short 3ft woman, weathered face, bright clever eyes, earth-stained, tunnel-dweller"
-        : "very short 3ft man, compact sturdy build, bright clever eyes, earth-stained, tunnel-dweller";
+        ? "very short halfling-sized woman, 3ft tall, compact sturdy build, bright clever eyes, tunnel-dweller"
+        : "very short halfling-sized man, 3ft tall, compact sturdy build, bright clever eyes, tunnel-dweller";
       hairTexture = "coarse short-cropped";
     }
 
@@ -811,48 +822,50 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       bodyBuild = types[Math.floor(Math.random() * types.length)];
     }
 
-    // Hair length (values are already descriptive for image model)
-    let cleanHairLen = formData.hairLength;
+    // Hair descriptor
+    const hairDesc = `${formData.hairLength} ${formData.hairColor} ${hairTexture} hair`;
 
-    // Height context
-    const safeHeight = formData.height.replace(/'/g, "ft ").replace(/"/g, "in").trim();
+    // Equipment — find the selected weapon name
+    const classEquipment = EQUIPMENT[formData.charClass] || [];
+    const selectedWeapon = classEquipment.find(e => e.id === formData.equipment);
+    const weaponDesc = selectedWeapon ? selectedWeapon.name.replace('Bronze ', 'bronze ').replace("Hero's ", 'heroic ') : '';
+
+    // Class visuals
+    const classVisual = CLASS_VISUALS[formData.charClass] || '';
 
     // Feature
-    const featureDesc = formData.distinguishingFeature !== 'none' ? `, with ${formData.distinguishingFeature}` : '';
+    const featureDesc = formData.distinguishingFeature !== 'none' ? formData.distinguishingFeature : '';
 
     // Mount
-    const mountDesc = formData.mount !== 'none' ? `, ${formData.mount}` : '';
+    const mountDesc = formData.mount !== 'none' ? formData.mount : '';
 
-    // Hair descriptor — combine length, color, and texture
-    const hairDesc = `${cleanHairLen} ${formData.hairColor} ${hairTexture} hair`;
-
-    // Build prompt in priority order — style first, then character, then negatives
+    // Build prompt — full body, detailed, thematic
+    // Priority: composition > character identity > appearance > gear > setting > extras
     const coreParts = [
-      `photorealistic portrait, dramatic lighting, 8k, oil painting`,
-      `${formData.sex} ${formData.lineage} ${formData.charClass}`,
-      `${cleanSkin}, ${phenotype}`,
-      `${bodyBuild} build, ${formData.eyeColor} eyes, ${hairDesc}`,
-      `wearing ${raceData.visuals}`,
-      `${formData.background}, ${formData.vibe} atmosphere`,
-      `ancient bronze-age biblical setting`,
-    ];
-    if (featureDesc) coreParts.push(featureDesc.replace(/^,\s*/, ''));
+      `full body character standing pose, head to boots visible, dramatic cinematic lighting, detailed fantasy illustration, 8k`,
+      `${formData.sex} ${phenotype}`,
+      `${cleanSkin}, ${bodyBuild} build, ${formData.eyeColor} eyes, ${hairDesc}`,
+      `wearing ${classVisual}, ${raceData.visuals}`,
+      weaponDesc ? `wielding ${weaponDesc}` : null,
+      `${formData.background}, ${formData.vibe} atmosphere, ancient bronze-age biblical world`,
+    ].filter(Boolean);
+    if (mountDesc) coreParts.push(mountDesc);
+    if (featureDesc) coreParts.push(`with ${featureDesc}`);
     if (customDesc) coreParts.push(customDesc);
     const negativeParts = [
-      `NO extra limbs, NO extra arms, NO horns, NO wings, NO nudity`,
+      `NO extra limbs, NO extra fingers, NO modern clothing, NO nudity`,
     ];
 
     // Assemble and trim to fit within 1000 character API limit
     const MAX_PROMPT_LENGTH = 1000;
-    const allParts = [...coreParts, ...negativeParts];
-    let prompt = allParts.join(', ');
+    let prompt = [...coreParts, ...negativeParts].join(', ');
     prompt = prompt.replace(/[()"]/g, "").replace(/,\s*,/g, ',').trim();
 
     if (prompt.length > MAX_PROMPT_LENGTH) {
-      // Drop sections from the end (least important first) until it fits
+      // Drop optional sections from the end until it fits
       const parts = [...coreParts, ...negativeParts];
-      while (parts.length > 1) {
-        parts.pop();
+      while (parts.length > 3) {
+        parts.splice(parts.length - 2, 1); // Remove before negatives
         prompt = parts.join(', ').replace(/[()"]/g, "").replace(/,\s*,/g, ',').trim();
         if (prompt.length <= MAX_PROMPT_LENGTH) break;
       }
