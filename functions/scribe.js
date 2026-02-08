@@ -84,11 +84,7 @@ function buildContext(matches) {
 function extractSources(matches) {
   return matches
     .filter(m => m.score > 0.5)
-    .map(m => ({
-      section: m.metadata?.section || 'General',
-      source: m.metadata?.source || 'unknown',
-      score: Math.round(m.score * 100) / 100,
-    }));
+    .map(m => m.metadata?.source || 'unknown');
 }
 
 export async function onRequestPost(context) {
@@ -136,8 +132,11 @@ export async function onRequestPost(context) {
       temperature: 0.7,
     });
 
+    // Cloudflare AI may return the text in .response or .result depending on SDK version
+    const replyText = response.response || response.result || (typeof response === 'string' ? response : '');
+
     return new Response(JSON.stringify({
-      reply: response.response,
+      reply: replyText,
       sources,
       model: 'llama-3.1-8b',
       contextChunks: matches.length,

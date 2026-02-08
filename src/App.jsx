@@ -38,7 +38,7 @@ const ScribeChat = () => {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
-  const WORKER_URL = "https://scribe.cisco-velez76.workers.dev";
+  const WORKER_URL = "/scribe";
 
   const {
     speaking,
@@ -72,7 +72,8 @@ const ScribeChat = () => {
     try {
       const response = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question: userText }) });
       const data = await response.json();
-      setMessages(prev => [...prev, { role: 'scribe', content: data.reply, sources: data.sources }]);
+      const replyText = data.reply || data.result || data.response || data.error || 'The Scribe is silent.';
+      setMessages(prev => [...prev, { role: 'scribe', content: replyText, sources: data.sources }]);
     } catch (error) {
       setMessages(prev => [...prev, { role: 'scribe', content: "The connection to the archives has been severed." }]);
     } finally {
