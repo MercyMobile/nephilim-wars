@@ -839,20 +839,19 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     // Mount
     const mountDesc = formData.mount !== 'none' ? formData.mount : '';
 
-    // Hair descriptor — combine length, color, and texture
-    const hairDesc = `${cleanHairLen} ${formData.hairColor} ${hairTexture} hair`;
-
     // Build prompt in priority order — subject first, then appearance, then setting
     const coreParts = [
       `cinematic portrait, dramatic lighting, highly detailed, 8k`,
       `${phenotype}`,
       `${cleanSkin}, ${formData.eyeColor} eyes, ${hairDesc}`,
       `${bodyBuild} build`,
-      `wearing ${raceData.visuals}`,
+      classVisual ? `wearing ${classVisual}` : `wearing ${raceData.visuals}`,
+      weaponDesc ? `wielding ${weaponDesc}` : '',
       `${formData.charClass}`,
       `ancient bronze-age biblical setting, ${formData.background}, ${formData.vibe} atmosphere`,
-    ];
-    if (featureDesc) coreParts.push(featureDesc.replace(/^,\s*/, ''));
+    ].filter(Boolean);
+    if (featureDesc) coreParts.push(featureDesc);
+    if (mountDesc) coreParts.push(`riding ${mountDesc}`);
     if (customDesc) coreParts.push(customDesc);
 
     // Negative prompt — passed as separate parameter to the model
