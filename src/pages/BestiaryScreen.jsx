@@ -124,19 +124,9 @@ const BESTIARY_DATA = {
         image: "/images/bestiary/Semyaza.png",
         hd: 18, hp: 180, def: 20,
         attack: "Arcane Bolt +15 (4d10+8)",
-        special: "Master of Oaths, Root-Cutting",
+        special: "Master of Oaths, Root-Cutting, Storm Caller",
         desc: "Leader of the rebellion.",
-        lore: "The leader of the 200. He feared to descend alone, so he made all 200 swear an oath (anathema) on Mount Hermon to fulfill their deed together. He taught enchantments and the properties of roots. He is bound between heaven and earth, suspended in Tartarus.",
-        legendary: true
-      },
-      {
-        name: "Shemihazah",
-        image: "/images/bestiary/Semyaza.png",
-        hd: 17, hp: 170, def: 20,
-        attack: "Chain Lightning +14 (4d8+8)",
-        special: "Storm Caller, Oath-Binder",
-        desc: "Variant name of Semyaza.",
-        lore: "In some texts, Shemihazah is the chief of the Watchers. He hangs between heaven and earth in the constellation Orion, a warning to all who would rebel.",
+        lore: "The leader of the 200 Watchers (also called Shemihazah in some texts). He feared to descend alone, so he made all 200 swear an oath (anathema) on Mount Hermon to fulfill their deed together. He taught enchantments and the properties of roots. He is bound between heaven and earth, suspended in Tartarus—some say he hangs in the constellation Orion as a warning to all who would rebel.",
         legendary: true
       },
       {
