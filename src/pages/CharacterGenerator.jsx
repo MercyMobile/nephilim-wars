@@ -751,67 +751,69 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     let cleanSkin = SKIN_MAP[formData.skinTone] || formData.skinTone;
 
     // Hair texture and phenotype by ancestry (sex-aware)
+    // IMPORTANT: Every phenotype MUST include "Middle Eastern" or "Semitic" ethnicity
+    // to prevent SDXL from defaulting to European/Nordic features
     const raceKey = formData.lineage.toLowerCase();
     const isFemale = formData.sex === 'Female';
     let phenotype = isFemale
-      ? "woman, Middle Eastern features"
-      : "man, Middle Eastern features";
+      ? "woman, Semitic Middle Eastern features, ancient biblical era"
+      : "man, Semitic Middle Eastern features, ancient biblical era";
     let hairTexture = "thick wavy";
 
     if (raceKey === 'nephilim') {
       phenotype = isFemale
-        ? "towering giant woman, 15ft tall, massive powerful build, angular celestial face"
-        : "towering giant man, 15ft tall, massively muscular, angular celestial face";
+        ? "towering giant woman, massive powerful build, angular celestial face, Middle Eastern Semitic features"
+        : "towering giant man, massively muscular, angular celestial face, Middle Eastern Semitic features";
       hairTexture = "thick wild";
     } else if (raceKey === 'rephaim') {
       phenotype = isFemale
-        ? "tall gaunt woman, hollow cheekbones, shadowed eyes, spectral haunting presence"
-        : "tall gaunt man, hollow cheekbones, haunted spectral presence";
+        ? "tall gaunt woman, hollow cheekbones, shadowed eyes, spectral haunting presence, Middle Eastern Semitic features"
+        : "tall gaunt man, hollow cheekbones, spectral haunting presence, Middle Eastern Semitic features";
       hairTexture = "thin wispy";
     } else if (raceKey === 'anakim') {
       phenotype = isFemale
-        ? "tall regal woman, elongated neck, sharp refined features, piercing eyes"
-        : "tall regal man, long neck, noble bearing, heavy bronze chains";
+        ? "tall regal woman, elongated neck, sharp refined features, piercing eyes, Middle Eastern Semitic features"
+        : "tall regal man, long neck, noble bearing, heavy bronze chains, Middle Eastern Semitic features";
       hairTexture = "thick braided";
     } else if (raceKey === 'gibborim') {
       phenotype = isFemale
-        ? "tall powerful woman, heroic athletic build, intense eyes"
-        : "tall powerful man, heroic proportions, strong jaw";
+        ? "tall powerful woman warrior, athletic build, intense eyes, Middle Eastern Semitic features"
+        : "tall powerful man warrior, heroic proportions, strong jaw, Middle Eastern Semitic features";
       hairTexture = "thick wavy";
     } else if (raceKey === 'elioud') {
       phenotype = isFemale
-        ? "tall athletic woman, intense eyes, subtle inhuman beauty"
-        : "tall athletic man, striking intense eyes, subtle inhuman beauty";
+        ? "tall athletic woman, intense eyes, subtle inhuman beauty, Middle Eastern Semitic features"
+        : "tall athletic man, striking intense eyes, subtle inhuman beauty, Middle Eastern Semitic features";
       hairTexture = "thick flowing";
     } else if (raceKey === 'horim') {
       phenotype = isFemale
-        ? "pale woman, large luminous eyes, lean wiry build, cave-dweller"
-        : "pale man, wide dark eyes, wiry compact build, cave-dweller";
+        ? "pale woman, large luminous eyes, lean wiry build, cave-dweller, Middle Eastern Semitic bone structure"
+        : "pale man, wide dark eyes, wiry compact build, cave-dweller, Middle Eastern Semitic bone structure";
       hairTexture = "coarse matted";
     } else if (raceKey === 'cainite') {
       phenotype = isFemale
-        ? "urban woman, calloused hands, sharp cunning eyes, city-dweller"
-        : "urban robust man, calloused hands, sharp cunning eyes, city-builder";
+        ? "urban woman, calloused hands, sharp cunning eyes, Middle Eastern Semitic features, city-dweller"
+        : "urban robust man, calloused hands, sharp cunning eyes, Middle Eastern Semitic features, city-builder";
       hairTexture = "thick coarse";
     } else if (raceKey === 'sethite') {
       phenotype = isFemale
-        ? "dignified woman, refined features, contemplative expression"
-        : "noble man, serene expression, refined features";
+        ? "dignified woman, refined features, contemplative expression, Middle Eastern Semitic features, priestly lineage"
+        : "noble man, serene expression, refined features, Middle Eastern Semitic features, priestly lineage";
       hairTexture = "thick wavy";
     } else if (raceKey === 'wanderer') {
       phenotype = isFemale
-        ? "lean weathered woman, sun-darkened skin, scarred hands, nomad"
-        : "rugged weathered man, sun-darkened face, nomad";
+        ? "lean weathered woman, sun-darkened skin, scarred hands, Middle Eastern Semitic nomad"
+        : "rugged weathered man, sun-darkened face, Middle Eastern Semitic nomad";
       hairTexture = "thick windswept";
     } else if (raceKey === 'sorcerer') {
       phenotype = isFemale
-        ? "mystical woman, intense unnatural gaze, luminous eyes, sorceress"
-        : "intense mystical man, sharp angular face, occult scholar";
+        ? "mystical woman, intense unnatural gaze, luminous eyes, Middle Eastern Semitic sorceress"
+        : "intense mystical man, sharp angular face, Middle Eastern Semitic occult scholar";
       hairTexture = "thick straight";
     } else if (raceKey === 'gammadim') {
       phenotype = isFemale
-        ? "very short halfling-sized woman, 3ft tall, compact sturdy build, bright clever eyes, tunnel-dweller"
-        : "very short halfling-sized man, 3ft tall, compact sturdy build, bright clever eyes, tunnel-dweller";
+        ? "very short halfling-sized woman, 3ft tall, compact sturdy build, bright clever eyes, Middle Eastern features, tunnel-dweller"
+        : "very short halfling-sized man, 3ft tall, compact sturdy build, bright clever eyes, Middle Eastern features, tunnel-dweller";
       hairTexture = "coarse short-cropped";
     }
 
@@ -855,7 +857,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     if (customDesc) coreParts.push(customDesc);
 
     // Negative prompt — passed as separate parameter to the model
-    const negativePrompt = 'extra limbs, extra arms, extra fingers, deformed hands, mutated, disfigured, blurry, bad anatomy, nudity, text, watermark, signature, cartoon, anime, 3d render';
+    const negativePrompt = 'European features, Nordic features, Viking, pale blue eyes, blonde eyebrows, extra limbs, extra arms, extra fingers, deformed hands, mutated, disfigured, blurry, bad anatomy, nudity, text, watermark, signature, cartoon, anime, 3d render';
 
     // Assemble and trim to fit within 1000 character API limit
     const MAX_PROMPT_LENGTH = 1000;
