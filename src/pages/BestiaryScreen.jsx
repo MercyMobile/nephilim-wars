@@ -9,7 +9,7 @@ const BESTIARY_DATA = {
     creatures: [
       {
         name: "Nephilim Warlord",
-        image: "/images/bestiary/GreaterGiant.png",
+        image: "/images/bestiary/NephilimWarlord.jpg",
         level: 16, hp: 320, ac: 40,
         attack: "Masterwork Bronze Greatsword +34 (3d12+17 slashing + 1d6 radiant)",
         special: "Titanic Cleave, Commanding Presence (60ft), Earth-Shattering Stomp, Watcher's Blessing",
@@ -30,7 +30,7 @@ const BESTIARY_DATA = {
       },
       {
         name: "Nephilim Scout",
-        image: null,
+        image: "/images/bestiary/NephilimScout.png",
         level: 8, hp: 150, ac: 26,
         attack: "Bronze Spear +22 (1d8+10 piercing)",
         special: "Ambush Tactics (+2d6 precision), Watcher's Eyes (see invisible 60ft), Stealthy Giant",
@@ -177,7 +177,7 @@ const BESTIARY_DATA = {
       },
       {
         name: "Elioud Champion",
-        image: null,
+        image: "/images/bestiary/ElioudChampion.jpg",
         level: 7, hp: 110, ac: 23,
         attack: "Masterwork Bronze Greatsword +20 (2d6+10 slashing)",
         special: "Ancestral Strike (+1d8), Champion's Aura (20ft), Diplomatic Presence",
@@ -187,7 +187,7 @@ const BESTIARY_DATA = {
       },
       {
         name: "Gammadim Tunnel-Fighter",
-        image: null,
+        image: "/images/bestiary/Gammadim.png",
         level: 4, hp: 55, ac: 20,
         attack: "Tunnel-Pick +12 (1d6+3 piercing)",
         special: "Tunnel Fighter (+1 attack in confined spaces), Shadow of the Titans (+2 Stealth near Large+ creatures), Earth Sense (Tremorsense 15ft), Sling Mastery",
