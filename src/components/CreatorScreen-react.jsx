@@ -64,6 +64,13 @@ const RACES = {
     stats: { int: 2, cha: 1 },
     traits: ["Dark Insight (Detect Magic)", "Blood Magic", "Watcher's Mark"],
     visuals: "robes covered in constellations, glowing runes on skin, holding strange herbs or crystals, purple magical aura"
+  },
+  "Gammadim": {
+    name: "Gammadim (Under-Walker)",
+    desc: "The hidden little people. Tunnel-fighters and survivors who claimed the deep places beneath the world of giants.",
+    stats: { dex: 2, wis: 1, str: -1 },
+    traits: ["Tunnel Fighter", "Shadow of the Titans", "Earth Sense (Tremorsense 15ft)", "Small Size"],
+    visuals: "very short 3ft tall person, earth-toned leather wraps, stone and bone tools, clay lamp, bright clever eyes"
   }
 };
 
