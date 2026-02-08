@@ -31,11 +31,10 @@ function checkRateLimit(ip) {
 
 // Supported models on Cloudflare Workers AI
 const MODELS = {
-  'sdxl-lightning': '@cf/bytedance/stable-diffusion-xl-lightning',   // Beta — FREE, unlimited
-  'flux-schnell':   '@cf/black-forest-labs/flux-1-schnell',          // ~58 neurons/image, ~173 free/day
+  'flux-schnell': '@cf/black-forest-labs/flux-1-schnell',          // ~58 neurons/image, ~173 free/day
 };
 
-const DEFAULT_MODEL = 'sdxl-lightning';
+const DEFAULT_MODEL = 'flux-schnell';
 
 export async function onRequest(context) {
   const { request } = context;
@@ -109,36 +108,17 @@ export async function onRequest(context) {
       );
     }
 
-    // Call Workers AI — models have different params and response formats
-    const aiParams = { prompt: body.prompt };
+    // Call FLUX Schnell
+    const aiParams = {
+      prompt: body.prompt,
+      num_steps: 8,
+    };
     if (body.negative_prompt) {
       aiParams.negative_prompt = body.negative_prompt;
     }
-    if (modelKey === 'flux-schnell') {
-      aiParams.num_steps = 8;
-    } else if (modelKey === 'sdxl-lightning') {
-      aiParams.guidance = 2;     // Lightning models need low guidance (distilled for few steps)
-      aiParams.num_steps = 4;    // SDXL Lightning optimal at 4 steps
-    }
 
     const aiResponse = await ai.run(modelId, aiParams);
-
-    let base64;
-    if (modelKey === 'flux-schnell') {
-      // FLUX returns JSON: { image: "<base64 string>" }
-      base64 = aiResponse.image;
-    } else {
-      // SDXL Lightning returns a ReadableStream of binary image data
-      const arrayBuffer = await new Response(aiResponse).arrayBuffer();
-      const uint8Array = new Uint8Array(arrayBuffer);
-      let binaryString = '';
-      const chunkSize = 8192;
-      for (let i = 0; i < uint8Array.length; i += chunkSize) {
-        const chunk = uint8Array.subarray(i, Math.min(i + chunkSize, uint8Array.length));
-        binaryString += String.fromCharCode.apply(null, chunk);
-      }
-      base64 = btoa(binaryString);
-    }
+    const base64 = aiResponse.image;
 
     if (!base64) {
       throw new Error('No image data returned from model');
