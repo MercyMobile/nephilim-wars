@@ -29,6 +29,14 @@ function checkRateLimit(ip) {
   return true;
 }
 
+// Supported models on Cloudflare Workers AI
+const MODELS = {
+  'sdxl-lightning': '@cf/bytedance/stable-diffusion-xl-lightning',   // Beta — FREE, unlimited
+  'flux-schnell':   '@cf/black-forest-labs/flux-1-schnell',          // ~58 neurons/image, ~173 free/day
+};
+
+const DEFAULT_MODEL = 'sdxl-lightning';
+
 export async function onRequest(context) {
   const { request } = context;
 
@@ -68,7 +76,7 @@ export async function onRequest(context) {
 
   try {
     const body = await request.json();
-    const { prompt } = body;
+    const { prompt, model: requestedModel } = body;
 
     if (!prompt) {
       return new Response(
@@ -88,55 +96,28 @@ export async function onRequest(context) {
       );
     }
 
-    const HF_TOKEN = context.env.HF_TOKEN;
-    if (!HF_TOKEN) {
+    // Resolve model — fall back to default if invalid
+    const modelKey = MODELS[requestedModel] ? requestedModel : DEFAULT_MODEL;
+    const modelId = MODELS[modelKey];
+
+    // Workers AI binding (configured in wrangler.jsonc as "AI")
+    const ai = context.env.AI;
+    if (!ai) {
       return new Response(
-        JSON.stringify({ error: 'HF_TOKEN not configured' }),
+        JSON.stringify({ error: 'AI binding not configured' }),
         { status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
       );
     }
 
-    // --- FIX STARTS HERE ---
-    
-    // 3. New Router URL
-    // The "hf-inference" path segment routes to the serverless inference API.
-    const MODEL_ID = 'black-forest-labs/FLUX.1-schnell';
-    const API_URL = `https://router.huggingface.co/hf-inference/models/${MODEL_ID}`;
+    // Call Workers AI
+    const aiResponse = await ai.run(modelId, { prompt });
 
-    // 4. Call the API
-    const hfResponse = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${HF_TOKEN}`,
-        'Content-Type': 'application/json',
-      },
-      // The router expects "inputs" just like the old API
-      body: JSON.stringify({
-        inputs: prompt
-      })
-    });
-    // --- FIX ENDS HERE ---
-
-    if (!hfResponse.ok) {
-      const errorText = await hfResponse.text();
-      return new Response(
-        JSON.stringify({ 
-          error: 'HF API error', 
-          status: hfResponse.status, 
-          details: errorText 
-        }),
-        { status: hfResponse.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
-      );
-    }
-
-    // 5. Handle Image Response
-    const imageBlob = await hfResponse.arrayBuffer();
-
-    // Convert ArrayBuffer to base64 without stack overflow
-    // Process in chunks to avoid "Maximum call stack size exceeded"
-    const uint8Array = new Uint8Array(imageBlob);
+    // Workers AI image models return a ReadableStream of the image bytes
+    // Convert to base64 for the client
+    const arrayBuffer = await new Response(aiResponse).arrayBuffer();
+    const uint8Array = new Uint8Array(arrayBuffer);
     let binaryString = '';
-    const chunkSize = 8192; // Process 8KB at a time
+    const chunkSize = 8192; // Process 8KB at a time to avoid stack overflow
 
     for (let i = 0; i < uint8Array.length; i += chunkSize) {
       const chunk = uint8Array.subarray(i, Math.min(i + chunkSize, uint8Array.length));
@@ -146,7 +127,7 @@ export async function onRequest(context) {
     const base64 = btoa(binaryString);
 
     return new Response(
-      JSON.stringify({ success: true, image: base64 }),
+      JSON.stringify({ success: true, image: base64, model: modelKey }),
       { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
     );
 

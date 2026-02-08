@@ -154,7 +154,7 @@ const CreatorScreen = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           prompt: imgPrompt,
-          model: 'flux-schnell'
+          model: 'sdxl-lightning'
         })
       });
 
