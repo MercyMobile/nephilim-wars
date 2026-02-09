@@ -420,116 +420,18 @@ export default function CharacterGenerator({ onCharacterComplete }) {
     return scores;
   };
 
-  // === BUILD IMAGE PROMPT (IMPROVED LOGIC) ===
-  const buildImagePrompt = () => {
-    const raceData = RACES[formData.lineage];
-    const customDesc = formData.customVisuals.trim();
-    const isFemale = formData.sex.toLowerCase() === 'female';
-    const raceKey = formData.lineage.toLowerCase();
+const buildImagePrompt = () => {
+  const raceData = RACES[formData.lineage];
+  const customDesc = formData.customVisuals.trim();
+  const isFemale = formData.sex === 'Female';
+  const raceKey = formData.lineage.toLowerCase();
 
-    // === STEP 1: Define biblical-era, fantasy-appropriate phenotype ===
-    let phenotype;
+  // === STEP 1: Precise, culturally grounded phenotype (no vagueness) ===
+  let phenotype;
+  let hairTexture = "thick, wavy";
 
-    if (raceKey === 'sethite') {
-      phenotype = isFemale
-        ? "noble woman of Seth's line, kind and wise expression, warm olive skin, gentle yet strong features, dark brown or hazel eyes, long flowing dark hair, peaceful demeanor, biblical fantasy aesthetic"
-        : "noble man of Seth's line, noble bearing, warm olive skin, strong jaw, dark brown or hazel eyes, well-groomed dark hair, serene and righteous countenance, biblical fantasy aesthetic";
-    } else if (raceKey === 'cainite') {
-      phenotype = isFemale
-        ? "urban dweller of early cities, intelligent eyes, warm tan skin, practical earth-toned robes, alert and worldly expression, bronze age civilization look"
-        : "city-builder of Cain's descendants, sturdy build, tan to bronze skin, observant gaze, practical leather and linen garments, skilled craftsman appearance";
-    } else if (raceKey === 'nephilim' || raceKey === 'gibborim' || raceKey === 'anakim') {
-      phenotype = isFemale
-        ? "tall and imposing figure, noble giantess, deep brown skin, regal posture, calm but commanding presence, no deformities, heroic proportions"
-        : "mighty warrior of great stature, noble giant, deep brown skin, powerful frame, stoic and noble expression, heroic proportions, no distortions";
-    } else {
-      // fallback for Horim, Sorcerer, etc.
-      phenotype = isFemale
-        ? "righteous woman of ancient times, warm olive skin, kind eyes, modest but dignified appearance, biblical era aesthetic"
-        : "righteous man of ancient times, warm olive skin, strong features, noble and wise expression, biblical era aesthetic";
-    }
-
-    // === STEP 2: Skin tone + features (descriptive) ===
-    const skinDesc = SKIN_MAP[formData.skinTone.trim().toLowerCase()] || 'warm olive skin';
-    const eyeDesc = formData.eyeColor ? `${formData.eyeColor} eyes` : 'dark brown eyes';
-    const hairLengthDesc = formData.hairLength?.trim() || 'shoulder length';
-    const hairColorDesc = formData.hairColor?.trim() || 'black';
-    const hairTexture = "thick, wavy";
-    const hairFull = `${hairLengthDesc} ${hairColorDesc} ${hairTexture} hair`;
-
-    // === STEP 3: Body build + distinguishing feature ===
-    const bodyBuild = formData.bodyBuild === 'random' 
-      ? ['lean', 'athletic', 'sturdy'][Math.floor(Math.random() * 3)] 
-      : formData.bodyBuild;
-    const featureDesc = formData.distinguishingFeature !== 'none' 
-      ? formData.distinguishingFeature.replace(/^[a-z]/, c => c.toUpperCase()) 
-      : '';
-
-    // === STEP 4: Class & gear visuals (keep existing) ===
-    const classVisual = CLASS_VISUALS[formData.charClass] || '';
-    const selectedWeapon = EQUIPMENT[formData.charClass]?.find(w => w.id === formData.equipment);
-    const weaponDesc = selectedWeapon
-      ? (WEAPON_VISUALS[selectedWeapon.id] || selectedWeapon.name.replace('Bronze ', 'bronze ').replace("Hero's ", 'heroic '))
-      : '';
-
-    // === STEP 5: Background & vibe ===
-    const bgDesc = formData.background || 'ancient holy land setting';
-    const vibeDesc = formData.vibe || 'biblical epic';
-
-    // === CORE PROMPT (family-friendly, fantasy appropriate) ===
-    const coreParts = [
-      // Quality & style
-      "beautiful artwork, detailed illustration, fantasy style, soft lighting, divine inspiration, biblical era art style",
-      
-      // Character & ethnicity
-      phenotype,
-      
-      // Physical specifics
-      `${skinDesc}, ${eyeDesc}, ${hairFull}`,
-      `${bodyBuild} build, proportional and realistic anatomy, no distortions`,
-      
-      // Clothing & role
-      classVisual ? `wearing ${classVisual}` : `wearing ${raceData.visuals}`,
-      weaponDesc ? `carrying ${weaponDesc}` : '',
-      
-      // Setting & theme
-      `${formData.charClass}, ${bgDesc}, ${vibeDesc} atmosphere`,
-      "ancient temples, desert landscapes, stone cities, biblical fantasy world"
-    ];
-
-    // Add optional elements
-    if (featureDesc) coreParts.push(featureDesc);
-    if (formData.mount !== 'none') coreParts.push(`riding ${formData.mount}`);
-    if (customDesc) coreParts.push(customDesc);
-
-    // === NEGATIVE PROMPT (family-friendly, biblically appropriate) ===
-    const negativePrompt = [
-      'inappropriate exposure, revealing clothing, nudity, sensual poses',
-      'deformed, distorted face, extra limbs, fused fingers, asymmetric eyes, blurry, bad anatomy',
-      'modern clothing, contemporary items, futuristic elements',
-      'European features, Nordic features, pale skin, fair hair, blue eyes',
-      'cartoon, anime, photograph, photorealistic, 3d render, text, watermark',
-      'excessive violence, gore, weapons shown in violent context',
-      'fantasy clichés (e.g., pointed ears, wings, horns unless specified)'
-    ].join(', ');
-
-    // === ASSEMBLE & SAFELY TRUNCATE ===
-    let prompt = coreParts.filter(Boolean).join(', ');
-    prompt = prompt.replace(/\s+/g, ' ').trim();
-
-    const MAX_LENGTH = 950;
-    if (prompt.length > MAX_LENGTH) {
-      const essential = [coreParts[0], coreParts[1], coreParts[2], coreParts[3], coreParts[4]];
-      let truncated = essential.join(', ');
-      if (truncated.length > MAX_LENGTH) {
-        truncated = truncated.slice(0, MAX_LENGTH);
-      }
-      prompt = truncated;
-    }
-
-    return { prompt, negativePrompt };
-  };
-
+…  return { prompt, negativePrompt };
+};
   // === GENERATE IMAGE ===
   const handleGenerate = async () => {
     setLoading(true);
