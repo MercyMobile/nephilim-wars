@@ -1,35 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { User, Shield, Sword, Heart, Save, Trash2, Users, PlusCircle, AlertCircle, Sparkles } from 'lucide-react';
-
-// --- INLINED UTILITIES (to prevent import errors) ---
-const validateCharacterName = (name) => {
-  if (!name) return "";
-  // Allow letters, spaces, hyphens, apostrophes
-  return name.replace(/[^a-zA-Z\s'-]/g, "").slice(0, 50);
-};
-
-const validateAttribute = (val, min, max) => {
-  const num = parseInt(val, 10);
-  if (isNaN(num)) return 10;
-  return Math.max(min, Math.min(max, num));
-};
-
-const validateDescription = (val, maxLen) => {
-  if (!val) return "";
-  return val.slice(0, maxLen);
-};
-
-// Mock storage functions for this session
-const setCharacterData = (char) => {
-  console.log("Character saved:", char);
-  return true;
-};
-
-const addToPartyRoster = (char) => {
-  console.log("Added to roster:", char);
-  // In a real app with the consolidated manager, we would emit an event or callback here
-  return true;
-};
+import { validateCharacterName, validateAttribute, validateDescription } from '../utils/validation';
+import { setCharacterData, addToPartyRoster } from '../utils/storage';
 
 const CharacterGenerator = ({ onCharacterComplete }) => {
   // === COMPREHENSIVE ANCESTRY DATA (PF2e-Compliant per Manual) ===
@@ -37,8 +8,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     Sethite: {
       name: "Sethite (Righteous Line)",
       desc: "Descendants of Seth. Keepers of the original faith and pre-fall history.",
-      abilityBoosts: ["Free", "Free"], 
-      abilityFlaw: "Free", 
+      abilityBoosts: ["Free", "Free"], // Two free boosts
+      abilityFlaw: "Free", // One free flaw (optional)
       ancestryHP: 8,
       size: "Medium",
       speed: 25,
@@ -52,8 +23,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     Cainite: {
       name: "Cainite (City Builder)",
       desc: "Descendants of the first murderer. Masters of metallurgy, music, and urbanization.",
-      abilityBoosts: ["Free", "Free"], 
-      abilityFlaw: "Free",
+      abilityBoosts: ["Free", "Free"], // Two free boosts
+      abilityFlaw: "Free", // One free flaw (optional)
       ancestryHP: 8,
       size: "Medium",
       speed: 25,
@@ -67,8 +38,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     Wanderer: {
       name: "Wanderer (Nomad)",
       desc: "Those who rejected both the cities of Cain and the strictures of Seth.",
-      abilityBoosts: ["Free", "Free"],
-      abilityFlaw: "Free",
+      abilityBoosts: ["Free", "Free"], // Two free boosts
+      abilityFlaw: "Free", // One free flaw (optional)
       ancestryHP: 10,
       size: "Medium",
       speed: 30,
@@ -82,7 +53,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     Nephilim: {
       name: "Nephilim (1st Gen Giant)",
       desc: "Direct offspring of Watchers and Humans. Titans of the ancient world.",
-      abilityBoosts: ["STR", "CON", "Free"],
+      abilityBoosts: ["STR", "CON", "Free"], // STR, CON, one free
       abilityFlaw: "DEX",
       ancestryHP: 12,
       size: "Large",
@@ -97,7 +68,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     Rephaim: {
       name: "Rephaim (Shade/Giant)",
       desc: "Later generations of giants, often associated with the dead and the underworld.",
-      abilityBoosts: ["STR", "CON", "Free"],
+      abilityBoosts: ["STR", "CON", "Free"], // STR, CON, one free
       abilityFlaw: "CHA",
       ancestryHP: 10,
       size: "Large",
@@ -112,7 +83,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     Anakim: {
       name: "Anakim (Noble Giant)",
       desc: "The 'Long-Necked Ones'. Noble giants known for chain weapons and regal bearing.",
-      abilityBoosts: ["STR", "CHA", "Free"],
+      abilityBoosts: ["STR", "CHA", "Free"], // STR, CHA, one free
       abilityFlaw: "DEX",
       ancestryHP: 12,
       size: "Large",
@@ -127,8 +98,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     Gibborim: {
       name: "Gibborim (Mighty One)",
       desc: "Human-Giant hybrids. The 'Mighty Ones of Old' - heroic warriors of renown.",
-      abilityBoosts: ["STR", "CON", "Free"],
-      abilityFlaw: null,
+      abilityBoosts: ["STR", "CON", "Free"], // STR, CON, one free
+      abilityFlaw: null, // None
       ancestryHP: 10,
       size: "Medium",
       speed: 25,
@@ -142,7 +113,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     Horim: {
       name: "Horim (Cave Dweller)",
       desc: "Giant-kin adapted to underground life. Masters of stone and darkness.",
-      abilityBoosts: ["DEX", "WIS", "Free"],
+      abilityBoosts: ["DEX", "WIS", "Free"], // DEX, WIS, one free
       abilityFlaw: "CHA",
       ancestryHP: 8,
       size: "Medium",
@@ -157,8 +128,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     Elioud: {
       name: "Elioud (Third-Gen Giant-Kin)",
       desc: "Third-generation giant descendants who can pass as large humans. Bridge between worlds.",
-      abilityBoosts: ["STR", "Free"],
-      abilityFlaw: null,
+      abilityBoosts: ["STR", "Free"], // STR, one free
+      abilityFlaw: null, // None
       ancestryHP: 8,
       size: "Medium",
       speed: 25,
@@ -172,8 +143,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     Sorcerer: {
       name: "Sorcerer Clan (Watcher-Taught)",
       desc: "Humans initiated into Watcher mysteries like root-cutting and astrology.",
-      abilityBoosts: ["Free", "Free"],
-      abilityFlaw: "Free",
+      abilityBoosts: ["Free", "Free"], // Two free boosts
+      abilityFlaw: "Free", // One free flaw (optional)
       ancestryHP: 6,
       size: "Medium",
       speed: 25,
@@ -187,7 +158,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     Gammadim: {
       name: "Gammadim (Under-Walker)",
       desc: "The hidden little people. When the giants claimed the peaks and humans the valleys, the Gammadim claimed the deep places beneath.",
-      abilityBoosts: ["DEX", "WIS", "Free"],
+      abilityBoosts: ["DEX", "WIS", "Free"], // DEX, WIS, one free
       abilityFlaw: "STR",
       ancestryHP: 6,
       size: "Small",
@@ -304,7 +275,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     { value: "accompanied by a large scaly monitor-lizard-like drake companion with thick armored hide and a spiked tail standing at waist height", label: "Hunting Drake (Companion)" }
   ];
 
-  // === NAME DATABASES ===
+  // === NAME DATABASES (Expanded) ===
   const NAMES = {
     Male: {
       Sethite: ["Enosh", "Kenan", "Mahalalel", "Jared", "Methuselah", "Lamech", "Noah", "Seth", "Shem", "Ham", "Japheth", "Adam", "Abel", "Enoch the Righteous"],
@@ -324,7 +295,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     }
   };
 
-  // === CLASSES ===
+  // === CLASSES (PF2e-Compliant per Manual) ===
   const CLASSES = [
     { value: "Warrior", label: "Warrior (Tribal Fighter)", classHP: 10, keyAbility: "STR or DEX" },
     { value: "Gibbor", label: "Gibbor (Mighty Hero)", classHP: 12, keyAbility: "STR" },
@@ -335,7 +306,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     { value: "Scribe", label: "Scribe (Keeper of Tablets)", classHP: 6, keyAbility: "INT" }
   ];
 
-  // === GAME BACKGROUNDS ===
+  // === GAME BACKGROUNDS (from Manual Chapter 3) ===
   const GAME_BACKGROUNDS = [
     { value: "watchers_apprentice", label: "Watcher's Apprentice", boost: "INT", skill: "Arcana", lore: "Forbidden Lore" },
     { value: "tribal_elder", label: "Tribal Elder", boost: "WIS", skill: "Diplomacy", lore: "Tribal Lore" },
@@ -359,7 +330,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     { value: "sacred_dancer", label: "Sacred Dancer", boost: "DEX or CHA", skill: "Performance", lore: "Dance Lore" }
   ];
 
-  // === EQUIPMENT BY CLASS ===
+  // === EQUIPMENT BY CLASS (D&D 5e Stats) ===
   const EQUIPMENT = {
     Warrior: [
       { id: 'bronze_sword', name: 'Bronze Longsword', type: 'melee', useStat: 'STR', damageDice: '1d8', damageType: 'slashing', desc: 'Versatile bronze blade (1d10 two-handed)' },
@@ -466,15 +437,15 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     vibe: 'biblical epic',
     customVisuals: '',
     imageModel: 'flux-schnell',
-    equipment: 'bronze_sword',
+    equipment: 'bronze_sword', // Default equipment
     attributes: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 },
     // PF2e Boost Allocations
-    ancestryFreeBoosts: [],
-    ancestryFlaw: '',
-    bgFixedChoice: '',
-    bgFreeBoost: '',
-    classKeyChoice: '',
-    freeBoosts: []
+    ancestryFreeBoosts: [],    // Which stats the player chose for ancestry free boosts
+    ancestryFlaw: '',          // Which stat for free flaw (Sethite, Cainite, Wanderer, Sorcerer Clan)
+    bgFixedChoice: '',         // For "or" backgrounds (e.g., "INT or STR"), which one they picked
+    bgFreeBoost: '',           // Which stat for background free boost
+    classKeyChoice: '',        // For "or" classes (e.g., Warrior "STR or DEX"), which one they picked
+    freeBoosts: []             // 4 free boosts (each to a different stat)
   });
 
   const [loading, setLoading] = useState(false);
@@ -483,6 +454,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
   const [showSheet, setShowSheet] = useState(false);
   const [finalCharacter, setFinalCharacter] = useState(null);
 
+  // === AUTO-GENERATE RANDOM NAME & HEIGHT ===
   useEffect(() => {
     generateRandomName();
     generateRandomHeight();
@@ -492,6 +464,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
   const generateRandomName = () => {
     const race = formData.lineage;
     const sex = formData.sex;
+
     let namePool;
     if (race === 'Nephilim' || race === 'Rephaim' || race === 'Anakim' || race === 'Gibborim' || race === 'Elioud') {
       namePool = NAMES[sex].Giant;
@@ -502,12 +475,13 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     } else if (race === 'Sorcerer') {
       namePool = NAMES[sex].Sorcerer;
     } else if (race === 'Horim') {
-      namePool = NAMES[sex].Giant;
+      namePool = NAMES[sex].Giant; // Horim use giant-kin names
     } else if (race === 'Gammadim') {
       namePool = NAMES[sex].Gammadim;
     } else {
       namePool = NAMES[sex].Wanderer;
     }
+
     const randomName = namePool[Math.floor(Math.random() * namePool.length)];
     setFormData(prev => ({ ...prev, name: randomName }));
   };
@@ -532,28 +506,37 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     const randomClass = randomFrom(CLASSES).value;
     const randomBg = randomFrom(GAME_BACKGROUNDS).value;
 
+    // Randomly allocate boosts per PF2e rules
     const raceData = RACES[randomRace];
     const classData = CLASSES.find(c => c.value === randomClass) || CLASSES[0];
     const bgData = GAME_BACKGROUNDS.find(b => b.value === randomBg);
 
+    // Ancestry free boosts
     const freeCount = raceData.abilityBoosts.filter(b => b === 'Free').length;
     const shuffled = [...allStats].sort(() => Math.random() - 0.5);
     const ancestryFreeBoosts = shuffled.slice(0, freeCount);
+
+    // Ancestry flaw (if free)
     const ancestryFlaw = raceData.abilityFlaw === 'Free' ? randomFrom(allStats) : '';
 
+    // Background fixed choice (for "or" type)
     let bgFixedChoice = '';
     if (bgData && bgData.boost.includes(' or ')) {
       const opts = bgData.boost.split(' or ');
       bgFixedChoice = randomFrom(opts);
     }
+
+    // Background free boost
     const bgFreeBoost = randomFrom(allStats);
 
+    // Class key choice (for "or" type)
     let classKeyChoice = '';
     if (classData.keyAbility.includes(' or ')) {
       const opts = classData.keyAbility.split(' or ');
       classKeyChoice = randomFrom(opts);
     }
 
+    // 4 free boosts (each to different stat)
     const freeShuffled = [...allStats].sort(() => Math.random() - 0.5);
     const freeBoosts = freeShuffled.slice(0, 4);
 
@@ -583,66 +566,95 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       freeBoosts
     }));
 
+    // Generate name after state update
     setTimeout(() => {
       generateRandomName();
       generateRandomHeight();
     }, 50);
   };
 
+  // === HANDLERS ===
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // Validate name input
     if (name === 'name') {
       const sanitized = validateCharacterName(value);
       setFormData({ ...formData, [name]: sanitized });
-    } else if (name === 'customVisuals') {
+    }
+    // Validate custom visuals
+    else if (name === 'customVisuals') {
       const sanitized = validateDescription(value, 500);
       setFormData({ ...formData, [name]: sanitized });
-    } else if (name === 'lineage') {
+    }
+    // Reset boost allocations when ancestry/class/background changes
+    else if (name === 'lineage') {
       setFormData({ ...formData, [name]: value, ancestryFreeBoosts: [], ancestryFlaw: '' });
     } else if (name === 'charClass') {
       setFormData({ ...formData, [name]: value, classKeyChoice: '' });
     } else if (name === 'gameBackground') {
       setFormData({ ...formData, [name]: value, bgFixedChoice: '', bgFreeBoost: '' });
-    } else {
+    }
+    // All other fields
+    else {
       setFormData({ ...formData, [name]: value });
     }
+  };
+
+  const handleAttrChange = (attr, value) => {
+    const validatedValue = validateAttribute(value, 3, 20);
+    setFormData(prev => ({
+      ...prev,
+      attributes: { ...prev.attributes, [attr]: validatedValue }
+    }));
   };
 
   // === PF2e BOOST SYSTEM ===
   const STATS = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
 
+  // Apply a single boost to a score: +2 (or +1 if 18+)
   const applyBoost = (scores, stat) => {
     if (!stat || !scores[stat] === undefined) return;
     scores[stat] = scores[stat] >= 18 ? scores[stat] + 1 : scores[stat] + 2;
   };
 
+  // Compute final attributes from all boost sources
   const computeAttributes = (data) => {
     const scores = { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 };
     const raceData = RACES[data.lineage];
     const classData = CLASSES.find(c => c.value === data.charClass) || CLASSES[0];
     const bgData = GAME_BACKGROUNDS.find(b => b.value === data.gameBackground);
 
+    // 1. Ancestry fixed boosts
     raceData.abilityBoosts.forEach(boost => {
       if (boost !== 'Free') applyBoost(scores, boost);
     });
+
+    // 2. Ancestry free boosts
     (data.ancestryFreeBoosts || []).forEach(stat => applyBoost(scores, stat));
 
+    // 3. Ancestry flaw
     if (raceData.abilityFlaw && raceData.abilityFlaw !== 'Free' && raceData.abilityFlaw !== null) {
       scores[raceData.abilityFlaw] = (scores[raceData.abilityFlaw] || 10) - 2;
     } else if (raceData.abilityFlaw === 'Free' && data.ancestryFlaw) {
       scores[data.ancestryFlaw] = (scores[data.ancestryFlaw] || 10) - 2;
     }
 
+    // 4. Background fixed boost
     if (bgData) {
       const bgBoostStr = bgData.boost;
       if (bgBoostStr.includes(' or ')) {
+        // Player chose one
         if (data.bgFixedChoice) applyBoost(scores, data.bgFixedChoice);
       } else {
         applyBoost(scores, bgBoostStr);
       }
     }
+
+    // 5. Background free boost
     if (data.bgFreeBoost) applyBoost(scores, data.bgFreeBoost);
 
+    // 6. Class key ability boost
     const keyAbility = classData.keyAbility;
     if (keyAbility.includes(' or ')) {
       if (data.classKeyChoice) applyBoost(scores, data.classKeyChoice);
@@ -650,45 +662,60 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       applyBoost(scores, keyAbility);
     }
 
+    // 7. Four free boosts (each to a different stat)
     (data.freeBoosts || []).forEach(stat => applyBoost(scores, stat));
+
     return scores;
   };
 
+  // Get number of ancestry free boost slots
   const getAncestryFreeCount = () => {
     const raceData = RACES[formData.lineage];
     return raceData.abilityBoosts.filter(b => b === 'Free').length;
   };
 
+  // Get whether ancestry flaw is free choice
   const isAncestryFlawFree = () => {
     const raceData = RACES[formData.lineage];
     return raceData.abilityFlaw === 'Free';
   };
 
+  // Get background boost options (for "or" type)
   const getBgBoostOptions = () => {
     const bgData = GAME_BACKGROUNDS.find(b => b.value === formData.gameBackground);
     if (!bgData) return null;
-    if (bgData.boost.includes(' or ')) return bgData.boost.split(' or ');
-    return null;
+    if (bgData.boost.includes(' or ')) {
+      return bgData.boost.split(' or ');
+    }
+    return null; // Fixed, no choice needed
   };
 
+  // Get class key ability options (for "or" type)
   const getClassKeyOptions = () => {
     const classData = CLASSES.find(c => c.value === formData.charClass) || CLASSES[0];
-    if (classData.keyAbility.includes(' or ')) return classData.keyAbility.split(' or ');
-    return null;
+    if (classData.keyAbility.includes(' or ')) {
+      return classData.keyAbility.split(' or ');
+    }
+    return null; // Fixed, no choice needed
   };
 
+  // Toggle a stat in an array-based boost list
   const toggleBoost = (field, stat, maxCount) => {
     setFormData(prev => {
       const current = prev[field] || [];
-      if (current.includes(stat)) return { ...prev, [field]: current.filter(s => s !== stat) };
-      if (current.length >= maxCount) return prev;
+      if (current.includes(stat)) {
+        return { ...prev, [field]: current.filter(s => s !== stat) };
+      }
+      if (current.length >= maxCount) return prev; // Already at max
       return { ...prev, [field]: [...current, stat] };
     });
   };
 
+  // Computed attributes (reactive)
   const computedAttrs = computeAttributes(formData);
 
-  // === CLASS VISUAL DESCRIPTIONS ===
+  // === BUILD PHOTOREALISTIC IMAGE PROMPT ===
+  // === CLASS VISUAL DESCRIPTIONS (for image prompt) ===
   const CLASS_VISUALS = {
     Warrior: "bronze plate armor, leather battle skirt, bronze greaves and vambraces",
     Gibbor: "heavy bronze champion armor, lion pelt draped over shoulders, bronze bracers engraved with victories",
@@ -699,59 +726,11 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     Scribe: "scholar robes with ink-stained sleeves, scroll case at hip, reed stylus behind ear"
   };
 
-  // === WEAPON VISUALS (Consolidated here for prompt logic) ===
-  const WEAPON_VISUALS = {
-    // Warrior
-    'bronze_sword': 'long bronze sword with leather grip',
-    'bronze_greatsword': 'massive two-handed bronze greatsword',
-    'bronze_battleaxe': 'heavy bronze battle axe',
-    'spear_shield': 'bronze-tipped spear and round bronze shield',
-    'war_hammer': 'heavy bronze war hammer',
-    'flail': 'bronze spiked flail on chain',
-    // Gibbor
-    'hero_blade': 'legendary ornate bronze greatsword',
-    'maul': 'massive stone and bronze war maul',
-    'glaive': 'long bronze-bladed polearm glaive',
-    'greataxe': 'brutal two-handed bronze great axe',
-    'lance': 'long bronze-tipped cavalry lance',
-    // Hunter
-    'longbow': 'tall composite longbow with quiver of arrows on back',
-    'shortbow': 'short wooden recurve bow with quiver of arrows',
-    'hand_crossbow': 'small wooden and bronze hand-held crossbow with trigger mechanism',
-    'sling': 'leather sling with stone pouch',
-    'javelin': 'bronze-tipped throwing javelin',
-    'scimitar': 'curved bronze scimitar blade',
-    // Magi
-    'arcane_staff': 'tall dark wooden staff carved with eldritch runes',
-    'fire_wand': 'slender bronze wand wreathed in flame',
-    'frost_orb': 'glowing pale blue crystal orb',
-    'shock_rod': 'crackling bronze rod with lightning',
-    'poison_focus': 'serpent-shaped bronze focus with green glow',
-    'ritual_dagger': 'ornate bronze ritual dagger',
-    // Priest
-    'holy_staff': 'tall bronze staff inscribed with sacred text',
-    'mace': 'ornate bronze ceremonial mace',
-    'sacred_light': 'hands glowing with divine radiant fire',
-    'divine_smite': 'aura of divine power and holy light',
-    'war_pick': 'bronze war pick with inscribed handle',
-    'sling_stones': 'leather sling with blessed stones',
-    // Artisan
-    'smith_hammer': 'heavy bronze smithing war hammer',
-    'battle_pick': 'bronze-tipped mining pick',
-    'hand_axe': 'small bronze hand axe',
-    'light_crossbow': 'engineered bronze crossbow with wooden stock and mechanical trigger',
-    'quarterstaff': 'reinforced wooden staff',
-    // Scribe
-    'quill_dagger': 'concealed bronze dagger',
-    'dart': 'handful of small throwing darts',
-    'sling_scholar': 'simple leather sling',
-    'arcane_knowledge': 'ancient scroll glowing with arcane symbols',
-  };
-
   const buildImagePrompt = () => {
     const raceData = RACES[formData.lineage];
     const customDesc = formData.customVisuals.trim();
 
+    // Skin tone mapping — concise descriptions for image models
     const SKIN_MAP = {
       'olive': 'olive skin',
       'bronze': 'bronze sun-tanned skin',
@@ -771,10 +750,11 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     };
     let cleanSkin = SKIN_MAP[formData.skinTone] || formData.skinTone;
 
+    // Hair texture and phenotype by ancestry (sex-aware)
+    // IMPORTANT: Every phenotype MUST include "Middle Eastern" or "Semitic" ethnicity
+    // to prevent SDXL from defaulting to European/Nordic features
     const raceKey = formData.lineage.toLowerCase();
     const isFemale = formData.sex === 'Female';
-    
-    // Default phenotype
     let phenotype = isFemale
       ? "woman, Semitic Middle Eastern features, ancient biblical era"
       : "man, Semitic Middle Eastern features, ancient biblical era";
@@ -837,68 +817,108 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       hairTexture = "coarse short-cropped";
     }
 
+    // Body build
     let bodyBuild = formData.bodyBuild;
     if (bodyBuild === 'random') {
       const types = ['gaunt', 'lean', 'athletic', 'stocky', 'heavyset'];
       bodyBuild = types[Math.floor(Math.random() * types.length)];
     }
 
+    // Hair descriptor — handle bald as special case
     const isBald = formData.hairLength.toLowerCase().includes('bald');
     const hairDesc = isBald
       ? 'completely bald shaved head, no hair'
       : `${formData.hairLength} ${formData.hairColor} ${hairTexture} hair`;
 
+    // Equipment — find the selected weapon name
     const classEquipment = EQUIPMENT[formData.charClass] || [];
     const selectedWeapon = classEquipment.find(e => e.id === formData.equipment);
-    
+    // Map weapon IDs to visual descriptions the image model can understand
+    const WEAPON_VISUALS = {
+      // Warrior
+      'bronze_sword': 'long bronze sword with leather grip',
+      'bronze_greatsword': 'massive two-handed bronze greatsword',
+      'bronze_battleaxe': 'heavy bronze battle axe',
+      'spear_shield': 'bronze-tipped spear and round bronze shield',
+      'war_hammer': 'heavy bronze war hammer',
+      'flail': 'bronze spiked flail on chain',
+      // Gibbor
+      'hero_blade': 'legendary ornate bronze greatsword',
+      'maul': 'massive stone and bronze war maul',
+      'glaive': 'long bronze-bladed polearm glaive',
+      'greataxe': 'brutal two-handed bronze great axe',
+      'lance': 'long bronze-tipped cavalry lance',
+      // Hunter
+      'longbow': 'tall composite longbow with quiver of arrows on back',
+      'shortbow': 'short wooden recurve bow with quiver of arrows',
+      'hand_crossbow': 'small wooden and bronze hand-held crossbow with trigger mechanism',
+      'sling': 'leather sling with stone pouch',
+      'javelin': 'bronze-tipped throwing javelin',
+      'scimitar': 'curved bronze scimitar blade',
+      // Magi
+      'arcane_staff': 'tall dark wooden staff carved with eldritch runes',
+      'fire_wand': 'slender bronze wand wreathed in flame',
+      'frost_orb': 'glowing pale blue crystal orb',
+      'shock_rod': 'crackling bronze rod with lightning',
+      'poison_focus': 'serpent-shaped bronze focus with green glow',
+      'ritual_dagger': 'ornate bronze ritual dagger',
+      // Priest
+      'holy_staff': 'tall bronze staff inscribed with sacred text',
+      'mace': 'ornate bronze ceremonial mace',
+      'sacred_light': 'hands glowing with divine radiant fire',
+      'divine_smite': 'aura of divine power and holy light',
+      'war_pick': 'bronze war pick with inscribed handle',
+      'sling_stones': 'leather sling with blessed stones',
+      // Artisan
+      'smith_hammer': 'heavy bronze smithing war hammer',
+      'battle_pick': 'bronze-tipped mining pick',
+      'hand_axe': 'small bronze hand axe',
+      'light_crossbow': 'engineered bronze crossbow with wooden stock and mechanical trigger',
+      'quarterstaff': 'reinforced wooden staff',
+      // Scribe
+      'quill_dagger': 'concealed bronze dagger',
+      'dart': 'handful of small throwing darts',
+      'sling_scholar': 'simple leather sling',
+      'arcane_knowledge': 'ancient scroll glowing with arcane symbols',
+    };
     const weaponDesc = selectedWeapon
       ? (WEAPON_VISUALS[selectedWeapon.id] || selectedWeapon.name.replace('Bronze ', 'bronze ').replace("Hero's ", 'heroic '))
       : '';
 
-    // Class visual base
-    const baseClassVisual = CLASS_VISUALS[formData.charClass] || '';
-    
-    // Logic Fix: For Giant-kin/Nephilim, preserve their racial visual (massive armor) if relevant, 
-    // or mix it with class visual, because standard class armor (e.g. "leather battle skirt") is too small/plain for them.
-    let finalClothingVisual = baseClassVisual;
-    const giantKin = ['nephilim', 'anakim', 'rephaim', 'gibborim'];
-    
-    if (giantKin.includes(raceKey)) {
-        // If they are giants, use the Race Visuals as the primary armor description if available, 
-        // as it contains "massive bronze armor plates" etc.
-        if (raceData.visuals.includes('armor') || raceData.visuals.includes('plates') || raceData.visuals.includes('clothing')) {
-            finalClothingVisual = raceData.visuals;
-        }
-    } else if (!finalClothingVisual) {
-        // Fallback for non-giants if no class visual
-        finalClothingVisual = raceData.visuals;
-    }
+    // Class visuals
+    const classVisual = CLASS_VISUALS[formData.charClass] || '';
 
+    // Feature
     const featureDesc = formData.distinguishingFeature !== 'none' ? formData.distinguishingFeature : '';
+
+    // Mount
     const mountDesc = formData.mount !== 'none' ? formData.mount : '';
 
+    // Build prompt in priority order — subject first, then appearance, then setting
     const coreParts = [
       `dark gritty fantasy character portrait, detailed fantasy art, oil painting style, dramatic chiaroscuro lighting, weathered and battle-worn`,
       `${phenotype}`,
       `${cleanSkin}, ${formData.eyeColor} eyes, ${hairDesc}`,
       `${bodyBuild} build`,
-      finalClothingVisual ? `wearing ${finalClothingVisual}` : '',
+      classVisual ? `wearing ${classVisual}` : `wearing ${raceData.visuals}`,
       weaponDesc ? `wielding ${weaponDesc}` : '',
       `${formData.charClass}`,
       `ancient bronze-age biblical setting, ${formData.background}, ${formData.vibe} atmosphere`,
     ].filter(Boolean);
-    
     if (featureDesc) coreParts.push(featureDesc);
     if (mountDesc) coreParts.push(`riding ${mountDesc}`);
     if (customDesc) coreParts.push(customDesc);
 
+    // Negative prompt — passed as separate parameter to the model
     const negativePrompt = 'European features, Nordic features, Viking, pale blue eyes, blonde eyebrows, photograph, photo, photorealistic, extra limbs, extra arms, extra fingers, deformed hands, mutated, disfigured, blurry, bad anatomy, nudity, text, watermark, signature, cartoon, anime, 3d render';
 
+    // Assemble and trim to fit within 1000 character API limit
     const MAX_PROMPT_LENGTH = 1000;
     let prompt = coreParts.join(', ');
     prompt = prompt.replace(/[()"]/g, "").replace(/,\s*,/g, ',').trim();
 
     if (prompt.length > MAX_PROMPT_LENGTH) {
+      // Drop sections from the end (least important first) until it fits
       const parts = [...coreParts];
       while (parts.length > 1) {
         parts.pop();
@@ -913,35 +933,32 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     return { prompt, negativePrompt };
   };
 
+  // === GENERATE IMAGE ===
   const handleGenerate = async () => {
     setLoading(true);
     setError('');
 
     try {
-      const { prompt: fullPrompt } = buildImagePrompt();
-      const apiKey = ""; // Injected by environment
-      
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            instances: [{ prompt: fullPrompt }],
-            parameters: { sampleCount: 1 }
-          })
-        }
-      );
+      const { prompt: fullPrompt, negativePrompt } = buildImagePrompt();
+      console.log('Generating image with prompt:', fullPrompt);
+      console.log('Negative prompt:', negativePrompt);
+
+      const response = await fetch('/generate-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: fullPrompt, negative_prompt: negativePrompt, model: formData.imageModel })
+      });
 
       const data = await response.json();
+      console.log('API Response:', data);
 
       if (!response.ok) {
-        throw new Error(data.error?.message || "Generation failed");
+        const errorMsg = data.message || data.details || data.error || "Generation failed";
+        throw new Error(errorMsg);
       }
 
-      if (data.predictions && data.predictions[0]) {
-        const base64Image = data.predictions[0].bytesBase64Encoded;
-        setPortrait(`data:image/png;base64,${base64Image}`);
+      if (data.image) {
+        setPortrait(`data:image/jpeg;base64,${data.image}`);
       } else {
         throw new Error("No image data received");
       }
@@ -954,6 +971,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     }
   };
 
+  // === CALCULATE FINAL STATS & CREATE CHARACTER ===
   const handleCreateCharacter = () => {
     if (!formData.name || !portrait) {
       setError("Name and Portrait are required.");
@@ -965,19 +983,25 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     const bgData = GAME_BACKGROUNDS.find(b => b.value === formData.gameBackground);
     const level = formData.level || 1;
 
+    // Compute final stats from PF2e boost system
     const finalStats = computeAttributes(formData);
+
+    // Calculate Modifiers
     const getMod = (score) => Math.floor((score - 10) / 2);
     const strMod = getMod(finalStats.STR);
     const dexMod = getMod(finalStats.DEX);
     const conMod = getMod(finalStats.CON);
 
-    const proficiency = 2 + Math.floor((level - 1) / 2);
+    // Calculate Derived Stats (PF2e: Ancestry HP + Class HP per level + CON mod per level)
+    const proficiency = 2 + Math.floor((level - 1) / 2); // PF2e proficiency scales with level
     const maxHp = loreData.ancestryHP + (classData.classHP + conMod) * level;
-    const defense = 10 + dexMod;
+    const defense = 10 + dexMod; // Base AC (armor adds more in PF2e)
 
+    // Get selected equipment from class list
     const classEquipment = EQUIPMENT[formData.charClass] || EQUIPMENT.Warrior;
     const selectedEquipment = classEquipment.find(e => e.id === formData.equipment) || classEquipment[0];
 
+    // Calculate attack bonus based on equipment's stat requirement
     const statMods = {
       STR: strMod,
       DEX: dexMod,
@@ -1037,59 +1061,59 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     setShowSheet(true);
   };
 
+  // === SAVE & CONTINUE ===
   const handleSave = () => {
     if (finalCharacter) {
       const success = setCharacterData(finalCharacter);
+      // Also add to party roster
       addToPartyRoster(finalCharacter);
+
       if (success && onCharacterComplete) {
         onCharacterComplete();
       } else if (!success) {
-        setError('Failed to save character data.');
+        setError('Failed to save character data. Please try again.');
       }
     }
   };
 
+  // === SAVE TO ROSTER ONLY ===
   const handleSaveToRoster = () => {
     if (finalCharacter) {
       const success = addToPartyRoster(finalCharacter);
       if (success) {
         alert(`${finalCharacter.name} has been saved to your party roster!`);
-        handleReset();
+        handleReset(); // Reset to create another character
       } else {
-        setError('Failed to save to roster.');
+        setError('Failed to save character to roster. Please try again.');
       }
     }
   };
 
+  // === RESET TO CREATE NEW CHARACTER ===
   const handleReset = () => {
-    setFormData({
+    const resetData = {
       name: '',
+      sex: 'Male',
       lineage: 'Sethite',
       charClass: 'Warrior',
       level: 1,
       gameBackground: 'watchers_apprentice',
-      sex: 'Male',
       height: '',
       skinTone: 'olive',
-      eyeColor: 'dark brown',
+      eyeColor: 'brown',
       hairColor: 'black',
-      hairLength: 'shoulder length',
+      hairLength: 'short',
       bodyBuild: 'athletic',
       distinguishingFeature: 'none',
       mount: 'none',
+      customVisuals: '',
       background: 'ancient stone city',
       vibe: 'biblical epic',
-      customVisuals: '',
-      imageModel: 'flux-schnell',
       equipment: 'bronze_sword',
-      attributes: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 },
-      ancestryFreeBoosts: [],
-      ancestryFlaw: '',
-      bgFixedChoice: '',
-      bgFreeBoost: '',
-      classKeyChoice: '',
-      freeBoosts: []
-    });
+      attributes: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 }
+    };
+
+    setFormData(resetData);
     setPortrait(null);
     setFinalCharacter(null);
     setShowSheet(false);
@@ -1099,10 +1123,14 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
 
   // === CHARACTER SHEET VIEW ===
   if (showSheet && finalCharacter) {
+    // Look up race data from RACES object using the lineage string
     const raceData = RACES[finalCharacter.lineage];
+
     return (
       <div className="min-h-screen bg-[#0c0a09] text-[#d6d3d1] font-serif p-4 pb-8">
         <div className="max-w-5xl mx-auto border-2 border-[#78350f] bg-[#1c1917] rounded-lg overflow-hidden mb-8">
+
+          {/* Header */}
           <div className="bg-gradient-to-r from-[#78350f] to-[#92400e] p-4 sm:p-6 text-center">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-cinzel font-bold text-[#fcd34d] mb-2">{finalCharacter.name}</h1>
             <div className="text-[#d6d3d1] text-base sm:text-lg">
@@ -1115,11 +1143,18 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
               )}
             </div>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+
+            {/* Portrait */}
             <div className="border-2 border-[#44403c] rounded overflow-hidden self-start">
               <img src={finalCharacter.portrait} alt={finalCharacter.name} className="w-full h-auto max-h-[600px] object-cover object-top" />
             </div>
+
+            {/* Stats Column */}
             <div className="space-y-6">
+
+              {/* Physical Appearance */}
               <div>
                 <h3 className="text-[#f59e0b] font-bold text-lg mb-3 border-b border-[#44403c] pb-1">APPEARANCE</h3>
                 <div className="bg-[#0c0a09] border border-[#44403c] p-3 space-y-1 text-sm">
@@ -1132,6 +1167,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   <div><span className="text-[#78716c]">Accessory:</span> <span className="text-[#a8a29e] italic">{finalCharacter.accessory}</span></div>
                 </div>
               </div>
+
+              {/* Attributes */}
               <div>
                 <h3 className="text-[#f59e0b] font-bold text-lg mb-3 border-b border-[#44403c] pb-1">ATTRIBUTES</h3>
                 <div className="grid grid-cols-3 gap-3">
@@ -1146,6 +1183,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   ))}
                 </div>
               </div>
+
+              {/* Combat Stats */}
               <div>
                 <h3 className="text-[#f59e0b] font-bold text-lg mb-3 border-b border-[#44403c] pb-1">COMBAT</h3>
                 <div className="grid grid-cols-3 gap-3 bg-[#0c0a09] p-3 border border-[#44403c]">
@@ -1165,6 +1204,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   </div>
                 </div>
               </div>
+
+              {/* Soul Economy */}
               <div>
                 <h3 className="text-[#f59e0b] font-bold text-lg mb-3 border-b border-[#44403c] pb-1">SOUL ECONOMY</h3>
                 <div className="grid grid-cols-2 gap-3">
@@ -1178,6 +1219,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   </div>
                 </div>
               </div>
+
+              {/* Racial Traits */}
               <div>
                 <h3 className="text-[#f59e0b] font-bold text-lg mb-3 border-b border-[#44403c] pb-1">RACIAL TRAITS</h3>
                 <div className="space-y-2">
@@ -1189,6 +1232,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   ))}
                 </div>
               </div>
+
+              {/* Actions */}
               <div>
                 <h3 className="text-[#f59e0b] font-bold text-lg mb-3 border-b border-[#44403c] pb-1">ACTIONS</h3>
                 {finalCharacter.actions.map((action, i) => (
@@ -1206,6 +1251,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
               </div>
             </div>
           </div>
+
+          {/* Footer Buttons */}
           <div className="p-6 bg-[#0c0a09] border-t border-[#44403c] flex gap-4 justify-center flex-wrap">
             <button
               onClick={() => setShowSheet(false)}
@@ -1235,11 +1282,16 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
   return (
     <div className="w-full bg-[#0c0a09] text-[#d6d3d1] font-serif p-4">
       <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 py-8">
+
+        {/* LEFT PANEL: CREATION FORM */}
         <div className="border-2 border-[#78350f] bg-[#1c1917]/95 p-4 sm:p-6 shadow-[0_0_40px_rgba(245,158,11,0.1)] rounded-sm">
           <h1 className="text-2xl sm:text-3xl md:text-4xl text-[#fcd34d] font-cinzel font-bold mb-6 border-b border-[#78350f] pb-2 tracking-widest text-center shadow-black drop-shadow-lg">
             CREATE CHARACTER
           </h1>
+
           <div className="space-y-5">
+
+            {/* NAME with Random Button */}
             <div>
               <div className="flex justify-between items-center mb-1">
                 <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest">Name</label>
@@ -1260,6 +1312,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                 className="w-full bg-black border border-[#44403c] p-3 text-xl text-white focus:border-[#f59e0b] outline-none"
               />
             </div>
+
+            {/* LINEAGE & SEX */}
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-1">Lineage</label>
@@ -1287,6 +1341,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                 </select>
               </div>
             </div>
+
+            {/* LORE INFO */}
             <div className="bg-[#292524] p-3 border-l-2 border-[#f59e0b] text-xs">
               <p className="text-[#d6d3d1] mb-1">{RACES[formData.lineage].desc}</p>
               <p className="text-[#fcd34d] font-bold">
@@ -1300,6 +1356,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
               </p>
               <p className="text-blue-400 text-xs mt-1">RP: {RACES[formData.lineage].startingRP} | <span className="text-red-400">CP: {RACES[formData.lineage].startingCP}</span></p>
             </div>
+
+            {/* CLASS */}
             <div>
               <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-1">Class</label>
               <select
@@ -1310,6 +1368,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   setFormData(prev => ({
                     ...prev,
                     charClass: newClass,
+                    // Reset equipment to first option of new class
                     equipment: EQUIPMENT[newClass]?.[0]?.id || 'bronze_sword'
                   }));
                 }}
@@ -1320,6 +1379,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                 ))}
               </select>
             </div>
+
+            {/* LEVEL & BACKGROUND */}
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-1">Level</label>
@@ -1348,6 +1409,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                 </select>
               </div>
             </div>
+
+            {/* Background Info */}
             {formData.gameBackground && (
               <div className="bg-[#292524] p-2 border-l-2 border-blue-600 text-xs">
                 {(() => {
@@ -1362,6 +1425,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                 })()}
               </div>
             )}
+
+            {/* EQUIPMENT/WEAPON */}
             <div>
               <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-1">
                 Equipment
@@ -1378,14 +1443,19 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   </option>
                 ))}
               </select>
+              {/* Equipment Description */}
               {formData.equipment && (
                 <div className="mt-1 text-[10px] text-[#78716c] italic">
                   {(EQUIPMENT[formData.charClass] || EQUIPMENT.Warrior).find(e => e.id === formData.equipment)?.desc}
                 </div>
               )}
             </div>
+
+            {/* PHYSICAL APPEARANCE */}
             <div className="border-t border-[#44403c] pt-4">
               <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-3">Physical Appearance</label>
+
+              {/* Height & Skin Tone */}
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
                   <label className="block text-[#78716c] text-[10px] font-bold mb-1">HEIGHT</label>
@@ -1419,6 +1489,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   </select>
                 </div>
               </div>
+
+              {/* Eye & Hair Color */}
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
                   <label className="block text-[#78716c] text-[10px] font-bold mb-1">EYE COLOR</label>
@@ -1447,6 +1519,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   </select>
                 </div>
               </div>
+
+              {/* Hair Length & Features */}
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
                   <label className="block text-[#78716c] text-[10px] font-bold mb-1">HAIR LENGTH</label>
@@ -1475,6 +1549,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   </select>
                 </div>
               </div>
+
+              {/* Body Build & Mount */}
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
                   <label className="block text-[#78716c] text-[10px] font-bold mb-1">BODY BUILD</label>
@@ -1504,8 +1580,12 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                 </div>
               </div>
             </div>
+
+            {/* PF2e ABILITY BOOST SYSTEM */}
             <div className="border-t border-[#44403c] pt-4">
               <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-3">Ability Scores (PF2e Boosts)</label>
+
+              {/* Final Scores Display */}
               <div className="grid grid-cols-6 gap-2 mb-4">
                 {STATS.map(attr => {
                   const val = computedAttrs[attr];
@@ -1521,6 +1601,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   );
                 })}
               </div>
+
+              {/* Step 1: Ancestry Free Boosts */}
               {getAncestryFreeCount() > 0 && (
                 <div className="mb-3 p-3 bg-[#1c1917] border border-[#44403c] rounded">
                   <div className="text-[10px] text-amber-400 font-bold uppercase mb-1">
@@ -1544,6 +1626,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   </div>
                 </div>
               )}
+
+              {/* Step 1b: Ancestry Free Flaw */}
               {isAncestryFlawFree() && (
                 <div className="mb-3 p-3 bg-[#1c1917] border border-[#44403c] rounded">
                   <div className="text-[10px] text-red-400 font-bold uppercase mb-1">
@@ -1567,10 +1651,13 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   </div>
                 </div>
               )}
+
+              {/* Step 2: Background Boost */}
               <div className="mb-3 p-3 bg-[#1c1917] border border-[#44403c] rounded">
                 <div className="text-[10px] text-blue-400 font-bold uppercase mb-1">
                   Background Boosts
                 </div>
+                {/* Fixed boost (or choice) */}
                 {getBgBoostOptions() ? (
                   <div className="mb-2">
                     <span className="text-[9px] text-stone-500 mr-2">Fixed:</span>
@@ -1594,6 +1681,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                     Fixed: {GAME_BACKGROUNDS.find(b => b.value === formData.gameBackground)?.boost || '—'}
                   </div>
                 )}
+                {/* Free boost */}
                 <div>
                   <span className="text-[9px] text-stone-500 mr-2">Free:</span>
                   <div className="flex gap-1 flex-wrap mt-1">
@@ -1614,6 +1702,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   </div>
                 </div>
               </div>
+
+              {/* Step 3: Class Key Ability */}
               <div className="mb-3 p-3 bg-[#1c1917] border border-[#44403c] rounded">
                 <div className="text-[10px] text-green-400 font-bold uppercase mb-1">
                   Class Key Ability Boost
@@ -1641,6 +1731,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   </div>
                 )}
               </div>
+
+              {/* Step 4: Four Free Boosts */}
               <div className="mb-3 p-3 bg-[#1c1917] border border-[#44403c] rounded">
                 <div className="text-[10px] text-purple-400 font-bold uppercase mb-1">
                   Free Boosts ({formData.freeBoosts.length}/4) — each to a different score
@@ -1666,8 +1758,11 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                 </div>
               </div>
             </div>
+
+            {/* VISUAL CUSTOMIZATION */}
             <div className="border-t border-[#44403c] pt-4">
               <label className="block text-[#f59e0b] text-xs font-bold uppercase tracking-widest mb-2">Visual Settings</label>
+
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
                   <label className="block text-[#78716c] text-[10px] font-bold mb-1">BACKGROUND</label>
@@ -1696,6 +1791,9 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                   </select>
                 </div>
               </div>
+
+              {/* Image model fixed to FLUX.1 Schnell */}
+
               <div>
                 <label className="block text-[#78716c] text-[10px] font-bold mb-1">CUSTOM DESCRIPTION (OPTIONAL)</label>
                 <textarea
@@ -1708,6 +1806,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
                 />
               </div>
             </div>
+
+            {/* RANDOM LEGEND BUTTON */}
             <button
               onClick={summonRandomLegend}
               disabled={loading}
@@ -1715,6 +1815,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
             >
               Summon Random Legend
             </button>
+
+            {/* GENERATE BUTTON */}
             <button
               onClick={handleGenerate}
               disabled={loading}
@@ -1726,6 +1828,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
             >
               {loading ? 'Summoning Image...' : 'Generate Portrait'}
             </button>
+
             {error && (
               <div className="bg-red-900/30 border border-red-800 p-2 text-red-400 text-xs text-center mt-2">
                 {error}
@@ -1733,6 +1836,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
             )}
           </div>
         </div>
+
+        {/* RIGHT: PREVIEW CARD */}
         <div className="border-2 border-[#78350f] bg-black p-2 flex flex-col relative shadow-2xl">
           <div className="text-center py-4 bg-[#1c1917] border-b border-[#292524]">
             <h2 className="text-3xl font-cinzel font-bold text-[#fcd34d] drop-shadow-md">
@@ -1746,6 +1851,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
               <span>{formData.charClass}</span>
             </div>
           </div>
+
           <div className="border border-[#292524] bg-[#0c0a09] relative overflow-hidden group aspect-square">
             {portrait ? (
               <img src={portrait} alt="Generated" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
@@ -1757,6 +1863,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60 pointer-events-none"></div>
           </div>
+
           <div className="p-4 bg-[#1c1917] border-t border-[#292524]">
             {portrait ? (
               <button
@@ -1772,6 +1879,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
             )}
           </div>
         </div>
+
       </div>
     </div>
   );
