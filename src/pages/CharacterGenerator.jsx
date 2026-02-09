@@ -421,115 +421,154 @@ export default function CharacterGenerator({ onCharacterComplete }) {
   };
 
 const buildImagePrompt = () => {
-  const raceData = RACES[formData.lineage];
+  // Use the exact variables from your CharacterGenerator_bu.jsx
+  const raceData = RACES[formData.lineage]; // Correctly gets data based on selected lineage
   const customDesc = formData.customVisuals.trim();
-  const isFemale = formData.sex === 'Female';
-  const raceKey = formData.lineage.toLowerCase();
+  const isFemale = formData.sex === 'Female'; // Correctly checks gender
+  const raceKey = formData.lineage.toLowerCase(); // Correctly gets lineage key
 
-  // === STEP 1: Precise, culturally grounded phenotype (no vagueness) ===
+  // === STEP 1: Precise, culturally grounded phenotype based on lineage (no vagueness) ===
   let phenotype;
-  let hairTexture = "thick, wavy";
+  let hairTexture = "thick, wavy"; // Default texture
 
   if (raceKey === 'sethite') {
     phenotype = isFemale
-      ? "noble woman of Seth's line, warm olive to tan skin, high cheekbones, dark brown or hazel almond-shaped eyes, refined but strong Semitic features, serene expression, ancient Near Eastern priestly bearing"
-      : "noble man of Seth's line, warm olive to tan skin, strong jawline, high cheekbones, dark brown or hazel eyes, well-groomed black hair, dignified and righteous countenance, ancient Near Eastern Semitic ancestry";
+      ? "dignified woman, refined features, contemplative expression, Middle Eastern Semitic features, priestly lineage, warm olive to tan skin, high cheekbones, dark brown or hazel eyes"
+      : "noble man, serene expression, refined features, Middle Eastern Semitic features, keeper of faith, warm olive to tan skin, strong jaw, dark brown or hazel eyes";
+    hairTexture = "thick, wavy or curly";
   } else if (raceKey === 'cainite') {
     phenotype = isFemale
-      ? "urban woman of Cain's line, tan to warm bronze skin, intelligent gaze, practical earth-toned robes, calloused hands, sharp features, Bronze Age Levantine city-dweller"
-      : "robust man of Cain's line, tan to warm bronze skin, observant eyes, sturdy build, practical leather-and-linen attire, skilled artisan or builder";
+      ? "urban woman, calloused hands, sharp cunning eyes, Middle Eastern Semitic features, city-dweller, tan to warm bronze skin"
+      : "urban robust man, calloused hands, sharp cunning eyes, Middle Eastern Semitic features, city-builder, tan to warm bronze skin";
+    hairTexture = "thick, coarse";
   } else if (raceKey === 'rephaim') {
     phenotype = isFemale
-      ? "tall gaunt woman, deep brown skin, hollow cheekbones, solemn eyes, draped in layered linen and bronze, ancient Near Eastern underworld presence"
-      : "tall gaunt man, deep brown skin, elongated face, solemn dignity, bronze adornments, spectral but human--no fantasy elements";
+      ? "gaunt woman, hollow cheeks, sunken eyes, Middle Eastern Semitic features, skeletal structure, ghostly pale white skin, ancient spirit"
+      : "gaunt man, hollow cheeks, sunken eyes, Middle Eastern Semitic features, skeletal structure, ghostly pale white skin, ancient spirit";
+    hairTexture = "brittle, stringy";
   } else if (raceKey === 'anakim' || raceKey === 'gibborim' || raceKey === 'elioud') {
     phenotype = isFemale
-      ? "imposing yet noble giantess, rich deep brown skin, regal posture, calm authority, proportional heroic anatomy, no deformities"
-      : "mighty giant warrior, rich deep brown skin, powerful frame, stoic nobility, proportional heroic anatomy, no exaggeration or distortion";
+      ? "imposing giantess, towering stature, proportional build, Middle Eastern Semitic features, rich deep brown skin, regal posture"
+      : "mighty giant warrior, towering stature, powerful frame, Middle Eastern Semitic features, rich deep brown skin, stoic expression";
+    // Note: Giants might have specific skin tones in your lore, adjust if needed
   } else {
-    // fallback (Horim, Wanderer, etc.)
+    // Fallback for Horim, Wanderer, etc., using general Semitic features
     phenotype = isFemale
-      ? "righteous woman of ancient times, warm olive skin, kind eyes, modest but dignified appearance, biblical-era Semitic features"
-      : "righteous man of ancient times, warm olive skin, strong features, wise expression, biblical-era Semitic features";
+      ? `righteous woman, Middle Eastern Semitic features, ${SKIN_MAP[formData.skinTone] || formData.skinTone}, kind eyes`
+      : `righteous man, Middle Eastern Semitic features, ${SKIN_MAP[formData.skinTone] || formData.skinTone}, strong features`;
   }
 
-  // === STEP 2: Skin, eyes, hair -- use full descriptive phrases (no single-word ambiguity) ===
-  const skinDesc = SKIN_MAP[formData.skinTone.toLowerCase()] || 'warm olive skin';
-  const eyeDesc = formData.eyeColor ? `${formData.eyeColor} eyes` : 'dark brown eyes';
-  const hairLengthDesc = formData.hairLength?.trim() || 'shoulder length';
-  const hairColorDesc = formData.hairColor?.trim() || 'black';
-  const hairFull = `${hairLengthDesc} ${hairColorDesc} ${hairTexture} hair`;
+  // === STEP 2: Skin, eyes, hair - Use exact formData values mapped via SKIN_MAP if possible ===
+  // Ensure SKIN_MAP is defined as in your bu file
+  const SKIN_MAP = {
+    'olive': 'olive skin',
+    'tan': 'sun-kissed tan skin',
+    'bronze': 'warm bronze skin',
+    'dark-brown': 'rich dark brown skin',
+    'ebony': 'ebony skin',
+    'pale': 'pale light skin',
+    'ghostly-pale': 'ghostly pale white skin',
+    'luminous-gold': 'golden luminous skin'
+    // Add other mappings if they exist in your main file
+  };
+  let cleanSkin = SKIN_MAP[formData.skinTone] || formData.skinTone; // Use map or raw value
+  const eyeDesc = formData.eyeColor ? `${formData.eyeColor} eyes` : 'dark brown eyes'; // Use selected eye color
+  const hairLengthDesc = formData.hairLength?.trim() || 'shoulder length'; // Use selected length
+  const hairColorDesc = formData.hairColor?.trim() || 'black'; // Use selected color
+  const hairDesc = `${hairLengthDesc} ${hairColorDesc} ${hairTexture} hair`; // Combine for prompt
 
-  // === STEP 3: Body & distinguishing feature ===
+
+  // === STEP 3: Body & distinguishing feature - Use exact formData values ===
   const bodyBuild = formData.bodyBuild === 'random'
     ? ['lean', 'athletic', 'stocky'][Math.floor(Math.random() * 3)]
-    : formData.bodyBuild;
+    : formData.bodyBuild; // Use selected build or random if chosen
   const featureDesc = formData.distinguishingFeature !== 'none'
-    ? formData.distinguishingFeature.replace(/^[a-z]/, c => c.toUpperCase())
+    ? formData.distinguishingFeature.replace(/^[a-z]/, c => c.toUpperCase()) // Capitalize if not 'none'
     : '';
 
-  // === STEP 4: Class & gear -- use your existing mappings ===
-  const classVisual = CLASS_VISUALS[formData.charClass] || raceData.visuals;
-  const selectedWeapon = EQUIPMENT[formData.charClass]?.find(w => w.id === formData.equipment);
+  // === STEP 4: Class & gear - Use exact formData values and mappings ===
+  const classVisual = CLASS_VISUALS[formData.charClass] || raceData.visuals; // Use class visuals or race default
+  const selectedWeapon = EQUIPMENT[formData.charClass]?.find(w => w.id === formData.equipment); // Find selected weapon
   const weaponDesc = selectedWeapon
-    ? (WEAPON_VISUALS[selectedWeapon.id] || selectedWeapon.name.replace('Bronze ', 'bronze '))
+    ? (WEAPON_VISUALS[selectedWeapon.id] || selectedWeapon.name) // Use specific visual or name
     : '';
 
-  // === STEP 5: Setting & vibe ===
-  const bgDesc = formData.background || 'ancient holy land';
-  const vibeDesc = formData.vibe || 'biblical epic';
+  // === STEP 5: Mount, Background & vibe - Use exact formData values ===
+  const mountDesc = formData.mount !== 'none' ? formData.mount : ''; // Use mount if not 'none'
+  const bgDesc = formData.background || 'ancient holy land'; // Use selected background
+  const vibeDesc = formData.vibe || 'biblical epic'; // Use selected vibe
 
-  // === CORE PROMPT -- ordered by importance, strict, non-redundant ===
+
+  // === CORE PROMPT - Ordered by importance, strict, non-redundant, using exact variables ===
   const coreParts = [
-    // Quality & style (avoid cartoon/3D/photo)
-    "masterpiece, best quality, ultra-detailed illustration, biblical fantasy art, soft divine lighting, historical realism, oil painting texture",
+    // Quality & style (avoid cartoon/3D/photo/watermark)
+    "masterpiece, best quality, ultra-detailed illustration, biblical fantasy art, soft divine lighting, historical realism, oil painting texture, no watermark, no text, no signature",
 
-    // Subject + ethnicity (critical anchor)
+    // Subject + ethnicity (critical anchor based on lineage)
     phenotype,
 
-    // Physical specifics (explicit, anatomically safe)
-    `${skinDesc}, ${eyeDesc}, ${hairFull}`,
-    `${bodyBuild} build, proportional realistic anatomy, no distortions, no extra limbs, no fused fingers`,
+    // Physical specifics (using exact formData values)
+    cleanSkin, // Use mapped or raw skin tone
+    eyeDesc,   // Use selected eye color
+    hairDesc,  // Use combined hair description
+    `${bodyBuild} build`, // Use selected body build
+    "proportional realistic anatomy, no distortions, no extra limbs, no fused fingers", // Anatomical guardrails
 
-    // Attire & role
-    `wearing ${classVisual}`,
-    weaponDesc ? `carrying ${weaponDesc}` : '',
+    // Attire & role (using exact mappings)
+    `wearing ${classVisual}`, // Use class/race visuals
+    weaponDesc ? `carrying ${weaponDesc}` : '', // Use weapon if selected
 
-    // Setting & lore
-    `${formData.charClass}, ${bgDesc}, ${vibeDesc} atmosphere`,
-    "ancient stone architecture, desert landscape, Levantine hill country, no modern elements"
-  ];
+    // Role & setting (using exact formData values)
+    `${formData.charClass}`,
+    `ancient bronze-age biblical setting, ${bgDesc}, ${vibeDesc} atmosphere`
+  ].filter(Boolean); // Remove any empty strings
 
-  // Optional additions
+
+  // Add optional elements if they exist
   if (featureDesc) coreParts.push(featureDesc);
-  if (formData.mount !== 'none') coreParts.push(`riding ${formData.mount}`);
+  if (mountDesc) coreParts.push(`riding ${mountDesc}`);
   if (customDesc) coreParts.push(customDesc);
 
-  // === NEGATIVE PROMPT -- tightened for fidelity & safety ===
+
+  // === NEGATIVE PROMPT - Tightened for fidelity, safety, and to prevent watermarks/distortions ===
   const negativePrompt = [
     'European features, Nordic features, Viking, pale skin, fair hair, blue eyes, blonde eyebrows',
     'deformed, distorted face, extra arms, extra fingers, mutated, disfigured, blurry, bad anatomy',
     'photograph, photo, photorealistic, 3d render, cartoon, anime, sketch, drawing',
-    'watermark, signature, text, logo, border, frame',
-    'fantasy clichés: pointed ears, horns, wings, tattoos (unless specified), glowing eyes',
+    'watermark, signature, text, logo, border, frame', // Explicitly prevent watermarks
+    'fantasy clichés: pointed ears, horns, wings, excessive tattoos, glowing eyes',
     'modern clothing, glasses, watches, contemporary items',
     'excessive violence, blood, gore, nudity, sensual pose'
   ].join(', ');
 
-  // === ASSEMBLE & SAFELY TRUNCATE (preserve key parts) ===
-  let prompt = coreParts.filter(Boolean).join(', ');
-  prompt = prompt.replace(/\s+/g, ' ').trim();
 
-  const MAX_LENGTH = 950;
+  // === ASSEMBLE & SAFELY TRUNCATE (preserve key parts) ===
+  let prompt = coreParts.join(', ');
+  prompt = prompt.replace(/\s+/g, ' ').trim(); // Clean up extra spaces
+
+  const MAX_LENGTH = 950; // Reasonable limit for most models
   if (prompt.length > MAX_LENGTH) {
-    const essential = [coreParts[0], coreParts[1], coreParts[2], coreParts[3], coreParts[4]];
-    let truncated = essential.join(', ');
-    if (truncated.length > MAX_LENGTH) {
-      truncated = truncated.slice(0, MAX_LENGTH);
+    // Prioritize essential parts: quality, phenotype, skin/eyes/hair, build, class, setting
+    const essential = [
+      coreParts[0], // Quality/style
+      coreParts[1], // Phenotype
+      coreParts[2], // Skin
+      coreParts[3], // Eyes
+      coreParts[4], // Hair
+      coreParts[5], // Build
+      coreParts[7], // Class
+      coreParts[8]  // Setting
+    ].filter(Boolean).join(', ');
+    if (essential.length <= MAX_LENGTH) {
+      prompt = essential;
+    } else {
+      // If even essentials are too long, truncate the joined string
+      prompt = essential.slice(0, MAX_LENGTH);
     }
-    prompt = truncated;
   }
 
+
+  // Return the final prompt and negative prompt
   return { prompt, negativePrompt };
 };
   // === GENERATE IMAGE ===
