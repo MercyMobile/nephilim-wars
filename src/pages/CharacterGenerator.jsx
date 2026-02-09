@@ -8,8 +8,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     Sethite: {
       name: "Sethite (Righteous Line)",
       desc: "Descendants of Seth. Keepers of the original faith and pre-fall history.",
-      abilityBoosts: ["Free", "Free"], // Two free boosts
-      abilityFlaw: "Free", // One free flaw (optional)
+      abilityBoosts: ["Free", "Free"], 
+      abilityFlaw: "Free",
       ancestryHP: 8,
       size: "Medium",
       speed: 25,
@@ -18,13 +18,13 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 0,
       heightRange: { male: [65, 72], female: [60, 67] },
       accessory: "prayer shawl, scroll case, or holy phylactery",
-      visuals: "simple robes of wool and linen, prayer shawl, holding scroll or staff"
+      visuals: "simple robes of wool and unbleached linen, prayer shawl with tassels, holding ancient scroll"
     },
     Cainite: {
       name: "Cainite (City Builder)",
       desc: "Descendants of the first murderer. Masters of metallurgy, music, and urbanization.",
-      abilityBoosts: ["Free", "Free"], // Two free boosts
-      abilityFlaw: "Free", // One free flaw (optional)
+      abilityBoosts: ["Free", "Free"],
+      abilityFlaw: "Free", 
       ancestryHP: 8,
       size: "Medium",
       speed: 25,
@@ -33,13 +33,13 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 1,
       heightRange: { male: [66, 73], female: [61, 68] },
       accessory: "bronze jewelry, musical instrument (lyre/flute), or artisan's hammer",
-      visuals: "elaborate dyed fabrics, bronze ornaments, gold and brass jewelry, practical stylish clothing"
+      visuals: "elaborate dyed crimson and purple fabrics, heavy bronze ornamentation, gold jewelry, Mesopotamian city attire"
     },
     Wanderer: {
       name: "Wanderer (Nomad)",
       desc: "Those who rejected both the cities of Cain and the strictures of Seth.",
-      abilityBoosts: ["Free", "Free"], // Two free boosts
-      abilityFlaw: "Free", // One free flaw (optional)
+      abilityBoosts: ["Free", "Free"], 
+      abilityFlaw: "Free", 
       ancestryHP: 10,
       size: "Medium",
       speed: 30,
@@ -48,12 +48,12 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 0,
       heightRange: { male: [64, 71], female: [59, 66] },
       accessory: "tribal totems, bone necklace, or hunting fetish",
-      visuals: "practical leather and fur clothing, tribal bead and feather decorations, animal hide garments"
+      visuals: "practical rough-spun tunic, animal hide cloak, tribal bead decorations, dusty travel gear"
     },
     Nephilim: {
       name: "Nephilim (1st Gen Giant)",
       desc: "Direct offspring of Watchers and Humans. Titans of the ancient world.",
-      abilityBoosts: ["STR", "CON", "Free"], // STR, CON, one free
+      abilityBoosts: ["STR", "CON", "Free"],
       abilityFlaw: "DEX",
       ancestryHP: 12,
       size: "Large",
@@ -63,12 +63,12 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 3,
       heightRange: { male: [144, 180], female: [132, 168] },
       accessory: "massive bronze armor plates, giant's chain, or trophy skulls",
-      visuals: "massive bronze armor plates, heavy bronze weaponry, clothing and equipment scaled to immense size"
+      visuals: "colossal stature, massive bronze scale armor, divine but terrible countenance, clothing scaled to immense size"
     },
     Rephaim: {
       name: "Rephaim (Shade/Giant)",
       desc: "Later generations of giants, often associated with the dead and the underworld.",
-      abilityBoosts: ["STR", "CON", "Free"], // STR, CON, one free
+      abilityBoosts: ["STR", "CON", "Free"], 
       abilityFlaw: "CHA",
       ancestryHP: 10,
       size: "Large",
@@ -78,12 +78,12 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 2,
       heightRange: { male: [108, 132], female: [102, 126] },
       accessory: "death shroud, spirit talisman, or ancient burial mask",
-      visuals: "dark clothing and armor, bones and skulls and death motifs incorporated into appearance"
+      visuals: "dark tattered robes, greyish skin tones, bone and skull motifs, ancient funerary armor"
     },
     Anakim: {
       name: "Anakim (Noble Giant)",
       desc: "The 'Long-Necked Ones'. Noble giants known for chain weapons and regal bearing.",
-      abilityBoosts: ["STR", "CHA", "Free"], // STR, CHA, one free
+      abilityBoosts: ["STR", "CHA", "Free"], 
       abilityFlaw: "DEX",
       ancestryHP: 12,
       size: "Large",
@@ -93,13 +93,13 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 2,
       heightRange: { male: [120, 156], female: [114, 144] },
       accessory: "heavy gold chains (neck/wrist), royal signet, or ceremonial shackles",
-      visuals: "massive bronze chain links across shoulders and chest, bronze rings woven in braided hair, regal noble attire"
+      visuals: "massive bronze chain links across shoulders, braided hair with gold rings, regal Canaanite noble attire"
     },
     Gibborim: {
       name: "Gibborim (Mighty One)",
       desc: "Human-Giant hybrids. The 'Mighty Ones of Old' - heroic warriors of renown.",
-      abilityBoosts: ["STR", "CON", "Free"], // STR, CON, one free
-      abilityFlaw: null, // None
+      abilityBoosts: ["STR", "CON", "Free"], 
+      abilityFlaw: null, 
       ancestryHP: 10,
       size: "Medium",
       speed: 25,
@@ -108,12 +108,12 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 1,
       heightRange: { male: [78, 96], female: [72, 90] },
       accessory: "lion pelt cloak, hero's bronze bracers, or trophy weapon",
-      visuals: "practical well-made armor, lion pelt cloak, bronze rings and beads of victory in hair"
+      visuals: "muscular heroic build, lion pelt cloak, bronze bracers, oils of anointing"
     },
     Horim: {
       name: "Horim (Cave Dweller)",
       desc: "Giant-kin adapted to underground life. Masters of stone and darkness.",
-      abilityBoosts: ["DEX", "WIS", "Free"], // DEX, WIS, one free
+      abilityBoosts: ["DEX", "WIS", "Free"], 
       abilityFlaw: "CHA",
       ancestryHP: 8,
       size: "Medium",
@@ -123,13 +123,13 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 1,
       heightRange: { male: [72, 82], female: [65, 77] },
       accessory: "stone carving tools, luminescent fungi, or cave crystals",
-      visuals: "simple leather and fur garments, stone and crystal and bronze ornaments, cave-dweller clothing"
+      visuals: "simple leather and fur garments, stone and crystal ornaments, pale cave-adapted features"
     },
     Elioud: {
       name: "Elioud (Third-Gen Giant-Kin)",
       desc: "Third-generation giant descendants who can pass as large humans. Bridge between worlds.",
-      abilityBoosts: ["STR", "Free"], // STR, one free
-      abilityFlaw: null, // None
+      abilityBoosts: ["STR", "Free"], 
+      abilityFlaw: null, 
       ancestryHP: 8,
       size: "Medium",
       speed: 25,
@@ -138,13 +138,13 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 1,
       heightRange: { male: [74, 84], female: [70, 80] },
       accessory: "ancestral amulet, oversized bronze bracers, or giant-blood tattoos",
-      visuals: "practical clothing that blends into human society, bronze-age leather armor with fine craftsmanship"
+      visuals: "clothing that blends into human society but strains at the seams, subtle inhuman features"
     },
     Sorcerer: {
       name: "Sorcerer Clan (Watcher-Taught)",
       desc: "Humans initiated into Watcher mysteries like root-cutting and astrology.",
-      abilityBoosts: ["Free", "Free"], // Two free boosts
-      abilityFlaw: "Free", // One free flaw (optional)
+      abilityBoosts: ["Free", "Free"], 
+      abilityFlaw: "Free", 
       ancestryHP: 6,
       size: "Medium",
       speed: 25,
@@ -153,12 +153,12 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 2,
       heightRange: { male: [65, 72], female: [60, 67] },
       accessory: "star charts, ritual dagger, dried herbs pouch, or crystal focus",
-      visuals: "robes concealing mystical marks, star charts and dried herbs, crystal focus, Watchers Mark brand on skin"
+      visuals: "hooded robes concealing mystical marks, carrying star charts and dried herbs, Watchers Mark brand on skin"
     },
     Gammadim: {
       name: "Gammadim (Under-Walker)",
       desc: "The hidden little people. When the giants claimed the peaks and humans the valleys, the Gammadim claimed the deep places beneath.",
-      abilityBoosts: ["DEX", "WIS", "Free"], // DEX, WIS, one free
+      abilityBoosts: ["DEX", "WIS", "Free"], 
       abilityFlaw: "STR",
       ancestryHP: 6,
       size: "Small",
@@ -168,26 +168,26 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       startingCP: 0,
       heightRange: { male: [36, 48], female: [34, 45] },
       accessory: "sling stones, tunnel-pick, clay lamp, or carved bone fetish",
-      visuals: "small stature, practical earth-toned clothing, leather wraps, stone and bone tools, clay lamp"
+      visuals: "small stature, earth-toned wraps, large eyes adapted for dark, stone tools"
     }
   };
 
   // === PHYSICAL APPEARANCE OPTIONS ===
   const SKIN_TONES = [
-    { value: "olive", label: "Olive (Semitic)" },
+    { value: "olive", label: "Olive (Levantine)" },
     { value: "bronze", label: "Bronze (Sun-Kissed)" },
     { value: "copper", label: "Copper (Reddish)" },
-    { value: "tan", label: "Tan (Levantine)" },
+    { value: "tan", label: "Tan (Desert)" },
     { value: "light brown", label: "Light Brown (Mesopotamian)" },
-    { value: "dark brown", label: "Dark Brown (Nubian)" },
-    { value: "alabaster", label: "Alabaster (Translucent White)" },
+    { value: "dark brown", label: "Dark Brown (Nubian/Cushite)" },
+    { value: "alabaster", label: "Alabaster (Translucent)" },
     { value: "obsidian", label: "Obsidian (Deep Black/Purple)" },
     { value: "red clay", label: "Red Clay (Adamah)" },
     { value: "ashen grey", label: "Ash Grey (Deathly)" },
     { value: "copper patina", label: "Copper Patina (Oxidized)" },
     { value: "marble", label: "Marble (Veined Stone)" },
     { value: "gold-dust", label: "Gold-Dust (Shimmering)" },
-    { value: "pale", label: "Pale (Cave Dweller/Northern)" },
+    { value: "pale", label: "Pale (Cave Dweller)" },
     { value: "unnaturally pale", label: "Unnaturally Pale (Nephilim)" }
   ];
 
@@ -214,11 +214,11 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     { value: "dark brown", label: "Dark Brown" },
     { value: "brown", label: "Brown" },
     { value: "auburn reddish", label: "Auburn/Reddish" },
-    { value: "bright golden blonde", label: "Golden" },
+    { value: "bright golden blonde", label: "Golden (Sun-Bleached)" },
     { value: "iron grey", label: "Grey (Elder)" },
     { value: "pure white", label: "White (Ancient)" },
     { value: "metallic silver", label: "Silver (Unnatural)" },
-    { value: "dark blue-black with vivid blue sheen and blue highlights", label: "Raven Blue (Dark Sheen)" }
+    { value: "dark blue-black", label: "Raven Blue (Dark Sheen)" }
   ];
 
   const HAIR_LENGTHS = [
@@ -717,103 +717,102 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
   // === BUILD PHOTOREALISTIC IMAGE PROMPT ===
   // === CLASS VISUAL DESCRIPTIONS (for image prompt) ===
   const CLASS_VISUALS = {
-    Warrior: "bronze plate armor, leather battle skirt, bronze greaves and vambraces",
-    Gibbor: "heavy bronze champion armor, lion pelt draped over shoulders, bronze bracers engraved with victories",
-    Hunter: "light leather armor, animal hide cloak, quiver of arrows, fur-lined boots",
-    Magi: "dark layered robes with arcane symbols, ritual focus hanging from belt, mystical sigils on cloth",
-    Priest: "white linen robes with bronze holy symbols, prayer shawl, sacred vestments",
-    Artisan: "thick leather apron over sturdy clothing, bronze tool belt, burn-scarred forearms",
-    Scribe: "scholar robes with ink-stained sleeves, scroll case at hip, reed stylus behind ear"
+    Warrior: "bronze scale mail, leather pteruges, bronze greaves",
+    Gibbor: "heavy ornate bronze champion armor, lion pelt draped over shoulders, bronze bracers engraved with cuneiform victories",
+    Hunter: "light cured leather armor, animal hide cloak, quiver of arrows, sandal-boots",
+    Magi: "dark layered linen robes with arcane Akkadian symbols, ritual focus hanging from belt, mystical sigils on cloth",
+    Priest: "white fine linen robes with blue fringes, bronze ephod, prayer shawl, sacred vestments",
+    Artisan: "thick leather apron over sturdy wool tunic, bronze tool belt, burn-scarred forearms",
+    Scribe: "clean linen scholar robes with ink-stained sleeves, scroll case at hip, reed stylus behind ear"
   };
 
   const buildImagePrompt = () => {
     const raceData = RACES[formData.lineage];
     const customDesc = formData.customVisuals.trim();
 
-    // Skin tone mapping — concise descriptions for image models
+    // Skin tone mapping — ensure lighter tones don't trigger "European"
     const SKIN_MAP = {
-      'olive': 'olive skin',
-      'bronze': 'bronze sun-tanned skin',
+      'olive': 'olive Levantine skin',
+      'bronze': 'deep bronze sun-tanned skin',
       'copper': 'copper reddish-brown skin',
-      'tan': 'tan skin',
-      'light brown': 'light brown skin',
-      'dark brown': 'deep dark brown skin',
-      'alabaster': 'pale alabaster skin',
+      'tan': 'tan desert-weathered skin',
+      'light brown': 'light brown Mesopotamian skin',
+      'dark brown': 'deep dark Nubian brown skin',
+      'alabaster': 'pale alabaster Near-Eastern skin',
       'obsidian': 'deep black skin',
-      'red clay': 'reddish clay skin',
+      'red clay': 'reddish clay-toned skin',
       'ashen grey': 'grey ashen skin',
       'copper patina': 'greenish copper-tinted skin',
-      'marble': 'pale marble-white skin',
+      'marble': 'pale marble-white skin (statuesque)',
       'gold-dust': 'golden luminous skin',
-      'pale': 'pale light skin',
-      'unnaturally pale': 'ghostly pale white skin'
+      'pale': 'pale cave-dweller skin',
+      'unnaturally pale': 'ghostly pale skin'
     };
     let cleanSkin = SKIN_MAP[formData.skinTone] || formData.skinTone;
 
     // Hair texture and phenotype by ancestry (sex-aware)
-    // IMPORTANT: Every phenotype MUST include "Middle Eastern" or "Semitic" ethnicity
-    // to prevent SDXL from defaulting to European/Nordic features
+    // IMPORTANT: Forced "Ancient Near Eastern" or "Semitic" ethnicity to override model bias
     const raceKey = formData.lineage.toLowerCase();
     const isFemale = formData.sex === 'Female';
     let phenotype = isFemale
-      ? "woman, Semitic Middle Eastern features, ancient biblical era"
-      : "man, Semitic Middle Eastern features, ancient biblical era";
+      ? "woman, Ancient Near Eastern Semitic features, biblical era"
+      : "man, Ancient Near Eastern Semitic features, biblical era";
     let hairTexture = "thick wavy";
 
     if (raceKey === 'nephilim') {
       phenotype = isFemale
-        ? "towering giant woman, massive powerful build, angular celestial face, Middle Eastern Semitic features"
-        : "towering giant man, massively muscular, angular celestial face, Middle Eastern Semitic features";
+        ? "towering giant woman, massive powerful build, angular Babylonian face, Ancient Near Eastern features"
+        : "towering giant man, massively muscular, angular Babylonian face, Ancient Near Eastern features";
       hairTexture = "thick wild";
     } else if (raceKey === 'rephaim') {
       phenotype = isFemale
-        ? "tall gaunt woman, hollow cheekbones, shadowed eyes, spectral haunting presence, Middle Eastern Semitic features"
-        : "tall gaunt man, hollow cheekbones, spectral haunting presence, Middle Eastern Semitic features";
+        ? "tall gaunt woman, hollow cheekbones, shadowed eyes, spectral haunting presence, Ancient Semitic features"
+        : "tall gaunt man, hollow cheekbones, spectral haunting presence, Ancient Semitic features";
       hairTexture = "thin wispy";
     } else if (raceKey === 'anakim') {
       phenotype = isFemale
-        ? "tall regal woman, elongated neck, sharp refined features, piercing eyes, Middle Eastern Semitic features"
-        : "tall regal man, long neck, noble bearing, heavy bronze chains, Middle Eastern Semitic features";
+        ? "tall regal woman, elongated neck, sharp refined features, piercing eyes, Canaanite noble features"
+        : "tall regal man, long neck, noble bearing, heavy bronze chains, Canaanite noble features";
       hairTexture = "thick braided";
     } else if (raceKey === 'gibborim') {
       phenotype = isFemale
-        ? "tall powerful woman warrior, athletic build, intense eyes, Middle Eastern Semitic features"
-        : "tall powerful man warrior, heroic proportions, strong jaw, Middle Eastern Semitic features";
+        ? "tall powerful woman warrior, athletic build, intense eyes, Ancient Near Eastern Semitic features"
+        : "tall powerful man warrior, heroic proportions, strong jaw, Ancient Near Eastern Semitic features";
       hairTexture = "thick wavy";
     } else if (raceKey === 'elioud') {
       phenotype = isFemale
-        ? "tall athletic woman, intense eyes, subtle inhuman beauty, Middle Eastern Semitic features"
-        : "tall athletic man, striking intense eyes, subtle inhuman beauty, Middle Eastern Semitic features";
+        ? "tall athletic woman, intense eyes, subtle inhuman beauty, Ancient Near Eastern Semitic features"
+        : "tall athletic man, striking intense eyes, subtle inhuman beauty, Ancient Near Eastern Semitic features";
       hairTexture = "thick flowing";
     } else if (raceKey === 'horim') {
       phenotype = isFemale
-        ? "pale woman, large luminous eyes, lean wiry build, cave-dweller, Middle Eastern Semitic bone structure"
-        : "pale man, wide dark eyes, wiry compact build, cave-dweller, Middle Eastern Semitic bone structure";
+        ? "pale woman, large luminous eyes, lean wiry build, cave-dweller, Semitic bone structure"
+        : "pale man, wide dark eyes, wiry compact build, cave-dweller, Semitic bone structure";
       hairTexture = "coarse matted";
     } else if (raceKey === 'cainite') {
       phenotype = isFemale
-        ? "urban woman, calloused hands, sharp cunning eyes, Middle Eastern Semitic features, city-dweller"
-        : "urban robust man, calloused hands, sharp cunning eyes, Middle Eastern Semitic features, city-builder";
+        ? "urban woman, calloused hands, sharp cunning eyes, Ancient Sumerian features, city-dweller"
+        : "urban robust man, calloused hands, sharp cunning eyes, Ancient Sumerian features, city-builder";
       hairTexture = "thick coarse";
     } else if (raceKey === 'sethite') {
       phenotype = isFemale
-        ? "dignified woman, refined features, contemplative expression, Middle Eastern Semitic features, priestly lineage"
-        : "noble man, serene expression, refined features, Middle Eastern Semitic features, priestly lineage";
+        ? "dignified woman, refined features, contemplative expression, Ancient Levantine features, priestly lineage"
+        : "noble man, serene expression, refined features, Ancient Levantine features, priestly lineage";
       hairTexture = "thick wavy";
     } else if (raceKey === 'wanderer') {
       phenotype = isFemale
-        ? "lean weathered woman, sun-darkened skin, scarred hands, Middle Eastern Semitic nomad"
-        : "rugged weathered man, sun-darkened face, Middle Eastern Semitic nomad";
+        ? "lean weathered woman, sun-darkened skin, scarred hands, Ancient Aramaic nomad"
+        : "rugged weathered man, sun-darkened face, Ancient Aramaic nomad";
       hairTexture = "thick windswept";
     } else if (raceKey === 'sorcerer') {
       phenotype = isFemale
-        ? "mystical woman, intense unnatural gaze, luminous eyes, Middle Eastern Semitic sorceress"
-        : "intense mystical man, sharp angular face, Middle Eastern Semitic occult scholar";
+        ? "mystical woman, intense unnatural gaze, luminous eyes, Ancient Akkadian sorceress"
+        : "intense mystical man, sharp angular face, Ancient Akkadian occult scholar";
       hairTexture = "thick straight";
     } else if (raceKey === 'gammadim') {
       phenotype = isFemale
-        ? "very short halfling-sized woman, 3ft tall, compact sturdy build, bright clever eyes, Middle Eastern features, tunnel-dweller"
-        : "very short halfling-sized man, 3ft tall, compact sturdy build, bright clever eyes, Middle Eastern features, tunnel-dweller";
+        ? "very short halfling-sized woman, 3ft tall, compact sturdy build, bright clever eyes, Ancient Semitic features, tunnel-dweller"
+        : "very short halfling-sized man, 3ft tall, compact sturdy build, bright clever eyes, Ancient Semitic features, tunnel-dweller";
       hairTexture = "coarse short-cropped";
     }
 
@@ -837,16 +836,16 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     const WEAPON_VISUALS = {
       // Warrior
       'bronze_sword': 'long bronze sword with leather grip',
-      'bronze_greatsword': 'massive two-handed bronze greatsword',
-      'bronze_battleaxe': 'heavy bronze battle axe',
+      'bronze_greatsword': 'massive two-handed bronze khopesh-style sword',
+      'bronze_battleaxe': 'heavy bronze epsilon axe',
       'spear_shield': 'bronze-tipped spear and round bronze shield',
       'war_hammer': 'heavy bronze war hammer',
       'flail': 'bronze spiked flail on chain',
       // Gibbor
       'hero_blade': 'legendary ornate bronze greatsword',
       'maul': 'massive stone and bronze war maul',
-      'glaive': 'long bronze-bladed polearm glaive',
-      'greataxe': 'brutal two-handed bronze great axe',
+      'glaive': 'long bronze-bladed polearm',
+      'greataxe': 'brutal two-handed bronze crescent axe',
       'lance': 'long bronze-tipped cavalry lance',
       // Hunter
       'longbow': 'tall composite longbow with quiver of arrows on back',
@@ -856,14 +855,14 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
       'javelin': 'bronze-tipped throwing javelin',
       'scimitar': 'curved bronze scimitar blade',
       // Magi
-      'arcane_staff': 'tall dark wooden staff carved with eldritch runes',
+      'arcane_staff': 'tall dark wooden staff carved with cuneiform runes',
       'fire_wand': 'slender bronze wand wreathed in flame',
       'frost_orb': 'glowing pale blue crystal orb',
       'shock_rod': 'crackling bronze rod with lightning',
       'poison_focus': 'serpent-shaped bronze focus with green glow',
       'ritual_dagger': 'ornate bronze ritual dagger',
       // Priest
-      'holy_staff': 'tall bronze staff inscribed with sacred text',
+      'holy_staff': 'tall bronze staff inscribed with paleo-hebrew text',
       'mace': 'ornate bronze ceremonial mace',
       'sacred_light': 'hands glowing with divine radiant fire',
       'divine_smite': 'aura of divine power and holy light',
@@ -909,8 +908,8 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     if (mountDesc) coreParts.push(`riding ${mountDesc}`);
     if (customDesc) coreParts.push(customDesc);
 
-    // Negative prompt — passed as separate parameter to the model
-    const negativePrompt = 'European features, Nordic features, Viking, pale blue eyes, blonde eyebrows, photograph, photo, photorealistic, extra limbs, extra arms, extra fingers, deformed hands, mutated, disfigured, blurry, bad anatomy, nudity, text, watermark, signature, cartoon, anime, 3d render';
+    // Negative prompt — Strict exclusion of European Medieval/Nordic tropes
+    const negativePrompt = 'European features, Nordic features, Viking, Celtic, Slavic, pale blue eyes, blonde eyebrows, pink skin, rosy cheeks, western medieval armor, steel plate armor, knight, crusader, arthurian, photograph, photo, photorealistic, extra limbs, extra arms, extra fingers, deformed hands, mutated, disfigured, blurry, bad anatomy, nudity, text, watermark, signature, cartoon, anime, 3d render';
 
     // Assemble and trim to fit within 1000 character API limit
     const MAX_PROMPT_LENGTH = 1000;
@@ -1886,4 +1885,3 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
 };
 
 export default CharacterGenerator;
-
