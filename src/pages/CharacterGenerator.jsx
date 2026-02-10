@@ -726,7 +726,7 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     Scribe: "clean linen scholar robes with ink-stained sleeves, scroll case at hip, reed stylus behind ear"
   };
 
- const buildImagePrompt = () => {
+const buildImagePrompt = () => {
     const raceData = RACES[formData.lineage];
     const customDesc = formData.customVisuals.trim();
 
@@ -749,8 +749,6 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
 
     // 2. PHENOTYPE (Base Gender Logic)
     const isFemale = formData.sex === 'Female';
-    // We use strict gender terms to prevent ambiguity
-    let genderTerm = isFemale ? "woman" : "man";
     
     let phenotype = isFemale
       ? "woman, Ancient Near Eastern Semitic bone structure, aquiline nose, intense gaze, biblical era"
@@ -758,14 +756,12 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
 
     const raceKey = formData.lineage.toLowerCase();
     
-    // 3. ANCESTRY OVERRIDES (The Fix: INJECT GENDER)
-    // We explicitly inject "giant woman" or "giant man" into these descriptions
+    // 3. ANCESTRY OVERRIDES (Explicit Gender Injection)
     if (raceKey === 'rephaim') {
       phenotype = isFemale 
         ? "terrifying tall giant woman, gaunt skeletal features, hollow eyes, necrotic atmosphere, Ancient Canaanite" 
         : "terrifying tall giant man, gaunt skeletal features, hollow eyes, necrotic atmosphere, Ancient Canaanite";
     } else if (raceKey === 'nephilim') {
-      // THIS WAS THE BROKEN PART. Now fixed to include gender.
       phenotype = isFemale
         ? "towering colossus woman, giantess, thick muscular build, unnatural symmetry, terrifying divine presence, Ancient Babylonian"
         : "towering colossus man, giant, thick muscular neck, unnatural symmetry, terrifying divine presence, Ancient Babylonian";
@@ -775,7 +771,13 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
         : "noble giant man, elongated neck, regal bearing, heavy gold chains, Ancient Canaanite royalty";
     }
 
-    // 4. WEAPON & STANCE
+    // 4. HAIR LOGIC (Restored & Fortified)
+    const isBald = formData.hairLength.toLowerCase().includes('bald');
+    const hairDesc = isBald
+      ? 'completely bald shaved head, smooth scalp, no hair'
+      : `${formData.hairLength} ${formData.hairColor} hair, matted and windblown`;
+
+    // 5. WEAPON & STANCE
     const classEquipment = EQUIPMENT[formData.charClass] || [];
     const selectedWeapon = classEquipment.find(e => e.id === formData.equipment);
     let weaponPrompt = "";
@@ -793,26 +795,26 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
         }
     }
 
-    // 5. CLASS VISUALS 
+    // 6. CLASS VISUALS 
     const classVisual = CLASS_VISUALS[formData.charClass] || raceData.visuals;
 
-    // 6. FINAL PROMPT ASSEMBLY
+    // 7. FINAL PROMPT ASSEMBLY
     const coreParts = [
       `full body shot, wide angle, showing entire figure from head to toe, standing tall`, 
       `historical reconstruction, museum art style, rough oil painting`, 
       `${phenotype}`, 
+      `${hairDesc}`, // <--- CRITICAL FIX: Added hair description back in
       `${skinDesc}`,
       `${formData.bodyBuild} build`,
       `wearing ${classVisual}`,
-      `wearing period-accurate sandals`, // Force feet visualization
+      `wearing period-accurate sandals`, 
       `${weaponPrompt}`,
       `ancient bronze-age setting, ${formData.background}, ${formData.vibe} atmosphere`
     ];
 
     if (customDesc) coreParts.push(customDesc);
 
-    // 7. NEGATIVE PROMPT
-    // Added "beard" and "facial hair" to the negative prompt IF the character is female
+    // 8. NEGATIVE PROMPT
     let negativePrompt = 'portrait, headshot, close up, cropped, face shot, smooth skin, makeup, pretty, handsome, model, clean, digital art, 3d render, cartoon, anime, european features, blonde, blue eyes, pink skin, medieval armor, steel, grey background, blurry, bad anatomy, extra fingers, disfigured hands, floating weapons';
     
     if (isFemale) {
