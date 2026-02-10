@@ -726,11 +726,11 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     Scribe: "clean linen scholar robes with ink-stained sleeves, scroll case at hip, reed stylus behind ear"
   };
 
-  const buildImagePrompt = () => {
+ const buildImagePrompt = () => {
     const raceData = RACES[formData.lineage];
     const customDesc = formData.customVisuals.trim();
 
-    // 1. ETHNICITY & TEXTURE (Keep it gritty)
+    // 1. ETHNICITY & TEXTURE
     const SKIN_MAP = {
       'olive': 'olive Levantine skin, weather-beaten texture',
       'bronze': 'deep bronze sun-tanned skin, rough texture',
@@ -747,24 +747,35 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     };
     let skinDesc = SKIN_MAP[formData.skinTone] || formData.skinTone;
 
-    // 2. PHENOTYPE (Keep the "Anti-Hero" look)
+    // 2. PHENOTYPE (Base Gender Logic)
     const isFemale = formData.sex === 'Female';
+    // We use strict gender terms to prevent ambiguity
+    let genderTerm = isFemale ? "woman" : "man";
+    
     let phenotype = isFemale
       ? "woman, Ancient Near Eastern Semitic bone structure, aquiline nose, intense gaze, biblical era"
       : "man, Ancient Near Eastern Semitic bone structure, strong heavy brow, aquiline nose, biblical era";
 
     const raceKey = formData.lineage.toLowerCase();
     
-    // ANCESTRY OVERRIDES (Giants)
+    // 3. ANCESTRY OVERRIDES (The Fix: INJECT GENDER)
+    // We explicitly inject "giant woman" or "giant man" into these descriptions
     if (raceKey === 'rephaim') {
       phenotype = isFemale 
         ? "terrifying tall giant woman, gaunt skeletal features, hollow eyes, necrotic atmosphere, Ancient Canaanite" 
         : "terrifying tall giant man, gaunt skeletal features, hollow eyes, necrotic atmosphere, Ancient Canaanite";
     } else if (raceKey === 'nephilim') {
-      phenotype = "towering colossus, thick muscular neck, unnatural symmetry, terrifying divine presence, Ancient Babylonian";
+      // THIS WAS THE BROKEN PART. Now fixed to include gender.
+      phenotype = isFemale
+        ? "towering colossus woman, giantess, thick muscular build, unnatural symmetry, terrifying divine presence, Ancient Babylonian"
+        : "towering colossus man, giant, thick muscular neck, unnatural symmetry, terrifying divine presence, Ancient Babylonian";
+    } else if (raceKey === 'anakim') {
+      phenotype = isFemale
+        ? "noble giant woman, elongated neck, regal bearing, heavy gold chains, Ancient Canaanite royalty"
+        : "noble giant man, elongated neck, regal bearing, heavy gold chains, Ancient Canaanite royalty";
     }
 
-    // 3. WEAPON & STANCE (Full body requires seeing the weapon relative to the body)
+    // 4. WEAPON & STANCE
     const classEquipment = EQUIPMENT[formData.charClass] || [];
     const selectedWeapon = classEquipment.find(e => e.id === formData.equipment);
     let weaponPrompt = "";
@@ -775,7 +786,6 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
             .replace('composite ', '')
             .replace("hero's ", '');
             
-        // "At side" or "on back" looks better for full body than "holding" which messes up hands at a distance
         if (simpleName.includes('greatsword') || simpleName.includes('bow') || simpleName.includes('spear') || simpleName.includes('staff')) {
             weaponPrompt = `with a large ${simpleName} strapped to back`;
         } else {
@@ -783,27 +793,31 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
         }
     }
 
-    // 4. CLASS VISUALS 
+    // 5. CLASS VISUALS 
     const classVisual = CLASS_VISUALS[formData.charClass] || raceData.visuals;
 
-    // 5. FINAL PROMPT ASSEMBLY (The "Full Body" Logic)
+    // 6. FINAL PROMPT ASSEMBLY
     const coreParts = [
-      // KEY CHANGE: "Full body shot" and "Wide angle"
       `full body shot, wide angle, showing entire figure from head to toe, standing tall`, 
       `historical reconstruction, museum art style, rough oil painting`, 
       `${phenotype}`, 
       `${skinDesc}`,
       `${formData.bodyBuild} build`,
       `wearing ${classVisual}`,
-      `wearing period-accurate sandals or greaves`, // Forces the AI to draw feet/legs
+      `wearing period-accurate sandals`, // Force feet visualization
       `${weaponPrompt}`,
       `ancient bronze-age setting, ${formData.background}, ${formData.vibe} atmosphere`
     ];
 
     if (customDesc) coreParts.push(customDesc);
 
-    // 6. NEGATIVE PROMPT (Explicitly ban portraits/crops)
-    const negativePrompt = 'portrait, headshot, close up, cropped, face shot, smooth skin, makeup, pretty, handsome, model, clean, digital art, 3d render, cartoon, anime, european features, blonde, blue eyes, pink skin, medieval armor, steel, grey background, blurry, bad anatomy, extra fingers, disfigured hands, floating weapons';
+    // 7. NEGATIVE PROMPT
+    // Added "beard" and "facial hair" to the negative prompt IF the character is female
+    let negativePrompt = 'portrait, headshot, close up, cropped, face shot, smooth skin, makeup, pretty, handsome, model, clean, digital art, 3d render, cartoon, anime, european features, blonde, blue eyes, pink skin, medieval armor, steel, grey background, blurry, bad anatomy, extra fingers, disfigured hands, floating weapons';
+    
+    if (isFemale) {
+        negativePrompt += ', beard, mustache, facial hair, male features';
+    }
 
     return { prompt: coreParts.join(', '), negativePrompt };
   };
