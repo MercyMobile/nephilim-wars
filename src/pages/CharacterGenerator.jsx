@@ -730,206 +730,82 @@ const CharacterGenerator = ({ onCharacterComplete }) => {
     const raceData = RACES[formData.lineage];
     const customDesc = formData.customVisuals.trim();
 
-    // Skin tone mapping — ensure lighter tones don't trigger "European"
+    // 1. ETHNICITY & TEXTURE (Keep it gritty)
     const SKIN_MAP = {
-      'olive': 'olive Levantine skin',
-      'bronze': 'deep bronze sun-tanned skin',
-      'copper': 'copper reddish-brown skin',
-      'tan': 'tan desert-weathered skin',
-      'light brown': 'light brown Mesopotamian skin',
-      'dark brown': 'deep dark Nubian brown skin',
-      'alabaster': 'pale alabaster Near-Eastern skin',
-      'obsidian': 'deep black skin',
-      'red clay': 'reddish clay-toned skin',
-      'ashen grey': 'grey ashen skin',
-      'copper patina': 'greenish copper-tinted skin',
-      'marble': 'pale marble-white skin (statuesque)',
-      'gold-dust': 'golden luminous skin',
-      'pale': 'pale cave-dweller skin',
-      'unnaturally pale': 'ghostly pale skin'
+      'olive': 'olive Levantine skin, weather-beaten texture',
+      'bronze': 'deep bronze sun-tanned skin, rough texture',
+      'copper': 'copper reddish-brown skin, sun-damaged',
+      'tan': 'tan desert-weathered skin, dusty',
+      'light brown': 'light brown Mesopotamian skin, coarse texture',
+      'dark brown': 'deep dark Nubian brown skin, rich texture',
+      'alabaster': 'pale alabaster Near-Eastern skin, translucent veins',
+      'obsidian': 'deep black skin, light absorbing',
+      'red clay': 'reddish clay-toned skin, rough',
+      'ashen grey': 'grey ashen skin, deathly pallor',
+      'pale': 'pale cave-dweller skin, sickly',
+      'unnaturally pale': 'ghostly pale skin, vein map'
     };
-    let cleanSkin = SKIN_MAP[formData.skinTone] || formData.skinTone;
+    let skinDesc = SKIN_MAP[formData.skinTone] || formData.skinTone;
 
-    // Hair texture and phenotype by ancestry (sex-aware)
-    // IMPORTANT: Forced "Ancient Near Eastern" or "Semitic" ethnicity to override model bias
-    const raceKey = formData.lineage.toLowerCase();
+    // 2. PHENOTYPE (Keep the "Anti-Hero" look)
     const isFemale = formData.sex === 'Female';
     let phenotype = isFemale
-      ? "woman, Ancient Near Eastern Semitic features, biblical era"
-      : "man, Ancient Near Eastern Semitic features, biblical era";
-    let hairTexture = "thick wavy";
+      ? "woman, Ancient Near Eastern Semitic bone structure, aquiline nose, intense gaze, biblical era"
+      : "man, Ancient Near Eastern Semitic bone structure, strong heavy brow, aquiline nose, biblical era";
 
-    if (raceKey === 'nephilim') {
-      phenotype = isFemale
-        ? "towering giant woman, massive powerful build, angular Babylonian face, Ancient Near Eastern features"
-        : "towering giant man, massively muscular, angular Babylonian face, Ancient Near Eastern features";
-      hairTexture = "thick wild";
-    } else if (raceKey === 'rephaim') {
-      phenotype = isFemale
-        ? "tall gaunt woman, hollow cheekbones, shadowed eyes, spectral haunting presence, Ancient Semitic features"
-        : "tall gaunt man, hollow cheekbones, spectral haunting presence, Ancient Semitic features";
-      hairTexture = "thin wispy";
-    } else if (raceKey === 'anakim') {
-      phenotype = isFemale
-        ? "tall regal woman, elongated neck, sharp refined features, piercing eyes, Canaanite noble features"
-        : "tall regal man, long neck, noble bearing, heavy bronze chains, Canaanite noble features";
-      hairTexture = "thick braided";
-    } else if (raceKey === 'gibborim') {
-      phenotype = isFemale
-        ? "tall powerful woman warrior, athletic build, intense eyes, Ancient Near Eastern Semitic features"
-        : "tall powerful man warrior, heroic proportions, strong jaw, Ancient Near Eastern Semitic features";
-      hairTexture = "thick wavy";
-    } else if (raceKey === 'elioud') {
-      phenotype = isFemale
-        ? "tall athletic woman, intense eyes, subtle inhuman beauty, Ancient Near Eastern Semitic features"
-        : "tall athletic man, striking intense eyes, subtle inhuman beauty, Ancient Near Eastern Semitic features";
-      hairTexture = "thick flowing";
-    } else if (raceKey === 'horim') {
-      phenotype = isFemale
-        ? "pale woman, large luminous eyes, lean wiry build, cave-dweller, Semitic bone structure"
-        : "pale man, wide dark eyes, wiry compact build, cave-dweller, Semitic bone structure";
-      hairTexture = "coarse matted";
-    } else if (raceKey === 'cainite') {
-      phenotype = isFemale
-        ? "urban woman, calloused hands, sharp cunning eyes, Ancient Sumerian features, city-dweller"
-        : "urban robust man, calloused hands, sharp cunning eyes, Ancient Sumerian features, city-builder";
-      hairTexture = "thick coarse";
-    } else if (raceKey === 'sethite') {
-      phenotype = isFemale
-        ? "dignified woman, refined features, contemplative expression, Ancient Levantine features, priestly lineage"
-        : "noble man, serene expression, refined features, Ancient Levantine features, priestly lineage";
-      hairTexture = "thick wavy";
-    } else if (raceKey === 'wanderer') {
-      phenotype = isFemale
-        ? "lean weathered woman, sun-darkened skin, scarred hands, Ancient Aramaic nomad"
-        : "rugged weathered man, sun-darkened face, Ancient Aramaic nomad";
-      hairTexture = "thick windswept";
-    } else if (raceKey === 'sorcerer') {
-      phenotype = isFemale
-        ? "mystical woman, intense unnatural gaze, luminous eyes, Ancient Akkadian sorceress"
-        : "intense mystical man, sharp angular face, Ancient Akkadian occult scholar";
-      hairTexture = "thick straight";
-    } else if (raceKey === 'gammadim') {
-      phenotype = isFemale
-        ? "very short halfling-sized woman, 3ft tall, compact sturdy build, bright clever eyes, Ancient Semitic features, tunnel-dweller"
-        : "very short halfling-sized man, 3ft tall, compact sturdy build, bright clever eyes, Ancient Semitic features, tunnel-dweller";
-      hairTexture = "coarse short-cropped";
+    const raceKey = formData.lineage.toLowerCase();
+    
+    // ANCESTRY OVERRIDES (Giants)
+    if (raceKey === 'rephaim') {
+      phenotype = isFemale 
+        ? "terrifying tall giant woman, gaunt skeletal features, hollow eyes, necrotic atmosphere, Ancient Canaanite" 
+        : "terrifying tall giant man, gaunt skeletal features, hollow eyes, necrotic atmosphere, Ancient Canaanite";
+    } else if (raceKey === 'nephilim') {
+      phenotype = "towering colossus, thick muscular neck, unnatural symmetry, terrifying divine presence, Ancient Babylonian";
     }
 
-    // Body build
-    let bodyBuild = formData.bodyBuild;
-    if (bodyBuild === 'random') {
-      const types = ['gaunt', 'lean', 'athletic', 'stocky', 'heavyset'];
-      bodyBuild = types[Math.floor(Math.random() * types.length)];
-    }
-
-    // Hair descriptor — handle bald as special case
-    const isBald = formData.hairLength.toLowerCase().includes('bald');
-    const hairDesc = isBald
-      ? 'completely bald shaved head, no hair'
-      : `${formData.hairLength} ${formData.hairColor} ${hairTexture} hair`;
-
-    // Equipment — find the selected weapon name
+    // 3. WEAPON & STANCE (Full body requires seeing the weapon relative to the body)
     const classEquipment = EQUIPMENT[formData.charClass] || [];
     const selectedWeapon = classEquipment.find(e => e.id === formData.equipment);
-    // Map weapon IDs to visual descriptions the image model can understand
-    const WEAPON_VISUALS = {
-      // Warrior
-      'bronze_sword': 'long bronze sword with leather grip',
-      'bronze_greatsword': 'massive two-handed bronze khopesh-style sword',
-      'bronze_battleaxe': 'heavy bronze epsilon axe',
-      'spear_shield': 'bronze-tipped spear and round bronze shield',
-      'war_hammer': 'heavy bronze war hammer',
-      'flail': 'bronze spiked flail on chain',
-      // Gibbor
-      'hero_blade': 'legendary ornate bronze greatsword',
-      'maul': 'massive stone and bronze war maul',
-      'glaive': 'long bronze-bladed polearm',
-      'greataxe': 'brutal two-handed bronze crescent axe',
-      'lance': 'long bronze-tipped cavalry lance',
-      // Hunter
-      'longbow': 'tall composite longbow with quiver of arrows on back',
-      'shortbow': 'short wooden recurve bow with quiver of arrows',
-      'hand_crossbow': 'small wooden and bronze hand-held crossbow with trigger mechanism',
-      'sling': 'leather sling with stone pouch',
-      'javelin': 'bronze-tipped throwing javelin',
-      'scimitar': 'curved bronze scimitar blade',
-      // Magi
-      'arcane_staff': 'tall dark wooden staff carved with cuneiform runes',
-      'fire_wand': 'slender bronze wand wreathed in flame',
-      'frost_orb': 'glowing pale blue crystal orb',
-      'shock_rod': 'crackling bronze rod with lightning',
-      'poison_focus': 'serpent-shaped bronze focus with green glow',
-      'ritual_dagger': 'ornate bronze ritual dagger',
-      // Priest
-      'holy_staff': 'tall bronze staff inscribed with paleo-hebrew text',
-      'mace': 'ornate bronze ceremonial mace',
-      'sacred_light': 'hands glowing with divine radiant fire',
-      'divine_smite': 'aura of divine power and holy light',
-      'war_pick': 'bronze war pick with inscribed handle',
-      'sling_stones': 'leather sling with blessed stones',
-      // Artisan
-      'smith_hammer': 'heavy bronze smithing war hammer',
-      'battle_pick': 'bronze-tipped mining pick',
-      'hand_axe': 'small bronze hand axe',
-      'light_crossbow': 'engineered bronze crossbow with wooden stock and mechanical trigger',
-      'quarterstaff': 'reinforced wooden staff',
-      // Scribe
-      'quill_dagger': 'concealed bronze dagger',
-      'dart': 'handful of small throwing darts',
-      'sling_scholar': 'simple leather sling',
-      'arcane_knowledge': 'ancient scroll glowing with arcane symbols',
-    };
-    const weaponDesc = selectedWeapon
-      ? (WEAPON_VISUALS[selectedWeapon.id] || selectedWeapon.name.replace('Bronze ', 'bronze ').replace("Hero's ", 'heroic '))
-      : '';
-
-    // Class visuals
-    const classVisual = CLASS_VISUALS[formData.charClass] || '';
-
-    // Feature
-    const featureDesc = formData.distinguishingFeature !== 'none' ? formData.distinguishingFeature : '';
-
-    // Mount
-    const mountDesc = formData.mount !== 'none' ? formData.mount : '';
-
-    // Build prompt in priority order — subject first, then appearance, then setting
-    const coreParts = [
-      `dark gritty fantasy character portrait, detailed fantasy art, oil painting style, dramatic chiaroscuro lighting, weathered and battle-worn`,
-      `${phenotype}`,
-      `${cleanSkin}, ${formData.eyeColor} eyes, ${hairDesc}`,
-      `${bodyBuild} build`,
-      classVisual ? `wearing ${classVisual}` : `wearing ${raceData.visuals}`,
-      weaponDesc ? `wielding ${weaponDesc}` : '',
-      `${formData.charClass}`,
-      `ancient bronze-age biblical setting, ${formData.background}, ${formData.vibe} atmosphere`,
-    ].filter(Boolean);
-    if (featureDesc) coreParts.push(featureDesc);
-    if (mountDesc) coreParts.push(`riding ${mountDesc}`);
-    if (customDesc) coreParts.push(customDesc);
-
-    // Negative prompt — Strict exclusion of European Medieval/Nordic tropes
-    const negativePrompt = 'European features, Nordic features, Viking, Celtic, Slavic, pale blue eyes, blonde eyebrows, pink skin, rosy cheeks, western medieval armor, steel plate armor, knight, crusader, arthurian, photograph, photo, photorealistic, extra limbs, extra arms, extra fingers, deformed hands, mutated, disfigured, blurry, bad anatomy, nudity, text, watermark, signature, cartoon, anime, 3d render';
-
-    // Assemble and trim to fit within 1000 character API limit
-    const MAX_PROMPT_LENGTH = 1000;
-    let prompt = coreParts.join(', ');
-    prompt = prompt.replace(/[()"]/g, "").replace(/,\s*,/g, ',').trim();
-
-    if (prompt.length > MAX_PROMPT_LENGTH) {
-      // Drop sections from the end (least important first) until it fits
-      const parts = [...coreParts];
-      while (parts.length > 1) {
-        parts.pop();
-        prompt = parts.join(', ').replace(/[()"]/g, "").replace(/,\s*,/g, ',').trim();
-        if (prompt.length <= MAX_PROMPT_LENGTH) break;
-      }
-      if (prompt.length > MAX_PROMPT_LENGTH) {
-        prompt = prompt.slice(0, MAX_PROMPT_LENGTH);
-      }
+    let weaponPrompt = "";
+    
+    if (selectedWeapon) {
+        let simpleName = selectedWeapon.name.toLowerCase()
+            .replace('bronze ', '')
+            .replace('composite ', '')
+            .replace("hero's ", '');
+            
+        // "At side" or "on back" looks better for full body than "holding" which messes up hands at a distance
+        if (simpleName.includes('greatsword') || simpleName.includes('bow') || simpleName.includes('spear') || simpleName.includes('staff')) {
+            weaponPrompt = `with a large ${simpleName} strapped to back`;
+        } else {
+            weaponPrompt = `heavy ${simpleName} hanging at belt`;
+        }
     }
 
-    return { prompt, negativePrompt };
+    // 4. CLASS VISUALS 
+    const classVisual = CLASS_VISUALS[formData.charClass] || raceData.visuals;
+
+    // 5. FINAL PROMPT ASSEMBLY (The "Full Body" Logic)
+    const coreParts = [
+      // KEY CHANGE: "Full body shot" and "Wide angle"
+      `full body shot, wide angle, showing entire figure from head to toe, standing tall`, 
+      `historical reconstruction, museum art style, rough oil painting`, 
+      `${phenotype}`, 
+      `${skinDesc}`,
+      `${formData.bodyBuild} build`,
+      `wearing ${classVisual}`,
+      `wearing period-accurate sandals or greaves`, // Forces the AI to draw feet/legs
+      `${weaponPrompt}`,
+      `ancient bronze-age setting, ${formData.background}, ${formData.vibe} atmosphere`
+    ];
+
+    if (customDesc) coreParts.push(customDesc);
+
+    // 6. NEGATIVE PROMPT (Explicitly ban portraits/crops)
+    const negativePrompt = 'portrait, headshot, close up, cropped, face shot, smooth skin, makeup, pretty, handsome, model, clean, digital art, 3d render, cartoon, anime, european features, blonde, blue eyes, pink skin, medieval armor, steel, grey background, blurry, bad anatomy, extra fingers, disfigured hands, floating weapons';
+
+    return { prompt: coreParts.join(', '), negativePrompt };
   };
 
   // === GENERATE IMAGE ===
