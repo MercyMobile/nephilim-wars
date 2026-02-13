@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nephilim Wars - RPG Playing Cards</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nephilim: {
+                            primary: '#8B2E3F',      // Deep red/brown - antediluvian blood/bronze
+                            secondary: '#4A6FA5',    // Ancient blue - sky/water before flood
+                            accent: '#C19A6B',       // Bronze/gold - technology of the era
+                            dark: '#1A120B',         // Primordial darkness
+                            light: '#F3E9DC'         // Antique parchment
+                        }
+                    },
+                    fontFamily: {
+                        ancient: ['Cinzel', 'Georgia', 'serif'],
+                        game: ['Roboto Condensed', 'Arial', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .card-shadow {
+                box-shadow: 0 10px 25px -5px rgba(26, 18, 11, 0.3), 0 8px 10px -6px rgba(26, 18, 11, 0.1);
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px) scale(1.02);
+            }
+            .ancient-border {
+                border-image: url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&w=100&q=80') 30 stretch;
+            }
+        }
+
+        body {
+            background-color: #1A120B;
+            background-image: 
+                radial-gradient(#4A6FA5 0.5px, transparent 0.5px),
+                radial-gradient(#4A6FA5 0.5px, #1A120B 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1A120B; }
+        ::-webkit-scrollbar-thumb { background: #C19A6B; border-radius: 4px; }
+    </style>
+</head>
+<body class="min-h-screen font-game text-nephilim-light">
+
+    <header class="bg-nephilim-dark bg-opacity-80 backdrop-blur-md py-6 px-4 border-b-2 border-nephilim-accent sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-[clamp(1.75rem,3vw,2.5rem)] font-ancient text-nephilim-accent tracking-wider">Nephilim Wars</h1>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#watchers" class="hover:text-nephilim-secondary transition-colors duration-300">Watchers</a>
+                <a href="#ancestries" class="hover:text-nephilim-secondary transition-colors duration-300">Lineages</a>
+                <a href="#economy" class="hover:text-nephilim-secondary transition-colors duration-300">Soul Economy</a>
+                <a href="https://nephilim-wars.pages.dev" target="_blank" class="hover:text-nephilim-secondary">Official Site</a>
+            </nav>
+            <button id="menuToggle" class="md:hidden text-2xl text-nephilim-accent">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-12">
+        
+        <section id="watchers" class="mb-20 scroll-mt-24">
+            <div class="flex items-center mb-12">
+                <div class="w-12 h-1 bg-nephilim-accent mr-4"></div>
+                <h3 class="text-[clamp(1.75rem,3vw,2.5rem)] font-ancient text-nephilim-secondary">The Fallen Watchers</h3>
+            </div>
+            <p class="max-w-4xl mb-12 text-lg leading-relaxed text-nephilim-light/80 italic">
+                "Two hundred angels... descended upon Mount Hermon. Bound together by a solemn oath under the leadership of Semyaza... they took mortal wives and taught forbidden knowledge that would forever corrupt the earth".
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-nephilim-dark rounded-xl overflow-hidden card-shadow border-2 border-nephilim-accent/30 group">
+                    <div class="relative h-72">
+                        <img src="https://images.unsplash.com/photo-1599408162162-cd00994f924e?auto=format&fit=crop&w=800&q=80" alt="Azazel - Warfare" class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity">
+                        <div class="absolute bottom-0 p-6 bg-gradient-to-t from-nephilim-dark to-transparent w-full">
+                            <h4 class="text-2xl font-ancient text-nephilim-accent">Azazel</h4>
+                            <p class="text-sm uppercase tracking-widest text-nephilim-secondary">The Master of Bronze & Blades</p>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <p class="text-sm text-nephilim-light/90">
+                            Azazel revealed the secrets of warfare—how to forge swords, craft shields, and create armor. He also taught cosmetics and vanity, turning humanity's focus inward toward physical appearance.
+                        </p>
+                        <div class="bg-nephilim-primary/10 border-l-4 border-nephilim-primary p-3">
+                            <span class="text-xs font-bold text-nephilim-accent uppercase">Tradition: Warfare & Metallurgy</span>
+                            <p class="text-xs text-nephilim-light/70 italic">Revealed the sword, the breastplate, and the art of smithing.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-nephilim-dark rounded-xl overflow-hidden card-shadow border-2 border-nephilim-accent/30 group">
+                    <div class="relative h-72">
+                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80" alt="Semyaza - Enchantment" class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity">
+                        <div class="absolute bottom-0 p-6 bg-gradient-to-t from-nephilim-dark to-transparent w-full">
+                            <h4 class="text-2xl font-ancient text-nephilim-accent">Semyaza</h4>
+                            <p class="text-sm uppercase tracking-widest text-nephilim-secondary">Leader of the Two Hundred</p>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <p class="text-sm text-nephilim-light/90">
+                            Semyaza shared enchantments and root-cutting (herbalism and poisons), giving mortals power over life and death through plants. He bound the Watchers by oath on Mount Hermon.
+                        </p>
+                        <div class="bg-nephilim-primary/10 border-l-4 border-nephilim-primary p-3">
+                            <span class="text-xs font-bold text-nephilim-accent uppercase">Tradition: Enchantment & Root-Cutting</span>
+                            <p class="text-xs text-nephilim-light/70 italic">Taught the bindings of enchantments and the property of herbs.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-nephilim-dark rounded-xl overflow-hidden card-shadow border-2 border-nephilim-accent/30 group">
+                    <div class="relative h-72">
+                        <img src="https://images.unsplash.com/photo-1532974297617-c0f05fe48bff?auto=format&fit=crop&w=800&q=80" alt="Baraqel - Astrology" class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity">
+                        <div class="absolute bottom-0 p-6 bg-gradient-to-t from-nephilim-dark to-transparent w-full">
+                            <h4 class="text-2xl font-ancient text-nephilim-accent">Baraqel</h4>
+                            <p class="text-sm uppercase tracking-widest text-nephilim-secondary">The Star Reader</p>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <p class="text-sm text-nephilim-light/90">
+                            Baraqel taught astrology and the observation of stars, opening pathways to divination and fate manipulation. He revealed the constellations and their hidden meanings.
+                        </p>
+                        <div class="bg-nephilim-primary/10 border-l-4 border-nephilim-primary p-3">
+                            <span class="text-xs font-bold text-nephilim-accent uppercase">Tradition: Astrology & Divination</span>
+                            <p class="text-xs text-nephilim-light/70 italic">Revealed the course of the stars and signs of the sun.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ancestries" class="mb-20 scroll-mt-24">
+            <div class="flex items-center mb-12">
+                <div class="w-12 h-1 bg-nephilim-accent mr-4"></div>
+                <h3 class="text-[clamp(1.75rem,3vw,2.5rem)] font-ancient text-nephilim-secondary">Lineages of the Old World</h3>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-nephilim-dark rounded-xl overflow-hidden border border-nephilim-accent/20 card-hover">
+                    <img src="https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&w=600&q=80" alt="Sethite" class="h-48 w-full object-cover grayscale hover:grayscale-0 transition-all">
+                    <div class="p-6">
+                        <h5 class="text-xl font-ancient text-nephilim-accent">Sethite</h5>
+                        <p class="text-xs text-nephilim-secondary font-bold uppercase mb-4 tracking-tighter">The Righteous Line</p>
+                        <p class="text-sm leading-relaxed mb-6">The keepers of the original faith. Scholars and shepherds who preserve ancient truths and knowledge of the Creator in an age of darkness.</p>
+                        <div class="grid grid-cols-2 gap-y-2 border-t border-nephilim-accent/30 pt-4 text-[10px] font-bold uppercase">
+                            <div class="flex items-center"><i class="fa fa-heart mr-2 text-nephilim-primary"></i> HP: 8</div>
+                            <div class="flex items-center"><i class="fa fa-bolt mr-2 text-nephilim-accent"></i> Speed: 25ft</div>
+                            <div class="flex items-center"><i class="fa fa-star mr-2 text-nephilim-secondary"></i> RP: 2</div>
+                            <div class="flex items-center"><i class="fa fa-user mr-2 text-nephilim-light"></i> Size: Med</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-nephilim-dark rounded-xl overflow-hidden border border-nephilim-accent/20 card-hover">
+                    <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80" alt="Cainite" class="h-48 w-full object-cover grayscale hover:grayscale-0 transition-all">
+                    <div class="p-6">
+                        <h5 class="text-xl font-ancient text-nephilim-accent">Cainite</h5>
+                        <p class="text-xs text-nephilim-secondary font-bold uppercase mb-4 tracking-tighter">The City Builders</p>
+                        <p class="text-sm leading-relaxed mb-6">Pragmatic descendants of Cain. Architects and metallurgists who master the world through urban engineering and innovation.</p>
+                        <div class="grid grid-cols-2 gap-y-2 border-t border-nephilim-accent/30 pt-4 text-[10px] font-bold uppercase">
+                            <div class="flex items-center"><i class="fa fa-heart mr-2 text-nephilim-primary"></i> HP: 8</div>
+                            <div class="flex items-center"><i class="fa fa-bolt mr-2 text-nephilim-accent"></i> Speed: 25ft</div>
+                            <div class="flex items-center"><i class="fa fa-skull mr-2 text-nephilim-primary"></i> CP: 1</div>
+                            <div class="flex items-center"><i class="fa fa-user mr-2 text-nephilim-light"></i> Size: Med</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-nephilim-dark rounded-xl overflow-hidden border border-nephilim-accent/20 card-hover">
+                    <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80" alt="Wanderer" class="h-48 w-full object-cover grayscale hover:grayscale-0 transition-all">
+                    <div class="p-6">
+                        <h5 class="text-xl font-ancient text-nephilim-accent">Wanderer</h5>
+                        <p class="text-xs text-nephilim-secondary font-bold uppercase mb-4 tracking-tighter">The Untamed People</p>
+                        <p class="text-sm leading-relaxed mb-6">Nomadic tribes who rejected both city-building and settled life. Self-reliant survivalists who roam the vast wilderness.</p>
+                        <div class="grid grid-cols-2 gap-y-2 border-t border-nephilim-accent/30 pt-4 text-[10px] font-bold uppercase">
+                            <div class="flex items-center"><i class="fa fa-heart mr-2 text-nephilim-primary"></i> HP: 10</div>
+                            <div class="flex items-center"><i class="fa fa-bolt mr-2 text-nephilim-accent"></i> Speed: 30ft</div>
+                            <div class="flex items-center"><i class="fa fa-star mr-2 text-nephilim-secondary"></i> RP: 0</div>
+                            <div class="flex items-center"><i class="fa fa-user mr-2 text-nephilim-light"></i> Size: Med</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-nephilim-dark rounded-xl overflow-hidden border border-nephilim-accent/20 card-hover">
+                    <img src="https://images.unsplash.com/photo-1514539079130-25950c84af65?auto=format&fit=crop&w=600&q=80" alt="Sorcerer" class="h-48 w-full object-cover grayscale hover:grayscale-0 transition-all">
+                    <div class="p-6">
+                        <h5 class="text-xl font-ancient text-nephilim-accent">Sorcerer Clan</h5>
+                        <p class="text-xs text-nephilim-secondary font-bold uppercase mb-4 tracking-tighter">The Initiated</p>
+                        <p class="text-sm leading-relaxed mb-6">Humans initiated into the Watchers' mysteries. They bear visible marks of forbidden knowledge and elemental arts.</p>
+                        <div class="grid grid-cols-2 gap-y-2 border-t border-nephilim-accent/30 pt-4 text-[10px] font-bold uppercase">
+                            <div class="flex items-center"><i class="fa fa-heart mr-2 text-nephilim-primary"></i> HP: 6</div>
+                            <div class="flex items-center"><i class="fa fa-bolt mr-2 text-nephilim-accent"></i> Speed: 25ft</div>
+                            <div class="flex items-center"><i class="fa fa-skull mr-2 text-nephilim-primary"></i> CP: 2</div>
+                            <div class="flex items-center"><i class="fa fa-user mr-2 text-nephilim-light"></i> Size: Med</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="giants" class="mb-20 scroll-mt-24">
+            <div class="flex items-center mb-12">
+                <div class="w-12 h-1 bg-nephilim-accent mr-4"></div>
+                <h3 class="text-[clamp(1.75rem,3vw,2.5rem)] font-ancient text-nephilim-secondary">The Kindred of Titans</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-nephilim-dark rounded-xl overflow-hidden border-2 border-nephilim-primary/50 card-hover group">
+                    <div class="h-56 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1599719321980-043530f28731?auto=format&fit=crop&w=600&q=80" alt="Nephilim Titan" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                    </div>
+                    <div class="p-8">
+                        <h5 class="text-2xl font-ancient text-nephilim-accent">Nephilim (1st Gen)</h5>
+                        <p class="text-xs text-nephilim-secondary font-bold uppercase mb-4 tracking-widest italic">"The Heroes of Renown"</p>
+                        <p class="text-sm leading-relaxed mb-6">Titanic direct offspring of Watchers. Standing 12–15 feet tall, they represent the pinnacle of antediluvian power and corruption.</p>
+                        <div class="grid grid-cols-2 gap-4 border-t border-nephilim-accent/30 pt-6 text-xs font-bold uppercase">
+                            <div><i class="fa fa-heart mr-2 text-nephilim-primary"></i> HP: 12</div>
+                            <div><i class="fa fa-bolt mr-2 text-nephilim-accent"></i> Speed: 25ft</div>
+                            <div><i class="fa fa-skull mr-2 text-nephilim-primary"></i> CP: 3</div>
+                            <div><i class="fa fa-expand mr-2 text-nephilim-light"></i> Size: Large</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-nephilim-dark rounded-xl overflow-hidden border-2 border-nephilim-secondary/50 card-hover group">
+                    <div class="h-56 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80" alt="Anakim Noble" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                    </div>
+                    <div class="p-8">
+                        <h5 class="text-2xl font-ancient text-nephilim-accent">Anakim</h5>
+                        <p class="text-xs text-nephilim-secondary font-bold uppercase mb-4 tracking-widest italic">"The Long-Necked Ones"</p>
+                        <p class="text-sm leading-relaxed mb-6">Noble giants standing 10–13 feet tall. They rule as noble houses, wearing massive bronze chains as symbols of status and war.</p>
+                        <div class="grid grid-cols-2 gap-4 border-t border-nephilim-accent/30 pt-6 text-xs font-bold uppercase">
+                            <div><i class="fa fa-heart mr-2 text-nephilim-primary"></i> HP: 12</div>
+                            <div><i class="fa fa-bolt mr-2 text-nephilim-accent"></i> Speed: 25ft</div>
+                            <div><i class="fa fa-skull mr-2 text-nephilim-primary"></i> CP: 2</div>
+                            <div><i class="fa fa-expand mr-2 text-nephilim-light"></i> Size: Large</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-nephilim-dark rounded-xl overflow-hidden border-2 border-nephilim-accent/50 card-hover group">
+                    <div class="h-56 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80" alt="Rephaim Shade" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                    </div>
+                    <div class="p-8">
+                        <h5 class="text-2xl font-ancient text-nephilim-accent">Rephaim</h5>
+                        <p class="text-xs text-nephilim-secondary font-bold uppercase mb-4 tracking-widest italic">"The Shades of Old"</p>
+                        <p class="text-sm leading-relaxed mb-6">Second-generation giants (9–11 feet) associated with death. Many practice spirit-binding or communicate with the disembodied.</p>
+                        <div class="grid grid-cols-2 gap-4 border-t border-nephilim-accent/30 pt-6 text-xs font-bold uppercase">
+                            <div><i class="fa fa-heart mr-2 text-nephilim-primary"></i> HP: 10</div>
+                            <div><i class="fa fa-bolt mr-2 text-nephilim-accent"></i> Speed: 25ft</div>
+                            <div><i class="fa fa-skull mr-2 text-nephilim-primary"></i> CP: 2</div>
+                            <div><i class="fa fa-expand mr-2 text-nephilim-light"></i> Size: Large</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="economy" class="mb-20 p-12 bg-nephilim-primary/5 rounded-3xl border-2 border-nephilim-accent/10">
+            <h3 class="text-3xl font-ancient text-nephilim-accent mb-8 text-center">The Soul Economy</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+                <div class="space-y-4">
+                    <div class="flex items-center text-nephilim-secondary">
+                        <i class="fa fa-sun-o text-2xl mr-4"></i>
+                        <h4 class="text-xl font-ancient">Righteousness (RP)</h4>
+                    </div>
+                    <p class="text-sm leading-relaxed text-nephilim-light/80">
+                        Righteousness Points (RP) are earned through acts of virtue and faithfulness. They can be spent to reroll checks or heal allies using divine grace.
+                    </p>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center text-nephilim-primary">
+                        <i class="fa fa-moon-o text-2xl mr-4"></i>
+                        <h4 class="text-xl font-ancient">Corruption (CP)</h4>
+                    </div>
+                    <p class="text-sm leading-relaxed text-nephilim-light/80">
+                        Corruption Points (CP) represent spiritual degradation through forbidden knowledge and cruelty. High CP reduces Initiative and risks divine judgment.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-nephilim-dark py-12 border-t-2 border-nephilim-accent/30 text-center">
+        <div class="container mx-auto px-4">
+            <p class="font-ancient text-nephilim-accent text-lg mb-4">Nephilim Wars</p>
+            <p class="text-nephilim-light/40 text-xs mb-8 uppercase tracking-widest">
+                © 2024 | Based on the Complete Pathfinder 2e Special Edition Manual
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
