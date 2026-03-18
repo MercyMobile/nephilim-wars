@@ -12,7 +12,7 @@
       "level": 8,
       "size": "Large",
       "description": "Offspring of the Watchers and human women, standing 12-15 feet tall with immense strength.",
-      "portrait": "/images/combat/nephilim_warrior.png",
+      "portrait": "/images/rutkowski/Giant/nephilim_warrior.png",
       "stats": {
         "hp": 120,
         "maxHp": 120,
@@ -41,7 +41,10 @@
           "damageDice": "2d12",
           "damageBonus": 8,
           "damageType": "slashing",
-          "traits": ["reach 10", "sweep"]
+          "traits": [
+            "reach 10",
+            "sweep"
+          ]
         },
         {
           "id": "crushing_blow",
@@ -52,7 +55,9 @@
           "damageDice": "3d10",
           "damageBonus": 8,
           "damageType": "bludgeoning",
-          "traits": ["reach 10"]
+          "traits": [
+            "reach 10"
+          ]
         }
       ],
       "academicDossier": {
@@ -68,7 +73,7 @@
       "level": 10,
       "size": "Large",
       "description": "Ancient giant warrior, remnant of the pre-flood world. Undying and merciless.",
-      "portrait": "/images/combat/rephaim_champion.png",
+      "portrait": "/images/rutkowski/Giant/rephaim_champion.png",
       "stats": {
         "hp": 150,
         "maxHp": 150,
@@ -97,10 +102,16 @@
           "damageDice": "2d12",
           "damageBonus": 10,
           "damageType": "bludgeoning",
-          "traits": ["reach 10", "forceful"]
+          "traits": [
+            "reach 10",
+            "forceful"
+          ]
         }
       ],
-      "specialAbilities": ["Spirit Sight", "Deathly Aura"],
+      "specialAbilities": [
+        "Spirit Sight",
+        "Deathly Aura"
+      ],
       "academicDossier": {
         "scholarlySynthesis": "Rephaim Champions are second-generation giants, noted for their association with death, the underworld, and the 'shades' of the antediluvian world.",
         "anthropologicalInsights": "The Rephaim represent the spectral legacy of the giants. Anthropologically, they symbolize the transition of the 'monstrous hybridity' into a chthonic existence, where the disembodied spirits of the Grigori-offspring continue to haunt the world as 'shades' of a fallen imperial age.",
@@ -114,7 +125,7 @@
       "level": 7,
       "size": "Large",
       "description": "Descendants of Anak, fierce and battle-crazed warriors. Chain masters.",
-      "portrait": "/images/combat/anakim_berserker.png",
+      "portrait": "/images/rutkowski/Giant/anakim_berserker.png",
       "stats": {
         "hp": 100,
         "maxHp": 100,
@@ -143,7 +154,10 @@
           "damageDice": "2d6",
           "damageBonus": 6,
           "damageType": "slashing",
-          "traits": ["sweep", "twin"]
+          "traits": [
+            "sweep",
+            "twin"
+          ]
         },
         {
           "id": "berserker_rage",
@@ -154,7 +168,9 @@
           "damageDice": "3d8",
           "damageBonus": 8,
           "damageType": "slashing",
-          "traits": ["rage"]
+          "traits": [
+            "rage"
+          ]
         }
       ],
       "academicDossier": {
@@ -170,7 +186,7 @@
       "level": 5,
       "size": "Medium",
       "description": "Descendant of Cain, marked by violence and cunning. Master of stealth and poison.",
-      "portrait": "/images/combat/cainite_assassin.png",
+      "portrait": "/images/rutkowski/Human/cainite_assassin.png",
       "stats": {
         "hp": 60,
         "maxHp": 60,
@@ -199,7 +215,11 @@
           "damageDice": "1d4",
           "damageBonus": 4,
           "damageType": "piercing",
-          "traits": ["agile", "finesse", "poison"]
+          "traits": [
+            "agile",
+            "finesse",
+            "poison"
+          ]
         },
         {
           "id": "shadow_strike",
@@ -210,12 +230,15 @@
           "damageDice": "2d6",
           "damageBonus": 8,
           "damageType": "piercing",
-          "traits": ["finesse", "sneak attack"]
+          "traits": [
+            "finesse",
+            "sneak attack"
+          ]
         }
       ],
       "academicDossier": {
         "scholarlySynthesis": "Cainite Assassins are human descendants of Cain who specialize in stealth, poison, and the pragmatic application of advanced Cainite technology.",
-        "anthropologicalInsights": "They symbolize the urban corruption of the first cities, where the advancement of metallurgy—a gift of the fallen Apkallu—was turned toward secret warfare. Their use of 'root-cutting' (poison) reflects the forbidden knowledge taught by the Watchers to subvert the natural order.",
+        "anthropologicalInsights": "They symbolize the urban corruption of the first cities, where the advancement of metallurgy\u2014a gift of the fallen Apkallu\u2014was turned toward secret warfare. Their use of 'root-cutting' (poison) reflects the forbidden knowledge taught by the Watchers to subvert the natural order.",
         "mythicalBeliefs": "Marked by the legacy of the first murderer, they are believed to operate in the 'shadow of the mark,' protected by a divine decree that shields them from simple vengeance."
       }
     },
@@ -226,7 +249,7 @@
       "level": 6,
       "size": "Medium",
       "description": "Wielder of forbidden knowledge, channeling demonic power through ancient rituals.",
-      "portrait": "/images/combat/sorcerer_priest.png",
+      "portrait": "/images/rutkowski/Human/sorcerer_priest.png",
       "stats": {
         "hp": 70,
         "maxHp": 70,
@@ -255,7 +278,10 @@
           "damageDice": "2d10",
           "damageBonus": 4,
           "damageType": "force",
-          "traits": ["occult", "evocation"]
+          "traits": [
+            "occult",
+            "evocation"
+          ]
         },
         {
           "id": "curse_weakness",
@@ -266,7 +292,11 @@
           "damageDice": "2d8",
           "damageBonus": 4,
           "damageType": "necrotic",
-          "traits": ["occult", "necromancy", "curse"]
+          "traits": [
+            "occult",
+            "necromancy",
+            "curse"
+          ]
         }
       ],
       "academicDossier": {
@@ -282,7 +312,7 @@
       "level": 5,
       "size": "Medium",
       "description": "Subterranean warriors who dwell in mountain caves. Adapted to darkness.",
-      "portrait": "/images/combat/horim_tunneler.png",
+      "portrait": "/images/rutkowski/Cave Dweller/horim_tunneler.png",
       "stats": {
         "hp": 80,
         "maxHp": 80,
@@ -311,10 +341,15 @@
           "damageDice": "1d8",
           "damageBonus": 5,
           "damageType": "bludgeoning",
-          "traits": ["shove"]
+          "traits": [
+            "shove"
+          ]
         }
       ],
-      "specialAbilities": ["Superior Darkvision 120ft", "Stone Cunning"],
+      "specialAbilities": [
+        "Superior Darkvision 120ft",
+        "Stone Cunning"
+      ],
       "academicDossier": {
         "scholarlySynthesis": "Horim Tunnelers are giant-kin adapted to life in the subterranean darkness, fleeing the violence of the surface world for the sanctuary of the earth.",
         "anthropologicalInsights": "The Horim represent a reclusive, specialized society that has mastered stonework and survival in environments that would be fatal to other humanoids.",
@@ -328,7 +363,7 @@
       "level": 7,
       "size": "Medium",
       "description": "The 'Mighty Men' of ancient legend. Warriors of renown, feared across nations.",
-      "portrait": "/images/combat/gibborim_elite.png",
+      "portrait": "/images/rutkowski/Mighty One/gibborim_elite.png",
       "stats": {
         "hp": 110,
         "maxHp": 110,
@@ -357,7 +392,9 @@
           "damageDice": "1d10",
           "damageBonus": 6,
           "damageType": "piercing",
-          "traits": ["reach 10"]
+          "traits": [
+            "reach 10"
+          ]
         },
         {
           "id": "shield_bash",
@@ -368,10 +405,15 @@
           "damageDice": "1d6",
           "damageBonus": 6,
           "damageType": "bludgeoning",
-          "traits": ["shove"]
+          "traits": [
+            "shove"
+          ]
         }
       ],
-      "specialAbilities": ["Powerful Build", "Heroic Blood"],
+      "specialAbilities": [
+        "Powerful Build",
+        "Heroic Blood"
+      ],
       "academicDossier": {
         "scholarlySynthesis": "Gibborim Elite Guards are the 'Mighty Men of Old,' human-giant hybrids who bridge the gap between mortal humanity and the titanic Nephilim.",
         "anthropologicalInsights": "They represent the most successful integration of giant heritage into human social structures, serving as the ultimate champions and tactical leaders of the antediluvian age.",
@@ -385,7 +427,7 @@
       "level": 4,
       "size": "Small",
       "description": "The hidden little people. Tunnel-fighters and survivors who claimed the deep places beneath the world of giants.",
-      "portrait": "/images/combat/Gammadim.png",
+      "portrait": "/images/rutkowski/Under-Walker/gammadim_tunnelfighter.png",
       "stats": {
         "hp": 55,
         "maxHp": 55,
@@ -414,7 +456,10 @@
           "damageDice": "1d6",
           "damageBonus": 3,
           "damageType": "piercing",
-          "traits": ["agile", "finesse"]
+          "traits": [
+            "agile",
+            "finesse"
+          ]
         },
         {
           "id": "sling_stone",
@@ -425,10 +470,18 @@
           "damageDice": "1d6",
           "damageBonus": 2,
           "damageType": "bludgeoning",
-          "traits": ["range 50", "propulsive"]
+          "traits": [
+            "range 50",
+            "propulsive"
+          ]
         }
       ],
-      "specialAbilities": ["Tunnel Fighter (+1 attack in confined spaces)", "Shadow of the Titans (+2 Stealth near Large+ creatures)", "Earth Sense (Tremorsense 15ft)", "Small Size"],
+      "specialAbilities": [
+        "Tunnel Fighter (+1 attack in confined spaces)",
+        "Shadow of the Titans (+2 Stealth near Large+ creatures)",
+        "Earth Sense (Tremorsense 15ft)",
+        "Small Size"
+      ],
       "academicDossier": {
         "scholarlySynthesis": "Gammadim Tunnel-Fighters are the 'hidden little people' or Under-Walkers who survived by claiming the deep places beneath the giant-dominated surface world.",
         "anthropologicalInsights": "They represent the survival of smaller, specialized humanoid groups that moved in the 'shadow of the titans,' utilizing earth sense and stealth to avoid detection.",
@@ -442,7 +495,7 @@
       "level": 3,
       "size": "Medium",
       "description": "Nomadic warrior from the wilderness, swift and deadly with bow and blade.",
-      "portrait": "/images/combat/desert_raider.png",
+      "portrait": "/images/rutkowski/Human/desert_raider.png",
       "stats": {
         "hp": 50,
         "maxHp": 50,
@@ -471,7 +524,10 @@
           "damageDice": "1d8",
           "damageBonus": 3,
           "damageType": "piercing",
-          "traits": ["deadly d10", "range 100"]
+          "traits": [
+            "deadly d10",
+            "range 100"
+          ]
         },
         {
           "id": "scimitar",
@@ -482,7 +538,10 @@
           "damageDice": "1d6",
           "damageBonus": 3,
           "damageType": "slashing",
-          "traits": ["forceful", "sweep"]
+          "traits": [
+            "forceful",
+            "sweep"
+          ]
         }
       ],
       "academicDossier": {
