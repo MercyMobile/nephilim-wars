@@ -161,9 +161,9 @@ async function loadData() {
 
     try {
         const [bestiaryRes, combatRes, creaturesRes] = await Promise.all([
-            fetch('data/bestiary.json'),
-            fetch('data/combat-bestiary.json'),
-            fetch('data/creatures.json')
+            fetch('../data/bestiary.json'),
+            fetch('../data/combat-bestiary.json'),
+            fetch('../data/creatures.json')
         ]);
         if (bestiaryRes.ok) bestiaryData = await bestiaryRes.json();
         if (combatRes.ok) combatBestiaryData = await combatRes.json();
