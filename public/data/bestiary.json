@@ -16,6 +16,11 @@
       "theology": {
         "biblical": ["Daniel 10:13, 21", "Jude 1:9", "Revelation 12:7-9"],
         "extraBiblical": ["1 Enoch 20:5", "War Scroll (1QM)", "Testament of Abraham"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Michael (Mikha'el, 'Who is like God?') is the Chief Prince and protector of Israel. He is the supreme commander of the heavenly hosts and the primary antagonist to the forces of darkness.",
+        "anthropologicalInsights": "The character of Michael reflects the transition from territorial tutelary spirits to a singular, cosmic defender of the righteous. In this capacity, he serves as the primary antithesis to the rebel 'Sarim' (territorial spirits) who have claimed dominion over the nations, functioning as the chief operative of the divine 'police force' sent to restore order.",
+        "mythicalBeliefs": "Tradition holds that Michael disputed with the devil over Moses' body and is commissioned to bind the fallen Watcher Semyaza for seventy generations. He is the restorer of cosmic equilibrium, tasked with dismantling the chaos introduced by the Egregores."
       }
     },
     {
@@ -30,6 +35,11 @@
       "theology": {
         "biblical": ["Daniel 8:15", "Daniel 9:20", "Luke 1:19, 26"],
         "extraBiblical": ["1 Enoch 9:1", "1 Enoch 20:7"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Gabriel (Gavri'el, 'God is my strength') is the primary herald of the Almighty, entrusted with delivering the most significant announcements in salvation history.",
+        "anthropologicalInsights": "Gabriel represents the weapon of divine communication and revelation. As part of the archangelic 'police force,' he serves as the bridge between the celestial and the terrestrial, ensuring the transmission of true wisdom to counter the 'forbidden knowledge' spread by the fallen.",
+        "mythicalBeliefs": "In Enochic tradition, Gabriel is one of the four archangels who look down upon the earth's corruption and is commanded to destroy the children of the Watchers."
       }
     },
     {
@@ -44,6 +54,11 @@
       "theology": {
         "biblical": ["Tobit 3:17", "Tobit 12:15"],
         "extraBiblical": ["1 Enoch 10:4", "1 Enoch 20:3", "Jubilees 10:10"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Raphael (Refa'el, 'God heals') embodies divine compassion as the celestial physician, charged with healing the earth and restraining demonic forces.",
+        "anthropologicalInsights": "The figure of Raphael reflects the personification of divine providence and restoration. His mission to 'heal the earth' is a direct counter-operation against the 'Apkallu Inversion,' where he acts to bind the sources of corruption—specifically Azazel—and purify the world from monstrous hybridity.",
+        "mythicalBeliefs": "Raphael is famously known for binding the demon Azazel in the desert and guiding Tobias on his journey in the deuterocanonical Book of Tobit."
       }
     },
     {
@@ -58,6 +73,11 @@
       "theology": {
         "biblical": ["Genesis 3:24 (Tradition)"],
         "extraBiblical": ["1 Enoch 20:2", "2 Esdras 4"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Uriel (Uri'el, 'God is my light') is the archangel of divine illumination and wisdom, serving as the celestial teacher of prophets and overseer of judgment.",
+        "anthropologicalInsights": "Uriel personifies the light of reason and divine law. As a restorer of order, he guards the threshold of Eden and monitors the descent of the Grigori, ensuring that the boundaries between the sacred and the profane remain intact despite the rebellion at Mt. Hermon.",
+        "mythicalBeliefs": "Tradition places Uriel at the gate of Eden with a flaming sword and identifies him as the guide who showed Enoch the secrets of the cosmos and the underworld."
       }
     },
     {
@@ -72,6 +92,11 @@
       "theology": {
         "biblical": [],
         "extraBiblical": ["1 Enoch 20:6", "1 Enoch 9:1"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Sariel (Sari'el, 'Prince of God') is one of the seven holy archangels, primarily associated with divine instruction, the lunar calendar, and the judgment of spiritual sins.",
+        "anthropologicalInsights": "Sariel's role highlights the celestial concern for cosmic cycles and the punishment of spiritual corruption that undermines the divine order.",
+        "mythicalBeliefs": "He is credited with teaching Moses the secrets of the lunar calendar and is tasked with watching over the spirits of those who sin against the spirit."
       }
     },
     {
@@ -86,6 +111,11 @@
       "theology": {
         "biblical": [],
         "extraBiblical": ["1 Enoch 20:4", "1 Enoch 23:4"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Raguel (Re'u'el, 'Friend of God') is the archangel of justice and harmony, acting as the enforcer of order within the angelic hierarchy.",
+        "anthropologicalInsights": "Raguel represents the concept of internal celestial policing, ensuring that even spiritual beings remain accountable to divine law and cosmic harmony.",
+        "mythicalBeliefs": "Enochic tradition describes Raguel as the one who 'takes vengeance on the world of the luminaries' and oversees the conduct of his fellow angels."
       }
     },
     {
@@ -100,6 +130,11 @@
       "theology": {
         "biblical": [],
         "extraBiblical": ["1 Enoch 20:8", "2 Baruch", "2 Esdras 4:36"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Remiel (Remi'el, 'Thunder of God') is the archangel of resurrection and hope, presiding over the souls awaiting the final judgment.",
+        "anthropologicalInsights": "Remiel personifies the eschatological hope of humanity, reflecting the belief in a transition from death to a new life and the eventual triumph of righteousness.",
+        "mythicalBeliefs": "In 2 Esdras, he is the one who answers the questions of the righteous dead concerning when the number of the faithful will be complete and judgment will begin."
       }
     },
     {
@@ -114,6 +149,11 @@
       "theology": {
         "biblical": ["Genesis 5:24 (Implied)"],
         "extraBiblical": ["3 Enoch", "Babylonian Talmud"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Metatron is the preeminent High Angel and celestial scribe in Jewish mystical tradition, often identified as the divinized patriarch Enoch.",
+        "anthropologicalInsights": "The figure of Metatron represents the ultimate human potential for ascension and the role of the 'Lesser YHWH' as a mediator of divine authority.",
+        "mythicalBeliefs": "Tradition holds that Enoch was transformed into Metatron, a being of fire with thirty-six pairs of wings and thousands of eyes, to record the deeds of Israel."
       }
     },
     {
@@ -128,6 +168,11 @@
       "theology": {
         "biblical": [],
         "extraBiblical": ["Sefer Raziel HaMalakh", "Zohar"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Raziel (Razi'el, 'Secret of God') is the keeper of divine mysteries and secrets, standing in the closest proximity to the throne of the Almighty.",
+        "anthropologicalInsights": "Raziel personifies the transmission of esoteric knowledge and the belief that the secrets of the cosmos are accessible to the righteous through divine revelation.",
+        "mythicalBeliefs": "He is said to have authored the 'Sefer Raziel HaMalakh,' a book of all celestial knowledge, which he gave to Adam after the exile from Eden."
       }
     },
     {
@@ -142,6 +187,11 @@
       "theology": {
         "biblical": [],
         "extraBiblical": ["Jewish Mysticism", "Islamic Tradition"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Azrael (Azar'el, 'Whom God Helps') is the Angel of Death, the psychopomp tasked with separating the soul from the body at the moment of expiration.",
+        "anthropologicalInsights": "Azrael reflects the personification of mortality as a compassionate and precise servant of God, ensuring the orderly transition from the temporal to the eternal.",
+        "mythicalBeliefs": "Folklore describes Azrael as being covered in eyes and tongues, each representing a living person, and recording the names of the born and dead in a vast book."
       }
     },
     {
@@ -156,6 +206,11 @@
       "theology": {
         "biblical": ["Job 1-2", "Isaiah 14", "Revelation 12"],
         "extraBiblical": ["Life of Adam and Eve", "Martyrdom of Isaiah"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Satan (The Adversary) represents the supreme mystery of cosmic evil and rebellion against the Creator, operating as the primary accuser of humanity.",
+        "anthropologicalInsights": "Satan embodies the archetype of the fallen pride and the personification of the chaotic forces that oppose the established divine order.",
+        "mythicalBeliefs": "Originally a high-ranking angel, he is believed to have led a celestial rebellion and is eschatologically destined to be cast down into the lake of fire."
       }
     },
     {
@@ -170,6 +225,11 @@
       "theology": {
         "biblical": ["Genesis 6:1-4 (Implied)"],
         "extraBiblical": ["1 Enoch 6-10", "Book of Giants"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Semyaza (Shemhazai) is the leader of the two hundred Watchers (Grigori) who descended upon Mount Hermon, an event that mirrors the emergence of the Apkallu from the Abzu but recontextualized as a cosmic rebellion.",
+        "anthropologicalInsights": "Semyaza represents the catalyst of 'monstrous hybridity.' His descent marks the beginning of the corruption of the natural order through the introduction of celestial mysteries, representing the 'Egregores' whose rebellion fundamentally fractured the antediluvian world.",
+        "mythicalBeliefs": "He bound his fellow Watchers by a mutual oath to commit their transgression and is eventually bound by Michael for seventy generations beneath the hills of the earth."
       }
     },
     {
@@ -184,6 +244,11 @@
       "theology": {
         "biblical": ["Leviticus 16"],
         "extraBiblical": ["1 Enoch 8:1", "1 Enoch 10:4", "Apocalypse of Abraham"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Azazel is a chief Fallen Watcher whose revelation of metallurgy and the arts of vanity represents a radical 'Apkallu Inversion.' In this polemic, the civilizing gifts of the Mesopotamian sages are recontextualized as the primary drivers of human corruption and rebellion.",
+        "anthropologicalInsights": "Azazel symbolizes the destructive introduction of advanced technology. By teaching the construction of weaponry, he inverts the role of the traditional sage from a bringer of civilization to a purveyor of 'forbidden knowledge' that necessitates divine intervention.",
+        "mythicalBeliefs": "Associated with the scapegoat of Leviticus, Enochic tradition identifies him as one of the 'Grigori' who descended to Mt. Hermon, mirroring the Apkallu's emergence from the Abzu but as a source of terminal chaos rather than order."
       }
     },
     {
@@ -198,6 +263,11 @@
       "theology": {
         "biblical": ["Isaiah 34:14"],
         "extraBiblical": ["Dead Sea Scrolls 4Q510", "Alphabet of Ben-Sira"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Lilith is an ancient night demoness whose origins trace back to the Mesopotamian 'Lilitu'—storm demons and succubi associated with the wind and the wild places of the earth.",
+        "anthropologicalInsights": "Lilith represents the archetype of the rebellious and unsubmissive feminine. Historically, she embodies the 'Lilitu' storm-demon legacy, reflecting cultural anxieties regarding the untamed forces of nature and the subversion of domestic order.",
+        "mythicalBeliefs": "Later folklore identifies her as the first wife of Adam who fled Eden after refusing to be subordinate, eventually becoming the mother of demons and monsters."
       }
     },
     {
@@ -212,6 +282,11 @@
       "theology": {
         "biblical": ["Tobit 3:8"],
         "extraBiblical": ["Testament of Solomon", "Talmud Gittin 68a"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Asmodeus (Ashmeday, 'Destroyer') is a powerful demon king associated with uncontrolled lust, rage, and the subversion of marital bonds.",
+        "anthropologicalInsights": "Asmodeus personifies the destructive potential of human passions when unbridled by law or covenant, specifically targeting the core social unit of the family.",
+        "mythicalBeliefs": "In the Book of Tobit, he is the antagonist who slew seven of Sarah's husbands on their wedding nights before being driven away and bound by the archangel Raphael."
       }
     },
     {
@@ -226,6 +301,11 @@
       "theology": {
         "biblical": ["2 Corinthians 6:15"],
         "extraBiblical": ["War Scroll (1QM)", "Testament of the Twelve Patriarchs"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Belial (Beliya'al, 'Worthlessness') is the personification of lawlessness and the chief adversary in the dualistic theology of the Qumran community.",
+        "anthropologicalInsights": "Belial represents the total absence of divine law and purpose, standing as the Prince of Darkness who leads the Sons of Darkness against the Sons of Light.",
+        "mythicalBeliefs": "The War Scroll (1QM) describes Belial as the leader of the demonic hosts who will be defeated by the archangel Michael in the final cosmic battle."
       }
     },
     {
@@ -240,6 +320,11 @@
       "theology": {
         "biblical": [],
         "extraBiblical": ["Book of Jubilees 10", "Book of Jubilees 48"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Mastema (Animosity) is the chief of evil spirits who operates within the divine framework as a tester and accuser of humanity.",
+        "anthropologicalInsights": "Mastema functions as an agent of divine testing, reflecting a theological attempt to explain the persistence of evil and temptation in a world governed by a sovereign God.",
+        "mythicalBeliefs": "According to the Book of Jubilees, Mastema convinced God to allow one-tenth of the demons to remain on earth after the Flood to continue testing the faith of men."
       }
     },
     {
@@ -254,6 +339,11 @@
       "theology": {
         "biblical": ["Revelation 9:11", "Job 26:6"],
         "extraBiblical": ["Dead Sea Scrolls"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Abaddon (Avadon, 'Destruction') is the angel of the Abyss and the personification of the realm of the dead as a destructive force.",
+        "anthropologicalInsights": "Abaddon represents the evolution of the concept of the grave (Sheol) into a sentient, personified entity that serves as the jailer of the bottomless pit.",
+        "mythicalBeliefs": "In the Book of Revelation, he is the king of the demonic locusts that emerge from the smoke of the pit to torment those without the seal of God on their foreheads."
       }
     },
     {
@@ -268,6 +358,11 @@
       "theology": {
         "biblical": [],
         "extraBiblical": ["1 Enoch 69:6"]
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "Gadreel is a Fallen Watcher identified in the Enochic tradition as the one who seduced Eve and introduced the knowledge of lethal weaponry.",
+        "anthropologicalInsights": "Gadreel represents an alternative explanation for the origin of sin and violence, shifting the focus from the serpent to a celestial rebel who taught humanity the art of death.",
+        "mythicalBeliefs": "Enochic texts claim he revealed the secrets of the sword and shield to mortals and even taught them how to strike the embryo within the womb."
       }
     },
     {
@@ -282,6 +377,11 @@
       "theology": {
         "biblical": ["Daniel 10:13, 20"],
         "extraBiblical": []
+      },
+      "academicDossier": {
+        "scholarlySynthesis": "The Prince of Persia (Sar Paras) is a powerful territorial spirit (Sar) who exercises spiritual authority over the Persian Empire.",
+        "anthropologicalInsights": "The figure reflects the ancient belief in national tutelary deities who govern the destinies of empires and engage in spiritual warfare against divine messengers.",
+        "mythicalBeliefs": "As recorded in the Book of Daniel, this spirit successfully delayed a heavenly messenger for twenty-one days until the archangel Michael came to the messenger's aid."
       }
     }
   ]

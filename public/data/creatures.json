@@ -9,7 +9,12 @@
         "hd": 14, "hp": 140, "def": 18, 
         "attack": "Sword of Wrath +14 (4d10+8 fire)", 
         "special": "Legendary, Prophetic Dreams", 
-        "description": "The wrathful first-born of Semyaza. Plagued by nightmares of the coming deluge."
+        "description": "The wrathful first-born of Semyaza. Plagued by nightmares of the coming deluge.",
+        "academicDossier": {
+          "scholarlySynthesis": "Ohya is the wrathful first-born son of the Watcher Semyaza and a human woman, representing the first generation of Nephilim titans.",
+          "anthropologicalInsights": "Ohya's character reflects the 'monstrous hybridity' that necessitates the Flood. Anthropologically, he symbolizes the existential dread of a being that violates cosmic boundaries, representing the doomed legacy of the Grigori whose rebellion at Mt. Hermon fractured the natural order.",
+          "mythicalBeliefs": "According to the Book of Giants, Ohya was plagued by nightmares of the coming Deluge and sought the prophet Enoch to interpret his visions of doom."
+        }
       },
       { 
         "id": "hahya",
@@ -17,7 +22,12 @@
         "hd": 12, "hp": 110, "def": 16, 
         "attack": "Greataxe +11 (3d12+6)", 
         "special": "Legendary, Dream Visions", 
-        "description": "The contemplative brother who dreamt of the garden where only one tree remained."
+        "description": "The contemplative brother who dreamt of the garden where only one tree remained.",
+        "academicDossier": {
+          "scholarlySynthesis": "Hahya is the contemplative brother of Ohya and son of the Watcher Semyaza, noted for his prophetic sensitivity and visions.",
+          "anthropologicalInsights": "Hahya serves as a symbol of the internal conflict and prophetic dread within the giant lineages. His contemplative nature highlights the tension between their celestial origin as sons of Egregores and their terrestrial fate.",
+          "mythicalBeliefs": "Hahya famously dreamt of a garden being submerged where only one tree with three branches remained, which was interpreted as the survival of Noah and his sons."
+        }
       },
       { 
         "id": "mahway",
@@ -25,7 +35,12 @@
         "hd": 10, "hp": 95, "def": 19, 
         "attack": "Diving Attack +12 (4d8+5)", 
         "special": "Legendary, True Flight", 
-        "description": "Son of Barakel. The messenger sent to find Enoch at the ends of the earth."
+        "description": "Son of Barakel. The messenger sent to find Enoch at the ends of the earth.",
+        "academicDossier": {
+          "scholarlySynthesis": "Mahway is a winged giant and the son of the Watcher Barakel, distinguished by his ability for true flight and his role as a celestial messenger.",
+          "anthropologicalInsights": "Mahway represents the role of the intermediary. As a winged Grigori-hybrid, he bridges the gap between the corrupted urban-imperial cultures and the nomadic prophetic line of Enoch, carrying the plea of the hybrid legacy before the divine 'police force'.",
+          "mythicalBeliefs": "Tradition holds that Mahway flew to the ends of the earth to find Enoch, carrying the plea of the Nephilim for intercession before the Most High."
+        }
       },
       { 
         "id": "gilgamesh",
@@ -33,7 +48,12 @@
         "hd": 12, "hp": 120, "def": 17, 
         "attack": "Hero's Blade +12 (3d10+7)", 
         "special": "Legendary, Wrestler Supreme", 
-        "description": "A giant mentioned in the Dead Sea Scrolls, confused by the nightmares of his brethren."
+        "description": "A giant mentioned in the Dead Sea Scrolls, confused by the nightmares of his brethren.",
+        "academicDossier": {
+          "scholarlySynthesis": "Gilgamesh is a legendary figure of immense strength, integrated into the Enochic narrative through a process of syncretism where he is explicitly identified as a Nephilim or Giant in the Dead Sea Scrolls.",
+          "anthropologicalInsights": "The inclusion of Gilgamesh reflects the polemic clash between nomadic Jewish culture and the decadent urban-imperial cultures of Babylon. By identifying the great Sumerian king as a monstrous hybrid destined for judgment, the text subverts the heroic ideals of the Mesopotamian empire.",
+          "mythicalBeliefs": "In the Book of Giants found among the Dead Sea Scrolls, Gilgamesh is a 'wrestler supreme' who is deeply troubled and confused by the prophetic nightmares of his brethren regarding the coming Flood."
+        }
       }
     ]
   },
@@ -47,7 +67,12 @@
         "hd": 6, "hp": 50, "def": 13, 
         "attack": "Sacrificial Knife +6", 
         "special": "Dark Sorcery", 
-        "description": "Priests who perform blood sacrifices to fuel dark miracles."
+        "description": "Priests who perform blood sacrifices to fuel dark miracles.",
+        "academicDossier": {
+          "scholarlySynthesis": "Baal-Priests are human servitors who have abandoned the worship of the Creator to serve the Nephilim and their fallen angelic patrons.",
+          "anthropologicalInsights": "These priests represent the institutionalization of corruption, where human religious structures are co-opted to maintain the dominance of giant overlords.",
+          "mythicalBeliefs": "They are believed to perform blood sacrifices and dark rituals to channel demonic power, effectively acting as the spiritual enforcers of the Watchers' legacy."
+        }
       },
       { 
         "id": "lamech",
@@ -55,7 +80,12 @@
         "hd": 9, "hp": 85, "def": 17, 
         "attack": "Tubal-Cain's Blade +11", 
         "special": "Legendary, Vengeance", 
-        "description": "The Cainite king who boasted of killing a man for wounding him."
+        "description": "The Cainite king who boasted of killing a man for wounding him.",
+        "academicDossier": {
+          "scholarlySynthesis": "Lamech the Avenger is a Cainite king who personifies the extreme escalation of violence and pride in the antediluvian world.",
+          "anthropologicalInsights": "Lamech represents the 'seventy-sevenfold' escalation of the mark of Cain, symbolizing a society where personal vengeance has replaced divine law.",
+          "mythicalBeliefs": "His boast to his wives, Adah and Zillah, about killing a man for a mere wound is seen as the narrative climax of human depravity before the Flood."
+        }
       }
     ]
   }

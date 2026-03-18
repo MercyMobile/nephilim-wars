@@ -54,7 +54,12 @@
           "damageType": "bludgeoning",
           "traits": ["reach 10"]
         }
-      ]
+      ],
+      "academicDossier": {
+        "scholarlySynthesis": "Nephilim Warriors are the direct titanic offspring of the Fallen Watchers and human women, representing the peak of antediluvian physical corruption.",
+        "anthropologicalInsights": "These beings represent the 'monstrous hybridity' that defines the antediluvian crisis. Anthropologically, they symbolize the clash between nomadic Jewish culture and the decadent urban-imperial structures of Babylon/Assyria, where the Nephilim function as the ultimate symbols of imperial tyranny and the 'Apkallu Inversion' of civilization into corruption.",
+        "mythicalBeliefs": "Enochic tradition describes them as 'men of renown' whose insatiable appetites eventually led them to devour the labor of men and turn to cannibalism."
+      }
     },
     {
       "id": "rephaim_champion",
@@ -95,7 +100,12 @@
           "traits": ["reach 10", "forceful"]
         }
       ],
-      "specialAbilities": ["Spirit Sight", "Deathly Aura"]
+      "specialAbilities": ["Spirit Sight", "Deathly Aura"],
+      "academicDossier": {
+        "scholarlySynthesis": "Rephaim Champions are second-generation giants, noted for their association with death, the underworld, and the 'shades' of the antediluvian world.",
+        "anthropologicalInsights": "The Rephaim represent the spectral legacy of the giants. Anthropologically, they symbolize the transition of the 'monstrous hybridity' into a chthonic existence, where the disembodied spirits of the Grigori-offspring continue to haunt the world as 'shades' of a fallen imperial age.",
+        "mythicalBeliefs": "Often referred to as 'the dead' or 'the ghosts,' mythical tradition holds that their disembodied spirits survived the Flood to become wandering demons (Refa'im)."
+      }
     },
     {
       "id": "anakim_berserker",
@@ -146,7 +156,12 @@
           "damageType": "slashing",
           "traits": ["rage"]
         }
-      ]
+      ],
+      "academicDossier": {
+        "scholarlySynthesis": "Anakim Berserkers are noble yet fierce giants known as the 'Long-Necked Ones,' distinguished by their martial honor and use of bronze chains.",
+        "anthropologicalInsights": "They represent a sophisticated yet brutal warrior culture that utilizes status symbols (chains) as both social markers and deadly battlefield implements.",
+        "mythicalBeliefs": "Descended from Anak, they were so terrifyingly large that human scouts famously compared themselves to 'grasshoppers' when standing in their presence."
+      }
     },
     {
       "id": "cainite_assassin",
@@ -197,7 +212,12 @@
           "damageType": "piercing",
           "traits": ["finesse", "sneak attack"]
         }
-      ]
+      ],
+      "academicDossier": {
+        "scholarlySynthesis": "Cainite Assassins are human descendants of Cain who specialize in stealth, poison, and the pragmatic application of advanced Cainite technology.",
+        "anthropologicalInsights": "They symbolize the urban corruption of the first cities, where the advancement of metallurgy—a gift of the fallen Apkallu—was turned toward secret warfare. Their use of 'root-cutting' (poison) reflects the forbidden knowledge taught by the Watchers to subvert the natural order.",
+        "mythicalBeliefs": "Marked by the legacy of the first murderer, they are believed to operate in the 'shadow of the mark,' protected by a divine decree that shields them from simple vengeance."
+      }
     },
     {
       "id": "sorcerer_priest",
@@ -248,7 +268,12 @@
           "damageType": "necrotic",
           "traits": ["occult", "necromancy", "curse"]
         }
-      ]
+      ],
+      "academicDossier": {
+        "scholarlySynthesis": "Sorcerer-Priests are human initiates of the Watcher traditions, channeling forbidden elemental and mental magic through demonic rituals.",
+        "anthropologicalInsights": "These figures represent the human desire for celestial power through the 'Apkallu Inversion.' By channeling demonic power through ancient rituals, they embody the decadent urban-imperial cultures that the nomadic prophetic line sought to counter.",
+        "mythicalBeliefs": "They often bear the 'Watcher's Mark,' a mystical brand that allows angelic beings to sense them and serves as a physical sign of their alignment with the Fallen."
+      }
     },
     {
       "id": "horim_tunneler",
@@ -289,7 +314,12 @@
           "traits": ["shove"]
         }
       ],
-      "specialAbilities": ["Superior Darkvision 120ft", "Stone Cunning"]
+      "specialAbilities": ["Superior Darkvision 120ft", "Stone Cunning"],
+      "academicDossier": {
+        "scholarlySynthesis": "Horim Tunnelers are giant-kin adapted to life in the subterranean darkness, fleeing the violence of the surface world for the sanctuary of the earth.",
+        "anthropologicalInsights": "The Horim represent a reclusive, specialized society that has mastered stonework and survival in environments that would be fatal to other humanoids.",
+        "mythicalBeliefs": "Ancient lore describes them as 'stone-dwellers' who worship the silence of the earth and possess the ability to sense vibrations and hidden passages through solid rock."
+      }
     },
     {
       "id": "gibborim_elite",
@@ -341,7 +371,12 @@
           "traits": ["shove"]
         }
       ],
-      "specialAbilities": ["Powerful Build", "Heroic Blood"]
+      "specialAbilities": ["Powerful Build", "Heroic Blood"],
+      "academicDossier": {
+        "scholarlySynthesis": "Gibborim Elite Guards are the 'Mighty Men of Old,' human-giant hybrids who bridge the gap between mortal humanity and the titanic Nephilim.",
+        "anthropologicalInsights": "They represent the most successful integration of giant heritage into human social structures, serving as the ultimate champions and tactical leaders of the antediluvian age.",
+        "mythicalBeliefs": "Inheriting the strength of giants without their insatiable appetites, they are famed for 'Heroic Blood' that allows them to perform feats beyond mortal capacity."
+      }
     },
     {
       "id": "gammadim_tunnelfighter",
@@ -393,7 +428,12 @@
           "traits": ["range 50", "propulsive"]
         }
       ],
-      "specialAbilities": ["Tunnel Fighter (+1 attack in confined spaces)", "Shadow of the Titans (+2 Stealth near Large+ creatures)", "Earth Sense (Tremorsense 15ft)", "Small Size"]
+      "specialAbilities": ["Tunnel Fighter (+1 attack in confined spaces)", "Shadow of the Titans (+2 Stealth near Large+ creatures)", "Earth Sense (Tremorsense 15ft)", "Small Size"],
+      "academicDossier": {
+        "scholarlySynthesis": "Gammadim Tunnel-Fighters are the 'hidden little people' or Under-Walkers who survived by claiming the deep places beneath the giant-dominated surface world.",
+        "anthropologicalInsights": "They represent the survival of smaller, specialized humanoid groups that moved in the 'shadow of the titans,' utilizing earth sense and stealth to avoid detection.",
+        "mythicalBeliefs": "Legend holds that the Gammadim are the masters of the world's ancient roots, possessing a spiritual connection to the deep-earth crystals and the world's foundations."
+      }
     },
     {
       "id": "desert_raider",
@@ -444,7 +484,12 @@
           "damageType": "slashing",
           "traits": ["forceful", "sweep"]
         }
-      ]
+      ],
+      "academicDossier": {
+        "scholarlySynthesis": "Desert Raiders are nomadic human warriors from the 'Wanderer' lineage, excelling in survival and mobile warfare in the harshest environments.",
+        "anthropologicalInsights": "They represent the independent human tribes that rejected both the city-builder culture of Cain and the strictures of the righteous line, choosing freedom in the wilds.",
+        "mythicalBeliefs": "Masters of the steppe and desert, they are believed to navigate by the stars and thrive where no giant could survive, resisting both Nephilim rule and urban corruption."
+      }
     }
   ]
 }

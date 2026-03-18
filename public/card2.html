@@ -1,483 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nephilim Wars - Bestiary Cards</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Nephilim Wars - Archives</title>
+    <link href='https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=Roboto+Condensed:wght@300;400;700&display=swap' rel='stylesheet'>
     <style>
         :root {
-            --primary: #8B2E3F;
-            --secondary: #4A6FA5;
-            --accent: #C19A6B;
-            --dark: #1A120B;
-            --light: #F3E9DC;
-            --angel: #4A6FA5;
-            --demon: #8B2E3F;
-            --fallen: #6B3FA0;
-            --giant: #8B6914;
-            --human: #5A7247;
-            --cave: #6B5B4B;
-            --mighty: #A85B20;
-            --under: #4B6B6B;
+            --primary: #8B2E3F; --secondary: #4A6FA5; --accent: #C19A6B; --dark: #0c0a09; --light: #F3E9DC;
+            --angel: #4A6FA5; --demon: #8B2E3F; --fallen: #6B3FA0; --giant: #8B6914; --human: #5A7247;
+            --cave: #6B5B4B; --mighty: #A85B20; --under: #4B6B6B; --archive-bg: #14110f; --archive-border: #3d342d;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             background-color: var(--dark);
-            background-image:
-                radial-gradient(circle at 20% 50%, rgba(139,46,63,0.06) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(74,111,165,0.06) 0%, transparent 50%);
-            color: var(--light);
-            font-family: 'Roboto Condensed', Arial, sans-serif;
-            min-height: 100vh;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-matter.png'),
+                radial-gradient(circle at 20% 50%, rgba(139,46,63,0.04) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(74,111,165,0.04) 0%, transparent 50%);
+            color: var(--light); font-family: 'Crimson Pro', serif; min-height: 100vh;
         }
+        
+        /* Modal Styles */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; padding: 2rem; }
+        .modal-overlay.open { display: flex; }
+        .modal-card { background: var(--archive-bg); border: 1px solid var(--archive-border); border-radius: 4px; max-width: 1300px; width: 95%; height: 90vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 0 100px rgba(0,0,0,1); position: relative; }
+        #modalContent { display: flex; flex-direction: row; width: 100%; height: 100%; overflow: hidden; }
+        .modal-sidebar { width: 400px; min-width: 400px; background: #080706; border-right: 1px solid var(--archive-border); display: flex; flex-direction: column; overflow-y: auto; color: var(--light); }
+        .modal-main { flex: 1; padding: 3.5rem; overflow-y: auto; background-image: radial-gradient(circle at top right, rgba(193,154,107,0.03), transparent); position: relative; background-color: var(--archive-bg); color: var(--light); }
+        .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: rgba(0,0,0,0.5); border: 1px solid var(--archive-border); color: var(--accent); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: pointer; z-index: 1100; font-size: 1.5rem; transition: all 0.2s; }
+        .modal-close:hover { background: var(--accent); color: var(--dark); }
+        .modal-art { width: 100%; height: 450px; object-fit: cover; object-position: center; border-bottom: 1px solid var(--archive-border); }
+        
+        /* Dossier Text */
+        .dossier-header { border-bottom: 1px solid var(--accent); margin-bottom: 2.5rem; padding-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-end; }
+        .dossier-id { font-family: 'Cinzel', serif; font-size: 0.75rem; color: var(--accent); opacity: 0.5; letter-spacing: 0.4em; }
+        .scholarly-section { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid rgba(193,154,107,0.1); }
+        .scholarly-section h3 { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--accent); text-transform: uppercase; margin-bottom: 1.5rem; letter-spacing: 0.2em; display: flex; align-items: center; gap: 1rem; }
+        .scholarly-section h3::after { content: ''; flex: 1; height: 1px; background: rgba(193,154,107,0.15); }
+        .academic-text { font-size: 1.1rem; line-height: 1.9; color: rgba(243,233,220,0.85); text-align: justify; margin-bottom: 1.5rem; }
+        .academic-text b { color: var(--accent); font-weight: 600; }
+        
+        .manuscript-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .manuscript-item { font-size: 0.85rem; color: var(--secondary); background: rgba(74,111,165,0.08); padding: 0.8rem; border-left: 3px solid var(--secondary); font-family: 'Roboto Condensed', sans-serif; }
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--dark); }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
-
-        /* Header */
-        header {
-            background: linear-gradient(180deg, rgba(26,18,11,0.98), rgba(26,18,11,0.85));
-            backdrop-filter: blur(12px);
-            padding: 1rem 2rem;
-            border-bottom: 2px solid var(--accent);
-            position: sticky; top: 0; z-index: 100;
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        header h1 {
-            font-family: 'Cinzel', serif;
-            color: var(--accent);
-            font-size: clamp(1.4rem, 3vw, 2rem);
-            letter-spacing: 0.15em;
-        }
-        header h1 span { color: var(--secondary); font-size: 0.5em; display: block; letter-spacing: 0.3em; text-transform: uppercase; }
-
-        /* Filter Bar */
-        .filter-bar {
-            display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
-        }
-        .filter-btn {
-            background: rgba(193,154,107,0.1);
-            border: 1px solid rgba(193,154,107,0.3);
-            color: var(--light);
-            padding: 0.4rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: 'Roboto Condensed', sans-serif;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            transition: all 0.2s;
-        }
-        .filter-btn:hover, .filter-btn.active {
-            background: var(--accent);
-            color: var(--dark);
-            border-color: var(--accent);
-        }
-        .search-input {
-            background: rgba(193,154,107,0.1);
-            border: 1px solid rgba(193,154,107,0.3);
-            color: var(--light);
-            padding: 0.4rem 1rem;
-            border-radius: 4px;
-            font-family: 'Roboto Condensed', sans-serif;
-            font-size: 0.85rem;
-            outline: none;
-            width: 200px;
-        }
-        .search-input::placeholder { color: rgba(243,233,220,0.4); }
+        /* Header & Navigation */
+        header { background: rgba(26,18,11,0.98); backdrop-filter: blur(12px); padding: 1rem 2rem; border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; }
+        header h1 { font-family: 'Cinzel', serif; color: var(--accent); font-size: 1.8rem; letter-spacing: 0.15em; }
+        header h1 span { color: var(--secondary); font-size: 0.5em; display: block; }
+        .filter-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+        .filter-btn { background: rgba(193,154,107,0.1); border: 1px solid rgba(193,154,107,0.3); color: var(--light); padding: 0.5rem 1.2rem; border-radius: 4px; cursor: pointer; text-transform: uppercase; font-size: 0.75rem; font-family: 'Cinzel', serif; transition: all 0.2s; letter-spacing: 0.1em; }
+        .filter-btn.active { background: var(--accent); color: var(--dark); box-shadow: 0 0 15px rgba(193,154,107,0.4); }
+        .search-input { background: rgba(0,0,0,0.4); border: 1px solid var(--archive-border); color: var(--light); padding: 0.5rem 1rem; border-radius: 4px; width: 250px; outline: none; font-family: 'Roboto Condensed', sans-serif; }
         .search-input:focus { border-color: var(--accent); }
 
         /* Card Grid */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            padding: 2rem;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        /* MTG Card */
-        .mtg-card {
-            perspective: 1000px;
-            cursor: pointer;
-            height: 480px;
-        }
-        .mtg-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            border-radius: 16px;
-            overflow: hidden;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5), 0 0 1px rgba(193,154,107,0.5);
-        }
-        .mtg-card:hover .mtg-card-inner {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 16px 40px rgba(0,0,0,0.7), 0 0 20px rgba(193,154,107,0.2);
-        }
-
-        /* Card Frame */
-        .card-frame {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            border: 3px solid;
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        /* Type-based border colors */
-        .card-frame[data-type="Angel"]   { border-color: var(--angel); }
-        .card-frame[data-type="Demon"]   { border-color: var(--demon); }
-        .card-frame[data-type="Fallen"]  { border-color: var(--fallen); }
-        .card-frame[data-type="Giant"]   { border-color: var(--giant); }
-        .card-frame[data-type="Human"]   { border-color: var(--human); }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; padding: 3rem 2rem; max-width: 1600px; margin: 0 auto; }
+        .mtg-card { perspective: 1000px; cursor: pointer; height: 450px; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .mtg-card:hover { transform: translateY(-15px) scale(1.02); }
+        .mtg-card-inner { position: relative; width: 100%; height: 100%; border-radius: 16px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.7); }
+        .card-frame { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; border: 4px solid; border-radius: 16px; overflow: hidden; background: #14110f; }
+        
+        /* Frame Colors */
+        .card-frame[data-type="Angel"]   { border-color: var(--angel); background: linear-gradient(to bottom, #14110f, #1a1e24); }
+        .card-frame[data-type="Demon"]   { border-color: var(--demon); background: linear-gradient(to bottom, #14110f, #241a1a); }
+        .card-frame[data-type="Fallen"]  { border-color: var(--fallen); background: linear-gradient(to bottom, #14110f, #1e1a24); }
+        .card-frame[data-type="Giant"]   { border-color: var(--giant); background: linear-gradient(to bottom, #14110f, #24211a); }
+        .card-frame[data-type="Human"]   { border-color: var(--human); background: linear-gradient(to bottom, #14110f, #1a241a); }
         .card-frame[data-type="Cave Dweller"] { border-color: var(--cave); }
         .card-frame[data-type="Mighty One"]   { border-color: var(--mighty); }
         .card-frame[data-type="Under-Walker"] { border-color: var(--under); }
+        .card-frame[data-type="Beast"] { border-color: var(--accent); }
+        .card-frame[data-type="Spirit"] { border-color: var(--secondary); }
 
-        /* Card Title Bar */
-        .card-title-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.6rem 0.8rem;
-            background: linear-gradient(135deg, rgba(26,18,11,0.95), rgba(26,18,11,0.85));
-            border-bottom: 1px solid rgba(193,154,107,0.3);
-        }
-        .card-name {
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: var(--accent);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            flex: 1;
-        }
-        .card-cost {
-            background: var(--primary);
-            color: var(--light);
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            font-size: 0.75rem;
-            width: 28px; height: 28px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 50%;
-            margin-left: 0.5rem;
-            flex-shrink: 0;
-        }
+        .card-title-bar { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 1rem; background: rgba(0,0,0,0.7); border-bottom: 1px solid rgba(193,154,107,0.3); }
+        .card-name { font-family: 'Cinzel', serif; font-weight: 700; font-size: 1rem; color: var(--accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-art-container { height: 200px; overflow: hidden; border-bottom: 2px solid rgba(193,154,107,0.4); background: #000; position: relative; }
+        .card-art-container img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+        .card-type-line { padding: 0.4rem 1rem; background: rgba(0,0,0,0.5); font-size: 0.7rem; text-transform: uppercase; font-weight: bold; border-bottom: 1px solid rgba(193,154,107,0.2); letter-spacing: 0.1em; color: var(--light); }
+        .card-text-box { flex: 1; padding: 0.8rem 1rem; background: rgba(26,18,11,0.2); display: flex; flex-direction: column; gap: 0.5rem; overflow: hidden; }
+        .card-description { font-size: 0.85rem; line-height: 1.5; color: rgba(243,233,220,0.9); font-family: 'Roboto Condensed', sans-serif; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        .stat-badge { font-size: 0.65rem; background: rgba(193,154,107,0.2); color: var(--accent); padding: 0.2rem 0.5rem; border-radius: 3px; border: 1px solid rgba(193,154,107,0.4); font-family: 'Cinzel', serif; }
 
-        /* Card Art */
-        .card-art {
-            position: relative;
-            height: 200px;
-            overflow: hidden;
-            border-bottom: 2px solid rgba(193,154,107,0.4);
-            border-top: none;
-        }
-        .card-art img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-        .mtg-card:hover .card-art img {
-            transform: scale(1.05);
-        }
-        .card-art-overlay {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 40px;
-            background: linear-gradient(transparent, rgba(26,18,11,0.6));
-        }
+        /* Tactical Data */
+        .rpg-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2rem 0; }
+        .rpg-stat-box { background: rgba(0,0,0,0.4); border: 1px solid rgba(193,154,107,0.3); padding: 1rem; border-radius: 2px; text-align: center; border-left: 4px solid var(--accent); }
+        .rpg-stat-val { font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--accent); display: block; font-weight: 900; }
+        .rpg-stat-lbl { font-size: 0.7rem; text-transform: uppercase; color: rgba(243,233,220,0.5); letter-spacing: 0.2em; font-family: 'Roboto Condensed', sans-serif; }
+        
+        .action-list { margin-top: 2rem; border: 1px solid rgba(193,154,107,0.1); border-radius: 4px; overflow: hidden; }
+        .action-item { background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(193,154,107,0.1); padding: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; }
+        .action-item:last-child { border-bottom: none; }
+        .action-header { display: flex; justify-content: space-between; align-items: center; }
+        .action-name { font-family: 'Cinzel', serif; color: var(--secondary); font-size: 1rem; font-weight: 700; }
+        .action-desc { font-size: 0.95rem; color: rgba(243,233,220,0.75); line-height: 1.6; }
+        .action-meta { font-size: 0.7rem; color: var(--accent); font-family: monospace; text-transform: uppercase; }
 
-        /* Card Type Line */
-        .card-type-line {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.35rem 0.8rem;
-            background: linear-gradient(135deg, rgba(26,18,11,0.9), rgba(26,18,11,0.8));
-            border-bottom: 1px solid rgba(193,154,107,0.2);
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-        }
-        .card-type-label { color: var(--secondary); font-weight: 700; }
-        .card-classification { color: var(--accent); font-style: italic; }
-
-        /* Card Text Box */
-        .card-text-box {
-            flex: 1;
-            padding: 0.6rem 0.8rem;
-            background: linear-gradient(180deg, rgba(26,18,11,0.92), rgba(26,18,11,0.97));
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-        }
-        .card-text-box::-webkit-scrollbar { width: 4px; }
-        .card-text-box::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
-
-        .card-hebrew {
-            font-size: 1rem;
-            color: var(--accent);
-            text-align: center;
-            opacity: 0.7;
-        }
-        .card-translation {
-            font-size: 0.7rem;
-            color: var(--secondary);
-            text-align: center;
-            font-style: italic;
-            margin-bottom: 0.3rem;
-        }
-        .card-description {
-            font-size: 0.75rem;
-            line-height: 1.5;
-            color: rgba(243,233,220,0.85);
-        }
-        .card-roles {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.3rem;
-            margin-top: auto;
-            padding-top: 0.3rem;
-        }
-        .role-tag {
-            font-size: 0.6rem;
-            padding: 0.15rem 0.45rem;
-            border-radius: 3px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-weight: 700;
-        }
-        .card-frame[data-type="Angel"] .role-tag   { background: rgba(74,111,165,0.2); color: var(--angel); border: 1px solid rgba(74,111,165,0.3); }
-        .card-frame[data-type="Demon"] .role-tag   { background: rgba(139,46,63,0.2); color: #D4627A; border: 1px solid rgba(139,46,63,0.3); }
-        .card-frame[data-type="Fallen"] .role-tag  { background: rgba(107,63,160,0.2); color: #A87FD4; border: 1px solid rgba(107,63,160,0.3); }
-        .role-tag { background: rgba(193,154,107,0.15); color: var(--accent); border: 1px solid rgba(193,154,107,0.3); }
-
-        /* Card Stats Footer (Combat cards) */
-        .card-stats-footer {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background: rgba(193,154,107,0.2);
-            border-top: 2px solid rgba(193,154,107,0.3);
-        }
-        .stat-cell {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 0.3rem 0.2rem;
-            background: rgba(26,18,11,0.95);
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .stat-cell .stat-value {
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            font-size: 1rem;
-            color: var(--accent);
-        }
-        .stat-cell .stat-label { color: rgba(243,233,220,0.5); font-size: 0.55rem; }
-
-        /* Power/Toughness box (bottom right, MTG-style) */
-        .card-pt-box {
-            position: absolute;
-            bottom: 8px;
-            right: 8px;
-            background: linear-gradient(135deg, rgba(26,18,11,0.95), rgba(26,18,11,0.85));
-            border: 2px solid var(--accent);
-            border-radius: 6px;
-            padding: 0.2rem 0.6rem;
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            font-size: 0.85rem;
-            color: var(--accent);
-        }
-
-        /* Scripture refs */
-        .card-scripture {
-            font-size: 0.6rem;
-            color: rgba(243,233,220,0.4);
-            font-style: italic;
-            padding-top: 0.2rem;
-            border-top: 1px solid rgba(193,154,107,0.1);
-        }
-
-        /* Card actions (combat cards) */
-        .card-action {
-            font-size: 0.7rem;
-            padding: 0.3rem 0;
-            border-bottom: 1px solid rgba(193,154,107,0.1);
-        }
-        .card-action:last-child { border-bottom: none; }
-        .action-name { color: var(--accent); font-weight: 700; }
-        .action-detail { color: rgba(243,233,220,0.7); }
-        .action-traits {
-            display: inline-flex; gap: 0.2rem; margin-left: 0.3rem;
-        }
-        .action-trait {
-            font-size: 0.55rem;
-            background: rgba(74,111,165,0.15);
-            color: var(--secondary);
-            padding: 0.1rem 0.3rem;
-            border-radius: 2px;
-        }
-
-        /* Special abilities */
-        .special-ability {
-            font-size: 0.65rem;
-            color: var(--fallen);
-            font-style: italic;
-        }
-        .card-frame[data-type="Giant"] .special-ability { color: var(--giant); }
-
-        /* Level badge */
-        .level-badge {
-            position: absolute;
-            top: 8px; right: 8px;
-            background: rgba(26,18,11,0.9);
-            border: 1px solid var(--accent);
-            border-radius: 50%;
-            width: 32px; height: 32px;
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            font-size: 0.8rem;
-            color: var(--accent);
-            z-index: 2;
-        }
-
-        /* Section count */
-        .section-info {
-            text-align: center;
-            padding: 1rem 2rem 0;
-            color: rgba(243,233,220,0.4);
-            font-size: 0.8rem;
-        }
-
-        /* Modal Overlay */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.85);
-            z-index: 200;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-        .modal-overlay.open { display: flex; }
-        .modal-card {
-            background: var(--dark);
-            border: 3px solid var(--accent);
-            border-radius: 16px;
-            max-width: 500px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-        .modal-close {
-            position: absolute;
-            top: 0.5rem; right: 0.8rem;
-            background: none; border: none;
-            color: var(--accent); font-size: 1.5rem;
-            cursor: pointer; z-index: 10;
-        }
-        .modal-art {
-            width: 100%;
-            height: 280px;
-            object-fit: cover;
-            border-radius: 13px 13px 0 0;
-        }
-        .modal-body { padding: 1.5rem; }
-        .modal-body h2 {
-            font-family: 'Cinzel', serif;
-            color: var(--accent);
-            font-size: 1.4rem;
-            margin-bottom: 0.2rem;
-        }
-        .modal-body .modal-subtitle {
-            color: var(--secondary);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            margin-bottom: 1rem;
-        }
-        .modal-body p { font-size: 0.85rem; line-height: 1.6; color: rgba(243,233,220,0.85); margin-bottom: 0.8rem; }
-        .modal-stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
-            margin: 1rem 0;
-        }
-        .modal-stat {
-            text-align: center;
-            padding: 0.5rem;
-            background: rgba(193,154,107,0.08);
-            border: 1px solid rgba(193,154,107,0.15);
-            border-radius: 6px;
-        }
-        .modal-stat .val { font-family: 'Cinzel', serif; font-weight: 900; font-size: 1.2rem; color: var(--accent); }
-        .modal-stat .lbl { font-size: 0.6rem; color: rgba(243,233,220,0.5); text-transform: uppercase; letter-spacing: 0.1em; }
-        .modal-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.5rem; }
-        .modal-tag {
-            font-size: 0.65rem; padding: 0.2rem 0.5rem;
-            background: rgba(74,111,165,0.15); color: var(--secondary);
-            border: 1px solid rgba(74,111,165,0.3); border-radius: 3px;
-            text-transform: uppercase; letter-spacing: 0.05em;
-        }
-        .modal-scripture {
-            font-size: 0.7rem; color: rgba(243,233,220,0.4); font-style: italic;
-            margin-top: 1rem; padding-top: 0.8rem;
-            border-top: 1px solid rgba(193,154,107,0.15);
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            border-top: 2px solid rgba(193,154,107,0.15);
-            margin-top: 2rem;
-        }
-        footer p { font-family: 'Cinzel', serif; color: var(--accent); font-size: 0.9rem; }
-        footer small { color: rgba(243,233,220,0.3); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.2em; }
-
-        @media (max-width: 640px) {
-            .card-grid { grid-template-columns: 1fr; padding: 1rem; gap: 1.5rem; }
-            .filter-bar { justify-content: center; }
-            header { flex-direction: column; gap: 0.8rem; }
-        }
+        @media (max-width: 900px) { .modal-card { flex-direction: column; height: 95vh; } .modal-sidebar { width: 100%; min-width: 100%; height: 350px; border-right: none; } .modal-main { padding: 2rem; } }
     </style>
 </head>
 <body>
-
 <header>
-    <h1>Nephilim Wars <span>Bestiary Collection</span></h1>
+    <h1>Nephilim Wars <span>Archives</span></h1>
     <div class="filter-bar">
-        <input type="text" class="search-input" id="searchInput" placeholder="Search cards...">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search Archives...">
         <button class="filter-btn active" data-filter="all">All</button>
         <button class="filter-btn" data-filter="Angel">Angels</button>
         <button class="filter-btn" data-filter="Demon">Demons</button>
         <button class="filter-btn" data-filter="Fallen">Fallen</button>
+        <button class="filter-btn" data-filter="Giant">Giants</button>
         <button class="filter-btn" data-filter="combat">Combat</button>
         <button class="filter-btn" data-filter="legendary">Legends</button>
     </div>
 </header>
-
-<p class="section-info" id="cardCount"></p>
-
+<p style="padding: 1.5rem 2rem 0.5rem; font-size: 0.9rem; color: var(--accent); opacity: 0.7; font-family: 'Cinzel', serif; letter-spacing: 0.1em;" id="cardCount"></p>
 <div class="card-grid" id="cardGrid"></div>
 
 <div class="modal-overlay" id="modalOverlay">
@@ -487,396 +123,292 @@
     </div>
 </div>
 
-<footer>
-    <p>Nephilim Wars</p>
-    <small>Based on the Complete Pathfinder 2e Special Edition Manual</small>
-</footer>
-
 <script>
-// ── Image mapping ──
-// Try multiple path patterns so it works from public/ or project root
 const imageMap = {
-    // Bestiary (angels, demons, fallen)
-    michael:       '../images/Michael.png',
-    gabriel:       '../images/Gabriel.png',
-    raphael:       '../images/Raphael.png',
-    uriel:         '../images/Uriel.png',
-    sariel:        '../images/Sariel.png',
-    semyaza:       '../images/Semyaza.png',
-    azazel:        '../images/Azazel.jpg',
-    lilith:        '../images/Lilith.png',
-    // Combat bestiary
-    nephilim_warrior:       '../images/combat/nephilim_warrior.png',
-    rephaim_champion:        '../images/combat/rephaim_champion.png',
-    rephaim_deathspeaker:   '../images/combat/Rephaim_Deathspeaker.png',
-    anakim_berserker:       '../images/combat/anakim_berserker.png',
-    cainite_assassin:       '../images/combat/cainite_assassin.png',
-    sorcerer_priest:        '../images/combat/sorcerer_priest.png',
-    horim_tunneler:         '../images/combat/horim_tunneler.png',
-    gibborim_elite:         '../images/combat/gibborim_elite.png',
-    gibborim:               '../images/combat/Gibborim.png',
-    gammadim_tunnelfighter: '../images/combat/Gammadim.png',
-    desert_raider:          '../images/combat/desert_raider.png',
-    nephilim_hunter:        '../images/combat/NephilimHunter.jpg',
-    nephilim_warlord:       '../images/combat/NephilimWarlord.jpg',
-    elioud_deceiver:        '../images/combat/ElioudDeceiver.jpg',
-    elioud_champion:        '../images/combat/ElioudChampion.jpg',
-    // Creatures (legendary giants)
-    ohya:       '../images/Ohya.png',
-    hahya:      '../images/Hahya.png',
-    mahway:     '../images/Mahway.png',
-    gilgamesh:  '../images/Gilgamesh.png',
-    // Corrupted humanity
-    baal_priest:   '../images/combat/sorcerer_priest.png',
-    lamech:        '../images/combat/NephilimWarlord.jpg',
+    michael: 'images/rutkowski/Angel/michael.png', gabriel: 'images/rutkowski/Angel/gabriel.png', raphael: 'images/rutkowski/Angel/raphael.png',
+    uriel: 'images/rutkowski/Angel/uriel.png', sariel: 'images/rutkowski/Angel/sariel.png', raguel: 'images/rutkowski/Angel/raguel.png',
+    remiel: 'images/rutkowski/Angel/remiel.png', metatron: 'images/rutkowski/Angel/metatron.png', raziel: 'images/rutkowski/Angel/raziel.png',
+    azrael: 'images/rutkowski/Angel/azrael.png', satan: 'images/rutkowski/Demon/satan.png', semyaza: 'images/rutkowski/Fallen/semyaza.png',
+    azazel: 'images/rutkowski/Fallen/azazel.png', lilith: 'images/rutkowski/Demon/lilith.png', asmodeus: 'images/rutkowski/Demon/asmodeus.png',
+    belial: 'images/rutkowski/Demon/belial.png', mastema: 'images/rutkowski/Demon/mastema.png', abaddon: 'images/rutkowski/Demon/abaddon.png',
+    gadreel: 'images/rutkowski/Fallen/gadreel.png', prince_persia: 'images/rutkowski/Demon/prince_persia.png', baraqel: 'images/rutkowski/Fallen/baraqel.png',
+    kokabiel: 'images/rutkowski/Fallen/kokabiel.png', penemue: 'images/rutkowski/Fallen/penemue.png', armaros: 'images/rutkowski/Fallen/armaros.png',
+    kasdeja: 'images/rutkowski/Fallen/kasdeja.png', nephilim_warrior: 'images/rutkowski/Giant/nephilim_warrior.png', nephilim_warlord: 'images/rutkowski/Giant/nephilim_warlord.png',
+    nephilim_scout: 'images/rutkowski/Giant/nephilim_scout.png', nephilim_hunter: 'images/rutkowski/Giant/nephilim_hunter.png', rephaim_champion: 'images/rutkowski/Giant/rephaim_champion.png',
+    rephaim_warrior: 'images/rutkowski/Giant/rephaim_warrior.png', rephaim_deathspeaker: 'images/rutkowski/Giant/rephaim_deathspeaker.png', anakim_berserker: 'images/rutkowski/Giant/anakim_berserker.png',
+    horim_tunneler: 'images/rutkowski/Cave Dweller/horim_tunneler.png', horim_stoneshaper: 'images/rutkowski/Cave Dweller/horim_stoneshaper.png', gibborim_elite: 'images/rutkowski/Mighty One/gibborim_elite.png',
+    gibborim: 'images/rutkowski/Mighty One/gibborim.png', gammadim_tunnelfighter: 'images/rutkowski/Under-Walker/gammadim_tunnelfighter.png', gammadim_earthspeaker: 'images/rutkowski/Under-Walker/gammadim_earthspeaker.png',
+    elioud_deceiver: 'images/rutkowski/Giant/elioud_deceiver.png', elioud_champion: 'images/rutkowski/Giant/elioud_champion.png', ohya: 'images/rutkowski/Giant/ohya.png',
+    hahya: 'images/rutkowski/Giant/hahya.png', mahway: 'images/rutkowski/Giant/mahway.png', gilgamesh: 'images/rutkowski/Giant/gilgamesh.png',
+    baal_priest: 'images/rutkowski/Human/baal_priest.png', lamech: 'images/rutkowski/Human/lamech.png', cainite_assassin: 'images/rutkowski/Human/cainite_assassin.png',
+    cainite_warrior: 'images/rutkowski/Human/cainite_warrior.png', sorcerer_priest: 'images/rutkowski/Human/sorcerer_priest.png', watcher_cult_leader: 'images/rutkowski/Human/watcher_cult_leader.png',
+    watcher_cultist: 'images/rutkowski/Human/watcher_cultist.png', desert_raider: 'images/rutkowski/Human/desert_raider.png', refaim_wraith: 'images/rutkowski/Spirit/refaim_wraith.png',
+    refaim_spirit: 'images/rutkowski/Spirit/refaim_spirit.png', behemoth: 'images/rutkowski/Beast/behemoth.png', leviathan: 'images/rutkowski/Beast/leviathan.png',
+    ziz: 'images/rutkowski/Beast/ziz.png',
 };
+const fallbackImg = 'images/rutkowski/Angel/michael.png';
+function getImage(id) { return imageMap[id] || fallbackImg; }
 
-// Fallback image for entries without art
-const fallbackImg = '../images/Parchment.png';
-
-function getImage(id) {
-    return imageMap[id] || fallbackImg;
-}
-
-// ── Embedded Data (no fetch needed — works with file:// protocol) ──
-
-const bestiaryData = {"metadata":{"version":"2.1","description":"Encyclopedia Angelorum et Daemonum - Full Archive"},"entries":[{"id":"michael","name":"Michael","hebrew":"\u05DE\u05B4\u05D9\u05DB\u05B8\u05D0\u05B5\u05DC","translation":"Who is like God?","type":"Angel","classification":"Archangel","roles":["Protector of Israel","Psychopomp","Defeater of Satan"],"description":"Michael stands as the preeminent warrior among all angels. He is explicitly called 'one of the chief princes' and 'the great prince who stands guard over the sons of your people'. He serves as the primary antagonist to the forces of darkness, the divine warrior who executes God's judgments.","theology":{"biblical":["Daniel 10:13, 21","Jude 1:9","Revelation 12:7-9"],"extraBiblical":["1 Enoch 20:5","War Scroll (1QM)","Testament of Abraham"]}},{"id":"gabriel","name":"Gabriel","hebrew":"\u05D2\u05B7\u05BC\u05D1\u05B0\u05E8\u05B4\u05D9\u05D0\u05B5\u05DC","translation":"God is my strength","type":"Angel","classification":"Archangel","roles":["Interpreter of Visions","Herald of Messiah"],"description":"Gabriel serves as God's primary herald, entrusted with delivering the most significant announcements in salvation history. Unlike Michael who wages war, Gabriel wields the weapon of divine communication, bringing understanding to confusion and revelation to mystery.","theology":{"biblical":["Daniel 8:15","Daniel 9:20","Luke 1:19, 26"],"extraBiblical":["1 Enoch 9:1","1 Enoch 20:7"]}},{"id":"raphael","name":"Raphael","hebrew":"\u05E8\u05B0\u05E4\u05B8\u05D0\u05B5\u05DC","translation":"God heals","type":"Angel","classification":"Archangel","roles":["Binder of Demons","Guide of Travelers","Healer"],"description":"Raphael embodies God's compassionate care, serving as the celestial physician. In 1 Enoch, he is commissioned to bind Azazel and 'heal the earth'. He acts not merely to heal victims but to restrain the victimizers.","theology":{"biblical":["Tobit 3:17","Tobit 12:15"],"extraBiblical":["1 Enoch 10:4","1 Enoch 20:3","Jubilees 10:10"]}},{"id":"uriel","name":"Uriel","hebrew":"\u05D0\u05D5\u05BC\u05E8\u05B4\u05D9\u05D0\u05B5\u05DC","translation":"God is my light","type":"Angel","classification":"Archangel","roles":["Illuminator of Truth","Overseer of Tartarus","Guardian of Eden"],"description":"Uriel stands as the archangel of divine illumination. He carries the flame of enlightenment and the scroll of knowledge. He is the celestial teacher par excellence, revealing mysteries about creation, judgment, and the movements of celestial bodies.","theology":{"biblical":["Genesis 3:24 (Tradition)"],"extraBiblical":["1 Enoch 20:2","2 Esdras 4"]}},{"id":"sariel","name":"Sariel / Suriel","hebrew":"\u05E9\u05B7\u05C2\u05E8\u05B4\u05D9\u05D0\u05B5\u05DC","translation":"Prince of God","type":"Angel","classification":"Archangel","roles":["Angel of Death","Teacher of Lunar Courses","Avenger of Spirits"],"description":"Sariel serves as one of the seven archangels, often associated with judgment and the lunar calendar. His specific assignment is 'over the spirits of those who sin against the spirit', suggesting a role in judging spiritual corruption.","theology":{"biblical":[],"extraBiblical":["1 Enoch 20:6","1 Enoch 9:1"]}},{"id":"raguel","name":"Raguel","hebrew":"\u05E8\u05B0\u05E2\u05D5\u05BC\u05D0\u05B5\u05DC","translation":"Friend of God","type":"Angel","classification":"Archangel","roles":["Angel of Justice","Overseer of Luminaries"],"description":"Raguel holds a unique position as the enforcer of divine order among the angels themselves. He takes vengeance on the world of the luminaries, ensuring that celestial beings fulfill their duties.","theology":{"biblical":[],"extraBiblical":["1 Enoch 20:4","1 Enoch 23:4"]}},{"id":"remiel","name":"Remiel / Jeremiel","hebrew":"\u05E8\u05B0\u05DE\u05B4\u05D9\u05D0\u05B5\u05DC","translation":"Thunder of God","type":"Angel","classification":"Archangel","roles":["Angel of Resurrection","Guide of Souls"],"description":"Remiel serves as the archangel of resurrection and hope. He is 'set over those who rise', making him the herald of humanity's ultimate hope that death is not the end.","theology":{"biblical":[],"extraBiblical":["1 Enoch 20:8","2 Baruch","2 Esdras 4:36"]}},{"id":"metatron","name":"Metatron","hebrew":"\u05DE\u05B5\u05D8\u05B7\u05D8\u05B0\u05E8\u05D5\u05B9\u05DF","translation":"Guardian","type":"Angel","classification":"High Angel","roles":["Celestial Scribe","Voice of God"],"description":"Metatron stands as the greatest angel in Jewish mystical tradition, serving as God's scribe. Many identify him as the patriarch Enoch transformed into an angel after being taken to heaven.","theology":{"biblical":["Genesis 5:24 (Implied)"],"extraBiblical":["3 Enoch","Babylonian Talmud"]}},{"id":"raziel","name":"Raziel","hebrew":"\u05E8\u05B8\u05D6\u05B4\u05D9\u05D0\u05B5\u05DC","translation":"Secret of God","type":"Angel","classification":"High Angel","roles":["Keeper of Mysteries","Teacher of Adam"],"description":"Raziel is the angel of mysteries who stands near God's throne recording all divine secrets. He gave Adam the Sefer Raziel containing all knowledge of the universe.","theology":{"biblical":[],"extraBiblical":["Sefer Raziel HaMalakh","Zohar"]}},{"id":"azrael","name":"Azrael","hebrew":"\u05E2\u05B2\u05D6\u05B7\u05E8\u05B0\u05D0\u05B5\u05DC","translation":"Whom God Helps","type":"Angel","classification":"Angel of Death","roles":["Psychopomp","Separator of Soul"],"description":"Azrael separates the soul from the body at death. Despite his fearsome role, he is often described as serving with compassion and accuracy.","theology":{"biblical":[],"extraBiblical":["Jewish Mysticism","Islamic Tradition"]}},{"id":"satan","name":"Satan / Sammael","hebrew":"\u05E9\u05B8\u05C2\u05D8\u05B8\u05DF","translation":"The Adversary","type":"Demon","classification":"Demon Prince","roles":["Accuser","Father of Lies","Ruler of this World"],"description":"The supreme mystery of evil. Originally a high-ranking angel who chose rebellion. He operates through deception and accusation, holding temporary power over the world system.","theology":{"biblical":["Job 1-2","Isaiah 14","Revelation 12"],"extraBiblical":["Life of Adam and Eve","Martyrdom of Isaiah"]}},{"id":"semyaza","name":"Semyaza","hebrew":"\u05E9\u05B6\u05C1\u05DE\u05B0\u05D7\u05B2\u05D6\u05B7\u05D0\u05D9","translation":"The Name has Seen","type":"Fallen","classification":"Fallen Watcher","roles":["Leader of the 200","Progenitor of Giants"],"description":"Leader of the Watchers who descended on Mount Hermon. He taught enchantments and root-cutting, and bound his brethren by an oath to corrupt humanity.","theology":{"biblical":["Genesis 6:1-4 (Implied)"],"extraBiblical":["1 Enoch 6-10","Book of Giants"]}},{"id":"azazel","name":"Azazel","hebrew":"\u05E2\u05B2\u05D6\u05B8\u05D0\u05D6\u05B5\u05DC","translation":"Scapegoat","type":"Fallen","classification":"Fallen Watcher","roles":["Teacher of Warfare","Corrupter"],"description":"Azazel taught humanity the arts of war (swords, shields) and vanity (cosmetics). He corrupted the earth so thoroughly that Raphael was commanded to bind him in the desert.","theology":{"biblical":["Leviticus 16"],"extraBiblical":["1 Enoch 8:1","1 Enoch 10:4","Apocalypse of Abraham"]}},{"id":"lilith","name":"Lilith","hebrew":"\u05DC\u05B4\u05D9\u05DC\u05B4\u05D9\u05EA","translation":"Night Creature","type":"Demon","classification":"Demoness","roles":["Mother of Monsters","Night Terror"],"description":"A female night demon associated with storms and danger to children. Later traditions identify her as Adam's first wife who refused submission and fled Eden.","theology":{"biblical":["Isaiah 34:14"],"extraBiblical":["Dead Sea Scrolls 4Q510","Alphabet of Ben-Sira"]}},{"id":"asmodeus","name":"Asmodeus","hebrew":"\u05D0\u05B7\u05E9\u05B0\u05C1\u05DE\u05B0\u05D3\u05B7\u05D0\u05D9","translation":"Destroyer","type":"Demon","classification":"Demon King","roles":["Destroyer of Marriage","Demon of Lust"],"description":"A powerful demon associated with lust and rage. In Tobit, he kills Sarah's seven husbands. He was eventually bound by Raphael.","theology":{"biblical":["Tobit 3:8"],"extraBiblical":["Testament of Solomon","Talmud Gittin 68a"]}},{"id":"belial","name":"Belial","hebrew":"\u05D1\u05B0\u05BC\u05DC\u05B4\u05D9\u05B7\u05BC\u05E2\u05B7\u05DC","translation":"Worthlessness","type":"Demon","classification":"Demon Prince","roles":["Prince of Darkness","Spirit of Lawlessness"],"description":"Belial is the embodiment of lawlessness, leading the forces of darkness against the forces of light in the Dead Sea Scrolls war theology.","theology":{"biblical":["2 Corinthians 6:15"],"extraBiblical":["War Scroll (1QM)","Testament of the Twelve Patriarchs"]}},{"id":"mastema","name":"Mastema","hebrew":"\u05DE\u05B7\u05E9\u05B0\u05C2\u05D8\u05B5\u05DE\u05B8\u05D4","translation":"Animosity","type":"Demon","classification":"Prince of Evil Spirits","roles":["Accuser","Executor of Punishment"],"description":"The chief of evil spirits who received permission from God to retain some demons after the Flood to continue testing humanity. He acts as both accuser and punisher.","theology":{"biblical":[],"extraBiblical":["Book of Jubilees 10","Book of Jubilees 48"]}},{"id":"abaddon","name":"Abaddon / Apollyon","hebrew":"\u05D0\u05B2\u05D1\u05B7\u05D3\u05BC\u05D5\u05B9\u05DF","translation":"Destruction","type":"Demon","classification":"Angel of the Abyss","roles":["King of Locusts","Destroyer"],"description":"The angel of the bottomless pit who leads tormenting locust-like creatures during the apocalyptic judgments.","theology":{"biblical":["Revelation 9:11","Job 26:6"],"extraBiblical":["Dead Sea Scrolls"]}},{"id":"gadreel","name":"Gadreel","hebrew":"\u05D2\u05B7\u05BC\u05D3\u05B0\u05E8\u05B5\u05D0\u05DC","translation":"Wall of God","type":"Fallen","classification":"Fallen Watcher","roles":["Tempter of Eve","Teacher of Weapons"],"description":"Identified in 1 Enoch as the angel who led Eve astray. He also taught humanity the art of making weapons of death.","theology":{"biblical":[],"extraBiblical":["1 Enoch 69:6"]}},{"id":"prince_persia","name":"Prince of Persia","hebrew":"\u05E9\u05B7\u05C2\u05E8 \u05E4\u05B8\u05BC\u05E8\u05B7\u05E1","translation":"Sar Paras","type":"Demon","classification":"Territorial Spirit","roles":["Ruler of Nations","Opposer of Angels"],"description":"A powerful territorial spirit with authority over the Persian Empire who opposed the angelic messenger sent to Daniel for 21 days.","theology":{"biblical":["Daniel 10:13, 20"],"extraBiblical":[]}}]};
-
-const combatBestiaryData = {"metadata":{"version":"2.0","description":"Combat-Ready Bestiary for Nephilim Wars (PF2e-Compliant)","system":"Pathfinder 2e Adapted"},"enemies":[{"id":"nephilim_warrior","name":"Nephilim Warrior","type":"Giant","level":8,"size":"Large","description":"Offspring of the Watchers and human women, standing 12-15 feet tall with immense strength.","portrait":"/images/combat/nephilim_warrior.png","stats":{"hp":120,"maxHp":120,"defense":26,"fortitude":18,"reflex":12,"will":12,"perception":14,"initiativeBonus":4,"speed":25,"STR":20,"DEX":12,"CON":18,"INT":10,"WIS":10,"CHA":12},"actionsPerTurn":3,"actions":[{"id":"bronze_sword","name":"Bronze Greatsword","type":"melee","cost":1,"toHitBonus":18,"damageDice":"2d12","damageBonus":8,"damageType":"slashing","traits":["reach 10","sweep"]},{"id":"crushing_blow","name":"Crushing Blow","type":"melee","cost":2,"toHitBonus":18,"damageDice":"3d10","damageBonus":8,"damageType":"bludgeoning","traits":["reach 10"]}]},{"id":"rephaim_champion","name":"Rephaim Champion","type":"Giant","level":10,"size":"Large","description":"Ancient giant warrior, remnant of the pre-flood world. Undying and merciless.","portrait":"/images/combat/rephaim_champion.png","stats":{"hp":150,"maxHp":150,"defense":28,"fortitude":22,"reflex":14,"will":16,"perception":16,"initiativeBonus":6,"speed":25,"STR":22,"DEX":10,"CON":20,"INT":8,"WIS":12,"CHA":8},"actionsPerTurn":3,"actions":[{"id":"war_club","name":"Massive War Club","type":"melee","cost":1,"toHitBonus":22,"damageDice":"2d12","damageBonus":10,"damageType":"bludgeoning","traits":["reach 10","forceful"]}],"specialAbilities":["Spirit Sight","Deathly Aura"]},{"id":"anakim_berserker","name":"Anakim Berserker","type":"Giant","level":7,"size":"Large","description":"Descendants of Anak, fierce and battle-crazed warriors. Chain masters.","portrait":"/images/combat/anakim_berserker.png","stats":{"hp":100,"maxHp":100,"defense":24,"fortitude":16,"reflex":14,"will":10,"perception":12,"initiativeBonus":2,"speed":25,"STR":18,"DEX":14,"CON":16,"INT":8,"WIS":8,"CHA":10},"actionsPerTurn":3,"actions":[{"id":"dual_axes","name":"Dual Bronze Axes","type":"melee","cost":1,"toHitBonus":17,"damageDice":"2d6","damageBonus":6,"damageType":"slashing","traits":["sweep","twin"]},{"id":"berserker_rage","name":"Berserker Rage","type":"melee","cost":2,"toHitBonus":19,"damageDice":"3d8","damageBonus":8,"damageType":"slashing","traits":["rage"]}]},{"id":"cainite_assassin","name":"Cainite Assassin","type":"Human","level":5,"size":"Medium","description":"Descendant of Cain, marked by violence and cunning. Master of stealth and poison.","portrait":"/images/combat/cainite_assassin.png","stats":{"hp":60,"maxHp":60,"defense":22,"fortitude":10,"reflex":16,"will":12,"perception":14,"initiativeBonus":4,"speed":25,"STR":12,"DEX":18,"CON":14,"INT":14,"WIS":12,"CHA":10},"actionsPerTurn":3,"actions":[{"id":"poisoned_dagger","name":"Poisoned Dagger","type":"melee","cost":1,"toHitBonus":14,"damageDice":"1d4","damageBonus":4,"damageType":"piercing","traits":["agile","finesse","poison"]},{"id":"shadow_strike","name":"Shadow Strike","type":"melee","cost":2,"toHitBonus":14,"damageDice":"2d6","damageBonus":8,"damageType":"piercing","traits":["finesse","sneak attack"]}]},{"id":"sorcerer_priest","name":"Sorcerer-Priest of Babylon","type":"Human","level":6,"size":"Medium","description":"Wielder of forbidden knowledge, channeling demonic power through ancient rituals.","portrait":"/images/combat/sorcerer_priest.png","stats":{"hp":70,"maxHp":70,"defense":20,"fortitude":10,"reflex":12,"will":16,"perception":14,"initiativeBonus":4,"speed":25,"STR":10,"DEX":14,"CON":12,"INT":18,"WIS":14,"CHA":16},"actionsPerTurn":3,"actions":[{"id":"eldritch_bolt","name":"Eldritch Bolt","type":"spell","cost":2,"toHitBonus":14,"damageDice":"2d10","damageBonus":4,"damageType":"force","traits":["occult","evocation"]},{"id":"curse_weakness","name":"Curse of Weakness","type":"spell","cost":2,"toHitBonus":14,"damageDice":"2d8","damageBonus":4,"damageType":"necrotic","traits":["occult","necromancy","curse"]}]},{"id":"horim_tunneler","name":"Horim Tunneler","type":"Cave Dweller","level":5,"size":"Medium","description":"Subterranean warriors who dwell in mountain caves. Adapted to darkness.","portrait":"/images/combat/horim_tunneler.png","stats":{"hp":80,"maxHp":80,"defense":22,"fortitude":14,"reflex":12,"will":14,"perception":16,"initiativeBonus":6,"speed":25,"STR":16,"DEX":12,"CON":16,"INT":10,"WIS":14,"CHA":8},"actionsPerTurn":3,"actions":[{"id":"stone_mace","name":"Stone Mace","type":"melee","cost":1,"toHitBonus":13,"damageDice":"1d8","damageBonus":5,"damageType":"bludgeoning","traits":["shove"]}],"specialAbilities":["Superior Darkvision 120ft","Stone Cunning"]},{"id":"gibborim_elite","name":"Gibborim Elite Guard","type":"Mighty One","level":7,"size":"Medium","description":"The 'Mighty Men' of ancient legend. Warriors of renown, feared across nations.","portrait":"/images/combat/gibborim_elite.png","stats":{"hp":110,"maxHp":110,"defense":25,"fortitude":16,"reflex":14,"will":14,"perception":14,"initiativeBonus":4,"speed":25,"STR":19,"DEX":15,"CON":17,"INT":12,"WIS":13,"CHA":14},"actionsPerTurn":3,"actions":[{"id":"spear_thrust","name":"Bronze Spear","type":"melee","cost":1,"toHitBonus":17,"damageDice":"1d10","damageBonus":6,"damageType":"piercing","traits":["reach 10"]},{"id":"shield_bash","name":"Shield Bash","type":"melee","cost":1,"toHitBonus":16,"damageDice":"1d6","damageBonus":6,"damageType":"bludgeoning","traits":["shove"]}],"specialAbilities":["Powerful Build","Heroic Blood"]},{"id":"gammadim_tunnelfighter","name":"Gammadim Tunnel-Fighter","type":"Under-Walker","level":4,"size":"Small","description":"The hidden little people. Tunnel-fighters and survivors who claimed the deep places beneath the world of giants.","portrait":"/images/combat/Gammadim.png","stats":{"hp":55,"maxHp":55,"defense":20,"fortitude":10,"reflex":14,"will":12,"perception":16,"initiativeBonus":6,"speed":25,"STR":10,"DEX":18,"CON":12,"INT":12,"WIS":16,"CHA":8},"actionsPerTurn":3,"actions":[{"id":"tunnel_pick","name":"Tunnel-Pick","type":"melee","cost":1,"toHitBonus":12,"damageDice":"1d6","damageBonus":3,"damageType":"piercing","traits":["agile","finesse"]},{"id":"sling_stone","name":"Sling Stone","type":"ranged","cost":1,"toHitBonus":12,"damageDice":"1d6","damageBonus":2,"damageType":"bludgeoning","traits":["range 50","propulsive"]}],"specialAbilities":["Tunnel Fighter (+1 attack in confined spaces)","Shadow of the Titans (+2 Stealth near Large+ creatures)","Earth Sense (Tremorsense 15ft)","Small Size"]},{"id":"desert_raider","name":"Desert Raider","type":"Human","level":3,"size":"Medium","description":"Nomadic warrior from the wilderness, swift and deadly with bow and blade.","portrait":"/images/combat/desert_raider.png","stats":{"hp":50,"maxHp":50,"defense":19,"fortitude":10,"reflex":14,"will":10,"perception":12,"initiativeBonus":2,"speed":30,"STR":14,"DEX":16,"CON":12,"INT":10,"WIS":12,"CHA":10},"actionsPerTurn":3,"actions":[{"id":"composite_bow","name":"Composite Bow","type":"ranged","cost":1,"toHitBonus":12,"damageDice":"1d8","damageBonus":3,"damageType":"piercing","traits":["deadly d10","range 100"]},{"id":"scimitar","name":"Curved Scimitar","type":"melee","cost":1,"toHitBonus":10,"damageDice":"1d6","damageBonus":3,"damageType":"slashing","traits":["forceful","sweep"]}]}]};
-
-const creaturesData = {"giants":{"title":"Giants \u2014 The Forbidden Offspring","intro":"Born of Watcher and human unions, giants terrorize the earth.","entries":[{"id":"ohya","name":"Ohya, Son of Semyaza","hd":14,"hp":140,"def":18,"attack":"Sword of Wrath +14 (4d10+8 fire)","special":"Legendary, Prophetic Dreams","description":"The wrathful first-born of Semyaza. Plagued by nightmares of the coming deluge."},{"id":"hahya","name":"Hahya, Brother of Ohya","hd":12,"hp":110,"def":16,"attack":"Greataxe +11 (3d12+6)","special":"Legendary, Dream Visions","description":"The contemplative brother who dreamt of the garden where only one tree remained."},{"id":"mahway","name":"Mahway, the Winged","hd":10,"hp":95,"def":19,"attack":"Diving Attack +12 (4d8+5)","special":"Legendary, True Flight","description":"Son of Barakel. The messenger sent to find Enoch at the ends of the earth."},{"id":"gilgamesh","name":"Gilgamesh","hd":12,"hp":120,"def":17,"attack":"Hero's Blade +12 (3d10+7)","special":"Legendary, Wrestler Supreme","description":"A giant mentioned in the Dead Sea Scrolls, confused by the nightmares of his brethren."}]},"corrupted":{"title":"Corrupted Humanity","intro":"Those who have turned from the Creator to serve the Nephilim.","entries":[{"id":"baal_priest","name":"Baal-Priest","hd":6,"hp":50,"def":13,"attack":"Sacrificial Knife +6","special":"Dark Sorcery","description":"Priests who perform blood sacrifices to fuel dark miracles."},{"id":"lamech","name":"Lamech the Avenger","hd":9,"hp":85,"def":17,"attack":"Tubal-Cain's Blade +11","special":"Legendary, Vengeance","description":"The Cainite king who boasted of killing a man for wounding him."}]}};
-
-// ── Data holders ──
 let allCards = [];
+let filteredCards = [];
+let currentFilter = 'all';
+let searchQuery = '';
 
-// ── Build card data from embedded JSON ──
-function loadData() {
-    const bestiary = bestiaryData;
-    const combatBestiary = combatBestiaryData;
-    const creatures = creaturesData;
+async function loadData() {
+    let bestiaryData = { entries: [] };
+    let combatBestiaryData = { enemies: [] };
+    let creaturesData = { giants: { entries: [] }, corrupted: { entries: [] }, beasts: { entries: [] } };
 
-    // Bestiary entries (angels, demons, fallen)
-    for (const entry of bestiary.entries) {
-        allCards.push({
-            source: 'bestiary',
-            id: entry.id,
-            name: entry.name,
-            hebrew: entry.hebrew,
-            translation: entry.translation,
-            type: entry.type,
-            classification: entry.classification,
-            roles: entry.roles,
-            description: entry.description,
-            theology: entry.theology,
-            image: getImage(entry.id),
-        });
+    try {
+        const [bestiaryRes, combatRes, creaturesRes] = await Promise.all([
+            fetch('data/bestiary.json'),
+            fetch('data/combat-bestiary.json'),
+            fetch('data/creatures.json')
+        ]);
+        if (bestiaryRes.ok) bestiaryData = await bestiaryRes.json();
+        if (combatRes.ok) combatBestiaryData = await combatRes.json();
+        if (creaturesRes.ok) creaturesData = await creaturesRes.json();
+    } catch (e) {
+        console.error('Failed to load data:', e);
     }
-
-    // Combat bestiary (statted enemies)
-    for (const enemy of combatBestiary.enemies) {
-        allCards.push({
-            source: 'combat',
-            id: enemy.id,
-            name: enemy.name,
-            type: enemy.type,
-            classification: `Level ${enemy.level} ${enemy.size}`,
-            level: enemy.level,
-            size: enemy.size,
-            description: enemy.description,
-            stats: enemy.stats,
-            actions: enemy.actions,
-            specialAbilities: enemy.specialAbilities || [],
-            image: getImage(enemy.id),
-        });
-    }
-
-    // Legendary creatures
-    for (const section of [creatures.giants, creatures.corrupted]) {
-        for (const c of section.entries) {
-            allCards.push({
-                source: 'legendary',
-                id: c.id,
-                name: c.name,
-                type: 'Giant',
-                classification: `HD ${c.hd} — ${c.special}`,
-                description: c.description,
-                hd: c.hd,
-                hp: c.hp,
-                def: c.def,
-                attack: c.attack,
-                special: c.special,
-                image: getImage(c.id),
-            });
+    
+    allCards = [];
+    if (bestiaryData && bestiaryData.entries) {
+        for (const entry of bestiaryData.entries) {
+            allCards.push({ source: 'bestiary', ...entry, image: getImage(entry.id) });
         }
     }
-
-    renderCards(allCards);
+    
+    if (combatBestiaryData && combatBestiaryData.enemies) {
+        for (const enemy of combatBestiaryData.enemies) {
+            allCards.push({ source: 'combat', ...enemy, classification: `Level ${enemy.level} ${enemy.size}`, image: getImage(enemy.id) });
+        }
+    }
+    
+    const sections = [
+        { data: creaturesData.giants, type: 'Giant' }, 
+        { data: creaturesData.corrupted, type: 'Human' }, 
+        { data: creaturesData.beasts, type: 'Beast' }
+    ];
+    
+    for (const section of sections) {
+        if (section.data && section.data.entries) {
+            for (const c of section.data.entries) {
+                allCards.push({ source: 'legendary', ...c, type: section.type, classification: `HD ${c.hd} — ${c.special}`, image: getImage(c.id) });
+            }
+        }
+    }
+    applyFilters();
 }
 
-// ── Render cards ──
-function renderCards(cards) {
-    const grid = document.getElementById('cardGrid');
-    const count = document.getElementById('cardCount');
-    grid.innerHTML = '';
-    count.textContent = `${cards.length} cards`;
+function applyFilters() {
+    console.log(`Applying Filter: ${currentFilter}, Search: ${searchQuery}`);
+    filteredCards = allCards.filter(card => {
+        const name = card.name.toLowerCase();
+        const type = (card.type || '').toLowerCase();
+        const query = searchQuery.toLowerCase();
+        const matchesSearch = name.includes(query) || type.includes(query);
+        
+        if (!matchesSearch) return false;
+        
+        if (currentFilter === 'all') return true;
+        if (currentFilter === 'combat') return card.source === 'combat';
+        if (currentFilter === 'legendary') return card.source === 'legendary';
+        
+        // Handle specific type filters (Angel, Demon, Fallen, Giant, Human)
+        return type === currentFilter.toLowerCase();
+    });
+    renderCards(filteredCards);
+}
 
+function renderCards(cards) {
+    const grid = document.getElementById('cardGrid'); 
+    grid.innerHTML = '';
+    document.getElementById('cardCount').textContent = `${cards.length} recovery entries synthesized`;
     for (const card of cards) {
-        const el = document.createElement('div');
-        el.className = 'mtg-card';
+        const el = document.createElement('div'); 
+        el.className = 'mtg-card'; 
         el.innerHTML = buildCardHTML(card);
-        el.addEventListener('click', () => openModal(card));
+        el.addEventListener('click', () => openModal(card)); 
         grid.appendChild(el);
     }
 }
 
 function buildCardHTML(card) {
-    if (card.source === 'bestiary') return buildBestiaryCard(card);
-    if (card.source === 'combat') return buildCombatCard(card);
-    if (card.source === 'legendary') return buildLegendaryCard(card);
-}
-
-// ── Bestiary Card (Angels/Demons/Fallen) ──
-function buildBestiaryCard(card) {
-    const refs = [];
-    if (card.theology?.biblical?.length) refs.push(...card.theology.biblical);
-    if (card.theology?.extraBiblical?.length) refs.push(...card.theology.extraBiblical);
-    const refText = refs.slice(0, 3).join(' · ');
+    let statsLine = '';
+    if (card.stats) statsLine = `<div class="stat-badge">HP ${card.stats.hp}</div> <div class="stat-badge">DEF ${card.stats.defense}</div>`;
+    else if (card.hp) statsLine = `<div class="stat-badge">HP ${card.hp}</div> <div class="stat-badge">DEF ${card.def || card.ac || ''}</div>`;
 
     return `
-    <div class="mtg-card-inner">
-        <div class="card-frame" data-type="${card.type}">
-            <div class="card-title-bar">
-                <span class="card-name">${card.name}</span>
-            </div>
-            <div class="card-art">
-                <img src="${card.image}" alt="${card.name}" loading="lazy" onerror="this.src='${fallbackImg}'">
-                <div class="card-art-overlay"></div>
-            </div>
-            <div class="card-type-line">
-                <span class="card-type-label">${card.type}</span>
-                <span class="card-classification">${card.classification}</span>
-            </div>
-            <div class="card-text-box">
-                ${card.hebrew ? `<div class="card-hebrew">${card.hebrew}</div>` : ''}
-                ${card.translation ? `<div class="card-translation">"${card.translation}"</div>` : ''}
-                <p class="card-description">${truncate(card.description, 160)}</p>
-                <div class="card-roles">
-                    ${card.roles.map(r => `<span class="role-tag">${r}</span>`).join('')}
+        <div class="mtg-card-inner">
+            <div class="card-frame" data-type="${card.type}">
+                <div class="card-title-bar">
+                    <span class="card-name">${card.name}</span>
+                    ${card.level ? `<span class="stat-badge">LVL ${card.level}</span>` : ''}
                 </div>
-                ${refText ? `<p class="card-scripture">${refText}</p>` : ''}
-            </div>
-        </div>
-    </div>`;
-}
-
-// ── Combat Card ──
-function buildCombatCard(card) {
-    const s = card.stats;
-    const actionsHTML = card.actions.map(a => `
-        <div class="card-action">
-            <span class="action-name">${a.name}</span>
-            <span class="action-detail"> — ${a.damageDice}+${a.damageBonus} ${a.damageType}</span>
-            <span class="action-traits">${a.traits.map(t => `<span class="action-trait">${t}</span>`).join('')}</span>
-        </div>
-    `).join('');
-
-    const specialHTML = card.specialAbilities.length
-        ? `<div class="special-ability">${card.specialAbilities.join(' · ')}</div>`
-        : '';
-
-    return `
-    <div class="mtg-card-inner">
-        <div class="card-frame" data-type="${card.type}">
-            <div class="card-title-bar">
-                <span class="card-name">${card.name}</span>
-                <span class="card-cost">${card.level}</span>
-            </div>
-            <div class="card-art">
-                <img src="${card.image}" alt="${card.name}" loading="lazy" onerror="this.src='${fallbackImg}'">
-                <div class="card-art-overlay"></div>
-                <div class="level-badge">${card.level}</div>
-            </div>
-            <div class="card-type-line">
-                <span class="card-type-label">${card.type} — ${card.size}</span>
-                <span class="card-classification">Level ${card.level}</span>
-            </div>
-            <div class="card-text-box">
-                <p class="card-description">${card.description}</p>
-                ${actionsHTML}
-                ${specialHTML}
-            </div>
-            <div class="card-stats-footer">
-                <div class="stat-cell"><span class="stat-value">${s.hp}</span><span class="stat-label">HP</span></div>
-                <div class="stat-cell"><span class="stat-value">${s.defense}</span><span class="stat-label">DEF</span></div>
-                <div class="stat-cell"><span class="stat-value">${s.speed}ft</span><span class="stat-label">SPD</span></div>
-            </div>
-        </div>
-    </div>`;
-}
-
-// ── Legendary Card ──
-function buildLegendaryCard(card) {
-    return `
-    <div class="mtg-card-inner">
-        <div class="card-frame" data-type="Giant">
-            <div class="card-title-bar">
-                <span class="card-name">${card.name}</span>
-                <span class="card-cost">${card.hd}</span>
-            </div>
-            <div class="card-art">
-                <img src="${card.image}" alt="${card.name}" loading="lazy" onerror="this.src='${fallbackImg}'">
-                <div class="card-art-overlay"></div>
-            </div>
-            <div class="card-type-line">
-                <span class="card-type-label">Legendary Giant</span>
-                <span class="card-classification">${card.special}</span>
-            </div>
-            <div class="card-text-box">
-                <p class="card-description">${card.description}</p>
-                <div class="card-action">
-                    <span class="action-name">Attack</span>
-                    <span class="action-detail"> — ${card.attack}</span>
+                <div class="card-art-container"><img src="${card.image}" loading="lazy"></div>
+                <div class="card-type-line"><span>${card.type}</span></div>
+                <div class="card-text-box">
+                    <div style="display:flex; gap:0.3rem; margin-bottom:0.2rem;">${statsLine}</div>
+                    <p class="card-description">${card.description}</p>
                 </div>
             </div>
-            <div class="card-stats-footer">
-                <div class="stat-cell"><span class="stat-value">${card.hp}</span><span class="stat-label">HP</span></div>
-                <div class="stat-cell"><span class="stat-value">${card.def}</span><span class="stat-label">DEF</span></div>
-                <div class="stat-cell"><span class="stat-value">${card.hd}</span><span class="stat-label">HD</span></div>
-            </div>
-        </div>
-    </div>`;
+        </div>`;
 }
 
-function truncate(text, len) {
-    if (!text || text.length <= len) return text || '';
-    return text.slice(0, len).replace(/\s+\S*$/, '') + '...';
-}
-
-// ── Modal ──
 function openModal(card) {
-    const overlay = document.getElementById('modalOverlay');
+    const overlay = document.getElementById('modalOverlay'); 
     const content = document.getElementById('modalContent');
-
-    let body = `<img class="modal-art" src="${card.image}" alt="${card.name}" onerror="this.src='${fallbackImg}'">`;
-    body += `<div class="modal-body">`;
-    body += `<h2>${card.name}</h2>`;
-    body += `<p class="modal-subtitle">${card.type} — ${card.classification}</p>`;
-
-    if (card.hebrew) body += `<p style="text-align:center;font-size:1.2rem;color:var(--accent);opacity:0.7">${card.hebrew}</p>`;
-    if (card.translation) body += `<p style="text-align:center;font-size:0.8rem;color:var(--secondary);font-style:italic;margin-bottom:1rem">"${card.translation}"</p>`;
-
-    body += `<p>${card.description}</p>`;
-
-    // Stats for combat cards
-    if (card.stats) {
-        const s = card.stats;
-        body += `<div class="modal-stats-grid">
-            <div class="modal-stat"><span class="val">${s.hp}</span><span class="lbl">HP</span></div>
-            <div class="modal-stat"><span class="val">${s.defense}</span><span class="lbl">Defense</span></div>
-            <div class="modal-stat"><span class="val">${s.speed}ft</span><span class="lbl">Speed</span></div>
-            <div class="modal-stat"><span class="val">${s.STR}</span><span class="lbl">STR</span></div>
-            <div class="modal-stat"><span class="val">${s.DEX}</span><span class="lbl">DEX</span></div>
-            <div class="modal-stat"><span class="val">${s.CON}</span><span class="lbl">CON</span></div>
-            <div class="modal-stat"><span class="val">${s.INT}</span><span class="lbl">INT</span></div>
-            <div class="modal-stat"><span class="val">${s.WIS}</span><span class="lbl">WIS</span></div>
-            <div class="modal-stat"><span class="val">${s.CHA}</span><span class="lbl">CHA</span></div>
+    
+    let sidebar = `
+        <div class="modal-sidebar">
+            <img class="modal-art" src="${card.image}">
+            <div style="padding:2.5rem;">
+                <h2 style="font-family:'Cinzel', serif; color:var(--accent); margin-bottom:0.5rem; font-size:1.8rem;">${card.name}</h2>
+                <div style="color:var(--secondary); font-size:0.9rem; text-transform:uppercase; letter-spacing:0.2em; margin-bottom:2rem; font-weight:bold;">${card.type}</div>
+                
+                ${card.classification ? `<div style="margin-bottom:1.2rem;"><div style="font-size:0.6rem; color:rgba(243,233,220,0.4); text-transform:uppercase; letter-spacing:0.1em;">Archive Classification</div><div style="font-size:1rem; color:var(--light); font-family:'Cinzel', serif;">${card.classification}</div></div>` : ''}
+                ${card.translation ? `<div style="margin-bottom:1.2rem;"><div style="font-size:0.6rem; color:rgba(243,233,220,0.4); text-transform:uppercase; letter-spacing:0.1em;">Etymological Root</div><div style="font-size:1rem; color:var(--accent); font-style:italic;">"${card.translation}"</div></div>` : ''}
+                
+                ${card.roles ? `
+                    <div style="margin-top:2.5rem;">
+                        <div style="font-size:0.6rem; color:rgba(243,233,220,0.4); text-transform:uppercase; margin-bottom:0.8rem; letter-spacing:0.1em;">Celestial Jurisdictions</div>
+                        <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+                            ${card.roles.map(role => `<span style="font-size:0.75rem; background:rgba(74,111,165,0.15); border:1px solid rgba(74,111,165,0.3); padding:0.3rem 0.7rem; border-radius:2px; color:var(--secondary);">${role}</span>`).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+            </div>
         </div>`;
+
+    let academicSection = '';
+    if (card.academicDossier) {
+        academicSection = `
+            <div class="scholarly-section">
+                <h3>Scholarly Synthesis</h3>
+                <p class="academic-text">${card.academicDossier.scholarlySynthesis}</p>
+            </div>
+            <div class="scholarly-section">
+                <h3>Anthropological Insights</h3>
+                <p class="academic-text">${card.academicDossier.anthropologicalInsights}</p>
+            </div>
+            <div class="scholarly-section">
+                <h3>Esoteric & Mythical Beliefs</h3>
+                <p class="academic-text">${card.academicDossier.mythicalBeliefs}</p>
+            </div>
+        `;
     }
 
-    // Stats for legendary
-    if (card.hp && !card.stats) {
-        body += `<div class="modal-stats-grid">
-            <div class="modal-stat"><span class="val">${card.hp}</span><span class="lbl">HP</span></div>
-            <div class="modal-stat"><span class="val">${card.def}</span><span class="lbl">Defense</span></div>
-            <div class="modal-stat"><span class="val">${card.hd}</span><span class="lbl">HD</span></div>
-        </div>`;
-    }
-
-    // Actions
-    if (card.actions) {
-        body += `<p style="font-size:0.75rem;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-top:0.5rem">Actions</p>`;
-        for (const a of card.actions) {
-            body += `<p style="font-size:0.8rem"><strong>${a.name}</strong> — ${a.damageDice}+${a.damageBonus} ${a.damageType}`;
-            if (a.traits?.length) body += ` <span style="color:var(--secondary);font-size:0.7rem">(${a.traits.join(', ')})</span>`;
-            body += `</p>`;
+    let combatSection = '';
+    if (card.stats || card.hd) {
+        let statsHtml = '';
+        if (card.stats) {
+            statsHtml = `
+                <div class="rpg-stats-grid">
+                    <div class="rpg-stat-box"><span class="rpg-stat-val">${card.stats.hp}</span><span class="rpg-stat-lbl">HP</span></div>
+                    <div class="rpg-stat-box"><span class="rpg-stat-val">${card.stats.defense}</span><span class="rpg-stat-lbl">DEF</span></div>
+                    <div class="rpg-stat-box"><span class="rpg-stat-val">${card.stats.speed}ft</span><span class="rpg-stat-lbl">SPD</span></div>
+                    <div class="rpg-stat-box"><span class="rpg-stat-val">+${card.stats.STR}</span><span class="rpg-stat-lbl">STR</span></div>
+                    <div class="rpg-stat-box"><span class="rpg-stat-val">+${card.stats.DEX}</span><span class="rpg-stat-lbl">DEX</span></div>
+                    <div class="rpg-stat-box"><span class="rpg-stat-val">+${card.stats.CON}</span><span class="rpg-stat-lbl">CON</span></div>
+                </div>`;
+        } else {
+            statsHtml = `
+                <div class="rpg-stats-grid">
+                    <div class="rpg-stat-box"><span class="rpg-stat-val">${card.hd}</span><span class="rpg-stat-lbl">Hit Dice</span></div>
+                    <div class="rpg-stat-box"><span class="rpg-stat-val">${card.hp}</span><span class="rpg-stat-lbl">HP</span></div>
+                    <div class="rpg-stat-box"><span class="rpg-stat-val">${card.def || card.ac || 'N/A'}</span><span class="rpg-stat-lbl">Armor Class</span></div>
+                </div>`;
         }
-    }
-    if (card.attack && !card.actions) {
-        body += `<p style="font-size:0.8rem"><strong>Attack:</strong> ${card.attack}</p>`;
+
+        let actionsHtml = '';
+        if (card.actions) {
+            actionsHtml = `
+                <div class="action-list">
+                    ${card.actions.map(a => `
+                        <div class="action-item">
+                            <div class="action-header">
+                                <div class="action-name">${a.name}</div>
+                                <div class="action-meta">+${a.toHitBonus} To Hit // ${a.damageDice}${a.damageBonus >= 0 ? '+' : ''}${a.damageBonus} ${a.damageType}</div>
+                            </div>
+                            <div class="action-desc">Cost: ${a.cost} Action(s) // ${a.traits ? a.actions.join(', ') : ''}</div>
+                        </div>
+                    `).join('')}
+                </div>`;
+        } else if (card.attack) {
+            actionsHtml = `<div class="action-list"><div class="action-item"><div class="action-name">Primary Capability</div><div class="action-desc">${card.attack}</div></div></div>`;
+        }
+
+        combatSection = `
+            <div class="scholarly-section" style="background: rgba(0,0,0,0.1); padding: 2rem; border: 1px dashed rgba(193,154,107,0.2); border-radius: 4px;">
+                <h3 style="margin-top:0;">Tactical Manifest (RPG Data)</h3>
+                <p style="font-size:0.8rem; color:var(--accent); opacity:0.6; margin-bottom:1rem; font-family:monospace;">// ARCHIVE_SEC_LEVEL_4 // COMBAT_POTENTIAL_METRICS</p>
+                ${statsHtml}
+                ${actionsHtml}
+                ${card.specialAbilities ? `<div style="margin-top:1.5rem;"><b style="color:var(--accent); font-family:'Cinzel', serif; font-size:0.8rem;">Special Traits:</b> <span style="font-size:0.9rem; color:rgba(243,233,220,0.7);">${card.specialAbilities.join(', ')}</span></div>` : ''}
+                ${card.special ? `<div style="margin-top:1.5rem;"><b style="color:var(--accent); font-family:'Cinzel', serif; font-size:0.8rem;">Note:</b> <span style="font-size:0.9rem; color:rgba(243,233,220,0.7);">${card.special}</span></div>` : ''}
+            </div>`;
     }
 
-    // Special abilities
-    if (card.specialAbilities?.length) {
-        body += `<div class="modal-tags">${card.specialAbilities.map(a => `<span class="modal-tag">${a}</span>`).join('')}</div>`;
-    }
-
-    // Roles
-    if (card.roles?.length) {
-        body += `<div class="modal-tags">${card.roles.map(r => `<span class="modal-tag">${r}</span>`).join('')}</div>`;
-    }
-
-    // Scripture refs
+    let theologySection = '';
     if (card.theology) {
-        const refs = [...(card.theology.biblical || []), ...(card.theology.extraBiblical || [])];
-        if (refs.length) body += `<p class="modal-scripture">${refs.join(' · ')}</p>`;
+        theologySection = `
+            <div class="scholarly-section">
+                <h3>Primary Sources & Manuscripts</h3>
+                <div class="manuscript-grid">
+                    ${card.theology.biblical && card.theology.biblical.length > 0 ? 
+                        card.theology.biblical.map(src => `<div class="manuscript-item"><b>Biblical:</b> ${src}</div>`).join('') : ''}
+                    ${card.theology.extraBiblical && card.theology.extraBiblical.length > 0 ? 
+                        card.theology.extraBiblical.map(src => `<div class="manuscript-item"><b>Extra-Biblical:</b> ${src}</div>`).join('') : ''}
+                </div>
+            </div>
+        `;
     }
 
-    body += `</div>`;
-    content.innerHTML = body;
+    let main = `
+        <div class="modal-main">
+            <div class="dossier-header">
+                <div>
+                    <h1 style="font-family:'Cinzel', serif; color:var(--accent); font-size:2.8rem; margin-bottom:0.2rem; line-height:1;">${card.name}</h1>
+                    <div class="dossier-id">${card.id.toUpperCase()} // ARCHIVE_REF_${Math.floor(Math.random()*10000)}</div>
+                </div>
+                ${card.hebrew ? `<div style="font-size: 3.5rem; color: var(--accent); opacity:0.8; font-family:serif; line-height:1;">${card.hebrew}</div>` : ''}
+            </div>
+            
+            <div class="scholarly-section" style="border-top:none; margin-top:0;">
+                <h3>Executive Summary</h3>
+                <p class="academic-text" style="font-size:1.2rem; border-left:4px solid var(--accent); padding-left:2rem; font-style:italic; color:var(--light); background: rgba(193,154,107,0.03); padding-top:1rem; padding-bottom:1rem;">${card.description}</p>
+            </div>
+            
+            ${academicSection}
+            ${combatSection}
+            ${theologySection}
+            
+            <div style="margin-top:5rem; padding:2rem; background:rgba(193,154,107,0.05); border:1px solid rgba(193,154,107,0.1); border-radius:4px; font-size:0.8rem; color:rgba(243,233,220,0.4); text-align:center; font-family:monospace; letter-spacing:0.2em;">
+                RESTRICTED ACCESS // SYNTHESIZED ARCHIVE // PROPERTY OF PROJECT NEPHILIM WARS
+            </div>
+        </div>`;
+    
+    content.innerHTML = sidebar + main; 
     overlay.classList.add('open');
 }
 
-document.getElementById('modalClose').addEventListener('click', () => {
-    document.getElementById('modalOverlay').classList.remove('open');
-});
-document.getElementById('modalOverlay').addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
-});
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') document.getElementById('modalOverlay').classList.remove('open');
-});
+// Event Listeners
+document.getElementById('modalClose').addEventListener('click', () => document.getElementById('modalOverlay').classList.remove('open'));
 
-// ── Filtering ──
 document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        currentFilter = btn.getAttribute('data-filter');
         applyFilters();
     });
 });
 
-document.getElementById('searchInput').addEventListener('input', applyFilters);
+document.getElementById('searchInput').addEventListener('input', (e) => {
+    searchQuery = e.target.value;
+    applyFilters();
+});
 
-function applyFilters() {
-    const activeFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
-    const search = document.getElementById('searchInput').value.toLowerCase();
-
-    let filtered = allCards;
-
-    if (activeFilter !== 'all') {
-        if (activeFilter === 'combat') {
-            filtered = filtered.filter(c => c.source === 'combat');
-        } else if (activeFilter === 'legendary') {
-            filtered = filtered.filter(c => c.source === 'legendary');
-        } else {
-            filtered = filtered.filter(c => c.type === activeFilter);
-        }
-    }
-
-    if (search) {
-        filtered = filtered.filter(c =>
-            c.name.toLowerCase().includes(search) ||
-            (c.description || '').toLowerCase().includes(search) ||
-            (c.classification || '').toLowerCase().includes(search) ||
-            (c.roles || []).some(r => r.toLowerCase().includes(search))
-        );
-    }
-
-    renderCards(filtered);
-}
-
-// ── Init ──
 loadData();
-</script>
-</body>
-</html>
+</script></body></html>
