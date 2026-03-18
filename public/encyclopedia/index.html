@@ -44,7 +44,31 @@
         .manuscript-item { font-size: 0.85rem; color: var(--secondary); background: rgba(74,111,165,0.08); padding: 0.8rem; border-left: 3px solid var(--secondary); font-family: 'Roboto Condensed', sans-serif; }
 
         /* Header & Navigation */
-        header { background: rgba(26,18,11,0.98); backdrop-filter: blur(12px); padding: 1rem 2rem; border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; }
+        /* --- NAVIGATION BAR --- */
+        .nav-bar {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background: rgba(28, 25, 23, 0.95);
+            border-bottom: 2px solid #78350f;
+            padding: 15px 20px;
+            display: flex; gap: 20px; z-index: 100;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+        }
+
+        /* Hide nav when in iframe */
+        body.in-iframe .nav-bar { display: none; }
+        body.in-iframe .card-grid { margin-top: 20px; }
+
+        .nav-link {
+            color: #fcd34d; text-decoration: none; font-weight: bold;
+            text-transform: uppercase; letter-spacing: 1px; font-size: 14px;
+            transition: all 0.3s; display: flex; align-items: center; gap: 8px;
+            font-family: 'Cinzel', serif;
+        }
+        .nav-link:hover { color: #fff; text-shadow: 0 0 10px #f59e0b; }
+
+        header { margin-top: 60px; }
+
         header h1 { font-family: 'Cinzel', serif; color: var(--accent); font-size: 1.8rem; letter-spacing: 0.15em; }
         header h1 span { color: var(--secondary); font-size: 0.5em; display: block; }
         .filter-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
@@ -100,6 +124,13 @@
     </style>
 </head>
 <body>
+    <nav class="nav-bar">
+        <a href="../index.html" class="nav-link">🏠 Home</a>
+        <a href="../DiceRoller/index.html" class="nav-link">🎲 Dice</a>
+        <a href="../combat/index.html" class="nav-link">⚔️ Combat</a>
+        <a href="nephilim_wars_races_and_peoples.html" class="nav-link">👥 Races & Peoples</a>
+    </nav>
+
 <header>
     <h1>Nephilim Wars <span>Archives</span></h1>
     <div class="filter-bar">
