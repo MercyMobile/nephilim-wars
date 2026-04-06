@@ -56,7 +56,7 @@ SOUL ECONOMY:
 
 COMBAT:
 - Attack: d20 + proficiency + ability mod vs target Defense (AC)
-- Defense: 10 + DEX mod + armor + shield
+- Defense: 10 + DEX mod + proficiency + armor + shield
 - Critical Hit: Natural 20 or beat DC by 10+ = double damage
 - Critical Miss: Natural 1 or miss by 10+
 - Damage Types: Slashing, Piercing, Bludgeoning, Fire, Cold, Lightning, Radiant, Necrotic, Poison, Psychic, Thunder, Force

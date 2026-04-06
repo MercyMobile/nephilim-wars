@@ -6,14 +6,14 @@ const RACES = {
     name: "Sethite (Righteous Line)",
     desc: "Descendants of Seth. Keepers of the original faith and pre-fall history.",
     stats: { wis: 2, cha: 1 },
-    traits: ["Blessed Heritage (Advantage on Religion)", "Divine Favor (1/Long Rest Reroll)"],
+    traits: ["Blessed Heritage (+2 to Religion)", "Divine Favor (1/Long Rest Reroll)"],
     visuals: "simple robes, prayer shawl, serene expression, holding scroll or staff, semitic features"
   },
   "Cainite": {
     name: "Cainite (City Builder)",
     desc: "Descendants of the first murderer. Masters of metallurgy, music, and urbanization.",
     stats: { int: 2, con: 1 },
-    traits: ["Mark of Cain (Protection from vengeance)", "City Born (Urban Advantage)", "Builder's Heritage"],
+    traits: ["Mark of Cain (Protection from vengeance)", "City Born (+2 to urban social checks)", "Builder's Heritage"],
     visuals: "adorned in gold and brass jewelry, fine dyed clothes, musical instrument or hammer, elaborate hair, sharp features"
   },
   "Wanderer": {

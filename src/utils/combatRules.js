@@ -45,8 +45,10 @@ export const getDegreeOfSuccess = (totalRoll, dc, d20Roll) => {
  * @param {object} attacker - The character attacking.
  * @param {object} defender - The character being attacked.
  * @param {number} d20Roll - The raw dice roll (1-20).
+ * @param {number} attackNumber - Which attack this is in the turn (1, 2, or 3) for MAP.
+ * @param {number} defenseOverride - Optional override for defender's AC (e.g., for Defend bonus).
  */
-export const resolveAttack = (action, attacker, defender, d20Roll) => {
+export const resolveAttack = (action, attacker, defender, d20Roll, attackNumber = 1, defenseOverride = null) => {
   const result = {
     isHit: false,
     isCrit: false,
@@ -56,19 +58,29 @@ export const resolveAttack = (action, attacker, defender, d20Roll) => {
     log: []
   };
 
-  // 1. Calculate total attack roll
-  const totalToHit = d20Roll + (action.toHitBonus || 0);
+  // 1. Calculate Multiple Attack Penalty (MAP)
+  let mapPenalty = 0;
+  if (attackNumber === 2) {
+    mapPenalty = action.traits?.includes('agile') ? -4 : -5;
+  } else if (attackNumber >= 3) {
+    mapPenalty = action.traits?.includes('agile') ? -8 : -10;
+  }
 
-  // 2. Determine degree of success (PF2e: compare to AC as DC)
-  const degree = getDegreeOfSuccess(totalToHit, defender.defense, d20Roll);
+  // 2. Calculate total attack roll
+  const totalToHit = d20Roll + (action.toHitBonus || 0) + mapPenalty;
+  const mapStr = mapPenalty !== 0 ? ` (MAP ${mapPenalty})` : '';
+
+  // 3. Determine degree of success (PF2e: compare to AC as DC)
+  const targetAC = defenseOverride !== null ? defenseOverride : defender.defense;
+  const degree = getDegreeOfSuccess(totalToHit, targetAC, d20Roll);
   result.degreeOfSuccess = degree;
 
-  // 3. Resolve based on degree
+  // 4. Resolve based on degree
   switch (degree) {
     case 'criticalSuccess': {
       result.isHit = true;
       result.isCrit = true;
-      result.log.push("CRITICAL HIT!");
+      result.log.push(`🔥 CRITICAL HIT! ${attacker.name} rolled NAT 20!`);
 
       // Parse dice notation (e.g., "2d8")
       const [numDice, diceType] = action.damageDice.split('d').map(Number);
@@ -82,14 +94,13 @@ export const resolveAttack = (action, attacker, defender, d20Roll) => {
       const totalDamage = baseDamage * 2; // PF2e doubles total damage on crit
       result.damage = totalDamage;
 
-      result.log.push(`Rolled ${totalToHit} vs AC ${defender.defense} (beat by ${totalToHit - defender.defense})`);
-      result.log.push(`Deals ${totalDamage} ${action.damageType} damage (${baseDamage} x2 crit)`);
+      result.log.push(`Rolled ${d20Roll}${mapStr} for a total of ${totalToHit} vs AC ${targetAC} (beat by ${totalToHit - targetAC})`);
+      result.log.push(`${action.name} deals ${totalDamage} ${action.damageType} damage to ${defender.name}! (${baseDamage} x2 crit)`);
       break;
     }
 
     case 'success': {
       result.isHit = true;
-      result.log.push("Hit!");
 
       const [numDice, diceType] = action.damageDice.split('d').map(Number);
       let diceDamage = 0;
@@ -99,19 +110,19 @@ export const resolveAttack = (action, attacker, defender, d20Roll) => {
       const totalDamage = diceDamage + (action.damageBonus || 0);
       result.damage = totalDamage;
 
-      result.log.push(`Rolled ${totalToHit} vs AC ${defender.defense}`);
-      result.log.push(`Deals ${totalDamage} ${action.damageType} damage (${diceDamage} dice + ${action.damageBonus || 0} bonus)`);
+      result.log.push(`⚔️ ${attacker.name} hits ${defender.name} with ${action.name}! (Rolled ${d20Roll}${mapStr}, total ${totalToHit} vs AC ${targetAC})`);
+      result.log.push(`Deals ${totalDamage} ${action.damageType} damage!`);
       break;
     }
 
     case 'failure': {
-      result.log.push(`Miss. Rolled ${totalToHit} vs AC ${defender.defense}`);
+      result.log.push(`🛡️ ${attacker.name}'s ${action.name} misses ${defender.name}! (Rolled ${d20Roll}${mapStr}, total ${totalToHit} vs AC ${targetAC})`);
       break;
     }
 
     case 'criticalFailure': {
       result.isFumble = true;
-      result.log.push(`FUMBLE! Rolled ${totalToHit} vs AC ${defender.defense} (missed by ${defender.defense - totalToHit})`);
+      result.log.push(`💀 CRITICAL MISS! ${attacker.name} rolled NAT 1! ${action.name} fails completely! (Total ${totalToHit} vs AC ${targetAC})`);
       break;
     }
   }

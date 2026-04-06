@@ -14,8 +14,8 @@
       "description": "Offspring of the Watchers and human women, standing 12-15 feet tall with immense strength.",
       "portrait": "/images/rutkowski/Giant/nephilim_warrior.png",
       "stats": {
-        "hp": 120,
-        "maxHp": 120,
+        "hp": 175,
+        "maxHp": 175,
         "defense": 26,
         "fortitude": 18,
         "reflex": 12,
@@ -75,8 +75,8 @@
       "description": "Ancient giant warrior, remnant of the pre-flood world. Undying and merciless.",
       "portrait": "/images/rutkowski/Giant/rephaim_champion.png",
       "stats": {
-        "hp": 150,
-        "maxHp": 150,
+        "hp": 220,
+        "maxHp": 220,
         "defense": 28,
         "fortitude": 22,
         "reflex": 14,
@@ -127,8 +127,8 @@
       "description": "Descendants of Anak, fierce and battle-crazed warriors. Chain masters.",
       "portrait": "/images/rutkowski/Giant/anakim_berserker.png",
       "stats": {
-        "hp": 100,
-        "maxHp": 100,
+        "hp": 140,
+        "maxHp": 140,
         "defense": 24,
         "fortitude": 16,
         "reflex": 14,
@@ -251,8 +251,8 @@
       "description": "Wielder of forbidden knowledge, channeling demonic power through ancient rituals.",
       "portrait": "/images/rutkowski/Human/sorcerer_priest.png",
       "stats": {
-        "hp": 70,
-        "maxHp": 70,
+        "hp": 95,
+        "maxHp": 95,
         "defense": 20,
         "fortitude": 10,
         "reflex": 12,
@@ -429,8 +429,8 @@
       "description": "The hidden little people. Tunnel-fighters and survivors who claimed the deep places beneath the world of giants.",
       "portrait": "/images/rutkowski/Under-Walker/gammadim_tunnelfighter.png",
       "stats": {
-        "hp": 55,
-        "maxHp": 55,
+        "hp": 70,
+        "maxHp": 70,
         "defense": 20,
         "fortitude": 10,
         "reflex": 14,
@@ -497,8 +497,8 @@
       "description": "Nomadic warrior from the wilderness, swift and deadly with bow and blade.",
       "portrait": "/images/rutkowski/Human/desert_raider.png",
       "stats": {
-        "hp": 50,
-        "maxHp": 50,
+        "hp": 60,
+        "maxHp": 60,
         "defense": 19,
         "fortitude": 10,
         "reflex": 14,
@@ -551,4 +551,5 @@
       }
     }
   ]
+}
 }

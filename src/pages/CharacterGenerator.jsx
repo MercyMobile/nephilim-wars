@@ -884,9 +884,11 @@ const buildImagePrompt = () => {
     const conMod = getMod(finalStats.CON);
 
     // Calculate Derived Stats (PF2e: Ancestry HP + Class HP per level + CON mod per level)
-    const proficiency = 2 + Math.floor((level - 1) / 2); // PF2e proficiency scales with level
+    // PF2e proficiency scales with level: Level + Proficiency Bonus (Trained = 2, Expert = 4, etc.)
+    // We will assume 'Trained' (+2) as the baseline for a starting class feature.
+    const proficiency = level + 2; 
     const maxHp = loreData.ancestryHP + (classData.classHP + conMod) * level;
-    const defense = 10 + dexMod; // Base AC (armor adds more in PF2e)
+    const defense = 10 + dexMod + proficiency; // PF2e Base AC: 10 + Dex + Proficiency
 
     // Get selected equipment from class list
     const classEquipment = EQUIPMENT[formData.charClass] || EQUIPMENT.Warrior;
@@ -904,6 +906,12 @@ const buildImagePrompt = () => {
 
     const attackMod = statMods[selectedEquipment.useStat] || 0;
     const damageMod = selectedEquipment.type === 'spell' ? 0 : attackMod;
+
+    // Calculate PF2e Saves (Assume Trained = level + 2 for now)
+    const fortitude = level + 2 + conMod;
+    const reflex = level + 2 + dexMod;
+    const will = level + 2 + getMod(finalStats.WIS);
+    const perception = level + 2 + getMod(finalStats.WIS);
 
     const mainAction = {
       id: selectedEquipment.id,
@@ -939,7 +947,11 @@ const buildImagePrompt = () => {
       hp: maxHp,
       maxHp: maxHp,
       defense: defense,
-      initiativeBonus: dexMod,
+      fortitude: fortitude,
+      reflex: reflex,
+      will: will,
+      perception: perception,
+      initiativeBonus: perception, // PF2e uses Perception for Initiative
       rp: loreData.startingRP,
       cp: loreData.startingCP,
       ancestryHP: loreData.ancestryHP,

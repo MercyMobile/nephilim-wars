@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import DiceRollerModal from '../components/DiceRollerModal';
 import PartyManager from '../components/PartyManager';
 import { getPartyRoster, getActiveParty } from '../utils/storage';
+import { resolveAttack, getDegreeOfSuccess } from '../utils/combatRules';
 
 const CombatScreen = () => {
   const [party, setParty] = useState([]);
@@ -18,6 +19,7 @@ const CombatScreen = () => {
   const [actionsRemaining, setActionsRemaining] = useState(3);
   const [defendingIds, setDefendingIds] = useState([]); // IDs of combatants currently Defending
   const actionsRef = useRef(3); // ref to track actions for close handler
+  const [attacksThisTurn, setAttacksThisTurn] = useState(0); // Track attacks for MAP
 
   // Load party and bestiary on mount
   useEffect(() => {
@@ -123,6 +125,7 @@ const CombatScreen = () => {
     setCurrentTurnIndex(nextIndex);
     setActionsRemaining(3); // PF2e: 3 actions per turn
     actionsRef.current = 3;
+    setAttacksThisTurn(0); // Reset MAP counter
 
     // Clear defend status for the combatant whose turn is starting
     const nextCombatant = updated[nextIndex];
@@ -188,12 +191,22 @@ const CombatScreen = () => {
   const handleDemoralize = (member) => {
     if (actionsRef.current <= 0) return;
     const roll = rollD20();
-    const intimidationBonus = Math.floor(((member.stats?.cha || member.cha || 10) - 10) / 2) + 2;
+    
+    // PF2e Demoralize: Roll Intimidation (Level + Prof + CHA) vs Will DC (10 + Will Save Modifier)
+    const level = member.level || 1;
+    const chaMod = Math.floor(((member.attributes?.CHA || member.stats?.cha || 10) - 10) / 2);
+    // Assume trained for now if they are demoralizing
+    const intimidationBonus = level + 2 + chaMod; 
     const total = roll + intimidationBonus;
-    const dc = 15; // base Will DC
-    if (roll === 20 || total >= dc + 10) {
+    
+    const enemyWillSave = enemy.stats?.will || enemy.will || 10;
+    const dc = 10 + enemyWillSave; 
+    
+    const degree = getDegreeOfSuccess(total, dc, roll);
+
+    if (degree === 'criticalSuccess') {
       addLog(`😨 ${member.name} CRITICALLY demoralizes ${enemy.name}! (Rolled ${roll}+${intimidationBonus}=${total} vs DC ${dc}) Frightened 2!`, 'hit');
-    } else if (total >= dc) {
+    } else if (degree === 'success') {
       addLog(`😰 ${member.name} demoralizes ${enemy.name}! (Rolled ${roll}+${intimidationBonus}=${total} vs DC ${dc}) Frightened 1!`, 'hit');
     } else {
       addLog(`💪 ${enemy.name} resists ${member.name}'s intimidation. (Rolled ${roll}+${intimidationBonus}=${total} vs DC ${dc})`, 'miss');
@@ -222,12 +235,18 @@ const CombatScreen = () => {
   // Process attack result after dice roll
   const processAttackResult = (d20) => {
     const { attacker, defender, action } = pendingAttack;
-    const toHit = d20 + action.toHitBonus;
+    
     // Apply defend bonus if defender is in defensive stance
     const baseDefense = defender.stats?.defense || defender.defense;
     const defendBonus = defendingIds.includes(defender.id) ? 2 : 0;
     const defenderDef = baseDefense + defendBonus;
-    const isHit = toHit >= defenderDef;
+
+    // Track MAP
+    const currentAttackNum = attacksThisTurn + 1;
+    setAttacksThisTurn(currentAttackNum);
+
+    // Resolve using the PF2e Engine
+    const result = resolveAttack(action, attacker, defender, d20, currentAttackNum, defenderDef);
 
     // Consume action
     setActionsRemaining(prev => {
@@ -236,30 +255,15 @@ const CombatScreen = () => {
       return next;
     });
 
-    let damage = 0;
-    let logMessage = '';
-
-    if (d20 === 20) {
-      // Critical hit
-      damage = rollDamage(action.damageDice) * 2 + action.damageBonus;
-      logMessage = `🔥 CRITICAL HIT! ${attacker.name} rolled NAT 20! ${action.name} deals ${damage} damage to ${defender.name}!`;
-      updateHp(defender, -damage);
-      addLog(logMessage, 'hit');
-    } else if (d20 === 1) {
-      // Critical miss
-      logMessage = `💀 CRITICAL MISS! ${attacker.name} rolled NAT 1! ${action.name} fails completely!`;
-      addLog(logMessage, 'miss');
-    } else if (isHit) {
-      // Normal hit
-      damage = rollDamage(action.damageDice) + action.damageBonus;
-      logMessage = `⚔️ ${attacker.name} hits ${defender.name} with ${action.name} for ${damage} damage! (Rolled ${d20}, needed ${defenderDef})`;
-      updateHp(defender, -damage);
-      addLog(logMessage, 'hit');
-    } else {
-      // Miss
-      logMessage = `🛡️ ${attacker.name}'s ${action.name} misses ${defender.name}! (Rolled ${d20}, needed ${defenderDef})`;
-      addLog(logMessage, 'miss');
+    // Apply Damage & Logging
+    if (result.damage > 0) {
+      updateHp(defender, -result.damage);
     }
+
+    result.log.forEach(logLine => {
+      const logType = result.isCrit ? 'hit' : result.isFumble ? 'miss' : result.isHit ? 'hit' : 'miss';
+      addLog(logLine, logType);
+    });
 
     setPendingAttack(null);
 
@@ -303,11 +307,11 @@ const CombatScreen = () => {
       const hpTracker = {};
       party.forEach(p => { hpTracker[p.id] = p.currentHp; });
 
-      const mapPenalties = [0, -5, -10];
+      const attackIndices = [1, 2, 3]; // Pass attack number instead of hardcoded MAP
       const delay = 800;
       const timers = [];
 
-      mapPenalties.forEach((penalty, i) => {
+      attackIndices.forEach((attackNum, i) => {
         const timer = setTimeout(() => {
           // Re-check alive using local tracker
           const aliveNow = party.filter(p => (hpTracker[p.id] ?? p.currentHp) > 0);
@@ -318,31 +322,26 @@ const CombatScreen = () => {
 
           const target = aliveNow[Math.floor(Math.random() * aliveNow.length)];
           const d20 = rollD20();
-          const toHit = d20 + baseAction.toHitBonus + penalty;
+          
           const baseDefense = target.stats?.defense || target.defense;
           const defendBonus = defendingIds.includes(target.id) ? 2 : 0;
           const defenderDef = baseDefense + defendBonus;
-          const mapLabel = penalty !== 0 ? ` (MAP ${penalty})` : '';
+          
+          // Resolve using the PF2e Engine
+          const result = resolveAttack(baseAction, currentCombatant, target, d20, attackNum, defenderDef);
 
-          let damage = 0;
-          if (d20 === 20 || toHit >= defenderDef + 10) {
-            damage = rollDamage(baseAction.damageDice) * 2 + baseAction.damageBonus;
-            addLog(`🔥 CRITICAL! ${currentCombatant.name} rolls ${d20}${mapLabel}, ${baseAction.name} deals ${damage} to ${target.name}!`, 'hit');
-            updateHp(target, -damage);
-            hpTracker[target.id] = Math.max(0, (hpTracker[target.id] ?? target.currentHp) - damage);
-          } else if (d20 === 1 || toHit < defenderDef - 10) {
-            addLog(`💀 FUMBLE! ${currentCombatant.name} rolls ${d20}${mapLabel}, ${baseAction.name} fails completely!`, 'miss');
-          } else if (toHit >= defenderDef) {
-            damage = rollDamage(baseAction.damageDice) + baseAction.damageBonus;
-            addLog(`⚔️ ${currentCombatant.name} rolls ${d20}${mapLabel}, hits ${target.name} with ${baseAction.name} for ${damage}! (needed ${defenderDef})`, 'hit');
-            updateHp(target, -damage);
-            hpTracker[target.id] = Math.max(0, (hpTracker[target.id] ?? target.currentHp) - damage);
-          } else {
-            addLog(`🛡️ ${currentCombatant.name} rolls ${d20}${mapLabel}, ${baseAction.name} misses ${target.name}. (needed ${defenderDef})`, 'miss');
+          if (result.damage > 0) {
+            updateHp(target, -result.damage);
+            hpTracker[target.id] = Math.max(0, (hpTracker[target.id] ?? target.currentHp) - result.damage);
           }
 
+          result.log.forEach(logLine => {
+            const logType = result.isCrit ? 'hit' : result.isFumble ? 'miss' : result.isHit ? 'hit' : 'miss';
+            addLog(logLine, logType);
+          });
+
           // Advance turn after last attack
-          if (i === mapPenalties.length - 1) {
+          if (i === attackIndices.length - 1) {
             setTimeout(() => nextTurn(), 600);
           }
         }, delay * (i + 1));
@@ -372,6 +371,7 @@ const CombatScreen = () => {
     setActionsRemaining(3);
     actionsRef.current = 3;
     setDefendingIds([]);
+    setAttacksThisTurn(0);
   };
 
   // Handle party selection
