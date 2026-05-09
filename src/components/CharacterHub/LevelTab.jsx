@@ -6,14 +6,16 @@ import { CLASSES } from '../../data/classes';
 import { ANCESTRIES } from '../../data/ancestries';
 import LevelUpWizard from './LevelUpWizard';
 
-function getClassFeaturesForLevel(className, level) {
+function getClassFeaturesForLevel(classValue, level) {
+  const className = typeof classValue === 'object' ? classValue?.value : classValue;
   const classData = CLASSES.find((c) => c.value === className);
   if (!classData || !classData.features[level]) return [];
   return classData.features[level];
 }
 
 function getAncestryFeatsForLevel(ancestry, level) {
-  const ancestryData = ANCESTRIES[ancestry];
+  const ancestryKey = typeof ancestry === 'object' ? ancestry?.key : ancestry;
+  const ancestryData = ANCESTRIES[ancestryKey];
   if (!ancestryData || !ancestryData.feats || !ancestryData.feats[level]) return [];
   return ancestryData.feats[level];
 }
@@ -177,7 +179,7 @@ export default function LevelTab({ character, updateCharacter }) {
                 </li>
               )}
               <li className="text-stone-500">
-                <span className="text-stone-500">HP:</span> +{CLASSES.find((c) => c.value === character.class)?.hpPerLevel || 0} + CON modifier
+                <span className="text-stone-500">HP:</span> +{CLASSES.find((c) => c.value === (typeof character.class === 'object' ? character.class?.value : character.class))?.hpPerLevel || 0} + CON modifier
               </li>
             </ul>
           </div>
@@ -201,7 +203,7 @@ export default function LevelTab({ character, updateCharacter }) {
           Level {currentLevel}
         </div>
         <div className="text-stone-500 text-sm font-cinzel uppercase tracking-wider">
-          {CLASSES.find((c) => c.value === character.class)?.label || character.class}
+          {CLASSES.find((c) => c.value === (typeof character.class === 'object' ? character.class?.value : character.class))?.label || (typeof character.class === 'object' ? character.class?.label : character.class)}
         </div>
       </div>
 

@@ -75,7 +75,7 @@ const ScribeChat = () => {
       const data = await response.json();
       const replyText = data.reply || data.result || data.response || data.error || 'The Scribe is silent.';
       setMessages(prev => [...prev, { role: 'scribe', content: replyText, sources: data.sources }]);
-    } catch (error) {
+    } catch {
       setMessages(prev => [...prev, { role: 'scribe', content: "The connection to the archives has been severed." }]);
     } finally {
       setLoading(false);
@@ -183,13 +183,8 @@ const MenuButton = ({ onClick, icon, title, desc }) => (
 // --- MAIN APP COMPONENT ---
 export default function App() {
   const [currentView, setCurrentView] = useState('home');
-  const [characterExists, setCharacterExists] = useState(false);
   const [loreTab, setLoreTab] = useState('codex'); 
   const [rulesTab, setRulesTab] = useState('combat'); 
-
-  useEffect(() => {
-    if (localStorage.getItem('generatedCharacter')) setCharacterExists(true);
-  }, []);
 
   // Listen for messages from Iframe (e.g. Return Home button inside Dice Roller)
   useEffect(() => {
@@ -203,8 +198,7 @@ export default function App() {
   }, []);
 
   const handleCharacterReady = () => {
-    setCharacterExists(true);
-    setCurrentView('combat');
+    setCurrentView('character');
   };
 
   return (

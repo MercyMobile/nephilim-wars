@@ -66,9 +66,9 @@ export function useScribeTTS() {
         if (currentSourceRef.current.stop) {
           currentSourceRef.current.stop();
         } else if (currentSourceRef.current.sources) {
-          currentSourceRef.current.sources.forEach(s => { try { s.stop(); } catch(e) {} });
+          currentSourceRef.current.sources.forEach(s => { try { s.stop(); } catch { /* noop */ } });
         }
-      } catch (e) {
+      } catch {
         // Already stopped
       }
       currentSourceRef.current = null;
@@ -141,7 +141,7 @@ export function useScribeTTS() {
 
       if (lastSource) {
         // Store sources for stop functionality
-        currentSourceRef.current = { sources, stop: () => sources.forEach(s => { try { s.stop(); } catch(e) {} }) };
+        currentSourceRef.current = { sources, stop: () => sources.forEach(s => { try { s.stop(); } catch { /* noop */ } }) };
 
         lastSource.onended = () => {
           setSpeaking(false);

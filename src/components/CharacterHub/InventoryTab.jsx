@@ -46,8 +46,8 @@ export default function InventoryTab({ character, updateCharacter }) {
     updateCharacter
   );
 
-  const inventory = character?.inventory || { items: [], equipped: {}, gold: 0 };
-  const items = inventory.items || [];
+  const inventory = useMemo(() => character?.inventory || { items: [], equipped: {}, gold: 0 }, [character?.inventory]);
+  const items = useMemo(() => inventory.items || [], [inventory.items]);
   const equipped = inventory.equipped || {};
   const gold = inventory.gold || 0;
 
@@ -162,7 +162,7 @@ export default function InventoryTab({ character, updateCharacter }) {
                 item={item}
                 onEquip={(i) => equipItem(i.id, i.category === 'ranged' || i.category === 'melee' ? 'weapon' : 'armor')}
                 onDrop={(i) => removeItem(i.id)}
-                onView={(i) => {}}
+                onView={() => {}}
                 compact={false}
               />
             ))}

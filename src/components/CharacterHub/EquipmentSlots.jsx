@@ -69,7 +69,7 @@ function MobileSlotRow({ slotKey, label, item, onUnequip }) {
   );
 }
 
-export default function EquipmentSlots({ equipped, onUnequip, character }) {
+export default function EquipmentSlots({ equipped, onUnequip }) {
   const eq = equipped || {};
 
   return (

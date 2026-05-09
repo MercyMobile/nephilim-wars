@@ -2,7 +2,7 @@ import { useMemo, useCallback } from 'react';
 import { getTotalBulk, getEncumbranceThreshold, getEncumbranceLevel } from '../utils/encumbrance';
 
 export function useInventory(character, updateCharacter) {
-  const inventory = character?.inventory || { items: [], equipped: {}, gold: 0 };
+  const inventory = useMemo(() => character?.inventory || { items: [], equipped: {}, gold: 0 }, [character?.inventory]);
 
   const getEquippedItem = useCallback((slot) => {
     return inventory.equipped?.[slot] || null;
@@ -11,7 +11,7 @@ export function useInventory(character, updateCharacter) {
   const equipItem = useCallback((itemId, slot) => {
     const items = [...(inventory.items || [])];
     const equipped = { ...(inventory.equipped || {}) };
-    const itemIndex = items.findIndex(i => i.id === itemId);
+    const itemIndex = items.findIndex(it => it.id === itemId);
     if (itemIndex === -1) return;
 
     const item = items[itemIndex];
@@ -27,7 +27,7 @@ export function useInventory(character, updateCharacter) {
       ...prev,
       inventory: { ...prev.inventory, items, equipped },
     }));
-  }, [inventory, updateCharacter]);
+  }, [inventory.items, inventory.equipped, updateCharacter]);
 
   const unequipItem = useCallback((slot) => {
     const items = [...(inventory.items || [])];
@@ -42,7 +42,7 @@ export function useInventory(character, updateCharacter) {
       ...prev,
       inventory: { ...prev.inventory, items, equipped },
     }));
-  }, [inventory, updateCharacter]);
+  }, [inventory.items, inventory.equipped, updateCharacter]);
 
   const addItem = useCallback((item) => {
     const items = [...(inventory.items || []), item];
@@ -51,16 +51,16 @@ export function useInventory(character, updateCharacter) {
       ...prev,
       inventory: { ...prev.inventory, items },
     }));
-  }, [inventory, updateCharacter]);
+  }, [inventory.items, updateCharacter]);
 
   const removeItem = useCallback((itemId) => {
-    const items = (inventory.items || []).filter(i => i.id !== itemId);
+    const items = (inventory.items || []).filter(it => it.id !== itemId);
 
     updateCharacter(prev => ({
       ...prev,
       inventory: { ...prev.inventory, items },
     }));
-  }, [inventory, updateCharacter]);
+  }, [inventory.items, updateCharacter]);
 
   const adjustGold = useCallback((amount) => {
     const gold = Math.max(0, (inventory.gold || 0) + amount);
@@ -69,16 +69,14 @@ export function useInventory(character, updateCharacter) {
       ...prev,
       inventory: { ...prev.inventory, gold },
     }));
-  }, [inventory, updateCharacter]);
+  }, [inventory.gold, updateCharacter]);
 
   const bulkInfo = useMemo(() => {
-    const totalBulk = getTotalBulk(inventory.items || [], inventory.equipped || {});
-    const thresholds = {
-      encumbered: getEncumbranceThreshold(character, 'encumbered'),
-      heavilyEncumbered: getEncumbranceThreshold(character, 'heavilyEncumbered'),
-    };
+    const totalBulk = getTotalBulk(inventory);
+    const strMod = Math.floor(((character?.attributes?.STR || 10) - 10) / 2);
+    const thresholds = getEncumbranceThreshold(strMod, character?.ancestry?.key === 'Gammadim');
     const level = getEncumbranceLevel(totalBulk, thresholds);
-    const maxBulk = thresholds.heavilyEncumbered;
+    const maxBulk = thresholds.heavy;
 
     return { totalBulk, thresholds, level, maxBulk };
   }, [inventory, character]);

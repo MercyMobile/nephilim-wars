@@ -64,7 +64,7 @@ export default function SoulTab({ character, updateCharacter }) {
       rp: newRp,
       spendingLog: [
         ...(se.spendingLog || []),
-        { type: 'rp', amount: delta, reason: reason || (delta > 0 ? 'Manual gain' : 'Manual spend'), timestamp: Date.now() },
+        { type: 'rp', amount: delta, reason: reason || (delta > 0 ? 'Manual gain' : 'Manual spend'), timestamp: new Date().toISOString() },
       ],
     };
     updateCharacter({ soulEconomy: newSe });
@@ -85,7 +85,7 @@ export default function SoulTab({ character, updateCharacter }) {
       cp: newCp,
       spendingLog: [
         ...(se.spendingLog || []),
-        { type: 'cp', amount: delta, reason: reason || (delta > 0 ? 'Manual gain' : 'Manual reduction'), timestamp: Date.now() },
+        { type: 'cp', amount: delta, reason: reason || (delta > 0 ? 'Manual gain' : 'Manual reduction'), timestamp: new Date().toISOString() },
       ],
     };
     updateCharacter({ soulEconomy: newSe });

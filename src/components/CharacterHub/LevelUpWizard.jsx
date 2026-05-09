@@ -101,7 +101,7 @@ function OverviewStep({ character, newLevel, options }) {
 }
 
 function AbilityBoostsStep({ choices, setChoices }) {
-  const selectedStats = Object.values(choices.abilityBoosts || {}).filter(Boolean);
+  const _selectedStats = Object.values(choices.abilityBoosts || {}).filter(Boolean);
 
   function handleChange(slot, value) {
     setChoices((prev) => ({
@@ -354,7 +354,7 @@ export default function LevelUpWizard({ character, updateCharacter, onClose }) {
     };
     if (options.abilityBoosts) {
       const boosts = {};
-      for (const [slot, stat] of Object.entries(choices.abilityBoosts)) {
+      for (const [, stat] of Object.entries(choices.abilityBoosts)) {
         if (stat) boosts[stat] = true;
       }
       applyChoices.abilityBoosts = boosts;

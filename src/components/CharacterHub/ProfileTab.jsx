@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function ProfileTab({ character, updateCharacter }) {
+export default function ProfileTab({ character }) {
   if (!character) {
     return (
       <div className="flex flex-col items-center justify-center h-full p-6 text-center">
@@ -19,12 +19,17 @@ export default function ProfileTab({ character, updateCharacter }) {
     );
   }
 
-  const ancestryTraits = character.ancestryTraits || character.traits || [];
+  const ancestryTraits = character.ancestryTraits || character.traits || character.ancestry?.traits || [];
   const heritage = character.heritage || character.heritageName;
-  const background = character.background || character.backgroundName;
+  const background = character.background || character.backgroundName || character.gameBackground;
   const size = character.size || 'Medium';
   const speed = character.speed || 30;
   const height = character.height || character.displayHeight;
+
+  const ancestryLabel = character.ancestry?.name || character.lineage || character.ancestry || character.race;
+  const classLabel = character.class?.label || character.class?.value || character.className || character.class;
+  const rp = character.soulEconomy?.rp ?? character.rp ?? 0;
+  const cp = character.soulEconomy?.cp ?? character.cp ?? 0;
 
   return (
     <div className="p-4 md:p-6 space-y-6">
@@ -46,7 +51,7 @@ export default function ProfileTab({ character, updateCharacter }) {
 
       {/* Ancestry / Class / Level subtitle */}
       <p className="text-stone-400 italic text-center font-serif">
-        {[character.ancestry || character.race, character.class || character.className, `Level ${character.level || 1}`]
+        {[ancestryLabel, classLabel, `Level ${character.level || 1}`]
           .filter(Boolean)
           .join(' • ')}
       </p>
@@ -102,11 +107,11 @@ export default function ProfileTab({ character, updateCharacter }) {
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-stone-950 p-3 rounded border-l-4 border-blue-600">
           <h3 className="text-blue-500 font-bold text-xs uppercase mb-1 font-cinzel">Righteousness (RP)</h3>
-          <div className="text-xl text-stone-200 font-serif">{character.rp ?? 0}</div>
+          <div className="text-xl text-stone-200 font-serif">{rp}</div>
         </div>
         <div className="bg-stone-950 p-3 rounded border-l-4 border-red-800">
           <h3 className="text-red-600 font-bold text-xs uppercase mb-1 font-cinzel">Corruption (CP)</h3>
-          <div className="text-xl text-stone-200 font-serif">{character.cp ?? 0}</div>
+          <div className="text-xl text-stone-200 font-serif">{cp}</div>
         </div>
       </div>
 

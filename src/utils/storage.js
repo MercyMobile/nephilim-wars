@@ -195,23 +195,34 @@ export function setActiveParty(characterIds) {
   return setInStorage('activeParty', limitedParty);
 }
 
+import { normalizeCharacter } from './normalizeCharacter';
+
 export function isValidCompleteCharacter(data) {
   if (!data || typeof data !== 'object') return false;
-  return !!(data.id && data.name && data.ancestry && data.class && 
-    data.level !== undefined && data.attributes && data.inventory && data.soulEconomy);
+  return !!(data.id && data.name && data.level !== undefined && data.attributes);
 }
 
 export function getCompleteCharacter() {
   const data = getFromStorage('completeCharacter', null);
-  if (!isValidCompleteCharacter(data)) return null;
+  if (!data) {
+    const legacy = getFromStorage('generatedCharacter', null);
+    if (legacy && isValidCharacterData(legacy)) {
+      const normalized = normalizeCharacter(legacy);
+      if (normalized) {
+        setCompleteCharacter(normalized);
+        return normalized;
+      }
+    }
+    return null;
+  }
+  if (!isValidCompleteCharacter(data)) {
+    removeFromStorage('completeCharacter');
+    return null;
+  }
   return data;
 }
 
 export function setCompleteCharacter(characterData) {
-  if (!isValidCompleteCharacter(characterData)) {
-    console.error('Attempted to save invalid complete character data');
-    return false;
-  }
   return setInStorage('completeCharacter', characterData);
 }
 

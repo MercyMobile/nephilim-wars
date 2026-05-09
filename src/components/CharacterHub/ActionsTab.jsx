@@ -18,7 +18,8 @@ const ACTION_PIPS = {
 
 function getCharClass(character) {
   if (!character?.class) return null;
-  return CLASSES.find((c) => c.value === character.class) || null;
+  const classValue = typeof character.class === 'object' ? character.class.value : character.class;
+  return CLASSES.find((c) => c.value === classValue) || null;
 }
 
 function getFeaturesForLevel(classData, level) {
@@ -180,7 +181,6 @@ export default function ActionsTab({ character }) {
           </h2>
           <div className="space-y-2">
             {spells.map((spell, i) => {
-              const cpRisk = spell.cpRisk || (spell.soulTag === 'CP_risk' ? 1 : null);
               return (
                 <ActionCard
                   key={spell.id || i}
@@ -211,7 +211,6 @@ export default function ActionsTab({ character }) {
           </h2>
           <div className="space-y-2">
             {spells.map((spell, i) => {
-              const rpCost = spell.rpCost || (spell.soulTag === 'RP_cost' ? 1 : null);
               return (
                 <ActionCard
                   key={spell.id || i}

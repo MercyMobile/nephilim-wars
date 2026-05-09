@@ -30,12 +30,12 @@ export function computeAllStats(character) {
   if (!character) return null;
 
   const attrs = character.attributes || { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 };
-  const strMod = getAbilityModifier(attrs.STR);
+  const _strMod = getAbilityModifier(attrs.STR);
   const dexMod = getAbilityModifier(attrs.DEX);
   const conMod = getAbilityModifier(attrs.CON);
-  const intMod = getAbilityModifier(attrs.INT);
+  const _intMod = getAbilityModifier(attrs.INT);
   const wisMod = getAbilityModifier(attrs.WIS);
-  const chaMod = getAbilityModifier(attrs.CHA);
+  const _chaMod = getAbilityModifier(attrs.CHA);
   const level = character.level || 1;
 
   const profBonus = getProficiencyBonus(level, 'trained');

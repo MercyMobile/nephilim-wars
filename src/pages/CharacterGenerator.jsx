@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { validateCharacterName, validateAttribute, validateDescription } from '../utils/validation';
-import { setCharacterData, addToPartyRoster } from '../utils/storage';
+import { setCharacterData, addToPartyRoster, setCompleteCharacter } from '../utils/storage';
+import { normalizeCharacter } from '../utils/normalizeCharacter';
 
 const CharacterGenerator = ({ onCharacterComplete }) => {
   // === COMPREHENSIVE ANCESTRY DATA (PF2e-Compliant per Manual) ===
@@ -840,7 +841,12 @@ const buildImagePrompt = () => {
         body: JSON.stringify({ prompt: fullPrompt, negative_prompt: negativePrompt, model: formData.imageModel })
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error("Image generation service is unavailable. Please try again or create your character without a portrait.");
+      }
       console.log('API Response:', data);
 
       if (!response.ok) {
@@ -864,8 +870,8 @@ const buildImagePrompt = () => {
 
   // === CALCULATE FINAL STATS & CREATE CHARACTER ===
   const handleCreateCharacter = () => {
-    if (!formData.name || !portrait) {
-      setError("Name and Portrait are required.");
+    if (!formData.name) {
+      setError("Name is required.");
       return;
     }
 
@@ -968,8 +974,9 @@ const buildImagePrompt = () => {
   const handleSave = () => {
     if (finalCharacter) {
       const success = setCharacterData(finalCharacter);
-      // Also add to party roster
       addToPartyRoster(finalCharacter);
+      const normalized = normalizeCharacter(finalCharacter);
+      if (normalized) setCompleteCharacter(normalized);
 
       if (success && onCharacterComplete) {
         onCharacterComplete();

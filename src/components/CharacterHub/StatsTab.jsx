@@ -1,6 +1,5 @@
 import React from 'react';
 import { computeAllStats, getAbilityModifier } from '../../utils/characterRules';
-import { getNetRighteousness, getSoulTier } from '../../utils/soulEconomy';
 import ProgressBar from './ProgressBar';
 
 const ABILITIES = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
@@ -27,8 +26,6 @@ export default function StatsTab({ character }) {
   const stats = computeAllStats(character);
   const attrs = character.attributes || { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 };
   const currentHP = character.hp ?? stats.maxHP;
-  const netR = getNetRighteousness(character.soulEconomy?.rp, character.soulEconomy?.cp);
-  const tier = getSoulTier(character.soulEconomy?.rp || 0, character.soulEconomy?.cp || 0);
 
   return (
     <div className="p-4 md:p-6 space-y-6 font-garamond text-stone-200">

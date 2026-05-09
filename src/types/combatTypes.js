@@ -1,105 +1,83 @@
 // src/types/combatTypes.js
 // PF2e-Compliant Combat Types for Nephilim Wars
 
-export type DamageType = 'physical' | 'slashing' | 'piercing' | 'bludgeoning' | 'fire' | 'cold' | 'lightning' | 'radiant' | 'necrotic' | 'force' | 'poison' | 'psychic' | 'thunder' | 'spiritual';
+/** @typedef {'physical'|'slashing'|'piercing'|'bludgeoning'|'fire'|'cold'|'lightning'|'radiant'|'necrotic'|'force'|'poison'|'psychic'|'thunder'|'spiritual'} DamageType */
+/** @typedef {'criticalSuccess'|'success'|'failure'|'criticalFailure'} DegreeOfSuccess */
 
-export type DegreeOfSuccess = 'criticalSuccess' | 'success' | 'failure' | 'criticalFailure';
+/**
+ * A single ability, spell, or weapon swing.
+ * @typedef {Object} CombatAction
+ * @property {string} id
+ * @property {string} name
+ * @property {string} [description]
+ * @property {'melee'|'ranged'|'miracle'|'spell'} type
+ * @property {number} cost - Actions required (PF2e 3-action economy: 1, 2, or 3)
+ * @property {number} toHitBonus
+ * @property {string} damageDice - e.g. "2d8"
+ * @property {number} damageBonus
+ * @property {DamageType} damageType
+ * @property {string[]} [traits] - e.g., ["sweep", "reach 10", "forceful", "deadly d10"]
+ * @property {'slash'|'smite'|'fireball'} [animation]
+ * @property {'clash'|'chant'|'roar'} [soundEffect]
+ */
 
-// A single ability, spell, or weapon swing
-export interface CombatAction {
-  id: string;
-  name: string;
-  description?: string;
-  type: 'melee' | 'ranged' | 'miracle' | 'spell';
-  cost: number; // Actions required (PF2e 3-action economy: 1, 2, or 3)
+/**
+ * InventoryItem for Character Hub.
+ * @typedef {Object} InventoryItem
+ * @property {string} id
+ * @property {string} name
+ * @property {string} category
+ * @property {number} [quantity]
+ * @property {number} [bulk]
+ * @property {string} [description]
+ * @property {number} [level]
+ * @property {number} [price]
+ * @property {string} [damageDice]
+ * @property {string} [damageType]
+ * @property {Object} [properties]
+ * @property {string} [soulTag]
+ * @property {string} [source]
+ */
 
-  // The Math
-  toHitBonus: number;
-  damageDice: string; // "2d8"
-  damageBonus: number;
-  damageType: DamageType;
+/**
+ * The Entity (Player or Monster).
+ * @typedef {Object} Combatant
+ * @property {string} id
+ * @property {string} name
+ * @property {string} portrait - URL to image
+ * @property {boolean} isPlayer
+ * @property {number} [level]
+ * @property {'Small'|'Medium'|'Large'|'Huge'} [size]
+ * @property {number} [speed] - feet
+ * @property {number} hp
+ * @property {number} maxHp
+ * @property {number} defense - Armor Class (PF2e AC)
+ * @property {number} initiativeBonus
+ * @property {number} [fortitude]
+ * @property {number} [reflex]
+ * @property {number} [will]
+ * @property {number} [perception]
+ * @property {number} actionsPerTurn - Default 3
+ * @property {number} [actionsRemaining]
+ * @property {number} [rp] - Righteousness Points
+ * @property {number} [cp] - Corruption Points
+ * @property {string} [soulTier] - 'Blessed'|'Righteous'|'Neutral'|'Tainted'|'Corrupted'|'Forsaken'
+ * @property {Object} [inventory] - { gold: number, items: InventoryItem[], equipped: Record<string, InventoryItem|null> }
+ * @property {Object} [attributes] - { STR, DEX, CON, INT, WIS, CHA }
+ * @property {string[]} statusEffects - e.g. ["stunned", "blessed", "frightened"]
+ * @property {CombatAction[]} actions
+ * @property {string[]} [specialAbilities]
+ */
 
-  // PF2e Weapon Traits
-  traits?: string[]; // e.g., ["sweep", "reach 10", "forceful", "deadly d10"]
-
-  // Visuals (The Juice)
-  animation?: 'slash' | 'smite' | 'fireball';
-  soundEffect?: 'clash' | 'chant' | 'roar';
-}
-
-// The Entity (Player or Monster)
-export interface Combatant {
-  id: string;
-  name: string;
-  portrait: string; // URL to image
-  isPlayer: boolean;
-
-  // PF2e Identity
-  level?: number;
-  size?: 'Small' | 'Medium' | 'Large' | 'Huge';
-  speed?: number; // feet
-
-  // Vitals
-  hp: number;
-  maxHp: number;
-  defense: number; // Armor Class (PF2e AC)
-  initiativeBonus: number;
-
-  // PF2e Saves
-  fortitude?: number;
-  reflex?: number;
-  will?: number;
-  perception?: number;
-
-  // PF2e Action Economy
-  actionsPerTurn: number; // Default 3
-  actionsRemaining?: number;
-
-  // Soul Economy
-  rp?: number; // Righteousness Points
-  cp?: number; // Corruption Points
-
-  // Level & Soul Economy (extended for Character Hub)
-  soulTier?: string; // 'Blessed' | 'Righteous' | 'Neutral' | 'Tainted' | 'Corrupted' | 'Forsaken'
-
-  // Inventory (extended for Character Hub)
-  inventory?: {
-    gold: number;
-    items: InventoryItem[];
-    equipped: Record<string, InventoryItem | null>;
-  };
-
-  // Attributes
-  attributes?: {
-    STR: number;
-    DEX: number;
-    CON: number;
-    INT: number;
-    WIS: number;
-    CHA: number;
-  };
-
-  // State
-  statusEffects: string[]; // e.g. ["stunned", "blessed", "frightened"]
-
-  // What can they do?
-  actions: CombatAction[];
-
-  // PF2e Special Abilities
-  specialAbilities?: string[];
-}
-
-// InventoryItem (extended type for Character Hub)
-// { id, name, category, quantity, bulk, description, level, price, damageDice, damageType, properties, soulTag, source }
-
-// The Log Entry (for the scrolling text)
-export interface LogEntry {
-  id: number;
-  timestamp: number;
-  sourceName: string;
-  message: string;
-  type: 'info' | 'attack' | 'damage' | 'heal' | 'criticalHit' | 'criticalFailure';
-  value?: number; // The roll result
-  isCrit?: boolean;
-  degreeOfSuccess?: DegreeOfSuccess;
-}
+/**
+ * The Log Entry (for the scrolling text).
+ * @typedef {Object} LogEntry
+ * @property {number} id
+ * @property {number} timestamp
+ * @property {string} sourceName
+ * @property {string} message
+ * @property {'info'|'attack'|'damage'|'heal'|'criticalHit'|'criticalFailure'} type
+ * @property {number} [value]
+ * @property {boolean} [isCrit]
+ * @property {DegreeOfSuccess} [degreeOfSuccess]
+ */
