@@ -6,6 +6,7 @@ import CombatScreen from './pages/CombatScreen';
 import BestiaryScreen from './pages/BestiaryScreen';
 import DiceScreen from './components/DiceScreen';
 import TabernacleViewer from "./components/TabernacleViewer";
+import CharacterHub from './components/CharacterHub/CharacterHub';
 import ErrorBoundary from './components/ErrorBoundary';
 import RulesOracle from './components/RulesOracle';
 import { useScribeTTS } from './hooks/useScribeTTS';
@@ -215,6 +216,7 @@ export default function App() {
           <nav className="bg-stone-950 border-b border-amber-900/50 p-3 flex flex-wrap justify-center gap-2 z-40 shadow-2xl relative min-h-[60px]">
             <NavButton label="🏛️ Home" isActive={currentView === 'home'} onClick={() => setCurrentView('home')} />
             <NavButton label="✨ Create Character" isActive={currentView === 'generator'} onClick={() => setCurrentView('generator')} />
+            <NavButton label="📜 Character" isActive={currentView === 'character'} onClick={() => setCurrentView('character')} />
             <NavButton label="⚔️ Combat" isActive={currentView === 'combat'} onClick={() => setCurrentView('combat')} />
             <NavButton label="🎲 Dice" isActive={currentView === 'dice'} onClick={() => setCurrentView('dice')} />
             <NavButton label="🏛️ Archives" isActive={currentView === 'bestiary'} onClick={() => window.location.href = '/encyclopedia/index.html'} />
@@ -228,6 +230,7 @@ export default function App() {
           {currentView === 'home' && <MainMenu onNavigate={setCurrentView} />}
           {currentView === 'generator' && <CharacterGenerator onCharacterComplete={handleCharacterReady} />}
           {currentView === 'combat' && <CombatScreen />}
+          {currentView === 'character' && <CharacterHub />}
           {currentView === 'bestiary' && <BestiaryScreen />}
           
           {currentView === 'rules' && (

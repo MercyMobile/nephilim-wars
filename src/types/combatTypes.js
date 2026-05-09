@@ -59,6 +59,16 @@ export interface Combatant {
   rp?: number; // Righteousness Points
   cp?: number; // Corruption Points
 
+  // Level & Soul Economy (extended for Character Hub)
+  soulTier?: string; // 'Blessed' | 'Righteous' | 'Neutral' | 'Tainted' | 'Corrupted' | 'Forsaken'
+
+  // Inventory (extended for Character Hub)
+  inventory?: {
+    gold: number;
+    items: InventoryItem[];
+    equipped: Record<string, InventoryItem | null>;
+  };
+
   // Attributes
   attributes?: {
     STR: number;
@@ -78,6 +88,9 @@ export interface Combatant {
   // PF2e Special Abilities
   specialAbilities?: string[];
 }
+
+// InventoryItem (extended type for Character Hub)
+// { id, name, category, quantity, bulk, description, level, price, damageDice, damageType, properties, soulTag, source }
 
 // The Log Entry (for the scrolling text)
 export interface LogEntry {
