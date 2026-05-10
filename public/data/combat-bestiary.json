@@ -41,10 +41,7 @@
           "damageDice": "2d12",
           "damageBonus": 8,
           "damageType": "slashing",
-          "traits": [
-            "reach 10",
-            "sweep"
-          ]
+          "traits": ["reach 10", "sweep"]
         },
         {
           "id": "crushing_blow",
@@ -55,9 +52,7 @@
           "damageDice": "3d10",
           "damageBonus": 8,
           "damageType": "bludgeoning",
-          "traits": [
-            "reach 10"
-          ]
+          "traits": ["reach 10"]
         }
       ],
       "academicDossier": {
@@ -102,16 +97,10 @@
           "damageDice": "2d12",
           "damageBonus": 10,
           "damageType": "bludgeoning",
-          "traits": [
-            "reach 10",
-            "forceful"
-          ]
+          "traits": ["reach 10", "forceful"]
         }
       ],
-      "specialAbilities": [
-        "Spirit Sight",
-        "Deathly Aura"
-      ],
+      "specialAbilities": ["Spirit Sight", "Deathly Aura"],
       "academicDossier": {
         "scholarlySynthesis": "Rephaim Champions are second-generation giants, noted for their association with death, the underworld, and the 'shades' of the antediluvian world.",
         "anthropologicalInsights": "The Rephaim represent the spectral legacy of the giants. Anthropologically, they symbolize the transition of the 'monstrous hybridity' into a chthonic existence, where the disembodied spirits of the Grigori-offspring continue to haunt the world as 'shades' of a fallen imperial age.",
@@ -154,10 +143,7 @@
           "damageDice": "2d6",
           "damageBonus": 6,
           "damageType": "slashing",
-          "traits": [
-            "sweep",
-            "twin"
-          ]
+          "traits": ["sweep", "twin"]
         },
         {
           "id": "berserker_rage",
@@ -168,9 +154,7 @@
           "damageDice": "3d8",
           "damageBonus": 8,
           "damageType": "slashing",
-          "traits": [
-            "rage"
-          ]
+          "traits": ["rage"]
         }
       ],
       "academicDossier": {
@@ -215,11 +199,7 @@
           "damageDice": "1d4",
           "damageBonus": 4,
           "damageType": "piercing",
-          "traits": [
-            "agile",
-            "finesse",
-            "poison"
-          ]
+          "traits": ["agile", "finesse", "poison"]
         },
         {
           "id": "shadow_strike",
@@ -230,10 +210,7 @@
           "damageDice": "2d6",
           "damageBonus": 8,
           "damageType": "piercing",
-          "traits": [
-            "finesse",
-            "sneak attack"
-          ]
+          "traits": ["finesse", "sneak attack"]
         }
       ],
       "academicDossier": {
@@ -278,10 +255,7 @@
           "damageDice": "2d10",
           "damageBonus": 4,
           "damageType": "force",
-          "traits": [
-            "occult",
-            "evocation"
-          ]
+          "traits": ["occult", "evocation"]
         },
         {
           "id": "curse_weakness",
@@ -292,11 +266,7 @@
           "damageDice": "2d8",
           "damageBonus": 4,
           "damageType": "necrotic",
-          "traits": [
-            "occult",
-            "necromancy",
-            "curse"
-          ]
+          "traits": ["occult", "necromancy", "curse"]
         }
       ],
       "academicDossier": {
@@ -341,15 +311,10 @@
           "damageDice": "1d8",
           "damageBonus": 5,
           "damageType": "bludgeoning",
-          "traits": [
-            "shove"
-          ]
+          "traits": ["shove"]
         }
       ],
-      "specialAbilities": [
-        "Superior Darkvision 120ft",
-        "Stone Cunning"
-      ],
+      "specialAbilities": ["Superior Darkvision 120ft", "Stone Cunning"],
       "academicDossier": {
         "scholarlySynthesis": "Horim Tunnelers are giant-kin adapted to life in the subterranean darkness, fleeing the violence of the surface world for the sanctuary of the earth.",
         "anthropologicalInsights": "The Horim represent a reclusive, specialized society that has mastered stonework and survival in environments that would be fatal to other humanoids.",
@@ -392,9 +357,7 @@
           "damageDice": "1d10",
           "damageBonus": 6,
           "damageType": "piercing",
-          "traits": [
-            "reach 10"
-          ]
+          "traits": ["reach 10"]
         },
         {
           "id": "shield_bash",
@@ -405,15 +368,10 @@
           "damageDice": "1d6",
           "damageBonus": 6,
           "damageType": "bludgeoning",
-          "traits": [
-            "shove"
-          ]
+          "traits": ["shove"]
         }
       ],
-      "specialAbilities": [
-        "Powerful Build",
-        "Heroic Blood"
-      ],
+      "specialAbilities": ["Powerful Build", "Heroic Blood"],
       "academicDossier": {
         "scholarlySynthesis": "Gibborim Elite Guards are the 'Mighty Men of Old,' human-giant hybrids who bridge the gap between mortal humanity and the titanic Nephilim.",
         "anthropologicalInsights": "They represent the most successful integration of giant heritage into human social structures, serving as the ultimate champions and tactical leaders of the antediluvian age.",
@@ -456,10 +414,7 @@
           "damageDice": "1d6",
           "damageBonus": 3,
           "damageType": "piercing",
-          "traits": [
-            "agile",
-            "finesse"
-          ]
+          "traits": ["agile", "finesse"]
         },
         {
           "id": "sling_stone",
@@ -470,10 +425,7 @@
           "damageDice": "1d6",
           "damageBonus": 2,
           "damageType": "bludgeoning",
-          "traits": [
-            "range 50",
-            "propulsive"
-          ]
+          "traits": ["range 50", "propulsive"]
         }
       ],
       "specialAbilities": [
@@ -524,10 +476,7 @@
           "damageDice": "1d8",
           "damageBonus": 3,
           "damageType": "piercing",
-          "traits": [
-            "deadly d10",
-            "range 100"
-          ]
+          "traits": ["deadly d10", "range 100"]
         },
         {
           "id": "scimitar",
@@ -538,10 +487,7 @@
           "damageDice": "1d6",
           "damageBonus": 3,
           "damageType": "slashing",
-          "traits": [
-            "forceful",
-            "sweep"
-          ]
+          "traits": ["forceful", "sweep"]
         }
       ],
       "academicDossier": {
@@ -549,7 +495,1507 @@
         "anthropologicalInsights": "They represent the independent human tribes that rejected both the city-builder culture of Cain and the strictures of the righteous line, choosing freedom in the wilds.",
         "mythicalBeliefs": "Masters of the steppe and desert, they are believed to navigate by the stars and thrive where no giant could survive, resisting both Nephilim rule and urban corruption."
       }
+    },
+    {
+      "id": "nephilim_scout",
+      "name": "Nephilim Scout",
+      "type": "Giant",
+      "level": 8,
+      "size": "Large",
+      "description": "Swift and perceptive Nephilim variant that serves as the eyes of giant warbands, roaming ahead with spear and javelin.",
+      "portrait": "/images/rutkowski/Giant/nephilim_scout.png",
+      "stats": {
+        "hp": 150,
+        "maxHp": 150,
+        "defense": 26,
+        "fortitude": 14,
+        "reflex": 16,
+        "will": 12,
+        "perception": 20,
+        "initiativeBonus": 6,
+        "speed": 30,
+        "STR": 18,
+        "DEX": 16,
+        "CON": 14,
+        "INT": 12,
+        "WIS": 14,
+        "CHA": 10
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "bronze_spear",
+          "name": "Bronze Spear",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 18,
+          "damageDice": "1d10",
+          "damageBonus": 6,
+          "damageType": "piercing",
+          "traits": ["reach 10", "versatile slashing"]
+        },
+        {
+          "id": "javelin",
+          "name": "Giant Javelin",
+          "type": "ranged",
+          "cost": 1,
+          "toHitBonus": 17,
+          "damageDice": "1d8",
+          "damageBonus": 6,
+          "damageType": "piercing",
+          "traits": ["range 60", "thrown"]
+        }
+      ],
+      "specialAbilities": ["Keen Scent", "Giant Stride"],
+      "academicDossier": {
+        "scholarlySynthesis": "Nephilim Scouts are the pathfinders and outriders of giant warbands, possessing heightened senses and unmatched speed among their titanic kin.",
+        "anthropologicalInsights": "They represent the tactical adaptation of giant society to mobile warfare, combining Nephilim physical prowess with the cunning of a hunter-gatherer tradition amplified to monstrous scale.",
+        "mythicalBeliefs": "Said to be born of the union between Watcher scouts and the swiftest of mortal women, they can smell prey on the wind from miles away and run down mounted riders."
+      }
+    },
+    {
+      "id": "nephilim_warlord",
+      "name": "Nephilim Warlord",
+      "type": "Giant",
+      "level": 16,
+      "size": "Large",
+      "description": "A towering Nephilim commander of immense power, leading armies of giants and lesser beings with iron will and devastating strength.",
+      "portrait": "/images/rutkowski/Giant/nephilim_warlord.png",
+      "stats": {
+        "hp": 320,
+        "maxHp": 320,
+        "defense": 40,
+        "fortitude": 26,
+        "reflex": 18,
+        "will": 22,
+        "perception": 22,
+        "initiativeBonus": 8,
+        "speed": 25,
+        "STR": 28,
+        "DEX": 14,
+        "CON": 26,
+        "INT": 16,
+        "WIS": 16,
+        "CHA": 20
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "warlord_greatsword",
+          "name": "Titansbane Greatsword",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 34,
+          "damageDice": "3d12",
+          "damageBonus": 14,
+          "damageType": "slashing",
+          "traits": ["reach 10", "sweep", "deadly d12"]
+        },
+        {
+          "id": "devastating_slam",
+          "name": "Devastating Slam",
+          "type": "melee",
+          "cost": 2,
+          "toHitBonus": 34,
+          "damageDice": "4d10",
+          "damageBonus": 14,
+          "damageType": "bludgeoning",
+          "traits": ["reach 15", "knockdown"]
+        },
+        {
+          "id": "commanding_shout",
+          "name": "Commanding Shout",
+          "type": "spell",
+          "cost": 2,
+          "toHitBonus": 28,
+          "damageDice": "3d6",
+          "damageBonus": 6,
+          "damageType": "sonic",
+          "traits": ["aura 30", "fear", "auditory"]
+        }
+      ],
+      "specialAbilities": ["Titanic Presence", "Unstoppable Charge", "Warlord's Command"],
+      "academicDossier": {
+        "scholarlySynthesis": "Nephilim Warlords are the apex of Watcher-hybrid power, possessing strategic intellect rivaling human generals paired with physical might that can shatter fortress walls.",
+        "anthropologicalInsights": "They embody the ultimate expression of antediluvian tyranny\u2014figures whose mere existence structures entire societies around fear and submission. The warlord represents the imperial principle made flesh, the Pharaoh whose divinity is enforced by raw supernatural force.",
+        "mythicalBeliefs": "Called 'kings of the earth' in antediluvian legend, they are said to have required a thousand human workers to supply each day's meals and could drink rivers dry."
+      }
+    },
+    {
+      "id": "ohya",
+      "name": "Ohya",
+      "type": "Giant",
+      "level": 15,
+      "size": "Large",
+      "description": "One of the twin Nephilim sorcerer-kings from the Book of Enoch, wielding devastating elemental magic and ancient khopesh.",
+      "portrait": "/images/rutkowski/Giant/ohya.png",
+      "stats": {
+        "hp": 260,
+        "maxHp": 260,
+        "defense": 36,
+        "fortitude": 22,
+        "reflex": 18,
+        "will": 24,
+        "perception": 20,
+        "initiativeBonus": 8,
+        "speed": 25,
+        "STR": 22,
+        "DEX": 14,
+        "CON": 22,
+        "INT": 20,
+        "WIS": 16,
+        "CHA": 22
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "khopesh_strike",
+          "name": "Ritual Khopesh",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 28,
+          "damageDice": "2d8",
+          "damageBonus": 10,
+          "damageType": "slashing",
+          "traits": ["reach 10", "trip"]
+        },
+        {
+          "id": "storm_call",
+          "name": "Storm Call",
+          "type": "spell",
+          "cost": 2,
+          "toHitBonus": 28,
+          "damageDice": "4d10",
+          "damageBonus": 8,
+          "damageType": "electricity",
+          "traits": ["occult", "evocation", "area"]
+        },
+        {
+          "id": "giants_fury",
+          "name": "Giant's Fury",
+          "type": "spell",
+          "cost": 2,
+          "toHitBonus": 28,
+          "damageDice": "3d8",
+          "damageBonus": 8,
+          "damageType": "fire",
+          "traits": ["occult", "evocation", "aura 20"]
+        }
+      ],
+      "specialAbilities": ["Watcher's Sorcery", "Titanic Presence", "Twin Bond"],
+      "academicDossier": {
+        "scholarlySynthesis": "Ohya is one of the legendary twin Nephilim sorcerer-kings described in the Book of Giants, a being of immense magical power who inherited the elemental secrets of the fallen Watcher Baraqel.",
+        "anthropologicalInsights": "The figure of Ohya represents the fusion of imperial authority with arcane knowledge\u2014the ruler who commands both armies and the forces of nature itself. This dual sovereignty mirrors ancient Near Eastern divine kingship ideology.",
+        "mythicalBeliefs": "In the Qumran texts, Ohya and Hahya are twin giants who dream of apocalyptic destruction and consult the sage Enoch for interpretation, making them central figures in the eschatological tradition."
+      }
+    },
+    {
+      "id": "hahya",
+      "name": "Hahya",
+      "type": "Giant",
+      "level": 13,
+      "size": "Large",
+      "description": "One of the twin Nephilim kings, a divine spellcaster who channels dark celestial power through unholy rites.",
+      "portrait": "/images/rutkowski/Giant/hahya.png",
+      "stats": {
+        "hp": 230,
+        "maxHp": 230,
+        "defense": 32,
+        "fortitude": 20,
+        "reflex": 16,
+        "will": 24,
+        "perception": 18,
+        "initiativeBonus": 6,
+        "speed": 25,
+        "STR": 20,
+        "DEX": 12,
+        "CON": 20,
+        "INT": 16,
+        "WIS": 20,
+        "CHA": 22
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "ritual_mace",
+          "name": "Ceremonial Mace",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 26,
+          "damageDice": "2d8",
+          "damageBonus": 8,
+          "damageType": "bludgeoning",
+          "traits": ["reach 10", "shove"]
+        },
+        {
+          "id": "dark_blessing",
+          "name": "Dark Blessing",
+          "type": "spell",
+          "cost": 2,
+          "toHitBonus": 26,
+          "damageDice": "3d8",
+          "damageBonus": 6,
+          "damageType": "necrotic",
+          "traits": ["divine", "necromancy", "heal self"]
+        },
+        {
+          "id": "apocalyptic_vision",
+          "name": "Apocalyptic Vision",
+          "type": "spell",
+          "cost": 2,
+          "toHitBonus": 26,
+          "damageDice": "3d6",
+          "damageBonus": 6,
+          "damageType": "mental",
+          "traits": ["divine", "enchantment", "fear", "area"]
+        }
+      ],
+      "specialAbilities": ["Divine Casting", "Twin Bond", "Apocalyptic Dreams"],
+      "academicDossier": {
+        "scholarlySynthesis": "Hahya is the twin of Ohya and a Nephilim king who channels divine magic through corrupted celestial rites, blending the Watchers' forbidden knowledge with organized worship.",
+        "anthropologicalInsights": "Hahya represents the priest-king archetype of the ancient Near East inverted\u2014a divine authority whose power comes not from legitimate celestial hierarchy but from the corrupted teachings of the fallen Watchers.",
+        "mythicalBeliefs": "The Book of Giants records Hahya's dream of the world's destruction, interpreted by Enoch as a prophecy of the Flood, making Hahya an unwilling prophet of his own doom."
+      }
+    },
+    {
+      "id": "mahway",
+      "name": "Mahway",
+      "type": "Giant",
+      "level": 11,
+      "size": "Large",
+      "description": "A swift Nephilim messenger and scout of the Watcher lines, able to traverse earth and sky with uncanny speed.",
+      "portrait": "/images/rutkowski/Giant/mahway.png",
+      "stats": {
+        "hp": 190,
+        "maxHp": 190,
+        "defense": 30,
+        "fortitude": 14,
+        "reflex": 20,
+        "will": 14,
+        "perception": 20,
+        "initiativeBonus": 8,
+        "speed": 25,
+        "STR": 20,
+        "DEX": 20,
+        "CON": 16,
+        "INT": 14,
+        "WIS": 14,
+        "CHA": 12
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "swift_dagger",
+          "name": "Wind Dagger",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 23,
+          "damageDice": "1d6",
+          "damageBonus": 7,
+          "damageType": "piercing",
+          "traits": ["agile", "finesse", "thrown 20"]
+        },
+        {
+          "id": "dive_attack",
+          "name": "Aerial Dive",
+          "type": "melee",
+          "cost": 2,
+          "toHitBonus": 25,
+          "damageDice": "2d10",
+          "damageBonus": 7,
+          "damageType": "piercing",
+          "traits": ["aerial", "charge"]
+        }
+      ],
+      "specialAbilities": ["Windborne Flight", "Messenger's Swiftness", "Uncanny Dodge"],
+      "academicDossier": {
+        "scholarlySynthesis": "Mahway is a Nephilim messenger noted in the Book of Giants as the swift envoy sent to consult Enoch about the apocalyptic dreams of the giant kings.",
+        "anthropologicalInsights": "Mahway represents the role of the divine messenger in Near Eastern tradition\u2014a liminal figure who traverses the boundary between heaven and earth, bearing knowledge that bridges the mortal and celestial realms.",
+        "mythicalBeliefs": "Said to have traveled to the heavens to speak with Enoch on behalf of the terrified giants, he is a figure of tragic knowledge, bearing the burden of a prophecy of annihilation he cannot prevent."
+      }
+    },
+    {
+      "id": "gilgamesh",
+      "name": "Gilgamesh",
+      "type": "Giant",
+      "level": 14,
+      "size": "Large",
+      "description": "The legendary king of Uruk, two-thirds divine warrior of unmatched prowess, wielding a celestial greatsword against gods and mortals alike.",
+      "portrait": "/images/rutkowski/Giant/Gilgamesh.png",
+      "stats": {
+        "hp": 270,
+        "maxHp": 270,
+        "defense": 36,
+        "fortitude": 24,
+        "reflex": 18,
+        "will": 20,
+        "perception": 20,
+        "initiativeBonus": 6,
+        "speed": 30,
+        "STR": 26,
+        "DEX": 16,
+        "CON": 24,
+        "INT": 14,
+        "WIS": 14,
+        "CHA": 18
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "celestial_greatsword",
+          "name": "Celestial Greatsword",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 32,
+          "damageDice": "3d12",
+          "damageBonus": 12,
+          "damageType": "slashing",
+          "traits": ["reach 10", "deadly d12", "versatile piercing"]
+        },
+        {
+          "id": "kingly_strike",
+          "name": "Kingly Strike",
+          "type": "melee",
+          "cost": 2,
+          "toHitBonus": 32,
+          "damageDice": "3d10",
+          "damageBonus": 12,
+          "damageType": "bludgeoning",
+          "traits": ["reach 10", "knockdown", "forceful"]
+        }
+      ],
+      "specialAbilities": ["Divine Heritage", "Titanic Presence", "Defiant Will"],
+      "academicDossier": {
+        "scholarlySynthesis": "Gilgamesh is the legendary king of Uruk, a figure of two-thirds divine heritage who embodies the pinnacle of mortal-divine hybrid power, straddling the line between Nephilim tyrant and human hero.",
+        "anthropologicalInsights": "As the archetypal divine king, Gilgamesh represents the Mesopotamian ideal of kingship\u2014a figure whose semi-divine nature justifies absolute rule, yet whose mortality makes him question the very order he enforces.",
+        "mythicalBeliefs": "The Epic of Gilgamesh casts him as both oppressor and seeker, a king whose quest for immortality ends in the acceptance of human limits\u2014the ultimate rebuke to the Nephilim aspiration toward godhood."
+      }
+    },
+    {
+      "id": "rephaim_warrior",
+      "name": "Rephaim Warrior",
+      "type": "Giant",
+      "level": 8,
+      "size": "Large",
+      "description": "A battle-hardened Rephaim warrior wielding a massive war club, standing as an eternal sentinel of the old world.",
+      "portrait": "/images/rutkowski/Giant/rephaim_warrior.png",
+      "stats": {
+        "hp": 140,
+        "maxHp": 140,
+        "defense": 24,
+        "fortitude": 18,
+        "reflex": 12,
+        "will": 14,
+        "perception": 14,
+        "initiativeBonus": 4,
+        "speed": 25,
+        "STR": 22,
+        "DEX": 10,
+        "CON": 18,
+        "INT": 8,
+        "WIS": 12,
+        "CHA": 8
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "war_club",
+          "name": "Massive War Club",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 20,
+          "damageDice": "2d10",
+          "damageBonus": 8,
+          "damageType": "bludgeoning",
+          "traits": ["reach 10", "forceful"]
+        },
+        {
+          "id": "bone_shatter",
+          "name": "Bone Shatter",
+          "type": "melee",
+          "cost": 2,
+          "toHitBonus": 20,
+          "damageDice": "3d8",
+          "damageBonus": 8,
+          "damageType": "bludgeoning",
+          "traits": ["reach 10", "shove"]
+        }
+      ],
+      "specialAbilities": ["Spirit Sight", "Undying Resolve"],
+      "academicDossier": {
+        "scholarlySynthesis": "Rephaim Warriors are the common soldiers of the spectral giant legions, lesser than the Champions but still formidable carryovers of the antediluvian warrior tradition.",
+        "anthropologicalInsights": "They represent the militarized remnants of a conquered civilization, warrior-spirits who refuse to pass into the underworld and instead linger to haunt the living as instruments of ancestral vengeance.",
+        "mythicalBeliefs": "The Rephaim are called 'the weak ones who cannot rise' in Canaanite funerary texts, yet biblical tradition names them as terrors\u2014a paradox reflecting their liminal status between death and power."
+      }
+    },
+    {
+      "id": "rephaim_deathspeaker",
+      "name": "Rephaim Deathspeaker",
+      "type": "Giant",
+      "level": 10,
+      "size": "Large",
+      "description": "A spectral Rephaim cleric who channels the necrotic power of the underworld, whispering death into the living.",
+      "portrait": "/images/rutkowski/Giant/rephaim_deathspeaker.png",
+      "stats": {
+        "hp": 170,
+        "maxHp": 170,
+        "defense": 26,
+        "fortitude": 14,
+        "reflex": 14,
+        "will": 22,
+        "perception": 18,
+        "initiativeBonus": 6,
+        "speed": 25,
+        "STR": 18,
+        "DEX": 12,
+        "CON": 16,
+        "INT": 14,
+        "WIS": 22,
+        "CHA": 18
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "sacrificial_dagger",
+          "name": "Bone Dagger",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 18,
+          "damageDice": "1d6",
+          "damageBonus": 6,
+          "damageType": "piercing",
+          "traits": ["agile", "finesse"]
+        },
+        {
+          "id": "death_whisper",
+          "name": "Death Whisper",
+          "type": "spell",
+          "cost": 2,
+          "toHitBonus": 22,
+          "damageDice": "4d6",
+          "damageBonus": 6,
+          "damageType": "necrotic",
+          "traits": ["divine", "necromancy", "fear"]
+        },
+        {
+          "id": "spectral_drain",
+          "name": "Spectral Drain",
+          "type": "spell",
+          "cost": 2,
+          "toHitBonus": 22,
+          "damageDice": "3d8",
+          "damageBonus": 6,
+          "damageType": "necrotic",
+          "traits": ["divine", "necromancy", "heal self"]
+        }
+      ],
+      "specialAbilities": ["Command Undead", "Spirit Sight", "Deathly Aura"],
+      "academicDossier": {
+        "scholarlySynthesis": "Rephaim Deathspeakners are the clerical caste of the spectral giants, channeling necrotic divine magic that draws upon their own undead state to weaken and consume the living.",
+        "anthropologicalInsights": "They embody the inversion of the priestly role\u2014where righteous priests mediate between humanity and the divine, Deathspeakners mediate between death and the living, making the boundary porous in the wrong direction.",
+        "mythicalBeliefs": "Said to speak with the voices of all the dead giants who fell in the Flood, their ceremonies are conducted in languages no living tongue remembers."
+      }
+    },
+    {
+      "id": "anakim_noble",
+      "name": "Anakim Noble",
+      "type": "Giant",
+      "level": 9,
+      "size": "Large",
+      "description": "An aristocratic Anakim warrior wielding greatsword and chains, combining martial ferocity with the calculated cruelty of the noble caste.",
+      "portrait": "/images/rutkowski/Giant/anakim_berserker.png",
+      "stats": {
+        "hp": 160,
+        "maxHp": 160,
+        "defense": 26,
+        "fortitude": 18,
+        "reflex": 14,
+        "will": 14,
+        "perception": 14,
+        "initiativeBonus": 4,
+        "speed": 25,
+        "STR": 22,
+        "DEX": 12,
+        "CON": 18,
+        "INT": 12,
+        "WIS": 12,
+        "CHA": 14
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "greatsword_slash",
+          "name": "Anak Greatsword",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 21,
+          "damageDice": "2d10",
+          "damageBonus": 8,
+          "damageType": "slashing",
+          "traits": ["reach 10", "sweep"]
+        },
+        {
+          "id": "chain_bind",
+          "name": "Chain Bind",
+          "type": "melee",
+          "cost": 2,
+          "toHitBonus": 20,
+          "damageDice": "2d6",
+          "damageBonus": 8,
+          "damageType": "bludgeoning",
+          "traits": ["reach 15", "restrain", "trip"]
+        }
+      ],
+      "specialAbilities": ["Chain Mastery", "Noble Authority"],
+      "academicDossier": {
+        "scholarlySynthesis": "Anakim Nobles are the ruling caste of the Long-Necked Ones, distinguished by their mastery of bronze chains as both weapons and symbols of dominion over lesser beings.",
+        "anthropologicalInsights": "The chains they wield are both practical restraints and symbols of social hierarchy\u2014representing the Anakim's claim to rule over 'lesser' races through physical and institutional domination.",
+        "mythicalBeliefs": "Legend holds that the Anakim noble houses each possess a 'Chain of Binding' forged from the metal their Watcher ancestors first taught humanity to smelt, making every chain a relic of the original transgression."
+      }
+    },
+    {
+      "id": "anakim_chainbearer",
+      "name": "Anakim Chainbearer",
+      "type": "Giant",
+      "level": 11,
+      "size": "Large",
+      "description": "An elite Anakim fighter who has mastered the art of chain warfare, wielding massive bronze chains to bind, crush, and drag enemies across the battlefield.",
+      "portrait": "/images/rutkowski/Giant/anakim_berserker.png",
+      "stats": {
+        "hp": 190,
+        "maxHp": 190,
+        "defense": 30,
+        "fortitude": 20,
+        "reflex": 16,
+        "will": 14,
+        "perception": 14,
+        "initiativeBonus": 4,
+        "speed": 25,
+        "STR": 24,
+        "DEX": 14,
+        "CON": 20,
+        "INT": 10,
+        "WIS": 12,
+        "CHA": 10
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "chain_sweep",
+          "name": "Chain Sweep",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 25,
+          "damageDice": "2d8",
+          "damageBonus": 10,
+          "damageType": "bludgeoning",
+          "traits": ["reach 15", "trip", "sweep"]
+        },
+        {
+          "id": "chain_bind_crush",
+          "name": "Chain Bind and Crush",
+          "type": "melee",
+          "cost": 2,
+          "toHitBonus": 25,
+          "damageDice": "3d8",
+          "damageBonus": 10,
+          "damageType": "bludgeoning",
+          "traits": ["reach 15", "restrain", "deadly d10"]
+        }
+      ],
+      "specialAbilities": ["Chain Mastery", "Drag Down", "Iron Grip"],
+      "academicDossier": {
+        "scholarlySynthesis": "Anakim Chainbearers are the elite vanguard of Anakim military tradition, specializing in the feared chain-fighting style that made the Long-Necked Ones the terror of Canaan.",
+        "anthropologicalInsights": "Their chain techniques represent a technological and martial innovation\u2014the weaponization of metallurgy itself, turning the Watcher's forbidden gift of metalwork into instruments of domination and terror.",
+        "mythicalBeliefs": "Biblical accounts describe giant warriors who could chain men like dogs; the Chainbearers are the fulfillment of that terrifying image, wielders of bonds that no mortal strength can break."
+      }
+    },
+    {
+      "id": "gibborim_champion",
+      "name": "Gibborim Champion",
+      "type": "Mighty One",
+      "level": 7,
+      "size": "Medium",
+      "description": "A champion of the Gibborim, the 'Mighty Men' of renown who combine giant heritage with human tactics and discipline.",
+      "portrait": "/images/rutkowski/Mighty One/Gibborim.png",
+      "stats": {
+        "hp": 120,
+        "maxHp": 120,
+        "defense": 24,
+        "fortitude": 16,
+        "reflex": 14,
+        "will": 14,
+        "perception": 14,
+        "initiativeBonus": 4,
+        "speed": 25,
+        "STR": 20,
+        "DEX": 14,
+        "CON": 17,
+        "INT": 12,
+        "WIS": 12,
+        "CHA": 14
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "greatsword_strike",
+          "name": "Champion's Greatsword",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 18,
+          "damageDice": "2d10",
+          "damageBonus": 7,
+          "damageType": "slashing",
+          "traits": ["sweep", "versatile piercing"]
+        },
+        {
+          "id": "shield_bash_champion",
+          "name": "Shield Bash",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 16,
+          "damageDice": "1d6",
+          "damageBonus": 7,
+          "damageType": "bludgeoning",
+          "traits": ["shove", "knockdown"]
+        }
+      ],
+      "specialAbilities": ["Powerful Build", "Heroic Blood", "Rally Cry"],
+      "academicDossier": {
+        "scholarlySynthesis": "Gibborim Champions are the elite warriors among the 'Mighty Men,' possessing enough giant blood to surpass mortal limits while retaining human tactical adaptability and discipline.",
+        "anthropologicalInsights": "They occupy a liminal space in the antediluvian hierarchy\u2014too powerful for common humanity, too human for the full Nephilim experience. Their hero-culture reflects the warlord traditions of early Bronze Age society.",
+        "mythicalBeliefs": "The 'Gibborim of old' are listed in Genesis as the second tier of the pre-Flood mighty ones, distinguished from the pure Nephilim by their human agency and capacity for both greatness and moral choice."
+      }
+    },
+    {
+      "id": "horim_stoneshaper",
+      "name": "Horim Stoneshaper",
+      "type": "Cave Dweller",
+      "level": 8,
+      "size": "Medium",
+      "description": "A Horim artisan-warrior who commands the living stone of the deep places, shaping rock with will and weapon alike.",
+      "portrait": "/images/rutkowski/Cave Dweller/horim_stoneshaper.png",
+      "stats": {
+        "hp": 110,
+        "maxHp": 110,
+        "defense": 24,
+        "fortitude": 14,
+        "reflex": 16,
+        "will": 16,
+        "perception": 16,
+        "initiativeBonus": 6,
+        "speed": 25,
+        "STR": 18,
+        "DEX": 15,
+        "CON": 14,
+        "INT": 14,
+        "WIS": 18,
+        "CHA": 10
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "crystal_blade",
+          "name": "Crystal Blade",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 18,
+          "damageDice": "1d8",
+          "damageBonus": 6,
+          "damageType": "piercing",
+          "traits": ["agile", "finesse", "deadly d8"]
+        },
+        {
+          "id": "stone_bolt",
+          "name": "Stone Bolt",
+          "type": "spell",
+          "cost": 1,
+          "toHitBonus": 18,
+          "damageDice": "2d8",
+          "damageBonus": 4,
+          "damageType": "bludgeoning",
+          "traits": ["range 60", "primal"]
+        }
+      ],
+      "specialAbilities": ["Stone Shape", "Earth Glide", "Superior Darkvision 120ft"],
+      "academicDossier": {
+        "scholarlySynthesis": "Horim Stoneshapers are the artisan-mystics of the cave-dwelling giant-kin, combining their racial talent for stonework with primal magic that allows them to shape and command rock itself.",
+        "anthropologicalInsights": "They represent the intersection of craft and warfare in ancient societies, where the master-builder is also the master-defender, and knowledge of geology becomes knowledge of fortification and siege.",
+        "mythicalBeliefs": "Said to have learned their art from the deep stones themselves, Stoneshapers can hear the 'song of the earth' and shape living rock as easily as clay."
+      }
+    },
+    {
+      "id": "elioud_deceiver",
+      "name": "Elioud Deceiver",
+      "type": "Giant",
+      "level": 4,
+      "size": "Medium",
+      "description": "A cunning offspring of Nephilim and human unions, using charm and deception to infiltrate mortal societies from within.",
+      "portrait": "/images/rutkowski/Giant/Elioud_Deceiver.png",
+      "stats": {
+        "hp": 65,
+        "maxHp": 65,
+        "defense": 18,
+        "fortitude": 10,
+        "reflex": 14,
+        "will": 14,
+        "perception": 14,
+        "initiativeBonus": 4,
+        "speed": 30,
+        "STR": 14,
+        "DEX": 18,
+        "CON": 12,
+        "INT": 16,
+        "WIS": 14,
+        "CHA": 18
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "slim_dagger",
+          "name": "Slim Dagger",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 12,
+          "damageDice": "1d4",
+          "damageBonus": 4,
+          "damageType": "piercing",
+          "traits": ["agile", "finesse", "poison"]
+        },
+        {
+          "id": "whispered_lie",
+          "name": "Whispered Lie",
+          "type": "spell",
+          "cost": 2,
+          "toHitBonus": 12,
+          "damageDice": "2d6",
+          "damageBonus": 4,
+          "damageType": "mental",
+          "traits": ["occult", "enchantment", "fear"]
+        }
+      ],
+      "specialAbilities": ["Charming Presence", "Deceptive Guise", "Watchful Eyes"],
+      "academicDossier": {
+        "scholarlySynthesis": "Elioud Deceivers are the third-generation offspring of the Watchers\u2014born of Nephilim and human unions\u2014who appear almost entirely human and use their gift of near-mortal appearance to infiltrate and subvert.",
+        "anthropologicalInsights": "They represent the most insidious form of the Nephilim threat: the enemy within. Unlike their titanic ancestors, Elioud can pass in human society, making them the intelligence apparatus of the antediluvian conspiracy.",
+        "mythicalBeliefs": "The Book of Enoch names the Elioud as the final generation of the corrupted, whose beauty and intelligence mask an inhuman hunger for power that drives them to manipulate kingdoms from the shadows."
+      }
+    },
+    {
+      "id": "elioud_champion",
+      "name": "Elioud Champion",
+      "type": "Giant",
+      "level": 7,
+      "size": "Medium",
+      "description": "A martial Elioud warrior who combines giant strength with human agility, wielding a greatsword with devastating precision.",
+      "portrait": "/images/rutkowski/Giant/Elioud_Champion.png",
+      "stats": {
+        "hp": 110,
+        "maxHp": 110,
+        "defense": 23,
+        "fortitude": 16,
+        "reflex": 14,
+        "will": 12,
+        "perception": 14,
+        "initiativeBonus": 4,
+        "speed": 30,
+        "STR": 20,
+        "DEX": 14,
+        "CON": 17,
+        "INT": 12,
+        "WIS": 10,
+        "CHA": 14
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "greatsword",
+          "name": "Heavy Greatsword",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 18,
+          "damageDice": "2d10",
+          "damageBonus": 7,
+          "damageType": "slashing",
+          "traits": ["sweep"]
+        },
+        {
+          "id": "javelin_throw",
+          "name": "War Javelin",
+          "type": "ranged",
+          "cost": 1,
+          "toHitBonus": 14,
+          "damageDice": "1d8",
+          "damageBonus": 5,
+          "damageType": "piercing",
+          "traits": ["range 40", "thrown"]
+        }
+      ],
+      "specialAbilities": ["Heroic Blood", "Deceptive Guise"],
+      "academicDossier": {
+        "scholarlySynthesis": "Elioud Champions are the warrior caste of the third-generation hybrid giants, combining Nephilim strength with human-scale build and tactical flexibility.",
+        "anthropologicalInsights": "They represent the tactical evolution of the Nephilim lineage\u2014smaller than pureblood giants but far more versatile, able to fight in formations and structures designed for human-scale combat.",
+        "mythicalBeliefs": "The Elioud are described in Enochic tradition as the most cunning and beautiful of the giant-descended races, their human-like appearance making them the most dangerous of all the Watcher's offspring."
+      }
+    },
+    {
+      "id": "cainite_warrior",
+      "name": "Cainite Warrior",
+      "type": "Human",
+      "level": 3,
+      "size": "Medium",
+      "description": "A soldier of the Cainite city-states, trained in bronze weaponry and urban warfare from birth.",
+      "portrait": "/images/rutkowski/Human/cainite_warrior.png",
+      "stats": {
+        "hp": 50,
+        "maxHp": 50,
+        "defense": 18,
+        "fortitude": 10,
+        "reflex": 12,
+        "will": 8,
+        "perception": 10,
+        "initiativeBonus": 2,
+        "speed": 25,
+        "STR": 16,
+        "DEX": 14,
+        "CON": 14,
+        "INT": 10,
+        "WIS": 10,
+        "CHA": 10
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "bronze_sword_warrior",
+          "name": "Bronze Sword",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 10,
+          "damageDice": "1d8",
+          "damageBonus": 4,
+          "damageType": "slashing",
+          "traits": ["versatile piercing"]
+        },
+        {
+          "id": "shield_bash_warrior",
+          "name": "Shield Bash",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 8,
+          "damageDice": "1d6",
+          "damageBonus": 3,
+          "damageType": "bludgeoning",
+          "traits": ["shove"]
+        }
+      ],
+      "academicDossier": {
+        "scholarlySynthesis": "Cainite Warriors are the standing military of the first cities, trained from youth in the arts of war and bound to the expansionist ambitions of the urban Cainite kingdoms.",
+        "anthropologicalInsights": "They represent the militarization of settled agricultural society\u2014the professional soldier class that emerges when cities need to defend and expand their territory, a direct product of Cain's legacy as 'the builder of cities.'",
+        "mythicalBeliefs": "Born into the 'Mark of Cain,' they believe their city-building heritage grants them dominion over the 'wanderers' and 'uncivilized' tribes of the wilderness."
+      }
+    },
+    {
+      "id": "baal_priest",
+      "name": "Baal Priest",
+      "type": "Human",
+      "level": 6,
+      "size": "Medium",
+      "description": "A priest of Baal, channeling divine power through ritual sacrifice and incense to unleash flame and fury upon the enemies of the old gods.",
+      "portrait": "/images/rutkowski/Human/baal_priest.png",
+      "stats": {
+        "hp": 90,
+        "maxHp": 90,
+        "defense": 22,
+        "fortitude": 12,
+        "reflex": 12,
+        "will": 18,
+        "perception": 14,
+        "initiativeBonus": 4,
+        "speed": 25,
+        "STR": 14,
+        "DEX": 16,
+        "CON": 12,
+        "INT": 14,
+        "WIS": 16,
+        "CHA": 20
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "sacrificial_dagger",
+          "name": "Sacrificial Dagger",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 14,
+          "damageDice": "1d4",
+          "damageBonus": 4,
+          "damageType": "piercing",
+          "traits": ["agile", "finesse"]
+        },
+        {
+          "id": "fire_of_baal",
+          "name": "Fire of Baal",
+          "type": "spell",
+          "cost": 2,
+          "toHitBonus": 16,
+          "damageDice": "3d6",
+          "damageBonus": 6,
+          "damageType": "fire",
+          "traits": ["divine", "evocation", "area"]
+        },
+        {
+          "id": "ritual_curse",
+          "name": "Ritual Curse",
+          "type": "spell",
+          "cost": 2,
+          "toHitBonus": 16,
+          "damageDice": "2d8",
+          "damageBonus": 6,
+          "damageType": "necrotic",
+          "traits": ["divine", "necromancy", "curse"]
+        }
+      ],
+      "specialAbilities": ["Divine Casting", "Ritual Sacrifice"],
+      "academicDossier": {
+        "scholarlySynthesis": "Baal Priests are the religious authorities of the Canaanite pantheon, wielding genuine divine power through the old gods to enforce the worship structure that sustains the Nephilim world order.",
+        "anthropologicalInsights": "They represent the institutional religious establishment of the ancient Near East\u2014the priestly class that mediates between the divine and human worlds through sacrifice, incense, and the architecture of sacred space.",
+        "mythicalBeliefs": "The contest between Baal's priests and the prophets of Yahweh is one of the central conflicts of the Hebrew Bible, making the Baal Priest the quintessential religious antagonist of the prophetic tradition."
+      }
+    },
+    {
+      "id": "lamech",
+      "name": "Lamech",
+      "type": "Human",
+      "level": 10,
+      "size": "Medium",
+      "description": "The seventh generation from Cain, a warrior-poet of legendary violence who boasted of killing a man for wounding him and promised seventy-sevenfold vengeance.",
+      "portrait": "/images/rutkowski/Human/lamech.png",
+      "stats": {
+        "hp": 160,
+        "maxHp": 160,
+        "defense": 28,
+        "fortitude": 18,
+        "reflex": 16,
+        "will": 16,
+        "perception": 18,
+        "initiativeBonus": 6,
+        "speed": 30,
+        "STR": 22,
+        "DEX": 18,
+        "CON": 18,
+        "INT": 14,
+        "WIS": 12,
+        "CHA": 16
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "vengeance_blade",
+          "name": "Vengeance Blade",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 22,
+          "damageDice": "2d10",
+          "damageBonus": 8,
+          "damageType": "slashing",
+          "traits": ["deadly d12", "forceful"]
+        },
+        {
+          "id": "seventy_sevenfold",
+          "name": "Seventy-Sevenfold Strike",
+          "type": "melee",
+          "cost": 3,
+          "toHitBonus": 24,
+          "damageDice": "4d10",
+          "damageBonus": 10,
+          "damageType": "slashing",
+          "traits": ["rage", "fatal d12"]
+        }
+      ],
+      "specialAbilities": ["Cain's Mark", "Vow of Vengeance", "Warrior-Poet"],
+      "academicDossier": {
+        "scholarlySynthesis": "Lamech is the seventh generation from Cain, a figure of escalating violence whose song of vengeance represents the culmination of the Cainite line's corruption.",
+        "anthropologicalInsights": "Lamech's song (Genesis 4:23-24) is one of the oldest passages in the Hebrew Bible, a poem of escalating retribution that anthropologists read as evidence of pre-state justice systems based on revenge-escalation rather than rule of law.",
+        "mythicalBeliefs": "Lamech's boast of seventy-sevenfold vengeance is the dark mirror of the seventy-seven generations of the righteous line. In extra-biblical tradition, he is the blind patriarch who accidentally kills the still-living Cain, completing the cycle of violence begun by the first murder."
+      }
+    },
+    {
+      "id": "watcher_cultist",
+      "name": "Watcher Cultist",
+      "type": "Human",
+      "level": 2,
+      "size": "Medium",
+      "description": "A human devotee of the fallen Watchers, performing dark rituals and sacrifices in hidden temples to honor the celestial rebels.",
+      "portrait": "/images/rutkowski/Human/watcher_cultist.png",
+      "stats": {
+        "hp": 35,
+        "maxHp": 35,
+        "defense": 16,
+        "fortitude": 8,
+        "reflex": 10,
+        "will": 10,
+        "perception": 10,
+        "initiativeBonus": 4,
+        "speed": 25,
+        "STR": 12,
+        "DEX": 16,
+        "CON": 10,
+        "INT": 12,
+        "WIS": 10,
+        "CHA": 12
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "cult_dagger",
+          "name": "Ritual Dagger",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 8,
+          "damageDice": "1d4",
+          "damageBonus": 2,
+          "damageType": "piercing",
+          "traits": ["agile", "finesse", "poison"]
+        }
+      ],
+      "specialAbilities": ["Dark Ritual", "Watcher's Blessing"],
+      "academicDossier": {
+        "scholarlySynthesis": "Watcher Cultists are human followers of the fallen Grigori, forming the lowest rank of a secretive religious hierarchy that preserves and propagates forbidden celestial knowledge.",
+        "anthropologicalInsights": "They represent the human desire for transcendent knowledge and power\u2014the temptation to bypass divine boundaries and acquire forbidden wisdom, mirroring the original transgression of the Watchers themselves.",
+        "mythicalBeliefs": "In Enochic tradition, the Watchers taught humanity 'eternal secrets' including metallurgy, cosmetics, astrology, and weapon-making. The cultist sees this not as corruption but as liberation from divine restriction."
+      }
+    },
+    {
+      "id": "watcher_cult_leader",
+      "name": "Watcher Cult Leader",
+      "type": "Human",
+      "level": 5,
+      "size": "Medium",
+      "description": "A charismatic sorcerer who leads a Watcher cult, channeling demonic power through forbidden rituals and ancient pacts with the fallen angels.",
+      "portrait": "/images/rutkowski/Human/watcher_cult_leader.png",
+      "stats": {
+        "hp": 75,
+        "maxHp": 75,
+        "defense": 20,
+        "fortitude": 10,
+        "reflex": 14,
+        "will": 18,
+        "perception": 14,
+        "initiativeBonus": 4,
+        "speed": 25,
+        "STR": 14,
+        "DEX": 16,
+        "CON": 12,
+        "INT": 16,
+        "WIS": 14,
+        "CHA": 20
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "ritual_blade",
+          "name": "Ritual Blade",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 13,
+          "damageDice": "1d6",
+          "damageBonus": 4,
+          "damageType": "piercing",
+          "traits": ["agile", "finesse"]
+        },
+        {
+          "id": "dark_invocation",
+          "name": "Dark Invocation",
+          "type": "spell",
+          "cost": 2,
+          "toHitBonus": 15,
+          "damageDice": "2d10",
+          "damageBonus": 5,
+          "damageType": "necrotic",
+          "traits": ["occult", "necromancy", "fear"]
+        },
+        {
+          "id": "summon_familiar",
+          "name": "Summon Watcher Familiar",
+          "type": "spell",
+          "cost": 2,
+          "toHitBonus": 15,
+          "damageDice": "2d6",
+          "damageBonus": 4,
+          "damageType": "force",
+          "traits": ["occult", "conjuration"]
+        }
+      ],
+      "specialAbilities": ["Watcher's Pact", "Command Cultists", "Dark Ritual"],
+      "academicDossier": {
+        "scholarlySynthesis": "Watcher Cult Leaders are the human sorcerers who maintain direct pacts with the fallen Grigori, serving as intermediaries between the celestial rebels and their mortal followers.",
+        "anthropologicalInsights": "They represent the institutionalization of forbidden knowledge\u2014the development of a priestly class around the teachings of the Watchers, mirroring the structure of legitimate religious institutions in a corrupted form.",
+        "mythicalBeliefs": "The Cult Leader claims direct communication with the imprisoned Watchers, who speak through dreams and omens, granting power in exchange for the souls and loyalty of the cult's followers."
+      }
+    },
+    {
+      "id": "refaim_spirit",
+      "name": "Refaim Spirit",
+      "type": "Incorporeal Undead",
+      "level": 3,
+      "size": "Small",
+      "description": "A weak and restless ghost of a dead Rephaim, a shade that lingers between worlds, barely more than a whisper of malice and sorrow.",
+      "portrait": "/images/rutkowski/Spirit/refaim_spirit.png",
+      "stats": {
+        "hp": 40,
+        "maxHp": 40,
+        "defense": 17,
+        "fortitude": 6,
+        "reflex": 12,
+        "will": 12,
+        "perception": 14,
+        "initiativeBonus": 4,
+        "speed": 20,
+        "STR": 0,
+        "DEX": 18,
+        "CON": 0,
+        "INT": 10,
+        "WIS": 12,
+        "CHA": 14
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "spectral_touch",
+          "name": "Spectral Touch",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 10,
+          "damageDice": "1d6",
+          "damageBonus": 2,
+          "damageType": "necrotic",
+          "traits": ["agile", "finesse", "incorporeal"]
+        },
+        {
+          "id": "despair_wail",
+          "name": "Wail of Despair",
+          "type": "spell",
+          "cost": 2,
+          "toHitBonus": 10,
+          "damageDice": "2d6",
+          "damageBonus": 2,
+          "damageType": "mental",
+          "traits": ["auditory", "fear", "area"]
+        }
+      ],
+      "specialAbilities": ["Incorporeal", "Fly 20", "Spirit Sight"],
+      "academicDossier": {
+        "scholarlySynthesis": "Refaim Spirits are the weakest manifestations of the dead Rephaim\u2014fragmented souls too weak to maintain full form, existing as barely-aware emanations of ancient giant malice.",
+        "anthropologicalInsights": "They represent the Canaanite concept of the 'weak ones' (rpum)\u2014spirits of the dead who lack the strength to participate in the ancestor cult, existing in a liminal state of helpless dependency.",
+        "mythicalBeliefs": "In biblical tradition, the Rephaim are 'those who do not rise'\u2014spirits denied resurrection or rest, forever trapped between death and a life they can never reclaim."
+      }
+    },
+    {
+      "id": "refaim_wraith",
+      "name": "Refaim Wraith",
+      "type": "Incorporeal Undead",
+      "level": 7,
+      "size": "Medium",
+      "description": "A powerful and malevolent ghost of a dead Rephaim, a fully-formed shade with the strength to drain the life from the living and terrorize entire communities.",
+      "portrait": "/images/rutkowski/Spirit/refaim_wraith.png",
+      "stats": {
+        "hp": 90,
+        "maxHp": 90,
+        "defense": 23,
+        "fortitude": 10,
+        "reflex": 16,
+        "will": 18,
+        "perception": 18,
+        "initiativeBonus": 6,
+        "speed": 30,
+        "STR": 0,
+        "DEX": 20,
+        "CON": 0,
+        "INT": 14,
+        "WIS": 16,
+        "CHA": 18
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "wraith_touch",
+          "name": "Withering Touch",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 16,
+          "damageDice": "2d6",
+          "damageBonus": 4,
+          "damageType": "necrotic",
+          "traits": ["agile", "finesse", "incorporeal", "drain"]
+        },
+        {
+          "id": "death_scream",
+          "name": "Death Scream",
+          "type": "spell",
+          "cost": 2,
+          "toHitBonus": 16,
+          "damageDice": "3d6",
+          "damageBonus": 4,
+          "damageType": "mental",
+          "traits": ["auditory", "fear", "area", "necromancy"]
+        }
+      ],
+      "specialAbilities": ["Incorporeal", "Fly 30", "Spirit Sight", "Life Drain", "Deathly Aura"],
+      "academicDossier": {
+        "scholarlySynthesis": "Refaim Wraiths are the powerful and malevolent ghosts of Rephaim warriors, fully-formed specters that retain enough martial will to directly harm the living and drain their vitality.",
+        "anthropologicalInsights": "The wraith represents the fear of the vengeful dead\u2014the ancestor spirit that has turned hostile, a concept universal to Near Eastern cultures that invested heavily in proper burial rites to prevent exactly this kind of return.",
+        "mythicalBeliefs": "The Refaim wraiths are the 'terrible ones' of Deuteronomy\u2014spirits so fierce that even in death they command fear. They cannot be truly destroyed, only bound or placated."
+      }
+    },
+    {
+      "id": "lilith",
+      "name": "Lilith",
+      "type": "Fey Humanoid",
+      "level": 15,
+      "size": "Medium",
+      "description": "The First Woman who would not submit, ancient queen of demons and night-terrors, wielding seduction and savage magic with equal mastery.",
+      "portrait": "/images/rutkowski/Demon/lilith.png",
+      "stats": {
+        "hp": 240,
+        "maxHp": 240,
+        "defense": 38,
+        "fortitude": 18,
+        "reflex": 22,
+        "will": 22,
+        "perception": 22,
+        "initiativeBonus": 10,
+        "speed": 30,
+        "STR": 16,
+        "DEX": 26,
+        "CON": 18,
+        "INT": 22,
+        "WIS": 20,
+        "CHA": 28
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "demon_claws",
+          "name": "Demon Queen's Claws",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 30,
+          "damageDice": "2d8",
+          "damageBonus": 10,
+          "damageType": "slashing",
+          "traits": ["agile", "finesse", "magical"]
+        },
+        {
+          "id": "seductive_whisper",
+          "name": "Seductive Whisper",
+          "type": "spell",
+          "cost": 2,
+          "toHitBonus": 30,
+          "damageDice": "4d6",
+          "damageBonus": 8,
+          "damageType": "mental",
+          "traits": ["occult", "enchantment", "charm", "auditory"]
+        },
+        {
+          "id": "night_terror",
+          "name": "Night Terror",
+          "type": "spell",
+          "cost": 2,
+          "toHitBonus": 30,
+          "damageDice": "3d10",
+          "damageBonus": 8,
+          "damageType": "necrotic",
+          "traits": ["occult", "necromancy", "fear", "area"]
+        }
+      ],
+      "specialAbilities": ["Fly 40", "Seductive Aura", "Immortal", "Resist Fire 15", "Resist Mental 10"],
+      "academicDossier": {
+        "scholarlySynthesis": "Lilith is the ancestral queen of demons in Mesopotamian and Jewish tradition, a figure who predates the Watcher narrative and operates outside its hierarchy, commanding fey and demonic forces of her own.",
+        "anthropologicalInsights": "Lilith represents the primal fear of female autonomy and sexual power in patriarchal societies. Her myth encodes anxiety about women who refuse subordination\u2014the 'first feminist' who chose exile over submission.",
+        "mythicalBeliefs": "In the Alphabet of Ben Sira, Lilith refused to lie beneath Adam and fled Eden. She became the mother of demons, stealing children and haunting men in their sleep, the eternal nemesis of the patriarchal order."
+      }
+    },
+    {
+      "id": "behemoth",
+      "name": "Behemoth",
+      "type": "Animal",
+      "level": 18,
+      "size": "Gargantuan",
+      "description": "The primordial beast of the earth, a colossal creature whose strength resides in its loins and whose tail swings like a cedar.",
+      "portrait": "/images/rutkowski/Beast/Behemoth.png",
+      "stats": {
+        "hp": 450,
+        "maxHp": 450,
+        "defense": 42,
+        "fortitude": 30,
+        "reflex": 18,
+        "will": 20,
+        "perception": 24,
+        "initiativeBonus": 4,
+        "speed": 40,
+        "STR": 34,
+        "DEX": 10,
+        "CON": 32,
+        "INT": 4,
+        "WIS": 14,
+        "CHA": 8
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "massive_gore",
+          "name": "Massive Gore",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 34,
+          "damageDice": "4d10",
+          "damageBonus": 16,
+          "damageType": "piercing",
+          "traits": ["reach 20", "deadly d12"]
+        },
+        {
+          "id": "tail_sweep",
+          "name": "Tail Sweep",
+          "type": "melee",
+          "cost": 2,
+          "toHitBonus": 34,
+          "damageDice": "3d12",
+          "damageBonus": 16,
+          "damageType": "bludgeoning",
+          "traits": ["reach 25", "sweep", "knockdown"]
+        },
+        {
+          "id": "trample",
+          "name": "Trample",
+          "type": "melee",
+          "cost": 3,
+          "toHitBonus": 32,
+          "damageDice": "4d8",
+          "damageBonus": 16,
+          "damageType": "bludgeoning",
+          "traits": ["area", "knockdown", "reach 30"]
+        }
+      ],
+      "specialAbilities": ["Immense Bulk", "Tremorsense 60", "Unstoppable Charge", "Resist Physical 15"],
+      "academicDossier": {
+        "scholarlySynthesis": "The Behemoth is the primordial beast of the earth, counterpart to Leviathan of the deep. It is described in Job 40:15-24 as the first of God's works of creation, possessing strength beyond any mortal creature.",
+        "anthropologicalInsights": "The Behemoth represents the terror of raw, untamed natural force\u2014the power of earthquake, flood, and stampede given animate form. It is nature as adversary, the wilderness that cannot be domesticated or controlled by human artifice.",
+        "mythicalBeliefs": "Jewish eschatology holds that the Behemoth will do battle with Leviathan at the end of days, and the righteous will feast upon their flesh\u2014making the Behemoth both the ultimate adversary and the ultimate provision."
+      }
+    },
+    {
+      "id": "nephilim_hunter",
+      "name": "Nephilim Hunter",
+      "type": "Giant",
+      "level": 6,
+      "size": "Large",
+      "description": "A Nephilim variant bred for tracking and hunting, stalking prey across deserts and mountains with supernatural patience and bone-tipped javelins.",
+      "portrait": "/images/rutkowski/Giant/nephilim_hunter.png",
+      "stats": {
+        "hp": 100,
+        "maxHp": 100,
+        "defense": 22,
+        "fortitude": 14,
+        "reflex": 16,
+        "will": 12,
+        "perception": 18,
+        "initiativeBonus": 6,
+        "speed": 30,
+        "STR": 18,
+        "DEX": 16,
+        "CON": 14,
+        "INT": 12,
+        "WIS": 16,
+        "CHA": 10
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "bone_javelin",
+          "name": "Bone Javelin",
+          "type": "ranged",
+          "cost": 1,
+          "toHitBonus": 15,
+          "damageDice": "1d8",
+          "damageBonus": 5,
+          "damageType": "piercing",
+          "traits": ["range 60", "thrown", "deadly d10"]
+        },
+        {
+          "id": "bone_club",
+          "name": "Bone Club",
+          "type": "melee",
+          "cost": 1,
+          "toHitBonus": 16,
+          "damageDice": "1d10",
+          "damageBonus": 5,
+          "damageType": "bludgeoning",
+          "traits": ["reach 10", "shove"]
+        }
+      ],
+      "specialAbilities": ["Trackless Step", "Watcher's Eyes"],
+      "academicDossier": {
+        "scholarlySynthesis": "Nephilim Hunters are a specialized variant bred for tracking and pursuit, combining giant physical prowess with predatory instincts honed over generations of hunting both beast and man.",
+        "anthropologicalInsights": "They represent the apex predator role in the antediluvian ecosystem\u2014beings for whom human communities are prey herds to be stalked and culled, inverting the civilized assumption that nature exists to serve humanity.",
+        "mythicalBeliefs": "Said to be able to follow a scent trail across days-old water and to see the heat of living blood through stone walls, the Hunter is the nightmare of every tribe that dares travel beyond the walls of the city."
+      }
+    },
+    {
+      "id": "gammadim_earthspeaker",
+      "name": "Gammadim Earthspeaker",
+      "type": "Under-Walker",
+      "level": 5,
+      "size": "Small",
+      "description": "A Gammadim shaman-mystic who communes with the deep earth, channeling its tremors into offensive magic and sensing disturbances through the stone itself.",
+      "portrait": "/images/rutkowski/Under-Walker/gammadim_earthspeaker.png",
+      "stats": {
+        "hp": 75,
+        "maxHp": 75,
+        "defense": 20,
+        "fortitude": 10,
+        "reflex": 14,
+        "will": 16,
+        "perception": 18,
+        "initiativeBonus": 6,
+        "speed": 25,
+        "STR": 10,
+        "DEX": 16,
+        "CON": 12,
+        "INT": 14,
+        "WIS": 18,
+        "CHA": 10
+      },
+      "actionsPerTurn": 3,
+      "actions": [
+        {
+          "id": "crystal_shard",
+          "name": "Crystal Shard",
+          "type": "ranged",
+          "cost": 1,
+          "toHitBonus": 13,
+          "damageDice": "1d8",
+          "damageBonus": 4,
+          "damageType": "piercing",
+          "traits": ["range 40", "primal", "deadly d8"]
+        },
+        {
+          "id": "earth_pulse",
+          "name": "Earth Pulse",
+          "type": "spell",
+          "cost": 2,
+          "toHitBonus": 13,
+          "damageDice": "3d6",
+          "damageBonus": 4,
+          "damageType": "bludgeoning",
+          "traits": ["primal", "evocation", "area", "knockdown"]
+        }
+      ],
+      "specialAbilities": ["Earth Glide", "Tremorsense 30ft", "Stone Shape"],
+      "academicDossier": {
+        "scholarlySynthesis": "Gammadim Earthspeakers are the mystic-shamans of the Under-Walker communities, channeling the primal power of the deep earth through ritual and innate connection to the living stone.",
+        "anthropologicalInsights": "They represent the spiritual dimension of the Gammadim survival strategy\u2014where tunnel-fighters master the physical underground, Earthspeakers master its mystical properties, treating the earth itself as a living partner rather than mere environment.",
+        "mythicalBeliefs": "It is said that the first Earthspeaker was taught by the roots of the World Tree itself, and that their descendants can still hear the deep-speech of the earth's bones if they listen long enough in the dark."
+      }
     }
   ]
-}
 }

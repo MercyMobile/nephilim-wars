@@ -4,6 +4,8 @@ import PartyManager from '../components/PartyManager';
 import { getPartyRoster, getActiveParty } from '../utils/storage';
 import { resolveAttack, getDegreeOfSuccess } from '../utils/combatRules';
 
+let _logCounter = 0;
+
 const CombatScreen = () => {
   const [party, setParty] = useState([]);
   const [enemy, setEnemy] = useState(null);
@@ -17,9 +19,15 @@ const CombatScreen = () => {
   const [showPartyManager, setShowPartyManager] = useState(false);
   const [combatStarted, setCombatStarted] = useState(false);
   const [actionsRemaining, setActionsRemaining] = useState(3);
-  const [defendingIds, setDefendingIds] = useState([]); // IDs of combatants currently Defending
-  const actionsRef = useRef(3); // ref to track actions for close handler
-  const [attacksThisTurn, setAttacksThisTurn] = useState(0); // Track attacks for MAP
+  const [defendingIds, setDefendingIds] = useState([]);
+  const actionsRef = useRef(3);
+  const [attacksThisTurn, setAttacksThisTurn] = useState(0);
+  const partyRef = useRef(party);
+  const enemyRef = useRef(enemy);
+  const defendingIdsRef = useRef(defendingIds);
+  partyRef.current = party;
+  enemyRef.current = enemy;
+  defendingIdsRef.current = defendingIds;
 
   // Load party and bestiary on mount
   useEffect(() => {
@@ -65,7 +73,7 @@ const CombatScreen = () => {
       setCombatStarted(true);
 
       setBattleLog([{
-        id: Date.now(),
+        id: `system-${_logCounter++}`,
         message: `${selectedEnemy.name} enters the battlefield!`,
         type: 'system'
       }]);
@@ -93,13 +101,13 @@ const CombatScreen = () => {
   };
 
   // Get current combatant
-  const getCurrentCombatant = () => {
+  const getCurrentCombatant = React.useCallback(() => {
     if (turnOrder.length === 0) return null;
     return turnOrder[currentTurnIndex];
-  };
+  }, [turnOrder, currentTurnIndex]);
 
   // Advance to next turn, skipping dead combatants
-  const nextTurn = () => {
+  const nextTurn = React.useCallback(() => {
     // Update turn order with current HP first
     const updated = turnOrder.map(c => {
       if (c.isPlayer) {
@@ -123,37 +131,28 @@ const CombatScreen = () => {
     if (attempts >= updated.length) return;
 
     setCurrentTurnIndex(nextIndex);
-    setActionsRemaining(3); // PF2e: 3 actions per turn
+    setActionsRemaining(3);
     actionsRef.current = 3;
-    setAttacksThisTurn(0); // Reset MAP counter
+    setAttacksThisTurn(0);
 
     // Clear defend status for the combatant whose turn is starting
     const nextCombatant = updated[nextIndex];
     if (nextCombatant) {
       setDefendingIds(prev => prev.filter(id => id !== nextCombatant.id));
     }
-  };
+  }, [turnOrder, currentTurnIndex, party, enemy]);
 
   // Add battle log entry
   const addLog = (message, type = 'info') => {
     setBattleLog(prev => [...prev, {
-      id: Date.now() + Math.random(),
+      id: `log-${_logCounter++}`,
       message,
       type
     }]);
   };
 
-  // Dice roll simulator
-  const rollD20 = () => Math.floor(Math.random() * 20) + 1;
-
-  const rollDamage = (dice) => {
-    const [count, sides] = dice.split('d').map(Number);
-    let total = 0;
-    for (let i = 0; i < count; i++) {
-      total += Math.floor(Math.random() * sides) + 1;
-    }
-    return total;
-  };
+  // Dice roll helpers (called in event handlers, not during render)
+  const rollD20 = React.useCallback(() => Math.floor(Math.random() * 20) + 1, []);
 
   // Handle attack (costs 1 action)
   const handleAttack = (attacker, defender, action) => {
@@ -192,24 +191,23 @@ const CombatScreen = () => {
     if (actionsRef.current <= 0) return;
     const roll = rollD20();
     
-    // PF2e Demoralize: Roll Intimidation (Level + Prof + CHA) vs Will DC (10 + Will Save Modifier)
     const level = member.level || 1;
     const chaMod = Math.floor(((member.attributes?.CHA || member.stats?.cha || 10) - 10) / 2);
-    // Assume trained for now if they are demoralizing
     const intimidationBonus = level + 2 + chaMod; 
     const total = roll + intimidationBonus;
     
-    const enemyWillSave = enemy.stats?.will || enemy.will || 10;
+    const currentEnemy = enemyRef.current;
+    const enemyWillSave = currentEnemy?.stats?.will || currentEnemy?.will || 10;
     const dc = 10 + enemyWillSave; 
     
     const degree = getDegreeOfSuccess(total, dc, roll);
 
     if (degree === 'criticalSuccess') {
-      addLog(`😨 ${member.name} CRITICALLY demoralizes ${enemy.name}! (Rolled ${roll}+${intimidationBonus}=${total} vs DC ${dc}) Frightened 2!`, 'hit');
+      addLog(`😨 ${member.name} CRITICALLY demoralizes ${currentEnemy?.name || 'the enemy'}! (Rolled ${roll}+${intimidationBonus}=${total} vs DC ${dc}) Frightened 2!`, 'hit');
     } else if (degree === 'success') {
-      addLog(`😰 ${member.name} demoralizes ${enemy.name}! (Rolled ${roll}+${intimidationBonus}=${total} vs DC ${dc}) Frightened 1!`, 'hit');
+      addLog(`😰 ${member.name} demoralizes ${currentEnemy?.name || 'the enemy'}! (Rolled ${roll}+${intimidationBonus}=${total} vs DC ${dc}) Frightened 1!`, 'hit');
     } else {
-      addLog(`💪 ${enemy.name} resists ${member.name}'s intimidation. (Rolled ${roll}+${intimidationBonus}=${total} vs DC ${dc})`, 'miss');
+      addLog(`💪 ${currentEnemy?.name || 'The enemy'} resists ${member.name}'s intimidation. (Rolled ${roll}+${intimidationBonus}=${total} vs DC ${dc})`, 'miss');
     }
     consumeAction();
   };
@@ -291,10 +289,13 @@ const CombatScreen = () => {
   useEffect(() => {
     const currentCombatant = getCurrentCombatant();
     if (currentCombatant && !currentCombatant.isPlayer && combatStarted) {
-      const initialAlive = party.filter(p => p.currentHp > 0);
+      const currentParty = partyRef.current;
+      const currentEnemy = enemyRef.current;
+      const currentDefendingIds = defendingIdsRef.current;
+      const initialAlive = currentParty.filter(p => p.currentHp > 0);
       if (initialAlive.length === 0) return;
 
-      const enemyActions = enemy?.stats?.actions || [];
+      const enemyActions = currentEnemy?.actions || [];
       const baseAction = enemyActions[0] || {
         name: 'Attack',
         toHitBonus: 5,
@@ -303,18 +304,16 @@ const CombatScreen = () => {
         damageType: 'bludgeoning'
       };
 
-      // Track HP changes locally so subsequent attacks see kills
       const hpTracker = {};
-      party.forEach(p => { hpTracker[p.id] = p.currentHp; });
+      currentParty.forEach(p => { hpTracker[p.id] = p.currentHp; });
 
-      const attackIndices = [1, 2, 3]; // Pass attack number instead of hardcoded MAP
+      const attackIndices = [1, 2, 3];
       const delay = 800;
       const timers = [];
 
       attackIndices.forEach((attackNum, i) => {
         const timer = setTimeout(() => {
-          // Re-check alive using local tracker
-          const aliveNow = party.filter(p => (hpTracker[p.id] ?? p.currentHp) > 0);
+          const aliveNow = currentParty.filter(p => (hpTracker[p.id] ?? p.currentHp) > 0);
           if (aliveNow.length === 0) {
             nextTurn();
             return;
@@ -324,10 +323,9 @@ const CombatScreen = () => {
           const d20 = rollD20();
           
           const baseDefense = target.stats?.defense || target.defense;
-          const defendBonus = defendingIds.includes(target.id) ? 2 : 0;
+          const defendBonus = currentDefendingIds.includes(target.id) ? 2 : 0;
           const defenderDef = baseDefense + defendBonus;
           
-          // Resolve using the PF2e Engine
           const result = resolveAttack(baseAction, currentCombatant, target, d20, attackNum, defenderDef);
 
           if (result.damage > 0) {
@@ -340,7 +338,6 @@ const CombatScreen = () => {
             addLog(logLine, logType);
           });
 
-          // Advance turn after last attack
           if (i === attackIndices.length - 1) {
             setTimeout(() => nextTurn(), 600);
           }
@@ -351,7 +348,7 @@ const CombatScreen = () => {
 
       return () => timers.forEach(t => clearTimeout(t));
     }
-  }, [currentTurnIndex, combatStarted]);
+  }, [currentTurnIndex, combatStarted, getCurrentCombatant, nextTurn, rollD20]);
 
   // Check for victory/defeat
   const aliveParty = party.filter(p => p.currentHp > 0);
