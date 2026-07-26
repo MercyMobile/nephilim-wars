@@ -441,6 +441,75 @@
         });
 
         // ================================================================
+        // SACRED FURNISHING MODELS (models/*.glb, Draco-compressed)
+        // Each piece of furniture is a detailed 3D model; materials are
+        // assigned in code so every piece matches the scene's gold and
+        // bronze palette (the source models carry no real textures).
+        // ================================================================
+
+        const dracoLoader = new THREE.DRACOLoader();
+        dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/draco/');
+
+        const gltfLoader = new THREE.GLTFLoader();
+        gltfLoader.setDRACOLoader(dracoLoader);
+
+        // Load a furnishing GLB into `group`, standing on the ground and
+        // centred on the group's origin.
+        //   opts.materials     - map of mesh name (or material name) -> material,
+        //                        with `default` as the fallback for the rest
+        //   opts.targetHeight  - scale so the model is this many units tall, or
+        //   opts.targetWidth   - ...this many units wide (X axis), or
+        //   opts.targetLength  - ...this many units along its longest floor axis
+        //   opts.rotateY       - rotation applied before measuring/centring
+        //   opts.onLoaded(model, box) - called after the model is in the group
+        //   opts.onError()     - called if loading fails (build a placeholder)
+        function loadFurnishing(group, file, opts) {
+            gltfLoader.load(file, (gltf) => {
+                const model = gltf.scene;
+
+                model.traverse((child) => {
+                    if (child.isMesh) {
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                        if (opts.materials) {
+                            child.material = opts.materials[child.name] ||
+                                             (child.material && opts.materials[child.material.name]) ||
+                                             opts.materials.default ||
+                                             child.material;
+                        }
+                    }
+                });
+
+                if (opts.rotateY) model.rotation.y = opts.rotateY;
+
+                const box = new THREE.Box3().setFromObject(model);
+                const size = box.getSize(new THREE.Vector3());
+                let scaleFactor = 1;
+                if (opts.targetHeight) {
+                    scaleFactor = opts.targetHeight / size.y;
+                } else if (opts.targetWidth) {
+                    scaleFactor = opts.targetWidth / size.x;
+                } else if (opts.targetLength) {
+                    scaleFactor = opts.targetLength / Math.max(size.x, size.z);
+                }
+                model.scale.setScalar(scaleFactor);
+
+                // Recentre: feet on the ground, footprint centred on the origin
+                box.setFromObject(model);
+                const center = box.getCenter(new THREE.Vector3());
+                model.position.set(-center.x, -box.min.y, -center.z);
+
+                group.add(model);
+                box.setFromObject(model);
+                if (opts.onLoaded) opts.onLoaded(model, box);
+                console.log(file + ' loaded (' + size.x.toFixed(1) + ' x ' + size.y.toFixed(1) + ' x ' + size.z.toFixed(1) + ' scaled by ' + scaleFactor.toFixed(2) + ')');
+            }, undefined, (error) => {
+                console.error('Error loading ' + file + ':', error);
+                if (opts.onError) opts.onError();
+            });
+        }
+
+        // ================================================================
         // GROUND PLANE - Seamless desert sand texture
         // ================================================================
 
@@ -718,23 +787,9 @@
 
         function createMenorah() {
             const group = new THREE.Group();
+            const menorahHeight = 3 * CUBIT; // Traditional height of the lampstand
 
-            // Base
-            const baseGeo = new THREE.CylinderGeometry(0.8, 1.2, 0.5, 6);
-            const base = new THREE.Mesh(baseGeo, goldMaterial);
-            base.castShadow = true;
-            group.add(base);
-
-            // Central shaft
-            const shaftGeo = new THREE.CylinderGeometry(0.15, 0.2, 5.5, 12);
-            const shaft = new THREE.Mesh(shaftGeo, goldMaterial);
-            shaft.position.y = 2.75;
-            shaft.castShadow = true;
-            group.add(shaft);
-
-            // Lamp and flame geometry - realistic oil lamp flames
-            const lampGeo = new THREE.CylinderGeometry(0.25, 0.15, 0.35, 8);
-            const flameGeo = new THREE.ConeGeometry(0.12, 0.35, 8);
+            // Burning flame material for the seven lamps
             const flameMat = new THREE.MeshStandardMaterial({
                 color: 0xFFDD44,
                 emissive: 0xFF8800,
@@ -744,59 +799,52 @@
                 opacity: 0.9
             });
 
-            // Three pairs of branches
-            const radii = [1.2, 2.0, 2.8];
-            const heights = [5.6, 5.2, 4.8];
-
-            radii.forEach((radius, i) => {
-                // Curved arms (torus segments)
-                const armGeo = new THREE.TorusGeometry(radius, 0.12, 8, 24, Math.PI);
-                const arm = new THREE.Mesh(armGeo, goldMaterial);
-                arm.rotation.z = Math.PI;
-                arm.position.y = heights[i];
-                arm.castShadow = true;
-                group.add(arm);
-
-                // Left lamp and flame
-                const leftLamp = new THREE.Mesh(lampGeo, goldMaterial);
-                leftLamp.position.set(-radius, heights[i], 0);
-                leftLamp.castShadow = true;
-                group.add(leftLamp);
-
-                const leftFlame = new THREE.Mesh(flameGeo, flameMat);
-                leftFlame.position.set(-radius, heights[i] + 0.4, 0);
-                const leftLight = new THREE.PointLight(0xFFAA44, 0.15, 6); // Soft candlelight
-                leftFlame.add(leftLight);
-                group.add(leftFlame);
-
-                // Right lamp and flame
-                const rightLamp = new THREE.Mesh(lampGeo, goldMaterial);
-                rightLamp.position.set(radius, heights[i], 0);
-                rightLamp.castShadow = true;
-                group.add(rightLamp);
-
-                const rightFlame = new THREE.Mesh(flameGeo, flameMat);
-                rightFlame.position.set(radius, heights[i] + 0.4, 0);
-                const rightLight = new THREE.PointLight(0xFFAA44, 0.15, 6); // Soft candlelight
-                rightFlame.add(rightLight);
-                group.add(rightFlame);
+            // Pure olive oil in the lamp bowls (Leviticus 24:2)
+            const oilMat = new THREE.MeshStandardMaterial({
+                color: 0x8B6914,
+                roughness: 0.1,
+                metalness: 0.2
             });
 
-            // Central lamp on top of shaft (the servant lamp - slightly brighter)
-            const topLamp = new THREE.Mesh(lampGeo, goldMaterial);
-            topLamp.position.y = 5.5;
-            topLamp.castShadow = true;
-            group.add(topLamp);
+            // Charred wicks
+            const wickMat = new THREE.MeshStandardMaterial({
+                color: 0x2A2018,
+                roughness: 0.9,
+                metalness: 0.0
+            });
 
-            const topFlame = new THREE.Mesh(flameGeo, flameMat);
-            topFlame.position.y = 5.9;
-            const topLight = new THREE.PointLight(0xFFBB55, 0.2, 8); // Central lamp slightly brighter
-            topFlame.add(topLight);
-            group.add(topFlame);
+            loadFurnishing(group, 'models/SM_GoldLampstand.glb', {
+                targetHeight: menorahHeight,
+                materials: {
+                    SM_Candles: flameMat,
+                    SM_Oil: oilMat,
+                    SM_Wicks: wickMat,
+                    default: goldMaterial
+                },
+                onLoaded: (model, box) => {
+                    // Soft candlelight from the row of seven flames
+                    const lampY = box.max.y - 0.15;
+                    [-box.getSize(new THREE.Vector3()).x * 0.3, 0, box.getSize(new THREE.Vector3()).x * 0.3].forEach((x, i) => {
+                        const lampLight = new THREE.PointLight(0xFFAA44, i === 1 ? 0.2 : 0.15, 7);
+                        lampLight.position.set(x, lampY, 0);
+                        group.add(lampLight);
+                    });
+                },
+                onError: () => {
+                    // Placeholder: simple golden stand
+                    const shaft = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.15, 0.5, menorahHeight, 12),
+                        goldMaterial
+                    );
+                    shaft.position.y = menorahHeight / 2;
+                    shaft.castShadow = true;
+                    group.add(shaft);
+                }
+            });
 
             // Subtle combined glow - oil lamps, not spotlights
             const menorahGlow = new THREE.PointLight(0xFFAA55, 0.4, 12);
-            menorahGlow.position.y = 4;
+            menorahGlow.position.y = menorahHeight * 0.9;
             group.add(menorahGlow);
 
             return group;
@@ -1940,207 +1988,32 @@ scene.add(redCarpet);
 
         const altarGroup = new THREE.Group();
 
-        // Create ornate bronze texture with patina
-        function createOrnatesBronzeTexture() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 512;
-            canvas.height = 512;
-            const ctx = canvas.getContext('2d');
+        // Fire-darkened hammered bronze for the great altar
+        const altarBronzeMaterial = new THREE.MeshStandardMaterial({
+            color: 0xA06B3A,
+            metalness: 0.8,
+            roughness: 0.45
+        });
 
-            // Rich bronze base
-            ctx.fillStyle = '#CD7F32';
-            ctx.fillRect(0, 0, 512, 512);
-
-            const imageData = ctx.getImageData(0, 0, 512, 512);
-            const data = imageData.data;
-
-            for (let i = 0; i < data.length; i += 4) {
-                const x = (i / 4) % 512;
-                const y = Math.floor((i / 4) / 512);
-
-                // Hammered bronze texture
-                const hammered = Math.sin(x / 8 + Math.sin(y / 6) * 2) * Math.cos(y / 7 + Math.cos(x / 9) * 2) * 15;
-
-                // Fire patina - darker areas from heat
-                const patina = Math.sin(x / 40) * Math.sin(y / 35) * 12;
-
-                // Fine grain
-                const grain = (Math.random() - 0.5) * 18;
-
-                const variation = hammered + patina + grain;
-
-                data[i] = Math.min(255, Math.max(0, data[i] + variation));
-                data[i + 1] = Math.min(255, Math.max(0, data[i + 1] + variation * 0.7));
-                data[i + 2] = Math.min(255, Math.max(0, data[i + 2] + variation * 0.3));
+        // Detailed altar model: horned corners, lattice grate walls
+        // (Exodus 27:4), and carrying poles left in their rings
+        loadFurnishing(altarGroup, 'models/SM_AltarBurntOffering.glb', {
+            targetWidth: ALTAR_SIZE,
+            materials: { default: altarBronzeMaterial },
+            onError: () => {
+                // Placeholder: hollow bronze box
+                const body = new THREE.Mesh(
+                    new THREE.BoxGeometry(ALTAR_SIZE, ALTAR_HEIGHT, ALTAR_SIZE),
+                    altarBronzeMaterial
+                );
+                body.position.y = ALTAR_HEIGHT / 2;
+                body.castShadow = true;
+                altarGroup.add(body);
             }
-
-            ctx.putImageData(imageData, 0, 0);
-
-            const texture = new THREE.CanvasTexture(canvas);
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            return texture;
-        }
-
-        const ornateBronzeTexture = createOrnatesBronzeTexture();
-        const ornateBronzeMaterial = new THREE.MeshStandardMaterial({
-            map: ornateBronzeTexture,
-            color: 0xB87333,
-            metalness: 0.85,
-            roughness: 0.35
         });
 
-        // === ALTAR BASE/FOUNDATION ===
-        // Stepped base for grandeur
-        const baseStep1Geo = new THREE.BoxGeometry(ALTAR_SIZE + 1.5, 0.4, ALTAR_SIZE + 1.5);
-        const baseStep1 = new THREE.Mesh(baseStep1Geo, ornateBronzeMaterial);
-        baseStep1.position.y = 0.2;
-        baseStep1.castShadow = true;
-        baseStep1.receiveShadow = true;
-        altarGroup.add(baseStep1);
-
-        const baseStep2Geo = new THREE.BoxGeometry(ALTAR_SIZE + 0.8, 0.3, ALTAR_SIZE + 0.8);
-        const baseStep2 = new THREE.Mesh(baseStep2Geo, ornateBronzeMaterial);
-        baseStep2.position.y = 0.55;
-        baseStep2.castShadow = true;
-        altarGroup.add(baseStep2);
-
-        // === MAIN ALTAR BODY ===
-        // Hollow structure per Exodus 27:8
-        const altarWallThickness = 0.4;
-
-        // Four walls of the altar
-        const wallHeight = ALTAR_HEIGHT - 0.7;
-        const wallY = 0.7 + wallHeight / 2;
-
-        // Front and back walls
-        const frontBackGeo = new THREE.BoxGeometry(ALTAR_SIZE, wallHeight, altarWallThickness);
-        const frontWall = new THREE.Mesh(frontBackGeo, ornateBronzeMaterial);
-        frontWall.position.set(0, wallY, ALTAR_SIZE / 2 - altarWallThickness / 2);
-        frontWall.castShadow = true;
-        altarGroup.add(frontWall);
-
-        const backWallAltar = new THREE.Mesh(frontBackGeo, ornateBronzeMaterial);
-        backWallAltar.position.set(0, wallY, -ALTAR_SIZE / 2 + altarWallThickness / 2);
-        backWallAltar.castShadow = true;
-        altarGroup.add(backWallAltar);
-
-        // Left and right walls
-        const leftRightGeo = new THREE.BoxGeometry(altarWallThickness, wallHeight, ALTAR_SIZE - altarWallThickness * 2);
-        const leftWall = new THREE.Mesh(leftRightGeo, ornateBronzeMaterial);
-        leftWall.position.set(-ALTAR_SIZE / 2 + altarWallThickness / 2, wallY, 0);
-        leftWall.castShadow = true;
-        altarGroup.add(leftWall);
-
-        const rightWall = new THREE.Mesh(leftRightGeo, ornateBronzeMaterial);
-        rightWall.position.set(ALTAR_SIZE / 2 - altarWallThickness / 2, wallY, 0);
-        rightWall.castShadow = true;
-        altarGroup.add(rightWall);
-
-        // === DECORATIVE LEDGE (Exodus 27:5) ===
-        // Bronze ledge halfway up the altar
-        const ledgeHeight = ALTAR_HEIGHT / 2;
-        const ledgeGeo = new THREE.BoxGeometry(ALTAR_SIZE + 0.6, 0.25, ALTAR_SIZE + 0.6);
-        const ledge = new THREE.Mesh(ledgeGeo, ornateBronzeMaterial);
-        ledge.position.y = ledgeHeight;
-        ledge.castShadow = true;
-        altarGroup.add(ledge);
-
-        // Decorative trim under ledge
-        const trimGeo = new THREE.BoxGeometry(ALTAR_SIZE + 0.4, 0.15, ALTAR_SIZE + 0.4);
-        const trim = new THREE.Mesh(trimGeo, ornateBronzeMaterial);
-        trim.position.y = ledgeHeight - 0.2;
-        trim.castShadow = true;
-        altarGroup.add(trim);
-
-        // === BRONZE GRATING (Exodus 27:4-5) ===
-        // Network of bronze - the grate where sacrifices burned
-        const grateY = ALTAR_HEIGHT - 0.3;
-
-        // Grate frame
-        const grateFrameOuter = new THREE.BoxGeometry(ALTAR_SIZE - 0.2, 0.15, ALTAR_SIZE - 0.2);
-        const grateFrame = new THREE.Mesh(grateFrameOuter, ornateBronzeMaterial);
-        grateFrame.position.y = grateY;
-        altarGroup.add(grateFrame);
-
-        // Grate bars - crosshatch pattern
-        const barThickness = 0.08;
-        const barSpacing = 0.6;
-        const grateSize = ALTAR_SIZE - 0.6;
-
-        for (let i = -grateSize / 2; i <= grateSize / 2; i += barSpacing) {
-            // Horizontal bars
-            const hBarGeo = new THREE.BoxGeometry(grateSize, barThickness, barThickness);
-            const hBar = new THREE.Mesh(hBarGeo, ornateBronzeMaterial);
-            hBar.position.set(0, grateY + 0.1, i);
-            altarGroup.add(hBar);
-
-            // Vertical bars
-            const vBarGeo = new THREE.BoxGeometry(barThickness, barThickness, grateSize);
-            const vBar = new THREE.Mesh(vBarGeo, ornateBronzeMaterial);
-            vBar.position.set(i, grateY + 0.1, 0);
-            altarGroup.add(vBar);
-        }
-
-        // === HORNS OF THE ALTAR (Exodus 27:2) ===
-        // Majestic horns at four corners - symbol of power and refuge
-        function createAltarHorn(x, z) {
-            const hornGroup = new THREE.Group();
-
-            // Horn base - wider
-            const hornBaseGeo = new THREE.CylinderGeometry(0.5, 0.7, 0.4, 8);
-            const hornBase = new THREE.Mesh(hornBaseGeo, ornateBronzeMaterial);
-            hornBase.position.y = 0;
-            hornGroup.add(hornBase);
-
-            // Horn middle
-            const hornMidGeo = new THREE.CylinderGeometry(0.35, 0.5, 0.6, 8);
-            const hornMid = new THREE.Mesh(hornMidGeo, ornateBronzeMaterial);
-            hornMid.position.y = 0.5;
-            hornGroup.add(hornMid);
-
-            // Horn tip - tapered
-            const hornTipGeo = new THREE.CylinderGeometry(0.1, 0.35, 0.8, 8);
-            const hornTip = new THREE.Mesh(hornTipGeo, ornateBronzeMaterial);
-            hornTip.position.y = 1.1;
-            hornGroup.add(hornTip);
-
-            // Horn cap
-            const hornCapGeo = new THREE.SphereGeometry(0.12, 8, 8);
-            const hornCap = new THREE.Mesh(hornCapGeo, ornateBronzeMaterial);
-            hornCap.position.y = 1.5;
-            hornGroup.add(hornCap);
-
-            hornGroup.position.set(x, ALTAR_HEIGHT, z);
-            hornGroup.castShadow = true;
-            return hornGroup;
-        }
-
-        const hornOffset = ALTAR_SIZE / 2 - 0.3;
-        altarGroup.add(createAltarHorn(hornOffset, hornOffset));
-        altarGroup.add(createAltarHorn(hornOffset, -hornOffset));
-        altarGroup.add(createAltarHorn(-hornOffset, hornOffset));
-        altarGroup.add(createAltarHorn(-hornOffset, -hornOffset));
-
-        // === CARRYING RINGS (Exodus 27:4) ===
-        // Bronze rings on sides for carrying poles
-        const ringGeo = new THREE.TorusGeometry(0.4, 0.08, 8, 16);
-
-        const ringPositions = [
-            { x: ALTAR_SIZE / 2 + 0.1, z: 0, rotY: 0 },
-            { x: -ALTAR_SIZE / 2 - 0.1, z: 0, rotY: 0 },
-            { x: 0, z: ALTAR_SIZE / 2 + 0.1, rotY: Math.PI / 2 },
-            { x: 0, z: -ALTAR_SIZE / 2 - 0.1, rotY: Math.PI / 2 }
-        ];
-
-        ringPositions.forEach(pos => {
-            const ring = new THREE.Mesh(ringGeo, ornateBronzeMaterial);
-            ring.position.set(pos.x, ledgeHeight, pos.z);
-            ring.rotation.y = pos.rotY;
-            ring.rotation.x = Math.PI / 2;
-            ring.castShadow = true;
-            altarGroup.add(ring);
-        });
+        // Footprint of the fire bed inside the hollow altar body
+        const fireBedSize = ALTAR_SIZE - 0.6;
 
         // === SACRIFICIAL FIRE (glowing embers UNDER the grate) ===
         const fireMaterial = new THREE.MeshStandardMaterial({
@@ -2158,9 +2031,9 @@ scene.add(redCarpet);
             const coalGeo = new THREE.SphereGeometry(coalSize, 8, 8);
             const coal = new THREE.Mesh(coalGeo, fireMaterial);
             coal.position.set(
-                (Math.random() - 0.5) * (grateSize - 1.5),
+                (Math.random() - 0.5) * (fireBedSize - 1.5),
                 emberBaseY + Math.random() * 1.5, // Scattered at various heights under grate
-                (Math.random() - 0.5) * (grateSize - 1.5)
+                (Math.random() - 0.5) * (fireBedSize - 1.5)
             );
             altarGroup.add(coal);
         }
@@ -2177,9 +2050,9 @@ scene.add(redCarpet);
             const logGeo = new THREE.CylinderGeometry(0.15, 0.2, 1.5 + Math.random(), 6);
             const log = new THREE.Mesh(logGeo, logMaterial);
             log.position.set(
-                (Math.random() - 0.5) * (grateSize - 2),
+                (Math.random() - 0.5) * (fireBedSize - 2),
                 emberBaseY + 0.3,
-                (Math.random() - 0.5) * (grateSize - 2)
+                (Math.random() - 0.5) * (fireBedSize - 2)
             );
             log.rotation.x = Math.PI / 2 + (Math.random() - 0.5) * 0.5;
             log.rotation.z = Math.random() * Math.PI;
@@ -2195,29 +2068,6 @@ scene.add(redCarpet);
         const fireLight2 = new THREE.PointLight(0xFF4400, 1.5, 12);
         fireLight2.position.set(0, ALTAR_HEIGHT + 0.5, 0);
         altarGroup.add(fireLight2);
-
-        // === RAMP (Exodus 20:26 implies a ramp, not steps) ===
-        const rampLength = 8;
-        const rampWidth = 3;
-        const rampGeo = new THREE.BoxGeometry(rampWidth, 0.3, rampLength);
-        const ramp = new THREE.Mesh(rampGeo, ornateBronzeMaterial);
-        ramp.position.set(0, ALTAR_HEIGHT / 2 - 0.5, ALTAR_SIZE / 2 + rampLength / 2 - 0.5);
-        ramp.rotation.x = Math.atan2(ALTAR_HEIGHT - 0.7, rampLength);
-        ramp.castShadow = true;
-        ramp.receiveShadow = true;
-        altarGroup.add(ramp);
-
-        // Ramp side rails
-        const railGeo = new THREE.BoxGeometry(0.2, 0.4, rampLength + 1);
-        const leftRail = new THREE.Mesh(railGeo, ornateBronzeMaterial);
-        leftRail.position.set(-rampWidth / 2 - 0.1, ALTAR_HEIGHT / 2 - 0.3, ALTAR_SIZE / 2 + rampLength / 2 - 0.5);
-        leftRail.rotation.x = Math.atan2(ALTAR_HEIGHT - 0.7, rampLength);
-        altarGroup.add(leftRail);
-
-        const rightRail = new THREE.Mesh(railGeo, ornateBronzeMaterial);
-        rightRail.position.set(rampWidth / 2 + 0.1, ALTAR_HEIGHT / 2 - 0.3, ALTAR_SIZE / 2 + rampLength / 2 - 0.5);
-        rightRail.rotation.x = Math.atan2(ALTAR_HEIGHT - 0.7, rampLength);
-        altarGroup.add(rightRail);
 
         altarGroup.position.set(0, 0, -COURTYARD_LENGTH / 4);
         altarGroup.userData = {
@@ -2235,175 +2085,36 @@ scene.add(redCarpet);
 
         const laverGroup = new THREE.Group();
 
-        // Create a lathe geometry for smooth curved shapes
-        function createLathePoints(profile) {
-            return profile.map(p => new THREE.Vector2(p[0], p[1]));
-        }
-
-        // === PEDESTAL BASE ===
-        // Wide circular foot at bottom
-        const footPoints = createLathePoints([
-            [0, 0],
-            [3.0, 0],      // Wide base
-            [3.2, 0.1],    // Lip edge
-            [3.0, 0.2],    // Lip top
-            [2.8, 0.3],    // Taper in
-            [2.5, 0.5],    // Continue taper
-            [2.2, 0.8],    // Narrowing
-            [2.0, 1.0],    // Base of stem
-            [0, 1.0]       // Center
-        ]);
-        const footGeo = new THREE.LatheGeometry(footPoints, 32);
-        const foot = new THREE.Mesh(footGeo, bronzeMaterial);
-        foot.castShadow = true;
-        foot.receiveShadow = true;
-        laverGroup.add(foot);
-
-        // === PEDESTAL STEM ===
-        // Decorative stem with bulges and rings
-        const stemHeight = 2.5;
-        const stemY = 1.0;
-
-        // Lower decorative ring
-        const ring1Geo = new THREE.TorusGeometry(1.8, 0.25, 12, 32);
-        const ring1 = new THREE.Mesh(ring1Geo, bronzeMaterial);
-        ring1.rotation.x = Math.PI / 2;
-        ring1.position.y = stemY + 0.3;
-        ring1.castShadow = true;
-        laverGroup.add(ring1);
-
-        // Main stem column
-        const stemPoints = createLathePoints([
-            [1.5, 0],       // Bottom
-            [1.6, 0.3],     // Slight bulge
-            [1.4, 0.8],     // Taper
-            [1.3, 1.2],     // Narrow middle
-            [1.4, 1.6],     // Bulge out
-            [1.6, 2.0],     // Wide
-            [1.5, 2.3],     // Taper
-            [1.8, 2.5],     // Top flare
-            [0, 2.5]        // Center
-        ]);
-        const stemGeo = new THREE.LatheGeometry(stemPoints, 32);
-        const stem = new THREE.Mesh(stemGeo, bronzeMaterial);
-        stem.position.y = stemY;
-        stem.castShadow = true;
-        laverGroup.add(stem);
-
-        // Middle decorative ring
-        const ring2Geo = new THREE.TorusGeometry(1.5, 0.2, 12, 32);
-        const ring2 = new THREE.Mesh(ring2Geo, bronzeMaterial);
-        ring2.rotation.x = Math.PI / 2;
-        ring2.position.y = stemY + 1.25;
-        ring2.castShadow = true;
-        laverGroup.add(ring2);
-
-        // Upper decorative ring
-        const ring3Geo = new THREE.TorusGeometry(1.7, 0.2, 12, 32);
-        const ring3 = new THREE.Mesh(ring3Geo, bronzeMaterial);
-        ring3.rotation.x = Math.PI / 2;
-        ring3.position.y = stemY + 2.2;
-        ring3.castShadow = true;
-        laverGroup.add(ring3);
-
-        // === BASIN SUPPORT COLLAR ===
-        const collarY = stemY + stemHeight;
-        const collarPoints = createLathePoints([
-            [1.8, 0],
-            [2.2, 0.2],
-            [2.5, 0.5],
-            [2.8, 0.8],
-            [3.0, 1.0],
-            [0, 1.0]
-        ]);
-        const collarGeo = new THREE.LatheGeometry(collarPoints, 32);
-        const collar = new THREE.Mesh(collarGeo, bronzeMaterial);
-        collar.position.y = collarY;
-        collar.castShadow = true;
-        laverGroup.add(collar);
-
-        // === MAIN BASIN ===
-        const basinY = collarY + 1.0;
-        const basinRadius = 3.5;
-        const basinDepth = 1.8;
-
-        // Outer basin shell
-        const basinOuterPoints = createLathePoints([
-            [0.5, 0],           // Bottom center hole
-            [1.0, 0.1],         // Inner bottom curve
-            [2.0, 0.3],         // Rising
-            [2.8, 0.6],         // Curving up
-            [3.3, 1.0],         // Side
-            [3.5, 1.5],         // Upper side
-            [3.4, 1.8],         // Rim curve
-            [3.6, 1.9],         // Rim outer edge
-            [3.5, 2.0],         // Rim top
-            [3.3, 1.95],        // Rim inner
-            [3.2, 1.7],         // Inner wall top
-            [3.0, 1.3],         // Inner wall
-            [2.5, 0.8],         // Inner curve
-            [1.5, 0.5],         // Inner bottom
-            [0.5, 0.4]          // Center
-        ]);
-        const basinGeo = new THREE.LatheGeometry(basinOuterPoints, 48);
-        const basin = new THREE.Mesh(basinGeo, bronzeMaterial);
-        basin.position.y = basinY;
-        basin.castShadow = true;
-        basin.receiveShadow = true;
-        laverGroup.add(basin);
-
-        // Decorative rim ring
-        const rimRingGeo = new THREE.TorusGeometry(3.45, 0.12, 12, 48);
-        const rimRing = new THREE.Mesh(rimRingGeo, bronzeMaterial);
-        rimRing.rotation.x = Math.PI / 2;
-        rimRing.position.y = basinY + 1.95;
-        rimRing.castShadow = true;
-        laverGroup.add(rimRing);
-
-        // === WATER inside basin ===
-        const waterMaterial = new THREE.MeshStandardMaterial({
+        // Standing water inside the basin
+        const laverWaterMaterial = new THREE.MeshStandardMaterial({
             color: 0x4A90A4,
             transparent: true,
             opacity: 0.7,
             roughness: 0.1,
             metalness: 0.3
         });
-        const waterGeo = new THREE.CylinderGeometry(3.0, 2.5, 0.3, 32);
-        const water = new THREE.Mesh(waterGeo, waterMaterial);
-        water.position.y = basinY + 1.5;
-        laverGroup.add(water);
 
-        // === DECORATIVE HANDLES (like in reference image) ===
-        function createHandle(angle) {
-            const handleGroup = new THREE.Group();
-
-            // Handle attachment point
-            const attachGeo = new THREE.CylinderGeometry(0.3, 0.35, 0.4, 12);
-            const attach = new THREE.Mesh(attachGeo, bronzeMaterial);
-            attach.rotation.z = Math.PI / 2;
-            attach.position.set(3.5, basinY + 1.2, 0);
-            handleGroup.add(attach);
-
-            // Handle ring
-            const handleRingGeo = new THREE.TorusGeometry(0.6, 0.12, 8, 16, Math.PI);
-            const handleRing = new THREE.Mesh(handleRingGeo, bronzeMaterial);
-            handleRing.rotation.y = Math.PI / 2;
-            handleRing.rotation.z = Math.PI / 2;
-            handleRing.position.set(4.0, basinY + 1.2, 0);
-            handleGroup.add(handleRing);
-
-            handleGroup.rotation.y = angle;
-            handleGroup.castShadow = true;
-            return handleGroup;
-        }
-
-        // Add handles on opposite sides
-        laverGroup.add(createHandle(0));
-        laverGroup.add(createHandle(Math.PI));
+        // Chalice-shaped laver model with its own water surface
+        loadFurnishing(laverGroup, 'models/SM_BronzeLaver.glb', {
+            targetHeight: LAVER_HEIGHT + CUBIT, // pedestal chalice, basin rim at ~2 cubits
+            materials: {
+                SM_Water: laverWaterMaterial,
+                default: bronzeMaterial
+            },
+            onError: () => {
+                // Placeholder: simple bronze basin
+                const basin = new THREE.Mesh(
+                    new THREE.CylinderGeometry(LAVER_RADIUS, LAVER_RADIUS * 0.6, LAVER_HEIGHT, 24),
+                    bronzeMaterial
+                );
+                basin.position.y = LAVER_HEIGHT / 2;
+                basin.castShadow = true;
+                laverGroup.add(basin);
+            }
+        });
 
         // Position the laver between altar and tent
         laverGroup.position.set(0, 0, 10);
-        laverGroup.scale.set(0.8, 0.8, 0.8); // Scale to fit scene
         laverGroup.userData = {
             name: "Bronze Laver",
             description: "The washing basin where priests cleansed their hands and feet before entering the Holy Place or offering sacrifices. Made from the bronze mirrors of the serving women. Symbolizes spiritual cleansing and sanctification.",
@@ -2418,135 +2129,22 @@ scene.add(redCarpet);
         // Table of Showbread (Exodus 25:23-30) - Ornate golden table
         const tableGroup = new THREE.Group();
 
-        // Table legs - ornate turned legs
-        function createTableLeg(x, z) {
-            const legGroup = new THREE.Group();
-
-            // Foot - decorative base
-            const footGeo = new THREE.CylinderGeometry(0.25, 0.35, 0.2, 12);
-            const foot = new THREE.Mesh(footGeo, goldMaterial);
-            foot.position.y = 0.1;
-            legGroup.add(foot);
-
-            // Lower bulge
-            const bulge1Geo = new THREE.SphereGeometry(0.22, 12, 12);
-            const bulge1 = new THREE.Mesh(bulge1Geo, goldMaterial);
-            bulge1.position.y = 0.4;
-            legGroup.add(bulge1);
-
-            // Main shaft
-            const shaftGeo = new THREE.CylinderGeometry(0.12, 0.15, 1.2, 12);
-            const shaft = new THREE.Mesh(shaftGeo, goldMaterial);
-            shaft.position.y = 1.1;
-            legGroup.add(shaft);
-
-            // Upper bulge
-            const bulge2Geo = new THREE.SphereGeometry(0.18, 12, 12);
-            const bulge2 = new THREE.Mesh(bulge2Geo, goldMaterial);
-            bulge2.position.y = 1.8;
-            legGroup.add(bulge2);
-
-            // Top section
-            const topGeo = new THREE.CylinderGeometry(0.15, 0.12, 0.3, 12);
-            const top = new THREE.Mesh(topGeo, goldMaterial);
-            top.position.y = 2.05;
-            legGroup.add(top);
-
-            legGroup.position.set(x, 0, z);
-            legGroup.castShadow = true;
-            return legGroup;
-        }
-
-        // Four ornate legs
-        const legOffsetX = TABLE_LENGTH / 2 - 0.3;
-        const legOffsetZ = TABLE_WIDTH / 2 - 0.3;
-        tableGroup.add(createTableLeg(-legOffsetX, -legOffsetZ));
-        tableGroup.add(createTableLeg(-legOffsetX, legOffsetZ));
-        tableGroup.add(createTableLeg(legOffsetX, -legOffsetZ));
-        tableGroup.add(createTableLeg(legOffsetX, legOffsetZ));
-
-        // Table top frame
-        const tableTopY = 2.2;
-        const frameThickness = 0.15;
-
-        // Main table surface
-        const tableTopGeo = new THREE.BoxGeometry(TABLE_LENGTH, 0.15, TABLE_WIDTH);
-        const tableTop = new THREE.Mesh(tableTopGeo, goldMaterial);
-        tableTop.position.y = tableTopY;
-        tableTop.castShadow = true;
-        tableGroup.add(tableTop);
-
-        // Decorative crown/border (Exodus 25:24-25)
-        const crownHeight = 0.25;
-        const crownThickness = 0.08;
-
-        // Front and back crown
-        const crownFBGeo = new THREE.BoxGeometry(TABLE_LENGTH + 0.1, crownHeight, crownThickness);
-        const crownFront = new THREE.Mesh(crownFBGeo, goldMaterial);
-        crownFront.position.set(0, tableTopY + crownHeight / 2 + 0.07, TABLE_WIDTH / 2);
-        tableGroup.add(crownFront);
-        const crownBack = new THREE.Mesh(crownFBGeo, goldMaterial);
-        crownBack.position.set(0, tableTopY + crownHeight / 2 + 0.07, -TABLE_WIDTH / 2);
-        tableGroup.add(crownBack);
-
-        // Left and right crown
-        const crownLRGeo = new THREE.BoxGeometry(crownThickness, crownHeight, TABLE_WIDTH);
-        const crownLeft = new THREE.Mesh(crownLRGeo, goldMaterial);
-        crownLeft.position.set(-TABLE_LENGTH / 2, tableTopY + crownHeight / 2 + 0.07, 0);
-        tableGroup.add(crownLeft);
-        const crownRight = new THREE.Mesh(crownLRGeo, goldMaterial);
-        crownRight.position.set(TABLE_LENGTH / 2, tableTopY + crownHeight / 2 + 0.07, 0);
-        tableGroup.add(crownRight);
-
-        // Gold rings for carrying poles (Exodus 25:26-27)
-        const tableRingGeo = new THREE.TorusGeometry(0.2, 0.05, 8, 16);
-        const ringYPos = 1.5;
-        [[-legOffsetX, -legOffsetZ], [-legOffsetX, legOffsetZ],
-         [legOffsetX, -legOffsetZ], [legOffsetX, legOffsetZ]].forEach(([x, z]) => {
-            const ring = new THREE.Mesh(tableRingGeo, goldMaterial);
-            ring.position.set(x, ringYPos, z > 0 ? z + 0.2 : z - 0.2);
-            ring.rotation.y = z > 0 ? 0 : Math.PI;
-            tableGroup.add(ring);
-        });
-
-        // Carrying poles
-        const tablePoleGeo = new THREE.CylinderGeometry(0.1, 0.1, TABLE_WIDTH + 2, 8);
-        const tablePole1 = new THREE.Mesh(tablePoleGeo, goldMaterial);
-        tablePole1.rotation.x = Math.PI / 2;
-        tablePole1.position.set(-legOffsetX, ringYPos, 0);
-        tableGroup.add(tablePole1);
-        const tablePole2 = new THREE.Mesh(tablePoleGeo, goldMaterial);
-        tablePole2.rotation.x = Math.PI / 2;
-        tablePole2.position.set(legOffsetX, ringYPos, 0);
-        tableGroup.add(tablePole2);
-
-        // Twelve loaves of showbread (Leviticus 24:5-6)
-        const breadMaterial = new THREE.MeshStandardMaterial({
-            color: 0xD4A574,
-            roughness: 0.9,
-            metalness: 0.0
-        });
-
-        // Two stacks of 6 loaves each
-        for (let stack = 0; stack < 2; stack++) {
-            const stackX = stack === 0 ? -0.6 : 0.6;
-            for (let i = 0; i < 6; i++) {
-                const loafGeo = new THREE.CylinderGeometry(0.35, 0.4, 0.12, 16);
-                const loaf = new THREE.Mesh(loafGeo, breadMaterial);
-                loaf.position.set(stackX, tableTopY + 0.2 + i * 0.13, 0);
-                loaf.castShadow = true;
-                tableGroup.add(loaf);
+        // Golden table model: crown moulding, carrying poles, the twelve
+        // loaves in two rows, and the golden vessels (Exodus 25:29)
+        loadFurnishing(tableGroup, 'models/SM_TableShowbread.glb', {
+            targetHeight: TABLE_HEIGHT,
+            materials: { default: goldMaterial },
+            onError: () => {
+                // Placeholder: simple golden table slab
+                const slab = new THREE.Mesh(
+                    new THREE.BoxGeometry(TABLE_LENGTH, TABLE_HEIGHT, TABLE_WIDTH),
+                    goldMaterial
+                );
+                slab.position.y = TABLE_HEIGHT / 2;
+                slab.castShadow = true;
+                tableGroup.add(slab);
             }
-        }
-
-        // Golden dishes and utensils on the table
-        const dishGeo = new THREE.CylinderGeometry(0.3, 0.25, 0.08, 16);
-        const dish1 = new THREE.Mesh(dishGeo, goldMaterial);
-        dish1.position.set(0, tableTopY + 0.12, 0.5);
-        tableGroup.add(dish1);
-        const dish2 = new THREE.Mesh(dishGeo, goldMaterial);
-        dish2.position.set(0, tableTopY + 0.12, -0.5);
-        tableGroup.add(dish2);
+        });
 
         tableGroup.position.set(-TENT_WIDTH / 3, 0, TENT_LENGTH / 4);
         tableGroup.userData = {
@@ -2570,125 +2168,26 @@ scene.add(redCarpet);
         // Altar of Incense (Exodus 30:1-10) - Ornate golden altar
         const incenseAltarGroup = new THREE.Group();
 
-        // Base platform
-        const incenseBaseGeo = new THREE.BoxGeometry(INCENSE_ALTAR_SIZE + 0.4, 0.15, INCENSE_ALTAR_SIZE + 0.4);
-        const incenseBase = new THREE.Mesh(incenseBaseGeo, goldMaterial);
-        incenseBase.position.y = 0.075;
-        incenseAltarGroup.add(incenseBase);
-
-        // Main body with decorative panels
-        const bodyHeight = INCENSE_ALTAR_HEIGHT - 0.6;
-
-        // Four corner posts
-        const incensePostGeo = new THREE.BoxGeometry(0.2, bodyHeight, 0.2);
-        const incensePostPositions = [
-            [INCENSE_ALTAR_SIZE / 2 - 0.1, -INCENSE_ALTAR_SIZE / 2 + 0.1],
-            [INCENSE_ALTAR_SIZE / 2 - 0.1, INCENSE_ALTAR_SIZE / 2 - 0.1],
-            [-INCENSE_ALTAR_SIZE / 2 + 0.1, -INCENSE_ALTAR_SIZE / 2 + 0.1],
-            [-INCENSE_ALTAR_SIZE / 2 + 0.1, INCENSE_ALTAR_SIZE / 2 - 0.1]
-        ];
-        incensePostPositions.forEach(([x, z]) => {
-            const incensePost = new THREE.Mesh(incensePostGeo, goldMaterial);
-            incensePost.position.set(x, 0.15 + bodyHeight / 2, z);
-            incensePost.castShadow = true;
-            incenseAltarGroup.add(incensePost);
+        // Golden incense altar model: crown moulding, horns, carrying
+        // poles, and a censer resting on top
+        loadFurnishing(incenseAltarGroup, 'models/SM_AltarIncense.glb', {
+            targetHeight: INCENSE_ALTAR_HEIGHT,
+            rotateY: Math.PI / 2, // poles run across the tent, clear of the veil
+            materials: { default: goldMaterial },
+            onError: () => {
+                // Placeholder: simple golden pillar
+                const pillar = new THREE.Mesh(
+                    new THREE.BoxGeometry(INCENSE_ALTAR_SIZE, INCENSE_ALTAR_HEIGHT, INCENSE_ALTAR_SIZE),
+                    goldMaterial
+                );
+                pillar.position.y = INCENSE_ALTAR_HEIGHT / 2;
+                pillar.castShadow = true;
+                incenseAltarGroup.add(pillar);
+            }
         });
 
-        // Recessed panels on each side - beaten gold overlay
-        const panelMaterial = new THREE.MeshStandardMaterial({
-            color: 0xC9A227,       // Beaten gold to match Ark
-            metalness: 0.85,
-            roughness: 0.35,
-            emissive: 0x3D2B00,
-            emissiveIntensity: 0.1
-        });
-
-        const panelGeo = new THREE.BoxGeometry(INCENSE_ALTAR_SIZE - 0.4, bodyHeight - 0.3, 0.05);
-        // Front and back panels
-        const panelFront = new THREE.Mesh(panelGeo, panelMaterial);
-        panelFront.position.set(0, 0.15 + bodyHeight / 2, INCENSE_ALTAR_SIZE / 2 - 0.08);
-        incenseAltarGroup.add(panelFront);
-        const panelBack = new THREE.Mesh(panelGeo, panelMaterial);
-        panelBack.position.set(0, 0.15 + bodyHeight / 2, -INCENSE_ALTAR_SIZE / 2 + 0.08);
-        incenseAltarGroup.add(panelBack);
-        // Left and right panels
-        const panelSideGeo = new THREE.BoxGeometry(0.05, bodyHeight - 0.3, INCENSE_ALTAR_SIZE - 0.4);
-        const panelLeft = new THREE.Mesh(panelSideGeo, panelMaterial);
-        panelLeft.position.set(-INCENSE_ALTAR_SIZE / 2 + 0.08, 0.15 + bodyHeight / 2, 0);
-        incenseAltarGroup.add(panelLeft);
-        const panelRight = new THREE.Mesh(panelSideGeo, panelMaterial);
-        panelRight.position.set(INCENSE_ALTAR_SIZE / 2 - 0.08, 0.15 + bodyHeight / 2, 0);
-        incenseAltarGroup.add(panelRight);
-
-        // Crown molding (Exodus 30:3)
-        const crownY = 0.15 + bodyHeight;
-        const incenseCrownGeo = new THREE.BoxGeometry(INCENSE_ALTAR_SIZE + 0.2, 0.12, INCENSE_ALTAR_SIZE + 0.2);
-        const incenseCrown = new THREE.Mesh(incenseCrownGeo, goldMaterial);
-        incenseCrown.position.y = crownY;
-        incenseAltarGroup.add(incenseCrown);
-
-        // Decorative trim below crown
-        const trimRingGeo = new THREE.BoxGeometry(INCENSE_ALTAR_SIZE + 0.1, 0.08, INCENSE_ALTAR_SIZE + 0.1);
-        const trimRing = new THREE.Mesh(trimRingGeo, goldMaterial);
-        trimRing.position.y = crownY - 0.1;
-        incenseAltarGroup.add(trimRing);
-
-        // Top surface with depression for coals
-        const topSurfaceGeo = new THREE.BoxGeometry(INCENSE_ALTAR_SIZE, 0.1, INCENSE_ALTAR_SIZE);
-        const topSurface = new THREE.Mesh(topSurfaceGeo, goldMaterial);
-        topSurface.position.y = crownY + 0.17;
-        incenseAltarGroup.add(topSurface);
-
-        // Incense bowl/depression in center
-        const bowlGeo = new THREE.CylinderGeometry(0.4, 0.35, 0.15, 16);
-        const bowl = new THREE.Mesh(bowlGeo, goldMaterial);
-        bowl.position.y = crownY + 0.25;
-        incenseAltarGroup.add(bowl);
-
-        // Horns at four corners - more ornate
-        function createIncenseHorn(x, z) {
-            const hornGroup = new THREE.Group();
-
-            const hornBase = new THREE.CylinderGeometry(0.18, 0.22, 0.15, 8);
-            const base = new THREE.Mesh(hornBase, goldMaterial);
-            base.position.y = 0;
-            hornGroup.add(base);
-
-            const hornMid = new THREE.CylinderGeometry(0.12, 0.18, 0.25, 8);
-            const mid = new THREE.Mesh(hornMid, goldMaterial);
-            mid.position.y = 0.2;
-            hornGroup.add(mid);
-
-            const hornTip = new THREE.CylinderGeometry(0.05, 0.12, 0.2, 8);
-            const tip = new THREE.Mesh(hornTip, goldMaterial);
-            tip.position.y = 0.4;
-            hornGroup.add(tip);
-
-            const cap = new THREE.SphereGeometry(0.06, 8, 8);
-            const hornCap = new THREE.Mesh(cap, goldMaterial);
-            hornCap.position.y = 0.52;
-            hornGroup.add(hornCap);
-
-            hornGroup.position.set(x, crownY + 0.22, z);
-            return hornGroup;
-        }
-
-        const hornOff = INCENSE_ALTAR_SIZE / 2 - 0.15;
-        incenseAltarGroup.add(createIncenseHorn(hornOff, hornOff));
-        incenseAltarGroup.add(createIncenseHorn(hornOff, -hornOff));
-        incenseAltarGroup.add(createIncenseHorn(-hornOff, hornOff));
-        incenseAltarGroup.add(createIncenseHorn(-hornOff, -hornOff));
-
-        // Gold rings for carrying (Exodus 30:4)
-        const incenseRingGeo = new THREE.TorusGeometry(0.15, 0.04, 8, 16);
-        const ringHeight = 0.8;
-        [[INCENSE_ALTAR_SIZE / 2 + 0.05, 0], [-INCENSE_ALTAR_SIZE / 2 - 0.05, 0],
-         [0, INCENSE_ALTAR_SIZE / 2 + 0.05], [0, -INCENSE_ALTAR_SIZE / 2 - 0.05]].forEach(([x, z], i) => {
-            const ring = new THREE.Mesh(incenseRingGeo, goldMaterial);
-            ring.position.set(x, ringHeight, z);
-            ring.rotation.y = i < 2 ? Math.PI / 2 : 0;
-            incenseAltarGroup.add(ring);
-        });
+        // Top of the altar, where the smoke rises from
+        const incenseTopY = INCENSE_ALTAR_HEIGHT;
 
         // Rising incense smoke effect (subtle glow)
         const smokeMaterial = new THREE.MeshStandardMaterial({
@@ -2704,7 +2203,7 @@ scene.add(redCarpet);
             const smoke = new THREE.Mesh(smokeGeo, smokeMaterial);
             smoke.position.set(
                 (Math.random() - 0.5) * 0.3,
-                crownY + 0.5 + i * 0.4,
+                incenseTopY + 0.5 + i * 0.4,
                 (Math.random() - 0.5) * 0.3
             );
             smoke.scale.y = 1.5;
@@ -2713,7 +2212,7 @@ scene.add(redCarpet);
 
         // Warm glow from incense
         const incenseLight = new THREE.PointLight(0xFFAA66, 0.8, 8);
-        incenseLight.position.set(0, crownY + 0.5, 0);
+        incenseLight.position.set(0, incenseTopY + 0.5, 0);
         incenseAltarGroup.add(incenseLight);
 
         // POSITION FIX: Move +2 units relative to veil (towards entrance) instead of -3 (behind veil)
@@ -2762,85 +2261,33 @@ scene.add(redCarpet);
 
         const arkGroup = new THREE.Group();
 
-        // Load the Ark model with Draco decoder for compressed mesh
-        const dracoLoader = new THREE.DRACOLoader();
-        dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/draco/');
+        // Gold-clad chest with carrying poles and the mercy seat's two cherubim
+        const arkGoldMaterial = new THREE.MeshStandardMaterial({
+            color: 0xD4AF37,
+            metalness: 0.9,
+            roughness: 0.2,
+            envMapIntensity: 1.0
+        });
 
-        const gltfLoader = new THREE.GLTFLoader();
-        gltfLoader.setDRACOLoader(dracoLoader);
-        gltfLoader.load(
-            'ark_compressed.glb',
-            (gltf) => {
-                const arkModel = gltf.scene;
+        // The mercy seat was hammered from one piece of pure gold -
+        // brighter and more polished than the overlaid chest
+        const mercySeatMaterial = new THREE.MeshStandardMaterial({
+            color: 0xE8C55A,
+            metalness: 0.9,
+            roughness: 0.12
+        });
 
-                // Apply golden material to all meshes in the model
-                const arkGold = new THREE.MeshStandardMaterial({
-                    color: 0xD4AF37,
-                    metalness: 0.9,
-                    roughness: 0.2,
-                    envMapIntensity: 1.0
-                });
-
-                arkModel.traverse((child) => {
-                    if (child.isMesh) {
-                        child.material = arkGold;
-                        child.castShadow = true;
-                        child.receiveShadow = true;
-                    }
-                });
-
-                // Biblical Ark dimensions: 2.5 x 1.5 x 1.5 cubits (length x width x height)
-                // CUBIT = 1.5 units, so:
-                // ARK_LENGTH = 2.5 * 1.5 = 3.75 units
-                // ARK_WIDTH = 1.5 * 1.5 = 2.25 units
-                // ARK_HEIGHT = 1.5 * 1.5 = 2.25 units
-                // Holy of Holies is 10 cubits = 15 units wide
-                // So Ark should be ~25% of the room width
-
-                // Get model's original bounding box
-                const box = new THREE.Box3().setFromObject(arkModel);
-                const modelSize = box.getSize(new THREE.Vector3());
-
-                console.log('Original model size:', modelSize);
-
-                // Find the longest horizontal dimension (the model's "length")
-                const modelLength = Math.max(modelSize.x, modelSize.z);
-
-                // The GLB model includes the carrying poles which extend beyond the Ark body
-                // Total length with poles is roughly double the Ark body length
-                // Scale so the overall model (with poles) fills about half the Holy of Holies width
-                const targetSize = HOLY_OF_HOLIES_SIZE * 0.5; // ~7.5 units with poles
-                const scaleFactor = targetSize / modelLength;
-                arkModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
-
-                // Recalculate box after scaling
-                box.setFromObject(arkModel);
-                const newSize = box.getSize(new THREE.Vector3());
-                const newCenter = box.getCenter(new THREE.Vector3());
-
-                console.log('Scaled model size:', newSize, 'Target length:', ARK_LENGTH);
-
-                // Orient the Ark: long axis should run along X (east-west)
-                // The entrance to Holy of Holies is from +Z direction
-                // Cherubim should be at each end (along X axis), facing each other
-                if (newSize.z > newSize.x * 1.1) {
-                    arkModel.rotation.y = Math.PI / 2;
-                    box.setFromObject(arkModel);
-                    newCenter.copy(box.getCenter(new THREE.Vector3()));
-                }
-
-                // Center horizontally and place on ground
-                arkModel.position.x = -newCenter.x;
-                arkModel.position.z = -newCenter.z;
-                arkModel.position.y = -box.min.y;
-
-                arkGroup.add(arkModel);
-
-                // Position the Shekinah glory based on actual model height
+        loadFurnishing(arkGroup, 'models/SM_ArkCovenant.glb', {
+            // With its carrying poles the Ark spans about half the Holy of Holies
+            targetLength: HOLY_OF_HOLIES_SIZE * 0.5,
+            materials: {
+                M_Ark_MercySeat: mercySeatMaterial,
+                default: arkGoldMaterial
+            },
+            onLoaded: (model, box) => {
+                // Seat the Shekinah glory between the cherubim wings
                 const actualHeight = box.max.y - box.min.y;
-                const gloryYPos = actualHeight - (CUBIT * 3); // Between the cherubim, 3 cubits lower
-
-                // Update all glory light and sphere positions
+                const gloryYPos = actualHeight * 0.92;
                 if (arkGroup.userData.shekinahLight) {
                     arkGroup.userData.shekinahLight.position.y = gloryYPos + 0.5;
                     arkGroup.userData.gloryFill.position.y = gloryYPos;
@@ -2849,22 +2296,18 @@ scene.add(redCarpet);
                     arkGroup.userData.glowSphere.position.y = gloryYPos;
                     arkGroup.userData.halo.position.y = gloryYPos;
                 }
-
-                console.log('Ark of the Covenant model loaded successfully, height:', actualHeight);
             },
-            (progress) => {
-                console.log('Loading Ark model: ' + (progress.loaded / progress.total * 100).toFixed(1) + '%');
-            },
-            (error) => {
-                console.error('Error loading Ark model:', error);
-                // Fallback: create a simple placeholder if model fails to load
-                const placeholderGeo = new THREE.BoxGeometry(ARK_LENGTH, ARK_HEIGHT, ARK_WIDTH);
-                const placeholderMat = new THREE.MeshStandardMaterial({ color: 0xD4AF37, metalness: 0.8, roughness: 0.3 });
-                const placeholder = new THREE.Mesh(placeholderGeo, placeholderMat);
+            onError: () => {
+                // Placeholder: simple golden chest
+                const placeholder = new THREE.Mesh(
+                    new THREE.BoxGeometry(ARK_LENGTH, ARK_HEIGHT, ARK_WIDTH),
+                    arkGoldMaterial
+                );
                 placeholder.position.y = ARK_HEIGHT / 2;
+                placeholder.castShadow = true;
                 arkGroup.add(placeholder);
             }
-        );
+        });
 
         // === SHEKINAH GLORY - Divine presence between the cherubim ===
         // "There I will meet with you, and I will speak with you from above the mercy seat,
@@ -2931,11 +2374,12 @@ scene.add(redCarpet);
 
         // Position the Ark in the Holy of Holies
         arkGroup.position.set(0, 0, -TENT_LENGTH / 2 + HOLY_OF_HOLIES_SIZE / 2);
-        arkGroup.userData = {
+        // Merge (not replace) so the Shekinah glory references above survive
+        Object.assign(arkGroup.userData, {
             name: "Ark of the Covenant",
             description: "The most sacred object in Israel, containing the Ten Commandments, Aaron's rod that budded, and a golden jar of manna. Made of acacia wood overlaid inside and out with pure gold. The Mercy Seat (Kapporeth) on top, flanked by two golden cherubim with wings overshadowing, was where God's presence dwelt and where atonement was made.",
             scripture: "Exodus 25:10-22 - 'They shall make an ark of acacia wood...overlay it with pure gold...make a mercy seat of pure gold...make two cherubim of gold...The cherubim shall stretch out their wings above, covering the mercy seat with their wings, and they shall face one another...There I will meet with you, and I will speak with you from above the mercy seat.'"
-        };
+        });
         tabernacleGroup.add(arkGroup);
 
         // ================================================================
@@ -2945,6 +2389,21 @@ scene.add(redCarpet);
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
         let currentlyHighlighted = null;
+
+        // Highlight an object group, remembering each material's own
+        // emissive colour so glowing parts (flames, embers, water) are
+        // restored instead of being reset to black
+        function setHighlight(objGroup, on) {
+            objGroup.traverse((child) => {
+                if (child.isMesh && child.material && child.material.emissive) {
+                    const mat = child.material;
+                    if (mat.userData.baseEmissive === undefined) {
+                        mat.userData.baseEmissive = mat.emissive.getHex();
+                    }
+                    mat.emissive.setHex(on ? 0x444444 : mat.userData.baseEmissive);
+                }
+            });
+        }
 
         const interactiveObjects = [
             altarGroup,
@@ -2982,19 +2441,11 @@ scene.add(redCarpet);
 
                 if (found && found !== currentlyHighlighted) {
                     if (currentlyHighlighted) {
-                        currentlyHighlighted.traverse((child) => {
-                            if (child.isMesh && child.material.emissive) {
-                                child.material.emissive.setHex(0x000000);
-                            }
-                        });
+                        setHighlight(currentlyHighlighted, false);
                     }
 
                     currentlyHighlighted = found;
-                    found.traverse((child) => {
-                        if (child.isMesh && child.material.emissive) {
-                            child.material.emissive.setHex(0x444444);
-                        }
-                    });
+                    setHighlight(found, true);
 
                     if (found.userData && found.userData.name) {
                         document.getElementById('info-title').textContent = found.userData.name;
@@ -3007,11 +2458,7 @@ scene.add(redCarpet);
                 }
             } else {
                 if (currentlyHighlighted) {
-                    currentlyHighlighted.traverse((child) => {
-                        if (child.isMesh && child.material.emissive) {
-                            child.material.emissive.setHex(0x000000);
-                        }
-                    });
+                    setHighlight(currentlyHighlighted, false);
                     currentlyHighlighted = null;
                 }
                 document.getElementById('info-panel').classList.remove('active');
@@ -3256,7 +2703,7 @@ scene.add(redCarpet);
         animate();
 
         console.log('%c✝ The Tabernacle of Moses ✝', 'font-size: 20px; color: gold; font-weight: bold;');
-        console.log('Improvements: White linen hangings, silver capitals, red carpet, better textures');
+        console.log('Improvements: Detailed 3D models for all six sacred furnishings');
     </script>
 </body>
 </html>
