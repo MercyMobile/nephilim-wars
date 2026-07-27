@@ -3067,6 +3067,7 @@
         scene.add(figureLines);
 
         // ---- day/night ------------------------------------------------------
+        const FOG_DAY_NEAR = 180, FOG_DAY_FAR = 340;   // the daylight haze, unchanged
         const SKY_DAY   = new THREE.Color(0x87CEEB);
         const SKY_NIGHT = new THREE.Color(0x050510);
         const SUN_DAY_INTENSITY = sunLight.intensity;       // whatever the daytime pass set
@@ -3085,7 +3086,16 @@
 
             _skyCol.copy(SKY_NIGHT).lerp(SKY_DAY, day);
             scene.background = _skyCol;
-            if (scene.fog) scene.fog.color.copy(_skyCol);
+            if (scene.fog) {
+                scene.fog.color.copy(_skyCol);
+                // FOG IS A DAYTIME EFFECT ONLY. Cisco, 2026-07-27: "I cannot see the night
+                // sky because of a fog or haze effect. It is nice in the daylight, but at
+                // night it needs to go." So it is pushed entirely out of the scene as night
+                // comes on. Pushed rather than set to null, because swapping scene.fog in and
+                // out forces a material recompile and a visible hitch every dusk and dawn.
+                scene.fog.near = FOG_DAY_NEAR + (100000 - FOG_DAY_NEAR) * night;
+                scene.fog.far  = FOG_DAY_FAR  + (200000 - FOG_DAY_FAR)  * night;
+            }
 
             sunLight.intensity = SUN_DAY_INTENSITY * Math.max(0, alt) ;
             ambientLight.intensity = AMB_DAY_INTENSITY * (0.18 + 0.82 * day);
