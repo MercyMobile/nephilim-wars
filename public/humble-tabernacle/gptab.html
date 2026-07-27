@@ -3046,7 +3046,7 @@
         });
         const starField = new THREE.Points(starGeo, starMaterial);
         starField.renderOrder = -1;                 // behind everything
-        scene.add(starField);
+        // NOT added to the scene directly — it goes into the spinning rig built below.
 
         // ---- the twelve ecliptic figures: faint thin lines, no labels anywhere
         const figPts = [];
@@ -3064,7 +3064,25 @@
         });
         const figureLines = new THREE.LineSegments(figGeo, figMaterial);
         figureLines.renderOrder = -1;
-        scene.add(figureLines);
+
+        // ---- the sky WHEELS. Two nested groups:
+        //   skyTilt  tips the celestial pole down from the zenith to the observer's latitude
+        //   skySpin  turns about that pole once per day, carrying stars AND figures together
+        // Without this the constellations sit pinned to the world like painted scenery —
+        // Cisco: "stars would move".
+        // ! ASSUMPTION - Claude: 29 deg N is the latitude of the Sinai peninsula, chosen for
+        // the setting. It is a scene-setting choice, not a claim about where the tabernacle
+        // stood — the text does not fix a latitude, and the wandering had many camps.
+        const SITE_LATITUDE_DEG = 29;
+        const skyTilt = new THREE.Group();
+        const skySpin = new THREE.Group();
+        skySpin.add(starField);
+        skySpin.add(figureLines);
+        skyTilt.add(skySpin);
+        // raDecToVec3 puts Dec +90 at +Y (pole overhead = what you'd see standing at the north
+        // pole). Tip it by (90 - latitude) so the pole sits at the correct altitude instead.
+        skyTilt.rotation.x = THREE.MathUtils.degToRad(90 - SITE_LATITUDE_DEG);
+        scene.add(skyTilt);
 
         // ---- day/night ------------------------------------------------------
         const FOG_DAY_NEAR = 180, FOG_DAY_FAR = 340;   // the daylight haze, unchanged
@@ -3099,6 +3117,10 @@
 
             sunLight.intensity = SUN_DAY_INTENSITY * Math.max(0, alt) ;
             ambientLight.intensity = AMB_DAY_INTENSITY * (0.18 + 0.82 * day);
+
+            // The whole sky turns once per cycle, same angular rate as the sun, so the stars
+            // rise and set with it instead of hanging fixed over the courtyard.
+            skySpin.rotation.y = -ang;
 
             starMaterial.opacity = night;
             figMaterial.opacity = night * 0.30;              // faint, subordinate to the stars
