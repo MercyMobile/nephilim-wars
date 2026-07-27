@@ -405,6 +405,47 @@
             metalness: 0.1
         });
 
+        // ================================================================
+        // THE THREE DYES — one sourced palette, used everywhere
+        //
+        // [SOURCED] Dye IDENTITY and HUE FAMILY, from peer-reviewed analysis of
+        // actual ancient Levantine textiles:
+        //
+        //  tekhelet / argaman — murex sea snail, confirmed by HPLC detection of
+        //    6-monobromoindigotin and 6,6'-dibromoindigotin. Sukenik, Iluz, Amar,
+        //    Varvak, Shamir & Ben-Yosef (2021), "Early evidence of royal purple
+        //    dyed textile from Timna Valley (Israel)", PLOS ONE 16(1):e0245897.
+        //    That paper: the words argaman and tekhelet "most probably represent a
+        //    PURPLE HUE and a VIOLET-BLUE HUE respectively". One Timna sample is
+        //    described as "pink-purplish wool fibers".
+        //
+        //  tola'at shani — the female scale insect KERMES VERMILIO, which lives on
+        //    the kermes oak; HPLC-identified on a wool textile from the Cave of
+        //    Skulls, Judean Desert, radiocarbon 1954-1767 BCE (Journal of
+        //    Archaeological Science: Reports; Israel Antiquities Authority).
+        //    Na'ama Sukenik, IAA: "the beautiful RED HUE that can be produced from
+        //    them". Kermes echinatus is identified as the Second-Temple-period
+        //    shani (BioScience, 2005).
+        //
+        // ! ASSUMPTION — Claude, 2026-07-27. THE EXACT HEX VALUES BELOW ARE MINE,
+        // not measured. No source I read gives a colorimetric or spectral value for
+        // any of these dyes, and the Timna authors state plainly that "the exact
+        // shade depends on different parameters, such as the chemical precursors
+        // compounds of each snail species, the dyeing process, and the levels of
+        // oxygen and light". Their hue attributions are hedged "most probably", and
+        // whether tekhelet was blue or purple is an open scholarly argument. So:
+        // the FAMILY is sourced, the SPECIFIC VALUE is art direction. Tune freely —
+        // you are not overwriting evidence, because there is none at this precision.
+        //
+        // Previous values were far darker and greyer (#1a2a5c / #4a1a4a / #6a1a1a
+        // and a muted set #2a3a4a / #4a3040 / #5a2a2a), which read as mud rather
+        // than as the dyes the text names over and over.
+        // ================================================================
+        const DYE_TEKHELET = '#2E3A8E';   // violet-blue  [family sourced, value mine]
+        const DYE_ARGAMAN  = '#6B2D5E';   // purple, pink-leaning  [family sourced, value mine]
+        const DYE_SHANI    = '#A32B25';   // kermes red  [family sourced, value mine]
+        const LINEN_WHITE  = '#EAE1CE';   // undyed fine twisted linen (Ex 26:1)
+
         // White linen material for curtains - more opaque and solid
         const linenMaterial = new THREE.MeshStandardMaterial({
             color: 0xFAF0E6, // Slightly warmer white (linen color)
@@ -427,8 +468,11 @@
             side: THREE.DoubleSide
         });
 
+        // [TEXT] Exodus 26:14 — "a covering for the tent of rams' skins DYED RED".
+        // Was 0x8B4513, which is saddle brown, not a red-dyed skin.
+        // ! ASSUMPTION — Claude: the specific value is mine; the text says only "dyed red".
         const ramsSkinMaterial = new THREE.MeshStandardMaterial({
-            color: 0x8B4513,
+            color: 0x8C3226,
             roughness: 0.8,
             side: THREE.DoubleSide
         });
@@ -930,14 +974,17 @@
                 const band = Math.floor(y / 60) % 5;
                 let color;
                 switch(band) {
-                    case 0: color = '#1a2a5c'; break; // Deep blue (tekhelet)
-                    case 1: color = '#4a1a4a'; break; // Royal purple (argaman)
-                    case 2: color = '#6a1a1a'; break; // Scarlet (tola'at shani)
-                    case 3: color = '#4a1a4a'; break; // Purple
-                    case 4: color = '#1a2a5c'; break; // Blue
+                    case 0: color = DYE_TEKHELET; break; // violet-blue (tekhelet)
+                    case 1: color = DYE_ARGAMAN;  break; // purple (argaman)
+                    case 2: color = DYE_SHANI;    break; // kermes red (tola'at shani)
+                    case 3: color = DYE_ARGAMAN;  break;
+                    case 4: color = DYE_TEKHELET; break;
                 }
                 ctx.fillStyle = color;
-                ctx.globalAlpha = 0.7;
+                // Dye laid at FULL opacity. At 0.7 over a near-white linen base these washed
+                // out to nursery pastels under the daylight sun (observed 2026-07-27). The
+                // cloth IS the dye colour; the weave and sheen passes below ride on top.
+                ctx.globalAlpha = 1.0;
                 ctx.fillRect(0, y, width, 2);
             }
 
@@ -1669,21 +1716,15 @@
 
             const bandHeight = 80;
             const colors = [
-                '#2a3a4a', // Deep muted blue (tekhelet)
-                '#e8e0d0', // Linen
-                '#4a3040', // Muted purple (argaman)
-                '#e8e0d0', // Linen
-                '#5a2a2a', // Deep muted scarlet (tola'at shani)
-                '#e8e0d0', // Linen
-                '#3a3a4a', // Blue
-                '#e8e0d0', // Linen
-                '#4a3545', // Purple
-                '#e8e0d0', // Linen
-                '#5a3030', // Scarlet
-                '#e8e0d0', // Linen
+                DYE_TEKHELET, LINEN_WHITE,
+                DYE_ARGAMAN,  LINEN_WHITE,
+                DYE_SHANI,    LINEN_WHITE,
+                DYE_TEKHELET, LINEN_WHITE,
+                DYE_ARGAMAN,  LINEN_WHITE,
+                DYE_SHANI,    LINEN_WHITE
             ];
 
-            ctx.globalAlpha = 0.7;
+            ctx.globalAlpha = 1.0;   // full opacity — see the note on the veil bands
             for (let y = 0; y < canvas.height; y += bandHeight) {
                 const colorIndex = Math.floor(y / bandHeight) % colors.length;
                 ctx.fillStyle = colors[colorIndex];
@@ -1965,17 +2006,46 @@
         const linenCovering = createDrapedCovering(0, linenCurtainMaterial, 0);
         tabernacleGroup.add(linenCovering);
 
-        // Fifty gold clasps join the two sets of linen curtains; the seam
-        // hangs directly above the veil (Exodus 26:6, 26:33)
-        const claspGeo = new THREE.SphereGeometry(0.09, 8, 8);
-        for (let ci = 0; ci < 25; ci++) {
+        // [TEXT] Exodus 26:6 — "fifty clasps of gold, and join the curtains to one another
+        // with the clasps so that the tabernacle will be a unit." FIFTY, not twenty-five:
+        // this loop ran to 25 while its own comment said fifty (corrected 2026-07-27).
+        // [TEXT] Exodus 26:33 — "hang up the veil UNDER THE CLASPS", which is why this seam
+        // sits directly above the veil line, 20 cubits back = the Most Holy Place boundary.
+        const claspGeo = new THREE.SphereGeometry(0.075, 8, 8);
+        const CLASPS_PER_SEAM = 50;
+        for (let ci = 0; ci < CLASPS_PER_SEAM; ci++) {
             const clasp = new THREE.Mesh(claspGeo, goldMaterial);
             clasp.position.set(
-                -TENT_WIDTH / 2 + 0.6 + (ci / 24) * (TENT_WIDTH - 1.2),
+                -TENT_WIDTH / 2 + 0.4 + (ci / (CLASPS_PER_SEAM - 1)) * (TENT_WIDTH - 0.8),
                 TENT_HEIGHT - 0.12,
                 -TENT_LENGTH / 2 + HOLY_OF_HOLIES_SIZE
             );
+            clasp.castShadow = true;
             tabernacleGroup.add(clasp);
+        }
+
+        // [TEXT] Exodus 26:11 — "fifty clasps of BRONZE, and you shall put the clasps into the
+        // loops and join the tent together so that it will be a unit." These belong to the
+        // GOATS' HAIR layer (v7-11), a different seam from the gold ones above, and the text is
+        // emphatic about the metal: gold joins the tabernacle, bronze joins the tent over it.
+        // [TEXT] v9 — the eleven goats' curtains are joined 5 + 6, and the sixth is doubled at
+        // the front of the tent.
+        // ! ASSUMPTION - Claude, not verified: the text gives the 5+6 division and the doubled
+        // sixth curtain but never states where that seam lands in cubits from the entrance.
+        // Placed one curtain-width (4 cubits) forward of the gold seam, which follows from the
+        // 5|6 split against the linen's 5|5 — that is inference, not Scripture. Commentators
+        // differ. Move GOAT_SEAM_OFFSET if you follow a different reading.
+        const GOAT_SEAM_OFFSET = 4 * CUBIT;
+        const bronzeClaspGeo = new THREE.SphereGeometry(0.075, 8, 8);
+        for (let ci = 0; ci < CLASPS_PER_SEAM; ci++) {
+            const bClasp = new THREE.Mesh(bronzeClaspGeo, bronzeMaterial);
+            bClasp.position.set(
+                -TENT_WIDTH / 2 + 0.4 + (ci / (CLASPS_PER_SEAM - 1)) * (TENT_WIDTH - 0.8),
+                TENT_HEIGHT + 0.15 - 0.10,          // sits on the goats'-hair layer above the linen
+                -TENT_LENGTH / 2 + HOLY_OF_HOLIES_SIZE + GOAT_SEAM_OFFSET
+            );
+            bClasp.castShadow = true;
+            tabernacleGroup.add(bClasp);
         }
 
         // Layer 2: Goat hair - given the extra length, it hangs lowest
@@ -2234,17 +2304,13 @@
             // Woven vertical bands - muted, earthy ancient Near Eastern dyes
             const bandWidth = 60;
             const colors = [
-                '#e0d8c8', // Linen
-                '#2a3a4a', // Muted tekhelet (blue)
-                '#e0d8c8', // Linen
-                '#4a3040', // Muted argaman (purple)
-                '#e0d8c8', // Linen
-                '#5a2a2a', // Muted tola'at shani (scarlet)
-                '#e0d8c8', // Linen
-                '#3a3a4a', // Blue
+                DYE_TEKHELET, LINEN_WHITE,
+                DYE_ARGAMAN,  LINEN_WHITE,
+                DYE_SHANI,    LINEN_WHITE,
+                DYE_TEKHELET, LINEN_WHITE
             ];
 
-            ctx.globalAlpha = 0.75;
+            ctx.globalAlpha = 1.0;   // full opacity — see the note on the veil bands
             for (let x = 0; x < canvas.width; x += bandWidth) {
                 const colorIndex = Math.floor(x / bandWidth) % colors.length;
                 ctx.fillStyle = colors[colorIndex];
