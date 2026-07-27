@@ -510,94 +510,334 @@
         }
 
         // ================================================================
-        // GROUND PLANE - Seamless desert sand texture
+        // GROUND PLANE - Wind-rippled desert sand
+        //
+        // The previous version used sin(x)*cos(y) as its "noise". That is a
+        // product of sinusoids - a perfectly regular egg-crate grid, not
+        // noise - tiled 12x12 with no normal map. Regular grid + flat
+        // shading is why it read as printed laminate rather than sand.
+        //
+        // This version builds a real height field (periodic value-noise fBm
+        // + phase-warped aeolian ripples + grain), then derives THREE maps
+        // from that one height field:
+        //   colour     - sand palette shaded by height, with baked cavity AO
+        //   normal     - central differences of the height field  <- the
+        //                single biggest realism win; sand is read by the eye
+        //                almost entirely through grazing-light relief
+        //   roughness  - crests scoured rougher, troughs slightly compacted
+        // All noise is lattice-periodic, so the maps still tile exactly.
+        //
+        // Tiling repetition is further broken up by (a) large-scale dune
+        // displacement in the geometry and (b) per-vertex colour blotching,
+        // both at wavelengths far longer than the texture tile.
         // ================================================================
 
-        // Create seamless tileable desert sand texture
-        function createSeamlessDesertTexture() {
-            const canvas = document.createElement('canvas');
-            const size = 512;
-            canvas.width = size;
-            canvas.height = size;
-            const ctx = canvas.getContext('2d');
+        // ! ASSUMPTION - Claude, not verified. Every numeric constant in this
+        // block (sand RGB palette, ripple wave numbers 18/7, NORMAL_STRENGTH,
+        // roughness 0.90-1.00, dune amplitude 2.6, SAND_REPEAT 12) is an
+        // art-direction value I chose by eye. None of it is measured from
+        // Sinai sand, photogrammetry, or any cited reference. The three.js
+        // API usage below IS verified - against the r128 build this page
+        // loads from cdnjs and against mrdoob/three.js tag r128 source
+        // (Material.js: vertexColors is boolean; MeshStandardMaterial.js:
+        // normalMap/normalScale/roughnessMap; normal_fragment_maps.glsl.js:
+        // tangent-space normal maps fall back to perturbNormal2Arb when the
+        // geometry has no tangent attribute, which PlaneGeometry does not).
 
-            // Base darker sand color
-            ctx.fillStyle = '#8B7355';
-            ctx.fillRect(0, 0, size, size);
-
-            const imageData = ctx.getImageData(0, 0, size, size);
-            const data = imageData.data;
-
-            // Seamless noise function using sin/cos (naturally tiles)
-            function seamlessNoise(x, y, scale, seed) {
-                const nx = x / size * Math.PI * 2;
-                const ny = y / size * Math.PI * 2;
-                return Math.sin(nx * scale + seed) * Math.cos(ny * scale + seed * 0.7) +
-                       Math.sin((nx + ny) * scale * 0.5 + seed * 1.3) * 0.5;
-            }
-
-            // Pre-generate random values that tile seamlessly
-            // by making the random pattern wrap
-            const randGrid = [];
-            const gridSize = 32;
-            for (let i = 0; i < gridSize * gridSize; i++) {
-                randGrid[i] = Math.random();
-            }
-
-            function tiledRandom(x, y) {
-                const gx = Math.floor((x / size) * gridSize) % gridSize;
-                const gy = Math.floor((y / size) * gridSize) % gridSize;
-                return randGrid[gy * gridSize + gx];
-            }
-
-            for (let i = 0; i < data.length; i += 4) {
-                const x = (i / 4) % size;
-                const y = Math.floor((i / 4) / size);
-
-                // Multiple octaves of seamless noise
-                const large = seamlessNoise(x, y, 2, 0) * 12;
-                const medium = seamlessNoise(x, y, 4, 100) * 8;
-                const small = seamlessNoise(x, y, 8, 200) * 5;
-                const fine = seamlessNoise(x, y, 16, 300) * 3;
-
-                // Add subtle tiled grain
-                const grain = (tiledRandom(x, y) - 0.5) * 15;
-
-                const variation = large + medium + small + fine + grain;
-
-                // Apply variation with warm color shift
-                data[i] = Math.min(255, Math.max(0, data[i] + variation));
-                data[i + 1] = Math.min(255, Math.max(0, data[i + 1] + variation * 0.85));
-                data[i + 2] = Math.min(255, Math.max(0, data[i + 2] + variation * 0.65));
-            }
-
-            ctx.putImageData(imageData, 0, 0);
-
-            const texture = new THREE.CanvasTexture(canvas);
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(12, 12);
-            return texture;
+        // --- periodic value noise -------------------------------------------------
+        // 32-bit integer hash -> [0,1). Deterministic, so the terrain is the
+        // same on every load (unlike the old Math.random() grain).
+        function sandHash(ix, iy, seed) {
+            let h = (ix * 374761393 + iy * 668265263 + seed * 362437) | 0;
+            h = Math.imul(h ^ (h >>> 13), 1274126177) | 0;
+            h = h ^ (h >>> 16);
+            return (h >>> 0) / 4294967296;
         }
 
-        const sandTexture = createSeamlessDesertTexture();
+        // Value noise on an integer lattice of period P -> tiles exactly when
+        // sampled as vnoise(u * P, v * P, P, seed) for u,v in [0,1).
+        function vnoise(x, y, P, seed) {
+            const x0 = Math.floor(x), y0 = Math.floor(y);
+            const fx = x - x0, fy = y - y0;
+            const ux = fx * fx * (3 - 2 * fx);
+            const uy = fy * fy * (3 - 2 * fy);
+            const wx0 = ((x0 % P) + P) % P, wy0 = ((y0 % P) + P) % P;
+            const wx1 = (wx0 + 1) % P, wy1 = (wy0 + 1) % P;
+            const a = sandHash(wx0, wy0, seed), b = sandHash(wx1, wy0, seed);
+            const c = sandHash(wx0, wy1, seed), d = sandHash(wx1, wy1, seed);
+            const top = a + (b - a) * ux;
+            const bot = c + (d - c) * ux;
+            return top + (bot - top) * uy;   // [0,1)
+        }
+
+        // Fractal sum of periodic value noise. baseFreq must be an integer.
+        function fbm(u, v, baseFreq, octaves, seed) {
+            let sum = 0, amp = 1, norm = 0, f = baseFreq;
+            for (let o = 0; o < octaves; o++) {
+                sum += vnoise(u * f, v * f, f, seed + o * 17) * amp;
+                norm += amp;
+                amp *= 0.5;
+                f *= 2;
+            }
+            return sum / norm;   // [0,1)
+        }
+
+        // Sign of the normal-map green channel. three.js uses the OpenGL
+        // (green = up) convention; whether that matches this plane's UV
+        // orientation depends on the rotation applied below.
+        // ! ASSUMPTION - Claude, not verified against a reference render.
+        // If the ripple highlights look lit from the wrong side, flip this
+        // to -1 (or set sandNormalMaterialScale.y negative).
+        const NORMAL_Y_SIGN = 1;
+
+        const SAND_TEX = 1024;          // texels per tile
+        const SAND_REPEAT = 12;         // tiles across the ground plane
+
+        /**
+         * Builds colour + normal + roughness maps for desert sand from a
+         * single shared height field. Returns { map, normalMap, roughnessMap }.
+         */
+        function createSandMaps(size) {
+            const h = new Float32Array(size * size);
+
+            // ---- height field ----
+            for (let y = 0; y < size; y++) {
+                for (let x = 0; x < size; x++) {
+                    const u = x / size, v = y / size;
+
+                    // Broad drifts and blown-out hollows.
+                    const drift = fbm(u, v, 2, 4, 11);
+
+                    // Aeolian ripples. Integer wave numbers keep them tileable;
+                    // the fBm term warps the phase so the crests wander instead
+                    // of marching in a straight comb.
+                    const warp = fbm(u, v, 4, 3, 71) * 2 - 1;
+                    const ripplePhase = 2 * Math.PI * (18 * u + 7 * v) + warp * 4.5;
+                    let ripple = Math.sin(ripplePhase);
+                    // Sharpen: real ripples have rounded troughs, crisper crests.
+                    ripple = Math.sign(ripple) * Math.pow(Math.abs(ripple), 0.7);
+
+                    // Ripples die out in sheltered hollows and scoured patches.
+                    const rippleMask = Math.min(1, Math.max(0,
+                        (fbm(u, v, 3, 3, 133) - 0.25) * 2.0));
+
+                    // Grain: coarse clumping plus per-texel scatter. Indexing the
+                    // scatter by integer texel coords makes it tile for free.
+                    const clump = fbm(u, v, 48, 2, 211) - 0.5;
+                    const speck = sandHash(x, y, 909) - 0.5;
+
+                    h[y * size + x] =
+                        drift * 0.55 +
+                        ripple * rippleMask * 0.26 +
+                        clump * 0.13 +
+                        speck * 0.06;
+                }
+            }
+
+            // ---- scattered pebbles / small stones (bump the height field so
+            //      they appear in the normal map too, not just as flat dots) ----
+            const PEBBLES = Math.round(size * size / 5200);
+            for (let p = 0; p < PEBBLES; p++) {
+                const px = Math.floor(sandHash(p, 1, 555) * size);
+                const py = Math.floor(sandHash(p, 2, 555) * size);
+                const pr = 1.5 + sandHash(p, 3, 555) * 3.5;
+                const pAmp = 0.05 + sandHash(p, 4, 555) * 0.07;
+                const r2 = pr * pr;
+                for (let dy = -Math.ceil(pr); dy <= Math.ceil(pr); dy++) {
+                    for (let dx = -Math.ceil(pr); dx <= Math.ceil(pr); dx++) {
+                        const d2 = dx * dx + dy * dy;
+                        if (d2 > r2) continue;
+                        const wx = ((px + dx) % size + size) % size;
+                        const wy = ((py + dy) % size + size) % size;
+                        const falloff = 1 - d2 / r2;
+                        h[wy * size + wx] += pAmp * falloff * falloff;
+                    }
+                }
+            }
+
+            // ---- normalise height to [0,1] ----
+            let hMin = Infinity, hMax = -Infinity;
+            for (let i = 0; i < h.length; i++) {
+                if (h[i] < hMin) hMin = h[i];
+                if (h[i] > hMax) hMax = h[i];
+            }
+            const hSpan = (hMax - hMin) || 1;
+            for (let i = 0; i < h.length; i++) h[i] = (h[i] - hMin) / hSpan;
+
+            const at = (x, y) => h[(((y % size) + size) % size) * size +
+                                   (((x % size) + size) % size)];
+
+            // ---- colour map ----
+            // Sinai sand is a pale warm tan, not the mud-brown #8B7355 the old
+            // texture started from. Two-tone blend keeps it from looking sprayed.
+            const colCanvas = document.createElement('canvas');
+            colCanvas.width = colCanvas.height = size;
+            const cctx = colCanvas.getContext('2d');
+            const cImg = cctx.createImageData(size, size);
+            const cData = cImg.data;
+
+            const SAND_PALE = [216, 194, 158];
+            const SAND_DEEP = [166, 139, 104];
+            const SAND_WARM = [199, 160, 118];
+
+            for (let y = 0; y < size; y++) {
+                for (let x = 0; x < size; x++) {
+                    const i = (y * size + x) * 4;
+                    const u = x / size, v = y / size;
+
+                    // Colour is driven by its own noise, deliberately NOT locked
+                    // 1:1 to the relief - real sand's tone and its ripples are
+                    // only loosely correlated (mineral sorting, damp patches).
+                    const tone = fbm(u, v, 3, 4, 401);
+                    const warmth = fbm(u, v, 6, 3, 907);
+
+                    let r = SAND_DEEP[0] + (SAND_PALE[0] - SAND_DEEP[0]) * tone;
+                    let g = SAND_DEEP[1] + (SAND_PALE[1] - SAND_DEEP[1]) * tone;
+                    let b = SAND_DEEP[2] + (SAND_PALE[2] - SAND_DEEP[2]) * tone;
+
+                    r += (SAND_WARM[0] - r) * warmth * 0.30;
+                    g += (SAND_WARM[1] - g) * warmth * 0.30;
+                    b += (SAND_WARM[2] - b) * warmth * 0.30;
+
+                    // Crests catch light, troughs hold shadow (cheap baked cavity
+                    // AO - it survives even when the sun is high and flat).
+                    const hv = at(x, y);
+                    const shade = 0.80 + hv * 0.34;
+                    r *= shade; g *= shade; b *= shade;
+
+                    // Fine sparkle from quartz grains.
+                    const glint = (sandHash(x, y, 1313) - 0.5) * 14;
+                    r += glint; g += glint * 0.92; b += glint * 0.78;
+
+                    cData[i]     = Math.max(0, Math.min(255, r));
+                    cData[i + 1] = Math.max(0, Math.min(255, g));
+                    cData[i + 2] = Math.max(0, Math.min(255, b));
+                    cData[i + 3] = 255;
+                }
+            }
+            cctx.putImageData(cImg, 0, 0);
+
+            // ---- normal map (central differences of the height field) ----
+            const nrmCanvas = document.createElement('canvas');
+            nrmCanvas.width = nrmCanvas.height = size;
+            const nctx = nrmCanvas.getContext('2d');
+            const nImg = nctx.createImageData(size, size);
+            const nData = nImg.data;
+            const NORMAL_STRENGTH = 26.0;   // slope gain; higher = deeper relief
+
+            for (let y = 0; y < size; y++) {
+                for (let x = 0; x < size; x++) {
+                    const i = (y * size + x) * 4;
+                    const dhdx = (at(x + 1, y) - at(x - 1, y)) * 0.5 * NORMAL_STRENGTH;
+                    const dhdy = (at(x, y + 1) - at(x, y - 1)) * 0.5 * NORMAL_STRENGTH;
+                    let nx = -dhdx, ny = -dhdy * NORMAL_Y_SIGN, nz = 1.0;
+                    const len = Math.sqrt(nx * nx + ny * ny + nz * nz);
+                    nData[i]     = (nx / len * 0.5 + 0.5) * 255;
+                    nData[i + 1] = (ny / len * 0.5 + 0.5) * 255;
+                    nData[i + 2] = (nz / len * 0.5 + 0.5) * 255;
+                    nData[i + 3] = 255;
+                }
+            }
+            nctx.putImageData(nImg, 0, 0);
+
+            // ---- roughness map (green channel is what three.js reads) ----
+            const rghCanvas = document.createElement('canvas');
+            rghCanvas.width = rghCanvas.height = size;
+            const rctx = rghCanvas.getContext('2d');
+            const rImg = rctx.createImageData(size, size);
+            const rData = rImg.data;
+            for (let y = 0; y < size; y++) {
+                for (let x = 0; x < size; x++) {
+                    const i = (y * size + x) * 4;
+                    // Loose crests scatter light almost perfectly diffusely;
+                    // wind-packed troughs are a touch smoother.
+                    const rough = 0.90 + at(x, y) * 0.10;
+                    const val = Math.max(0, Math.min(255, rough * 255));
+                    rData[i] = rData[i + 1] = rData[i + 2] = val;
+                    rData[i + 3] = 255;
+                }
+            }
+            rctx.putImageData(rImg, 0, 0);
+
+            const maxAniso = renderer.capabilities.getMaxAnisotropy();
+            const finish = (canvas) => {
+                const t = new THREE.CanvasTexture(canvas);
+                t.wrapS = THREE.RepeatWrapping;
+                t.wrapT = THREE.RepeatWrapping;
+                t.repeat.set(SAND_REPEAT, SAND_REPEAT);
+                // Without anisotropic filtering the sand smears to flat mush at
+                // the grazing angles you spend most of this scene looking from.
+                t.anisotropy = maxAniso;
+                return t;
+            };
+
+            return {
+                map: finish(colCanvas),
+                normalMap: finish(nrmCanvas),
+                roughnessMap: finish(rghCanvas)
+            };
+        }
+
+        const sandMaps = createSandMaps(SAND_TEX);
+
         const desertGroundMaterial = new THREE.MeshStandardMaterial({
-            map: sandTexture,
-            color: 0x9C8B70,
-            roughness: 0.95,
-            metalness: 0.0
+            map: sandMaps.map,
+            normalMap: sandMaps.normalMap,
+            normalScale: new THREE.Vector2(1.0, 1.0),
+            roughnessMap: sandMaps.roughnessMap,
+            roughness: 1.0,
+            metalness: 0.0,
+            vertexColors: true    // macro blotching, set up below
         });
 
-        const groundGeometry = new THREE.PlaneGeometry(COURTYARD_LENGTH + 120, COURTYARD_WIDTH + 120, 32, 32);
+        // Ground is much larger than the old 270x195 slab so the horizon is
+        // fog, not an edge; segment count is high enough to carry dunes.
+        const GROUND_SIZE = 600;
+        const GROUND_SEGS = 200;
+        const groundGeometry = new THREE.PlaneGeometry(
+            GROUND_SIZE, GROUND_SIZE, GROUND_SEGS, GROUND_SEGS
+        );
 
-        // Add very subtle height variation
-        const groundPosArray = groundGeometry.attributes.position.array;
-        for (let i = 0; i < groundPosArray.length; i += 3) {
-            const x = groundPosArray[i];
-            const y = groundPosArray[i + 1];
-            groundPosArray[i + 2] = Math.sin(x / 40) * Math.cos(y / 35) * 0.2;
+        // ---- dune displacement + macro colour variation ----
+        // Long-wavelength relief the texture tile cannot produce, plus broad
+        // tonal patches. Together these are what stop the eye locking onto the
+        // 12x12 repeat.
+        const groundPos = groundGeometry.attributes.position;
+        const groundCols = new Float32Array(groundPos.count * 3);
+
+        // Keep the ground dead flat under the courtyard so nothing pokes
+        // through the hangings, boards, altar or laver; ramp dunes in outside it.
+        const FLAT_X = (COURTYARD_LENGTH / 2) + 25;
+        const FLAT_Z = (COURTYARD_WIDTH / 2) + 25;
+
+        for (let i = 0; i < groundPos.count; i++) {
+            const x = groundPos.getX(i);
+            const y = groundPos.getY(i);   // becomes world Z after the rotation
+
+            const u = (x / GROUND_SIZE) + 0.5;
+            const v = (y / GROUND_SIZE) + 0.5;
+
+            // Distance from the tabernacle footprint, 0 inside -> 1 well outside.
+            const rx = Math.abs(x) / FLAT_X;
+            const rz = Math.abs(y) / FLAT_Z;
+            const r = Math.max(rx, rz);
+            const t = Math.max(0, Math.min(1, (r - 1.0) / 0.9));
+            const mask = t * t * (3 - 2 * t);
+
+            const dunes = (fbm(u, v, 2, 4, 3001) - 0.5) * 2;   // [-1,1]
+            const swell = (fbm(u, v, 5, 3, 4002) - 0.5) * 2;
+            groundPos.setZ(i, (dunes * 2.6 + swell * 0.7) * mask);
+
+            // Macro tone: broad pale/dark drifts at a wavelength far longer
+            // than one texture tile.
+            const macro = fbm(u, v, 3, 3, 5003);
+            const tint = 0.88 + macro * 0.24;
+            groundCols[i * 3]     = tint;
+            groundCols[i * 3 + 1] = tint * (0.985 + macro * 0.03);
+            groundCols[i * 3 + 2] = tint * (0.95 + macro * 0.06);
         }
-        groundGeometry.attributes.position.needsUpdate = true;
+        groundPos.needsUpdate = true;
+        groundGeometry.setAttribute('color', new THREE.BufferAttribute(groundCols, 3));
         groundGeometry.computeVertexNormals();
 
         const ground = new THREE.Mesh(groundGeometry, desertGroundMaterial);
