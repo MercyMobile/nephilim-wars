@@ -474,9 +474,31 @@
         // give weave TYPE and technique, not thread counts per cm — I searched and
         // found none. Family sourced, values mine, same split as the dyes.
         // ================================================================
+        // PHYSICAL SCALE (Cisco's design, 2026-07-27): one bitmap represents exactly ONE
+        // CUBIT SQUARE of real cloth, at a fixed thread pitch. Every surface then tiles that
+        // one bitmap by its TRUE size in cubits, so a 20-cubit gate and a 10-cubit veil are
+        // woven at identical thread density — the way one loom and one weaver would produce
+        // them. Threads land fine enough that at viewing distance the four yarns blend into a
+        // single shot colour and you cannot pick out stripes; up close the weave is there.
+        //
+        // [TEXT] The dimensions are given, so we do not have to invent them:
+        //   Ex 26:2   each curtain 28 x 4 cubits      Ex 26:8   goats' hair 30 x 4 cubits
+        //   Ex 27:16  the gate screen is 20 cubits    Ex 27:18  the court is 5 cubits high
+        //   The tent and the veil are 10 cubits across.
+        //
+        // ! ASSUMPTION - Claude: THREADS_PER_CUBIT is mine. I searched the Timna papers for
+        // thread counts per cm and found none — they give weave TYPE ("densely packed
+        // weft-faced tabby", "thin threads"), not density. 240 picks to the cubit is chosen so
+        // the yarns blend at distance and resolve when you lean in. Not evidence.
+        const THREADS_PER_CUBIT = 480;   // doubled 2026-07-27 at Cisco's call
+        // Tile resolution must keep up: at 480 picks in a 512px tile each thread is ~1.07px
+        // and the rib profile cannot resolve, so cubit-mode tiles render at 1024.
+
         function makeFabricMaps(opts) {
-            const size = opts.size || 512;
-            const ribs = opts.ribs || 90;          // weft ribs across the tile
+            const size = opts.size || (opts.cubits ? 1024 : 512);
+            // cubit-scaled mode: tile = 1 cubit, picks = THREADS_PER_CUBIT
+            const ribs = opts.cubits ? (opts.threadsPerCubit || THREADS_PER_CUBIT)
+                                     : (opts.ribs || 90);          // weft ribs across the tile
             const warpShow = opts.warpShow || 0.18; // how much warp peeks through
             const fuzz = opts.fuzz || 0.0;          // wool/goat hair fibre halo
             const slub = opts.slub || 0.0;          // irregular thick threads
@@ -501,15 +523,42 @@
                 const v = y / size;
                 // WEFT-FACED TABBY: the weft rib is the dominant relief, running
                 // horizontally. Each rib is a rounded ridge of thread.
-                const ribPos = (v * ribs) % 1;
-                const ribProfile = Math.sin(ribPos * Math.PI);          // 0 at gap, 1 at crown
+                // MICRO RIPPLE — a real pick is not a ruler-straight line; it wanders a
+                // fraction of its own width as it passes the warp. Without this the cloth
+                // reads as printed bands however fine you make them.
+                const rippleAmt = opts.ripple || 0;
+                const ripple = rippleAmt
+                    ? (Math.sin(v * ribs * 0.37 + 11.0) * 0.5 + hx(Math.floor(v * ribs), 5, 17) - 0.5) * rippleAmt
+                    : 0;
+                const ribPos = ((v * ribs) + ripple) % 1;
+                let ribProfile = Math.sin(Math.abs(ribPos) * Math.PI);  // 0 at gap, 1 at crown
+                // THREAD EDGE — Cisco's "half-black line": each pick carries a hard shadow on
+                // ONE side where it tucks under its neighbour. Symmetric shading reads as a
+                // stripe; an asymmetric dark edge reads as a thread lying on another thread.
+                if (opts.threadEdge) {
+                    const e = opts.threadEdge;
+                    if (ribPos < 0.16) ribProfile -= e * (1 - ribPos / 0.16);
+                }
                 const ribRow = Math.floor(v * ribs);
                 // Plied thread: each weft pick varies slightly in thickness.
                 const pick = 0.85 + hx(ribRow, 0, 31) * 0.3 + (slub ? (hx(ribRow,7,91) > 0.94 ? slub : 0) : 0);
 
-                // pick the band colour for this weft row (colour changes on the weft)
+                // Colour of this weft pick.
+                //  bands[]      — solid blocks (kept for anything that genuinely is banded)
+                //  weftColors[] — MA'ASEH ROQEM. [SOURCED] Ex 26:36 and 27:16 both call the
+                //    screens  מעשׂה רקם . Strong's H7551 raqam = "to VARIEGATE COLOUR, that is,
+                //    embroider"; H7553 riqmah = "variegation of colour ... DIVERS COLOURS".
+                //    So the four yarns are INTERMINGLED, not laid in four fat stripes. In a
+                //    weft-faced tabby each pick shows as one fine horizontal line of its own
+                //    yarn, so cycling the yarn per pick is both what the word says and what
+                //    the loom would actually produce.
                 let col = baseRGB;
-                if (bands) {
+                if (opts.weftColors) {
+                    const wc = opts.weftColors;
+                    // irregular but repeating yarn order — a weaver's sequence, not random noise
+                    const pickIdx = (ribRow * 3 + Math.floor(hx(ribRow, 3, 55) * 2.99)) % wc.length;
+                    col = hex2rgb(wc[pickIdx]);
+                } else if (bands) {
                     for (const b of bands) { if (v >= b.from && v < b.to) { col = hex2rgb(b.color); break; } }
                 }
 
@@ -530,6 +579,25 @@
                     cd[i+2] = Math.max(0, Math.min(255, col[2] * lit * fibre));
                     cd[i+3] = 255;
                 }
+            }
+            // VERTICAL WEAVE (opts.vertical): transpose the finished maps so the picks run
+            // top-to-bottom instead of left-to-right.
+            // ! ASSUMPTION - Claude, 2026-07-27: I have NO textual reason for either
+            // orientation. My earlier horizontal default came from the Timna line about
+            // colour changing on "the weft (horizontal) threads" — but that describes cloth
+            // ON THE LOOM, not how it hung once made. Nothing I have read says which way
+            // these curtains were oriented when hung. This is a look, not a finding.
+            if (opts.vertical) {
+                const t = new Uint8ClampedArray(cd.length);
+                for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+                    const src = (y * size + x) * 4, dst = (x * size + (size - 1 - y)) * 4;
+                    t[dst] = cd[src]; t[dst+1] = cd[src+1]; t[dst+2] = cd[src+2]; t[dst+3] = 255;
+                }
+                cd.set(t);
+                const th = new Float32Array(hgt.length);
+                for (let y = 0; y < size; y++) for (let x = 0; x < size; x++)
+                    th[x * size + (size - 1 - y)] = hgt[y * size + x];
+                hgt.set(th);
             }
             cx.putImageData(cimg, 0, 0);
 
@@ -555,7 +623,16 @@
             const aniso = renderer.capabilities.getMaxAnisotropy();
             const mk = (c) => { const t = new THREE.CanvasTexture(c);
                 t.wrapS = t.wrapT = THREE.RepeatWrapping;
-                t.repeat.set(opts.repeatU || 4, opts.repeatV || 4);
+                // In cubit mode the repeat IS the surface's real size in cubits, so thread
+                // pitch is identical on every piece of cloth in the scene.
+                if (opts.cubits) {
+                    // tileCubits < 1 makes the bitmap cover a FRACTION of a cubit, so the same
+                    // 1024px tile holds the same picks over less cloth = higher thread density
+                    // for no extra texture memory. Repeat scales up to compensate.
+                    const tc = opts.tileCubits || 1;
+                    t.repeat.set(opts.cubits[0] / tc, opts.cubits[1] / tc);
+                }
+                else t.repeat.set(opts.repeatU || 4, opts.repeatV || 4);
                 t.anisotropy = aniso; return t; };
             return { map: mk(cCan), normalMap: mk(nCan), roughnessMap: mk(rCan) };
         }
@@ -564,8 +641,10 @@
         // [TEXT] Ex 26:1, 27:9 — "fine twisted linen". Fine, densely packed, evenly woven:
         // the Timna analysis calls the low fault rate "the mark of an experienced weaver",
         // so this is regular cloth, not rustic.
-        const linenFab = makeFabricMaps({ base: LINEN_WHITE, ribs:130, warpShow:0.26, fuzz:0.05,
-            rough:[0.68,0.88], normalStrength:2.6, repeatU:8, repeatV:8 });
+        // [TEXT] Ex 27:9,18 — the court hangings are fine twisted linen, 5 cubits high.
+        // Woven at the same thread pitch as every other cloth in the scene.
+        const linenFab = makeFabricMaps({ base: LINEN_WHITE, cubits: [8, 5], size: 1024,
+            warpShow:0.26, fuzz:0.05, rough:[0.68,0.88], normalStrength:2.6 });
         const linenMaterial = new THREE.MeshStandardMaterial({
             map: linenFab.map, normalMap: linenFab.normalMap, roughnessMap: linenFab.roughnessMap,
             side: THREE.DoubleSide,
@@ -581,11 +660,41 @@
         // scarlet it used (tola'at shani) belongs to the GATE CURTAIN in v16, not the ground.
         // Do not re-add it. Where the text is silent, the silence is data.
         // Tent covering materials - layered colors
-        // [TEXT] Ex 26:14 — "a covering of fine leather above". Not woven, so this uses
-        // the fabric generator in a grain mode: no warp showing, very fine relief, heavy
-        // fibre noise. An approximation of hide grain with the tools at hand.
-        // ! ASSUMPTION — Claude: colour and grain are mine; the text says only "fine leather".
-        const badgerFab = makeFabricMaps({ base:'#5A4F45', ribs:210, warpShow:0.02, fuzz:0.34,
+        // ================================================================
+        // THE OUTERMOST COVERING — Ex 26:14, the taḥash question
+        //
+        // [HEBREW] WLC and the Aleppo Codex both read  ערת תחשׁים  (ʿorot teḥashim).
+        // The Samaritan Pentateuch carries the same word. The Dead Sea Scrolls
+        // variant module preserves nothing at this verse.
+        //
+        // The witnesses do NOT agree on what taḥash means:
+        //   LXX (Greek)   δερματα ὑακίνθινα
+        //   Vulgate       de ianthinis pellibus
+        //   KJV  (1611)   "badgers' skins"            — an ANIMAL
+        //   NASB          "fine leather"              — a QUALITY
+        //   Strong's H8476 "probably a species of antelope: - badger" (it hedges too)
+        //
+        // The Greek is decisive for us, and it is checkable rather than asserted:
+        // in Ex 26:1 the LXX renders tekhelet (תכלת) as ὑάκινθος, and in 26:14 it
+        // renders taḥash with ὑακίνθινος — the adjective of that SAME root. Strong's
+        // gives G5192 ὑάκινθος as "some gem of a deep blue color" and G5191
+        // ὑακίνθινος as "hyacinthine ... i.e. DEEP BLUE". So the Greek translators
+        // understood this covering to be the same deep blue as the tekhelet yarn —
+        // not hide, and not a grade of leather.
+        //
+        // Cisco's rule, 2026-07-27: "we give credence to the oldest sources."
+        // The LXX and the Vulgate outrank 1611 and 1971 here, so this layer is BLUE.
+        // The word recurs 13 times across Exodus and Numbers; this is not a one-off.
+        //
+        // ! ASSUMPTION — Claude: the exact hex is mine. "Deep blue" is sourced; this
+        // particular deep blue is art direction, as with the dyes.
+        // ! NOT VERIFIED — Claude: I have no Latin lexicon installed, so I have NOT
+        // checked what "ianthinis" means. It is quoted, not translated. Do not lean
+        // on the Vulgate line until someone looks it up.
+        // NOTE: the variable is still named badgerSkin* — a fossil of the KJV reading
+        // left in place only to avoid a wide rename; the model no longer follows it.
+        // ================================================================
+        const badgerFab = makeFabricMaps({ base:'#2A3566', ribs:210, warpShow:0.02, fuzz:0.34,
             rough:[0.52,0.78], normalStrength:2.2, repeatU:6, repeatV:6 });
         const badgerSkinMaterial = new THREE.MeshStandardMaterial({
             map: badgerFab.map, normalMap: badgerFab.normalMap, roughnessMap: badgerFab.roughnessMap,
@@ -610,8 +719,11 @@
         // strong fibre halo. Was 0x3D3D3D flat with no maps at all.
         // ! ASSUMPTION — Claude: the dark brown-black colour and the coarseness are mine. The
         // text names the fibre, not the shade.
-        const goatFab = makeFabricMaps({ base:'#2F2822', ribs:52, warpShow:0.22, fuzz:0.26,
-            slub:0.45, rough:[0.80,0.96], normalStrength:4.6, repeatU:5, repeatV:5 });
+        // [TEXT] Ex 26:8 — each goats' hair curtain is 30 x 4 cubits. Coarser yarn than the
+        // linen, so a third of the thread pitch, but still on the one cubit-scaled system.
+        const goatFab = makeFabricMaps({ base:'#2F2822', cubits:[8, 8], size: 1024,
+            threadsPerCubit: 80,
+            warpShow:0.22, fuzz:0.26, slub:0.45, rough:[0.80,0.96], normalStrength:4.6 });
         const goatsHairMaterial = new THREE.MeshStandardMaterial({
             map: goatFab.map, normalMap: goatFab.normalMap, roughnessMap: goatFab.roughnessMap,
             roughness: 1.0, metalness: 0.0,
@@ -1534,11 +1646,34 @@
         }
 
         const gateGeo = new THREE.PlaneGeometry(gateWidth, COURTYARD_HEIGHT);
-        const gateTexture = createGateCurtainTexture();
+        // [SOURCED] Ex 27:16 / 26:36 — both screens are  מעשׂה רקם  (ma'aseh roqem).
+        // Strong's H7551 raqam: "to VARIEGATE COLOUR, that is, embroider"; H7553 riqmah:
+        // "variegation of colour ... DIVERS COLOURS ... (on both sides)". The four yarns
+        // are INTERMINGLED. The old texture drew four fat bands, which is the opposite of
+        // what the word says and looks nothing like a loom. Rebuilt 2026-07-27 as a
+        // weft-faced tabby whose picks cycle through the four yarns.
+        const gateFab = makeFabricMaps({
+            // Yarn order. The text lists the dyed yarns FIRST and the linen last
+            // (תכלת וארגמן ותולעת שני ושש משזר), and names four materials, not four bands.
+            // Linen is one pick in four here so the dyed yarns carry the cloth; at one in two
+            // the whole screen greyed out (observed 2026-07-27).
+            // ! ASSUMPTION - Claude: the RATIO is mine. The text gives no proportions.
+            weftColors: [DYE_TEKHELET, DYE_ARGAMAN, DYE_SHANI, LINEN_WHITE],
+            // [TEXT] Ex 27:16 the gate is TWENTY cubits; Ex 27:18 the court is FIVE high.
+            // The gate is the piece you stand in front of, so it gets the finest weave in the
+            // scene: the tile covers HALF a cubit, so 480 picks land in half the cloth =
+            // 960 threads per cubit, at no extra texture cost.
+            // ! ASSUMPTION - Claude: 960/cubit, the 0.55 thread edge and the 0.30 ripple are
+            // all mine, tuned by eye to Cisco's brief ("fine textile, not coloured bands").
+            // No source gives thread density; the Timna papers give weave type only.
+            cubits: [20, 5], tileCubits: 0.5, size: 1024,
+            threadEdge: 0.55, ripple: 0.30,
+            warpShow: 0.20, fuzz: 0.09, rough: [0.66, 0.86], normalStrength: 3.4, vertical: true
+        });
         const gateMaterial = new THREE.MeshStandardMaterial({
-            map: gateTexture,
+            map: gateFab.map, normalMap: gateFab.normalMap, roughnessMap: gateFab.roughnessMap,
             side: THREE.DoubleSide,
-            roughness: 0.75,
+            roughness: 1.0,
             metalness: 0.0
         });
         const gateCurtain = new THREE.Mesh(gateGeo, gateMaterial);
@@ -2483,13 +2618,23 @@
         }
 
         const entranceGeo = new THREE.PlaneGeometry(TENT_WIDTH - 1, TENT_HEIGHT - 1);
-        const entranceTexture = createEntranceScreenTexture();
+        // Same ma'aseh roqem as the courtyard gate (Ex 26:36) — see the note there.
+        const entranceFab = makeFabricMaps({
+            // Yarn order. The text lists the dyed yarns FIRST and the linen last
+            // (תכלת וארגמן ותולעת שני ושש משזר), and names four materials, not four bands.
+            // Linen is one pick in four here so the dyed yarns carry the cloth; at one in two
+            // the whole screen greyed out (observed 2026-07-27).
+            // ! ASSUMPTION - Claude: the RATIO is mine. The text gives no proportions.
+            weftColors: [DYE_TEKHELET, DYE_ARGAMAN, DYE_SHANI, LINEN_WHITE],
+            // [TEXT] the tent is 10 cubits across (Ex 26:16 boards, 26:22-23) and 10 high.
+            cubits: [10, 10], size: 1024,
+            warpShow: 0.20, fuzz: 0.09, rough: [0.66, 0.86], normalStrength: 3.0, vertical: true
+        });
         const entranceMaterial = new THREE.MeshStandardMaterial({
-            map: entranceTexture,
+            map: entranceFab.map, normalMap: entranceFab.normalMap, roughnessMap: entranceFab.roughnessMap,
             side: THREE.DoubleSide,
-            transparent: true,
-            opacity: 0.75,
-            roughness: 0.8
+            roughness: 1.0,
+            metalness: 0.0
         });
         const entranceCurtain = new THREE.Mesh(entranceGeo, entranceMaterial);
         entranceCurtain.position.set(0, TENT_HEIGHT / 2, TENT_LENGTH / 2 + 0.3); // Align with pillars
