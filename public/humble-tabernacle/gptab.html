@@ -259,7 +259,7 @@
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x87CEEB); // Sky blue
-        scene.fog = new THREE.Fog(0x87CEEB, 100, 300);
+        scene.fog = new THREE.Fog(0x87CEEB, 180, 340);  // was 100,300 - mid-field was bleached
 
         const camera = new THREE.PerspectiveCamera(
             60,
@@ -296,10 +296,10 @@
         // LIGHTING
         // ================================================================
 
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.45);  // was 0.6 - blew out pale sand
         scene.add(ambientLight);
 
-        const sunLight = new THREE.DirectionalLight(0xfff4e6, 1.0);
+        const sunLight = new THREE.DirectionalLight(0xfff4e6, 0.85);  // was 1.0 - blew out pale sand
         sunLight.position.set(50, 80, 50);
         sunLight.castShadow = true;
         sunLight.shadow.camera.left = -80;
@@ -414,13 +414,12 @@
             transparent: false
         });
 
-        // Red carpet material
-        const redCarpetMaterial = new THREE.MeshStandardMaterial({
-            color: 0x8B0000,
-            roughness: 0.9,
-            metalness: 0.0
-        });
-
+        // NOTE: a red ceremonial runner/carpet from the gate to the altar was removed
+        // 2026-07-26. Exodus 27:9-19 (NASB) specifies the courtyard completely - hangings,
+        // pillars, bases, hooks, bands, the woven gate curtain, pegs - and closes with a
+        // completeness clause in v19. There is NO floor covering or path in the text. The
+        // scarlet it used (tola'at shani) belongs to the GATE CURTAIN in v16, not the ground.
+        // Do not re-add it. Where the text is silent, the silence is data.
         // Tent covering materials - layered colors
         const badgerSkinMaterial = new THREE.MeshStandardMaterial({
             color: 0x4A4A4A,
@@ -533,10 +532,13 @@
         // ================================================================
 
         // ! ASSUMPTION - Claude, not verified. Every numeric constant in this
-        // block (sand RGB palette, ripple wave numbers 18/7, NORMAL_STRENGTH,
-        // roughness 0.90-1.00, dune amplitude 2.6, SAND_REPEAT 12) is an
-        // art-direction value I chose by eye. None of it is measured from
-        // Sinai sand, photogrammetry, or any cited reference.
+        // block (sand RGB palette, ripple wave numbers, NORMAL_STRENGTH,
+        // normalScale, roughness range, dune amplitude, SAND_REPEAT, GROUND_SIZE)
+        // is an art-direction value I chose by eye. None of it is measured from
+        // Sinai sand, photogrammetry, or any cited reference. The 2026-07-26
+        // anti-shimmer pass also changed SCENE-WIDE settings - AmbientLight
+        // 0.6->0.45, DirectionalLight 1.0->0.85, Fog 100/300->180/340 - which
+        // affect the tent, hangings and furnishings too, not just the ground.
         //
         // ! ASSUMPTION - Claude, not verified. The comments below that assert
         // how real sand behaves - "Sinai sand is a pale warm tan", "real
@@ -601,7 +603,7 @@
         const NORMAL_Y_SIGN = 1;
 
         const SAND_TEX = 1024;          // texels per tile
-        const SAND_REPEAT = 12;         // tiles across the ground plane
+        const SAND_REPEAT = 15;         // tiles across the ground plane
 
         /**
          * Builds colour + normal + roughness maps for desert sand from a
@@ -631,16 +633,19 @@
                     const rippleMask = Math.min(1, Math.max(0,
                         (fbm(u, v, 3, 3, 133) - 0.25) * 2.0));
 
-                    // Grain: coarse clumping plus per-texel scatter. Indexing the
-                    // scatter by integer texel coords makes it tile for free.
-                    const clump = fbm(u, v, 48, 2, 211) - 0.5;
-                    const speck = sandHash(x, y, 909) - 0.5;
+                    // Grain: coarse clumping only.
+                    // NOTE: an earlier version added per-texel scatter here
+                    // (sandHash(x,y)). Single-texel detail in a HEIGHT field
+                    // becomes single-texel detail in the NORMAL map, and normals
+                    // do not average linearly, so mipmapping cannot fix it - it
+                    // shimmered into moire at middle distance. Removed, and the
+                    // clump frequency dropped from 48 to 24, for the same reason.
+                    const clump = fbm(u, v, 24, 2, 211) - 0.5;
 
                     h[y * size + x] =
                         drift * 0.55 +
                         ripple * rippleMask * 0.26 +
-                        clump * 0.13 +
-                        speck * 0.06;
+                        clump * 0.10;
                 }
             }
 
@@ -686,9 +691,12 @@
             const cImg = cctx.createImageData(size, size);
             const cData = cImg.data;
 
-            const SAND_PALE = [216, 194, 158];
-            const SAND_DEEP = [166, 139, 104];
-            const SAND_WARM = [199, 160, 118];
+            // Darkened from the first pass (was 216/194/158, 166/139/104,
+            // 199/160/118). Against ambient 0.6 + sun 1.0 that palette clipped
+            // to near-white across the whole mid-field - "harsh".
+            const SAND_PALE = [198, 176, 142];
+            const SAND_DEEP = [150, 125,  95];
+            const SAND_WARM = [182, 146, 110];
 
             for (let y = 0; y < size; y++) {
                 for (let x = 0; x < size; x++) {
@@ -712,11 +720,11 @@
                     // Crests catch light, troughs hold shadow (cheap baked cavity
                     // AO - it survives even when the sun is high and flat).
                     const hv = at(x, y);
-                    const shade = 0.80 + hv * 0.34;
+                    const shade = 0.84 + hv * 0.24;   // contrast reduced from 0.80+0.34 (shimmer)
                     r *= shade; g *= shade; b *= shade;
 
                     // Fine sparkle from quartz grains.
-                    const glint = (sandHash(x, y, 1313) - 0.5) * 14;
+                    const glint = (sandHash(x, y, 1313) - 0.5) * 4;    // was 14 - single-texel, aliased
                     r += glint; g += glint * 0.92; b += glint * 0.78;
 
                     cData[i]     = Math.max(0, Math.min(255, r));
@@ -733,7 +741,7 @@
             const nctx = nrmCanvas.getContext('2d');
             const nImg = nctx.createImageData(size, size);
             const nData = nImg.data;
-            const NORMAL_STRENGTH = 26.0;   // slope gain; higher = deeper relief
+            const NORMAL_STRENGTH = 13.0;   // was 26.0 - halved; steep normals were the main moire source
 
             for (let y = 0; y < size; y++) {
                 for (let x = 0; x < size; x++) {
@@ -793,7 +801,7 @@
         const desertGroundMaterial = new THREE.MeshStandardMaterial({
             map: sandMaps.map,
             normalMap: sandMaps.normalMap,
-            normalScale: new THREE.Vector2(1.0, 1.0),
+            normalScale: new THREE.Vector2(0.85, 0.85),
             roughnessMap: sandMaps.roughnessMap,
             roughness: 1.0,
             metalness: 0.0,
@@ -802,7 +810,7 @@
 
         // Ground is much larger than the old 270x195 slab so the horizon is
         // fog, not an edge; segment count is high enough to carry dunes.
-        const GROUND_SIZE = 600;
+        const GROUND_SIZE = 900;
         const GROUND_SEGS = 200;
         const groundGeometry = new THREE.PlaneGeometry(
             GROUND_SIZE, GROUND_SIZE, GROUND_SEGS, GROUND_SEGS
@@ -1364,101 +1372,6 @@
         courtyardGroup.add(gateCurtain);
 
         scene.add(courtyardGroup);
-
-        // ================================================================
-        // WOVEN RUNNER/CARPET - Masterfully crafted ceremonial path
-        // Deep scarlet runner - tola'at shani (kermes insect dye)
-        // ================================================================
-
-        function createCeremonialRunnerTexture() {
-            const canvas = document.createElement('canvas');
-            const width = 512;
-            const height = 2048;
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext('2d');
-
-            // True tola'at shani - deep crimson scarlet from kermes insects
-            // Darker, richer than modern "red" - more blood/wine colored
-            ctx.fillStyle = '#6B1C1C';
-            ctx.fillRect(0, 0, width, height);
-
-            // Add woven texture
-            const imageData = ctx.getImageData(0, 0, width, height);
-            const data = imageData.data;
-
-            for (let y = 0; y < height; y++) {
-                for (let x = 0; x < width; x++) {
-                    const i = (y * width + x) * 4;
-
-                    // Woven fabric texture
-                    const warpThread = Math.sin(x * Math.PI / 1.5) * 0.5 + 0.5;
-                    const weftThread = Math.sin(y * Math.PI / 1.5) * 0.5 + 0.5;
-                    const weavePattern = (warpThread * weftThread) * 10;
-
-                    // Subtle variation
-                    const colorVar = Math.sin(x / 40) * Math.cos(y / 50) * 6;
-                    const grain = (Math.random() - 0.5) * 8;
-
-                    const variation = weavePattern + colorVar + grain;
-
-                    // Keep it in deep scarlet range
-                    data[i] = Math.min(140, Math.max(80, data[i] + variation));
-                    data[i + 1] = Math.min(50, Math.max(15, data[i + 1] + variation * 0.2));
-                    data[i + 2] = Math.min(50, Math.max(15, data[i + 2] + variation * 0.2));
-                }
-            }
-            ctx.putImageData(imageData, 0, 0);
-
-            // Simple darker border - no gold/yellow
-            const borderWidth = 20;
-            ctx.fillStyle = '#4A1212';
-            ctx.fillRect(0, 0, borderWidth, height);
-            ctx.fillRect(width - borderWidth, 0, borderWidth, height);
-
-            // Very subtle inner line
-            ctx.fillStyle = '#3A0E0E';
-            ctx.fillRect(borderWidth, 0, 3, height);
-            ctx.fillRect(width - borderWidth - 3, 0, 3, height);
-
-            const texture = new THREE.CanvasTexture(canvas);
-            texture.wrapS = THREE.ClampToEdgeWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(1, 4);
-            return texture;
-        }
-
-        const runnerTexture = createCeremonialRunnerTexture();
-        const runnerMaterial = new THREE.MeshStandardMaterial({
-            map: runnerTexture,
-            roughness: 0.85,
-            metalness: 0.0,
-            side: THREE.DoubleSide
-        });
-
-// --- UPDATED CARPET: WIDER AND FLUSH WITH GATE ---
-// 1. Define the boundaries
-// Using -COURTYARD_LENGTH / 2 puts it exactly on the gate line
-const gateZ = -COURTYARD_LENGTH / 2; 
-const altarBaseZ = (-COURTYARD_LENGTH / 4) + (ALTAR_SIZE / 2); 
-
-// 2. Calculate the exact length
-const carpetLength = Math.abs(altarBaseZ - gateZ); 
-
-// 3. Set width to be just shy of the Altar (Altar is 7.5, so we'll use 7.0)
-const carpetWidth = 7.0; 
-
-// 4. Create and position the geometry
-const carpetGeo = new THREE.PlaneGeometry(carpetWidth, carpetLength);
-const redCarpet = new THREE.Mesh(carpetGeo, runnerMaterial);
-
-// Position at the vertical offset (0.08) and the midpoint of the path
-redCarpet.position.set(0, 0.08, (gateZ + altarBaseZ) / 2);
-
-// 5. Finalize orientation and scene addition
-redCarpet.rotation.x = -Math.PI / 2;
-redCarpet.receiveShadow = true;
-scene.add(redCarpet);
 
         // ================================================================
         // TABERNACLE TENT with visible covering layers
