@@ -536,7 +536,17 @@
         // block (sand RGB palette, ripple wave numbers 18/7, NORMAL_STRENGTH,
         // roughness 0.90-1.00, dune amplitude 2.6, SAND_REPEAT 12) is an
         // art-direction value I chose by eye. None of it is measured from
-        // Sinai sand, photogrammetry, or any cited reference. The three.js
+        // Sinai sand, photogrammetry, or any cited reference.
+        //
+        // ! ASSUMPTION - Claude, not verified. The comments below that assert
+        // how real sand behaves - "Sinai sand is a pale warm tan", "real
+        // ripples have rounded troughs, crisper crests", "tone and ripples are
+        // only loosely correlated", "wind-packed troughs are smoother",
+        // "ripples die out in sheltered hollows" - are my rationale for the
+        // chosen look, NOT sourced from sedimentology, field photos, or any
+        // artifact I read. Treat them as art direction, not fact.
+        //
+        // The three.js
         // API usage below IS verified - against the r128 build this page
         // loads from cdnjs and against mrdoob/three.js tag r128 source
         // (Material.js: vertexColors is boolean; MeshStandardMaterial.js:
