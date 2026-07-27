@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 const TabernacleViewer = () => {
   const [activeView, setActiveView] = useState('sanctuary');
   const [is3DFullscreen, setIs3DFullscreen] = useState(false);
+  const [openStone, setOpenStone] = useState(null);   // index of the clicked stone, or null
   const fullscreenContainerRef = useRef(null);
 
   // Handle fullscreen state changes from browser
@@ -66,19 +67,146 @@ const TabernacleViewer = () => {
 
   // --- EDUCATIONAL CONTENT ---
   const breastplateStones = [
-    { name: "Sardius", tribe: "Reuben", gradient: "radial-gradient(ellipse at 30% 20%, #ff6b6b 0%, #dc2626 40%, #7f1d1d 100%)", glow: "rgba(220, 38, 38, 0.6)", meaning: "The Firstborn" },
-    { name: "Topaz", tribe: "Simeon", gradient: "radial-gradient(ellipse at 30% 20%, #fef08a 0%, #eab308 40%, #a16207 100%)", glow: "rgba(234, 179, 8, 0.6)", meaning: "Hearing" },
-    { name: "Carbuncle", tribe: "Levi", gradient: "radial-gradient(ellipse at 30% 20%, #f87171 0%, #991b1b 40%, #450a0a 100%)", glow: "rgba(153, 27, 27, 0.5)", meaning: "Joined" },
-    { name: "Emerald", tribe: "Judah", gradient: "radial-gradient(ellipse at 30% 20%, #6ee7b7 0%, #059669 40%, #064e3b 100%)", glow: "rgba(5, 150, 105, 0.6)", meaning: "Praise" },
-    { name: "Sapphire", tribe: "Issachar", gradient: "radial-gradient(ellipse at 30% 20%, #93c5fd 0%, #2563eb 40%, #1e3a8a 100%)", glow: "rgba(37, 99, 235, 0.6)", meaning: "Reward" },
-    { name: "Diamond", tribe: "Zebulun", gradient: "radial-gradient(ellipse at 30% 20%, #ffffff 0%, #e2e8f0 30%, #94a3b8 70%, #64748b 100%)", glow: "rgba(255, 255, 255, 0.8)", textDark: true, meaning: "Dwelling" },
-    { name: "Jacinth", tribe: "Dan", gradient: "radial-gradient(ellipse at 30% 20%, #fdba74 0%, #ea580c 40%, #7c2d12 100%)", glow: "rgba(234, 88, 12, 0.6)", meaning: "Judge" },
-    { name: "Agate", tribe: "Naphtali", gradient: "radial-gradient(ellipse at 30% 20%, #d6d3d1 0%, #78716c 40%, #44403c 100%)", glow: "rgba(120, 113, 108, 0.5)", meaning: "Wrestling" },
-    { name: "Amethyst", tribe: "Gad", gradient: "radial-gradient(ellipse at 30% 20%, #c4b5fd 0%, #7c3aed 40%, #4c1d95 100%)", glow: "rgba(124, 58, 237, 0.6)", meaning: "Troop" },
-    { name: "Beryl", tribe: "Asher", gradient: "radial-gradient(ellipse at 30% 20%, #5eead4 0%, #0d9488 40%, #134e4a 100%)", glow: "rgba(13, 148, 136, 0.6)", meaning: "Happy" },
-    { name: "Onyx", tribe: "Joseph", gradient: "radial-gradient(ellipse at 30% 20%, #525252 0%, #171717 40%, #000000 100%)", glow: "rgba(82, 82, 82, 0.4)", meaning: "Adding" },
-    { name: "Jasper", tribe: "Benjamin", gradient: "radial-gradient(ellipse at 30% 20%, #fca5a5 0%, #b91c1c 40%, #450a0a 100%)", glow: "rgba(185, 28, 28, 0.5)", meaning: "Son of Right Hand" }
+    // ================================================================
+    // THE TWELVE STONES — Exodus 28:17-20
+    //
+    // NOT ONE of these twelve identifications is secure, and the page used to
+    // present all twelve as settled. Checked 2026-07-27 against the Hebrew
+    // (Westminster Leningrad Codex), the Septuagint, the Vulgate, the KJV, the
+    // NASB and Strong's, all installed locally.
+    //
+    // Strong's hedges on EVERY stone ("probably", "perhaps", "supposed to be",
+    // "or some other red gem"), and it CONTRADICTS the KJV outright on five:
+    // bareket, nophekh, yahalom, tarshish and shoham. On shevo it offers no
+    // identification at all — just "a gem".
+    //
+    // So the Hebrew is given first, because that is the one thing that is not in
+    // dispute. `hue` is how we DRAW it, and is art direction, not a claim.
+    // ! ASSUMPTION - Claude: every hue below is mine.
+    //
+    // ---- RE-VERIFIED 2026-07-27 against primary texts in docs/scribe-texts ----
+    // heb   12/12 vs bib/tan/exo028.md (pointed Hebrew)          VERIFIED
+    // lxx   12/12 vs bib/sep/exo028.md (Greek)                   VERIFIED
+    // kjv   12/12 vs bib/kjv/exo028.md                           VERIFIED (exact)
+    // nasb  12/12 vs the NASB                                    VERIFIED
+    // vulg  order+substance correct; 7 spellings CORRECTED below
+    //       to match bib/vul/exo028.md
+    // strongs  NOT verified - no lexicon found in the corpus.
+    // meaning  NOT verified - no source checked for any of these. See flag below.
+    //
+    // ---- WHO GETS WHICH STONE IS **NOT** IN EXODUS ----
+    // Ex 28:21 and 39:14 say twelve stones bear twelve names. NEITHER VERSE SAYS
+    // WHICH TRIBE GOES ON WHICH STONE. The pairing below is not biblical.
+    // It matches Pseudo-Philo (bib/bap/bap42.md) exactly, twelve for twelve --
+    // that text's own front matter dates itself late 1st c. CE, but that dating
+    // is one site-editor's line and is NOT independently confirmed.
+    // ! The UI must say "tribe order: Pseudo-Philo, not Exodus". It now does.
+    //
+    // ---- optics / structure: HOW THE MINERAL BEHAVES ----
+    // Added so the render obeys the stone instead of drawing twelve identical
+    // gems. optics = transparent | translucent | opaque.
+    // structure = plain | banded | included | mottled.
+    // ! ASSUMPTION - Claude: these follow the BEST-ATTESTED reading of each
+    // ! stone. Where the witnesses split, `disputed` says so and the panel shows
+    // ! it. None of this is a claim that the identification is settled.
+    //
+    // Ex 28:21 calls them PITTUCHEI CHOTAM, "engravings of a signet", and 28:20
+    // MESHUBBATSIM ZAHAV, "set in gold filigree". BOTH read in the pointed
+    // Hebrew, bib/tan/exo028.md. Those two are TEXT.
+    // ! ASSUMPTION - Claude: drawing them as polished DOMES follows from those
+    // ! verses only by MY inference (a signet has to take an engraved name).
+    // ! I have NOT sourced anything about ancient lapidary technique, and an
+    // ! earlier claim of mine that faceted cuts are anachronistic was retracted
+    // ! as unsourced. The dome is art direction, not an argument.
+    // ================================================================
+    // vulg spellings below CORRECTED 2026-07-27 to bib/vul/exo028.md (7 changed).
+    // optics/struct/split: ! ASSUMPTION - Claude, per header note.
+    { heb: "odem",     strongs: "H124",  tribe: "Reuben",   meaning: "The Firstborn",
+      lxx: "sardion",     vulg: "sardius",     kjv: "Sardius",   nasb: "Ruby",
+      note: '"redness ... the ruby, garnet OR SOME OTHER RED GEM"',
+      optics: "translucent", struct: "plain", split: false,
+      hue: "#c0392b", deep: "#5e1512", lite: "#ff8a7a" },
+    { heb: "pitdah",   strongs: "H6357", tribe: "Simeon",   meaning: "Hearing",
+      lxx: "topazion",    vulg: "topazius",    kjv: "Topaz",     nasb: "Topaz",
+      note: '"a gem, PROBABLY the topaz"',
+      optics: "transparent", struct: "plain", split: false,
+      hue: "#d4a017", deep: "#6b4a06", lite: "#ffe58a" },
+    { heb: "bareket",  strongs: "H1304", tribe: "Levi",     meaning: "Joined",
+      lxx: "smaragdos",   vulg: "smaragdus",   kjv: "Carbuncle", nasb: "Emerald",
+      note: '"a gem (as FLASHING), PERHAPS the emerald" — KJV says carbuncle, LXX and Vulgate say emerald',
+      optics: "transparent", struct: "included", split: true,
+      hue: "#1f9c6b", deep: "#083d29", lite: "#7dffcb" },
+    { heb: "nophekh",  strongs: "H5306", tribe: "Judah",    meaning: "Praise",
+      lxx: "anthrax",     vulg: "carbunculus", kjv: "Emerald",   nasb: "Turquoise",
+      note: '"PROBABLY THE GARNET" — three witnesses, three different stones',
+      optics: "transparent", struct: "plain", split: true,
+      hue: "#b0324a", deep: "#4a0d1c", lite: "#ff8fa3" },
+    { heb: "sappir",   strongs: "H5601", tribe: "Issachar", meaning: "Reward",
+      lxx: "sapphiros",   vulg: "sapphirus",   kjv: "Sapphire",  nasb: "Sapphire",
+      note: '"PROBABLY the sapphire" — the one all four witnesses agree on',
+      optics: "transparent", struct: "plain", split: false,
+      hue: "#2457c5", deep: "#0b1f5e", lite: "#8fb4ff" },
+    { heb: "yahalom",  strongs: "H3095", tribe: "Zebulun",  meaning: "Dwelling",
+      lxx: "iaspis",      vulg: "jaspis",      kjv: "Diamond",   nasb: "Diamond",
+      note: '"in the sense of HARDNESS ... PROBABLY ONYX" — LXX and Vulgate both read jasper, not diamond',
+      optics: "transparent", struct: "plain", split: true,
+      hue: "#cfd6dd", deep: "#5b646d", lite: "#ffffff" },
+    { heb: "leshem",   strongs: "H3958", tribe: "Dan",      meaning: "Judge",
+      lxx: "ligyrion",    vulg: "ligurius",    kjv: "Ligure",    nasb: "Jacinth",
+      note: '"of UNCERTAIN meaning; a gem, PERHAPS the jacinth"',
+      optics: "transparent", struct: "plain", split: true,
+      hue: "#d8641c", deep: "#63250a", lite: "#ffb277" },
+    { heb: "shevo",    strongs: "H7618", tribe: "Naphtali", meaning: "Wrestling",
+      lxx: "achates",     vulg: "achates",     kjv: "Agate",     nasb: "Agate",
+      note: 'Strong\'s gives NO identification — only "meaning to flame; a gem"',
+      optics: "translucent", struct: "banded", split: false,
+      hue: "#9a8f86", deep: "#3d3630", lite: "#e8dfd6" },
+    { heb: "achlamah", strongs: "H306",  tribe: "Gad",      meaning: "Troop",
+      lxx: "amethystos",  vulg: "amethystus",  kjv: "Amethyst",  nasb: "Amethyst",
+      note: '"perhaps ... DREAM STONE; a gem, PROBABLY the amethyst"',
+      optics: "transparent", struct: "plain", split: false,
+      hue: "#7c46c9", deep: "#33165e", lite: "#c9a8ff" },
+    { heb: "tarshish", strongs: "H8658", tribe: "Asher",    meaning: "Happy",
+      lxx: "chrysolithos", vulg: "chrysolithus", kjv: "Beryl",   nasb: "Beryl",
+      note: '"a gem, PERHAPS THE TOPAZ" — KJV prints beryl; LXX and Vulgate read chrysolite',
+      optics: "transparent", struct: "plain", split: true,
+      hue: "#17a89a", deep: "#06413c", lite: "#7ff0e4" },
+    { heb: "shoham",   strongs: "H7718", tribe: "Joseph",   meaning: "Adding",
+      lxx: "beryllion",   vulg: "onychinus",   kjv: "Onyx",      nasb: "Onyx",
+      note: '"PROBABLY THE BERYL (from its pale green colour)" — KJV prints onyx',
+      optics: "opaque", struct: "banded", split: true,
+      hue: "#5c5a57", deep: "#171615", lite: "#a8a5a1" },
+    { heb: "yashpeh",  strongs: "H3471", tribe: "Benjamin", meaning: "Son of Right Hand",
+      lxx: "onychion",    vulg: "beryllus",    kjv: "Jasper",    nasb: "Jasper",
+      note: '"SUPPOSED TO BE jasper (from the RESEMBLANCE IN NAME)" — the weakest reason of all twelve',
+      optics: "opaque", struct: "mottled", split: true,
+      hue: "#a8332c", deep: "#41100d", lite: "#f08a80" }
   ];
+
+
+  // ---- HOW A STONE IS DRAWN -------------------------------------------------
+  // Driven by `optics` and `struct` on each entry so the twelve do not all read
+  // as the same gem. Transparent stones get a bright core and deep rim (light
+  // goes through); translucent get a soft waxy subsurface glow; opaque get flat
+  // matte shading and NO internal light.
+  // Form is a CABOCHON -- a polished dome -- because Ex 28:21 calls them
+  // PITTUCHEI CHOTAM, "engravings of a signet" (read in the Hebrew,
+  // bib/tan/exo028.md): a seal-stone has to carry an engraved name.
+  // ! ASSUMPTION - Claude: the gradients/opacities are my art direction.
+  const stoneSurface = (s) => {
+    if (s.optics === 'opaque') return {
+      background: `radial-gradient(ellipse 70% 60% at 36% 28%, ${s.lite}66 0%, ${s.hue} 46%, ${s.deep} 100%)`,
+      boxShadow: `inset 0 -6px 12px -4px rgba(0,0,0,.6), inset 0 4px 8px -3px ${s.lite}33`
+    };
+    if (s.optics === 'translucent') return {
+      background: `radial-gradient(ellipse 62% 52% at 36% 26%, ${s.lite}dd 0%, ${s.hue}f2 42%, ${s.deep}e6 100%)`,
+      boxShadow: `inset 0 -8px 14px -5px rgba(0,0,0,.5), inset 0 5px 12px -3px ${s.lite}77, 0 0 12px -4px ${s.hue}88`
+    };
+    return {   // transparent
+      background: `radial-gradient(ellipse 58% 48% at 37% 25%, #ffffffcc 0%, ${s.lite} 18%, ${s.hue} 52%, ${s.deep} 100%)`,
+      boxShadow: `inset 0 -9px 16px -5px ${s.deep}, inset 0 6px 14px -4px ${s.lite}, 0 0 16px -3px ${s.hue}aa`
+    };
+  };
 
   const garmentData = [
     {
@@ -362,40 +490,115 @@ const TabernacleViewer = () => {
                   <p className="text-stone-400 text-xs mt-1">Twelve stones for twelve tribes, worn over the heart</p>
                 </div>
                 <div className="max-w-sm mx-auto grid grid-cols-3 gap-3 relative">
-                  {breastplateStones.map((stone, i) => (
-                    <div
+                  {breastplateStones.map((stone, i) => {
+                    const open = openStone === i;
+                    return (
+                    <button
                       key={i}
-                      className="aspect-square group relative overflow-hidden flex flex-col items-center justify-center cursor-help transition-transform hover:scale-105"
+                      type="button"
+                      onClick={() => setOpenStone(open ? null : i)}
+                      aria-label={`${stone.tribe} \u2014 ${stone.heb}`}
+                      aria-pressed={open}
+                      className={`aspect-square group relative rounded-lg p-[3px] transition-transform hover:scale-105 focus:outline-none ${open ? 'scale-105 ring-2 ring-gold-400' : ''}`}
                       style={{
-                        background: stone.gradient,
-                        boxShadow: `
-                          inset 0 -8px 12px rgba(0,0,0,0.4),
-                          inset 0 4px 8px rgba(255,255,255,0.25),
-                          0 0 15px ${stone.glow},
-                          0 4px 6px rgba(0,0,0,0.5)
-                        `,
-                        clipPath: 'polygon(8% 0%, 92% 0%, 100% 8%, 100% 92%, 92% 100%, 8% 100%, 0% 92%, 0% 8%)',
-                        border: '1px solid rgba(255,255,255,0.3)'
+                        // GOLD FILIGREE SETTING -- Ex 28:20 MESHUBBATSIM ZAHAV,
+                        // "set in gold filigree", read in the Hebrew (bib/tan/exo028.md).
+                        background: 'linear-gradient(145deg,#f6da85 0%,#bd952f 36%,#7d5f16 63%,#eccb6b 100%)',
+                        boxShadow: '0 2px 7px rgba(0,0,0,.55), inset 0 1px 2px rgba(255,255,255,.55)'
                       }}
                     >
-                      {/* Facet overlays */}
-                      <div className="absolute top-0 left-0 w-1/2 h-1/2 opacity-30" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.6) 0%, transparent 50%)' }} />
-                      <div className="absolute top-0 right-0 w-1/2 h-1/2 opacity-20" style={{ background: 'linear-gradient(225deg, rgba(255,255,255,0.4) 0%, transparent 50%)' }} />
-                      <div className="absolute bottom-0 left-0 right-0 h-1/2 opacity-40" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%)' }} />
-                      <div className="absolute inset-[15%] opacity-20" style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.5) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.3) 100%)', clipPath: 'polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%)' }} />
-                      <div className="absolute top-1 left-1 w-3 h-3 rounded-full opacity-80" style={{ background: 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 60%)' }} />
-                      <div className="absolute top-3 left-4 w-1 h-1 rounded-full opacity-90 bg-white" />
-                      <div className="absolute top-0 left-[10%] right-[10%] h-[2px] opacity-50" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)' }} />
-                      <span className={`text-[7px] font-bold uppercase z-10 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] ${stone.textDark ? 'text-stone-800' : 'text-white/95'}`}>{stone.tribe}</span>
-                      <div className="absolute inset-0 bg-black/85 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity p-2 text-center backdrop-blur-sm">
-                        <span className="text-[9px] text-gold-300 font-bold">{stone.name}</span>
-                        <span className="text-[7px] text-stone-300 mt-1">{stone.meaning}</span>
-                      </div>
-                    </div>
-                  ))}
+                      <span className="block w-full h-full rounded-md relative overflow-hidden flex items-center justify-center"
+                            style={stoneSurface(stone)}>
+
+                        {/* BANDING -- agate/onyx grow in layers */}
+                        {stone.struct === 'banded' && (
+                          <span className="absolute inset-0 pointer-events-none opacity-70" style={{
+                            background: `repeating-linear-gradient(28deg, ${stone.lite}00 0px, ${stone.lite}55 3px, ${stone.deep}66 7px, ${stone.lite}00 11px)`
+                          }} />
+                        )}
+                        {/* INCLUSIONS -- emerald's jardin: fissures, not sparkle */}
+                        {stone.struct === 'included' && (
+                          <span className="absolute inset-0 pointer-events-none opacity-55" style={{
+                            background: `radial-gradient(circle at 62% 38%, ${stone.deep}aa 0 6%, transparent 7%),
+                                         radial-gradient(circle at 33% 66%, ${stone.deep}99 0 4%, transparent 5%),
+                                         linear-gradient(74deg, transparent 44%, ${stone.deep}77 46%, transparent 48%)`
+                          }} />
+                        )}
+                        {/* MOTTLING -- jasper is a patchy, impure stone */}
+                        {stone.struct === 'mottled' && (
+                          <span className="absolute inset-0 pointer-events-none opacity-60" style={{
+                            background: `radial-gradient(ellipse 40% 30% at 25% 30%, ${stone.deep}cc 0%, transparent 60%),
+                                         radial-gradient(ellipse 35% 45% at 72% 62%, ${stone.lite}55 0%, transparent 55%),
+                                         radial-gradient(ellipse 30% 25% at 55% 20%, ${stone.deep}88 0%, transparent 60%)`
+                          }} />
+                        )}
+
+                        {/* wet polish highlight -- one soft dome specular, no faceting */}
+                        <span className="absolute top-[12%] left-[18%] w-[26%] h-[18%] rounded-full pointer-events-none"
+                              style={{ background: 'radial-gradient(ellipse, rgba(255,255,255,.85) 0%, rgba(255,255,255,.25) 45%, transparent 72%)', filter: 'blur(.6px)' }} />
+
+                        {/* the ENGRAVED name -- cut into the stone, not printed on it */}
+                        <span className="relative z-10 text-[7px] font-bold uppercase tracking-wide"
+                              style={{ color: 'rgba(0,0,0,.42)', textShadow: `0 1px 0 ${stone.lite}cc, 0 -1px 1px rgba(0,0,0,.5)` }}>
+                          {stone.tribe}
+                        </span>
+
+                        {/* witnesses disagree on this one */}
+                        {stone.split && (
+                          <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-amber-300/90 ring-1 ring-black/40 pointer-events-none"
+                                title="the ancient witnesses disagree on this stone" />
+                        )}
+
+                        {/* HOVER -- Hebrew first */}
+                        <span className="absolute inset-0 bg-black/88 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity p-1 text-center backdrop-blur-sm">
+                          <span className="text-[10px] text-gold-300 font-bold italic leading-tight">{stone.heb}</span>
+                          <span className="text-[6px] text-stone-300 mt-0.5 leading-tight">LXX {stone.lxx}</span>
+                          <span className="text-[6px] text-stone-400 leading-tight">KJV {stone.kjv} · NASB {stone.nasb}</span>
+                          <span className="text-[6px] text-amber-300/80 mt-0.5">click</span>
+                        </span>
+                      </span>
+                    </button>
+                    );
+                  })}
                 </div>
+
+                {/* CLICKED STONE -- the full record */}
+                {openStone !== null && (() => {
+                  const s = breastplateStones[openStone];
+                  return (
+                    <div className="mt-4 bg-stone-950/80 border border-gold-400/40 rounded-lg p-4 text-left relative">
+                      <button type="button" onClick={() => setOpenStone(null)}
+                              className="absolute top-2 right-3 text-stone-400 hover:text-gold-300 text-sm" aria-label="close">&times;</button>
+                      <div className="flex items-baseline gap-2 flex-wrap">
+                        <span className="text-gold-300 font-bold text-lg italic">{s.heb}</span>
+                        <span className="text-stone-400 text-xs">{s.strongs}</span>
+                        <span className="text-stone-300 text-xs">— {s.tribe}</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-3 text-[11px] text-stone-300">
+                        <div><span className="text-stone-500">Septuagint</span> {s.lxx}</div>
+                        <div><span className="text-stone-500">Vulgate</span> {s.vulg}</div>
+                        <div><span className="text-stone-500">KJV</span> {s.kjv}</div>
+                        <div><span className="text-stone-500">NASB</span> {s.nasb}</div>
+                      </div>
+                      <p className="text-[11px] text-amber-200/80 mt-3 leading-relaxed italic">{s.note}</p>
+                      {s.split && (
+                        <p className="text-[10px] text-amber-300/90 mt-2">
+                          The ancient witnesses do not agree on this stone. What you see is our drawing of the
+                          best-attested reading — not a settled identification.
+                        </p>
+                      )}
+                      <p className="text-[10px] text-stone-500 mt-2 leading-relaxed">
+                        Tribe order follows Pseudo-Philo, not Exodus — Ex 28:21 and 39:14 say twelve stones bore
+                        twelve names, but neither verse says which tribe went on which stone. The meaning given for
+                        the tribe name is unsourced.
+                      </p>
+                    </div>
+                  );
+                })()}
+
                 <p className="text-center text-stone-500 text-[10px] mt-4 italic">
-                  Hover over each stone to see its name and the meaning of the tribe
+                  Hover a stone for its Hebrew name; click it for every witness. A gold dot marks the stones the
+                  ancient sources disagree about.
                 </p>
               </div>
 
