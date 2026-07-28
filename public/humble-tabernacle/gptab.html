@@ -370,94 +370,10 @@
             metalness: 0.1
         });
 
-        // ================================================================
-        // METAL SURFACES — sheet vs cast, because the text distinguishes them
-        //
-        // [SOURCED] Ex 26:29 overlays the boards with gold: Hebrew  תצפה , H6823
-        // tsaphah = "to SHEET OVER (especially with metal): cover, overlay". Gold
-        // laid as a beaten SHEET over acacia — so the surface follows the wood
-        // beneath, carries seams where sheets meet, and is never machine-flat.
-        // [SOURCED] Ex 26:37 "you shall CAST five sockets of bronze" — cast metal,
-        // a different surface: granular, faintly pitted, softer edged.
-        // [SOURCED] H4749 miqshah, "moulded by hammering (repousse)", is the word
-        // used of the LAMPSTAND (Ex 25:31) — NOT of the boards. Our old gold
-        // comment called everything "hand-hammered"; the text does not say that.
-        //
-        // ! ASSUMPTION - Claude: every number below is mine. No source gives sheet
-        // thickness, seam spacing, planish scale or pitting density.
-        // ================================================================
-        function makeMetalMaps(opts) {
-            const size = opts.size || 512;
-            const mode = opts.mode || 'sheet';
-            const hgt = new Float32Array(size * size);
-            const hx = (a, b, sd) => { let h = (a * 374761393 + b * 668265263 + sd * 362437) | 0;
-                h = Math.imul(h ^ (h >>> 13), 1274126177) | 0;
-                return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
-            const vn = (x, y, P, sd) => {
-                const x0 = Math.floor(x), y0 = Math.floor(y), fx = x - x0, fy = y - y0;
-                const ux = fx*fx*(3-2*fx), uy = fy*fy*(3-2*fy);
-                const wx0 = ((x0%P)+P)%P, wy0 = ((y0%P)+P)%P, wx1 = (wx0+1)%P, wy1 = (wy0+1)%P;
-                const a = hx(wx0,wy0,sd), b2 = hx(wx1,wy0,sd), c = hx(wx0,wy1,sd), d = hx(wx1,wy1,sd);
-                const t = a + (b2-a)*ux, bt = c + (d-c)*ux; return t + (bt-t)*uy; };
-
-            for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
-                const u = x/size, v = y/size;
-                let h;
-                if (mode === 'cast') {
-                    // cast: granular skin, occasional pit, no directional structure
-                    h = vn(u*24, v*24, 24, 5) * 0.55 + vn(u*90, v*90, 90, 9) * 0.30;
-                    const pit = hx(x, y, 31);
-                    if (pit > 0.985) h -= 0.55;
-                } else {
-                    // sheet over wood: broad undulation following the substrate, a fine
-                    // planish tooth, and horizontal seams where one sheet laps the next
-                    h = vn(u*6, v*6, 6, 3) * 0.62 + vn(u*40, v*40, 40, 7) * 0.22;
-                    const seam = (v * (opts.seams || 5)) % 1;
-                    if (seam < 0.035) h -= 0.42 * (1 - seam/0.035);
-                    h += (hx(x, y, 77) - 0.5) * 0.05;
-                }
-                hgt[y*size+x] = h;
-            }
-            let lo = Infinity, hi = -Infinity;
-            for (const q of hgt) { if (q<lo) lo=q; if (q>hi) hi=q; }
-            const sp = (hi-lo)||1;
-            for (let i=0;i<hgt.length;i++) hgt[i] = (hgt[i]-lo)/sp;
-
-            const at=(x,y)=>hgt[(((y%size)+size)%size)*size+(((x%size)+size)%size)];
-            const mk=(draw)=>{ const c=document.createElement('canvas'); c.width=c.height=size;
-                const g=c.getContext('2d'), im=g.createImageData(size,size), d=im.data;
-                draw(d); g.putImageData(im,0,0);
-                const t=new THREE.CanvasTexture(c); t.wrapS=t.wrapT=THREE.RepeatWrapping;
-                t.repeat.set(opts.repeat||3, opts.repeat||3);
-                t.anisotropy=renderer.capabilities.getMaxAnisotropy(); return t; };
-
-            const base = opts.base;
-            const map = mk(d=>{ for(let y=0;y<size;y++) for(let x=0;x<size;x++){
-                const i=(y*size+x)*4, lit=0.80+at(x,y)*0.34;
-                d[i]=Math.min(255,base[0]*lit); d[i+1]=Math.min(255,base[1]*lit);
-                d[i+2]=Math.min(255,base[2]*lit); d[i+3]=255; }});
-            const STR = opts.normalStrength || 2.6;
-            const normalMap = mk(d=>{ for(let y=0;y<size;y++) for(let x=0;x<size;x++){
-                const i=(y*size+x)*4;
-                const dx=(at(x+1,y)-at(x-1,y))*0.5*STR, dy=(at(x,y+1)-at(x,y-1))*0.5*STR;
-                const l=Math.sqrt(dx*dx+dy*dy+1);
-                d[i]=(-dx/l*0.5+0.5)*255; d[i+1]=(-dy/l*0.5+0.5)*255; d[i+2]=(1/l*0.5+0.5)*255; d[i+3]=255; }});
-            const rg = opts.rough || [0.22, 0.52];
-            const roughnessMap = mk(d=>{ for(let y=0;y<size;y++) for(let x=0;x<size;x++){
-                const i=(y*size+x)*4, r=rg[0]+(1-at(x,y))*(rg[1]-rg[0]);
-                d[i]=d[i+1]=d[i+2]=Math.min(255,r*255); d[i+3]=255; }});
-            return { map, normalMap, roughnessMap };
-        }
-
-        // CAST bronze — Ex 26:37 "you shall CAST five sockets of bronze"; the courtyard
-        // sockets likewise (27:10-11,17). Granular skin with occasional pitting.
-        const bronzeFab = makeMetalMaps({ mode:'cast', base:[184,115,51], repeat:4,
-            rough:[0.34,0.62], normalStrength:2.2 });
         const bronzeMaterial = new THREE.MeshStandardMaterial({
-            map: bronzeFab.map, normalMap: bronzeFab.normalMap, roughnessMap: bronzeFab.roughnessMap,
             color: 0xB87333,
             metalness: 0.8,
-            roughness: 1.0
+            roughness: 0.4
         });
 
         // Acacia Wood (Shittim wood - reddish hardwood) - base for Ark, Table, Altars
@@ -470,29 +386,17 @@
         // Beaten gold - hand-hammered pure gold as described in Exodus
         // Darker, warmer tone with more texture than polished gold
         // Matches the Ark model's authentic gold appearance
-        // SHEET gold — Ex 26:29, H6823 tsaphah, "to SHEET OVER with metal". Beaten sheet
-        // laid over acacia: broad undulation following the wood, a fine planish tooth, and
-        // seams where one sheet laps the next. NOT "hand-hammered" — that word (H4749
-        // miqshah, repousse) belongs to the lampstand in Ex 25:31, not to the boards.
-        const goldFab = makeMetalMaps({ mode:'sheet', base:[201,162,39], repeat:3, seams:5,
-            rough:[0.18,0.46], normalStrength:2.4 });
         const goldMaterial = new THREE.MeshStandardMaterial({
-            map: goldFab.map, normalMap: goldFab.normalMap, roughnessMap: goldFab.roughnessMap,
-            color: 0xC9A227,
-            metalness: 0.85,
-            roughness: 1.0,
+            color: 0xC9A227,      // Darker, richer gold - less yellow, more antique
+            metalness: 0.85,      // Still metallic but not mirror-like
+            roughness: 0.4,       // Hammered texture, not polished smooth
             envMapIntensity: 0.8
         });
 
-        // CAST silver — the board sockets are cast from the atonement silver (Ex 38:27),
-        // and the veil sockets likewise (26:32). Same cast skin as the bronze, finer.
-        const silverFab = makeMetalMaps({ mode:'cast', base:[192,192,192], repeat:5,
-            rough:[0.20,0.44], normalStrength:1.8 });
         const silverMaterial = new THREE.MeshStandardMaterial({
-            map: silverFab.map, normalMap: silverFab.normalMap, roughnessMap: silverFab.roughnessMap,
             color: 0xC0C0C0,
             metalness: 0.9,
-            roughness: 1.0
+            roughness: 0.2
         });
 
         const woodMaterial = new THREE.MeshStandardMaterial({
@@ -1981,14 +1885,9 @@
         }
 
         const leatherTexture = createLeatherTexture();
-        // [TEXT] Ex 26:14, the taḥash covering. WLC/Aleppo/Samaritan all read  תחשים .
-        // LXX  δερματα ὑακίνθινα  and Vulgate  ianthinis pellibus ; Strong's G5191 gives
-        // that root as "deep blue". LXX uses the SAME root in 26:1 for tekhelet. KJV reads
-        // "badgers' skins", NASB "fine leather", Strong's H8476 hedges "probably antelope".
-        // Cisco's rule: credence to the oldest sources — so this is BLUE, not grey hide.
         const tentCoveringMaterial = new THREE.MeshStandardMaterial({
-            map: badgerFab.map, normalMap: badgerFab.normalMap, roughnessMap: badgerFab.roughnessMap,
-            color: 0xFFFFFF,
+            map: leatherTexture,
+            color: 0xA8A195, // Weathered grey tachash hide (Exodus 26:14)
             roughness: 0.95, // Matte, sun-bleached skin
             metalness: 0.0,
             side: THREE.DoubleSide
@@ -2174,10 +2073,8 @@
         // Layer 1: Fine twined linen with cherubim (blue, purple, scarlet woven in)
         // Natural linen base with earthy, muted dye colors - ancient Near Eastern palette
         const linenCeilingTexture = createFineLinenCeilingTexture();
-        // [TEXT] Ex 26:1 — fine twisted linen with tekhelet, argaman and tola'at shani,
-        // מעשׂה חשׁב with כרבים. Cubit-scaled weave; the cherubim are still NOT rendered.
         const linenCurtainMaterial = new THREE.MeshStandardMaterial({
-            map: linenFab.map, normalMap: linenFab.normalMap, roughnessMap: linenFab.roughnessMap,
+            map: linenCeilingTexture,
             roughness: 0.85,
             metalness: 0.0,
             side: THREE.DoubleSide
@@ -2185,12 +2082,8 @@
 
         // Layer 2: Goat hair (dark, coarse - felt-like)
         const goatTexture = createSkinTexture('#2A2218', 0.8, 25);
-        // Uses the cubit-scaled fabric system (goatFab) — normal + roughness, not a flat
-        // image. The old goatTexture had colour only. NOTE 2026-07-27: a near-identical
-        // 'goatsHairMaterial' also exists and is NOT used by the tent; three commits of
-        // fabric work went onto it by mistake. This is the one the coverings bind to.
         const goatHairMaterial = new THREE.MeshStandardMaterial({
-            map: goatFab.map, normalMap: goatFab.normalMap, roughnessMap: goatFab.roughnessMap,
+            map: goatTexture,
             color: 0x3A3228,
             roughness: 0.95,
             metalness: 0.0,
@@ -2199,9 +2092,8 @@
 
         // Layer 3: Ram skins dyed red (morocco leather)
         const ramTexture = createSkinTexture('#6B2000', 1.0, 18);
-        // [TEXT] Ex 26:14 "rams' skins DYED RED".
         const ramSkinMaterial = new THREE.MeshStandardMaterial({
-            map: ramsFab.map, normalMap: ramsFab.normalMap, roughnessMap: ramsFab.roughnessMap,
+            map: ramTexture,
             color: 0x8B3010,
             roughness: 0.85,
             metalness: 0.05,
@@ -2212,28 +2104,9 @@
         // The 6th goat hair curtain was "doubled in the forefront" = 1 cubit overhang
         // Goat hair covering: 30 cubits long total
         // Must cover: front drop + sloped roof + back drop
-        // DRAPE FROM THE TEXT'S OWN ARITHMETIC. Every figure below is derived, not chosen.
-        //   LINEN  10 curtains of 28 x 4 (26:2), joined 5+5 (26:3) with 50 gold clasps
-        //          (26:6) = one sheet 40 x 28.
-        //          40 along the length  = 30 roof + 10 down the back   (exact)
-        //          28 across the width  = 10 roof + 9 side + 9 side    (exact)
-        //          -> the linen hangs NINE cubits: one cubit SHORT of the ground.
-        //   GOATS' HAIR  11 curtains of 30 x 4 (26:8), joined 5+6, sixth doubled at the
-        //          front (26:9) = one sheet 44 x 30.
-        //          30 across the width  = 10 roof + 10 + 10  -> REACHES THE GROUND
-        //          44 along the length  = 2 doubled front + 30 roof + 10 back + 2 rear
-        //          -> 26:13, being 2 cubits wider than the linen, one per side, it covers
-        //             exactly the linen's one-cubit shortfall. That is why the number is 30.
-        //
-        // The previous values were 1 / 1 / 0.5 cubits and cited 26:13 for an OUTWARD CANT.
-        // That was a misreading: 26:13 is about the goats' hair being WIDER than the linen,
-        // not about the sides flaring. The text never cants the sides, so the flare is gone.
-        const DRAPE_OUTWARD = 0;              // the text gives no outward cant
-        const FRONT_OVERHANG = 2 * CUBIT;     // sixth curtain doubled over (26:9)
-        const BACK_OVERHANG = 2 * CUBIT;      // the half curtain lapping the back (26:12)
-        const LINEN_HEM_CUBITS = 1;           // 28 = 10 + 9 + 9, so it stops 1 cubit high
-        // ! ASSUMPTION - Claude: the text gives NO dimensions for the rams' skins (26:14)
-        // or the covering above it. Their hems below are art direction, nothing more.
+        const DRAPE_OUTWARD = CUBIT; // 1 cubit outward cant on sides (Exodus 26:13)
+        const FRONT_OVERHANG = CUBIT; // 1 cubit overhang at front (doubled curtain)
+        const BACK_OVERHANG = 0.5 * CUBIT; // Half curtain hangs at rear (Exodus 26:12)
 
         // Create a complete draped covering (roof + walls as one piece)
         // This creates geometry that goes: front edge -> over roof -> down back -> around sides
@@ -2400,7 +2273,7 @@
         // Layer 4: Badger/tachash skins - outermost (waterproof protection)
 
         // Layer 1: Fine linen (innermost) - visible from inside only
-        const linenCovering = createDrapedCovering(0, linenCurtainMaterial, LINEN_HEM_CUBITS * CUBIT);
+        const linenCovering = createDrapedCovering(0, linenCurtainMaterial, 0);
         tabernacleGroup.add(linenCovering);
 
         // [TEXT] Exodus 26:6 — "fifty clasps of gold, and join the curtains to one another
