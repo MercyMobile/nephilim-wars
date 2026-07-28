@@ -733,6 +733,197 @@
             return { map: mk(cCan), normalMap: mk(nCan), roughnessMap: mk(rCan) };
         }
 
+        // ================================================================
+        // makeHideMaps — TANNED SKIN, not cloth.
+        //
+        // WHY THIS EXISTS: Ex 26:14's two outer layers are  עֹרֹת  (ʿorot) in the
+        // Hebrew — the SAME noun for both, and it is not the ambiguous word in the
+        // verse. Only  תחשים  (which animal / what grade) is disputed. The substrate
+        // is agreed by every witness we can check:
+        //   Hebrew   עֹרֹ֥ת אֵילִ֖ם ... עֹרֹ֥ת תְּחָשִׁ֖ים   (Sefaria, Ex 26:14 — ʿorot twice)
+        //   LXX      δέρματα      LSJ: "skin, hide"        (Perseus 1999.04.0057)
+        //   Vulgate  pellibus     L&S: "a skin, hide (of a beast), whether on the
+        //                          body or taken off; a felt, pelt"  (Perseus 1999.04.0059)
+        //   NASB     "fine leather"
+        // Running these layers through makeFabricMaps gave them 210 weft ribs and a
+        // warp — a WOVEN surface, which no witness supports. The weave was the same
+        // unsourced invention the 0xA8A195 grey was, pointed the other way.
+        //
+        // A hide reads as a hide because of things cloth cannot do: pebbled follicle
+        // grain with no thread direction at all, tone that varies from skin to skin,
+        // and SEAMS — a covering this size is many small hides stitched together, and
+        // the stitch line is the strongest single cue. All three are generated here.
+        //
+        // ! ASSUMPTION — Claude, 2026-07-28: grain scale, pore density, panel size and
+        // stitch pitch are ALL art direction. The text gives no dimension for either
+        // hide layer (26:14 states no measurements), and names no animal we can size.
+        // Nothing below is derived from the text except the fact that it is skin.
+        //
+        // SCAFFOLDING: the hash `hx`, `hex2rgb`, the height-field -> normal/roughness
+        // loop and the `mk()` texture helper are lifted from makeFabricMaps ABOVE IN
+        // THIS FILE (lines ~610-615 and ~700-733). Same domain, same renderer, same
+        // canvas->CanvasTexture path, so the borrow is like-for-like. What is NOT
+        // borrowed is the surface itself: no ribs, no warp, no thread — those are
+        // exactly the parts that made this layer look woven.
+        // ================================================================
+        function makeHideMaps(opts) {
+            const size = opts.size || 1024;
+            const base = opts.base || '#3B3572';
+            const rough = opts.rough || [0.44, 0.72];
+            const panels = opts.panels || 3;          // stitched hides per tile edge
+            // NOTE ON UNITS, learned by rendering it wrong 2026-07-28: grainScale is
+            // noise cells PER TILE, not a size. At 18-24 it put one bump every half
+            // metre of tent and the surface came out smooth and soapy. Follicle grain
+            // needs the HUNDREDS. Broad hide undulation is a separate, much lower
+            // frequency — coupling the two to one number was the mistake.
+            const grainScale = opts.grainScale || 240;  // follicle grain, cells per tile
+            const coarseScale = opts.coarseScale || 7;  // broad undulation of the skin
+            const poreDepth = opts.poreDepth || 0.30;
+            const seamWidth = opts.seamWidth || 0.020;
+            const toneVar = opts.toneVar === undefined ? 0.11 : opts.toneVar;
+            const stitchFreq = opts.stitchFreq || 90;
+
+            const hx = (a, b, sd) => {
+                let h = (a * 374761393 + b * 668265263 + sd * 362437) | 0;
+                h = Math.imul(h ^ (h >>> 13), 1274126177) | 0;
+                return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+            };
+            const hex2rgb = (h) => [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
+            const baseRGB = hex2rgb(base);
+            const smooth = (t) => t * t * (3 - 2 * t);
+
+            // tiling value noise — lattice hashed modulo `freq` so the tile wraps
+            const vnoise = (u, v, freq, sd) => {
+                const x = u * freq, y = v * freq;
+                const xi = Math.floor(x), yi = Math.floor(y);
+                const xf = smooth(x - xi), yf = smooth(y - yi);
+                const w = (a, b) => hx(((a % freq) + freq) % freq, ((b % freq) + freq) % freq, sd);
+                const a = w(xi, yi), b = w(xi + 1, yi), c = w(xi, yi + 1), d = w(xi + 1, yi + 1);
+                return (a * (1 - xf) + b * xf) * (1 - yf) + (c * (1 - xf) + d * xf) * yf;
+            };
+            // fractal sum — grain is self-similar at several scales on real leather
+            const fbm = (u, v, f, sd) => vnoise(u, v, f, sd) * 0.55
+                                       + vnoise(u, v, f * 2, sd + 11) * 0.28
+                                       + vnoise(u, v, f * 4, sd + 23) * 0.17;
+
+            // stitched-hide layout: one jittered site per grid cell, toroidal.
+            // Jitter runs nearly the full cell (0.06..0.94). At the 0.20..0.80 I first
+            // used, the cells came out near-equal hexagons and the covering read as
+            // FLAGSTONE — a paved courtyard, not sewn skins. Wide jitter plus the
+            // domain warp below is what kills the honeycomb.
+            const sites = [];
+            for (let gy = 0; gy < panels; gy++) for (let gx = 0; gx < panels; gx++) {
+                sites.push({
+                    x: (gx + 0.06 + 0.88 * hx(gx, gy, 5)) / panels,
+                    y: (gy + 0.06 + 0.88 * hx(gx, gy, 9)) / panels,
+                    id: gy * panels + gx
+                });
+            }
+            // DOMAIN WARP — bend the space the cells are measured in, so their edges
+            // wander instead of running straight between sites. Straight edges are the
+            // single strongest "tile" cue; hides are cut with a knife round a carcass.
+            const warpAmt = opts.warpAmt === undefined ? 0.09 : opts.warpAmt;
+
+            const hgt = new Float32Array(size * size);
+            const seamF = new Float32Array(size * size);
+            const cCan = document.createElement('canvas'); cCan.width = cCan.height = size;
+            const cx = cCan.getContext('2d');
+            const cimg = cx.createImageData(size, size); const cd = cimg.data;
+
+            for (let y = 0; y < size; y++) {
+                const v = y / size;
+                for (let x = 0; x < size; x++) {
+                    const u = x / size;
+
+                    // --- which hide is this pixel on, and how close to the join ---
+                    // measured in WARPED space so the cut edges wander
+                    const uw = u + (fbm(u, v, 5, 601) - 0.5) * warpAmt;
+                    const vw = v + (fbm(u, v, 5, 733) - 0.5) * warpAmt;
+                    let d1 = 9, d2 = 9, s1 = null, s2 = null;
+                    for (const s of sites) {
+                        let dx = uw - s.x; dx -= Math.round(dx);      // toroidal
+                        let dy = vw - s.y; dy -= Math.round(dy);
+                        const d = Math.sqrt(dx * dx + dy * dy);
+                        if (d < d1) { d2 = d1; s2 = s1; d1 = d; s1 = s; }
+                        else if (d < d2) { d2 = d; s2 = s; }
+                    }
+                    const edge = d2 - d1;                             // 0 exactly on the join
+                    const seam = 1 - Math.min(1, smooth(Math.min(1, edge / seamWidth)));
+
+                    // --- follicle grain: no direction, unlike a weave ---
+                    // amplitudes raised from 0.30/0.34: at the first values the grain was
+                    // invisible past a few metres and mipmapping flattened each cell to a
+                    // plate, which is most of why it read as paving.
+                    const grain = fbm(u, v, grainScale, 101) - 0.5;
+                    const coarse = fbm(u, v, coarseScale, 211) - 0.5;         // slow hide undulation
+                    // pores: sparse pinpricks, deeper than the grain around them
+                    const pr = hx(x, y, 307);
+                    const pore = pr > 0.986 ? -poreDepth : 0;
+
+                    let h = 0.56 + grain * 0.46 + coarse * 0.42 + pore;
+
+                    // --- the stitch line ---
+                    // seam runs perpendicular to the line joining the two hides, so
+                    // projecting onto that perpendicular gives distance ALONG the seam
+                    if (seam > 0.01 && s1 && s2) {
+                        let ax = s2.x - s1.x; ax -= Math.round(ax);
+                        let ay = s2.y - s1.y; ay -= Math.round(ay);
+                        const al = Math.hypot(ax, ay) || 1;
+                        const t = (u * (-ay / al) + v * (ax / al)) * stitchFreq;
+                        const along = t - Math.floor(t);
+                        const stitch = along < 0.42 ? 1 : 0;          // thread, then gap
+                        h -= seam * 0.16;                              // hides pull down at the join
+                        h += seam * stitch * 0.30;                     // the thread rides over it
+                    }
+
+                    hgt[y * size + x] = h;
+                    seamF[y * size + x] = seam;
+
+                    // --- colour: per-skin tone, then grain shading ---
+                    const tone = 1 + (hx(s1.id, 0, 61) - 0.5) * 2 * toneVar;   // skin to skin
+                    const mottle = 1 + (fbm(u, v, grainScale * 0.5, 401) - 0.5) * 0.20; // dye unevenness
+                    const lit = 0.80 + h * 0.34;
+                    const dark = 1 - seam * 0.14;                              // shadow in the join
+                    const f = tone * mottle * lit * dark;
+                    const i = (y * size + x) * 4;
+                    cd[i]   = Math.max(0, Math.min(255, baseRGB[0] * f));
+                    cd[i+1] = Math.max(0, Math.min(255, baseRGB[1] * f));
+                    cd[i+2] = Math.max(0, Math.min(255, baseRGB[2] * f));
+                    cd[i+3] = 255;
+                }
+            }
+            cx.putImageData(cimg, 0, 0);
+
+            const at = (x, y) => hgt[(((y % size) + size) % size) * size + (((x % size) + size) % size)];
+            const nCan = document.createElement('canvas'); nCan.width = nCan.height = size;
+            const nx = nCan.getContext('2d'); const nimg = nx.createImageData(size, size); const nd = nimg.data;
+            const rCan = document.createElement('canvas'); rCan.width = rCan.height = size;
+            const rx = rCan.getContext('2d'); const rimg = rx.createImageData(size, size); const rd = rimg.data;
+            const STR = opts.normalStrength || 3.0;
+            for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+                const i = (y * size + x) * 4;
+                const dx = (at(x+1,y) - at(x-1,y)) * 0.5 * STR;
+                const dy = (at(x,y+1) - at(x,y-1)) * 0.5 * STR;
+                const vx = -dx, vy = -dy;
+                const l = Math.sqrt(vx*vx + vy*vy + 1);
+                nd[i] = (vx/l*0.5+0.5)*255; nd[i+1] = (vy/l*0.5+0.5)*255; nd[i+2] = (1/l*0.5+0.5)*255; nd[i+3]=255;
+                // tanned leather takes a low broad sheen on the crowns — the one thing
+                // that most separates it from cloth under a moving light. Thread at the
+                // seam is fibre again, so it goes back to matte.
+                let rv = rough[0] + (1 - at(x,y)) * (rough[1] - rough[0]);
+                rv += seamF[y * size + x] * 0.22;
+                rd[i] = rd[i+1] = rd[i+2] = Math.max(0, Math.min(255, rv * 255)); rd[i+3] = 255;
+            }
+            nx.putImageData(nimg,0,0); rx.putImageData(rimg,0,0);
+
+            const aniso = renderer.capabilities.getMaxAnisotropy();
+            const mk = (c) => { const t = new THREE.CanvasTexture(c);
+                t.wrapS = t.wrapT = THREE.RepeatWrapping;
+                t.repeat.set(opts.repeatU || 4, opts.repeatV || 4);
+                t.anisotropy = aniso; return t; };
+            return { map: mk(cCan), normalMap: mk(nCan), roughnessMap: mk(rCan) };
+        }
+
         // White linen material for curtains - more opaque and solid
         // [TEXT] Ex 26:1, 27:9 — "fine twisted linen". Fine, densely packed, evenly woven:
         // the Timna analysis calls the low fault rate "the mark of an experienced weaver",
@@ -795,23 +986,59 @@
         // NOTE: the variable is still named badgerSkin* — a fossil of the KJV reading
         // left in place only to avoid a wide rename; the model no longer follows it.
         // ================================================================
-        const badgerFab = makeFabricMaps({ base:'#2A3566', ribs:210, warpShow:0.02, fuzz:0.34,
-            rough:[0.52,0.78], normalStrength:2.2, repeatU:6, repeatV:6 });
+        // SURFACE, 2026-07-28: this was makeFabricMaps({ ribs:210, warpShow:0.02 }) —
+        // a weft-faced WEAVE. Wrong for this layer and unsourced: the noun is  עֹרֹת
+        // (skins) in the Hebrew, δέρματα "skin, hide" in the LXX (LSJ, Perseus
+        // 1999.04.0057), pellibus "a skin, hide (of a beast)" in the Vulgate (Lewis &
+        // Short, Perseus 1999.04.0059), "fine leather" in NASB. Every witness reads a
+        // hide; none reads cloth. Now generated by makeHideMaps — grain, pores, tone
+        // per skin, stitched seams, no thread anywhere. See that function's header.
+        //
+        // COLOUR, 2026-07-28: was #2A3566, which is navy — it read blue-black, and
+        // Cisco called it. Lewis & Short glosses the Vulgate's own word directly:
+        //   ĭanthĭnus, a, um, adj., = ἰάνθινος — "violet-blue, violet-"  (Perseus
+        //   1999.04.0059; Plin. 21,8,22 §45 "color", 21,6,14 §27 "vestis")
+        // Navy is not violet-blue. Moved toward indigo.
+        // ! ASSUMPTION — Claude, 2026-07-28: #3B3572 is a COORDINATE, and the lexicon
+        // gives a word. "Violet-blue" is sourced; this particular violet-blue is
+        // Cisco's art-direction call of 2026-07-28, chosen against two alternatives.
+        // (The Greek is weaker than the Latin here and is NOT doing work: LSJ
+        // ὑακίνθινος is "hyacinthine", a flower reference, not a colour coordinate.)
+        // RENDERED AND CORRECTED 2026-07-28: #3B3572 read as near-black in the scene's
+        // own evening light — the violet was there in the texture and invisible on the
+        // tent. Lifted to #453C7A, which is the SAME art-direction option Cisco chose,
+        // at the brighter end he was shown. seamWidth 0.020 -> 0.007 and panels 3 -> 4
+        // for the same reason: the wide dark joins read as mortar between paving slabs.
+        const badgerFab = makeHideMaps({ base:'#453C7A', panels:4, grainScale:260,
+            coarseScale:7, poreDepth:0.30, seamWidth:0.007, stitchFreq:110,
+            toneVar:0.13, warpAmt:0.09,
+            rough:[0.44,0.72], normalStrength:3.0, repeatU:6, repeatV:6 });
         const badgerSkinMaterial = new THREE.MeshStandardMaterial({
             map: badgerFab.map, normalMap: badgerFab.normalMap, roughnessMap: badgerFab.roughnessMap,
-            roughness: 1.0, metalness: 0.0,
+            roughness: 1.0, metalness: 0.0,   // 1.0 so the roughness MAP governs, unscaled
             side: THREE.DoubleSide
         });
 
         // [TEXT] Exodus 26:14 — "a covering for the tent of rams' skins DYED RED".
         // Was 0x8B4513, which is saddle brown, not a red-dyed skin.
         // ! ASSUMPTION — Claude: the specific value is mine; the text says only "dyed red".
-        const ramsFab = makeFabricMaps({ base:'#8C3226', ribs:190, warpShow:0.02, fuzz:0.30,
-            rough:[0.48,0.74], normalStrength:2.0, repeatU:6, repeatV:6 });
+        // SURFACE, 2026-07-28: this layer had the SAME weave bug as the tachash above
+        // it — makeFabricMaps({ ribs:190 }). 26:14 says rams' SKINS, and the Hebrew
+        // uses  עֹרֹת  for this layer and the one above it in the same breath, so it
+        // gets the same hide treatment. Coarser grain and bigger panels than the
+        // tachash: ram hide is a heavier skin than whatever taḥash was.
+        // ! ASSUMPTION — Claude, 2026-07-28: "coarser and bigger" is art direction. The
+        // text gives no dimension, no grade and no animal for the layer above to
+        // compare against — only that both are skins.
+        const ramsFab = makeHideMaps({ base:'#8C3226', panels:3, grainScale:200,
+            coarseScale:6, poreDepth:0.26, seamWidth:0.009, stitchFreq:80,
+            toneVar:0.15, warpAmt:0.11,
+            rough:[0.46,0.76], normalStrength:2.8, repeatU:6, repeatV:6 });
         const ramsSkinMaterial = new THREE.MeshStandardMaterial({
             map: ramsFab.map, normalMap: ramsFab.normalMap, roughnessMap: ramsFab.roughnessMap,
+            // was `roughness: 1.0` immediately followed by `roughness: 0.8` — a duplicate
+            // key, so 0.8 silently won and scaled the whole roughness map down. Removed.
             roughness: 1.0, metalness: 0.0,
-            roughness: 0.8,
             side: THREE.DoubleSide
         });
 
