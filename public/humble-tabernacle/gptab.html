@@ -4334,36 +4334,83 @@ for (let i = 0; i < _starCount; i++) {
 // list is the only authoritative source for those three because they are
 // not in SKY_FIGURES, so we use it directly for group-2 assignment.
 //
-// GUARDED 2026-07-28. SKY_GROUP_CATALOGUE appears EXACTLY ONCE in this file -
-// here, at its use site. It is never defined anywhere. The reference threw
-// "SKY_GROUP_CATALOGUE is not defined" and killed the whole script, which is
-// why the page hung on the loading spinner. Presumably the old catalogue-derived
-// array was dropped when the proximity approach replaced it, and this line was
-// left behind.
+// ---- THE SKY THE HEBREW TEXT NAMES ----------------------------------------
+// Four things are named, and all four are in this model:
 //
-// ! FUNCTIONAL REGRESSION, NOT FIXED: with the array gone, the named-asterism
-// ! mask is NOT being applied. Orion, Ursa Major and the Pleiades - KESIL, ASH
-// ! and KIMAH - are no longer highlighted as group 2. Verses VERIFIED 2026-07-28
-// ! against Sefaria, not quoted from memory:
-// !   Job 9:9      "Who made the Bear and Orion, Pleiades, and the chambers of
-// !                 the south wind"  <- all three named together
-// !   Job 38:31-32 "Can you tie cords to Pleiades / Or undo the reins of Orion?
-// !                 ... Conduct the Bear with her children?"  (v32 also names
-// !                 MAZZAROTH, meaning unresolved - NOT claimed here)
-// !   Amos 5:8     "Who made the Pleiades and Orion"  <- two of the three
-// ! An earlier draft of this comment cited "Job 9:9, 38:31; Amos 5:8" from
-// ! recall; 38:31 was one verse short and none had been checked. I have NOT invented a
-// ! replacement catalogue; that data has to come from a real star list, not
-// ! from me. Guarded so the page runs, and flagged so the loss is visible.
-if (typeof SKY_GROUP_CATALOGUE !== 'undefined' && SKY_GROUP_CATALOGUE) {
-    for (let i = 0; i < _starCount; i++) {
-        if (SKY_GROUP_CATALOGUE[i] === 2 && SKY_GROUP[i] !== 1) SKY_GROUP[i] = 2;
-    }
-} else {
-    console.warn('SKY_GROUP_CATALOGUE missing - named-asterism mask ' +
-                 '(Orion / Ursa Major / Pleiades) is NOT applied.');
-}
+//   MAZZAROTH  [TEXT Job 38:32] "Can you lead out Mazzaroth in its season"
+//              -> group 1, the twelve ecliptic figures already carried by
+//                 SKY_FIGURES. "In its season" is the zodiacal band led out
+//                 month by month, which is what those twelve ARE. They were
+//                 already drawn; they simply were not named.
+//   KIMAH      the Pleiades      [Job 9:9, 38:31, Amos 5:8]
+//   KESIL      Orion             [Job 9:9, 38:31, Amos 5:8]
+//   ASH        the Bear          [Job 9:9, 38:32 "the Bear with her children"]
+//              -> group 2, below.
+//
+// ! The meaning of MAZZAROTH is debated and this file does not pretend
+// ! otherwise - the identification with the zodiacal band is the traditional
+// ! reading, recorded here as a reading. The verse is quoted as it stands.
+//
+// ---- KIMAH, KESIL and ASH ------------------------------------------------
+// [TEXT Job 9:9]  "Who made the Bear and Orion, Pleiades, and the chambers of
+//                  the south wind"   - all three in one verse
+// [TEXT Job 38:31-32] Pleiades and Orion; v32 the Bear (and Mazzaroth)
+// [TEXT Amos 5:8] "Who made the Pleiades and Orion"
+//
+// These are NOT in SKY_FIGURES, which carries only the twelve ecliptic figures.
+// An earlier version referenced a SKY_GROUP_CATALOGUE array that did not exist
+// anywhere in the file, so group 2 was never populated and these three were
+// dark. Rather than invent the data, the polylines below are taken from
+// d3-celestial's asterisms.json and the Pleiades from its messier.json,
+// fetched 2026-07-28:
+//   github.com/ofrohn/d3-celestial/blob/master/data/asterisms.json
+//   github.com/ofrohn/d3-celestial/blob/master/data/messier.json
+// Same encoding as SKY_FIGURES: RA and Dec in degrees x10, RA on -180..180.
+//   BigDipper (8 pts) = ASH, the Bear
+//   Belt (3) + Sword (3) = KESIL, Orion
+const NAMED_ASTERISMS = [[-1761,570,1659,618,1655,564,1785,537,-1761,570,-1665,560,-1590,549,-1531,493],[830,-3,841,-12,852,-19],[847,-26,838,-54,839,-59]];
+// KIMAH is a CLUSTER, not a line figure, so it gets a radius instead.
+// M45 from messier.json: RA 56.75, Dec 24.1167, listed size 110 arcmin.
+const PLEIADES_RA = 56.75, PLEIADES_DEC = 24.1167;
+const PLEIADES_RADIUS_DEG = 110 / 60 / 2;     // listed diameter -> radius, 0.917 deg
 
+{
+    const namedSegs = [];
+    for (const seg of NAMED_ASTERISMS) {
+        for (let i = 0; i + 3 < seg.length; i += 2) {
+            const a = raDecToVec3(seg[i] / 10, seg[i+1] / 10, 1).normalize();
+            const b = raDecToVec3(seg[i+2] / 10, seg[i+3] / 10, 1).normalize();
+            namedSegs.push({ a, b, n: a.clone().cross(b).normalize(),
+                             abAngle: Math.acos(THREE.MathUtils.clamp(a.dot(b), -1, 1)) });
+        }
+    }
+    const pv = raDecToVec3(PLEIADES_RA, PLEIADES_DEC, 1).normalize();
+    const pCos = Math.cos(PLEIADES_RADIUS_DEG * Math.PI / 180);
+    const thr = FIGURE_PROXIMITY_DEG * Math.PI / 180;
+    const v = new THREE.Vector3(), pr = new THREE.Vector3();
+    let n2 = 0;
+    for (let i = 0; i < _starCount; i++) {
+        if (SKY_GROUP[i] === 1) continue;                 // ecliptic figures win
+        v.copy(raDecToVec3(SKY_STARS[i*3] / 10, SKY_STARS[i*3+1] / 10, 1));
+        let hit = v.dot(pv) >= pCos;                      // inside the Pleiades
+        if (!hit) {
+            for (const f of namedSegs) {
+                const dGC = Math.asin(THREE.MathUtils.clamp(Math.abs(v.dot(f.n)), 0, 1));
+                if (dGC > thr) continue;
+                const sdn = v.dot(f.n);
+                pr.copy(v).addScaledVector(f.n, -sdn).normalize();
+                const ap = Math.acos(THREE.MathUtils.clamp(f.a.dot(pr), -1, 1));
+                const bp = Math.acos(THREE.MathUtils.clamp(f.b.dot(pr), -1, 1));
+                const d = (ap + bp <= f.abAngle + 1e-6) ? dGC
+                        : Math.min(Math.acos(THREE.MathUtils.clamp(v.dot(f.a), -1, 1)),
+                                   Math.acos(THREE.MathUtils.clamp(v.dot(f.b), -1, 1)));
+                if (d <= thr) { hit = true; break; }
+            }
+        }
+        if (hit) { SKY_GROUP[i] = 2; n2++; }
+    }
+    console.log('KIMAH/KESIL/ASH: ' + n2 + ' stars marked (group 2)');
+}
         const SKY_RADIUS = 250;
         const DAY_LENGTH_S = 90;         // seconds for a full day/night cycle (doubled from 180 at Cisco's call)
         // ! ASSUMPTION - Claude: 180s is an art choice so the cycle is visible
@@ -4392,12 +4439,12 @@ if (typeof SKY_GROUP_CATALOGUE !== 'undefined' && SKY_GROUP_CATALOGUE) {
                 const g = SKY_GROUP[i];
                 grp[i] = g;
                 if (g === 2) {
-                    // KIMAH / KESIL / ASH -- what the Hebrew text names. Blue.
+                    // KIMAH (Pleiades) / KESIL (Orion) / ASH (the Bear). Blue.
                     const t = Math.min(1.0, 0.55 + b * 0.85);
                     col[i*3] = t * 0.55; col[i*3+1] = t * 0.78; col[i*3+2] = t;
                     siz[i] = 3.4 + b * 5.0;
                 } else if (g === 1) {
-                    // the twelve ecliptic constellations -- gold, and clearly larger.
+                    // MAZZAROTH -- the twelve ecliptic figures. Gold, and larger.
                     const t = Math.min(1.0, 0.55 + b * 0.85);
                     col[i*3] = t; col[i*3+1] = t * 0.86; col[i*3+2] = t * 0.50;
                     siz[i] = 3.0 + b * 4.6;
@@ -4433,8 +4480,11 @@ if (typeof SKY_GROUP_CATALOGUE !== 'undefined' && SKY_GROUP_CATALOGUE) {
                     // constellation reads as a living shape instead of a dot-to-dot.
                     // Phase runs on world position, so the pulse sweeps the figure
                     // rather than blinking it all at once. Field stars are untouched.
+                    // The ETHEREAL breath belongs ONLY to the three the text names:
+                    // KIMAH (Pleiades), KESIL (Orion), ASH (the Bear) - group 2.
+                    // The zodiacal band (group 1) stays highlighted gold and steady.
                     float pulse = 0.0;
-                    if (aGroup > 0.5) {
+                    if (aGroup > 1.5) {
                         float phase = dot(normalize(position), vec3(0.42, 0.67, 0.61)) * 5.5;
                         pulse = 0.5 + 0.5 * sin(uTime * 0.85 - phase);
                         pulse = pow(pulse, 2.2);
