@@ -4299,7 +4299,14 @@ const _sVec = new THREE.Vector3();
 const _proj = new THREE.Vector3();
 for (let i = 0; i < _starCount; i++) {
     const ra = SKY_STARS[i*3] / 10, dec = SKY_STARS[i*3+1] / 10;
-    raDecToVec3(ra, dec, 1, _sVec);
+    // FIXED 2026-07-28. This read `raDecToVec3(ra, dec, 1, _sVec)` - but that
+    // function takes THREE arguments and RETURNS a vector; it has no output
+    // parameter. _sVec was therefore never written and stayed (0,0,0) for every
+    // star, so every dot product was zero and NOT ONE star was ever assigned to a
+    // constellation. This is why the highlighted constellations never appeared.
+    // Found by counting the aGroup attribute in a rendered frame: 5044 stars, 0
+    // in any figure group.
+    _sVec.copy(raDecToVec3(ra, dec, 1));
     let near = false;
     for (let k = 0; k < _figureSegments.length; k++) {
         const f = _figureSegments[k];
@@ -4358,7 +4365,7 @@ if (typeof SKY_GROUP_CATALOGUE !== 'undefined' && SKY_GROUP_CATALOGUE) {
 }
 
         const SKY_RADIUS = 250;
-        const DAY_LENGTH_S = 180;        // seconds for a full day/night cycle
+        const DAY_LENGTH_S = 90;         // seconds for a full day/night cycle (doubled from 180 at Cisco's call)
         // ! ASSUMPTION - Claude: 180s is an art choice so the cycle is visible
         // while browsing. Nothing astronomical about it.
 
@@ -4520,9 +4527,55 @@ figureLines.renderOrder = -2;
         // the setting. It is a scene-setting choice, not a claim about where the tabernacle
         // stood — the text does not fix a latitude, and the wandering had many camps.
         const SITE_LATITUDE_DEG = 29;
+        // ---- PRECESSION: the sky of the Exodus period, not ours ---------------
+        // The catalogue is J2000. Over ~3,400 years the equinox walks the ecliptic
+        // and the celestial pole moves a long way among the stars - in that era the
+        // pole star was near Thuban (alpha Draconis), not Polaris. This is a real,
+        // computed rotation of the celestial sphere, not decoration.
+        //
+        // General precession in longitude, IAU: p = 5029.0966 arcsec/century at
+        // J2000, i.e. ~50.29 arcsec/year. Applied as a rotation of the star sphere
+        // about the ECLIPTIC POLE, which in equatorial coordinates sits at
+        // RA 270 deg, Dec (90 - obliquity) = 66.56 deg.
+        //
+        // ! [FORK] The date of the Exodus is disputed and this project does not pick
+        // ! one silently. 1 Kings 6:1's 480 years before Solomon's fourth year gives
+        // ! the early date, c. 1446 BC; the late date is c. 1260 BC. The difference
+        // ! here is 186 years = 2.6 degrees of precession, which is small next to the
+        // ! ~48 degrees either way. EXODUS_EPOCH_BC below is the knob.
+        //
+        // ! ASSUMPTION - Claude: this models PRECESSION ONLY. Nutation, the slow
+        // ! change in obliquity, and stellar proper motion are NOT applied. Proper
+        // ! motion over 3,400 years is arcminutes for most stars but is large for a
+        // ! few nearby ones - so bright-star positions are approximate, and the
+        // ! constellation FIGURES (drawn from J2000 polylines) are not re-fitted.
+        // SIGN VERIFIED 2026-07-28. With this rotation the celestial pole of the
+        // epoch lands at RA 202.3 deg, Dec +71.3 deg in J2000 coordinates - i.e. it
+        // has moved AWAY from Polaris (RA 38, Dec +89.3) and toward Draco, which is
+        // the correct direction of travel. Cross-check: Thuban (alpha Draconis) was
+        // the pole star c. 2800 BC. From 2800 to 1446 BC is 1354 yr = 18.9 deg along
+        // a precession circle of radius = obliquity 23.44 deg, so the pole should by
+        // then sit 2*23.44*sin(9.45) = 7.7 deg off Thuban. Measured separation is
+        // 7-8 deg. The magnitude and the sign both check out.
+        // ! ASSUMPTION - Claude: Thuban's and Polaris's J2000 coordinates used in
+        // ! that check are from recall, not from an opened catalogue. The internal
+        // ! geometry (18.9 deg -> 7.7 deg) is arithmetic and stands on its own; the
+        // ! identification of the star does not.
+        const EXODUS_EPOCH_BC = 1446;        // [FORK] early date, 1 Kings 6:1
+        const PRECESS_ARCSEC_PER_YEAR = 50.29;
+        const OBLIQUITY_DEG = 23.4392911;    // J2000 mean obliquity
+        const _yearsBack = EXODUS_EPOCH_BC + 2000;
+        const PRECESS_RAD = -(PRECESS_ARCSEC_PER_YEAR * _yearsBack / 3600) * Math.PI / 180;
+        const _eclipticPole = raDecToVec3(270, 90 - OBLIQUITY_DEG, 1).normalize();
+        const skyEpoch = new THREE.Group();
+        skyEpoch.setRotationFromAxisAngle(_eclipticPole, PRECESS_RAD);
+        console.log('sky epoch: ' + EXODUS_EPOCH_BC + ' BC, precession ' +
+                    (PRECESS_RAD * 180 / Math.PI).toFixed(2) + ' deg about the ecliptic pole');
+
         const skyTilt = new THREE.Group();
         const skySpin = new THREE.Group();
-        skySpin.add(starField);
+        skyEpoch.add(starField);
+        skySpin.add(skyEpoch);   // precess first, then spin about the pole of the day
         // DOT-TO-DOT REMOVED 2026-07-28 at Cisco's instruction - he had asked for
         // these gone once already. The constellations are now carried by the STARS
         // themselves (gold, larger, and breathing via aGroup in the star shader),
@@ -4547,7 +4600,19 @@ figureLines.renderOrder = -2;
             const ang = (t / DAY_LENGTH_S) * Math.PI * 2;
             const alt = Math.sin(ang);                       // +1 noon, -1 midnight
             const sunDist = 120;
-            sunLight.position.set(Math.cos(ang) * sunDist * 0.6, alt * sunDist, Math.sin(ang) * sunDist * 0.6);
+            // SUN PATH REORIENTED 2026-07-28. It previously rose at +X, but the
+            // compound's EAST is -Z: the gate, the bronze altar and the laver all sit
+            // at negative z, and [TEXT Ex 27:13] puts the entrance "on the front side,
+            // to the east" - the single fact that fixes the whole building's bearing
+            // ([TEXT Num 3:38] puts Moses and Aaron camped before it, eastward).
+            // The sun was therefore rising over the SIDE hangings instead of over the
+            // gate, 90 degrees out.
+            //   ang = 0     -> -Z  sunrise, over the gate
+            //   ang = pi/2  -> +X  noon. North is -X (the table's side, [TEXT Ex 26:35]
+            //                      with the tent group's 180 deg rotation), so +X is
+            //                      south, which is where the noon sun belongs at 29 N.
+            //   ang = pi    -> +Z  sunset, behind the Holy of Holies
+            sunLight.position.set(Math.sin(ang) * sunDist * 0.6, alt * sunDist, -Math.cos(ang) * sunDist * 0.6);
 
             // night 0..1, with a soft twilight band around the horizon
             const night = Math.max(0, Math.min(1, (-alt + 0.12) / 0.30));
@@ -4574,8 +4639,13 @@ figureLines.renderOrder = -2;
             // never turned, so the stars hung fixed over the courtyard. Implemented
             // 2026-07-28 after Cisco reported the sky was stationary.
             // Same angular rate as the sun, about the tilted celestial pole, so the stars
-            // rise and set with it. Negative because the sky wheels westward overhead.
-            skySpin.rotation.y = -ang;
+            // rise and set with it.
+            // SIGN CORRECTED 2026-07-28: this was -ang, which ran the stars BACKWARDS -
+            // measured azimuth drifting south->east while the sun goes east->south->west.
+            // Caught by rendering a night frame and tracking one star's azimuth; the
+            // earlier check returned +0.003 deg, which was headless frame-rate noise and
+            // proved nothing. +ang matches the sun's sense of travel.
+            skySpin.rotation.y = ang;
             starMaterial.uniforms.uOpacity.value = night;
             starField.visible = night > 0.01;
             starMaterial.uniforms.uTime.value = t;   // drives the ethereal breath
