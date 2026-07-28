@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import STARS from '../data/stars.json';
 
 const TabernacleViewer = () => {
   const [activeView, setActiveView] = useState('sanctuary');
@@ -446,6 +447,79 @@ const TabernacleViewer = () => {
   // ! ASSUMPTION - Claude: the English identifications (Pleiades, Orion, Bear)
   // ! are the TRANSLATORS' readings, not the text's. The little star-patterns
   // ! drawn below follow those conventional identifications and are my art.
+
+  // ---- THE ACTUAL SKY -------------------------------------------------------
+  // Real star positions, not a diagram. HYG Database v4.1 (astronexus/HYG-
+  // Database), filtered to naked-eye magnitude <= 5.2, with the catalogue's
+  // Sol entry removed -- it carries a placeholder position of RA 0 / Dec 0 and
+  // magnitude -26.7, which rendered as a disc in the corner of the sky.
+  // Each record is [ra(hours), dec(deg), mag, group, colourIndex, proper, con].
+  //   group 1 = a star lying in one of the twelve zodiacal constellations
+  //             (Ari Tau Gem Cnc Leo Vir Lib Sco Sgr Cap Aqr Psc) -- the circle
+  //             Josephus called the one "the Greeks call the Zodiac".
+  //   group 2 = Orion, Ursa Major, and the seven named Pleiades -- the objects
+  //             the HEBREW text actually names (Kesil, Ash/Ayish, Kimah).
+  // Star colour comes from the catalogue's colour index; size and opacity from
+  // magnitude. Nothing here is drawn by hand.
+  // ! ASSUMPTION - Claude: equirectangular projection, and the highlight
+  // ! palette (gold for the zodiacal band, blue for the Hebrew-named) are my
+  // ! presentation choices. The positions and magnitudes are catalogue data.
+  const starColour = (ci) =>
+    ci < -0.05 ? '#cfe0ff' : ci < 0.30 ? '#ffffff' : ci < 0.60 ? '#fff6e0'
+    : ci < 1.00 ? '#ffe2b0' : '#ffc48a';
+
+  const SkyMap = () => {
+    const W = 960, H = 480;
+    return (
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto block rounded-lg" role="img"
+           aria-label="Star map showing the zodiacal constellations and the objects named in the Hebrew Bible">
+        <defs>
+          <radialGradient id="skybg" cx="50%" cy="45%" r="75%">
+            <stop offset="0%" stopColor="#0b1226" /><stop offset="100%" stopColor="#03050d" />
+          </radialGradient>
+          <filter id="glowBlue" x="-200%" y="-200%" width="500%" height="500%">
+            <feGaussianBlur stdDeviation="3.2" result="b" />
+            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+          <filter id="glowGold" x="-200%" y="-200%" width="500%" height="500%">
+            <feGaussianBlur stdDeviation="2.2" result="b" />
+            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+        </defs>
+        <rect width={W} height={H} fill="url(#skybg)" />
+
+        {/* the ecliptic band, where the twelve sit */}
+        {/* the ecliptic -- extended past both edges so no stroke cap shows */}
+        <path d={Array.from({length: 105}, (_, k) => {
+                  const ra = -1 + k * 0.25;
+                  const dec = 23.44 * Math.sin((ra / 24) * 2 * Math.PI);
+                  return `${k ? 'L' : 'M'}${(ra / 24 * W).toFixed(1)},${((90 - dec) / 180 * H).toFixed(1)}`;
+                }).join(' ')}
+              fill="none" stroke="#ffd76a" strokeOpacity=".055" strokeWidth="34" strokeLinecap="butt" />
+
+        {STARS.map((st, i) => {
+          const [ra, dec, mag, grp, ci] = st;
+          const x = ra / 24 * W, y = (90 - dec) / 180 * H;
+          const base = Math.max(0.4, (5.6 - mag) * 0.62);
+          const op = Math.min(1, Math.max(0.22, (5.6 - mag) / 4.6));
+          if (grp === 2) return (
+            <g key={i}>
+              <circle cx={x} cy={y} r={base * 2.6} fill="#5aa8ff" opacity={op * 0.30} filter="url(#glowBlue)" />
+              <circle cx={x} cy={y} r={base * 1.35} fill="#dbeaff" opacity={Math.min(1, op * 1.5)} />
+            </g>
+          );
+          if (grp === 1) return (
+            <g key={i}>
+              <circle cx={x} cy={y} r={base * 1.9} fill="#ffd76a" opacity={op * 0.42} filter="url(#glowGold)" />
+              <circle cx={x} cy={y} r={base * 1.15} fill="#fff3cf" opacity={Math.min(1, op * 1.45)} />
+            </g>
+          );
+          return <circle key={i} cx={x} cy={y} r={base} fill={starColour(ci)} opacity={op * 0.72} />;
+        })}
+      </svg>
+    );
+  };
+
   const heavenNames = [
     { heb: "כִּימָה", tr: "Kimah", eng: "rendered Pleiades",
       where: "Job 9:9 · Job 38:31 · Amos 5:8",
@@ -881,7 +955,19 @@ const TabernacleViewer = () => {
                 </p>
               </div>
 
-              <div className="bg-stone-950 rounded-xl p-6 shadow-2xl">
+              <div className="bg-stone-950 rounded-xl p-4 md:p-6 shadow-2xl">
+                <SkyMap />
+                <div className="flex flex-wrap justify-center gap-4 mt-3 mb-5 text-[11px]">
+                  <span className="flex items-center gap-1.5 text-stone-300">
+                    <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#dbeaff] shadow-[0_0_7px_3px_rgba(90,168,255,.75)]" />
+                    named in the Hebrew text — Kimah, Kesil, Ash
+                  </span>
+                  <span className="flex items-center gap-1.5 text-stone-300">
+                    <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#fff3cf] shadow-[0_0_6px_2px_rgba(255,215,106,.7)]" />
+                    the twelve zodiacal constellations
+                  </span>
+                  <span className="text-stone-500">2,073 stars to magnitude 5.2 · HYG Database v4.1 · real positions</span>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {heavenNames.map((h, i) => (
                     <div key={i} className="bg-black/40 border border-gold-400/25 rounded-lg p-4 flex gap-4">
