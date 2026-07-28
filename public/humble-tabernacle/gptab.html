@@ -3552,6 +3552,7 @@
         const starMaterial = new THREE.ShaderMaterial({
             uniforms: { uOpacity: { value: 0 }, uScale: { value: 1.0 } },
             vertexShader: `
+                uniform float uScale;
                 attribute float size;
                 varying vec3 vCol;
                 void main() {
@@ -3559,7 +3560,7 @@
                     vec4 mv = modelViewMatrix * vec4(position, 1.0);
                     gl_PointSize = size * uScale;
                     gl_Position = projectionMatrix * mv;
-                }`.replace('uScale', 'uScale'),
+                }`,
             fragmentShader: `
                 uniform float uOpacity;
                 varying vec3 vCol;
