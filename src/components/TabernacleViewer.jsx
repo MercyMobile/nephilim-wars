@@ -439,6 +439,11 @@ const TabernacleViewer = () => {
   // governs; 2 Kings names them among things Israel was forbidden to burn
   // incense to. No Hebrew source tells us a story they were said to tell.
   // ! ASSUMPTION - Claude: the English identifications (Pleiades, Orion, Bear)
+  // kesil/fool: VERIFIED 2026-07-27 by consonantal search of all of bib/tan/ --
+  // 75 lines contain כסיל, concentrated in Proverbs and Ecclesiastes, and the
+  // NASB renders those "fool" (Prov 26:4, 26:11, 17:10; Eccl 2:14 checked).
+  // That the STAR-NAME is the same word remains unstated by the text.
+  // ! ASSUMPTION - Claude: the English identifications (Pleiades, Orion, Bear)
   // ! are the TRANSLATORS' readings, not the text's. The little star-patterns
   // ! drawn below follow those conventional identifications and are my art.
   const heavenNames = [
@@ -448,7 +453,7 @@ const TabernacleViewer = () => {
       pattern: "cluster" },
     { heb: "כְּסִיל", tr: "Kesil", eng: "rendered Orion",
       where: "Job 9:9 · Job 38:31 · Amos 5:8",
-      says: "The same verse asks whether you can loose its moshkhot — its cords. The noun kesil elsewhere means a fool; whether that is the same word is not settled by the text.",
+      says: "The same verse asks whether you can loose its moshkhot — its cords. The same consonants spell kesil, 'fool' — 75 occurrences across the Tanakh, almost all of them in Proverbs and Ecclesiastes. Whether the star-name is that same word, the text never says.",
       pattern: "orion" },
     { heb: "עָשׁ / עַיִשׁ", tr: "Ash / Ayish", eng: "rendered the Bear",
       where: "Job 9:9 (עָשׁ) · Job 38:32 (עַיִשׁ)",
