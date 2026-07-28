@@ -361,12 +361,41 @@
         cavity with seven flames in it and bare ground as the only absorber. No radiative
         exchange has been solved yet.</p>
 
-        <h4 class="warn">What is not established</h4>
-        <p class="warn">No mechanism that would <em>charge</em> the Ark. No breakdown data
-        for thin dusty air. No clinical injury threshold — so <strong>nothing here says
-        lethal or not lethal, in either direction.</strong> No sorption isotherm, so no
-        humidity&rarr;resistivity claim is joined. The placements driving this model are
-        rabbinic, not Torah, and rest on a single uncollated witness.</p>
+        <h4>If it holds charge</h4>
+        <p>Every result above constrained the Ark to <em>net charge zero</em> — induction
+        only. That was a modelling choice, and the environment argues against it.
+        <strong>Charging mechanisms here are established and measured</strong>: blown sand is
+        triboelectrically charged (that is the documented origin of the 50–200 kV/m
+        dust-storm fields), so a gold shell sandblasted at 140 km/h in sub-5% humidity
+        exchanges charge; add ion capture in a high field and chemi-ionization at the seven
+        flames and the censer.</p>
+        <p>Driving the shell to potential and scaling to breakdown gives the ceiling — the
+        most it can hold before it lets go:</p>
+        <table>
+            <tr><td>at ~200 kV (ambient scale)</td><td class="num">1.7 J</td></tr>
+            <tr><td>ceiling, 1.0 MV/m breakdown</td><td class="num">38.5 J</td></tr>
+            <tr><td>ceiling, 2.0 MV/m</td><td class="num">154 J</td></tr>
+            <tr><td>ceiling, 3.0 MV/m</td><td class="num">347 J</td></tr>
+        </table>
+        <p>That is <strong>not</strong> the millijoule range of an ordinary static shock.</p>
+
+        <h4 class="warn">What is and is not established</h4>
+        <p class="warn"><strong>Established:</strong> the charging mechanisms, the ambient
+        field, the capacitance, the field concentration, and this energy ceiling.</p>
+        <p class="warn"><strong>Not computed:</strong> the <em>rate</em> — how fast charge
+        accumulates and what equilibrium potential the environment actually drives the Ark
+        to. The ceiling says what it <em>can</em> hold, not what it <em>did</em>. Reaching
+        the top of that table needs megavolt-scale potential and nothing yet shows the
+        environment gets there.</p>
+        <p class="warn"><strong>Still unsourced:</strong> breakdown in thin, hot, dust-laden
+        air — all three corrections lower it, which lowers the ceiling. No clinical injury
+        threshold, so this page makes no claim about harm. The cherubim are blocks, not
+        wings; real points raise field-per-volt and lower every figure above. The placements
+        are rabbinic, not Torah, on a single uncollated witness.</p>
+        <p class="src">CORRECTED 2026-07-28: this panel previously read "no mechanism that
+        would charge the Ark". That was wrong — several are established and measured. The
+        true statement is that their magnitude was never computed. The earlier sub-joule
+        reading was an artifact of assuming zero net charge.</p>
     </div>
 
     <div id="info-panel">
@@ -2164,93 +2193,57 @@
         }
 
         // WEST side (back, away from entrance) - 10 posts along 50 cubit width
-        let prevX = -COURTYARD_WIDTH / 2;
-        let prevZ = COURTYARD_LENGTH / 2;
+        // Posts sit at the CENTRE of the five cubits each one owns, not at the
+        // ends of the run. [RABBINIC para 21]: the hanging projects 2.5 cubits
+        // either side of each post, "hence from post to post, five cubits".
+        // 20 x 5 = 100 with the run closed at both corners and NO GAP.
+        // (Placing them at i*SPACING from a corner runs 0..95 and leaves the last
+        // five cubits open - that was the gap.)
+        const postAt = (half, i) => -half + (i + 0.5) * POST_SPACING;
 
-        for (let i = 0; i < postsShortSide; i++) {
-            const x = -COURTYARD_WIDTH / 2 + i * POST_SPACING;
-            const z = COURTYARD_LENGTH / 2;
-            courtyardGroup.add(createPost(x, z));
-
-            // Add linen panel between posts
-            if (i > 0) {
-                courtyardGroup.add(createLinenPanel(prevX, prevZ, x, z));
-            }
-            prevX = x;
-            prevZ = z;
+        // The hangings are a CONTINUOUS run corner to corner, not post-to-post
+        // segments, so nothing can open up between them.
+        function createRun(x1, z1, x2, z2) {
+            const len = Math.hypot(x2 - x1, z2 - z1);
+            const p = new THREE.Mesh(new THREE.PlaneGeometry(len, COURTYARD_HEIGHT), linenMaterial);
+            p.position.set((x1 + x2) / 2, COURTYARD_HEIGHT / 2, (z1 + z2) / 2);
+            p.rotation.y = Math.atan2(z2 - z1, x2 - x1);
+            p.castShadow = true; p.receiveShadow = true;
+            return p;
         }
 
-        // EAST side (front, entrance side) - 10 posts with 20-cubit gate in center
-        prevX = -COURTYARD_WIDTH / 2;
-        prevZ = -COURTYARD_LENGTH / 2;
-        const gateWidth = 20 * CUBIT; // 20 cubits gate
-        const gateStart = -gateWidth / 2;
-        const gateEnd = gateWidth / 2;
+        const HW = COURTYARD_WIDTH / 2, HL = COURTYARD_LENGTH / 2;
 
-        // Just add the posts on the east side - we'll add custom panels for the gate flanks
-        for (let i = 0; i < postsShortSide; i++) {
-            const x = -COURTYARD_WIDTH / 2 + i * POST_SPACING;
-            const z = -COURTYARD_LENGTH / 2;
-            courtyardGroup.add(createPost(x, z));
+        // WEST (back) - ten posts across fifty cubits  [TEXT Ex 27:12]
+        for (let i = 0; i < postsShortSide; i++)
+            courtyardGroup.add(createPost(postAt(HW, i), HL));
+        courtyardGroup.add(createRun(-HW, HL, HW, HL));
+
+        // NORTH - twenty posts along one hundred cubits  [TEXT Ex 27:11]
+        for (let i = 0; i < postsLongSide; i++)
+            courtyardGroup.add(createPost(HW, postAt(HL, i)));
+        courtyardGroup.add(createRun(HW, -HL, HW, HL));
+
+        // SOUTH - twenty posts  [TEXT Ex 27:10]
+        for (let i = 0; i < postsLongSide; i++)
+            courtyardGroup.add(createPost(-HW, postAt(HL, i)));
+        courtyardGroup.add(createRun(-HW, -HL, -HW, HL));
+
+        // EAST (entrance) - fifteen cubits of hangings each flank with three posts,
+        // and a twenty-cubit gate between them  [TEXT Ex 27:14-16]
+        const gateWidth = 20 * CUBIT;
+        const flank = (COURTYARD_WIDTH - gateWidth) / 2;      // 15 cubits each side
+        // three posts per flank, centred in the five cubits each owns
+        for (let i = 0; i < 3; i++) {
+            courtyardGroup.add(createPost(-HW + (i + 0.5) * POST_SPACING, -HL));
+            courtyardGroup.add(createPost( HW - (i + 0.5) * POST_SPACING, -HL));
         }
-
-        // Create the two linen panels that flank the gate (no overlap with gate curtain)
-        // Left flank panel - from left edge to gate start
-        const leftFlankWidth = COURTYARD_WIDTH / 2 - gateWidth / 2;
-        const leftFlankGeo = new THREE.PlaneGeometry(leftFlankWidth, COURTYARD_HEIGHT);
-        const leftFlankPanel = new THREE.Mesh(leftFlankGeo, linenMaterial);
-        leftFlankPanel.position.set(
-            -COURTYARD_WIDTH / 2 + leftFlankWidth / 2,
-            COURTYARD_HEIGHT / 2,
-            -COURTYARD_LENGTH / 2
-        );
-        leftFlankPanel.castShadow = true;
-        leftFlankPanel.receiveShadow = true;
-        courtyardGroup.add(leftFlankPanel);
-
-        // Right flank panel - from gate end to right edge
-        const rightFlankGeo = new THREE.PlaneGeometry(leftFlankWidth, COURTYARD_HEIGHT);
-        const rightFlankPanel = new THREE.Mesh(rightFlankGeo, linenMaterial);
-        rightFlankPanel.position.set(
-            COURTYARD_WIDTH / 2 - leftFlankWidth / 2,
-            COURTYARD_HEIGHT / 2,
-            -COURTYARD_LENGTH / 2
-        );
-        rightFlankPanel.castShadow = true;
-        rightFlankPanel.receiveShadow = true;
-        courtyardGroup.add(rightFlankPanel);
-
-        // NORTH side (long side) - 20 posts along 100 cubit length
-        prevX = COURTYARD_WIDTH / 2;
-        prevZ = -COURTYARD_LENGTH / 2;
-
-        for (let i = 0; i < postsLongSide; i++) {
-            const x = COURTYARD_WIDTH / 2;
-            const z = -COURTYARD_LENGTH / 2 + i * POST_SPACING;
-            courtyardGroup.add(createPost(x, z));
-
-            if (i > 0) {
-                courtyardGroup.add(createLinenPanel(prevX, prevZ, x, z));
-            }
-            prevX = x;
-            prevZ = z;
-        }
-
-        // SOUTH side (long side) - 20 posts along 100 cubit length
-        prevX = -COURTYARD_WIDTH / 2;
-        prevZ = -COURTYARD_LENGTH / 2;
-
-        for (let i = 0; i < postsLongSide; i++) {
-            const x = -COURTYARD_WIDTH / 2;
-            const z = -COURTYARD_LENGTH / 2 + i * POST_SPACING;
-            courtyardGroup.add(createPost(x, z));
-
-            if (i > 0) {
-                courtyardGroup.add(createLinenPanel(prevX, prevZ, x, z));
-            }
-            prevX = x;
-            prevZ = z;
-        }
+        // the four gate posts  [TEXT Ex 27:16]
+        for (let i = 0; i < 4; i++)
+            courtyardGroup.add(createPost(-gateWidth / 2 + (i + 0.5) * (gateWidth / 4), -HL));
+        // flank hangings, continuous, meeting the gate exactly
+        courtyardGroup.add(createRun(-HW, -HL, -HW + flank, -HL));
+        courtyardGroup.add(createRun( HW - flank, -HL, HW, -HL));
 
         // Gate curtain (colored: blue, purple, scarlet) - 20 cubits wide on EAST entrance
         // Master seamstress quality - finely woven linen with high thread count
@@ -4382,6 +4375,7 @@ if (typeof SKY_GROUP_CATALOGUE !== 'undefined' && SKY_GROUP_CATALOGUE) {
         {
             const n = SKY_STARS.length / 3;
             const pos = new Float32Array(n * 3), col = new Float32Array(n * 3), siz = new Float32Array(n);
+            const grp = new Float32Array(n);   // 0 field star, 1 ecliptic figure, 2 named asterism
             for (let i = 0; i < n; i++) {
                 const ra = SKY_STARS[i*3] / 10, dec = SKY_STARS[i*3+1] / 10, mag = SKY_STARS[i*3+2] / 10;
                 const v = raDecToVec3(ra, dec, SKY_RADIUS);
@@ -4389,6 +4383,7 @@ if (typeof SKY_GROUP_CATALOGUE !== 'undefined' && SKY_GROUP_CATALOGUE) {
                 // magnitude 6 (faintest) -> dim & small; magnitude -1.4 (Sirius) -> bright & large
                 const b = Math.max(0.18, Math.min(1.0, (6.5 - mag) / 6.0));
                 const g = SKY_GROUP[i];
+                grp[i] = g;
                 if (g === 2) {
                     // KIMAH / KESIL / ASH -- what the Hebrew text names. Blue.
                     const t = Math.min(1.0, 0.55 + b * 0.85);
@@ -4404,6 +4399,7 @@ if (typeof SKY_GROUP_CATALOGUE !== 'undefined' && SKY_GROUP_CATALOGUE) {
                     siz[i] = 1.0 + b * 2.0;
                 }
             }
+            starGeo.setAttribute('aGroup', new THREE.BufferAttribute(grp, 1));
             starGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
             starGeo.setAttribute('color', new THREE.BufferAttribute(col, 3));
             starGeo.setAttribute('size', new THREE.BufferAttribute(siz, 1));
@@ -4415,27 +4411,44 @@ if (typeof SKY_GROUP_CATALOGUE !== 'undefined' && SKY_GROUP_CATALOGUE) {
         // fixes it: gl_PointSize comes from the attribute, and the fragment is a
         // soft round falloff so bright stars read as discs rather than squares.
         const starMaterial = new THREE.ShaderMaterial({
-            uniforms: { uOpacity: { value: 0 }, uScale: { value: 1.0 } },
+            uniforms: { uOpacity: { value: 0 }, uScale: { value: 1.0 }, uTime: { value: 0 } },
             vertexShader: `
                 uniform float uScale;
+                uniform float uTime;
                 attribute float size;
+                attribute float aGroup;
                 varying vec3 vCol;
+                varying float vGlow;
                 void main() {
                     vCol = color;
                     vec4 mv = modelViewMatrix * vec4(position, 1.0);
-                    gl_PointSize = size * uScale;
+                    // ETHEREAL: a slow travelling breath along the figure, so the
+                    // constellation reads as a living shape instead of a dot-to-dot.
+                    // Phase runs on world position, so the pulse sweeps the figure
+                    // rather than blinking it all at once. Field stars are untouched.
+                    float pulse = 0.0;
+                    if (aGroup > 0.5) {
+                        float phase = dot(normalize(position), vec3(0.42, 0.67, 0.61)) * 5.5;
+                        pulse = 0.5 + 0.5 * sin(uTime * 0.85 - phase);
+                        pulse = pow(pulse, 2.2);
+                    }
+                    vGlow = pulse;
+                    gl_PointSize = size * uScale * (1.0 + pulse * 0.55);
                     gl_Position = projectionMatrix * mv;
                 }`,
             fragmentShader: `
                 uniform float uOpacity;
                 varying vec3 vCol;
+                varying float vGlow;
                 void main() {
                     vec2 d = gl_PointCoord - vec2(0.5);
                     float r = length(d) * 2.0;
                     if (r > 1.0) discard;
                     float a = pow(1.0 - r, 1.8);              // soft edge
                     float core = pow(max(0.0, 1.0 - r * 1.9), 3.0);  // bright centre
-                    gl_FragColor = vec4(vCol * (0.75 + core * 1.4), (a * 0.85 + core) * uOpacity);
+                    float halo = pow(max(0.0, 1.0 - r), 2.6) * vGlow;   // ethereal bloom
+                    vec3 c = vCol * (0.75 + core * 1.4 + vGlow * 0.9);
+                    gl_FragColor = vec4(c, (a * 0.85 + core + halo * 0.8) * uOpacity);
                 }`,
             uniformsNeedUpdate: true,
             vertexColors: true, transparent: true, depthWrite: false, fog: false,
@@ -4510,15 +4523,13 @@ figureLines.renderOrder = -2;
         const skyTilt = new THREE.Group();
         const skySpin = new THREE.Group();
         skySpin.add(starField);
-        skySpin.add(figureLines);                       // figures rotate with the stars once per day
-        // The previous line replaces the deliberate "no figure lines" stance --
-        // the figures are now a luminous overlay rather than a join-the-dots
-        // stain, so the visual problem they used to cause (opaque lines
-        // occluding the pattern) no longer applies.
-        skyTilt.add(skySpin);
-        // constellation figures are out. The twelve are shown by BRIGHTNESS and
-        // COLOUR instead, which is how they actually look overhead.
-        skyTilt.add(skySpin);
+        // DOT-TO-DOT REMOVED 2026-07-28 at Cisco's instruction - he had asked for
+        // these gone once already. The constellations are now carried by the STARS
+        // themselves (gold, larger, and breathing via aGroup in the star shader),
+        // which is what "ethereal / highlighted" meant. figureLines is left
+        // constructed but NOT added to the scene, because SKY_FIGURES is still the
+        // geometry the proximity test uses to decide which stars are figure stars.
+        skyTilt.add(skySpin);   // (was added twice; the duplicate did nothing and is gone)
         // raDecToVec3 puts Dec +90 at +Y (pole overhead = what you'd see standing at the north
         // pole). Tip it by (90 - latitude) so the pole sits at the correct altitude instead.
         skyTilt.rotation.x = THREE.MathUtils.degToRad(90 - SITE_LATITUDE_DEG);
@@ -4558,13 +4569,18 @@ figureLines.renderOrder = -2;
             sunLight.intensity = SUN_DAY_INTENSITY * Math.max(0, alt) ;
             ambientLight.intensity = AMB_DAY_INTENSITY * (0.18 + 0.82 * day);
 
-            // The whole sky turns once per cycle, same angular rate as the sun, so the stars
-            // rise and set with it instead of hanging fixed over the courtyard.
+            // THE SKY WHEELS. This comment has been here describing a rotation that was
+            // never actually written - skySpin was built, tilted to the latitude, and then
+            // never turned, so the stars hung fixed over the courtyard. Implemented
+            // 2026-07-28 after Cisco reported the sky was stationary.
+            // Same angular rate as the sun, about the tilted celestial pole, so the stars
+            // rise and set with it. Negative because the sky wheels westward overhead.
+            skySpin.rotation.y = -ang;
             starMaterial.uniforms.uOpacity.value = night;
             starField.visible = night > 0.01;
-            figMaterial.uniforms.uOpacity.value = night * 0.55;
+            starMaterial.uniforms.uTime.value = t;   // drives the ethereal breath
             figMaterial.uniforms.uTime.value = t;
-            figureLines.visible = night > 0.01;
+            figureLines.visible = false;   // never drawn - see note at skySpin
         }
         updateSky(0);
 
