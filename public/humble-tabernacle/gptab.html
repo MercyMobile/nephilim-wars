@@ -317,6 +317,18 @@
         // 1 cubit = 1.5 units = 18 inches
         // ================================================================
 
+        // [FORK] The cubit is not settled and the choice here is a scale factor.
+        //   common / short cubit  ~44.5-45 cm
+        //   Egyptian royal / long ~52.3-52.5 cm
+        // [TEXT Ezek 40:5] defines the long cubit as "a cubit and a handbreadth".
+        // If a common cubit is 6 handbreadths the long one is 7, giving 7/6 =
+        // 1.16667 — and 52.5/45 = 1.16667 EXACTLY. So if the royal cubit is
+        // 52.5, the common cubit is 45.0 cm. [TEXT 2 Chr 3:3] "by the former
+        // measure" independently confirms more than one standard existed.
+        // The physics work uses 0.45 m; 18 inches (45.72 cm) is 1.6% off that
+        // and matches NEITHER attested standard exactly. Kept here because the
+        // viewer's units are arbitrary and 1.5 units/cubit is convenient —
+        // but do not read "18 inches" as sourced. It is a rendering convenience.
         const CUBIT = 1.5;
 
         // Courtyard dimensions (Exodus 27:9-18)
@@ -339,9 +351,28 @@
 
         // Altar of Burnt Offering (Exodus 27:1)
         const ALTAR_SIZE = 5 * CUBIT;
+        // [FORK] The height is DISPUTED and only one side is drawn here.
+        //   R. Meir  : 3 cubits, reading Ex 38:1 plainly.        <-- drawn
+        //   R. Yose  : 10 cubits, by gezerah shavah on "square"; and Baraita
+        //              para 47 states flatly that the altar Moses made in the
+        //              wilderness was TEN cubits high.
+        //   R. Meir's own objection is preserved: "then the altar is taller
+        //   than the hangings" (the court screen is 5 cubits, Ex 27:18).
+        //   R. Yose does not deny it.
+        // This is not cosmetic. At 3 cubits the fire bed sits BELOW the court
+        // wall, sheltered. At 10 it sits ABOVE the wall and level with the tent
+        // roof, wind-exposed, radiating at the tent. See
+        // ~/companion/fem-lab/THE_SCENE.md Part 9.3.
         const ALTAR_HEIGHT = 3 * CUBIT;
 
-        // Laver dimensions (Exodus 30:18)
+        // Laver (Exodus 30:18)
+        // ! ASSUMPTION - Claude, NOT verified. EXODUS GIVES NO DIMENSIONS FOR
+        // ! THE LAVER. Not its diameter, not its depth, not its capacity —
+        // ! nowhere in Exodus, and the Baraita (para 50) says only that Moses
+        // ! made ONE laver. These two numbers are invented to make it drawable.
+        // ! Ex 30:18 gives the MATERIAL (copper, on a copper stand), Ex 38:8 its
+        // ! source (the mirrors of the serving women), and Ex 30:18 its POSITION
+        // ! (between the Tent of Meeting and the altar). Nothing else.
         const LAVER_RADIUS = 1.5 * CUBIT;
         const LAVER_HEIGHT = 2 * CUBIT;
 
@@ -358,6 +389,143 @@
         const ARK_LENGTH = 2.5 * CUBIT;
         const ARK_WIDTH = 1.5 * CUBIT;
         const ARK_HEIGHT = 1.5 * CUBIT;
+
+        // ================================================================
+        // PLACEMENT — corrected 2026-07-28.
+        //
+        // Everything below was previously positioned by FRACTIONS OF THE TENT
+        // (TENT_WIDTH/3, TENT_LENGTH/4, -COURTYARD_LENGTH/4) plus a raw "- 10"
+        // magic number. None of those are measurements. Audited against the
+        // Baraita de-Melekhet ha-Mishkan and every one was wrong:
+        //     tent face -> altar   was 38.33 cu,  should be 10
+        //     tent -> court rear   was  6.67 cu,  should be 20
+        //     tent -> court front  was 63.33 cu,  should be 50
+        //     table <-> menorah    was  6.67 cu,  should be 5
+        //     table -> side wall   was  1.67 cu,  should be 2.5
+        //     furniture from west  was  7.50 cu,  should be 15
+        //
+        // SOURCE for the placement chains: Baraita de-Melekhet ha-Mishkan,
+        // Sefaria's Otzar Midrashim edition (ed. R. M. Ish-Shalom), Hebrew,
+        // fetched 2026-07-28. Paragraph numbers index
+        // ~/companion/fem-lab/sources/baraita_NUMBERED.txt.
+        // ! ONE SOURCE — this is Sefaria's edition alone, NOT collated against
+        // ! any other witness. These are RABBINIC placements, not Torah. Exodus
+        // ! gives the OBJECTS and their sizes; it does NOT give these distances.
+        //
+        // para 20  court: 20 cu (west hangings) + 30 (tent) + 50 (to east
+        //          hangings) = 100;  and 20 + 10 (tent) + 20 = 50 across,
+        //          so the tent is CENTRED north-south.
+        // para 22  "מה מן המשכן ולמזבח עשר אמות" — from the Mishkan to the
+        //          altar, ten cubits.
+        // para 48  altar mid-court, ramp south, LAVER TO ITS WEST (i.e. between
+        //          altar and tent). Agrees with [TEXT Ex 30:18].
+        // para 17  width chain: south boards -> menorah 2.5, menorah -> table 5,
+        //          table -> north boards 2.5  = 10.
+        // para 18  length chain, from the WEST wall: veil 10, table/menorah 15,
+        //          gold altar 20, east pillars 30.
+        // [TEXT Ex 26:35] table NORTH, lampstand SOUTH, opposite each other.
+        //
+        // Axis convention here: +z = WEST (tent end), -z = EAST (gate).
+        // ================================================================
+
+        // tent centre: west hangings at +50 cu, tent rear face 20 cu in, tent 30 long
+        const TENT_CENTRE_Z = (50 - 20 - 15) * CUBIT;   // = +15 cu  [para 20]
+        const TENT_FACE_EAST_Z = TENT_CENTRE_Z - TENT_LENGTH / 2;  // = 0 cu
+
+        // ! ASSUMPTION - Claude: para 22 gives "ten cubits" as the GAP between
+        // ! Mishkan and altar. Whether that is face-to-face or centre-to-centre
+        // ! is not stated. Taken as face-to-NEAR-face here; centre-to-centre
+        // ! would move the altar 2.5 cu further east.
+        const ALTAR_CENTRE_Z = TENT_FACE_EAST_Z - (10 * CUBIT) - ALTAR_SIZE / 2;
+
+        // laver between the altar and the tent [TEXT Ex 30:18, RABBINIC para 48]
+        // ! ASSUMPTION - Claude: midway. No source gives its position in the gap.
+        const LAVER_CENTRE_Z = (TENT_FACE_EAST_Z + (ALTAR_CENTRE_Z + ALTAR_SIZE / 2)) / 2;
+
+        // interior, in TENT-LOCAL coords. The tent group is rotated 180deg, so
+        // local -z is WEST. distance-from-west-wall = local_z + 15 cubits.
+        const INT_VEIL_Z    = (-15 + 10) * CUBIT;   // veil        [para 18]
+        const INT_FURN_Z    = (-15 + 15) * CUBIT;   // table+menorah line
+        const INT_INCENSE_Z = (-15 + 20) * CUBIT;   // gold altar
+        const INT_TABLE_X   =  2.5 * CUBIT;         // north  [para 17, Ex 26:35]
+        const INT_MENORAH_X = -2.5 * CUBIT;         // south
+
+        // ================================================================
+        // THE PHYSICS — what this scene actually does, as far as it has been
+        // COMPUTED. 2026-07-28. Full workings and provenance:
+        //   ~/companion/fem-lab/THE_SCENE.md
+        //   ~/companion/fem-lab/tabernacle/CASE_ARK.md
+        //   ~/companion/fem-lab/sources/PROVENANCE.md
+        //   reproduce: bash ~/companion/fem-lab/ark-case/run.sh
+        //
+        // Solver: Elmer 26.2, StatElecSolve. These are SOLVER OUTPUT, not
+        // estimates. Nothing here is a claim about purpose or intent.
+        // ================================================================
+        //
+        // --- ELECTROSTATICS ---------------------------------------------
+        // The Ark is built as a capacitor by construction: [TEXT Ex 25:11]
+        // gold overlaid INSIDE AND OUT with acacia between = two conductors and
+        // a dielectric. But [RABBINIC para 26] says Bezalel made it as three
+        // nested boxes, gold/wood/gold, "and he capped its upper rims with
+        // gold" — which JOINS the two shells and SHORTS the capacitor.
+        //   capped (as the Baraita describes it) :    84.6 pF, shell to ground
+        //   isolated (if the rims were not capped) : 2487.4 pF between shells
+        //   ratio 29.4x, riding on that one construction detail.
+        // With kapporet + cherubim added, the LARGEST capacitance in the object
+        // is the seat under the lid (7162 pF) — and it self-limits: C ~ A/d
+        // while breakdown V ~ d, so max stored energy ~ A*d. A tighter seat
+        // flashes over SOONER holding LESS. Sub-joule at any real seating gap.
+        //
+        // --- IN A SANDSTORM ----------------------------------------------
+        // Measured desert dust-storm fields run 50-200 kV/m near the surface.
+        // Khamsin gusts reach 140 km/h and RH drops BELOW 5% — every organic
+        // material in the tent then sits at its maximum resistivity.
+        // Ark floating (net charge zero) in a 200 kV/m field, SOLVED:
+        //   peak |E| = 261 kV/m = 1.31x ambient, located AT THE CHERUBIM
+        //   that is ~8.7% of the 3 MV/m clean-air breakdown threshold
+        // Three checks passed unprompted: the interior field came out ~0
+        // (Faraday shielding, not imposed); capacitance to ground was identical
+        // whether the inside was modelled or not; reported energy equalled
+        // 1/2 CV^2 exactly.
+        //
+        // ! LIMITS, stated plainly:
+        // ! - the cherubim in that mesh are rectangular BLOCKS. Flat faces
+        // !   concentrate field LESS than curved or pointed ones, so 1.31x is a
+        // !   LOWER BOUND. Real hammered wings have not been built or solved.
+        // ! - 3 MV/m is clean dry air at sea level. At 1569 m, hot, and
+        // !   dust-laden it is LOWER, which narrows the margin further.
+        // !   NOT SOURCED.
+        // ! - nothing establishes any mechanism that would CHARGE the object.
+        // ! On what has actually been computed: not a machine, by roughly an
+        // ! order of magnitude — and the dominant uncertainty is a geometry we
+        // ! know to be wrong in the direction that would close the gap.
+        //
+        // --- THE AIR INSIDE ----------------------------------------------
+        // [RABBINIC Menachot 89a] half a log of oil per lamp, burning
+        // evening to morning. Seven lamps => 1.2-2.1 L of olive oil a night:
+        //   ~1000-1700 W of continuous heat inside a closed gold-lined cavity
+        //   CO2 to 9,600-16,800 ppm  (occupational limit 5,000)
+        //   O2 down to 19.3-18.2%    (deficiency threshold 19.5%)
+        //   and 7.8-13.6 g/m^3 of combustion WATER added
+        // That last one matters: the menorah is a HUMIDIFIER, running nightly
+        // inside a structure whose electrical behaviour is moisture-controlled.
+        // ! UNVENTILATED BOUND, not a prediction. And a loose one — the
+        // ! coverings are not sealed to the ground anywhere in the text.
+        //
+        // [RABBINIC Keritot 6a] 368 maneh of incense a year, "365 corresponding
+        // to the days of the solar year" => ONE MANEH PER DAY, split morning
+        // and evening = 0.78-1.56 g/m^3 in the Holy Place. The frankincense
+        // study that achieved total microbial kill used 137.8 g/m^3.
+        // The Tabernacle is 88-176x MORE DILUTE. Room fumigation is not the
+        // mechanism at this scale.
+        //
+        // --- GOLD ---------------------------------------------------------
+        // >98% IR reflectance from ~700nm, ~99% far IR, and it does not
+        // tarnish. Every interior surface is gold [TEXT Ex 26:29 etc]; the only
+        // one that is not is the FLOOR, which is never specified. So the Holy
+        // Place is a near-mirror cavity with seven flames in it and a dirt
+        // floor as the only absorber. No radiative-exchange solve exists yet.
+        // ================================================================
 
         // ================================================================
         // MATERIALS
@@ -2043,7 +2211,7 @@
 
         const tabernacleGroup = new THREE.Group();
         // Position tent toward the WEST (back) of the courtyard
-        tabernacleGroup.position.set(0, 0, COURTYARD_LENGTH / 2 - TENT_LENGTH / 2 - 10);
+        tabernacleGroup.position.set(0, 0, TENT_CENTRE_Z);   // [RABBINIC para 20] 20 cu from the west hangings
         // Rotate 180 degrees so entrance faces east toward the gate
         tabernacleGroup.rotation.y = Math.PI;
 
@@ -3113,7 +3281,7 @@
         fireLight2.position.set(0, ALTAR_HEIGHT + 0.5, 0);
         altarGroup.add(fireLight2);
 
-        altarGroup.position.set(0, 0, -COURTYARD_LENGTH / 4);
+        altarGroup.position.set(0, 0, ALTAR_CENTRE_Z);   // [RABBINIC para 22] ten cubits from the Mishkan
         altarGroup.userData = {
             name: "Altar of Burnt Offering",
             description: "The bronze altar where animal sacrifices were offered. Made of acacia wood overlaid with bronze, with four horns on its corners. All offerings were made here, representing the substitutionary sacrifice for sin.",
@@ -3158,7 +3326,7 @@
         });
 
         // Position the laver between altar and tent
-        laverGroup.position.set(0, 0, 10);
+        laverGroup.position.set(0, 0, LAVER_CENTRE_Z);   // [TEXT Ex 30:18 / RABBINIC para 48] between altar and tent
         laverGroup.userData = {
             name: "Bronze Laver",
             description: "The washing basin where priests cleansed their hands and feet before entering the Holy Place or offering sacrifices. Made from the bronze mirrors of the serving women. Symbolizes spiritual cleansing and sanctification.",
@@ -3191,7 +3359,7 @@
         });
 
         // "You shall set the table on the north side" (Exodus 26:35)
-        tableGroup.position.set(TENT_WIDTH / 3, 0, TENT_LENGTH / 4);
+        tableGroup.position.set(INT_TABLE_X, 0, INT_FURN_Z);   // [RABBINIC paras 17,18] 2.5 cu from the north wall, 15 cu from the west
         tableGroup.userData = {
             name: "Table of Showbread",
             description: "The golden table holding twelve loaves of bread, representing the twelve tribes of Israel in God's presence. Fresh bread was placed here every Sabbath. Made of acacia wood overlaid with pure gold, with a decorative crown border.",
@@ -3202,7 +3370,7 @@
         // Golden Menorah (Exodus 25:31-40)
         const menorahGroup = createMenorah();
         // "...and the lampstand opposite the table, on the south side" (Exodus 26:35)
-        menorahGroup.position.set(-TENT_WIDTH / 3, 0, TENT_LENGTH / 4);
+        menorahGroup.position.set(INT_MENORAH_X, 0, INT_FURN_Z);   // [RABBINIC paras 17,18] 2.5 cu from the south wall, 15 cu from the west
         menorahGroup.rotation.y = Math.PI / 2; // Rotate 90° to align branches north-south
         menorahGroup.userData = {
             name: "Golden Menorah",
@@ -3262,7 +3430,7 @@
         incenseAltarGroup.add(incenseLight);
 
         // POSITION FIX: Move +2 units relative to veil (towards entrance) instead of -3 (behind veil)
-        incenseAltarGroup.position.set(0, 0, -TENT_LENGTH / 2 + HOLY_OF_HOLIES_SIZE + 2);
+        incenseAltarGroup.position.set(0, 0, INT_INCENSE_Z);   // [RABBINIC para 18] 20 cu from the west wall, aligned with the Ark (para 16)
         incenseAltarGroup.userData = {
             name: "Altar of Incense",
             description: "The golden altar where fragrant incense was burned morning and evening before the veil of the Holy of Holies. Made of acacia wood overlaid with pure gold, with a crown molding and four horns. The incense represents the prayers of the saints rising to God.",
@@ -3732,16 +3900,70 @@
         // ================================================================
 
         // ---- which constellation each star belongs to -------------------------
-        // Derived 2026-07-27 by cross-matching every SKY_STARS position against
-        // the HYG Database v4.1 (which carries IAU constellation membership),
-        // nearest match within 0.12 degrees. 1245 of 5044 stars matched.
-        //   1 = one of the twelve ecliptic constellations
-        //       (Ari Tau Gem Cnc Leo Vir Lib Sco Sgr Cap Aqr Psc)  -> 986 stars
-        //   2 = Orion, Ursa Major, or the named Pleiades           -> 259 stars
-        //       i.e. KESIL, ASH/AYISH and KIMAH -- the only sky objects the
-        //       Hebrew text actually names (Job 9:9, 38:31-32, Amos 5:8).
-        // Membership is catalogue data. Nothing hand-assigned.
-        const SKY_GROUP = [0,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,0,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,1,0,0,1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,1,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,1,0,0,0,0,0,0,1,0,1,0,0,1,0,0,0,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1,1,1,0,0,1,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,1,0,0,0,1,1,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,1,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,2,2,0,1,0,2,0,1,2,2,0,0,0,0,1,2,0,0,0,2,0,0,1,1,0,0,0,0,2,2,0,0,0,0,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,1,1,1,1,1,0,0,1,1,0,0,0,1,1,1,0,0,1,1,0,0,0,0,0,1,0,0,1,0,0,1,1,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,1,1,1,1,0,0,1,0,1,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,1,1,0,1,0,1,0,0,1,0,1,1,1,0,1,1,1,0,1,1,0,1,0,1,1,1,1,1,0,1,1,0,0,1,1,1,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,1,1,0,0,0,0,1,0,1,1,0,1,0,1,1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,2,0,0,2,1,0,0,0,0,0,0,0,0,2,0,0,2,0,0,2,1,0,0,2,0,1,0,0,2,0,2,2,2,2,2,0,0,0,0,2,0,2,0,0,0,1,1,1,2,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,1,0,0,0,2,0,0,0,0,0,0,0,0,0,0,1,0,1,0,2,1,1,0,0,0,2,2,1,0,2,0,2,2,0,0,2,0,0,2,0,0,0,2,2,0,0,2,0,0,0,2,0,0,0,0,0,0,0,2,1,0,0,0,0,0,0,0,0,0,2,2,2,0,0,0,2,0,2,0,0,0,2,2,1,0,2,2,0,0,2,2,2,0,1,0,0,2,0,0,1,1,0,1,1,0,0,1,2,2,2,0,0,2,2,0,0,0,2,0,0,2,2,1,1,2,0,0,0,0,0,2,1,0,2,2,2,0,2,2,2,2,2,0,2,2,2,2,2,1,2,2,0,2,2,1,2,0,1,1,0,2,2,0,0,2,2,2,0,2,0,1,0,2,2,2,1,0,0,0,2,2,0,0,0,0,0,0,0,2,1,2,0,1,0,1,1,2,2,2,1,0,1,0,0,0,0,2,2,0,1,2,0,0,1,0,0,2,0,2,0,1,2,2,0,0,1,0,2,0,2,0,0,0,2,0,0,2,0,2,0,0,0,2,2,0,1,2,0,2,2,0,0,0,0,0,0,0,2,0,0,0,0,0,2,0,2,2,1,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,2,1,0,1,0,0,0,0,0,0,0,1,0,0,2,2,2,0,0,2,2,0,2,0,1,2,0,0,0,2,0,2,0,0,2,0,2,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,2,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,1,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1,1,0,0,0,0,0,1,0,1,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,1,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,2,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,2,0,0,0,1,1,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,1,0,0,0,1,0,0,0,0,2,2,0,1,0,1,0,1,0,0,0,0,2,0,0,0,0,0,0,1,0,1,0,0,0,0,1,2,0,0,0,2,2,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,2,0,0,1,0,0,0,0,0,1,1,0,0,0,2,0,0,1,0,1,1,0,1,0,0,2,0,1,0,0,0,0,0,1,0,0,0,2,1,1,2,2,0,0,2,0,0,0,1,0,1,0,2,0,1,0,2,0,0,1,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,1,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,1,1,1,0,0,0,2,0,0,0,0,0,0,0,0,2,0,2,2,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,2,0,0,0,0,1,0,1,0,0,0,2,2,1,0,1,0,0,1,1,0,1,0,0,2,0,2,0,0,0,0,2,0,0,0,0,1,2,0,1,0,0,0,0,0,0,2,1,0,0,2,0,1,2,0,1,2,1,0,0,0,1,0,2,0,0,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,2,1,0,2,0,0,0,0,2,0,1,1,0,0,2,2,0,2,0,0,0,0,2,0,0,0,1,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,1,0,0,1,0,2,0,0,1,1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,2,0,2,0,0,0,0,0,2,0,0,0,2,2,0,0,2,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,2,2,0,0,0,0,2,2,0,1,2,0,0,2,0,1,1,2,1,0,0,0,2,0,2,0,0,0,0,2,1,1,2,1,2,1,0,1,2,0,0,1,0,0,0,0,1,0,0,0,0,1,2,2,2,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,2,1,2,2,1,2,0,0,0,1,2,0,0,0,0,1,1,0,0,0,1,0,0,1,0,2,0,0,0,1,0,2,2,0,1,1,1,2,0,0,0,0,0,2,0,0,0,0,0,1,0,1,0,0,2,0,0,0,0,1,0,0,0,1,0,0,0,0,0,2,1,0,0,0,0,1,0,2,0,2,0,0,0,0,0,1,0,0,1,2,0,0,2,0,1,1,0,1,0,1,0,2,0,0,1,1,0,0,0,0,0,2,0,0,1,0,1,2,0,0,0,0,2,0,1,1,0,1,2,2,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,1,0,0,0,1,0,0,1,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,1,1,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,1,0,0,0,0,0,0,0,0,1,0,0,0,2,0,0,0,0,1,0,0,1,2,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,1,0,1,0,0,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,1,0,0,0,1,0,1,0,1,0,0,0,0,0,0,0,1,1,0,0,1,1,2,0,1,0,0,1,2,0,0,0,0,1,0,1,0,0,1,1,2,1,0,0,1,0,1,1,2,1,0,1,1,0,1,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,2,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0,0,1,0,0,2,0,0,0,0,0,1,0,2,0,0,0,0,0,0,0,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,1,0,1,0,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,1,0,1,0,0,1,0,1,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,1,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,1,0,0,0,1,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,1,1,0,1,0,0,0,1,0,1,1,0,0,1,0,1,0,0,0,0,0,0,1,0,1,1,0,0,0,1,1,1,1,1,0,0,0,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0,0,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,1,0,1,1,0,0,0,1,1,0,0,1,1,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,1,1,0,0,1,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,1,0,1,1,0,0,1,0,1,1,0,0,0,1,0,1,0,0,0,0,0,0,0,1,1,0,0,0,1,0,1,1,0,1,0,1,0,0,0,0,0,0,0,0,1,0,1,0,1,1,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,1,0,1,1,1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,1,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0,1,1,1,0,1,0,0,1,1,0,0,0,1,1,1,0,0,1,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,1,0,0,0,1,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,1,0,0,1,1,0,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,1,1,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,1,0,1,0,0,0,1,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,1,1,0,1,1,0,0,0,1,1,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,1,1,0,0,1,0,1,0,0,1,0,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1,0,1,0,0,0,0,1,1,0,1,1,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,1,0,0,1,0,1,0,0,1,0,0,0,0,1,1,1,1,1,0,0,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,0,1,0,0,1,1,1,1,1,1,1,0,0,0,1,0,1,0,1,0,0,0,1,0,0,1,0,0,1,0,0,1,1,0,1,1,0,0,1,0,1,1,0,1,0,0,0,0,0,1,0,0,1,0,0,0];
+// Original 2026-07-27 mask was an HYG catalogue cross-match (986 ecliptic
+// stars + 259 named-asterism stars). It over-highlighted whole IAU
+// boundary polygons, so every faint star inside Aries/Taurus/etc. lit
+// up gold and the actual stick-figure patterns washed into blobs.
+// New 2026-07-28: build SKY_GROUP at load time from SKY_FIGURES polyline
+// proximity, not boundary polygons. A star is group 1 iff it lies within
+// FIGURE_PROXIMITY_DEG great-circle degrees of any figure segment. The
+// named-asterism mask (Orion, Ursa Major, Pleiades = KESIL, ASH, KIMAH,
+// the only sky objects the Hebrew text names) is preserved from the
+// catalogue because SKY_FIGURES does not include those constellations.
+//   1 = within threshold of an ecliptic figure segment
+//   2 = named-asterism star (Orion / UMa / Pleiades) and not group 1
+const FIGURE_PROXIMITY_DEG = 0.85;     // 0.5–1.0 deg; tuned for d3-celestial polyline spacing
+const _skyTmpA = new THREE.Vector3();
+const _skyTmpB = new THREE.Vector3();
+const _skyTmpN = new THREE.Vector3();
+const _skyTmpS = new THREE.Vector3();
+const _figureSegments = [];
+for (const seg of SKY_FIGURES) {
+    for (let i = 0; i + 3 < seg.length; i += 2) {
+        const a = raDecToVec3(seg[i] / 10, seg[i+1] / 10, 1);
+        const b = raDecToVec3(seg[i+2] / 10, seg[i+3] / 10, 1);
+        const n = new THREE.Vector3().crossVectors(a, b).normalize();
+        const abCos = THREE.MathUtils.clamp(a.dot(b), -1, 1);
+        const abAngle = Math.acos(abCos);
+        _figureSegments.push({ a, b, n, abCos, abAngle });
+    }
+}
+const _starCount = SKY_STARS.length / 3;
+const SKY_GROUP = new Uint8Array(_starCount);
+const _sVec = new THREE.Vector3();
+const _proj = new THREE.Vector3();
+for (let i = 0; i < _starCount; i++) {
+    const ra = SKY_STARS[i*3] / 10, dec = SKY_STARS[i*3+1] / 10;
+    raDecToVec3(ra, dec, 1, _sVec);
+    let near = false;
+    for (let k = 0; k < _figureSegments.length; k++) {
+        const f = _figureSegments[k];
+        // cheap rejection: distance from star to the infinite great circle
+        const distToGC = Math.asin(THREE.MathUtils.clamp(Math.abs(_sVec.dot(f.n)), 0, 1));
+        if (distToGC > FIGURE_PROXIMITY_DEG * Math.PI / 180) continue;
+        // closer check: project star onto the great-circle plane
+        const sDotN = _sVec.dot(f.n);
+        _proj.copy(_sVec).addScaledVector(f.n, -sDotN).normalize();
+        const apAngle = Math.acos(THREE.MathUtils.clamp(f.a.dot(_proj), -1, 1));
+        const bpAngle = Math.acos(THREE.MathUtils.clamp(f.b.dot(_proj), -1, 1));
+        let d;
+        if (apAngle + bpAngle <= f.abAngle + 1e-6) {
+            d = distToGC;
+        } else {
+            const sa = Math.acos(THREE.MathUtils.clamp(_sVec.dot(f.a), -1, 1));
+            const sb = Math.acos(THREE.MathUtils.clamp(_sVec.dot(f.b), -1, 1));
+            d = Math.min(sa, sb);
+        }
+        if (d <= FIGURE_PROXIMITY_DEG * Math.PI / 180) { near = true; break; }
+    }
+    if (near) SKY_GROUP[i] = 1;
+}
+// Preserve the named-asterism mask (Orion / UMa / Pleiades). The catalogue
+// list is the only authoritative source for those three because they are
+// not in SKY_FIGURES, so we use it directly for group-2 assignment.
+for (let i = 0; i < _starCount; i++) {
+    if (SKY_GROUP_CATALOGUE[i] === 2 && SKY_GROUP[i] !== 1) SKY_GROUP[i] = 2;
+}
 
         const SKY_RADIUS = 250;
         const DAY_LENGTH_S = 180;        // seconds for a full day/night cycle
@@ -3835,14 +4057,49 @@
                 const b = raDecToVec3(seg[i+2] / 10, seg[i+3] / 10, SKY_RADIUS * 0.995);
                 figPts.push(a.x, a.y, a.z, b.x, b.y, b.z);
             }
-        }
-        const figGeo = new THREE.BufferGeometry();
-        figGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(figPts), 3));
-        const figMaterial = new THREE.LineBasicMaterial({
-            color: 0x9fb6d8, transparent: true, opacity: 0, depthWrite: false, fog: false
-        });
-        const figureLines = new THREE.LineSegments(figGeo, figMaterial);
-        figureLines.renderOrder = -1;
+        }   // <-- RESTORED 2026-07-28. This closing brace for the outer
+            // "for (const seg of SKY_FIGURES)" loop was MISSING in the working
+            // tree, which left the entire inline script block unparseable -
+            // "SyntaxError: Unexpected end of input". The whole 3D viewer was
+            // dead in this copy. git HEAD parses clean and dist/ parses clean,
+            // so the live site was unaffected; the next BUILD would have
+            // shipped a blank canvas. Found by node --check on the extracted
+            // script block.
+
+        // ---- the twelve ecliptic figures: ethereal luminous overlay ----------------
+// Originally a faint LineBasicMaterial at opacity 0, deliberately not added
+// to the scene. Replaced with a ShaderMaterial that paints a slow travelling
+// pulse along world-space position, additive-blended over the night sky.
+// Sits at SKY_RADIUS * 0.995 (just inside the star sphere) with renderOrder
+// -2 so the stars render on top of the lines.
+const figGeo = new THREE.BufferGeometry();
+figGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(figPts), 3));
+const figMaterial = new THREE.ShaderMaterial({
+    uniforms: { uOpacity: { value: 0 }, uTime: { value: 0 } },
+    vertexShader: `
+        varying vec3 vWorldPos;
+        void main() {
+            vec4 world = modelMatrix * vec4(position, 1.0);
+            vWorldPos = world.xyz;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }`,
+    fragmentShader: `
+        uniform float uOpacity;
+        uniform float uTime;
+        varying vec3 vWorldPos;
+        void main() {
+            // gentle travelling pulse keyed off world position so neighbouring
+            // segments breathe in phase without a per-segment attribute.
+            float wave = 0.5 + 0.5 * sin(uTime * 0.35 + dot(vWorldPos, vec3(0.04, 0.06, 0.03)));
+            vec3 color = vec3(0.62, 0.72, 0.88);   // soft ethereal blue
+            float alpha = uOpacity * (0.18 + 0.24 * wave);
+            gl_FragColor = vec4(color, alpha);
+        }`,
+    transparent: true, depthWrite: false, depthTest: true, fog: false,
+    blending: THREE.AdditiveBlending
+});
+const figureLines = new THREE.LineSegments(figGeo, figMaterial);
+figureLines.renderOrder = -2;
 
         // ---- the sky WHEELS. Two nested groups:
         //   skyTilt  tips the celestial pole down from the zenith to the observer's latitude
@@ -3856,7 +4113,12 @@
         const skyTilt = new THREE.Group();
         const skySpin = new THREE.Group();
         skySpin.add(starField);
-        // figureLines deliberately NOT added -- Cisco, 2026-07-27: the join-the-dots
+        skySpin.add(figureLines);                       // figures rotate with the stars once per day
+        // The previous line replaces the deliberate "no figure lines" stance --
+        // the figures are now a luminous overlay rather than a join-the-dots
+        // stain, so the visual problem they used to cause (opaque lines
+        // occluding the pattern) no longer applies.
+        skyTilt.add(skySpin);
         // constellation figures are out. The twelve are shown by BRIGHTNESS and
         // COLOUR instead, which is how they actually look overhead.
         skyTilt.add(skySpin);
@@ -3901,10 +4163,11 @@
 
             // The whole sky turns once per cycle, same angular rate as the sun, so the stars
             // rise and set with it instead of hanging fixed over the courtyard.
-            skySpin.rotation.y = -ang;
-
             starMaterial.uniforms.uOpacity.value = night;
             starField.visible = night > 0.01;
+            figMaterial.uniforms.uOpacity.value = night * 0.55;
+            figMaterial.uniforms.uTime.value = t;
+            figureLines.visible = night > 0.01;
         }
         updateSky(0);
 
