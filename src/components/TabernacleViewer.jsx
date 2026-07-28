@@ -520,23 +520,59 @@ const TabernacleViewer = () => {
     );
   };
 
+
+  // A crop of the SAME catalogue used by the big map -- centred on each object's
+  // real position (centres computed from the data, not typed by hand). No
+  // hand-placed dots anywhere on this page.
+  const SkyCrop = ({ view }) => {
+    if (!view) return (
+      <svg viewBox="0 0 60 60" className="w-16 h-16 shrink-0" aria-hidden="true">
+        <rect width="60" height="60" fill="#05070f" rx="4" />
+        <text x="30" y="36" textAnchor="middle" fontSize="20" fill="#4a5568">?</text>
+      </svg>
+    );
+    const halfDec = view.span / 2;
+    const halfRa  = (view.span / 2) / 15 / Math.max(0.2, Math.cos(view.dec * Math.PI / 180));
+    const inView = STARS.filter(([ra, dec]) =>
+      Math.abs(dec - view.dec) <= halfDec &&
+      Math.abs(((ra - view.ra + 36) % 24) - 12) <= halfRa);
+    return (
+      <svg viewBox="0 0 60 60" className="w-16 h-16 shrink-0" aria-hidden="true">
+        <rect width="60" height="60" fill="#05070f" rx="4" />
+        {inView.map(([ra, dec, mag, grp, ci], k) => {
+          const dRa = ((ra - view.ra + 36) % 24) - 12;
+          const x = 30 - (dRa / halfRa) * 28;
+          const y = 30 - ((dec - view.dec) / halfDec) * 28;
+          const r = Math.max(0.5, (5.6 - mag) * 0.42);
+          const op = Math.min(1, Math.max(0.3, (5.6 - mag) / 4.6));
+          return grp === 2
+            ? <g key={k}>
+                <circle cx={x} cy={y} r={r * 2.2} fill="#5aa8ff" opacity={op * 0.35} />
+                <circle cx={x} cy={y} r={r} fill="#dbeaff" opacity={Math.min(1, op * 1.5)} />
+              </g>
+            : <circle key={k} cx={x} cy={y} r={r * 0.8} fill={starColour(ci)} opacity={op * 0.5} />;
+        })}
+      </svg>
+    );
+  };
+
   const heavenNames = [
     { heb: "כִּימָה", tr: "Kimah", eng: "rendered Pleiades",
       where: "Job 9:9 · Job 38:31 · Amos 5:8",
       says: "Job 38:31 asks whether you can bind its ma'adannot — its bonds or chains. Amos names it among what the LORD made.",
-      pattern: "cluster" },
+      view: { ra: 3.781, dec: 24.17, span: 1.6 } },
     { heb: "כְּסִיל", tr: "Kesil", eng: "rendered Orion",
       where: "Job 9:9 · Job 38:31 · Amos 5:8",
       says: "The same verse asks whether you can loose its moshkhot — its cords. The same consonants spell kesil, 'fool' — 75 occurrences across the Tanakh, almost all of them in Proverbs and Ecclesiastes. Whether the star-name is that same word, the text never says.",
-      pattern: "orion" },
+      view: { ra: 5.492, dec: -0.48, span: 22 } },
     { heb: "עָשׁ / עַיִשׁ", tr: "Ash / Ayish", eng: "rendered the Bear",
       where: "Job 9:9 (עָשׁ) · Job 38:32 (עַיִשׁ)",
       says: "Job 38:32 speaks of guiding Ayish al-baneha — with her sons. Two spellings, one apparent referent.",
-      pattern: "bear" },
+      view: { ra: 11.243, dec: 52.96, span: 46 } },
     { heb: "מַזָּרוֹת", tr: "Mazzarot", eng: "rendered a constellation",
       where: "Job 38:32 — ONCE, in the whole Hebrew Bible",
       says: "A hapax legomenon: it occurs exactly one time and nowhere else. The verse asks whether you can bring it out in its season. The text does not say how many there are, and does not say twelve.",
-      pattern: "none" },
+      view: null },
   ];
 
   const garmentData = [
@@ -966,24 +1002,12 @@ const TabernacleViewer = () => {
                     <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#fff3cf] shadow-[0_0_6px_2px_rgba(255,215,106,.7)]" />
                     the twelve zodiacal constellations
                   </span>
-                  <span className="text-stone-500">2,073 stars to magnitude 5.2 · HYG Database v4.1 · real positions</span>
+                  <span className="text-stone-500">2,072 stars to magnitude 5.2 · HYG Database v4.1 · real positions</span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {heavenNames.map((h, i) => (
                     <div key={i} className="bg-black/40 border border-gold-400/25 rounded-lg p-4 flex gap-4">
-                      <svg viewBox="0 0 60 60" className="w-16 h-16 shrink-0" aria-hidden="true">
-                        <rect width="60" height="60" fill="#05070f" rx="4" />
-                        {h.pattern === 'cluster' && [[26,22],[32,19],[36,25],[29,28],[22,30],[35,33],[30,24]].map(([x,y],k)=>(
-                          <circle key={k} cx={x} cy={y} r={k===6?1.9:1.4} fill="#dbe7ff" opacity=".95" />))}
-                        {h.pattern === 'orion' && (<>
-                          {[[20,14],[41,16],[18,46],[43,44]].map(([x,y],k)=>(<circle key={k} cx={x} cy={y} r="2" fill="#dbe7ff" />))}
-                          {[[26,28],[30,30],[34,32]].map(([x,y],k)=>(<circle key={k} cx={x} cy={y} r="1.8" fill="#fff" />))}
-                        </>)}
-                        {h.pattern === 'bear' && [[14,40],[21,38],[28,37],[34,34],[40,28],[45,22],[39,19]].map(([x,y],k)=>(
-                          <circle key={k} cx={x} cy={y} r="1.7" fill="#dbe7ff" />))}
-                        {h.pattern === 'none' && (
-                          <text x="30" y="35" textAnchor="middle" fontSize="20" fill="#4a5568">?</text>)}
-                      </svg>
+                      <SkyCrop view={h.view} />
                       <div className="min-w-0">
                         <div className="flex items-baseline gap-2 flex-wrap">
                           <span className="text-gold-300 text-lg" dir="rtl">{h.heb}</span>
