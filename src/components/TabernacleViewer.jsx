@@ -253,9 +253,10 @@ const TabernacleViewer = () => {
   // PITTUCHEI CHOTAM ("engravings of a signet") are TEXT, read in the pointed
   // Hebrew, bib/tan/exo028.md -- so every stone sits in a gold bezel with
   // prongs and carries an engraved name.
-  // ! ASSUMPTION - Claude: which stones are cut vs domed, the facet counts,
-  // ! the angles and all the shading are MY art direction. I have opened NO
-  // ! mineralogy source. This is a drawing, not a gemmological claim.
+  // Optical constants now come from webmineral + Handbook of Mineralogy (see
+  // the data header). ! ASSUMPTION - Claude: which stones are cut vs domed,
+  // the facet counts, the angles and the mapping from refractive index to
+  // pixels are still MY art direction. A drawing, not a gemmological claim.
   const octagon = (r, cx = 50, cy = 50) =>
     Array.from({ length: 8 }, (_, i) => {
       const a = (Math.PI / 180) * (22.5 + 45 * i);
@@ -430,30 +431,63 @@ const TabernacleViewer = () => {
     );
   };
 
+
+  // ---- WHAT THE HEBREW TEXT NAMES IN THE SKY -------------------------------
+  // Every celestial name in the Hebrew Bible, read from the pointed Hebrew in
+  // docs/scribe-texts/bib/tan/. FOUR names, and NO narrative attached to any of
+  // them anywhere in the text. Job names them as things God alone made and
+  // governs; 2 Kings names them among things Israel was forbidden to burn
+  // incense to. No Hebrew source tells us a story they were said to tell.
+  // ! ASSUMPTION - Claude: the English identifications (Pleiades, Orion, Bear)
+  // ! are the TRANSLATORS' readings, not the text's. The little star-patterns
+  // ! drawn below follow those conventional identifications and are my art.
+  const heavenNames = [
+    { heb: "כִּימָה", tr: "Kimah", eng: "rendered Pleiades",
+      where: "Job 9:9 · Job 38:31 · Amos 5:8",
+      says: "Job 38:31 asks whether you can bind its ma'adannot — its bonds or chains. Amos names it among what the LORD made.",
+      pattern: "cluster" },
+    { heb: "כְּסִיל", tr: "Kesil", eng: "rendered Orion",
+      where: "Job 9:9 · Job 38:31 · Amos 5:8",
+      says: "The same verse asks whether you can loose its moshkhot — its cords. The noun kesil elsewhere means a fool; whether that is the same word is not settled by the text.",
+      pattern: "orion" },
+    { heb: "עָשׁ / עַיִשׁ", tr: "Ash / Ayish", eng: "rendered the Bear",
+      where: "Job 9:9 (עָשׁ) · Job 38:32 (עַיִשׁ)",
+      says: "Job 38:32 speaks of guiding Ayish al-baneha — with her sons. Two spellings, one apparent referent.",
+      pattern: "bear" },
+    { heb: "מַזָּרוֹת", tr: "Mazzarot", eng: "rendered a constellation",
+      where: "Job 38:32 — ONCE, in the whole Hebrew Bible",
+      says: "A hapax legomenon: it occurs exactly one time and nowhere else. The verse asks whether you can bring it out in its season. The text does not say how many there are, and does not say twelve.",
+      pattern: "none" },
+  ];
+
   const garmentData = [
     {
       part: "The Ephod (אֵפוֹד)",
-      detail: "A woven vest of gold, blue, purple, and scarlet threads—the gold beaten into thin sheets, then cut into threads and woven with the fabric. On its shoulders sat two onyx stones in gold settings, each engraved with six tribal names in birth order. The High Priest literally carried the weight of the nation on his shoulders before God.",
+      detail: "Gold was hammered into sheets and cut into threads, then woven in with the violet, purple and scarlet and the fine linen (Ex 39:3). On the shoulder pieces sat two onyx stones in gold filigree, six tribal names cut into each like a signet, carried as stones of memorial (Ex 28:9-12). Josephus, writing in Greek in the first century, saw the same thing: two sardonyxes clasping the shoulders, the names of Jacob&rsquo;s sons engraved six to a stone &mdash; and he adds, in his own words, that they were cut <em>in our native letters, in our own tongue</em>, with the elder names on the right shoulder.",
       scripture: "Exodus 28:6-14",
-      historicalNote: "The ephod was so central to Israelite worship that the term became synonymous with seeking God's will. When David fled from Saul, he asked Abiathar to 'bring the ephod' to inquire of the LORD (1 Samuel 23:9)."
+      historicalNote: "TEXT: Ex 28:6-14, 28:9-12, 39:3, read in the Hebrew. WITNESS: Josephus, Antiquities 3.165-166, read in Greek (Niese 1892). The claim that the term 'ephod' became shorthand for seeking God's will is not sourced here.",
+      witness: "TEXT + 1st-century Jewish witness"
     },
     {
       part: "The Hoshen (חֹשֶׁן) — Breastplate of Judgment",
-      detail: "A square pouch of the same woven material as the ephod, folded double to create a pocket. Twelve precious stones were set in gold filigree, arranged in four rows of three. Inside the fold rested the mysterious Urim and Thummim—'Lights and Perfections'—used to receive divine guidance in matters of national importance.",
+      detail: "Square and folded double, a span each way &mdash; a pouch, not a plaque (Ex 28:15-16). Twelve stones in four rows of three, set in gold filigree, each cut with a tribal name like the engraving of a seal (Ex 28:17-21). Josephus calls it the <em>essen</em>, and says the Greeks would call it an oracle; he describes the twelve as surpassing in size and beauty, an adornment no man could purchase for the excess of their worth. Into the fold went the Urim and the Thummim, over the heart, whenever Aaron went in before the LORD (Ex 28:30).",
       scripture: "Exodus 28:15-30",
-      historicalNote: "The Talmud records that the Urim and Thummim functioned by causing specific letters on the stones to light up, spelling out God's answer. After the destruction of Solomon's Temple, the Urim and Thummim were among the five things that 'ceased from Israel' and were never restored."
+      historicalNote: "The Urim and Thummim appear seven times in the whole Hebrew Bible &mdash; Ex 28:30, Lev 8:8, Num 27:21, Deut 33:8, 1 Sam 28:6, Ezra 2:63, Neh 7:65 &mdash; and NOT ONCE does any text describe what they looked like. No material, no shape, no number. That silence is the honest state of the evidence. Later tradition (Talmud, Yoma) holds they were inquired of only when the high priest wore all eight garments, and only for the king, the head of the court, or one whom the public had need of.",
+      witness: "TEXT + 1st-century Jewish witness + later rabbinic tradition"
     },
     {
       part: "The Robe of the Ephod (מְעִיל)",
-      detail: "A seamless garment of pure blue wool (<em>tekhelet</em>), woven in one piece with an opening for the head reinforced like armor. The hem was adorned with alternating golden bells and embroidered pomegranates in blue, purple, and scarlet. The bells announced the High Priest's movement in the Holy Place.",
+      detail: "A robe of blue worn under the ephod, its hem ringed with golden bells and pomegranates alternating (Ex 28:31-34). Josephus read the pair as a sign of the storm: the bells for thunder, the pomegranates for lightning.",
       scripture: "Exodus 28:31-35",
-      historicalNote: "The Talmud states: 'Why bells? So his sound shall be heard when he enters the Holy Place before the LORD and when he comes out—that he may not die.' If the bells stopped, the priests outside would know tragedy had struck. A rope was tied to the High Priest's ankle on Yom Kippur to retrieve him if necessary."
+      historicalNote: "The reason for the bells is given by Scripture itself, not by later commentary &mdash; Ex 28:35: the sound is heard when he enters and leaves the Holy Place before the LORD, so that he will not die. (An earlier version of this page attributed that line to the Talmud. It is Exodus.)",
+      witness: "TEXT + 1st-century Jewish witness"
     },
     {
       part: "The Golden Plate — Tzitz (צִיץ)",
-      detail: "A plate of pure gold worn across the forehead, inscribed with the words קֹדֶשׁ לַיהוָה ('HOLY TO THE LORD') in ancient Hebrew script. It was tied with a blue cord and rested above the turban. This 'flower' (the literal meaning of <em>tzitz</em>) of gold served to 'bear the iniquity' of the holy offerings.",
+      detail: "A plate of pure gold engraved like a signet with <span dir='rtl'>קֹדֶשׁ לַיהוָה</span> &mdash; Holy to the LORD (Ex 28:36). It sat on Aaron&rsquo;s forehead so that he would bear the guilt of the holy things Israel consecrated, and the gifts be accepted (Ex 28:38). Josephus describes a golden crown bearing the sacred name, and remarks that it consists of four vowels.",
       scripture: "Exodus 28:36-38",
-      historicalNote: "Archaeological parallels exist in Egyptian and Mesopotamian cultures, where royal and priestly figures wore forehead ornaments. But only Israel's bore words dedicating the wearer entirely to their God—a radical statement of exclusive devotion."
+      historicalNote: "TEXT: Ex 28:36-38, read in the Hebrew. WITNESS: Josephus, Jewish War 5. The comparison to Egyptian and Mesopotamian forehead ornaments that stood here before is not sourced and has been removed.",
+      witness: "TEXT + 1st-century Jewish witness"
     },
     {
       part: "The Turban (מִצְנֶפֶת) and Sash (אַבְנֵט)",
@@ -479,7 +513,7 @@ const TabernacleViewer = () => {
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-12">
         {/* SIDEBAR NAVIGATION */}
         <nav className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible gap-2 border-b lg:border-b-0 border-stone-300 pb-4 lg:pb-0">
-          {['sanctuary', 'elements', 'garments', 'archaeology'].map(tab => (
+          {['sanctuary', 'elements', 'garments', 'heavens', 'archaeology'].map(tab => (
             <button
               key={tab}
               onClick={() => setActiveView(tab)}
@@ -805,8 +839,15 @@ const TabernacleViewer = () => {
                       <span className="text-[10px] text-amber-700 bg-amber-100 px-2 py-0.5 rounded">{g.scripture}</span>
                     </div>
                     <p className="text-sm text-stone-700 leading-relaxed mb-3" dangerouslySetInnerHTML={{ __html: g.detail }}></p>
+                    {g.witness && (
+                      <div className="mb-2">
+                        <span className="text-[10px] uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300 rounded px-2 py-0.5">
+                          {g.witness}
+                        </span>
+                      </div>
+                    )}
                     <div className="bg-stone-100 p-3 rounded text-xs text-stone-600 border-l-2 border-stone-400">
-                      <strong className="text-stone-700">Historical Note:</strong> {g.historicalNote}
+                      <strong className="text-stone-700">Where this comes from:</strong> {g.historicalNote}
                     </div>
                   </div>
                 ))}
@@ -826,6 +867,85 @@ const TabernacleViewer = () => {
           )}
 
           {/* ARCHAEOLOGY TAB */}
+          {activeView === 'heavens' && (
+            <div className="space-y-6">
+              <div className="text-center">
+                <h2 className="font-cinzel text-amber-800 text-2xl mb-2 uppercase tracking-[0.2em]">What They Named in the Sky</h2>
+                <p className="text-sm text-stone-600 italic max-w-2xl mx-auto">
+                  Four names. That is the whole celestial vocabulary of the Hebrew Bible &mdash; and not one text tells us a story they were said to tell.
+                </p>
+              </div>
+
+              <div className="bg-stone-950 rounded-xl p-6 shadow-2xl">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {heavenNames.map((h, i) => (
+                    <div key={i} className="bg-black/40 border border-gold-400/25 rounded-lg p-4 flex gap-4">
+                      <svg viewBox="0 0 60 60" className="w-16 h-16 shrink-0" aria-hidden="true">
+                        <rect width="60" height="60" fill="#05070f" rx="4" />
+                        {h.pattern === 'cluster' && [[26,22],[32,19],[36,25],[29,28],[22,30],[35,33],[30,24]].map(([x,y],k)=>(
+                          <circle key={k} cx={x} cy={y} r={k===6?1.9:1.4} fill="#dbe7ff" opacity=".95" />))}
+                        {h.pattern === 'orion' && (<>
+                          {[[20,14],[41,16],[18,46],[43,44]].map(([x,y],k)=>(<circle key={k} cx={x} cy={y} r="2" fill="#dbe7ff" />))}
+                          {[[26,28],[30,30],[34,32]].map(([x,y],k)=>(<circle key={k} cx={x} cy={y} r="1.8" fill="#fff" />))}
+                        </>)}
+                        {h.pattern === 'bear' && [[14,40],[21,38],[28,37],[34,34],[40,28],[45,22],[39,19]].map(([x,y],k)=>(
+                          <circle key={k} cx={x} cy={y} r="1.7" fill="#dbe7ff" />))}
+                        {h.pattern === 'none' && (
+                          <text x="30" y="35" textAnchor="middle" fontSize="20" fill="#4a5568">?</text>)}
+                      </svg>
+                      <div className="min-w-0">
+                        <div className="flex items-baseline gap-2 flex-wrap">
+                          <span className="text-gold-300 text-lg" dir="rtl">{h.heb}</span>
+                          <span className="text-stone-200 text-sm font-bold">{h.tr}</span>
+                          <span className="text-stone-500 text-[11px] italic">{h.eng}</span>
+                        </div>
+                        <p className="text-[11px] text-amber-200/70 mt-1">{h.where}</p>
+                        <p className="text-[11px] text-stone-300 mt-2 leading-relaxed">{h.says}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-[10px] text-stone-500 mt-4 text-center italic">
+                  The English identifications are the translators&rsquo; readings, not the text&rsquo;s. The star-patterns follow those conventional identifications and are our drawing.
+                </p>
+              </div>
+
+              <div className="bg-white/70 p-5 rounded-lg border-l-4 border-amber-500 shadow">
+                <h3 className="font-cinzel text-amber-900 font-bold mb-2">The question God asks</h3>
+                <p className="text-sm text-stone-700 leading-relaxed">
+                  Job 38 does not explain the stars. It asks whether Job can <em>tie</em> the bonds of Kimah or <em>loose</em> the cords of Kesil, bring out Mazzarot in its season, guide Ayish with her sons. Every clause is a question about authorship and control &mdash; not about meaning, and not about prediction.
+                </p>
+                <div className="mt-2"><span className="text-[10px] uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300 rounded px-2 py-0.5">TEXT — Job 38:31-32, read in the Hebrew</span></div>
+              </div>
+
+              <div className="bg-white/70 p-5 rounded-lg border-l-4 border-red-700/60 shadow">
+                <h3 className="font-cinzel text-amber-900 font-bold mb-2">And the line they drew</h3>
+                <p className="text-sm text-stone-700 leading-relaxed">
+                  The related word <em>mazzalot</em> appears once too &mdash; in 2 Kings 23:5, where Josiah does away with the priests who burned incense to Baal, to the sun, to the moon, to the constellations and to all the host of heaven. The heavens could be named and admired. They could not be burned to.
+                </p>
+                <div className="mt-2"><span className="text-[10px] uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300 rounded px-2 py-0.5">TEXT — 2 Kings 23:5</span></div>
+              </div>
+
+              <div className="bg-stone-100 p-5 rounded-lg border-l-4 border-stone-400 shadow">
+                <h3 className="font-cinzel text-stone-800 font-bold mb-2">What later Jewish writers added</h3>
+                <p className="text-sm text-stone-700 leading-relaxed mb-2">
+                  <strong>Enoch</strong> describes a machinery rather than a myth: the sun rising and setting through six portals at either edge of heaven, the whole reckoning shown to Enoch by the angel Uriel &mdash; and a warning that when the chiefs of the stars transgress their prescribed order, men will go astray over them.
+                </p>
+                <p className="text-sm text-stone-700 leading-relaxed">
+                  <strong>Josephus</strong>, describing this very breastplate, wrote that the twelve stones may be understood as the twelve months, or as the twelve signs of the circle <em>which the Greeks call the Zodiac</em>. He names the referent and marks the name as somebody else&rsquo;s.
+                </p>
+                <div className="mt-2"><span className="text-[10px] uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300 rounded px-2 py-0.5">WITNESS — 1 Enoch 72, 80; Josephus, Antiquities 3</span></div>
+              </div>
+
+              <div className="bg-stone-900 text-parchment-100 p-5 rounded-lg border border-gold-400/30">
+                <h3 className="font-cinzel text-gold-400 mb-2">What we do not have</h3>
+                <p className="text-sm leading-relaxed text-stone-300">
+                  No Hebrew text preserves a story told by these stars. There is no biblical list of twelve signs, no mapping of tribes to constellations, and no narrative read out of the sky. Later systems supply all three &mdash; but they are later, and this page keeps that line visible rather than filling the gap.
+                </p>
+              </div>
+            </div>
+          )}
+
           {activeView === 'archaeology' && (
             <div className="animate-fadeIn space-y-8">
                 {/* Header */}
