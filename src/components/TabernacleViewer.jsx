@@ -119,93 +119,315 @@ const TabernacleViewer = () => {
     // ! earlier claim of mine that faceted cuts are anachronistic was retracted
     // ! as unsourced. The dome is art direction, not an argument.
     // ================================================================
+    // ---- mineral / ri / luster / diaph: MEASURED OPTICAL DATA ----
+    // Read 2026-07-27 from TWO independent references, which agree:
+    //   webmineral.com/data/<Mineral>.shtml
+    //   handbookofmineralogy.org/pdfs/<mineral>.pdf  (Mineralogical Soc. of America)
+    // Diamond: adamantine, n=2.4175 (589nm), and the Handbook states
+    //   "Dispersion: Strong" with n running 2.4354 (486) to 2.4076 (687) --
+    //   that spread across the spectrum IS the fire, so it is drawn with it.
+    // Turquoise: BOTH sources say waxy / subtranslucent-to-opaque when massive,
+    //   so nophekh is NO LONGER a faceted transparent gem. Corrected.
+    // Beryl has the LOWEST ri here (1.56-1.60) -> emerald and beryl are drawn
+    //   softer than corundum. Quartz 1.544/1.553 (both sources, exact match).
+    // Corundum: sources CONFLICT slightly -- Handbook "adamantine to vitreous",
+    //   webmineral "vitreous". Recorded as the range, not resolved.
+    // Zircon luster (adamantine) is ONE SOURCE, webmineral only.
+    // ! ONE SOURCE (webmineral only) for the refractive indices of corundum,
+    // ! beryl, topaz, zircon and turquoise. Only DIAMOND and QUARTZ have n from
+    // ! both references. The brilliance ramp below inherits that weakness.
+    // ! ASSUMPTION - Claude: the MAPPING from refractive index to pixels --
+    // ! facet contrast, highlight size and opacity -- is mine. The optical
+    // ! constants are measured; how brightly they are drawn is art direction.
+    // These are MEASURED PROPERTIES OF THE MINERALS. Which mineral each Hebrew
+    // word denotes is still NOT settled -- see the trad/witness columns.
+    //
+    // ---- trad / ctx: TRADITIONAL RABBINIC IDENTIFICATIONS ----
+    // Supplied by Cisco 2026-07-27 as the page's editorial line. These are a
+    // DIFFERENT CLASS from the lxx/vulg/kjv/nasb columns, which I read directly
+    // from primary texts. I have NOT checked these against any rabbinic source
+    // -- they are Cisco's, and the palette now follows them.
+    // Two stones changed colour: nophekh and yashpeh were drawn RED, and are
+    // now blue-green and green per the traditional identification.
+    // The shoham shoulder note IS text: Ex 28:9-12 (NASB, read) and Josephus
+    // Ant. 3 describes two sardonyxes at the shoulders.
+    //
     // vulg spellings below CORRECTED 2026-07-27 to bib/vul/exo028.md (7 changed).
     // optics/struct/split: ! ASSUMPTION - Claude, per header note.
     { heb: "odem",     strongs: "H124",  tribe: "Reuben",   meaning: "The Firstborn",
       lxx: "sardion",     vulg: "sardius",     kjv: "Sardius",   nasb: "Ruby",
       note: '"redness ... the ruby, garnet OR SOME OTHER RED GEM"',
-      optics: "translucent", struct: "plain", split: false,
-      hue: "#c0392b", deep: "#5e1512", lite: "#ff8a7a" },
+      trad: "Ruby / Sardius", ctx: "The Hebrew root means “red.” Traditionally a deep red ruby.",
+      mineral: "corundum", ri: 1.77, luster: "adamantine-vitreous", diaph: "transparent",
+      optics: "transparent", struct: "plain", split: false,
+      hue: "#c81e3a", deep: "#5c0a18", lite: "#ff8095" },
     { heb: "pitdah",   strongs: "H6357", tribe: "Simeon",   meaning: "Hearing",
       lxx: "topazion",    vulg: "topazius",    kjv: "Topaz",     nasb: "Topaz",
       note: '"a gem, PROBABLY the topaz"',
+      trad: "Topaz", ctx: "Traditionally a highly refractive yellow or golden stone.",
+      mineral: "topaz", ri: 1.62, luster: "vitreous", diaph: "transparent",
       optics: "transparent", struct: "plain", split: false,
-      hue: "#d4a017", deep: "#6b4a06", lite: "#ffe58a" },
+      hue: "#e0a80f", deep: "#6b4a06", lite: "#ffec96" },
     { heb: "bareket",  strongs: "H1304", tribe: "Levi",     meaning: "Joined",
       lxx: "smaragdos",   vulg: "smaragdus",   kjv: "Carbuncle", nasb: "Emerald",
       note: '"a gem (as FLASHING), PERHAPS the emerald" — KJV says carbuncle, LXX and Vulgate say emerald',
+      trad: "Carbuncle / Emerald", ctx: "The root b-r-q means “lightning” or “flash” — a brilliant, flashing stone.",
+      mineral: "beryl", ri: 1.58, luster: "vitreous-resinous", diaph: "transparent",
       optics: "transparent", struct: "included", split: true,
-      hue: "#1f9c6b", deep: "#083d29", lite: "#7dffcb" },
+      hue: "#16a34a", deep: "#07351f", lite: "#8dffc4" },
     { heb: "nophekh",  strongs: "H5306", tribe: "Judah",    meaning: "Praise",
       lxx: "anthrax",     vulg: "carbunculus", kjv: "Emerald",   nasb: "Turquoise",
       note: '"PROBABLY THE GARNET" — three witnesses, three different stones',
-      optics: "transparent", struct: "plain", split: true,
-      hue: "#b0324a", deep: "#4a0d1c", lite: "#ff8fa3" },
+      trad: "Emerald / Turquoise", ctx: "Traditionally a deep, glowing green or blue-green precious stone.",
+      mineral: "turquoise", ri: 1.62, luster: "waxy", diaph: "subtranslucent",
+      optics: "translucent", struct: "plain", split: true,
+      hue: "#0f93a8", deep: "#03323b", lite: "#79e8f5" },
     { heb: "sappir",   strongs: "H5601", tribe: "Issachar", meaning: "Reward",
       lxx: "sapphiros",   vulg: "sapphirus",   kjv: "Sapphire",  nasb: "Sapphire",
       note: '"PROBABLY the sapphire" — the one all four witnesses agree on',
+      trad: "Sapphire", ctx: "The direct linguistic source of the modern word “sapphire.”",
+      mineral: "corundum", ri: 1.77, luster: "adamantine-vitreous", diaph: "transparent",
       optics: "transparent", struct: "plain", split: false,
       hue: "#2457c5", deep: "#0b1f5e", lite: "#8fb4ff" },
     { heb: "yahalom",  strongs: "H3095", tribe: "Zebulun",  meaning: "Dwelling",
       lxx: "iaspis",      vulg: "jaspis",      kjv: "Diamond",   nasb: "Diamond",
       note: '"in the sense of HARDNESS ... PROBABLY ONYX" — LXX and Vulgate both read jasper, not diamond',
+      trad: "Diamond", ctx: "The root h-l-m means “to strike hard” — an exceptionally hard, unbreakable stone.",
+      mineral: "diamond", ri: 2.42, luster: "adamantine", diaph: "transparent",
       optics: "transparent", struct: "plain", split: true,
-      hue: "#cfd6dd", deep: "#5b646d", lite: "#ffffff" },
+      hue: "#dfe6ee", deep: "#798593", lite: "#ffffff" },
     { heb: "leshem",   strongs: "H3958", tribe: "Dan",      meaning: "Judge",
       lxx: "ligyrion",    vulg: "ligurius",    kjv: "Ligure",    nasb: "Jacinth",
       note: '"of UNCERTAIN meaning; a gem, PERHAPS the jacinth"',
+      trad: "Ligure / Jacinth", ctx: "Traditionally a warm amber or deep orange-red hue.",
+      mineral: "zircon", ri: 1.95, luster: "adamantine", diaph: "transparent",
       optics: "transparent", struct: "plain", split: true,
       hue: "#d8641c", deep: "#63250a", lite: "#ffb277" },
     { heb: "shevo",    strongs: "H7618", tribe: "Naphtali", meaning: "Wrestling",
       lxx: "achates",     vulg: "achates",     kjv: "Agate",     nasb: "Agate",
       note: 'Strong\'s gives NO identification — only "meaning to flame; a gem"',
+      trad: "Agate", ctx: "Traditionally a beautifully banded, multi-coloured stone.",
+      mineral: "quartz (chalcedony)", ri: 1.55, luster: "vitreous", diaph: "translucent",
       optics: "translucent", struct: "banded", split: false,
-      hue: "#9a8f86", deep: "#3d3630", lite: "#e8dfd6" },
+      bands: ["#f3e3c8","#8a6a45","#d8c19a","#5e452c","#e8d3ae","#a07f55"],
+      hue: "#b08d63", deep: "#4a3524", lite: "#f0dcc0" },
     { heb: "achlamah", strongs: "H306",  tribe: "Gad",      meaning: "Troop",
       lxx: "amethystos",  vulg: "amethystus",  kjv: "Amethyst",  nasb: "Amethyst",
       note: '"perhaps ... DREAM STONE; a gem, PROBABLY the amethyst"',
+      trad: "Amethyst", ctx: "A highly prized, deep purple gemstone.",
+      mineral: "quartz", ri: 1.55, luster: "vitreous", diaph: "transparent",
       optics: "transparent", struct: "plain", split: false,
       hue: "#7c46c9", deep: "#33165e", lite: "#c9a8ff" },
     { heb: "tarshish", strongs: "H8658", tribe: "Asher",    meaning: "Happy",
       lxx: "chrysolithos", vulg: "chrysolithus", kjv: "Beryl",   nasb: "Beryl",
       note: '"a gem, PERHAPS THE TOPAZ" — KJV prints beryl; LXX and Vulgate read chrysolite',
+      trad: "Beryl / Chrysolite", ctx: "Traditionally a sea-green or golden-yellow stone.",
+      mineral: "beryl", ri: 1.58, luster: "vitreous-resinous", diaph: "transparent",
       optics: "transparent", struct: "plain", split: true,
-      hue: "#17a89a", deep: "#06413c", lite: "#7ff0e4" },
+      hue: "#2f9e8f", deep: "#0a3b34", lite: "#8ff0e0" },
     { heb: "shoham",   strongs: "H7718", tribe: "Joseph",   meaning: "Adding",
       lxx: "beryllion",   vulg: "onychinus",   kjv: "Onyx",      nasb: "Onyx",
       note: '"PROBABLY THE BERYL (from its pale green colour)" — KJV prints onyx',
+      trad: "Onyx", ctx: "Two larger shoham stones were also engraved and mounted on the ephod’s shoulders (Ex 28:9-12).",
+      mineral: "quartz (chalcedony)", ri: 1.55, luster: "vitreous", diaph: "opaque",
       optics: "opaque", struct: "banded", split: true,
-      hue: "#5c5a57", deep: "#171615", lite: "#a8a5a1" },
+      hue: "#4a4744", deep: "#0e0d0c", lite: "#c9c4bd" },
     { heb: "yashpeh",  strongs: "H3471", tribe: "Benjamin", meaning: "Son of Right Hand",
       lxx: "onychion",    vulg: "beryllus",    kjv: "Jasper",    nasb: "Jasper",
       note: '"SUPPOSED TO BE jasper (from the RESEMBLANCE IN NAME)" — the weakest reason of all twelve',
+      trad: "Jasper", ctx: "Traditionally a highly polished, precious green jasper.",
+      mineral: "quartz (chalcedony)", ri: 1.55, luster: "vitreous", diaph: "opaque",
       optics: "opaque", struct: "mottled", split: true,
-      hue: "#a8332c", deep: "#41100d", lite: "#f08a80" }
+      hue: "#3f7d4a", deep: "#16301c", lite: "#93c9a0" }
   ];
 
 
-  // ---- HOW A STONE IS DRAWN -------------------------------------------------
-  // Driven by `optics` and `struct` on each entry so the twelve do not all read
-  // as the same gem. Transparent stones get a bright core and deep rim (light
-  // goes through); translucent get a soft waxy subsurface glow; opaque get flat
-  // matte shading and NO internal light.
-  // Form is a CABOCHON -- a polished dome -- because Ex 28:21 calls them
-  // PITTUCHEI CHOTAM, "engravings of a signet" (read in the Hebrew,
-  // bib/tan/exo028.md): a seal-stone has to carry an engraved name.
-  // ! ASSUMPTION - Claude: the gradients/opacities are my art direction.
-  const stoneSurface = (s) => {
-    if (s.optics === 'opaque') return {
-      background: `radial-gradient(ellipse 70% 60% at 36% 28%, ${s.lite}66 0%, ${s.hue} 46%, ${s.deep} 100%)`,
-      boxShadow: `inset 0 -6px 12px -4px rgba(0,0,0,.6), inset 0 4px 8px -3px ${s.lite}33`
-    };
-    if (s.optics === 'translucent') return {
-      background: `radial-gradient(ellipse 62% 52% at 36% 26%, ${s.lite}dd 0%, ${s.hue}f2 42%, ${s.deep}e6 100%)`,
-      boxShadow: `inset 0 -8px 14px -5px rgba(0,0,0,.5), inset 0 5px 12px -3px ${s.lite}77, 0 0 12px -4px ${s.hue}88`
-    };
-    return {   // transparent
-      background: `radial-gradient(ellipse 58% 48% at 37% 25%, #ffffffcc 0%, ${s.lite} 18%, ${s.hue} 52%, ${s.deep} 100%)`,
-      boxShadow: `inset 0 -9px 16px -5px ${s.deep}, inset 0 6px 14px -4px ${s.lite}, 0 0 16px -3px ${s.hue}aa`
-    };
+  // ---- A STONE IS A SHAPE, NOT A SQUARE ------------------------------------
+  // First pass drew rounded squares with gradients on them. That is a button.
+  // Real geometry now: an octagonal CUT with individually shaded crown facets
+  // for the transparent stones, and a domed CABOCHON for the translucent and
+  // opaque ones. Drawn in SVG so the silhouette, the girdle and the facet
+  // edges are actual geometry instead of CSS box tricks.
+  //
+  // Ex 28:20 MESHUBBATSIM ZAHAV ("set in gold filigree") and 28:21
+  // PITTUCHEI CHOTAM ("engravings of a signet") are TEXT, read in the pointed
+  // Hebrew, bib/tan/exo028.md -- so every stone sits in a gold bezel with
+  // prongs and carries an engraved name.
+  // ! ASSUMPTION - Claude: which stones are cut vs domed, the facet counts,
+  // ! the angles and all the shading are MY art direction. I have opened NO
+  // ! mineralogy source. This is a drawing, not a gemmological claim.
+  const octagon = (r, cx = 50, cy = 50) =>
+    Array.from({ length: 8 }, (_, i) => {
+      const a = (Math.PI / 180) * (22.5 + 45 * i);
+      return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+    });
+  const pts = (arr) => arr.map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`).join(' ');
+
+  const Stone = ({ s, i = 0 }) => {
+    const uid = s.heb;
+    // facet contrast and highlight sharpness scale with the MEASURED refractive
+    // index: quartz 1.55 -> diamond 2.42. Sourced, see header.
+    const bril = Math.min(1, Math.max(0, ((s.ri || 1.55) - 1.5) / 0.95));
+    const adamantine = (s.luster || '').startsWith('adamantine');
+    const waxy = (s.luster || '').includes('waxy');
+    const fire = s.mineral === 'diamond';
+    // ! ASSUMPTION - Claude: highlight placement varies per stone so the twelve
+    // ! are not stamped with one identical blob. Values are art direction.
+    const hl = [
+      { x: 37, y: 30, rx: 9,   ry: 5.5, rot: -22 }, { x: 41, y: 27, rx: 7.5, ry: 4.4, rot: 14 },
+      { x: 34, y: 33, rx: 10,  ry: 4.8, rot: -38 }, { x: 39, y: 25, rx: 6.8, ry: 5.2, rot: 30 },
+      { x: 43, y: 32, rx: 8.4, ry: 4.2, rot: -8  }, { x: 33, y: 28, rx: 7.2, ry: 6.0, rot: 46 },
+      { x: 45, y: 29, rx: 9.6, ry: 4.0, rot: -30 }, { x: 36, y: 35, rx: 6.4, ry: 5.6, rot: 8  },
+      { x: 40, y: 31, rx: 8.8, ry: 4.6, rot: -46 }, { x: 31, y: 30, rx: 7.8, ry: 5.0, rot: 22 },
+      { x: 44, y: 34, rx: 6.6, ry: 4.4, rot: -14 }, { x: 38, y: 27, rx: 9.2, ry: 5.8, rot: 38 }
+    ][i % 12];
+    const cut = s.optics === 'transparent';          // faceted cut
+    const outer = octagon(41);
+    const table = octagon(19);
+    const girdle = octagon(41);
+
+    return (
+      <svg viewBox="0 0 100 100" className="w-full h-full block" aria-hidden="true">
+        <defs>
+          <clipPath id={`clip-${uid}`}>
+            {cut ? <polygon points={pts(outer)} /> : <ellipse cx="50" cy="50" rx="41" ry="38" />}
+          </clipPath>
+          <radialGradient id={`dome-${uid}`} cx="36%" cy="28%" r="78%">
+            <stop offset="0%"  stopColor={s.optics === 'opaque' ? s.lite : '#ffffff'}
+                  stopOpacity={s.optics === 'opaque' ? '.55' : '.95'} />
+            <stop offset="26%" stopColor={s.lite} stopOpacity={s.optics === 'opaque' ? '.5' : '.95'} />
+            <stop offset="62%" stopColor={s.hue} />
+            <stop offset="100%" stopColor={s.deep} />
+          </radialGradient>
+          <linearGradient id={`gold-${uid}`} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%"   stopColor="#f8e08e" />
+            <stop offset="38%"  stopColor="#c79a33" />
+            <stop offset="64%"  stopColor="#7c5c14" />
+            <stop offset="100%" stopColor="#f0cf72" />
+          </linearGradient>
+        </defs>
+
+        {/* GOLD BEZEL -- the stone is SET, per Ex 28:20 */}
+        {cut
+          ? <polygon points={pts(octagon(47))} fill={`url(#gold-${uid})`} />
+          : <ellipse cx="50" cy="50" rx="47" ry="44" fill={`url(#gold-${uid})`} />}
+        {cut
+          ? <polygon points={pts(octagon(43.5))} fill="#241a06" opacity=".85" />
+          : <ellipse cx="50" cy="50" rx="43.5" ry="40.5" fill="#241a06" opacity=".85" />}
+
+        <g clipPath={`url(#clip-${uid})`}>
+          {/* body */}
+          <rect x="0" y="0" width="100" height="100" fill={`url(#dome-${uid})`} />
+
+          {/* CROWN FACETS -- separate planes, hard edges, each lit differently */}
+          {cut && outer.map((p0, i) => {
+            const p1 = outer[(i + 1) % 8], t0 = table[i], t1 = table[(i + 1) % 8];
+            const base = [0.42, 0.20, 0.10, 0.16, 0.34, 0.55, 0.62, 0.55][i];
+            const lit = Math.min(0.95, base * (0.55 + 1.15 * bril));
+            return (
+              <polygon key={i} points={pts([p0, p1, t1, t0])}
+                       fill={i < 4 ? s.lite : s.deep} opacity={lit}
+                       stroke={s.lite} strokeOpacity=".28" strokeWidth=".5" />
+            );
+          })}
+          {/* TABLE -- the flat top the name is cut into */}
+          {cut && <polygon points={pts(table)} fill={s.hue} opacity=".55"
+                           stroke={s.lite} strokeOpacity=".45" strokeWidth=".6" />}
+
+          {/* BANDING -- agate, onyx: irregular layers, varied width */}
+          {s.struct === 'banded' && (
+            <g opacity=".82">
+              {[6, 16, 25, 35, 44, 54, 63, 73, 82, 91].map((y, k) => {
+                const cols = s.bands || [s.lite, s.deep];
+                const h = [6, 4, 8, 5, 7, 4, 9, 5, 6, 7][k];
+                const a = [5, 3, 6, 4, 7, 3, 5, 4, 6, 4][k];
+                const d = `M -25,${y} C 5,${y - a} 35,${y + a} 62,${y - a * 0.5}`
+                        + ` S 105,${y + a} 125,${y}`
+                        + ` L 125,${y + h} C 95,${y + h + a} 55,${y + h - a} 28,${y + h + a * 0.5}`
+                        + ` S -5,${y + h - a} -25,${y + h} Z`;
+                return <path key={k} d={d} fill={cols[k % cols.length]}
+                             opacity={[.85,.6,.9,.55,.8,.65,.9,.5,.75,.8][k]} />;
+              })}
+            </g>
+          )}
+
+          {/* INCLUSIONS -- emerald's jardin */}
+          {s.struct === 'included' && (
+            <g opacity=".6" fill={s.deep}>
+              <ellipse cx="62" cy="38" rx="6" ry="3.4" transform="rotate(24 62 38)" />
+              <ellipse cx="35" cy="63" rx="4" ry="2.2" transform="rotate(-38 35 63)" />
+              <path d="M22,58 L46,40 L48,43 L25,61 Z" opacity=".5" />
+            </g>
+          )}
+          {/* MOTTLING -- jasper is impure and patchy */}
+          {s.struct === 'mottled' && (
+            <g opacity=".55">
+              <ellipse cx="33" cy="36" rx="19" ry="13" fill={s.deep} transform="rotate(-20 33 36)" />
+              <ellipse cx="68" cy="62" rx="16" ry="19" fill={s.lite} opacity=".4" />
+              <ellipse cx="58" cy="27" rx="12" ry="9" fill={s.deep} opacity=".7" />
+              <ellipse cx="40" cy="76" rx="14" ry="8" fill={s.deep} opacity=".5" />
+            </g>
+          )}
+
+          {/* DISPERSION -- Handbook of Mineralogy: diamond "Dispersion: Strong",
+              n 2.4354 (486nm) to 2.4076 (687nm). Only diamond gets spectral fire. */}
+          {fire && (
+            <g opacity=".9">
+              {[[12,'#7fb3ff'],[47,'#8affd8'],[96,'#ffe98a'],[143,'#ff9ec4'],
+                [198,'#9fd4ff'],[243,'#c9ff9f'],[295,'#ffd08a'],[331,'#ffa6d6']].map(([deg, c], k) => {
+                const a = (Math.PI / 180) * deg, w = (Math.PI / 180) * 5;
+                const r1 = 13, r2 = 40;
+                const q = [
+                  [50 + r1 * Math.cos(a - w),       50 + r1 * Math.sin(a - w)],
+                  [50 + r2 * Math.cos(a - w * 0.5), 50 + r2 * Math.sin(a - w * 0.5)],
+                  [50 + r2 * Math.cos(a + w * 0.5), 50 + r2 * Math.sin(a + w * 0.5)],
+                  [50 + r1 * Math.cos(a + w),       50 + r1 * Math.sin(a + w)]
+                ];
+                return <polygon key={k} points={pts(q)} fill={c}
+                                opacity={[.6,.42,.66,.48,.55,.38,.6,.44][k]} />;
+              })}
+            </g>
+          )}
+
+          {/* pavilion darkening -- depth below the girdle */}
+          <ellipse cx="50" cy="86" rx="46" ry="26" fill={s.deep} opacity=".55" />
+
+          {/* specular: tight + bright on cut stones, broad + dull on opaque */}
+          {s.optics === 'opaque'
+            ? <ellipse cx={hl.x + 2} cy={hl.y + 3} rx={hl.rx * 1.5} ry={hl.ry * 1.5}
+                       fill="#fff" opacity=".14" transform={`rotate(${hl.rot} ${hl.x} ${hl.y})`} />
+            : <>
+                <ellipse cx={hl.x} cy={hl.y}
+                         rx={hl.rx * (waxy ? 2.1 : adamantine ? 0.75 : 1)}
+                         ry={hl.ry * (waxy ? 2.1 : adamantine ? 0.75 : 1)}
+                         fill="#fff"
+                         opacity={waxy ? '.13' : adamantine ? '.95' : (0.45 + 0.4 * bril).toFixed(2)}
+                         transform={`rotate(${hl.rot} ${hl.x} ${hl.y})`} />
+                {s.optics === 'transparent' &&
+                  <circle cx={hl.x + 5} cy={hl.y - 4} r="1.9" fill="#fff" opacity=".95" />}
+              </>}
+        </g>
+
+        {/* GIRDLE -- the bright rim where crown meets pavilion */}
+        {cut
+          ? <polygon points={pts(girdle)} fill="none" stroke={s.lite} strokeOpacity=".55" strokeWidth="1.1" />
+          : <ellipse cx="50" cy="50" rx="41" ry="38" fill="none" stroke={s.lite} strokeOpacity=".4" strokeWidth="1.1" />}
+
+        {/* the witnesses disagree -- marked ON the setting, not floating beside it */}
+        {s.split && (
+          <g>
+            <circle cx="83" cy="17" r="5.2" fill="#1a1206" stroke="#ffd76a" strokeWidth="1.3" />
+            <text x="83" y="20.4" textAnchor="middle" fontSize="8" fontWeight="bold"
+                  fill="#ffd76a" fontFamily="Georgia, serif">?</text>
+          </g>
+        )}
+
+        {/* PRONGS holding the stone */}
+        {[[50,7],[93,50],[50,93],[7,50]].map(([x,y],i)=>(
+          <circle key={i} cx={x} cy={y} r="4.6" fill={`url(#gold-${uid})`} stroke="#5c440f" strokeWidth=".5" />
+        ))}
+      </svg>
+    );
   };
 
   const garmentData = [
@@ -499,58 +721,23 @@ const TabernacleViewer = () => {
                       onClick={() => setOpenStone(open ? null : i)}
                       aria-label={`${stone.tribe} \u2014 ${stone.heb}`}
                       aria-pressed={open}
-                      className={`aspect-square group relative rounded-lg p-[3px] transition-transform hover:scale-105 focus:outline-none ${open ? 'scale-105 ring-2 ring-gold-400' : ''}`}
-                      style={{
-                        // GOLD FILIGREE SETTING -- Ex 28:20 MESHUBBATSIM ZAHAV,
-                        // "set in gold filigree", read in the Hebrew (bib/tan/exo028.md).
-                        background: 'linear-gradient(145deg,#f6da85 0%,#bd952f 36%,#7d5f16 63%,#eccb6b 100%)',
-                        boxShadow: '0 2px 7px rgba(0,0,0,.55), inset 0 1px 2px rgba(255,255,255,.55)'
-                      }}
+                      className={`aspect-square group relative transition-transform hover:scale-110 focus:outline-none ${open ? 'scale-110' : ''}`}
+                      style={{ filter: `drop-shadow(0 3px 5px rgba(0,0,0,.65)) drop-shadow(0 0 7px ${stone.hue}55)` }}
                     >
-                      <span className="block w-full h-full rounded-md relative overflow-hidden flex items-center justify-center"
-                            style={stoneSurface(stone)}>
+                      <span className="block w-full h-full relative">
+                        <Stone s={stone} i={i} />
 
-                        {/* BANDING -- agate/onyx grow in layers */}
-                        {stone.struct === 'banded' && (
-                          <span className="absolute inset-0 pointer-events-none opacity-70" style={{
-                            background: `repeating-linear-gradient(28deg, ${stone.lite}00 0px, ${stone.lite}55 3px, ${stone.deep}66 7px, ${stone.lite}00 11px)`
-                          }} />
-                        )}
-                        {/* INCLUSIONS -- emerald's jardin: fissures, not sparkle */}
-                        {stone.struct === 'included' && (
-                          <span className="absolute inset-0 pointer-events-none opacity-55" style={{
-                            background: `radial-gradient(circle at 62% 38%, ${stone.deep}aa 0 6%, transparent 7%),
-                                         radial-gradient(circle at 33% 66%, ${stone.deep}99 0 4%, transparent 5%),
-                                         linear-gradient(74deg, transparent 44%, ${stone.deep}77 46%, transparent 48%)`
-                          }} />
-                        )}
-                        {/* MOTTLING -- jasper is a patchy, impure stone */}
-                        {stone.struct === 'mottled' && (
-                          <span className="absolute inset-0 pointer-events-none opacity-60" style={{
-                            background: `radial-gradient(ellipse 40% 30% at 25% 30%, ${stone.deep}cc 0%, transparent 60%),
-                                         radial-gradient(ellipse 35% 45% at 72% 62%, ${stone.lite}55 0%, transparent 55%),
-                                         radial-gradient(ellipse 30% 25% at 55% 20%, ${stone.deep}88 0%, transparent 60%)`
-                          }} />
-                        )}
-
-                        {/* wet polish highlight -- one soft dome specular, no faceting */}
-                        <span className="absolute top-[12%] left-[18%] w-[26%] h-[18%] rounded-full pointer-events-none"
-                              style={{ background: 'radial-gradient(ellipse, rgba(255,255,255,.85) 0%, rgba(255,255,255,.25) 45%, transparent 72%)', filter: 'blur(.6px)' }} />
-
-                        {/* the ENGRAVED name -- cut into the stone, not printed on it */}
-                        <span className="relative z-10 text-[7px] font-bold uppercase tracking-wide"
-                              style={{ color: 'rgba(0,0,0,.42)', textShadow: `0 1px 0 ${stone.lite}cc, 0 -1px 1px rgba(0,0,0,.5)` }}>
-                          {stone.tribe}
+                        {/* the ENGRAVED name -- cut into the stone face */}
+                        <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                          <span className="text-[7px] font-bold uppercase tracking-wide"
+                                style={{ color: 'rgba(0,0,0,.5)', textShadow: `0 .5px 0 ${stone.lite}aa, 0 -.5px 1px rgba(0,0,0,.55)` }}>
+                            {stone.tribe}
+                          </span>
                         </span>
 
-                        {/* witnesses disagree on this one */}
-                        {stone.split && (
-                          <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-amber-300/90 ring-1 ring-black/40 pointer-events-none"
-                                title="the ancient witnesses disagree on this stone" />
-                        )}
 
                         {/* HOVER -- Hebrew first */}
-                        <span className="absolute inset-0 bg-black/88 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity p-1 text-center backdrop-blur-sm">
+                        <span className="absolute inset-0 rounded-full bg-black/88 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity p-1 text-center backdrop-blur-sm">
                           <span className="text-[10px] text-gold-300 font-bold italic leading-tight">{stone.heb}</span>
                           <span className="text-[6px] text-stone-300 mt-0.5 leading-tight">LXX {stone.lxx}</span>
                           <span className="text-[6px] text-stone-400 leading-tight">KJV {stone.kjv} · NASB {stone.nasb}</span>
@@ -580,6 +767,12 @@ const TabernacleViewer = () => {
                         <div><span className="text-stone-500">KJV</span> {s.kjv}</div>
                         <div><span className="text-stone-500">NASB</span> {s.nasb}</div>
                       </div>
+                      <p className="text-[12px] text-gold-200 mt-3">{s.trad}</p>
+                      <p className="text-[10px] text-stone-500 mt-1">
+                        drawn as {s.mineral} — refractive index {s.ri}, {s.luster} lustre, {s.diaph}
+                        <span className="text-stone-600"> (webmineral + Handbook of Mineralogy)</span>
+                      </p>
+                      <p className="text-[11px] text-stone-300 mt-1 leading-relaxed">{s.ctx}</p>
                       <p className="text-[11px] text-amber-200/80 mt-3 leading-relaxed italic">{s.note}</p>
                       {s.split && (
                         <p className="text-[10px] text-amber-300/90 mt-2">
