@@ -443,12 +443,48 @@
         controls.dampingFactor = 0.05;
         controls.minDistance = 2;          // Allow getting very close
         controls.maxDistance = 300;        // Allow zooming out further
-        controls.maxPolarAngle = Math.PI;  // Allow looking from below (full rotation)
+        // GROUND LOCK (2026-07-29, Cisco: "the ground is the ground. can we lock the ground?")
+        // Math.PI here was what let the camera swing all the way under the desert floor and invert
+        // the starfield. PI/2 is only a safe STARTING value — the real clamp is recomputed every
+        // frame in clampCameraToGround(), because a fixed maxPolarAngle measures from the ORBIT
+        // TARGET, not from the ground, and this scene moves its target (y=5 here, y=10 at the
+        // preset further down). A fixed PI/2 would therefore pin the floor to the target's height
+        // and cost you every low, looking-up-at-the-tent view. minPolarAngle stays 0 so straight
+        // up at the sky is still free.
+        controls.maxPolarAngle = Math.PI / 2;
         controls.minPolarAngle = 0;        // Allow looking from directly above
         controls.target.set(0, 5, 0);
         controls.enablePan = true;         // Allow panning to move around
         controls.panSpeed = 1.0;
         controls.update();
+
+        // ---- the ground lock -------------------------------------------------------------
+        // Look anywhere you like ABOVE the horizon; you cannot get underneath the world. This is
+        // the RPG camera rule: free to tilt up to the zenith, free to come right down near the
+        // sand, but the floor is a floor.
+        //
+        // The desert floor is the `ground` mesh below: a PlaneGeometry rotated -PI/2 with no
+        // position.y set, so it sits at y = 0 (read from the mesh, not assumed).
+        //
+        // WHY THIS IS COMPUTED PER FRAME rather than set once. OrbitControls positions the camera
+        // at  target + distance * (sin/cos of the polar angle), so the polar angle is measured
+        // from the TARGET, not from the world floor. With the target at y=5, a static
+        // maxPolarAngle = PI/2 would stop the camera at y=5 and you could never drop to eye level.
+        // Solving  target.y + dist*cos(polar) >= MIN_CAM_Y  for polar gives the angle below, which
+        // adapts automatically as you zoom (dist changes) and as the view presets move the target.
+        //
+        // ! ASSUMPTION — Claude: MIN_CAM_Y = 1.0 is my pick, not measured from anything. The floor
+        // ! is at y=0; sitting the camera slightly above it keeps the flat ground from rendering
+        // ! edge-on as a hairline, which reads as broken. Raise it if you want a taller "eye
+        // ! height", lower it toward 0 to hug the sand. Nothing else depends on the value.
+        const MIN_CAM_Y = 1.0;
+        function clampCameraToGround() {
+            if (controls.target.y < 0) controls.target.y = 0;   // panning must not sink the pivot
+            const dist = camera.position.distanceTo(controls.target);
+            const cosMax = (MIN_CAM_Y - controls.target.y) / Math.max(dist, 1e-4);
+            controls.maxPolarAngle = Math.acos(Math.max(-1, Math.min(1, cosMax)));
+            if (camera.position.y < MIN_CAM_Y) camera.position.y = MIN_CAM_Y;
+        }
 
         // ================================================================
         // LIGHTING
@@ -4745,6 +4781,7 @@ figureLines.renderOrder = -2;
 
             updateSky(animationTime);
 
+            clampCameraToGround();   // ground lock: recompute the horizon limit for this frame
             controls.update();
             renderer.render(scene, camera);
         }
