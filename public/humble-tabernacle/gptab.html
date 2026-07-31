@@ -1532,7 +1532,9 @@
         // text names the fibre, not the shade.
         // [TEXT] Ex 26:8 — each goats' hair curtain is 30 x 4 cubits. Coarser yarn than the
         // linen, so a third of the thread pitch, but still on the one cubit-scaled system.
-        const goatFab = makeFabricMaps({ base:'#2F2822', cubits:[8, 8], size: 1024,
+        // Dark brown-black goat hair, lifted enough that coarse fibres and folds
+        // remain legible in shadow. Material colour later supplies a mild warm tint.
+        const goatFab = makeFabricMaps({ base:'#685747', cubits:[8, 8], size: 1024,
             threadsPerCubit: 80,
             warpShow:0.22, fuzz:0.26, slub:0.45, rough:[0.80,0.96], normalStrength:4.6 });
         const goatsHairMaterial = new THREE.MeshStandardMaterial({
@@ -3111,7 +3113,10 @@
         // fabric work went onto it by mistake. This is the one the coverings bind to.
         const goatHairMaterial = new THREE.MeshStandardMaterial({
             map: goatFab.map, normalMap: goatFab.normalMap, roughnessMap: goatFab.roughnessMap,
-            color: 0x3A3228,
+            // Texture already carries the dark brown/black goat-hair colour.
+            // A second dark material tint multiplied it almost to zero, hiding
+            // the weave and turning the entire covering into a black silhouette.
+            color: 0xD6C7B5,
             roughness: 0.95,
             metalness: 0.0,
             side: THREE.DoubleSide
@@ -3162,11 +3167,10 @@
 
             // Dimensions for this layer (outer layers slightly larger)
             const halfW = TENT_WIDTH / 2 + layerOffset;
-            // Layer separation is normal to the boards (width/height), not an
-            // invented increase in the text's 30-cubit east-west footprint.
-            // Expanding halfL while leaving the roof and side walls at
-            // TENT_LENGTH created open, skewed corners at both ends.
-            const halfL = TENT_LENGTH / 2;
+            // The board footprint remains the text's 30 cubits. Each successive
+            // textile surface sits just outside the preceding solid/cloth layer,
+            // so its rendered surface must expand consistently at both ends.
+            const halfL = TENT_LENGTH / 2 + layerOffset;
             const roofY = TENT_HEIGHT + layerOffset;
             const drapeOut = DRAPE_OUTWARD + layerOffset * 0.5;
             // Roof extensions are not used for the text-dimensioned linen/goat layers:
@@ -3181,7 +3185,7 @@
             // and wrinkles of resting cloth: pockets at the 4-cubit curtain
             // widths (Exodus 26:2,8), a whisper of sag across the free span.
             const roofW = TENT_WIDTH + layerOffset * 2;
-            const roofL = TENT_LENGTH + frontOH + backOH;
+            const roofL = TENT_LENGTH + layerOffset * 2 + frontOH + backOH;
             const roofGeo = new THREE.PlaneGeometry(roofW, roofL, 48, 96);
             const roofPos = roofGeo.attributes.position;
             const panelSpan = 4 * CUBIT; // one woven curtain width
@@ -3209,7 +3213,9 @@
             group.add(roof);
 
             // === WALL SECTIONS - canted outward ===
-            const wallSegs = 16;
+            // Enough longitudinal subdivisions for hanging folds to curve rather
+            // than reading as a row of rigid triangular panels.
+            const wallSegs = 64;
             const heightSegs = 12;
 
             // Function to create a canted wall
@@ -3235,8 +3241,13 @@
 
                         // Hanging cloth ripples into soft vertical folds,
                         // strongest at the free-hanging hem
-                        const fold = (Math.sin(along * 0.62 + startX * 2.1 + startZ) * 0.34 +
-                                      Math.sin(along * 1.7 + 1.3) * 0.09) * t;
+                        // Pin folds to zero at each corner so adjoining panels
+                        // meet on one edge. The earlier non-zero end displacement
+                        // opened pointed flaps at the front and rear.
+                        const cornerFade = Math.sin(Math.PI * s);
+                        const fold = (Math.sin(along * 0.62 + startX * 2.1 + startZ) * 0.16 +
+                                      Math.sin(along * 1.7 + 1.3) * 0.04) *
+                                     t * cornerFade;
                         const reach = outward + fold;
 
                         // Position along the wall based on direction
@@ -3285,7 +3296,7 @@
             }
 
             // Side walls run the length of the tent plus overhangs
-            const sideWallLength = TENT_LENGTH + frontOH + backOH;
+            const sideWallLength = TENT_LENGTH + layerOffset * 2 + frontOH + backOH;
 
             // North wall (left side, -X) - runs along Z axis
             const northWallGeo = createCantedWall(
@@ -3427,8 +3438,9 @@
 
         // Layer 2: Goat hair - given the extra length, it hangs lowest
         // and shows as the dark band at the ground (Exodus 26:12-13)
+        const GOAT_LAYER_OFFSET = 0.75;
         const goatCovering = createDrapedCovering(
-            0.75, goatHairMaterial, 0,
+            GOAT_LAYER_OFFSET, goatHairMaterial, 0,
             { roofFront: 0, roofBack: 0 }
         );
         tabernacleGroup.add(goatCovering);
@@ -3443,7 +3455,7 @@
         goatFrontFold.position.set(
             0,
             TENT_HEIGHT - FRONT_OVERHANG / 2 + 0.75,
-            TENT_LENGTH / 2 + 0.78
+            TENT_LENGTH / 2 + GOAT_LAYER_OFFSET + 0.03
         );
         goatFrontFold.castShadow = true;
         goatCovering.add(goatFrontFold);
@@ -3451,7 +3463,10 @@
         const goatTrainGeo = new THREE.PlaneGeometry(TENT_WIDTH + 1.5, BACK_OVERHANG);
         const goatRearTrain = new THREE.Mesh(goatTrainGeo, goatHairMaterial);
         goatRearTrain.rotation.x = -Math.PI / 2;
-        goatRearTrain.position.set(0, 0.03, -TENT_LENGTH / 2 - BACK_OVERHANG / 2);
+        goatRearTrain.position.set(
+            0, 0.03,
+            -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET - BACK_OVERHANG / 2
+        );
         goatRearTrain.receiveShadow = true;
         goatCovering.add(goatRearTrain);
 
