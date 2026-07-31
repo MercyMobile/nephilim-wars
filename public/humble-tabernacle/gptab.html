@@ -1091,15 +1091,38 @@
                     const warp = Math.sin(u * ribs * Math.PI * 2) * 0.5 + 0.5;
                     let h = ribProfile * pick + warp * warpShow * (1 - ribProfile);
                     if (fuzz) h += (hx(x, y, 401) - 0.5) * fuzz;
+
+                    // MA'ASEH ROQEM needs a middle scale. Thread relief alone becomes
+                    // moiré at viewing distance; fat colour bands are not stated by the
+                    // text. This repeating lozenge is a deliberately non-figurative
+                    // reconstruction of variegated embroidery. Unlike the parokhet it
+                    // has no cherubim, because Ex 26:36 and 27:16 do not name them.
+                    let pixelCol = col;
+                    if (opts.roqem) {
+                        const du = Math.abs(u - 0.5);
+                        const dv = Math.abs(v - 0.5);
+                        const diamond = du + dv;
+                        const outerStitch = Math.abs(diamond - 0.355) < 0.022;
+                        const innerStitch = Math.abs(diamond - 0.205) < 0.016;
+                        const crossStitch = (du < 0.018 && dv < 0.31) ||
+                                            (dv < 0.018 && du < 0.31);
+                        if (outerStitch || innerStitch || crossStitch) {
+                            const motifYarns = opts.roqemColors ||
+                                [DYE_TEKHELET, DYE_ARGAMAN, DYE_SHANI];
+                            const sector = (x < size / 2 ? 0 : 1) + (y < size / 2 ? 0 : 2);
+                            pixelCol = hex2rgb(motifYarns[sector % motifYarns.length]);
+                            h += outerStitch ? 0.42 : 0.30; // embroidery rides over ground
+                        }
+                    }
                     hgt[y * size + x] = h;
 
                     // shade the thread: crown catches light, gap holds shadow
                     const lit = 0.74 + h * 0.42;
                     const fibre = 1 + (hx(x, y, 77) - 0.5) * (fuzz ? 0.10 : 0.05);
                     const i = (y * size + x) * 4;
-                    cd[i]   = Math.max(0, Math.min(255, col[0] * lit * fibre));
-                    cd[i+1] = Math.max(0, Math.min(255, col[1] * lit * fibre));
-                    cd[i+2] = Math.max(0, Math.min(255, col[2] * lit * fibre));
+                    cd[i]   = Math.max(0, Math.min(255, pixelCol[0] * lit * fibre));
+                    cd[i+1] = Math.max(0, Math.min(255, pixelCol[1] * lit * fibre));
+                    cd[i+2] = Math.max(0, Math.min(255, pixelCol[2] * lit * fibre));
                     cd[i+3] = 255;
                 }
             }
@@ -1158,6 +1181,29 @@
                 else t.repeat.set(opts.repeatU || 4, opts.repeatV || 4);
                 t.anisotropy = aniso; return t; };
             return { map: mk(cCan), normalMap: mk(nCan), roughnessMap: mk(rCan) };
+        }
+
+        // Give a hanging screen geometry at human scale: shallow gathers at the
+        // supports, broad gravity folds, a slight sag between attachment points,
+        // and a free lower hem. These amplitudes are visual assumptions; neither
+        // Exodus nor the rabbinic sources specify the fastening or fold pattern.
+        function makeHangingScreenGeometry(width, height, supports, segmentsX, segmentsY, phase = 0) {
+            const geo = new THREE.PlaneGeometry(width, height, segmentsX, segmentsY);
+            const pos = geo.attributes.position;
+            for (let i = 0; i < pos.count; i++) {
+                const x = pos.getX(i);
+                const y = pos.getY(i);
+                const u = x / width + 0.5;
+                const fromTop = 0.5 - y / height;
+                const fold = Math.sin(u * Math.PI * supports * 2 + phase);
+                const secondary = Math.sin(u * Math.PI * supports * 4 + phase * 0.7);
+                const topSag = 0.055 * height * Math.pow(Math.sin(u * Math.PI * (supports - 1)), 2);
+                const hemWander = 0.018 * height * Math.sin(u * Math.PI * 7 + phase);
+                pos.setZ(i, (0.035 + 0.075 * fromTop) * fold + 0.025 * fromTop * secondary);
+                pos.setY(i, y - topSag * (1 - fromTop) + hemWander * fromTop);
+            }
+            geo.computeVertexNormals();
+            return geo;
         }
 
         // ================================================================
@@ -1986,9 +2032,15 @@
         }
 
         /**
-         * Creates the Veil texture - a masterwork of skilled craftswomen
-         * "Blue, purple, and scarlet thread, and fine woven linen" (Exodus 26:31)
-         * Heavy, richly embroidered tapestry with cherubim
+         * The wilderness parokhet (Ex 26:31; 36:35): blue, purple and scarlet
+         * yarn with fine-twined linen, the cherubim executed as ma'aseh hoshev
+         * (designer/weaver's work).  Exodus does not describe coloured bands, so
+         * render the colours as interlaced yarns in one dense figured textile.
+         *
+         * Mishnah Shekalim 8:5 describes the much later TEMPLE parokhet as a
+         * handbreadth thick, with 72 cords of 24 threads.  That is not imported
+         * as a Tabernacle dimension; it only cautions against a thin translucent
+         * or printed-looking curtain.
          */
         function createVeilTexture() {
             const width = 1024;
@@ -1998,119 +2050,99 @@
             canvas.height = height;
             const ctx = canvas.getContext('2d');
 
-            // Base: Fine twined linen - off-white/cream foundation
-            ctx.fillStyle = '#e8e0d0';
+            // Warm linen ground, visible between the dyed warp and weft.
+            ctx.fillStyle = '#d9cfb8';
             ctx.fillRect(0, 0, width, height);
 
-            // Create rich woven tapestry effect with blue, purple, scarlet
-            // Horizontal bands of color woven through the linen
-            for (let y = 0; y < height; y += 2) {
-                const band = Math.floor(y / 60) % 5;
-                let color;
-                switch(band) {
-                    case 0: color = DYE_TEKHELET; break; // violet-blue (tekhelet)
-                    case 1: color = DYE_ARGAMAN;  break; // purple (argaman)
-                    case 2: color = DYE_SHANI;    break; // kermes red (tola'at shani)
-                    case 3: color = DYE_ARGAMAN;  break;
-                    case 4: color = DYE_TEKHELET; break;
-                }
-                ctx.fillStyle = color;
-                // Dye laid at FULL opacity. At 0.7 over a near-white linen base these washed
-                // out to nursery pastels under the daylight sun (observed 2026-07-27). The
-                // cloth IS the dye colour; the weave and sheen passes below ride on top.
-                ctx.globalAlpha = 1.0;
-                ctx.fillRect(0, y, width, 2);
-            }
-
-            // Vertical warp threads - subtle linen showing through
-            ctx.globalAlpha = 0.15;
-            ctx.strokeStyle = '#d0c8b8';
-            ctx.lineWidth = 1;
-            for (let x = 0; x < width; x += 3) {
+            // Four constituent yarns cross through the whole cloth. Alternating
+            // over-under dashes make this read as woven work rather than stripes.
+            const yarns = ['#d9cfb8', DYE_TEKHELET, DYE_ARGAMAN, DYE_SHANI];
+            ctx.lineCap = 'butt';
+            for (let y = 0; y < height; y += 8) {
+                ctx.globalAlpha = 0.88;
+                ctx.strokeStyle = yarns[(y / 8) % yarns.length];
+                ctx.lineWidth = 5;
+                ctx.setLineDash([13, 3]);
+                ctx.lineDashOffset = (y / 8) % 2 ? 8 : 0;
                 ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, height);
+                ctx.moveTo(0, y + 2);
+                ctx.lineTo(width, y + 2);
                 ctx.stroke();
             }
-
-            // Woven texture - slight variations
-            ctx.globalAlpha = 0.08;
-            for (let y = 0; y < height; y += 6) {
-                for (let x = 0; x < width; x += 6) {
-                    if ((x + y) % 12 === 0) {
-                        ctx.fillStyle = '#ffffff';
-                        ctx.fillRect(x, y, 3, 3);
-                    }
-                }
+            for (let x = 0; x < width; x += 8) {
+                ctx.globalAlpha = 0.42;
+                ctx.strokeStyle = yarns[(x / 8 + 2) % yarns.length];
+                ctx.lineWidth = 3;
+                ctx.setLineDash([5, 11]);
+                ctx.lineDashOffset = (x / 8) % 2 ? 6 : 0;
+                ctx.beginPath();
+                ctx.moveTo(x + 2, 0);
+                ctx.lineTo(x + 2, height);
+                ctx.stroke();
             }
+            ctx.setLineDash([]);
 
-            // CHERUBIM - Skillfully embroidered golden figures
-            ctx.globalAlpha = 1.0;
+            // Cherubim are woven into the design (not separate gold appliqué).
+            // Their precise ancient iconography is unknown, so the paired-wing
+            // motif is intentionally schematic and uses the same dyed yarns.
             const cherubSpacing = 256;
 
             for (let cx = cherubSpacing / 2; cx < width; cx += cherubSpacing) {
                 for (let cy = cherubSpacing / 2; cy < height; cy += cherubSpacing) {
-                    // Gold thread base for cherub
-                    ctx.strokeStyle = '#c9a227';
-                    ctx.fillStyle = '#c9a227';
+                    ctx.save();
+                    ctx.translate(cx, cy);
+                    ctx.globalAlpha = 0.82;
+                    ctx.fillStyle = DYE_ARGAMAN;
+                    ctx.strokeStyle = '#24143d';
+                    ctx.lineWidth = 5;
+
+                    // Central body and head.
+                    ctx.beginPath();
+                    ctx.ellipse(0, 20, 17, 29, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(0, -17, 13, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Broad, opposed wings, filled with blue and scarlet yarn.
+                    ctx.fillStyle = DYE_TEKHELET;
+                    ctx.beginPath();
+                    ctx.moveTo(-10, 5);
+                    ctx.bezierCurveTo(-45, -10, -72, -54, -78, -82);
+                    ctx.bezierCurveTo(-46, -66, -21, -42, -8, -13);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.fillStyle = DYE_SHANI;
+                    ctx.beginPath();
+                    ctx.moveTo(10, 5);
+                    ctx.bezierCurveTo(45, -10, 72, -54, 78, -82);
+                    ctx.bezierCurveTo(46, -66, 21, -42, 8, -13);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    ctx.strokeStyle = '#d9cfb8';
                     ctx.lineWidth = 3;
-                    ctx.globalAlpha = 0.6;
-
-                    // Cherub body (kneeling form)
-                    ctx.beginPath();
-                    ctx.ellipse(cx, cy + 20, 15, 25, 0, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    // Head
-                    ctx.beginPath();
-                    ctx.arc(cx, cy - 15, 12, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    // Left wing - sweeping upward
-                    ctx.beginPath();
-                    ctx.moveTo(cx - 10, cy);
-                    ctx.quadraticCurveTo(cx - 50, cy - 30, cx - 60, cy - 70);
-                    ctx.quadraticCurveTo(cx - 40, cy - 50, cx - 20, cy - 30);
-                    ctx.quadraticCurveTo(cx - 15, cy - 15, cx - 10, cy);
-                    ctx.fill();
-
-                    // Right wing - sweeping upward
-                    ctx.beginPath();
-                    ctx.moveTo(cx + 10, cy);
-                    ctx.quadraticCurveTo(cx + 50, cy - 30, cx + 60, cy - 70);
-                    ctx.quadraticCurveTo(cx + 40, cy - 50, cx + 20, cy - 30);
-                    ctx.quadraticCurveTo(cx + 15, cy - 15, cx + 10, cy);
-                    ctx.fill();
-
-                    // Wing feather details - lighter gold highlights
-                    ctx.strokeStyle = '#e8d068';
-                    ctx.lineWidth = 1.5;
-                    ctx.globalAlpha = 0.5;
-
-                    // Left wing feathers
-                    for (let f = 0; f < 4; f++) {
+                    ctx.globalAlpha = 0.72;
+                    for (let f = 0; f < 5; f++) {
                         ctx.beginPath();
-                        ctx.moveTo(cx - 15 - f * 10, cy - 5 - f * 8);
-                        ctx.quadraticCurveTo(cx - 35 - f * 8, cy - 35 - f * 10, cx - 45 - f * 5, cy - 55 - f * 5);
+                        ctx.moveTo(-14 - f * 8, -3 - f * 10);
+                        ctx.quadraticCurveTo(-39 - f * 5, -29 - f * 8, -61 - f * 3, -60 - f * 4);
+                        ctx.stroke();
+                        ctx.beginPath();
+                        ctx.moveTo(14 + f * 8, -3 - f * 10);
+                        ctx.quadraticCurveTo(39 + f * 5, -29 - f * 8, 61 + f * 3, -60 - f * 4);
                         ctx.stroke();
                     }
-
-                    // Right wing feathers
-                    for (let f = 0; f < 4; f++) {
-                        ctx.beginPath();
-                        ctx.moveTo(cx + 15 + f * 10, cy - 5 - f * 8);
-                        ctx.quadraticCurveTo(cx + 35 + f * 8, cy - 35 - f * 10, cx + 45 + f * 5, cy - 55 - f * 5);
-                        ctx.stroke();
-                    }
+                    ctx.restore();
                 }
             }
 
-            // Add fabric texture grain
+            // Fine deterministic fibre variation.
             ctx.globalAlpha = 1.0;
             const imageData = ctx.getImageData(0, 0, width, height);
             const data = imageData.data;
             for (let i = 0; i < data.length; i += 4) {
-                const grain = (Math.random() - 0.5) * 8;
+                const grain = (((i / 4) * 17 + Math.floor(i / (width * 4)) * 31) % 11) - 5;
                 data[i] = Math.min(255, Math.max(0, data[i] + grain));
                 data[i + 1] = Math.min(255, Math.max(0, data[i + 1] + grain));
                 data[i + 2] = Math.min(255, Math.max(0, data[i + 2] + grain));
@@ -2118,9 +2150,8 @@
             ctx.putImageData(imageData, 0, 0);
 
             const texture = new THREE.CanvasTexture(canvas);
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(2, 2);
+            texture.colorSpace = THREE.SRGBColorSpace;
+            texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
             return texture;
         }
 
@@ -2405,7 +2436,9 @@
             return texture;
         }
 
-        const gateGeo = new THREE.PlaneGeometry(gateWidth, COURTYARD_HEIGHT);
+        const gateGeo = makeHangingScreenGeometry(
+            gateWidth, COURTYARD_HEIGHT, 4, 120, 28, 0.35
+        );
         // [SOURCED] Ex 27:16 / 26:36 — both screens are  מעשׂה רקם  (ma'aseh roqem).
         // Strong's H7551 raqam: "to VARIEGATE COLOUR, that is, embroider"; H7553 riqmah:
         // "variegation of colour ... DIVERS COLOURS ... (on both sides)". The four yarns
@@ -2418,7 +2451,11 @@
             // Linen is one pick in four here so the dyed yarns carry the cloth; at one in two
             // the whole screen greyed out (observed 2026-07-27).
             // ! ASSUMPTION - Claude: the RATIO is mine. The text gives no proportions.
-            weftColors: [DYE_TEKHELET, DYE_ARGAMAN, DYE_SHANI, LINEN_WHITE],
+            // Linen remains visible as the ground; dyed yarn supplies the roqem.
+            weftColors: [LINEN_WHITE, LINEN_WHITE, DYE_TEKHELET, LINEN_WHITE,
+                         DYE_ARGAMAN, LINEN_WHITE, DYE_SHANI, LINEN_WHITE],
+            roqem: true,
+            roqemColors: [DYE_TEKHELET, DYE_ARGAMAN, DYE_SHANI],
             // [TEXT] Ex 27:16 the gate is TWENTY cubits; Ex 27:18 the court is FIVE high.
             // The gate is the piece you stand in front of, so it gets the finest weave in the
             // scene: the tile covers HALF a cubit, so 480 picks land in half the cloth =
@@ -2426,8 +2463,8 @@
             // ! ASSUMPTION - Claude: 960/cubit, the 0.55 thread edge and the 0.30 ripple are
             // all mine, tuned by eye to Cisco's brief ("fine textile, not coloured bands").
             // No source gives thread density; the Timna papers give weave type only.
-            cubits: [20, 5], tileCubits: 0.5, size: 1024,
-            threadEdge: 0.55, ripple: 0.30,
+            cubits: [20, 5], tileCubits: 2, size: 1024,
+            threadsPerCubit: 360, threadEdge: 0.38, ripple: 0.22,
             warpShow: 0.20, fuzz: 0.09, rough: [0.66, 0.86], normalStrength: 3.4, vertical: true
         });
         const gateMaterial = new THREE.MeshStandardMaterial({
@@ -3638,7 +3675,9 @@
         const ENTRANCE_BOTTOM_GAP = 0.10 * CUBIT;
         const entranceWidth = TENT_WIDTH - 2 * ENTRANCE_EDGE_GAP;
         const entranceHeight = TENT_HEIGHT - ENTRANCE_BOTTOM_GAP;
-        const entranceGeo = new THREE.PlaneGeometry(entranceWidth, entranceHeight);
+        const entranceGeo = makeHangingScreenGeometry(
+            entranceWidth, entranceHeight, 5, 96, 72, 1.1
+        );
         // Same ma'aseh roqem as the courtyard gate (Ex 26:36) — see the note there.
         const entranceFab = makeFabricMaps({
             // Yarn order. The text lists the dyed yarns FIRST and the linen last
@@ -3646,9 +3685,13 @@
             // Linen is one pick in four here so the dyed yarns carry the cloth; at one in two
             // the whole screen greyed out (observed 2026-07-27).
             // ! ASSUMPTION - Claude: the RATIO is mine. The text gives no proportions.
-            weftColors: [DYE_TEKHELET, DYE_ARGAMAN, DYE_SHANI, LINEN_WHITE],
+            weftColors: [LINEN_WHITE, LINEN_WHITE, DYE_TEKHELET, LINEN_WHITE,
+                         DYE_ARGAMAN, LINEN_WHITE, DYE_SHANI, LINEN_WHITE],
+            roqem: true,
+            roqemColors: [DYE_TEKHELET, DYE_ARGAMAN, DYE_SHANI],
             // [TEXT] the tent is 10 cubits across (Ex 26:16 boards, 26:22-23) and 10 high.
-            cubits: [10, 10], size: 1024,
+            cubits: [10, 10], tileCubits: 2, size: 1024,
+            threadsPerCubit: 360, threadEdge: 0.38, ripple: 0.22,
             warpShow: 0.20, fuzz: 0.09, rough: [0.66, 0.86], normalStrength: 3.0, vertical: true
         });
         const entranceMaterial = new THREE.MeshStandardMaterial({
@@ -3948,44 +3991,71 @@
         // VEIL and ARK OF THE COVENANT
         // ================================================================
 
-        // Veil separating Holy Place from Holy of Holies
-        const veilGeo = new THREE.PlaneGeometry(TENT_WIDTH - 1, TENT_HEIGHT - 1);
+        // Veil separating Holy Place from Most Holy Place. Exodus gives no
+        // thickness or explicit veil dimensions; full bay width and near-floor
+        // drop are reconstruction choices required for its stated function.
+        const veilGeo = new THREE.PlaneGeometry(TENT_WIDTH, TENT_HEIGHT - 0.25, 96, 72);
+        const veilPosition = veilGeo.attributes.position;
+        for (let i = 0; i < veilPosition.count; i++) {
+            const x = veilPosition.getX(i);
+            const y = veilPosition.getY(i);
+            const down = (TENT_HEIGHT - 0.125 - (y + TENT_HEIGHT / 2)) / TENT_HEIGHT;
+            const folds = Math.sin((x / TENT_WIDTH + 0.5) * Math.PI * 18);
+            const broadFold = Math.sin((x / TENT_WIDTH + 0.5) * Math.PI * 6 + 0.7);
+            veilPosition.setZ(i, (0.045 + 0.18 * down) * folds + 0.055 * down * broadFold);
+        }
+        veilGeo.computeVertexNormals();
         const veilTexture = createVeilTexture();
         const veilMaterial = new THREE.MeshStandardMaterial({
             map: veilTexture,
             side: THREE.DoubleSide,
             transparent: false,
-            roughness: 0.95,  // Heavy woven fabric
-            metalness: 0.0
+            roughness: 0.88,
+            metalness: 0.0,
+            bumpMap: veilTexture,
+            bumpScale: 0.018
         });
         // "You shall hang it on four pillars of acacia wood overlaid
         // with gold... on four sockets of silver" (Exodus 26:32)
-        const veilPillarGeo = new THREE.BoxGeometry(0.55, TENT_HEIGHT - 0.6, 0.55);
+        const veilZ = -TENT_LENGTH / 2 + HOLY_OF_HOLIES_SIZE;
+        const veilPillarXs = [
+            -TENT_WIDTH / 2 + 0.32,
+            -TENT_WIDTH / 6,
+             TENT_WIDTH / 6,
+             TENT_WIDTH / 2 - 0.32
+        ];
+        const veilPillarGeo = new THREE.CylinderGeometry(0.24, 0.29, TENT_HEIGHT - 0.45, 16);
         const veilSocketGeo = new THREE.BoxGeometry(0.85, 0.45, 0.85);
-        [-5.625, -1.875, 1.875, 5.625].forEach((px) => {
+        veilPillarXs.forEach((px) => {
             const vSocket = new THREE.Mesh(veilSocketGeo, silverMaterial);
-            vSocket.position.set(px, 0.225, -TENT_LENGTH / 2 + HOLY_OF_HOLIES_SIZE + 0.45);
+            vSocket.position.set(px, 0.225, veilZ);
             vSocket.castShadow = true;
             tabernacleGroup.add(vSocket);
 
             const vPillar = new THREE.Mesh(veilPillarGeo, goldMaterial);
-            vPillar.position.set(px, 0.45 + (TENT_HEIGHT - 0.6) / 2, -TENT_LENGTH / 2 + HOLY_OF_HOLIES_SIZE + 0.45);
+            vPillar.position.set(px, 0.45 + (TENT_HEIGHT - 0.45) / 2, veilZ);
             vPillar.castShadow = true;
             tabernacleGroup.add(vPillar);
+
+            // Gold hook called for by Ex 26:32; the ring is a legible visual
+            // proxy, not a claim about the hook's undocumented shape.
+            const hook = new THREE.Mesh(new THREE.TorusGeometry(0.13, 0.035, 8, 18), goldMaterial);
+            hook.position.set(px, TENT_HEIGHT - 0.18, veilZ + 0.13);
+            tabernacleGroup.add(hook);
         });
 
         const veilMesh = new THREE.Mesh(veilGeo, veilMaterial);
         veilMesh.position.set(
             0,
             TENT_HEIGHT / 2,
-            -TENT_LENGTH / 2 + HOLY_OF_HOLIES_SIZE  // Positioned 10 cubits from back
+            veilZ + 0.08
         );
         // No rotation needed now that parent isn't rotated
         veilMesh.castShadow = true;
         veilMesh.userData = {
             name: "The Veil",
-            description: "The thick curtain separating the Holy Place from the Most Holy Place, woven with blue, purple, and scarlet thread with cherubim. Only the High Priest could pass through once a year on the Day of Atonement. This veil was torn from top to bottom when Christ died.",
-            scripture: "Exodus 26:31-33 - 'You shall make a veil woven of blue, purple, and scarlet thread...And the veil shall be a divider for you between the holy place and the Most Holy.' Matthew 27:51 - 'Then, behold, the veil of the temple was torn in two from top to bottom.'"
+            description: "The wilderness parokhet divided the Holy Place from the Most Holy Place. Exodus specifies blue, purple, and scarlet yarn with fine-twined linen, cherubim worked into the design, and four gold-clad acacia pillars on silver sockets. Its thickness is not stated. The High Priest's annual entry belongs to the Day of Atonement rite. The veil torn at Jesus' death was the later Jerusalem Temple veil, not this wilderness textile.",
+            scripture: "Exodus 26:31-33; 36:35-36 — the parokhet and its supports. Leviticus 16:2, 29-34 — annual entry and atonement. Matthew 27:50-51; Mark 15:37-38; Luke 23:45-46 — the later Temple veil torn at Jesus' death. Mishnah Shekalim 8:5 is retained only as later Temple evidence for a dense multi-thread curtain, not as a Tabernacle measurement."
         };
         // Add veil to tabernacle group so it moves with the tent
         tabernacleGroup.add(veilMesh);
