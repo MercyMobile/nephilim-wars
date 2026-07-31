@@ -3445,17 +3445,23 @@
         );
         tabernacleGroup.add(goatCovering);
 
-        // [TEXT Ex 26:9] half of the end curtain is doubled at the entrance.
+        // [TEXT Ex 26:9] half of the end curtain is doubled "at/against the
+        // front of the tent." This does NOT say that it hangs down as a
+        // valance over the entrance. Shabbat 98b accounts for two cubits in
+        // the doubling but likewise supplies no vertical drop. Model the
+        // conservative reading: the two-cubit portion is folded back over the
+        // front of the roof, making a double thickness there.
         // [TEXT Ex 26:12] the remaining half hangs at the rear.
         // [RABBINIC R. Judah, Shabbat 98b / Baraita para 10] the rear two
         // cubits trail on the ground like a train. These are separate pieces of
         // geometry, not extra roof length.
         const goatFoldGeo = new THREE.PlaneGeometry(TENT_WIDTH + 1.5, FRONT_OVERHANG);
         const goatFrontFold = new THREE.Mesh(goatFoldGeo, goatHairMaterial);
+        goatFrontFold.rotation.x = -Math.PI / 2;
         goatFrontFold.position.set(
             0,
-            TENT_HEIGHT - FRONT_OVERHANG / 2 + 0.75,
-            TENT_LENGTH / 2 + GOAT_LAYER_OFFSET + 0.03
+            TENT_HEIGHT + GOAT_LAYER_OFFSET + 0.03,
+            TENT_LENGTH / 2 + GOAT_LAYER_OFFSET - FRONT_OVERHANG / 2
         );
         goatFrontFold.castShadow = true;
         goatCovering.add(goatFrontFold);
