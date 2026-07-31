@@ -3378,6 +3378,35 @@
         // ! ASSUMPTION - Claude: the text gives NO dimensions for the rams' skins (26:14)
         // or the covering above it. Their hems below are art direction, nothing more.
 
+        // ONE SAG FIELD FOR EVERY ROOF LAYER, keyed on WORLD position.
+        //
+        // MEASURED FAULT: the layers were interpenetrating. Five sheets sit between
+        // 10.021 and 10.142 cubits - 0.121 cubits of total stack - while each sheet
+        // sagged by panelSag 0.24 + crossSag 0.12 = 0.36 scene units = 0.24 cubits.
+        // The gap between the linen and the goats' hair is 0.02 cubits. The movement
+        // was TWELVE TIMES the spacing, so they could not avoid crossing.
+        // Worse, each layer computed its own sag from its own roofL, which differs per
+        // layer, so their phases drifted apart, and the two hide sheets used a different
+        // displacement function again.
+        //
+        // Stacked cloth resting on cloth moves TOGETHER. One field, same world input,
+        // same answer for every layer, so stackY alone decides who is above whom and
+        // nothing can cross. At 0.45 m to the cubit this sag peaks at ~11 cm across a
+        // 4.5 m span, which is a resting drape, not a hammock.
+        function sharedRoofSag(wx, wz) {
+            const halfW = TENT_WIDTH / 2, halfL = TENT_LENGTH / 2;
+            const u = (wx + halfW) / TENT_WIDTH;    // 0..1 across the 10-cubit width
+            const v = (wz + halfL) / TENT_LENGTH;   // 0..1 along the 30-cubit length
+            const cl = (t) => Math.min(1, Math.max(0, t));
+            const fade = cl(Math.min(u, 1 - u) * 7) * cl(Math.min(v, 1 - v) * 7);
+            // pockets at the 4-cubit curtain widths [TEXT Ex 26:2]
+            const panelT = (((wz + halfL) / (4 * CUBIT)) % 1 + 1) % 1;
+            const panelSag = Math.pow(Math.sin(Math.PI * panelT), 2) * 0.24;
+            const crossSag = Math.sin(Math.PI * cl(u)) * 0.12;
+            const wrinkle  = Math.sin(u * 23 + v * 57) * Math.sin(v * 31 + u * 7) * 0.018;
+            return ((panelSag + crossSag) - wrinkle) * fade;   // downward, scene units
+        }
+
         // Create a complete draped covering (roof + walls as one piece)
         // This creates geometry that goes: front edge -> over roof -> down back -> around sides
         function createDrapedCovering(layerOffset, material, hemY, longitudinal = {}) {
@@ -3411,22 +3440,16 @@
             const roofL = TENT_LENGTH + surfaceFront + surfaceBack + frontOH + backOH;
             const roofGeo = new THREE.PlaneGeometry(roofW, roofL, 48, 96);
             const roofPos = roofGeo.attributes.position;
-            const panelSpan = 4 * CUBIT; // one woven curtain width
+            const roofZoff = (surfaceFront + frontOH - surfaceBack - backOH) / 2;
             for (let vi = 0; vi < roofPos.count; vi++) {
-                const px = roofPos.getX(vi) / roofW + 0.5;  // 0..1 across width
-                const py = roofPos.getY(vi) / roofL + 0.5;  // 0..1 along length
-                // Cloth is pinned at the edges where it crosses the walls
-                const edgeFade = Math.min(1, Math.min(px, 1 - px) * 7) *
-                                 Math.min(1, Math.min(py, 1 - py) * 7);
-                // Sag pocket within each curtain panel
-                const panelT = (py * roofL / panelSpan) % 1;
-                const panelSag = Math.pow(Math.sin(Math.PI * panelT), 2) * 0.24;
-                // Gentle rest across the unsupported span
-                const crossSag = Math.sin(Math.PI * px) * 0.12;
-                // The faintest wrinkles of the lying skin
-                const wrinkle = Math.sin(px * 23 + py * 57) * Math.sin(py * 31 + px * 7) * 0.018;
-                roofPos.setZ(vi, roofPos.getZ(vi) - (panelSag + crossSag) * edgeFade + wrinkle * edgeFade);
+                // local -> world. The plane is rotated -PI/2 about X, so local +Y maps
+                // to world -Z. Feeding WORLD coords to the shared field is what makes
+                // every layer agree at the same physical point.
+                const wx = roofPos.getX(vi);
+                const wz = roofZoff - roofPos.getY(vi);
+                roofPos.setZ(vi, roofPos.getZ(vi) - sharedRoofSag(wx, wz));
             }
+            roofGeo.computeVertexNormals();
             roofGeo.computeVertexNormals();
             const roof = new THREE.Mesh(roofGeo, material);
             roof.rotation.x = -Math.PI / 2;
@@ -3629,21 +3652,26 @@
                 const u = x / width + 0.5;
                 const v = z / length + 0.5;
                 const edge = Math.min(u, 1-u, v, 1-v);
-                const edgeFade = Math.min(1, Math.max(0, edge * 18));
 
-                // Broad gravity settlement over the flat board-top span.
-                const basin = Math.sin(Math.PI * u) * Math.sin(Math.PI * v);
-                // Unequal sewn skins make low, non-periodic-looking undulations.
-                const panelSet = (
-                    Math.sin(u * Math.PI * 7.0 + v * 2.1) +
-                    0.55 * Math.sin(v * Math.PI * 17.0 + u * 5.3)
-                ) * 0.035;
-                // Free perimeter dries and curls slightly upward. This is visual
-                // material behaviour, not a dimension from the text.
+                // THE HIDES FOLLOW THE SAME SAG AS THE CLOTH BENEATH THEM. This used
+                // to be an independent basin/panelSet/curl field, which is the other
+                // half of why the stack interpenetrated: two different surfaces, both
+                // moving further than the 0.02-cubit gap between them. A hide laid over
+                // sagging cloth takes the shape of the cloth.
+                // This sheet may be INSET from the tent (the tachash is), so its local
+                // coords must be converted to world before asking the shared field.
+                const wx = x;
+                const wz = -z;
+                const sag = sharedRoofSag(wx, wz);
+
+                // The only motion of its own: the free perimeter of a dried skin curls
+                // slightly upward. Kept small enough that it cannot reach the layer
+                // above - 0.045 scene units is 1.35 cm at 0.45 m to the cubit.
+                // ! ASSUMPTION - Claude: curl is material behaviour, not from any text.
                 const curl = edge < 0.035
                     ? (1 - edge / 0.035) * (0.045 + 0.018 * Math.sin((u + v) * 31))
                     : 0;
-                pos.setZ(i, -0.10 * basin * edgeFade + panelSet * edgeFade + curl);
+                pos.setZ(i, -sag + curl);
             }
             geo.computeVertexNormals();
             const hide = new THREE.Mesh(geo, material);
