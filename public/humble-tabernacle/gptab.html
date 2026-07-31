@@ -1508,25 +1508,32 @@
         // tent. Lifted to #453C7A, which is the SAME art-direction option Cisco chose,
         // at the brighter end he was shown. seamWidth 0.020 -> 0.007 and panels 3 -> 4
         // for the same reason: the wide dark joins read as mortar between paving slabs.
-        // TACHASH COLOUR — REVERSED 2026-07-31, and this reverses an earlier decision
-        // in this file, so it is reversible in one line.
-        // It was '#453C7A' violet, chosen from the LXX (δερματα ὑακίνθινα) and Vulgate
-        // (ianthinis pellibus) under "credence to the oldest sources". Nobody here has
-        // ever opened the LXX or the Vulgate; that reading came to us second-hand.
-        // What the PRIMARY Hebrew actually does (hebrew-lexicon/Exod.xml, morphhb, read
-        // directly, 26:14 and identically 36:19):
-        //     עֹרֹת אֵילִם  מְאָדָּמִים   ... וּמִכְסֵה עֹרֹת תְּחָשִׁים  מִלְמָעְלָה
-        // The rams' skins carry an explicit colour participle, מְאָדָּמִים, "reddened".
-        // The very next phrase, עֹרֹת תְּחָשִׁים, is a bare construct with NO colour word.
-        // The same verse colours one layer and declines to colour the other.
-        // [LEXICON hebrew-lexicon/HebrewStrong.xml, H8476] תַּחַשׁ — "a (clean) animal with
-        // fur, probably a species of antelope, badger." An animal, not a colour.
-        // ! ASSUMPTION - Claude: so is THIS value. The text gives the tachash no colour at
-        // ! all, so a natural tanned hide is the least-committed rendering, not a sourced
-        // ! one. Put '#453C7A' back if the LXX reading is preferred - it is one edit.
-        // ONE SOURCE on the lexicon side: Strong's alone. BrownDriverBriggs.xml is on the
-        // box but returned no H8476 entry, and I did not substitute one for the other.
-        const TACHASH_HIDE = '#7A6A55';
+        // TACHASH COLOUR — VIOLET, and now VERIFIED against the ancient versions
+        // themselves rather than against our own comments.
+        //
+        // I briefly changed this to a tan hide on the argument that the Hebrew gives the
+        // tachash no colour word. That was WRONG, and the way it was wrong matters: I
+        // treated "I have not opened the LXX" as if it were evidence about what the LXX
+        // says. Cisco caught it and pointed at docs/scribe-texts, which holds the
+        // Septuagint and the Vulgate in full. Read directly, both are colour terms:
+        //
+        //   [LXX  docs/scribe-texts/bib/sep/exo026.md, v14]
+        //     δέρματα κριῶν ἠρυθροδανωμένα καὶ ἐπικαλύμματα δέρματα ὑακίνθινα ἐπάνωθεν
+        //   [VULGATE  docs/scribe-texts/bib/vul/exo026.md, v14]
+        //     de pellibus arietum rubricatis ... aliud operimentum de janthinis pellibus
+        //
+        // ὑακίνθινα and janthinis are ADJECTIVES agreeing with "skins" - hyacinth, violet.
+        // Neither says "skins of a hyacinth-animal"; both colour the leather. And LXX 26:1
+        // renders tekhelet with the same root, ὑακίνθου, so the two oldest translations
+        // read this covering as the same blue-violet as the tekhelet yarn.
+        //
+        // The Hebrew observation stands and is NOT overturned: 26:14 and 36:19 put the
+        // colour participle מְאָדָּמִים on the rams and leave עֹרֹת תְּחָשִׁים bare, and
+        // [LEXICON HebrewStrong.xml H8476] glosses תַּחַשׁ as an animal. So the witnesses
+        // genuinely disagree - the Hebrew noun is opaque, and the two oldest translators,
+        // who were nearer to living usage than any modern lexicon, understood it as a
+        // colour. Cisco's standing rule is credence to the oldest sources. Violet stands.
+        const TACHASH_HIDE = '#453C7A';
         const badgerFab = makeHideMaps({ base:TACHASH_HIDE, panels:4, grainScale:260,
             coarseScale:7, poreDepth:0.30, seamWidth:0.007, stitchFreq:110,
             toneVar:0.13, warpAmt:0.09,
