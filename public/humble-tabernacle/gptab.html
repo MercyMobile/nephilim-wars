@@ -2260,15 +2260,6 @@
             return panel;
         }
 
-        // WEST side (back, away from entrance) - 10 posts along 50 cubit width
-        // Posts sit at the CENTRE of the five cubits each one owns, not at the
-        // ends of the run. [RABBINIC para 21]: the hanging projects 2.5 cubits
-        // either side of each post, "hence from post to post, five cubits".
-        // 20 x 5 = 100 with the run closed at both corners and NO GAP.
-        // (Placing them at i*SPACING from a corner runs 0..95 and leaves the last
-        // five cubits open - that was the gap.)
-        const postAt = (half, i) => -half + (i + 0.5) * POST_SPACING;
-
         // The hangings are a CONTINUOUS run corner to corner, not post-to-post
         // segments, so nothing can open up between them.
         const courtCordMaterial = new THREE.MeshStandardMaterial({
@@ -2315,43 +2306,38 @@
 
         const HW = COURTYARD_WIDTH / 2, HL = COURTYARD_LENGTH / 2;
 
-        // WEST (back) - ten posts across fifty cubits [TEXT Ex 27:12].
-        // Anchor the two end posts on the physical corners. Exodus fixes the
-        // count and span but not individual spacing. The Baraita's five-cubit
-        // ownership remains the interior rhythm; the terminal bays widen.
-        for (let i = 0; i < postsShortSide; i++) {
-            const x = i === 0 ? -HW
-                    : i === postsShortSide - 1 ? HW
-                    : postAt(HW, i);
-            courtyardGroup.add(createPost(x, HL));
-        }
+        // POSTS AS ONE CLOSED PERIMETER. The court perimeter is
+        // 2(100 + 50) = 300 cubits; at the Baraita's five-cubit pitch this is
+        // exactly 60 unique positions. Treat each side as a half-open interval
+        // so corner posts are shared rather than doubled. This keeps every
+        // spacing at five cubits, lands on all four corners, and makes the east
+        // 15 / 20 / 15-cubit divisions fall on the same grid.
+        for (let i = 0; i < postsShortSide; i++)
+            courtyardGroup.add(createPost(-HW + i * POST_SPACING, -HL));
+        for (let i = 0; i < postsLongSide; i++)
+            courtyardGroup.add(createPost(HW, -HL + i * POST_SPACING));
+        for (let i = 0; i < postsShortSide; i++)
+            courtyardGroup.add(createPost(HW - i * POST_SPACING, HL));
+        for (let i = 0; i < postsLongSide; i++)
+            courtyardGroup.add(createPost(-HW, HL - i * POST_SPACING));
+
+        // WEST (back) hanging [TEXT Ex 27:12].
         courtyardGroup.add(createRun(-HW, HL, HW, HL));
 
-        // NORTH - twenty posts along one hundred cubits  [TEXT Ex 27:11]
-        for (let i = 0; i < postsLongSide; i++)
-            courtyardGroup.add(createPost(HW, postAt(HL, i)));
+        // NORTH hanging [TEXT Ex 27:11].
         courtyardGroup.add(createRun(HW, -HL, HW, HL));
 
-        // SOUTH - twenty posts  [TEXT Ex 27:10]
-        for (let i = 0; i < postsLongSide; i++)
-            courtyardGroup.add(createPost(-HW, postAt(HL, i)));
+        // SOUTH hanging [TEXT Ex 27:10].
         courtyardGroup.add(createRun(-HW, -HL, -HW, HL));
 
         // EAST (entrance) - fifteen cubits of hangings each flank with three posts,
         // and a twenty-cubit gate between them  [TEXT Ex 27:14-16]
         const gateWidth = 20 * CUBIT;
         const flank = (COURTYARD_WIDTH - gateWidth) / 2;      // 15 cubits each side
-        // three posts per flank, centred in the five cubits each owns
-        for (let i = 0; i < 3; i++) {
-            // The outer post on each flank is also the courtyard corner post.
-            const leftX = i === 0 ? -HW : -HW + (i + 0.5) * POST_SPACING;
-            const rightX = i === 0 ? HW : HW - (i + 0.5) * POST_SPACING;
-            courtyardGroup.add(createPost(leftX, -HL));
-            courtyardGroup.add(createPost(rightX, -HL));
-        }
-        // the four gate posts  [TEXT Ex 27:16]
-        for (let i = 0; i < 4; i++)
-            courtyardGroup.add(createPost(-gateWidth / 2 + (i + 0.5) * (gateWidth / 4), -HL));
+        // The east-side posts already come from the same five-cubit perimeter
+        // grid. Counting each interval by its starting post yields 3 left-flank,
+        // 4 gate, and 3 right-flank supports [TEXT Ex 27:14-16], while boundary
+        // posts are physically shared and never duplicated.
         // flank hangings, continuous, meeting the gate exactly
         courtyardGroup.add(createRun(-HW, -HL, -HW + flank, -HL));
         courtyardGroup.add(createRun( HW - flank, -HL, HW, -HL));
