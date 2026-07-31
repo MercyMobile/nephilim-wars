@@ -3381,6 +3381,9 @@
 
             // Function to create a canted wall
             // Note: walls are positioned relative to tent center (0,0,0) in local space
+            // 'curtain' = continue the roof's uv field down the walls so drawn seams
+            // line up. Only the linen asks for it; layers with no drawn seam keep 'legacy'.
+            const uvMode = longitudinal.uvMode || 'legacy';
             const wallHemY = hemY || 0; // where this layer's SIDE hanging edge stops
             // [TEXT Ex 26:2-3 + Baraita para 7] the two axes of a curtain sheet do NOT
             // hang to the same height, so the back wall needs its own hem. For the linen,
@@ -3393,9 +3396,28 @@
                 const indices = [];
                 const uvs = [];
 
-                // UV scale for texture tiling on walls
-                const uvScaleX = length / 15; // Tile based on wall length
-                const uvScaleY = roofY / 10;  // Tile based on wall height
+                // UVs. 'legacy' keeps the old arbitrary scaling for layers whose cloth
+                // carries no drawn seam. 'curtain' CONTINUES THE ROOF'S UV FIELD around
+                // the corner, which is the only way the curtain joins can line up.
+                //
+                // MEASURED BEFORE THE FIX, on the running page: roof seams at 4.003
+                // cubits (right), side walls 0.80 cubits running HORIZONTALLY (wrong
+                // spacing and wrong direction), back wall 0.889 cubits. The two scale
+                // factors below are the cause - they are pure invention, tuned by eye.
+                //
+                // [TEXT Ex 26:2] each curtain is 28 long by 4 wide. The 28 runs
+                // TRANSVERSELY - nine cubits down one side, ten across the roof, nine
+                // down the other (Baraita para 7) - and the 4-cubit widths accumulate
+                // ALONG the tent. So a seam is a transverse line: it crosses the roof,
+                // and it must run VERTICALLY down the side walls, four cubits apart.
+                // On the back the sheet turns and runs downward, so there the seams are
+                // horizontal, still four cubits apart.
+                const uvScaleX = length / 15; // legacy only: tile based on wall length
+                const uvScaleY = roofY / 10;  // legacy only: tile based on wall height
+                const isSide = Math.abs(dirX) > 0;
+                const TENT_LEN_CU = TENT_LENGTH / CUBIT;   // 30
+                const TENT_WID_CU = TENT_WIDTH / CUBIT;    // 10
+                const dropCu = (roofY - thisHemY) / CUBIT; // how far this hem falls
 
                 for (let j = 0; j <= heightSegs; j++) {
                     const t = j / heightSegs; // 0 = top, 1 = bottom
@@ -3434,8 +3456,25 @@
                         }
 
                         vertices.push(x, y, z);
-                        // Scale UVs for proper texture tiling
-                        uvs.push(s * uvScaleX, t * uvScaleY);
+                        if (uvMode === 'curtain') {
+                            if (isSide) {
+                                // u walks off the roof edge and on down the wall, so the
+                                // cloth's transverse run reads 9 + 10 + 9. v IS the roof's
+                                // v, which is what keeps these seams vertical and in step
+                                // with the ones overhead. v = 1 at the west end, matching
+                                // the roof plane (its +Y maps to -Z after the -90 rotation).
+                                const uBase = (dirX < 0) ? 0 : 1;
+                                uvs.push(uBase + dirX * (t * dropCu) / TENT_WID_CU,
+                                         1 - (s * length / CUBIT) / TENT_LEN_CU);
+                            } else {
+                                // back wall: u spans the width exactly as the roof does;
+                                // v carries on PAST the roof's west edge, so the seams
+                                // turn the corner and continue horizontally.
+                                uvs.push(s, 1 + (t * dropCu) / TENT_LEN_CU);
+                            }
+                        } else {
+                            uvs.push(s * uvScaleX, t * uvScaleY);
+                        }
                     }
                 }
 
@@ -3578,7 +3617,8 @@
         // Both sources agree, so backHem is 0 (ground) and is READ, not chosen.
         const linenCovering = createDrapedCovering(
             0.03, linenCurtainMaterial, LINEN_HEM_CUBITS * CUBIT,
-            { surfaceFront: 0, surfaceBack: 0.03, stackY: 0.03, backHem: 0 }
+            { surfaceFront: 0, surfaceBack: 0.03, stackY: 0.03, backHem: 0,
+              uvMode: 'curtain' }
         );
         tabernacleGroup.add(linenCovering);
 
