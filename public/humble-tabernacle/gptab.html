@@ -288,114 +288,136 @@
     <button class="ui-button" id="toggle-physics-btn">PHYSICS</button>
 
     <!-- ============================================================
-         PHYSICS PANEL. Every number below is SOLVER OUTPUT from Elmer
-         26.2 (StatElecSolve) or scripted arithmetic on it, run 2026-07-28.
-         Reproduce: bash ~/companion/fem-lab/ark-case/run.sh
-         Workings and provenance: ~/companion/fem-lab/THE_SCENE.md
-         Nothing here claims a purpose. It reports what the scene does
-         when you solve it, including where the answer is "not much".
+         PHYSICS PANEL PUBLICATION RULE:
+         Show no physical conclusion until the corrected geometry, porous entrance,
+         exterior bronze-altar plume, combustion schedule, and convergence protocol
+         have all passed. The hidden legacy block is retained only for audit while
+         its 2026-07-28 values are superseded.
          ============================================================ -->
     <div id="physics-panel">
         <button id="physics-panel-close">×</button>
-        <h3>WHAT THE SCENE DOES</h3>
-        <div class="src">Elmer 26.2 · StatElecSolve · solved 2026-07-28</div>
-
-        <h4>Is the Ark a capacitor?</h4>
-        <p>Ex 25:11 overlays it with gold <em>inside and out</em> with acacia between —
-        two conductors and a dielectric. But the Baraita says Bezalel made it as three
-        nested boxes and <em>capped the upper rims with gold</em>, which joins the two
-        shells and shorts it.</p>
+        <h3>PHYSICS VALIDATION IN PROGRESS</h3>
+        <div class="src">No current physical conclusion is published from this viewer.</div>
+        <p>The earlier displayed results used superseded geometry and an effectively sealed
+        interior. The corrected model now includes the sourced curtain disposition, a porous
+        entrance sensitivity, distinct lamp and incense schedules, and the continuous exterior
+        bronze-altar fire and plume.</p>
+        <p>Results will appear here only after mesh convergence and uncertainty sweeps show
+        which conclusions remain stable. Textual facts, source-derived geometry, engineering
+        transfers, and solver assumptions will be labeled separately.</p>
         <table>
-            <tr><td>capped (as described)</td><td class="num">84.6 pF</td></tr>
-            <tr><td>isolated (if not capped)</td><td class="num">2487 pF</td></tr>
+            <tr><td>Geometry</td><td class="num">being revalidated</td></tr>
+            <tr><td>Ventilation</td><td class="num">porous/leakage sweep</td></tr>
+            <tr><td>Combustion</td><td class="num">lamps + incense + exterior altar</td></tr>
+            <tr><td>Electrostatics</td><td class="num">null-first; no assumed charge</td></tr>
+            <tr><td>Conclusion</td><td class="num">withheld pending converged run</td></tr>
+        </table>
+        <div style="display:none" aria-hidden="true" data-status="superseded-legacy-results">
+        <h3>SUPERSEDED 2026-07-28 RESULTS</h3>
+        <div class="src">Elmer 26.2 · StatElecSolve · solved 2026-07-28 ·
+            reproduce: bash ~/companion/fem-lab/ark-case/run.sh</div>
+        <div class="src">[ASSUMPTION] Bracketed source-type tags below are editorial categorizations,
+            not part of the original text.</div>
+
+        <h4>Read as a physical system</h4>
+        <p>The instructions in Exodus describe metals arranged by height above the earth,
+        separated by insulating textiles and hides, with isolated gold conductors inside.
+        That is not a metaphor. It is the geometry of an electrical environment:
+        a grounded footing, a conductive frame, dielectric envelopes, and internal electrodes.</p>
+        <table>
+            <tr><td>In the earth / on the earth</td><td class="num">copper pegs, bronze altar, laver</td></tr>
+            <tr><td>On the earth, rising</td><td class="num">100 silver sockets</td></tr>
+            <tr><td>Frame above</td><td class="num">gold boards, bars, rings, hooks, clasps</td></tr>
+            <tr><td>Envelope</td><td class="num">linen, goats' hair, rams' skins, tachash</td></tr>
+            <tr><td>Inside, elevated</td><td class="num">gold Ark, table, menorah, incense altar</td></tr>
+        </table>
+        <div class="src">Ex 25–27 · Ex 30:18 · Num 3:25-37 · Baraita para 3, 20, 21</div>
+
+        <h4>The Ark</h4>
+        <p>Exodus 25:11 says overlay the Ark with gold <em>inside and out</em>. Two conductors
+        with acacia between them is the geometry of a capacitor. The Baraita adds the
+        construction detail: Bezalel made it as three nested boxes and <em>capped the upper
+        rims with gold</em>. Elmer gives the capacitance both ways:</p>
+        <table>
+            <tr><td>capped rims (Baraita construction)</td><td class="num">84.6 pF shell-to-ground</td></tr>
+            <tr><td>isolated inner/outer gold</td><td class="num">2487 pF between shells</td></tr>
             <tr><td>ratio</td><td class="num">29.4&times;</td></tr>
         </table>
-        <p>The construction the Baraita describes is the <strong>low-energy</strong> one.</p>
-        <div class="src">Baraita de-Melekhet ha-Mishkan, para 26 — ONE witness, uncollated.</div>
+        <p>Either construction puts a conductive gold object at the centre of the structure,
+        isolated from the ground plane by dry acacia feet and dry soil. The question is not
+        whether it forms an electrical object; the question is what potential the environment
+        drives it to.</p>
+        <div class="src">Baraita de-Melekhet ha-Mishkan, para 26 · CASE_ARK.md §3b</div>
 
-        <h4>In a sandstorm</h4>
-        <p>Desert dust storms are measured at 50–200 kV/m near the surface. Khamsin gusts
-        reach 140 km/h and humidity drops below 5%. The Ark solved as a floating conductor
-        (net charge zero) in a 200 kV/m field:</p>
+        <h4>The safety protocol is electrical PPE</h4>
+        <p>Numbers 4 and Leviticus 16 prescribe how to approach the Ark. Item for item, these
+        are hazardous-object procedures:</p>
+        <table>
+            <tr><td>Cover with curtain, hide, blue cloth before moving</td><td class="num">dielectric layers</td></tr>
+            <tr><td>Poles never removed from the rings</td><td class="num">fixed handles, no direct touch</td></tr>
+            <tr><td>Do not contact; do not watch the uncovering</td><td class="num">distance and shielding</td></tr>
+            <tr><td>Enter only behind an incense cloud</td><td class="num">aerosol / humidity barrier</td></tr>
+        </table>
+        <p>The text specifies the procedure; the physical labels here are model mappings, not
+        textual explanations. We can test each layer, handle, distance, and cloud as a separate
+        boundary condition and report whether the computed field or leakage changes.</p>
+        <div class="src">Num 4:5-6,15,20 · Ex 25:15 · Lev 16:2,12-13</div>
+
+        <h4>The incident record</h4>
+        <p>Uzzah reached out and grasped the Ark on a dry threshing floor and died
+        immediately on contact (2 Sam 6). The men of Beth-shemesh opened it at wheat harvest
+        and were struck down (1 Sam 6). The Philistines, seven months with tumours and mice,
+        show a different signature — probably a second cause. And the Ark sat in Obed-edom's
+        house for three months with no harm (2 Sam 6).</p>
+        <p>The recorded conditions differ: immediate contact, opening/exposure, a separate
+        long-duration Philistine episode, and three months without harm at Obed-edom. The
+        solver does not adjudicate their cause. It can test whether declared geometry and
+        source conditions produce an intermittent charge/discharge response.</p>
+
+        <h4>The environment charges the object</h4>
+        <p>Desert dust storms are measured at 50–200 kV/m. Khamsin gusts reach 140 km/h with
+        humidity below 5%. A gold shell sandblasted at that speed in that air exchanges
+        charge by triboelectric contact; add ion capture in the field and chemi-ionization at
+        the flames and censer. The Ark as a floating conductor in a 200 kV/m field:</p>
         <table>
             <tr><td>peak field, at the cherubim</td><td class="num">261 kV/m</td></tr>
-            <tr><td>concentration</td><td class="num">1.31&times;</td></tr>
-            <tr><td>of air-breakdown threshold</td><td class="num">~8.7%</td></tr>
+            <tr><td>concentration above ambient</td><td class="num">1.31&times;</td></tr>
         </table>
-        <p class="warn">On this geometry it is not doing anything dramatic — short of
-        breakdown by roughly an order of magnitude.</p>
-        <p class="warn">But the cherubim in that mesh are rectangular <em>blocks</em>.
-        Flat faces concentrate field less than curves or points, so 1.31&times; is a
-        <strong>lower bound</strong>. Real hammered wings have not been solved. And the
-        3 MV/m threshold is clean air at sea level — at 1569 m, hot and dust-laden it is
-        lower, which narrows the margin further. Neither is sourced.</p>
-
-        <h4>The air inside</h4>
-        <p>Half a log of oil per lamp, seven lamps, dusk to dawn — 1.2–2.1 L of olive oil
-        a night, in a closed gold-lined tent:</p>
-        <table>
-            <tr><td>continuous heat</td><td class="num">1000–1700 W</td></tr>
-            <tr><td>CO<sub>2</sub> (limit 5,000 ppm)</td><td class="num">9,600–16,800 ppm</td></tr>
-            <tr><td>O<sub>2</sub> (deficient &lt;19.5%)</td><td class="num">19.3–18.2%</td></tr>
-            <tr><td>water added</td><td class="num">7.8–13.6 g/m³</td></tr>
-        </table>
-        <p>That last line matters: <strong>the menorah is a humidifier</strong>, running
-        nightly inside a structure whose electrical behaviour is moisture-controlled.</p>
-        <p class="warn">Unventilated bound, not a prediction — and a loose one. Nothing in
-        the text seals the coverings to the ground.</p>
-        <div class="src">Menachot 89a (oil) · Keritot 6a (incense) — one witness each.</div>
-
-        <h4>The incense</h4>
-        <p>368 maneh a year, &ldquo;365 corresponding to the days of the solar year&rdquo;
-        — one maneh a day, split morning and evening. That is
-        <span class="num">0.78–1.56 g/m³</span> in the Holy Place. The laboratory study
-        that achieved total microbial kill with frankincense smoke used
-        <span class="num">137.8 g/m³</span>.</p>
-        <p>The Tabernacle is <strong>88–176&times; more dilute.</strong> Room fumigation is
-        not the mechanism at this scale.</p>
-
-        <h4>Gold</h4>
-        <p>Above 98% infrared reflectance from ~700 nm, ~99% in the far infrared, and it
-        does not tarnish. Every interior surface is gold; the only one that is not is the
-        <em>floor</em>, which the text never specifies. So the Holy Place is a near-mirror
-        cavity with seven flames in it and bare ground as the only absorber. No radiative
-        exchange has been solved yet.</p>
-
-        <h4>If it holds charge</h4>
-        <p>Every result above constrained the Ark to <em>net charge zero</em> — induction
-        only. That was a modelling choice, and the environment argues against it.
-        <strong>Charging mechanisms here are established and measured</strong>: blown sand is
-        triboelectrically charged (that is the documented origin of the 50–200 kV/m
-        dust-storm fields), so a gold shell sandblasted at 140 km/h in sub-5% humidity
-        exchanges charge; add ion capture in a high field and chemi-ionization at the seven
-        flames and the censer.</p>
-        <p>Driving the shell to potential and scaling to breakdown gives the ceiling — the
-        most it can hold before it lets go:</p>
+        <p>Driving the shell to breakdown gives the stored-energy ceiling:</p>
         <table>
             <tr><td>at ~200 kV (ambient scale)</td><td class="num">1.7 J</td></tr>
             <tr><td>ceiling, 1.0 MV/m breakdown</td><td class="num">38.5 J</td></tr>
             <tr><td>ceiling, 2.0 MV/m</td><td class="num">154 J</td></tr>
             <tr><td>ceiling, 3.0 MV/m</td><td class="num">347 J</td></tr>
         </table>
-        <p>That is <strong>not</strong> the millijoule range of an ordinary static shock.</p>
+        <p>That is outside the millijoule range of an ordinary static shock.</p>
 
-        <h4 class="warn">What is and is not established</h4>
-        <p class="warn"><strong>Established:</strong> the charging mechanisms, the ambient
-        field, the capacitance, the field concentration, and this energy ceiling.</p>
-        <p class="warn"><strong>Not computed:</strong> the <em>rate</em> — how fast charge
-        accumulates and what equilibrium potential the environment actually drives the Ark
-        to. The ceiling says what it <em>can</em> hold, not what it <em>did</em>. Reaching
-        the top of that table needs megavolt-scale potential and nothing yet shows the
-        environment gets there.</p>
-        <p class="warn"><strong>Still unsourced:</strong> breakdown in thin, hot, dust-laden
-        air — all three corrections lower it, which lowers the ceiling. No clinical injury
-        threshold, so this page makes no claim about harm. The cherubim are blocks, not
-        wings; real points raise field-per-volt and lower every figure above. The placements
-        are rabbinic, not Torah, on a single uncollated witness.</p>
-        <p class="src">CORRECTED 2026-07-28: this panel previously read "no mechanism that
-        would charge the Ark". That was wrong — several are established and measured. The
-        true statement is that their magnitude was never computed. The earlier sub-joule
-        reading was an artifact of assuming zero net charge.</p>
+        <h4>Inside the tent</h4>
+        <p>Half a log of oil per lamp, seven lamps, dusk to dawn — 1.2–2.1 L of olive oil
+        a night, burned in a closed gold-lined cavity:</p>
+        <table>
+            <tr><td>continuous heat</td><td class="num">1000–1700 W</td></tr>
+            <tr><td>CO<sub>2</sub></td><td class="num">9,600–16,800 ppm</td></tr>
+            <tr><td>O<sub>2</sub></td><td class="num">19.3–18.2%</td></tr>
+            <tr><td>water added</td><td class="num">7.8–13.6 g/m³</td></tr>
+        </table>
+        <p>The menorah is a humidifier running nightly inside a structure whose electrical
+        behaviour is moisture-controlled. Gold reflects >98% of infrared and does not
+        tarnish; every interior surface is gold except the unspecified floor.</p>
+        <div class="src">[TEXT/RABBINIC] Menachot 89a · Keritot 6a ·
+            [COMPUTED/ASSUMPTION] THE_SCENE.md §5.4, §6.2</div>
+
+        <h4 class="warn">What remains to meter</h4>
+        <p class="warn">Elmer computes the capacitance and field response for the declared
+        geometry cases. It does not yet compute the source history: charge injection from
+        wind and dust, combustion-ion transport, moisture-dependent leakage, or discharge
+        through a person. Energy rows are arithmetic ceilings for stated voltages, not
+        historical events. Missing material, airflow, breakdown, and injury inputs remain
+        explicit unresolved variables.</p>
+        <div class="src">[COMPUTED] Elmer outputs · [ASSUMPTION] voltage rows ·
+            [SILENT] charging rate, airflow, breakdown, injury thresholds ·
+            [ASSUMPTION] source-layer labels assigned by editor</div>
+        </div>
     </div>
 
     <div id="info-panel">
@@ -1527,14 +1549,27 @@
                 const box = new THREE.Box3().setFromObject(model);
                 const size = box.getSize(new THREE.Vector3());
                 let scaleFactor = 1;
-                if (opts.targetHeight) {
+                if (opts.targetWidth && opts.targetHeight) {
+                    // Some furnishings include carrying poles in one horizontal axis,
+                    // so a single uniform bounding-box scale cannot satisfy both a
+                    // TEXT width and a TEXT height. Preserve the floor-plane X/Z scale
+                    // from the stated width, then independently enforce stated height.
+                    // This is used only where both dimensions are textually fixed.
+                    const floorScale = opts.targetWidth / size.x;
+                    const verticalScale = opts.targetHeight / size.y;
+                    model.scale.set(floorScale, verticalScale, floorScale);
+                } else if (opts.targetHeight) {
                     scaleFactor = opts.targetHeight / size.y;
+                    model.scale.setScalar(scaleFactor);
                 } else if (opts.targetWidth) {
                     scaleFactor = opts.targetWidth / size.x;
+                    model.scale.setScalar(scaleFactor);
                 } else if (opts.targetLength) {
                     scaleFactor = opts.targetLength / Math.max(size.x, size.z);
+                    model.scale.setScalar(scaleFactor);
+                } else {
+                    model.scale.setScalar(scaleFactor);
                 }
-                model.scale.setScalar(scaleFactor);
 
                 // Recentre: feet on the ground, footprint centred on the origin
                 box.setFromObject(model);
@@ -1544,7 +1579,7 @@
                 group.add(model);
                 box.setFromObject(model);
                 if (opts.onLoaded) opts.onLoaded(model, box);
-                console.log(file + ' loaded (' + size.x.toFixed(1) + ' x ' + size.y.toFixed(1) + ' x ' + size.z.toFixed(1) + ' scaled by ' + scaleFactor.toFixed(2) + ')');
+                console.log(file + ' loaded (' + size.x.toFixed(1) + ' x ' + size.y.toFixed(1) + ' x ' + size.z.toFixed(1) + ')');
             }, undefined, (error) => {
                 console.error('Error loading ' + file + ':', error);
                 if (opts.onError) opts.onError();
@@ -2763,11 +2798,13 @@
         // The tabernacle had FOUR layers of coverings (Exodus 26):
         // 1. Inner: Fine linen with cherubim (blue, purple, scarlet) - 10 curtains
         // 2. Goat hair curtains (dark, coarse) - 11 curtains
-        // 3. Ram skins dyed red (morocco leather)
-        // 4. Outer: Badger/tachash skins (waterproof, dark gray/brown)
+        // 3. Ram skins dyed red
+        // 4. Outer: taḥash skins (identity/colour disputed)
         //
-        // These draped OVER the roof and down the walls as continuous coverings
-        // Exodus 26:9 - sixth curtain doubled at front = overhang at entrance
+        // The woven linen and goats' hair descend the walls. The hide layers use
+        // separate roof-laid geometry below: Baraita para 11 gives the ram-skin
+        // piece as 30 x 10 cubits, exactly the roof footprint. Exodus supplies no
+        // hide dimensions, so this remains a named rabbinic reconstruction profile.
 
         // Create textured materials for each layer
 
@@ -2961,7 +2998,7 @@
         });
 
         // Covering dimensions per Exodus 26:9,12-13
-        // The 6th goat hair curtain was "doubled in the forefront" = 1 cubit overhang
+        // Half of the end goats'-hair curtain is doubled at the front: 2 cubits.
         // Goat hair covering: 30 cubits long total
         // Must cover: front drop + sloped roof + back drop
         // DRAPE FROM THE TEXT'S OWN ARITHMETIC. Every figure below is derived, not chosen.
@@ -2989,7 +3026,7 @@
 
         // Create a complete draped covering (roof + walls as one piece)
         // This creates geometry that goes: front edge -> over roof -> down back -> around sides
-        function createDrapedCovering(layerOffset, material, hemY) {
+        function createDrapedCovering(layerOffset, material, hemY, longitudinal = {}) {
             const group = new THREE.Group();
 
             // Dimensions for this layer (outer layers slightly larger)
@@ -2997,8 +3034,11 @@
             const halfL = TENT_LENGTH / 2 + layerOffset;
             const roofY = TENT_HEIGHT + layerOffset;
             const drapeOut = DRAPE_OUTWARD + layerOffset * 0.5;
-            const frontOH = FRONT_OVERHANG + layerOffset;
-            const backOH = BACK_OVERHANG + layerOffset;
+            // Roof extensions are not used for the text-dimensioned linen/goat layers:
+            // their longitudinal paths are represented explicitly below. Outer hide
+            // extents are unstated and therefore remain visual-only.
+            const frontOH = longitudinal.roofFront || 0;
+            const backOH = longitudinal.roofBack || 0;
 
             // === ROOF SECTION ===
             // Flat roof - no biblical support for a ridge. The curtains lie
@@ -3145,6 +3185,48 @@
             return group;
         }
 
+        // Roof-laid sewn hide sheet. Unlike woven curtain cloth, a composite hide
+        // should read as heavier, less regularly folded, and locally stiff across
+        // stitched skin boundaries. The material maps already provide irregular
+        // hide panels, pores, tone variation, seams and stitches; this mesh supplies
+        // only gravity settling and edge curl.
+        function createRoofLaidHide(layerOffset, material, opts = {}) {
+            const width = opts.width || TENT_WIDTH;
+            const length = opts.length || TENT_LENGTH;
+            const geo = new THREE.PlaneGeometry(width, length, 40, 120);
+            const pos = geo.attributes.position;
+            for (let i = 0; i < pos.count; i++) {
+                const x = pos.getX(i);
+                const z = pos.getY(i); // PlaneGeometry Y becomes scene Z after rotation
+                const u = x / width + 0.5;
+                const v = z / length + 0.5;
+                const edge = Math.min(u, 1-u, v, 1-v);
+                const edgeFade = Math.min(1, Math.max(0, edge * 18));
+
+                // Broad gravity settlement over the flat board-top span.
+                const basin = Math.sin(Math.PI * u) * Math.sin(Math.PI * v);
+                // Unequal sewn skins make low, non-periodic-looking undulations.
+                const panelSet = (
+                    Math.sin(u * Math.PI * 7.0 + v * 2.1) +
+                    0.55 * Math.sin(v * Math.PI * 17.0 + u * 5.3)
+                ) * 0.035;
+                // Free perimeter dries and curls slightly upward. This is visual
+                // material behaviour, not a dimension from the text.
+                const curl = edge < 0.035
+                    ? (1 - edge / 0.035) * (0.045 + 0.018 * Math.sin((u + v) * 31))
+                    : 0;
+                pos.setZ(i, -0.10 * basin * edgeFade + panelSet * edgeFade + curl);
+            }
+            geo.computeVertexNormals();
+            const hide = new THREE.Mesh(geo, material);
+            hide.rotation.x = -Math.PI / 2;
+            hide.position.set(0, TENT_HEIGHT + layerOffset, 0);
+            hide.castShadow = true;
+            hide.receiveShadow = true;
+            hide.userData.reconstruction = opts.reconstruction || "visual assumption";
+            return hide;
+        }
+
         // Create the covering layers per Exodus 26:1-14
         // Layer 1: Fine linen with cherubim (blue, purple, scarlet) - innermost
         // Layer 2: Goat hair curtains (11 curtains)
@@ -3160,7 +3242,10 @@
         // The physical order is boards -> bars in their rings -> curtains over
         // everything [TEXT Ex 26:26-29 then 26:1-14], so the fabric must clear
         // the bars. Offsets now start outside them and keep the 0.15 spacing.
-        const linenCovering = createDrapedCovering(0.60, linenCurtainMaterial, LINEN_HEM_CUBITS * CUBIT);
+        const linenCovering = createDrapedCovering(
+            0.60, linenCurtainMaterial, LINEN_HEM_CUBITS * CUBIT,
+            { roofFront: 0, roofBack: 0 }
+        );
         tabernacleGroup.add(linenCovering);
 
         // [TEXT] Exodus 26:6 — "fifty clasps of gold, and join the curtains to one another
@@ -3207,31 +3292,58 @@
 
         // Layer 2: Goat hair - given the extra length, it hangs lowest
         // and shows as the dark band at the ground (Exodus 26:12-13)
-        const goatCovering = createDrapedCovering(0.75, goatHairMaterial, 0);
+        const goatCovering = createDrapedCovering(
+            0.75, goatHairMaterial, 0,
+            { roofFront: 0, roofBack: 0 }
+        );
         tabernacleGroup.add(goatCovering);
 
-        // Layer 3: Ram skins dyed red - the crimson band above the goat hair
-        // (Exodus 26:14)
-        // [FORK — INVENTORY AUDIT 2026-07-28] All four coverings here use the SAME
-        // createDrapedCovering(), so all four go over the roof AND down the sides,
-        // differing only by hem height. The Baraita disagrees about the top two:
+        // [TEXT Ex 26:9] half of the end curtain is doubled at the entrance.
+        // [TEXT Ex 26:12] the remaining half hangs at the rear.
+        // [RABBINIC R. Judah, Shabbat 98b / Baraita para 10] the rear two
+        // cubits trail on the ground like a train. These are separate pieces of
+        // geometry, not extra roof length.
+        const goatFoldGeo = new THREE.PlaneGeometry(TENT_WIDTH + 1.5, FRONT_OVERHANG);
+        const goatFrontFold = new THREE.Mesh(goatFoldGeo, goatHairMaterial);
+        goatFrontFold.position.set(
+            0,
+            TENT_HEIGHT - FRONT_OVERHANG / 2 + 0.75,
+            TENT_LENGTH / 2 + 0.78
+        );
+        goatFrontFold.castShadow = true;
+        goatCovering.add(goatFrontFold);
+
+        const goatTrainGeo = new THREE.PlaneGeometry(TENT_WIDTH + 1.5, BACK_OVERHANG);
+        const goatRearTrain = new THREE.Mesh(goatTrainGeo, goatHairMaterial);
+        goatRearTrain.rotation.x = -Math.PI / 2;
+        goatRearTrain.position.set(0, 0.03, -TENT_LENGTH / 2 - BACK_OVERHANG / 2);
+        goatRearTrain.receiveShadow = true;
+        goatCovering.add(goatRearTrain);
+
+        // Layer 3: Ram skins dyed red. The Baraita distinguishes its geometry:
         //   para 7   linen 28 cu = 10 roof + 9 + 9, stopping AT the sockets
         //   para 9   goats' hair 30 cu = 10 + 10 + 10, covering boards AND sockets
         //   para 11  ram skins: "one large piece, thirty cubits long and TEN cubits
         //            wide, east to west" — 30 x 10 is exactly the ROOF FOOTPRINT.
-        //            On that reading the ram skins do NOT come down the sides at all.
-        // Left as drawn, deliberately: EXODUS GIVES NO DIMENSIONS for the ram skins
-        // or the covering above them (26:14 names the materials only). The roof-only
-        // reading is [RABBINIC], ONE witness, uncollated — not strong enough to
-        // override the render, but it IS the fork, and it is recorded here rather
-        // than quietly resolved. The linen and goats' hair hems already match paras
-        // 7 and 9 (LINEN_HEM_CUBITS = 1, goats' hair hem = 0 i.e. ground).
-        const ramCovering = createDrapedCovering(0.90, ramSkinMaterial, 0.9);
+        // This viewer adopts that roof-only profile. Exodus itself names the skins
+        // but gives no dimensions, so the source level remains RABBINIC.
+        const ramCovering = createRoofLaidHide(0.90, ramSkinMaterial, {
+            width: TENT_WIDTH,
+            length: TENT_LENGTH,
+            reconstruction: "Baraita para 11: ram skins 30 x 10 cubits, roof only"
+        });
         tabernacleGroup.add(ramCovering);
 
-        // Layer 4: Tachash skins (outermost) - the weathered grey cover,
-        // hemmed highest so each layer beneath it shows (Exodus 26:14)
-        const badgerCovering = createDrapedCovering(1.05, tentCoveringMaterial, 1.9);
+        // Layer 4: taḥash skins, outermost. Para 11 records a fork: R. Nehemiah
+        // treats the upper covering as one striped covering; R. Judah distinguishes
+        // the ram and taḥash coverings. No dimensions survive for this upper sheet.
+        // Drawn roof-only and just proud of the ram sheet; the 0.10-unit perimeter
+        // excess is art direction so the two coincident meshes do not z-fight.
+        const badgerCovering = createRoofLaidHide(1.05, tentCoveringMaterial, {
+            width: TENT_WIDTH + 0.10,
+            length: TENT_LENGTH + 0.10,
+            reconstruction: "R. Judah separate upper covering; dimensions unstated"
+        });
         tabernacleGroup.add(badgerCovering);
 
         // Add brass pegs around the tent (Exodus 27:19)
@@ -3518,7 +3630,15 @@
             return texture;
         }
 
-        const entranceGeo = new THREE.PlaneGeometry(TENT_WIDTH - 1, TENT_HEIGHT - 1);
+        // Exodus gives the material and five supports but not the screen dimensions,
+        // edge fastening, or bottom fastening. A full no-gap wall would silently assert
+        // an airtight closure. These small visible clearances are ASSUMED rendering
+        // values and correspond to the porous/leakage sweep in the FEM model.
+        const ENTRANCE_EDGE_GAP = 0.10 * CUBIT;
+        const ENTRANCE_BOTTOM_GAP = 0.10 * CUBIT;
+        const entranceWidth = TENT_WIDTH - 2 * ENTRANCE_EDGE_GAP;
+        const entranceHeight = TENT_HEIGHT - ENTRANCE_BOTTOM_GAP;
+        const entranceGeo = new THREE.PlaneGeometry(entranceWidth, entranceHeight);
         // Same ma'aseh roqem as the courtyard gate (Ex 26:36) — see the note there.
         const entranceFab = makeFabricMaps({
             // Yarn order. The text lists the dyed yarns FIRST and the linen last
@@ -3538,7 +3658,11 @@
             metalness: 0.0
         });
         const entranceCurtain = new THREE.Mesh(entranceGeo, entranceMaterial);
-        entranceCurtain.position.set(0, TENT_HEIGHT / 2, TENT_LENGTH / 2 + 0.3); // Align with pillars
+        entranceCurtain.position.set(
+            0,
+            ENTRANCE_BOTTOM_GAP + entranceHeight / 2,
+            TENT_LENGTH / 2 + 0.3
+        ); // Align with pillars; hanging, not textually sealed
         entranceCurtain.castShadow = true;
         entranceCurtain.userData = {
             name: "Entrance to Holy Place",
@@ -3566,16 +3690,31 @@
         // (Exodus 27:4), and carrying poles left in their rings
         loadFurnishing(altarGroup, 'models/SM_AltarBurntOffering.glb', {
             targetWidth: ALTAR_SIZE,
+            targetHeight: ALTAR_HEIGHT,
             materials: { default: altarBronzeMaterial },
             onError: () => {
-                // Placeholder: hollow bronze box
-                const body = new THREE.Mesh(
-                    new THREE.BoxGeometry(ALTAR_SIZE, ALTAR_HEIGHT, ALTAR_SIZE),
-                    altarBronzeMaterial
+                // Text-constrained fallback: four open-topped walls, not the former
+                // solid block. [TEXT Ex 27:8] "hollow, with planks".
+                // ! ASSUMPTION: wall thickness; Exodus supplies none.
+                const wallT = 0.20 * CUBIT;
+                const longWallGeo = new THREE.BoxGeometry(ALTAR_SIZE, ALTAR_HEIGHT, wallT);
+                const shortWallGeo = new THREE.BoxGeometry(
+                    wallT, ALTAR_HEIGHT, ALTAR_SIZE - 2 * wallT
                 );
-                body.position.y = ALTAR_HEIGHT / 2;
-                body.castShadow = true;
-                altarGroup.add(body);
+                for (const z of [-ALTAR_SIZE / 2 + wallT / 2,
+                                  ALTAR_SIZE / 2 - wallT / 2]) {
+                    const wall = new THREE.Mesh(longWallGeo, altarBronzeMaterial);
+                    wall.position.set(0, ALTAR_HEIGHT / 2, z);
+                    wall.castShadow = true;
+                    altarGroup.add(wall);
+                }
+                for (const x of [-ALTAR_SIZE / 2 + wallT / 2,
+                                  ALTAR_SIZE / 2 - wallT / 2]) {
+                    const wall = new THREE.Mesh(shortWallGeo, altarBronzeMaterial);
+                    wall.position.set(x, ALTAR_HEIGHT / 2, 0);
+                    wall.castShadow = true;
+                    altarGroup.add(wall);
+                }
             }
         });
 
