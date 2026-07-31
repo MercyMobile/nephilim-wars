@@ -2729,7 +2729,14 @@
             }
             return grp;
         }
-        ['south', 'north', 'west'].forEach(sd => tabernacleGroup.add(buildWallBars(sd)));
+        ['south', 'north', 'west'].forEach(sd => {
+            const coveredBars = buildWallBars(sd);
+            // The upper/lower bars and their rings remain modeled, but the
+            // opaque linen and goat-hair coverings lie over this exterior
+            // framing. Do not let assumed bar radii pierce the sourced cloth.
+            coveredBars.visible = false;
+            tabernacleGroup.add(coveredBars);
+        });
 
         // ================================================================
         // CARRYING POLES — built 2026-07-28. Previously ABSENT from the model.
@@ -3184,15 +3191,18 @@
             const group = new THREE.Group();
 
             // Dimensions for this layer (outer layers slightly larger)
+            // Renderer-only shell separation prevents coincident cloth faces
+            // from z-fighting. Values are hundredths of a scene unit and are
+            // excluded from every sourced cubit span.
             const halfW = TENT_WIDTH / 2 + layerOffset;
             // Side/back clearance and vertical cloth thickness are different
             // quantities. The old single offset floated the roofs up to half a
             // cubit above the entrance and extended them through its plane.
             const surfaceFront = longitudinal.surfaceFront || 0;
-            const surfaceBack = longitudinal.surfaceBack ?? layerOffset;
+            const surfaceBack = longitudinal.surfaceBack || 0;
             const stackY = longitudinal.stackY || 0.03;
             const roofY = TENT_HEIGHT + stackY;
-            const drapeOut = DRAPE_OUTWARD + layerOffset * 0.5;
+            const drapeOut = DRAPE_OUTWARD;
             // Roof extensions are not used for the text-dimensioned linen/goat layers:
             // their longitudinal paths are represented explicitly below. Outer hide
             // extents are unstated and therefore remain visual-only.
@@ -3268,9 +3278,13 @@
                         // meet on one edge. The earlier non-zero end displacement
                         // opened pointed flaps at the front and rear.
                         const cornerFade = Math.sin(Math.PI * s);
-                        const fold = (Math.sin(along * 0.62 + startX * 2.1 + startZ) * 0.16 +
-                                      Math.sin(along * 1.7 + 1.3) * 0.04) *
-                                     t * cornerFade;
+                        // All layers follow the same fold field. A fold can
+                        // billow away from the boards, never pass inward
+                        // through the solid wall or through the cloth beneath.
+                        const foldWave =
+                            Math.sin(along * 0.62) * 0.16 +
+                            Math.sin(along * 1.7 + 1.3) * 0.04;
+                        const fold = Math.abs(foldWave) * t * cornerFade;
                         const reach = outward + fold;
 
                         // Position along the wall based on direction
@@ -3417,8 +3431,8 @@
         // everything [TEXT Ex 26:26-29 then 26:1-14], so the fabric must clear
         // the bars. Offsets now start outside them and keep the 0.15 spacing.
         const linenCovering = createDrapedCovering(
-            0.60, linenCurtainMaterial, LINEN_HEM_CUBITS * CUBIT,
-            { surfaceFront: 0, surfaceBack: 0.60, stackY: 0.03 }
+            0.03, linenCurtainMaterial, LINEN_HEM_CUBITS * CUBIT,
+            { surfaceFront: 0, surfaceBack: 0.03, stackY: 0.03 }
         );
         tabernacleGroup.add(linenCovering);
 
@@ -3466,7 +3480,7 @@
 
         // Layer 2: Goat hair - given the extra length, it hangs lowest
         // and shows as the dark band at the ground (Exodus 26:12-13)
-        const GOAT_LAYER_OFFSET = 0.75;
+        const GOAT_LAYER_OFFSET = 0.06;
         const goatCovering = createDrapedCovering(
             GOAT_LAYER_OFFSET, goatHairMaterial, 0,
             { surfaceFront: 0, surfaceBack: GOAT_LAYER_OFFSET, stackY: 0.06 }
@@ -3483,7 +3497,7 @@
         // [RABBINIC R. Judah, Shabbat 98b / Baraita para 10] the rear two
         // cubits trail on the ground like a train. These are separate pieces of
         // geometry, not extra roof length.
-        const goatFoldGeo = new THREE.PlaneGeometry(TENT_WIDTH + 1.5, FRONT_OVERHANG);
+        const goatFoldGeo = new THREE.PlaneGeometry(TENT_WIDTH, FRONT_OVERHANG);
         const goatFrontFold = new THREE.Mesh(goatFoldGeo, goatHairMaterial);
         goatFrontFold.rotation.x = -Math.PI / 2;
         goatFrontFold.position.set(
@@ -3494,7 +3508,7 @@
         goatFrontFold.castShadow = true;
         goatCovering.add(goatFrontFold);
 
-        const goatTrainGeo = new THREE.PlaneGeometry(TENT_WIDTH + 1.5, BACK_OVERHANG);
+        const goatTrainGeo = new THREE.PlaneGeometry(TENT_WIDTH, BACK_OVERHANG);
         const goatRearTrain = new THREE.Mesh(goatTrainGeo, goatHairMaterial);
         goatRearTrain.rotation.x = -Math.PI / 2;
         goatRearTrain.position.set(
@@ -3524,8 +3538,8 @@
         // Drawn roof-only and just proud of the ram sheet; the 0.10-unit perimeter
         // excess is art direction so the two coincident meshes do not z-fight.
         const badgerCovering = createRoofLaidHide(0.15, tentCoveringMaterial, {
-            width: TENT_WIDTH + 0.10,
-            length: TENT_LENGTH + 0.10,
+            width: TENT_WIDTH,
+            length: TENT_LENGTH,
             reconstruction: "R. Judah separate upper covering; dimensions unstated"
         });
         tabernacleGroup.add(badgerCovering);
