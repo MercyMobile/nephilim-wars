@@ -1092,28 +1092,7 @@
                     let h = ribProfile * pick + warp * warpShow * (1 - ribProfile);
                     if (fuzz) h += (hx(x, y, 401) - 0.5) * fuzz;
 
-                    // MA'ASEH ROQEM needs a middle scale. Thread relief alone becomes
-                    // moiré at viewing distance; fat colour bands are not stated by the
-                    // text. This repeating lozenge is a deliberately non-figurative
-                    // reconstruction of variegated embroidery. Unlike the parokhet it
-                    // has no cherubim, because Ex 26:36 and 27:16 do not name them.
                     let pixelCol = col;
-                    if (opts.roqem) {
-                        const du = Math.abs(u - 0.5);
-                        const dv = Math.abs(v - 0.5);
-                        const diamond = du + dv;
-                        const outerStitch = Math.abs(diamond - 0.355) < 0.022;
-                        const innerStitch = Math.abs(diamond - 0.205) < 0.016;
-                        const crossStitch = (du < 0.018 && dv < 0.31) ||
-                                            (dv < 0.018 && du < 0.31);
-                        if (outerStitch || innerStitch || crossStitch) {
-                            const motifYarns = opts.roqemColors ||
-                                [DYE_TEKHELET, DYE_ARGAMAN, DYE_SHANI];
-                            const sector = (x < size / 2 ? 0 : 1) + (y < size / 2 ? 0 : 2);
-                            pixelCol = hex2rgb(motifYarns[sector % motifYarns.length]);
-                            h += outerStitch ? 0.42 : 0.30; // embroidery rides over ground
-                        }
-                    }
                     hgt[y * size + x] = h;
 
                     // shade the thread: crown catches light, gap holds shadow
@@ -1181,29 +1160,6 @@
                 else t.repeat.set(opts.repeatU || 4, opts.repeatV || 4);
                 t.anisotropy = aniso; return t; };
             return { map: mk(cCan), normalMap: mk(nCan), roughnessMap: mk(rCan) };
-        }
-
-        // Give a hanging screen geometry at human scale: shallow gathers at the
-        // supports, broad gravity folds, a slight sag between attachment points,
-        // and a free lower hem. These amplitudes are visual assumptions; neither
-        // Exodus nor the rabbinic sources specify the fastening or fold pattern.
-        function makeHangingScreenGeometry(width, height, supports, segmentsX, segmentsY, phase = 0) {
-            const geo = new THREE.PlaneGeometry(width, height, segmentsX, segmentsY);
-            const pos = geo.attributes.position;
-            for (let i = 0; i < pos.count; i++) {
-                const x = pos.getX(i);
-                const y = pos.getY(i);
-                const u = x / width + 0.5;
-                const fromTop = 0.5 - y / height;
-                const fold = Math.sin(u * Math.PI * supports * 2 + phase);
-                const secondary = Math.sin(u * Math.PI * supports * 4 + phase * 0.7);
-                const topSag = 0.055 * height * Math.pow(Math.sin(u * Math.PI * (supports - 1)), 2);
-                const hemWander = 0.018 * height * Math.sin(u * Math.PI * 7 + phase);
-                pos.setZ(i, (0.035 + 0.075 * fromTop) * fold + 0.025 * fromTop * secondary);
-                pos.setY(i, y - topSag * (1 - fromTop) + hemWander * fromTop);
-            }
-            geo.computeVertexNormals();
-            return geo;
         }
 
         // ================================================================
@@ -1413,6 +1369,12 @@
             transparent: false
         });
 
+        // The texts give textile face dimensions but no cloth thickness. A
+        // zero-thickness PlaneGeometry disappears edge-on and makes adjoining
+        // walls look disconnected, so use a small renderer-only thickness.
+        // It is NOT included in any cubit span or solver dimension.
+        const textileRenderDepth = 0.025 * CUBIT;
+
         // NOTE: a red ceremonial runner/carpet from the gate to the altar was removed
         // 2026-07-26. Exodus 27:9-19 (NASB) specifies the courtyard completely - hangings,
         // pillars, bases, hooks, bands, the woven gate curtain, pegs - and closes with a
@@ -1558,7 +1520,10 @@
         // ================================================================
 
         const dracoLoader = new THREE.DRACOLoader();
-        dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/draco/');
+        // Keep the decoder beside the scene. Depending on a third-party CDN
+        // left the altar, laver and sacred furniture absent while only their
+        // synchronous fire/poles/effects remained visible.
+        dracoLoader.setDecoderPath('draco/');
 
         const gltfLoader = new THREE.GLTFLoader();
         gltfLoader.setDRACOLoader(dracoLoader);
@@ -2277,8 +2242,9 @@
 
         function createLinenPanel(x1, z1, x2, z2) {
             const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(z2 - z1, 2));
-            // Make panels wider to ensure complete overlap and no gaps
-            const panelGeo = new THREE.PlaneGeometry(length + 1.0, COURTYARD_HEIGHT);
+            const panelGeo = new THREE.BoxGeometry(
+                length, COURTYARD_HEIGHT, textileRenderDepth
+            );
             const panel = new THREE.Mesh(panelGeo, linenMaterial);
 
             // Position panel between posts
@@ -2305,13 +2271,46 @@
 
         // The hangings are a CONTINUOUS run corner to corner, not post-to-post
         // segments, so nothing can open up between them.
+        const courtCordMaterial = new THREE.MeshStandardMaterial({
+            color: 0x8a7655,
+            roughness: 0.96,
+            metalness: 0.0
+        });
+
+        function createCourtCord(x1, z1, x2, z2, y = COURTYARD_HEIGHT) {
+            const start = new THREE.Vector3(x1, y, z1);
+            const end = new THREE.Vector3(x2, y, z2);
+            const direction = new THREE.Vector3().subVectors(end, start);
+            const length = direction.length();
+            const cord = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.035, 0.035, length, 6),
+                courtCordMaterial
+            );
+            cord.position.copy(start).add(end).multiplyScalar(0.5);
+            cord.quaternion.setFromUnitVectors(
+                new THREE.Vector3(0, 1, 0),
+                direction.normalize()
+            );
+            cord.castShadow = true;
+            return cord;
+        }
+
         function createRun(x1, z1, x2, z2) {
             const len = Math.hypot(x2 - x1, z2 - z1);
-            const p = new THREE.Mesh(new THREE.PlaneGeometry(len, COURTYARD_HEIGHT), linenMaterial);
+            const run = new THREE.Group();
+            const p = new THREE.Mesh(
+                new THREE.BoxGeometry(len, COURTYARD_HEIGHT, textileRenderDepth),
+                linenMaterial
+            );
             p.position.set((x1 + x2) / 2, COURTYARD_HEIGHT / 2, (z1 + z2) / 2);
             p.rotation.y = Math.atan2(z2 - z1, x2 - x1);
             p.castShadow = true; p.receiveShadow = true;
-            return p;
+            run.add(p);
+            // [RABBINIC Baraita ch. 5] rods/rings, cords, posts and bronze
+            // pegs support the hangings. The cord gives the textile a physical
+            // suspension edge without changing its sourced face dimensions.
+            run.add(createCourtCord(x1, z1, x2, z2));
+            return run;
         }
 
         const HW = COURTYARD_WIDTH / 2, HL = COURTYARD_LENGTH / 2;
@@ -2436,8 +2435,11 @@
             return texture;
         }
 
-        const gateGeo = makeHangingScreenGeometry(
-            gateWidth, COURTYARD_HEIGHT, 4, 120, 28, 0.35
+        // [TEXT Ex 27:16,18] exact rectangular extent: 20 cubits long,
+        // matching the court hanging height of 5 cubits. Surface texture must
+        // not deform these sourced dimensions.
+        const gateGeo = new THREE.BoxGeometry(
+            gateWidth, COURTYARD_HEIGHT, textileRenderDepth
         );
         // [SOURCED] Ex 27:16 / 26:36 — both screens are  מעשׂה רקם  (ma'aseh roqem).
         // Strong's H7551 raqam: "to VARIEGATE COLOUR, that is, embroider"; H7553 riqmah:
@@ -2454,8 +2456,6 @@
             // Linen remains visible as the ground; dyed yarn supplies the roqem.
             weftColors: [LINEN_WHITE, LINEN_WHITE, DYE_TEKHELET, LINEN_WHITE,
                          DYE_ARGAMAN, LINEN_WHITE, DYE_SHANI, LINEN_WHITE],
-            roqem: true,
-            roqemColors: [DYE_TEKHELET, DYE_ARGAMAN, DYE_SHANI],
             // [TEXT] Ex 27:16 the gate is TWENTY cubits; Ex 27:18 the court is FIVE high.
             // The gate is the piece you stand in front of, so it gets the finest weave in the
             // scene: the tile covers HALF a cubit, so 480 picks land in half the cloth =
@@ -2484,6 +2484,10 @@
             scripture: "Exodus 27:16 - 'For the gate of the court there shall be a screen twenty cubits long, woven of blue, purple, and scarlet thread, and fine woven linen.'"
         };
         courtyardGroup.add(gateCurtain);
+        courtyardGroup.add(createCourtCord(
+            -gateWidth / 2, -COURTYARD_LENGTH / 2,
+             gateWidth / 2, -COURTYARD_LENGTH / 2
+        ));
 
         scene.add(courtyardGroup);
 
@@ -2540,11 +2544,52 @@
             return texture;
         }
 
+        // Rear geometry is not eight equal visible widths. Exodus gives six
+        // ordinary 1.5-cubit boards (9 cubits) plus two corner boards. Josephus
+        // explicitly accounts for the last cubit at the corners. Draw the rear
+        // face as 0.5 + (6 x 1.5) + 0.5 cubits; the concealed/wrapped portions
+        // of the corner boards are not flattened into the visible west face.
+        function createRearBoardTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1000;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+            const visibleWidths = [0.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 0.5];
+            let x0 = 0;
+            visibleWidths.forEach((cu, index) => {
+                const bw = canvas.width * cu / 10;
+                const grad = ctx.createLinearGradient(x0, 0, x0 + bw, 0);
+                const tone = index === 0 || index === visibleWidths.length - 1
+                    ? ['#806719', '#bea027', '#806719']
+                    : ['#8f741c', '#dcb62e', '#8f741c'];
+                grad.addColorStop(0, tone[0]);
+                grad.addColorStop(0.5, tone[1]);
+                grad.addColorStop(1, tone[2]);
+                ctx.fillStyle = grad;
+                ctx.fillRect(x0, 0, bw, canvas.height);
+                ctx.fillStyle = 'rgba(60, 40, 5, 0.88)';
+                ctx.fillRect(Math.max(0, x0 - 2), 0, 4, canvas.height);
+                x0 += bw;
+            });
+            const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < img.data.length; i += 4) {
+                const n = ((((i / 4) * 19) % 17) - 8) * 0.8;
+                img.data[i] = Math.min(255, Math.max(0, img.data[i] + n));
+                img.data[i + 1] = Math.min(255, Math.max(0, img.data[i + 1] + n * 0.9));
+                img.data[i + 2] = Math.min(255, Math.max(0, img.data[i + 2] + n * 0.5));
+            }
+            ctx.putImageData(img, 0, 0);
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.wrapS = THREE.ClampToEdgeWrapping;
+            texture.wrapT = THREE.ClampToEdgeWrapping;
+            return texture;
+        }
+
         // Sides: 20 boards each (Exodus 26:18,20). Back: 6 boards plus the
         // two corner boards (Exodus 26:22-23).
         const sideBoardTexture = createBoardTexture(4);
         sideBoardTexture.repeat.set(5, 1); // 4 boards x 5 = 20
-        const backBoardTexture = createBoardTexture(8);
+        const backBoardTexture = createRearBoardTexture();
 
         const frameWallMaterial = new THREE.MeshStandardMaterial({
             map: sideBoardTexture,
@@ -2687,23 +2732,47 @@
             });
         }
 
-        // Back wall (west) - solid
-        const backWallGeo = new THREE.BoxGeometry(TENT_WIDTH, TENT_HEIGHT, 0.5);
+        // Board thickness is not stated in Exodus. Keep the existing visual
+        // depth, but place it INSIDE the sourced 10 x 30 cubit footprint:
+        // outer faces, not wall centrelines, define TENT_WIDTH/TENT_LENGTH.
+        // [JOSEPHUS Ant. III.6.3] four fingers / one-third span = 1/6 cubit.
+        // Exodus is silent; the rabbinic one-cubit/tapered alternatives remain
+        // documented model variants rather than being blended into this view.
+        const BOARD_RENDER_DEPTH = (1 / 6) * CUBIT;
+
+        // Back wall (west) - its outside face is exactly z = -TENT_LENGTH/2.
+        const backWallGeo = new THREE.BoxGeometry(
+            TENT_WIDTH, TENT_HEIGHT, BOARD_RENDER_DEPTH
+        );
         const backWall = new THREE.Mesh(backWallGeo, backWallMaterial);
-        backWall.position.set(0, TENT_HEIGHT / 2, -TENT_LENGTH / 2);
+        backWall.position.set(
+            0,
+            TENT_HEIGHT / 2,
+            -TENT_LENGTH / 2 + BOARD_RENDER_DEPTH / 2
+        );
         backWall.castShadow = true;
         tabernacleGroup.add(backWall);
 
         // Side walls (north and south) - solid
-        const sideWallGeo = new THREE.BoxGeometry(0.5, TENT_HEIGHT, TENT_LENGTH);
+        const sideWallGeo = new THREE.BoxGeometry(
+            BOARD_RENDER_DEPTH, TENT_HEIGHT, TENT_LENGTH
+        );
 
         const northWall = new THREE.Mesh(sideWallGeo, frameWallMaterial);
-        northWall.position.set(-TENT_WIDTH / 2, TENT_HEIGHT / 2, 0);
+        northWall.position.set(
+            -TENT_WIDTH / 2 + BOARD_RENDER_DEPTH / 2,
+            TENT_HEIGHT / 2,
+            0
+        );
         northWall.castShadow = true;
         tabernacleGroup.add(northWall);
 
         const southWall = new THREE.Mesh(sideWallGeo, frameWallMaterial);
-        southWall.position.set(TENT_WIDTH / 2, TENT_HEIGHT / 2, 0);
+        southWall.position.set(
+            TENT_WIDTH / 2 - BOARD_RENDER_DEPTH / 2,
+            TENT_HEIGHT / 2,
+            0
+        );
         southWall.castShadow = true;
         tabernacleGroup.add(southWall);
 
@@ -3592,19 +3661,21 @@
 
             // Bronze base (socket) - on ground
             const base = new THREE.Mesh(pillarBaseGeo, bronzeMaterial);
-            base.position.set(xPos, 0.2, TENT_LENGTH / 2 + 0.5);
+            // Keep the front face on the 30-cubit footprint boundary.
+            const entranceSupportZ = TENT_LENGTH / 2 - pillarDepth / 2;
+            base.position.set(xPos, 0.2, entranceSupportZ);
             base.castShadow = true;
             tabernacleGroup.add(base);
 
             // Gold-overlaid pillar (acacia wood base) - starts above base
             const pillar = new THREE.Mesh(pillarGeo, goldMaterial);
-            pillar.position.set(xPos, 0.4 + pillarActualHeight / 2, TENT_LENGTH / 2 + 0.5);
+            pillar.position.set(xPos, 0.4 + pillarActualHeight / 2, entranceSupportZ);
             pillar.castShadow = true;
             tabernacleGroup.add(pillar);
 
             // Gold capital on top - just below roof
             const cap = new THREE.Mesh(pillarCapGeo, goldMaterial);
-            cap.position.set(xPos, 0.4 + pillarActualHeight + 0.25, TENT_LENGTH / 2 + 0.5);
+            cap.position.set(xPos, 0.4 + pillarActualHeight + 0.25, entranceSupportZ);
             cap.castShadow = true;
             tabernacleGroup.add(cap);
         }
@@ -3667,16 +3738,15 @@
             return texture;
         }
 
-        // Exodus gives the material and five supports but not the screen dimensions,
-        // edge fastening, or bottom fastening. A full no-gap wall would silently assert
-        // an airtight closure. These small visible clearances are ASSUMED rendering
-        // values and correspond to the porous/leakage sweep in the FEM model.
-        const ENTRANCE_EDGE_GAP = 0.10 * CUBIT;
-        const ENTRANCE_BOTTOM_GAP = 0.10 * CUBIT;
-        const entranceWidth = TENT_WIDTH - 2 * ENTRANCE_EDGE_GAP;
-        const entranceHeight = TENT_HEIGHT - ENTRANCE_BOTTOM_GAP;
-        const entranceGeo = makeHangingScreenGeometry(
-            entranceWidth, entranceHeight, 5, 96, 72, 1.1
+        // Exodus gives material and five supports but no dimensions. Josephus,
+        // Ant. III.6.4, says this entrance veil was like the inner 10-cubit
+        // square veil "in magnitude"; use that ancient reconstruction here.
+        // This face geometry is not an airtight CFD boundary: permeability and
+        // unresolved edge leakage remain independent solver parameters.
+        const entranceWidth = TENT_WIDTH;
+        const entranceHeight = TENT_HEIGHT;
+        const entranceGeo = new THREE.BoxGeometry(
+            entranceWidth, entranceHeight, textileRenderDepth
         );
         // Same ma'aseh roqem as the courtyard gate (Ex 26:36) — see the note there.
         const entranceFab = makeFabricMaps({
@@ -3687,8 +3757,6 @@
             // ! ASSUMPTION - Claude: the RATIO is mine. The text gives no proportions.
             weftColors: [LINEN_WHITE, LINEN_WHITE, DYE_TEKHELET, LINEN_WHITE,
                          DYE_ARGAMAN, LINEN_WHITE, DYE_SHANI, LINEN_WHITE],
-            roqem: true,
-            roqemColors: [DYE_TEKHELET, DYE_ARGAMAN, DYE_SHANI],
             // [TEXT] the tent is 10 cubits across (Ex 26:16 boards, 26:22-23) and 10 high.
             cubits: [10, 10], tileCubits: 2, size: 1024,
             threadsPerCubit: 360, threadEdge: 0.38, ripple: 0.22,
@@ -3703,9 +3771,9 @@
         const entranceCurtain = new THREE.Mesh(entranceGeo, entranceMaterial);
         entranceCurtain.position.set(
             0,
-            ENTRANCE_BOTTOM_GAP + entranceHeight / 2,
-            TENT_LENGTH / 2 + 0.3
-        ); // Align with pillars; hanging, not textually sealed
+            entranceHeight / 2,
+            TENT_LENGTH / 2 - textileRenderDepth / 2
+        ); // Front face aligns exactly with the 30-cubit boundary
         entranceCurtain.castShadow = true;
         entranceCurtain.userData = {
             name: "Entrance to Holy Place",
@@ -3991,20 +4059,12 @@
         // VEIL and ARK OF THE COVENANT
         // ================================================================
 
-        // Veil separating Holy Place from Most Holy Place. Exodus gives no
-        // thickness or explicit veil dimensions; full bay width and near-floor
-        // drop are reconstruction choices required for its stated function.
-        const veilGeo = new THREE.PlaneGeometry(TENT_WIDTH, TENT_HEIGHT - 0.25, 96, 72);
-        const veilPosition = veilGeo.attributes.position;
-        for (let i = 0; i < veilPosition.count; i++) {
-            const x = veilPosition.getX(i);
-            const y = veilPosition.getY(i);
-            const down = (TENT_HEIGHT - 0.125 - (y + TENT_HEIGHT / 2)) / TENT_HEIGHT;
-            const folds = Math.sin((x / TENT_WIDTH + 0.5) * Math.PI * 18);
-            const broadFold = Math.sin((x / TENT_WIDTH + 0.5) * Math.PI * 6 + 0.7);
-            veilPosition.setZ(i, (0.045 + 0.18 * down) * folds + 0.055 * down * broadFold);
-        }
-        veilGeo.computeVertexNormals();
+        // [RABBINIC Baraita, ch. 4; JOSEPHUS Ant. III.6.4] 10 x 10 cubits.
+        // Keep the sourced rectangular extent; textile relief belongs in the
+        // material maps, not in geometry that changes the measurements.
+        const veilGeo = new THREE.BoxGeometry(
+            TENT_WIDTH, TENT_HEIGHT, textileRenderDepth
+        );
         const veilTexture = createVeilTexture();
         const veilMaterial = new THREE.MeshStandardMaterial({
             map: veilTexture,
@@ -4018,12 +4078,9 @@
         // "You shall hang it on four pillars of acacia wood overlaid
         // with gold... on four sockets of silver" (Exodus 26:32)
         const veilZ = -TENT_LENGTH / 2 + HOLY_OF_HOLIES_SIZE;
-        const veilPillarXs = [
-            -TENT_WIDTH / 2 + 0.32,
-            -TENT_WIDTH / 6,
-             TENT_WIDTH / 6,
-             TENT_WIDTH / 2 - 0.32
-        ];
+        // Four equal 2.5-cubit service bays across the 10-cubit width. The
+        // sources give four pillars but do not state their individual spacing.
+        const veilPillarXs = [-3.75, -1.25, 1.25, 3.75].map(cu => cu * CUBIT);
         const veilPillarGeo = new THREE.CylinderGeometry(0.24, 0.29, TENT_HEIGHT - 0.45, 16);
         const veilSocketGeo = new THREE.BoxGeometry(0.85, 0.45, 0.85);
         veilPillarXs.forEach((px) => {
@@ -4048,7 +4105,7 @@
         veilMesh.position.set(
             0,
             TENT_HEIGHT / 2,
-            veilZ + 0.08
+            veilZ + textileRenderDepth / 2
         );
         // No rotation needed now that parent isn't rotated
         veilMesh.castShadow = true;
