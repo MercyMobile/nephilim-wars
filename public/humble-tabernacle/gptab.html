@@ -2315,9 +2315,16 @@
 
         const HW = COURTYARD_WIDTH / 2, HL = COURTYARD_LENGTH / 2;
 
-        // WEST (back) - ten posts across fifty cubits  [TEXT Ex 27:12]
-        for (let i = 0; i < postsShortSide; i++)
-            courtyardGroup.add(createPost(postAt(HW, i), HL));
+        // WEST (back) - ten posts across fifty cubits [TEXT Ex 27:12].
+        // Anchor the two end posts on the physical corners. Exodus fixes the
+        // count and span but not individual spacing. The Baraita's five-cubit
+        // ownership remains the interior rhythm; the terminal bays widen.
+        for (let i = 0; i < postsShortSide; i++) {
+            const x = i === 0 ? -HW
+                    : i === postsShortSide - 1 ? HW
+                    : postAt(HW, i);
+            courtyardGroup.add(createPost(x, HL));
+        }
         courtyardGroup.add(createRun(-HW, HL, HW, HL));
 
         // NORTH - twenty posts along one hundred cubits  [TEXT Ex 27:11]
@@ -2336,8 +2343,11 @@
         const flank = (COURTYARD_WIDTH - gateWidth) / 2;      // 15 cubits each side
         // three posts per flank, centred in the five cubits each owns
         for (let i = 0; i < 3; i++) {
-            courtyardGroup.add(createPost(-HW + (i + 0.5) * POST_SPACING, -HL));
-            courtyardGroup.add(createPost( HW - (i + 0.5) * POST_SPACING, -HL));
+            // The outer post on each flank is also the courtyard corner post.
+            const leftX = i === 0 ? -HW : -HW + (i + 0.5) * POST_SPACING;
+            const rightX = i === 0 ? HW : HW - (i + 0.5) * POST_SPACING;
+            courtyardGroup.add(createPost(leftX, -HL));
+            courtyardGroup.add(createPost(rightX, -HL));
         }
         // the four gate posts  [TEXT Ex 27:16]
         for (let i = 0; i < 4; i++)

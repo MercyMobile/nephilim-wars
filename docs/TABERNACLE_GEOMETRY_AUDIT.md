@@ -19,7 +19,7 @@ architecture is not used as construction data.
 | Court | 100 x 50 x 5 cubits | Exodus 27:9-18; 38:9-20 |
 | Court gate | 20 x 5 cubits | Exodus 27:16,18; LXX makes the height explicit |
 | Court supports | 60 | Exodus: 20 + 20 + 10 + 10 |
-| Court post pitch | 5 cubits | Baraita de-Melekhet ha-Mishkan ch. 5 |
+| Court post rhythm | 5 cubits through interior runs; terminal end-wall bays widen so four posts anchor the corners | Baraita ch. 5 supplies the interior pitch; corner anchoring is an Exodus-compatible physical reconstruction |
 | Tent | 30 x 10 x 10 cubits | Exodus 26; length/width derived from board layout |
 | Side boards | 20 per side, 1.5 x 10 cubits | Exodus 26:15-21 |
 | Rear visible divisions | 0.5 + 6(1.5) + 0.5 cubits | Exodus 26:22-24; Josephus, Ant. III.6.3 |
