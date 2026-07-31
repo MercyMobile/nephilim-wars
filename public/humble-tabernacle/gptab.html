@@ -3162,7 +3162,11 @@
 
             // Dimensions for this layer (outer layers slightly larger)
             const halfW = TENT_WIDTH / 2 + layerOffset;
-            const halfL = TENT_LENGTH / 2 + layerOffset;
+            // Layer separation is normal to the boards (width/height), not an
+            // invented increase in the text's 30-cubit east-west footprint.
+            // Expanding halfL while leaving the roof and side walls at
+            // TENT_LENGTH created open, skewed corners at both ends.
+            const halfL = TENT_LENGTH / 2;
             const roofY = TENT_HEIGHT + layerOffset;
             const drapeOut = DRAPE_OUTWARD + layerOffset * 0.5;
             // Roof extensions are not used for the text-dimensioned linen/goat layers:
