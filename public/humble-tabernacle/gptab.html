@@ -666,6 +666,35 @@
         const INT_TABLE_X   =  2.5 * CUBIT;         // north  [para 17, Ex 26:35]
         const INT_MENORAH_X = -2.5 * CUBIT;         // south
 
+        // Reproducible inspection views. These make geometry reviews and
+        // screenshots compare the same faces instead of relying on a hand-dragged
+        // orbit. They do not alter scene geometry.
+        const inspectionView = new URLSearchParams(window.location.search).get('view');
+        const inspectionViews = {
+            'tent-front': {
+                camera: [-24, 20, -18],
+                target: [0, 7, TENT_CENTRE_Z]
+            },
+            'tent-side': {
+                camera: [62, 24, TENT_CENTRE_Z - 2],
+                target: [0, 7, TENT_CENTRE_Z]
+            },
+            'tent-rear': {
+                camera: [-25, 21, TENT_CENTRE_Z + 48],
+                target: [0, 7, TENT_CENTRE_Z]
+            },
+            'court-east': {
+                camera: [-45, 25, -88],
+                target: [0, 4, -COURTYARD_LENGTH / 2]
+            }
+        };
+        if (inspectionViews[inspectionView]) {
+            const preset = inspectionViews[inspectionView];
+            camera.position.fromArray(preset.camera);
+            controls.target.fromArray(preset.target);
+            controls.update();
+        }
+
         // ================================================================
         // THE PHYSICS — what this scene actually does, as far as it has been
         // COMPUTED. 2026-07-28. Full workings and provenance:
@@ -4449,7 +4478,7 @@
         dimensionGroup.add(courtyardHeightLabel);
 
         // Tabernacle tent dimensions (30 x 10 x 10 cubits)
-        const tentWorldZ = COURTYARD_LENGTH / 2 - TENT_LENGTH / 2 - 10;
+        const tentWorldZ = TENT_CENTRE_Z;
 
         // Tent length label (30 cubits)
         const tentLengthLabel = createDimensionLabel(
@@ -4481,8 +4510,8 @@
         // Altar dimensions (5 x 5 x 3 cubits)
         const altarLabel = createDimensionLabel(
             'Altar: 5×5×3 cubits',
-            { x: -ALTAR_SIZE, y: 0, z: -COURTYARD_LENGTH / 4 },
-            { x: ALTAR_SIZE, y: 0, z: -COURTYARD_LENGTH / 4 },
+            { x: -ALTAR_SIZE / 2, y: 0, z: ALTAR_CENTRE_Z },
+            { x: ALTAR_SIZE / 2, y: 0, z: ALTAR_CENTRE_Z },
             ALTAR_HEIGHT + 4, 0x4ECDC4
         );
         dimensionGroup.add(altarLabel);
