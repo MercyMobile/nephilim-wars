@@ -672,8 +672,8 @@
         const inspectionView = new URLSearchParams(window.location.search).get('view');
         const inspectionViews = {
             'tent-front': {
-                camera: [-24, 20, -18],
-                target: [0, 7, TENT_CENTRE_Z]
+                camera: [0, 11, -38],
+                target: [0, 7, TENT_FACE_EAST_Z]
             },
             'tent-side': {
                 camera: [62, 24, TENT_CENTRE_Z - 2],
@@ -684,7 +684,7 @@
                 target: [0, 7, TENT_CENTRE_Z]
             },
             'court-east': {
-                camera: [-45, 25, -88],
+                camera: [0, 18, -116],
                 target: [0, 4, -COURTYARD_LENGTH / 2]
             }
         };
@@ -3536,16 +3536,16 @@
 
                 if (direction === 'x+') {
                     // South side - rope goes from peg inward toward +X edge of drape
-                    targetX = TENT_WIDTH / 2 + DRAPE_OUTWARD;
+                    targetX = TENT_WIDTH / 2 + GOAT_LAYER_OFFSET;
                     targetZ = pegZ;
                 } else if (direction === 'x-') {
                     // North side - rope goes from peg inward toward -X edge of drape
-                    targetX = -TENT_WIDTH / 2 - DRAPE_OUTWARD;
+                    targetX = -TENT_WIDTH / 2 - GOAT_LAYER_OFFSET;
                     targetZ = pegZ;
                 } else if (direction === 'z-') {
                     // Back side - rope goes from peg inward toward -Z edge of drape
                     targetX = pegX;
-                    targetZ = -TENT_LENGTH / 2 - DRAPE_OUTWARD;
+                    targetZ = -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET;
                 } else {
                     targetX = pegX;
                     targetZ = pegZ;
@@ -3589,22 +3589,22 @@
 
         // Pegs on north side (left, -X)
         addBrassPegs(
-            -TENT_WIDTH / 2 - DRAPE_OUTWARD - 2, -TENT_LENGTH / 2 - 2,
-            -TENT_WIDTH / 2 - DRAPE_OUTWARD - 2, TENT_LENGTH / 2 + 2,
+            -TENT_WIDTH / 2 - GOAT_LAYER_OFFSET - 2, -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET,
+            -TENT_WIDTH / 2 - GOAT_LAYER_OFFSET - 2, TENT_LENGTH / 2 + GOAT_LAYER_OFFSET,
             8, 'x-'
         );
 
         // Pegs on south side (right, +X)
         addBrassPegs(
-            TENT_WIDTH / 2 + DRAPE_OUTWARD + 2, -TENT_LENGTH / 2 - 2,
-            TENT_WIDTH / 2 + DRAPE_OUTWARD + 2, TENT_LENGTH / 2 + 2,
+            TENT_WIDTH / 2 + GOAT_LAYER_OFFSET + 2, -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET,
+            TENT_WIDTH / 2 + GOAT_LAYER_OFFSET + 2, TENT_LENGTH / 2 + GOAT_LAYER_OFFSET,
             8, 'x+'
         );
 
         // Pegs on back (west, -Z)
         addBrassPegs(
-            -TENT_WIDTH / 2 - 2, -TENT_LENGTH / 2 - DRAPE_OUTWARD - 2,
-            TENT_WIDTH / 2 + 2, -TENT_LENGTH / 2 - DRAPE_OUTWARD - 2,
+            -TENT_WIDTH / 2 - GOAT_LAYER_OFFSET, -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET - 2,
+            TENT_WIDTH / 2 + GOAT_LAYER_OFFSET, -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET - 2,
             6, 'z-'
         );
 
@@ -3660,18 +3660,18 @@
         // Add corner pegs at the back corners
         // North-back corner (northwest)
         addCornerPeg(
-            -TENT_WIDTH / 2 - DRAPE_OUTWARD - 3,
-            -TENT_LENGTH / 2 - DRAPE_OUTWARD - 3,
-            -TENT_WIDTH / 2 - DRAPE_OUTWARD,
-            -TENT_LENGTH / 2 - DRAPE_OUTWARD
+            -TENT_WIDTH / 2 - GOAT_LAYER_OFFSET - 3,
+            -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET - 3,
+            -TENT_WIDTH / 2 - GOAT_LAYER_OFFSET,
+            -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET
         );
 
         // South-back corner (southwest)
         addCornerPeg(
-            TENT_WIDTH / 2 + DRAPE_OUTWARD + 3,
-            -TENT_LENGTH / 2 - DRAPE_OUTWARD - 3,
-            TENT_WIDTH / 2 + DRAPE_OUTWARD,
-            -TENT_LENGTH / 2 - DRAPE_OUTWARD
+            TENT_WIDTH / 2 + GOAT_LAYER_OFFSET + 3,
+            -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET - 3,
+            TENT_WIDTH / 2 + GOAT_LAYER_OFFSET,
+            -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET
         );
 
         scene.add(tabernacleGroup);
@@ -3696,15 +3696,13 @@
         // Bronze base/socket - tapered base
         const pillarBaseGeo = new THREE.BoxGeometry(pillarWidth + 0.4, 0.4, pillarDepth + 0.4);
 
-        // Position pillars at the edges to frame the entrance beautifully
-        // Two outer pillars at tent edges, three inner pillars evenly spaced
-        const pillarPositions = [
-            -TENT_WIDTH / 2 + pillarWidth / 2 + 0.1,  // Far left - at edge
-            -TENT_WIDTH / 4,                           // Left inner
-            0,                                         // Center
-            TENT_WIDTH / 4,                            // Right inner
-            TENT_WIDTH / 2 - pillarWidth / 2 - 0.1    // Far right - at edge
-        ];
+        // Exodus supplies five pillars across the ten-cubit entrance but no
+        // unequal bay scheme. Put the two outer axes on the wall corners and
+        // divide the span into four equal 2.5-cubit service bays.
+        const pillarPositions = Array.from(
+            { length: 5 },
+            (_, i) => -TENT_WIDTH / 2 + i * TENT_WIDTH / 4
+        );
 
         for (let i = 0; i < 5; i++) {
             const xPos = pillarPositions[i];
