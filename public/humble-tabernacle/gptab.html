@@ -2050,108 +2050,218 @@
          * as a Tabernacle dimension; it only cautions against a thin translucent
          * or printed-looking curtain.
          */
-        function createVeilTexture() {
-            const width = 1024;
-            const height = 1024;
+        // ================================================================
+        // FIGURED LINEN — ma'aseh choshev, the two cloths that carry cherubim
+        // ================================================================
+        // [TEXT Ex 26:1]  the ten inner curtains — "fine twisted linen and
+        //                 violet, purple, and scarlet material ... with
+        //                 cherubim, the work of a skilled embroiderer."
+        // [TEXT Ex 26:31] the veil — the same four materials, the same
+        //                 cherubim, the same technique.
+        //
+        // Same yarns, same motif, same craft. NOT the same cloth. This file
+        // used to render the inner ceiling by CALLING createVeilTexture(), so
+        // the two were literally one bitmap. The text separates them:
+        //   [TEXT Ex 26:2-3] the ceiling is TEN curtains, each 28 x 4 cubits,
+        //     joined five and five. It is a PANELLED cloth: a seam every four
+        //     cubits, and a clasped join between the two sets of five.
+        //   [TEXT Ex 26:31-32] the veil is ONE hanging on four pillars.
+        //     Exodus gives it no panels, no seams and no dimensions at all.
+        // A single texture could not be honest to both. They now come from one
+        // generator called twice, with the panel structure only where the text
+        // puts panels.
+        //
+        // ! ASSUMPTION - Claude, not from the text: the FORM, SIZE and COUNT of
+        // ! the woven cherubim. Exodus requires them in both cloths (26:1,
+        // ! 26:31) and describes neither. The only cherubim Exodus ever gives a
+        // ! shape to are the hammered GOLD pair on the kapporet (25:18-20 /
+        // ! 37:7-9: "wings spread upward ... facing one another"). That is a
+        // ! different object in a different material, and it is deliberately
+        // ! NOT borrowed here - lifting it would dress this assumption in a
+        // ! verse number it has not earned. The motif below is frontal,
+        // ! schematic and symmetrical, and its spacing is art direction.
+
+        // Draw the motif at THREAD resolution, then blow it up with smoothing
+        // OFF. A figure assembled from discrete warp/weft crossings is what
+        // separates woven work from a printed curtain, and stepping the edges
+        // is the only honest way to show ma'aseh choshev at this texture
+        // budget — see the note on THREADS_PER_CUBIT: the real thread count is
+        // far finer than any bitmap here can resolve.
+        // THE CHERUB, AUTHORED AS A THREAD GRID
+        // ! ASSUMPTION - Claude: the FORM is mine. Exodus requires cherubim in both
+        // ! cloths (26:1, 26:31) and gives them no shape, no count, no pose, no face.
+        // ! This is deliberately a SCHEMATIC our-own-hand rendering, not a picture of
+        // ! an artifact: it is authored cell by cell so it reads as woven work and
+        // ! can never be mistaken for an excavated object. A generated "photograph"
+        // ! of an ancient tapestry was tried and REJECTED on 2026-07-31 - it had no
+        // ! provenance and would have read as evidence.
+        //
+        // The head carries NO FACIAL FEATURES. The text describes none, and inventing
+        // eyes and a mouth would be supplying detail Scripture withholds.
+        // [RABBINIC Baraita para 15, R. Nehemiah] מעשה חושב שני פרצופין / מעשה רוקם
+        // אינו אלא פרצוף אחד בלבד - "wherever it says ma'aseh choshev, TWO FACES;
+        // ma'aseh rokem, only ONE face." The veil and the ten inner curtains are
+        // choshev (Ex 26:1, 26:31), so this motif is carried on BOTH faces of the
+        // veil. The doorway screen (26:36) and court gate (27:16) are rokem and get
+        // NO cherubim at all - see entranceFab and createGateCurtainTexture.
+        // [RABBINIC Baraita para 14] gold thread belongs to the ephod and breastpiece,
+        // NOT to the veil, so there is no metallic yarn anywhere in this motif.
+        //   B = tekhelet   P = argaman   S = tola'at shani   L = undyed linen
+        const CHERUB_GRID = [
+            "LBBL.....................LBBL",
+            "LBBBB...................BBBBL",
+            ".LSSS...................SSSL.",
+            ".LSSSL.................LSSSL.",
+            ".LBBBB.....LLLLLLL.....BBBBL.",
+            "..LBBBB.....SSSSS.....BBBBL..",
+            "..LSSSSL....SSSSS....LSSSSL..",
+            "..LSSSSS....SSSSS....SSSSSL..",
+            "..LBBBBBB...SSSSS...BBBBBBL..",
+            "...LBBBBL...SSSSS...LBBBBL...",
+            "...LSSSSSS...SSS...SSSSSSL...",
+            "...LSSSSSSS..SSS..SSSSSSSL...",
+            "....LBBBBBBBBBBBBBBBBBBBL....",
+            "..........BBBBBBBBB..........",
+            "...........LSSSSSL...........",
+            "...........LPPSPPL...........",
+            "..........LPPPSPPPL..........",
+            ".........SSSSSSSSSSS.........",
+            ".........LLLLLLLLLLL.........",
+            "..........LPPPSPPPL..........",
+            "..........LSSSSSSSL..........",
+            ".........LPPPPSPPPPL.........",
+            ".........LPPPPSPPPPL.........",
+            ".........LSSSSSSSSSL.........",
+            "........LPPPPPSPPPPPL........",
+            "........LPPPPPSPPPPPL........",
+            "........LSSSSSSSSSSSL........",
+            "........LPPPPPSPPPPPL........",
+            "........LPPPPPSPPPPPL........",
+            ".......LSSSSSSSSSSSSSL.......",
+            "..........PPPPPPPPP..........",
+        ];
+        const CHERUB_YARN = { B: DYE_TEKHELET, P: DYE_ARGAMAN, S: DYE_SHANI, L: LINEN_WHITE };
+
+        // One canvas pixel per thread. Scaled up later with smoothing OFF, which is
+        // what gives real tapestry its stepped edges.
+        function makeWovenMotif() {
+            const h = CHERUB_GRID.length, w = CHERUB_GRID[0].length;
+            const c = document.createElement('canvas');
+            c.width = w; c.height = h;
+            const g = c.getContext('2d');
+            for (let r = 0; r < h; r++) {
+                for (let x = 0; x < w; x++) {
+                    const col = CHERUB_YARN[CHERUB_GRID[r][x]];
+                    if (!col) continue;
+                    g.fillStyle = col;
+                    g.fillRect(x, r, 1, 1);
+                }
+            }
+            return c;
+        }
+
+        // One generator, two cloths. Everything dimensional is passed in.
+        //   cubitsU / cubitsV : the REAL size of cloth this bitmap represents,
+        //                       so thread pitch is comparable to the rest of
+        //                       the scene instead of being a free number.
+        //   seamEveryV        : draw a selvedge at the tile edge. Used only by
+        //                       the ceiling, where [TEXT Ex 26:2] puts a seam
+        //                       every 4 cubits. The veil passes false.
+        function createFiguredLinen(opts) {
+            const size = opts.size || 1024;
+            const cubitsU = opts.cubitsU, cubitsV = opts.cubitsV;
             const canvas = document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height;
+            canvas.width = canvas.height = size;
             const ctx = canvas.getContext('2d');
 
-            // Warm linen ground, visible between the dyed warp and weft.
-            ctx.fillStyle = '#d9cfb8';
-            ctx.fillRect(0, 0, width, height);
+            // ! ASSUMPTION - Claude: PICKS_SHOWN is a RENDERING limit, not a
+            // ! textile claim. THREADS_PER_CUBIT is 480; a bitmap covering
+            // ! several cubits cannot resolve that, so the visible weave is
+            // ! coarser here and the true fineness is carried by the cubit-
+            // ! scaled normal map on the material instead.
+            const PICKS_SHOWN = 72;
+            const pitchV = Math.max(2, Math.round(size / (cubitsV * PICKS_SHOWN)));
+            const pitchU = Math.max(2, Math.round(size / (cubitsU * PICKS_SHOWN)));
 
-            // Four constituent yarns cross through the whole cloth. Alternating
-            // over-under dashes make this read as woven work rather than stripes.
+            ctx.fillStyle = '#d9cfb8';
+            ctx.fillRect(0, 0, size, size);
+
+            // [TEXT Ex 26:1 / 26:31] four constituent yarns run through the
+            // whole cloth: the three dyes and the fine twisted linen. Drawn as
+            // interlaced picks, not as coloured bands - Exodus describes no
+            // bands anywhere in either cloth.
             const yarns = ['#d9cfb8', DYE_TEKHELET, DYE_ARGAMAN, DYE_SHANI];
             ctx.lineCap = 'butt';
-            for (let y = 0; y < height; y += 8) {
-                ctx.globalAlpha = 0.88;
-                ctx.strokeStyle = yarns[(y / 8) % yarns.length];
-                ctx.lineWidth = 5;
-                ctx.setLineDash([13, 3]);
-                ctx.lineDashOffset = (y / 8) % 2 ? 8 : 0;
+            for (let y = 0, i = 0; y < size; y += pitchV, i++) {
+                ctx.globalAlpha = 0.80;
+                ctx.strokeStyle = yarns[i % yarns.length];
+                ctx.lineWidth = Math.max(1, pitchV * 0.62);
+                ctx.setLineDash([pitchU * 1.7, pitchU * 0.45]);
+                ctx.lineDashOffset = (i % 2) ? pitchU : 0;
                 ctx.beginPath();
-                ctx.moveTo(0, y + 2);
-                ctx.lineTo(width, y + 2);
+                ctx.moveTo(0, y + pitchV / 2);
+                ctx.lineTo(size, y + pitchV / 2);
                 ctx.stroke();
             }
-            for (let x = 0; x < width; x += 8) {
-                ctx.globalAlpha = 0.42;
-                ctx.strokeStyle = yarns[(x / 8 + 2) % yarns.length];
-                ctx.lineWidth = 3;
-                ctx.setLineDash([5, 11]);
-                ctx.lineDashOffset = (x / 8) % 2 ? 6 : 0;
+            for (let x = 0, i = 0; x < size; x += pitchU, i++) {
+                ctx.globalAlpha = 0.34;
+                ctx.strokeStyle = yarns[(i + 2) % yarns.length];
+                ctx.lineWidth = Math.max(1, pitchU * 0.38);
+                ctx.setLineDash([pitchV * 0.6, pitchV * 1.4]);
+                ctx.lineDashOffset = (i % 2) ? pitchV * 0.75 : 0;
                 ctx.beginPath();
-                ctx.moveTo(x + 2, 0);
-                ctx.lineTo(x + 2, height);
+                ctx.moveTo(x + pitchU / 2, 0);
+                ctx.lineTo(x + pitchU / 2, size);
                 ctx.stroke();
             }
             ctx.setLineDash([]);
+            ctx.globalAlpha = 1;
 
-            // Cherubim are woven into the design (not separate gold appliqué).
-            // Their precise ancient iconography is unknown, so the paired-wing
-            // motif is intentionally schematic and uses the same dyed yarns.
-            const cherubSpacing = 256;
-
-            for (let cx = cherubSpacing / 2; cx < width; cx += cherubSpacing) {
-                for (let cy = cherubSpacing / 2; cy < height; cy += cherubSpacing) {
-                    ctx.save();
-                    ctx.translate(cx, cy);
-                    ctx.globalAlpha = 0.82;
-                    ctx.fillStyle = DYE_ARGAMAN;
-                    ctx.strokeStyle = '#24143d';
-                    ctx.lineWidth = 5;
-
-                    // Central body and head.
-                    ctx.beginPath();
-                    ctx.ellipse(0, 20, 17, 29, 0, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.beginPath();
-                    ctx.arc(0, -17, 13, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    // Broad, opposed wings, filled with blue and scarlet yarn.
-                    ctx.fillStyle = DYE_TEKHELET;
-                    ctx.beginPath();
-                    ctx.moveTo(-10, 5);
-                    ctx.bezierCurveTo(-45, -10, -72, -54, -78, -82);
-                    ctx.bezierCurveTo(-46, -66, -21, -42, -8, -13);
-                    ctx.closePath();
-                    ctx.fill();
-                    ctx.fillStyle = DYE_SHANI;
-                    ctx.beginPath();
-                    ctx.moveTo(10, 5);
-                    ctx.bezierCurveTo(45, -10, 72, -54, 78, -82);
-                    ctx.bezierCurveTo(46, -66, 21, -42, 8, -13);
-                    ctx.closePath();
-                    ctx.fill();
-
-                    ctx.strokeStyle = '#d9cfb8';
-                    ctx.lineWidth = 3;
-                    ctx.globalAlpha = 0.72;
-                    for (let f = 0; f < 5; f++) {
-                        ctx.beginPath();
-                        ctx.moveTo(-14 - f * 8, -3 - f * 10);
-                        ctx.quadraticCurveTo(-39 - f * 5, -29 - f * 8, -61 - f * 3, -60 - f * 4);
-                        ctx.stroke();
-                        ctx.beginPath();
-                        ctx.moveTo(14 + f * 8, -3 - f * 10);
-                        ctx.quadraticCurveTo(39 + f * 5, -29 - f * 8, 61 + f * 3, -60 - f * 4);
-                        ctx.stroke();
-                    }
-                    ctx.restore();
+            // Cherubim, laid out on the grid this cloth was asked for.
+            const cols = opts.cols, rows = opts.rows;
+            const cellW = size / cols, cellH = size / rows;
+            const motif = makeWovenMotif();
+            // Keep the grid's own proportions (29 threads wide x 31 tall). Stretching
+            // it to a square would distort a figure whose symmetry is the whole point.
+            const fill = opts.motifFill || 0.82;
+            const box = Math.min(cellW, cellH) * fill;
+            const mW = box * (motif.width / motif.height <= 1 ? motif.width / motif.height : 1);
+            const mH = box * (motif.width / motif.height <= 1 ? 1 : motif.height / motif.width);
+            ctx.imageSmoothingEnabled = false;   // keep the woven stepping
+            ctx.globalAlpha = 0.92;
+            for (let c = 0; c < cols; c++) {
+                for (let r = 0; r < rows; r++) {
+                    ctx.drawImage(motif,
+                        c * cellW + (cellW - mW) / 2,
+                        r * cellH + (cellH - mH) / 2,
+                        mW, mH);
                 }
+            }
+            ctx.globalAlpha = 1;
+            ctx.imageSmoothingEnabled = true;
+
+            // [TEXT Ex 26:2-3] the ceiling's seam. Two selvedges meeting: the
+            // linen ground doubles and darkens slightly where the curtains are
+            // joined. The veil is not panelled and skips this.
+            if (opts.seamEveryV) {
+                const sw = Math.max(2, size * 0.006);
+                ctx.globalAlpha = 0.5;
+                ctx.fillStyle = '#b9ac92';
+                ctx.fillRect(0, 0, size, sw);
+                ctx.fillRect(0, size - sw, size, sw);
+                ctx.globalAlpha = 0.28;
+                ctx.fillStyle = '#6d6350';
+                ctx.fillRect(0, sw, size, sw * 0.5);
+                ctx.fillRect(0, size - sw * 1.5, size, sw * 0.5);
+                ctx.globalAlpha = 1;
             }
 
             // Fine deterministic fibre variation.
-            ctx.globalAlpha = 1.0;
-            const imageData = ctx.getImageData(0, 0, width, height);
+            const imageData = ctx.getImageData(0, 0, size, size);
             const data = imageData.data;
             for (let i = 0; i < data.length; i += 4) {
-                const grain = (((i / 4) * 17 + Math.floor(i / (width * 4)) * 31) % 11) - 5;
-                data[i] = Math.min(255, Math.max(0, data[i] + grain));
+                const grain = (((i / 4) * 17 + Math.floor(i / (size * 4)) * 31) % 11) - 5;
+                data[i]     = Math.min(255, Math.max(0, data[i] + grain));
                 data[i + 1] = Math.min(255, Math.max(0, data[i + 1] + grain));
                 data[i + 2] = Math.min(255, Math.max(0, data[i + 2] + grain));
             }
@@ -2159,6 +2269,7 @@
 
             const texture = new THREE.CanvasTexture(canvas);
             texture.colorSpace = THREE.SRGBColorSpace;
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
             texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
             return texture;
         }
@@ -3114,9 +3225,26 @@
 
         // Layer 1: Fine twined linen with cherubim (blue, purple, scarlet woven in)
         // Natural linen base with earthy, muted dye colors - ancient Near Eastern palette
-        const linenCeilingTexture = createVeilTexture();
-        linenCeilingTexture.wrapS = THREE.RepeatWrapping;
-        linenCeilingTexture.wrapT = THREE.RepeatWrapping;
+        // THE INNER CURTAINS ARE NOT THE VEIL. This line used to read
+        // `createVeilTexture()` — the ceiling was rendered with the veil's own
+        // bitmap, stretched once over the whole 30 x 10 cubit roof, so its
+        // cherubim were smeared out and the ten curtains had no seams at all.
+        // ! DERIVED - Claude, arithmetic on the old code, not measured in the
+        // ! render: the retired texture was 1024px with cherubSpacing 256, so
+        // ! 4 cherubim across the bitmap; at repeat (1,1) over 30 cubits of
+        // ! roof that is one roughly every 7.5 cubits. Stated here as the
+        // ! reason for the change, not as an observation of the old page.
+        // [TEXT Ex 26:2-3] ten curtains, each 28 x 4 cubits, joined five and
+        // five. The tile below IS one curtain: 4 cubits along the tent, the
+        // full 10 cubits across it, with a selvedge at each end.
+        const linenCeilingTexture = createFiguredLinen({
+            size: 1024, cubitsU: 10, cubitsV: 4,
+            cols: 2, rows: 1, threads: 56, seamEveryV: true
+        });
+        // 30 cubits of roof / 4 cubits per curtain = 7.5 curtain widths, which
+        // is exactly what the text spends on the roof: of the sheet's 40, thirty
+        // lie over the top and ten hang down the back (Ex 26:2-3, Baraita 7).
+        linenCeilingTexture.repeat.set(1, 30 / 4);
         // [TEXT] Ex 26:1 — fine twisted linen with tekhelet, argaman and tola'at shani,
         // מעשׂה חשׁב with כרבים. Use the figured texture generated specifically
         // for this inner covering; the former linenFab binding silently rendered
@@ -4197,15 +4325,33 @@
         const veilGeo = new THREE.BoxGeometry(
             TENT_WIDTH, TENT_HEIGHT, textileRenderDepth
         );
-        const veilTexture = createVeilTexture();
+        // [TEXT Ex 26:31] one hanging, no panels and no seams stated — so
+        // unlike the ceiling this tile is the WHOLE cloth, at its full size,
+        // and it is not repeated. Four large cherubim rather than a field of
+        // small ones; the count is art direction (see the note on the
+        // generator), the presence of cherubim is Ex 26:31 itself.
+        const veilTexture = createFiguredLinen({
+            size: 2048, cubitsU: 10, cubitsV: 10,
+            cols: 2, rows: 2, threads: 72, motifFill: 0.86, seamEveryV: false
+        });
+        veilTexture.repeat.set(1, 1);
+        // The old material used its own COLOUR map as a bumpMap, which embossed
+        // the dye colours as height: the blue and scarlet picks read as ridges
+        // and the cloth came out muddy. Relief now comes from the same cubit-
+        // scaled weave every other textile in this scene uses, so the veil is
+        // as fine as the linen beside it instead of visibly coarser.
+        const veilFab = makeFabricMaps({
+            base: LINEN_WHITE, cubits: [10, 10], size: 1024,
+            warpShow: 0.22, rough: [0.68, 0.90]
+        });
         const veilMaterial = new THREE.MeshStandardMaterial({
             map: veilTexture,
+            normalMap: veilFab.normalMap,
+            roughnessMap: veilFab.roughnessMap,
             side: THREE.DoubleSide,
             transparent: false,
             roughness: 0.88,
-            metalness: 0.0,
-            bumpMap: veilTexture,
-            bumpScale: 0.018
+            metalness: 0.0
         });
         // "You shall hang it on four pillars of acacia wood overlaid
         // with gold... on four sockets of silver" (Exodus 26:32)
