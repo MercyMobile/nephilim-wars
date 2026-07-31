@@ -686,6 +686,18 @@
             'court-east': {
                 camera: [0, 18, -116],
                 target: [0, 4, -COURTYARD_LENGTH / 2]
+            },
+            'inside-holy-west': {
+                camera: [0, 7, TENT_FACE_EAST_Z + 2.0],
+                target: [0, 7, TENT_CENTRE_Z]
+            },
+            'inside-holy-east': {
+                camera: [0, 7, TENT_CENTRE_Z - 4.0],
+                target: [0, 7, TENT_FACE_EAST_Z]
+            },
+            'roof-front': {
+                camera: [22, 23, TENT_FACE_EAST_Z - 10],
+                target: [0, TENT_HEIGHT, TENT_FACE_EAST_Z]
             }
         };
         if (inspectionViews[inspectionView]) {
@@ -3095,11 +3107,17 @@
 
         // Layer 1: Fine twined linen with cherubim (blue, purple, scarlet woven in)
         // Natural linen base with earthy, muted dye colors - ancient Near Eastern palette
-        const linenCeilingTexture = createFineLinenCeilingTexture();
+        const linenCeilingTexture = createVeilTexture();
+        linenCeilingTexture.wrapS = THREE.RepeatWrapping;
+        linenCeilingTexture.wrapT = THREE.RepeatWrapping;
         // [TEXT] Ex 26:1 — fine twisted linen with tekhelet, argaman and tola'at shani,
-        // מעשׂה חשׁב with כרבים. Cubit-scaled weave; the cherubim are still NOT rendered.
+        // מעשׂה חשׁב with כרבים. Use the figured texture generated specifically
+        // for this inner covering; the former linenFab binding silently rendered
+        // plain courtyard linen and omitted the required cherubim.
         const linenCurtainMaterial = new THREE.MeshStandardMaterial({
-            map: linenFab.map, normalMap: linenFab.normalMap, roughnessMap: linenFab.roughnessMap,
+            map: linenCeilingTexture,
+            normalMap: linenFab.normalMap,
+            roughnessMap: linenFab.roughnessMap,
             roughness: 0.85,
             metalness: 0.0,
             side: THREE.DoubleSide
@@ -3167,11 +3185,13 @@
 
             // Dimensions for this layer (outer layers slightly larger)
             const halfW = TENT_WIDTH / 2 + layerOffset;
-            // The board footprint remains the text's 30 cubits. Each successive
-            // textile surface sits just outside the preceding solid/cloth layer,
-            // so its rendered surface must expand consistently at both ends.
-            const halfL = TENT_LENGTH / 2 + layerOffset;
-            const roofY = TENT_HEIGHT + layerOffset;
+            // Side/back clearance and vertical cloth thickness are different
+            // quantities. The old single offset floated the roofs up to half a
+            // cubit above the entrance and extended them through its plane.
+            const surfaceFront = longitudinal.surfaceFront || 0;
+            const surfaceBack = longitudinal.surfaceBack ?? layerOffset;
+            const stackY = longitudinal.stackY || 0.03;
+            const roofY = TENT_HEIGHT + stackY;
             const drapeOut = DRAPE_OUTWARD + layerOffset * 0.5;
             // Roof extensions are not used for the text-dimensioned linen/goat layers:
             // their longitudinal paths are represented explicitly below. Outer hide
@@ -3185,7 +3205,7 @@
             // and wrinkles of resting cloth: pockets at the 4-cubit curtain
             // widths (Exodus 26:2,8), a whisper of sag across the free span.
             const roofW = TENT_WIDTH + layerOffset * 2;
-            const roofL = TENT_LENGTH + layerOffset * 2 + frontOH + backOH;
+            const roofL = TENT_LENGTH + surfaceFront + surfaceBack + frontOH + backOH;
             const roofGeo = new THREE.PlaneGeometry(roofW, roofL, 48, 96);
             const roofPos = roofGeo.attributes.position;
             const panelSpan = 4 * CUBIT; // one woven curtain width
@@ -3207,7 +3227,10 @@
             roofGeo.computeVertexNormals();
             const roof = new THREE.Mesh(roofGeo, material);
             roof.rotation.x = -Math.PI / 2;
-            roof.position.set(0, roofY, (frontOH - backOH) / 2);
+            roof.position.set(
+                0, roofY,
+                (surfaceFront + frontOH - surfaceBack - backOH) / 2
+            );
             roof.castShadow = true;
             roof.receiveShadow = true;
             group.add(roof);
@@ -3221,7 +3244,7 @@
             // Function to create a canted wall
             // Note: walls are positioned relative to tent center (0,0,0) in local space
             const wallHemY = hemY || 0; // where this layer's hanging edge stops
-            function createCantedWall(length, startX, startZ, dirX, dirZ) {
+            function createCantedWall(length, startX, startZ, dirX, dirZ, alongCenter = 0) {
                 const vertices = [];
                 const indices = [];
                 const uvs = [];
@@ -3255,7 +3278,7 @@
                         if (Math.abs(dirX) > 0) {
                             // Side wall (north or south) - runs along Z axis
                             x = startX + dirX * reach;
-                            z = along; // centered on tent
+                            z = along + alongCenter;
                         } else {
                             // Back wall - runs along X axis
                             x = along; // centered on tent
@@ -3296,13 +3319,17 @@
             }
 
             // Side walls run the length of the tent plus overhangs
-            const sideWallLength = TENT_LENGTH + layerOffset * 2 + frontOH + backOH;
+            const sideWallLength =
+                TENT_LENGTH + surfaceFront + surfaceBack + frontOH + backOH;
+            const sideWallCenter =
+                (surfaceFront + frontOH - surfaceBack - backOH) / 2;
 
             // North wall (left side, -X) - runs along Z axis
             const northWallGeo = createCantedWall(
                 sideWallLength,
                 -halfW, 0,  // Start at left edge of tent
-                -1, 0       // Cant outward in -X direction
+                -1, 0,      // Cant outward in -X direction
+                sideWallCenter
             );
             const northWall = new THREE.Mesh(northWallGeo, material);
             northWall.castShadow = true;
@@ -3312,7 +3339,8 @@
             const southWallGeo = createCantedWall(
                 sideWallLength,
                 halfW, 0,   // Start at right edge of tent
-                1, 0        // Cant outward in +X direction
+                1, 0,       // Cant outward in +X direction
+                sideWallCenter
             );
             const southWall = new THREE.Mesh(southWallGeo, material);
             southWall.castShadow = true;
@@ -3321,7 +3349,7 @@
             // Back wall (-Z side) - runs along X axis, matches tent width
             const backWallGeo = createCantedWall(
                 TENT_WIDTH + layerOffset * 2,  // Just slightly wider than tent
-                0, -halfL,  // At back edge of tent
+                0, -TENT_LENGTH / 2 - surfaceBack - backOH,
                 0, -1       // Cant outward in -Z direction
             );
             const backWall = new THREE.Mesh(backWallGeo, material);
@@ -3336,7 +3364,7 @@
         // stitched skin boundaries. The material maps already provide irregular
         // hide panels, pores, tone variation, seams and stitches; this mesh supplies
         // only gravity settling and edge curl.
-        function createRoofLaidHide(layerOffset, material, opts = {}) {
+        function createRoofLaidHide(stackY, material, opts = {}) {
             const width = opts.width || TENT_WIDTH;
             const length = opts.length || TENT_LENGTH;
             const geo = new THREE.PlaneGeometry(width, length, 40, 120);
@@ -3366,7 +3394,7 @@
             geo.computeVertexNormals();
             const hide = new THREE.Mesh(geo, material);
             hide.rotation.x = -Math.PI / 2;
-            hide.position.set(0, TENT_HEIGHT + layerOffset, 0);
+            hide.position.set(0, TENT_HEIGHT + stackY, 0);
             hide.castShadow = true;
             hide.receiveShadow = true;
             hide.userData.reconstruction = opts.reconstruction || "visual assumption";
@@ -3390,7 +3418,7 @@
         // the bars. Offsets now start outside them and keep the 0.15 spacing.
         const linenCovering = createDrapedCovering(
             0.60, linenCurtainMaterial, LINEN_HEM_CUBITS * CUBIT,
-            { roofFront: 0, roofBack: 0 }
+            { surfaceFront: 0, surfaceBack: 0.60, stackY: 0.03 }
         );
         tabernacleGroup.add(linenCovering);
 
@@ -3441,7 +3469,7 @@
         const GOAT_LAYER_OFFSET = 0.75;
         const goatCovering = createDrapedCovering(
             GOAT_LAYER_OFFSET, goatHairMaterial, 0,
-            { roofFront: 0, roofBack: 0 }
+            { surfaceFront: 0, surfaceBack: GOAT_LAYER_OFFSET, stackY: 0.06 }
         );
         tabernacleGroup.add(goatCovering);
 
@@ -3460,8 +3488,8 @@
         goatFrontFold.rotation.x = -Math.PI / 2;
         goatFrontFold.position.set(
             0,
-            TENT_HEIGHT + GOAT_LAYER_OFFSET + 0.03,
-            TENT_LENGTH / 2 + GOAT_LAYER_OFFSET - FRONT_OVERHANG / 2
+            TENT_HEIGHT + 0.09,
+            TENT_LENGTH / 2 - FRONT_OVERHANG / 2
         );
         goatFrontFold.castShadow = true;
         goatCovering.add(goatFrontFold);
@@ -3483,7 +3511,7 @@
         //            wide, east to west" — 30 x 10 is exactly the ROOF FOOTPRINT.
         // This viewer adopts that roof-only profile. Exodus itself names the skins
         // but gives no dimensions, so the source level remains RABBINIC.
-        const ramCovering = createRoofLaidHide(0.90, ramSkinMaterial, {
+        const ramCovering = createRoofLaidHide(0.12, ramSkinMaterial, {
             width: TENT_WIDTH,
             length: TENT_LENGTH,
             reconstruction: "Baraita para 11: ram skins 30 x 10 cubits, roof only"
@@ -3495,7 +3523,7 @@
         // the ram and taḥash coverings. No dimensions survive for this upper sheet.
         // Drawn roof-only and just proud of the ram sheet; the 0.10-unit perimeter
         // excess is art direction so the two coincident meshes do not z-fight.
-        const badgerCovering = createRoofLaidHide(1.05, tentCoveringMaterial, {
+        const badgerCovering = createRoofLaidHide(0.15, tentCoveringMaterial, {
             width: TENT_WIDTH + 0.10,
             length: TENT_LENGTH + 0.10,
             reconstruction: "R. Judah separate upper covering; dimensions unstated"
