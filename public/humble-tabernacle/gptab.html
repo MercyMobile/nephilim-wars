@@ -3253,8 +3253,14 @@
 
             // Function to create a canted wall
             // Note: walls are positioned relative to tent center (0,0,0) in local space
-            const wallHemY = hemY || 0; // where this layer's hanging edge stops
-            function createCantedWall(length, startX, startZ, dirX, dirZ, alongCenter = 0) {
+            const wallHemY = hemY || 0; // where this layer's SIDE hanging edge stops
+            // [TEXT Ex 26:2-3 + Baraita para 7] the two axes of a curtain sheet do NOT
+            // hang to the same height, so the back wall needs its own hem. For the linen,
+            // 28 across = 10 roof + 9 + 9 (stops at the sockets) while 40 along = 30 roof
+            // + 10 behind (reaches the ground). One hem for all three walls lost a cubit.
+            const backHemY = (longitudinal.backHem === undefined) ? wallHemY : longitudinal.backHem;
+            function createCantedWall(length, startX, startZ, dirX, dirZ, alongCenter = 0, hemOverride) {
+                const thisHemY = (hemOverride === undefined) ? wallHemY : hemOverride;
                 const vertices = [];
                 const indices = [];
                 const uvs = [];
@@ -3265,7 +3271,7 @@
 
                 for (let j = 0; j <= heightSegs; j++) {
                     const t = j / heightSegs; // 0 = top, 1 = bottom
-                    const y = roofY - t * (roofY - wallHemY);
+                    const y = roofY - t * (roofY - thisHemY);
                     const outward = drapeOut * t; // Cant increases toward bottom
 
                     for (let i = 0; i <= wallSegs; i++) {
@@ -3364,7 +3370,9 @@
             const backWallGeo = createCantedWall(
                 TENT_WIDTH + layerOffset * 2,  // Just slightly wider than tent
                 0, -TENT_LENGTH / 2 - surfaceBack - backOH,
-                0, -1       // Cant outward in -Z direction
+                0, -1,      // Cant outward in -Z direction
+                0,
+                backHemY    // [TEXT Ex 26:2-3 / Baraita para 7] back hem is its own figure
             );
             const backWall = new THREE.Mesh(backWallGeo, material);
             backWall.castShadow = true;
@@ -3430,9 +3438,19 @@
         // The physical order is boards -> bars in their rings -> curtains over
         // everything [TEXT Ex 26:26-29 then 26:1-14], so the fabric must clear
         // the bars. Offsets now start outside them and keep the 0.15 spacing.
+        // CORRECTED: the linen back drop was hanging to the SIDE hem (1 cubit short),
+        // which lost a cubit of a sheet whose own arithmetic is exact.
+        //   [TEXT Ex 26:2-3]  ten curtains, 28 x 4 -> one sheet 40 x 28.
+        //   28 across = 10 roof + 9 + 9   -> sides stop 1 cubit up, AT THE SOCKETS
+        //   40 along  = 30 roof + 10 back -> the back reaches THE GROUND
+        //   [RABBINIC Baraita para 7] states both halves explicitly and in these words:
+        //   "...descending and covering the boards UNTIL THEY REACH THE SOCKETS — hence
+        //   you learn the sockets are a cubit high ... thirty cubits east to west which
+        //   he gave to the ROOF, and TEN CUBITS TO THE WEST, BEHIND the tabernacle: forty."
+        // Both sources agree, so backHem is 0 (ground) and is READ, not chosen.
         const linenCovering = createDrapedCovering(
             0.03, linenCurtainMaterial, LINEN_HEM_CUBITS * CUBIT,
-            { surfaceFront: 0, surfaceBack: 0.03, stackY: 0.03 }
+            { surfaceFront: 0, surfaceBack: 0.03, stackY: 0.03, backHem: 0 }
         );
         tabernacleGroup.add(linenCovering);
 
@@ -3441,6 +3459,11 @@
         // this loop ran to 25 while its own comment said fifty (corrected 2026-07-27).
         // [TEXT] Exodus 26:33 — "hang up the veil UNDER THE CLASPS", which is why this seam
         // sits directly above the veil line, 20 cubits back = the Most Holy Place boundary.
+        // DO NOT "FIX" THE HEIGHT: these sit at 14.88, just BELOW the linen roof at 15.03,
+        // and that is deliberate. [RABBINIC Baraita para 6] והקרסים היו נראין במשכן ככוכבים
+        // ברקיע — "the clasps appeared IN the tabernacle like stars in the firmament", i.e.
+        // seen from INSIDE, from below. Raising them onto the roof would hide them under the
+        // goats' hair and delete the one thing the source says about how they looked.
         const claspGeo = new THREE.SphereGeometry(0.075, 8, 8);
         const CLASPS_PER_SEAM = 50;
         for (let ci = 0; ci < CLASPS_PER_SEAM; ci++) {
@@ -3460,19 +3483,38 @@
         // emphatic about the metal: gold joins the tabernacle, bronze joins the tent over it.
         // [TEXT] v9 — the eleven goats' curtains are joined 5 + 6, and the sixth is doubled at
         // the front of the tent.
-        // ! ASSUMPTION - Claude, not verified: the text gives the 5+6 division and the doubled
-        // sixth curtain but never states where that seam lands in cubits from the entrance.
-        // Placed one curtain-width (4 cubits) forward of the gold seam, which follows from the
-        // 5|6 split against the linen's 5|5 — that is inference, not Scripture. Commentators
-        // differ. Move GOAT_SEAM_OFFSET if you follow a different reading.
-        const GOAT_SEAM_OFFSET = 4 * CUBIT;
+        // SEAM POSITION — was a free 4-cubit guess; it is not free. The layout this file
+        // ALREADY adopts for the goat sheet fixes it, and the two disagreed.
+        //
+        // ! DERIVED - Claude. Not a verse. Arithmetic on values that ARE verses:
+        //   [TEXT Ex 26:8]  eleven curtains, 30 x 4      -> one sheet 44 along the length
+        //   [TEXT Ex 26:9]  joined 5 + 6, and the SIXTH curtain doubled at the FRONT
+        //                   -> the six-curtain set (6 x 4 = 24 cubits) is the FRONT set
+        //   [TEXT Ex 26:12] "the HALF curtain that is left over shall hang over the back"
+        //                   -> 2 cubits doubled front, 2 cubits over the back
+        //                   = R. Judah in [RABBINIC Baraita para 10], the reading adopted
+        //                     above at FRONT_OVERHANG / BACK_OVERHANG. Kept consistent here.
+        //   44 = 2 front + 30 roof + 10 back + 2 trailing.
+        //   Two cubits of cloth are spent at the front before the roof run begins, so the
+        //   5|6 seam lands 24 - 2 = 22 cubits back from the entrance edge of the roof,
+        //   i.e. 30 - 22 = EIGHT cubits from the west wall.
+        //
+        // Robust to the one fork this file left open: whether those 2 cubits lie folded on
+        // the roof or hang over the entrance, 2 cubits are consumed either way and the
+        // answer is 22 / 8 in both.
+        // NOT robust to the other Baraita reading: the anonymous tanna in para 10 folds the
+        // WHOLE leftover curtain (4 cubits) at the front, which puts the seam at 20 from the
+        // entrance = 10 from the west = directly over the gold clasps and the veil. This file
+        // follows R. Judah because NASB 26:12 says "half curtain" in the plain text.
+        const GOAT_SEAM_FROM_WEST_CUBITS = 8;   // derived above; 4 cubits was arbitrary
+        const GOAT_SEAM_Z = -TENT_LENGTH / 2 + GOAT_SEAM_FROM_WEST_CUBITS * CUBIT;
         const bronzeClaspGeo = new THREE.SphereGeometry(0.075, 8, 8);
         for (let ci = 0; ci < CLASPS_PER_SEAM; ci++) {
             const bClasp = new THREE.Mesh(bronzeClaspGeo, bronzeMaterial);
             bClasp.position.set(
                 -TENT_WIDTH / 2 + 0.4 + (ci / (CLASPS_PER_SEAM - 1)) * (TENT_WIDTH - 0.8),
                 TENT_HEIGHT + 0.15 - 0.10,          // sits on the goats'-hair layer above the linen
-                -TENT_LENGTH / 2 + HOLY_OF_HOLIES_SIZE + GOAT_SEAM_OFFSET
+                GOAT_SEAM_Z
             );
             bClasp.castShadow = true;
             tabernacleGroup.add(bClasp);
