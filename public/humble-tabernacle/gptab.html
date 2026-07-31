@@ -1009,6 +1009,10 @@
         const DYE_ARGAMAN  = '#6B2D5E';   // purple, pink-leaning  [family sourced, value mine]
         const DYE_SHANI    = '#A32B25';   // kermes red  [family sourced, value mine]
         const LINEN_WHITE  = '#EAE1CE';   // undyed fine twisted linen (Ex 26:1)
+        // The woven GROUND tone, slightly deeper than a single bright linen thread.
+        // Was an unnamed '#d9cfb8' literal inside createFiguredLinen; named here so the
+        // ceiling's linen-led yarn cycle can reference the same value. Value unchanged.
+        const LINEN_GROUND = '#d9cfb8';
 
         // ================================================================
         // THE FABRIC SYSTEM — one generator, albedo + normal + roughness
@@ -1504,7 +1508,26 @@
         // tent. Lifted to #453C7A, which is the SAME art-direction option Cisco chose,
         // at the brighter end he was shown. seamWidth 0.020 -> 0.007 and panels 3 -> 4
         // for the same reason: the wide dark joins read as mortar between paving slabs.
-        const badgerFab = makeHideMaps({ base:'#453C7A', panels:4, grainScale:260,
+        // TACHASH COLOUR — REVERSED 2026-07-31, and this reverses an earlier decision
+        // in this file, so it is reversible in one line.
+        // It was '#453C7A' violet, chosen from the LXX (δερματα ὑακίνθινα) and Vulgate
+        // (ianthinis pellibus) under "credence to the oldest sources". Nobody here has
+        // ever opened the LXX or the Vulgate; that reading came to us second-hand.
+        // What the PRIMARY Hebrew actually does (hebrew-lexicon/Exod.xml, morphhb, read
+        // directly, 26:14 and identically 36:19):
+        //     עֹרֹת אֵילִם  מְאָדָּמִים   ... וּמִכְסֵה עֹרֹת תְּחָשִׁים  מִלְמָעְלָה
+        // The rams' skins carry an explicit colour participle, מְאָדָּמִים, "reddened".
+        // The very next phrase, עֹרֹת תְּחָשִׁים, is a bare construct with NO colour word.
+        // The same verse colours one layer and declines to colour the other.
+        // [LEXICON hebrew-lexicon/HebrewStrong.xml, H8476] תַּחַשׁ — "a (clean) animal with
+        // fur, probably a species of antelope, badger." An animal, not a colour.
+        // ! ASSUMPTION - Claude: so is THIS value. The text gives the tachash no colour at
+        // ! all, so a natural tanned hide is the least-committed rendering, not a sourced
+        // ! one. Put '#453C7A' back if the LXX reading is preferred - it is one edit.
+        // ONE SOURCE on the lexicon side: Strong's alone. BrownDriverBriggs.xml is on the
+        // box but returned no H8476 entry, and I did not substitute one for the other.
+        const TACHASH_HIDE = '#7A6A55';
+        const badgerFab = makeHideMaps({ base:TACHASH_HIDE, panels:4, grainScale:260,
             coarseScale:7, poreDepth:0.30, seamWidth:0.007, stitchFreq:110,
             toneVar:0.13, warpAmt:0.09,
             rough:[0.44,0.72], normalStrength:3.0, repeatU:6, repeatV:6 });
@@ -2183,14 +2206,16 @@
             const pitchV = Math.max(2, Math.round(size / (cubitsV * PICKS_SHOWN)));
             const pitchU = Math.max(2, Math.round(size / (cubitsU * PICKS_SHOWN)));
 
-            ctx.fillStyle = '#d9cfb8';
+            ctx.fillStyle = opts.base || '#d9cfb8';
             ctx.fillRect(0, 0, size, size);
 
             // [TEXT Ex 26:1 / 26:31] four constituent yarns run through the
             // whole cloth: the three dyes and the fine twisted linen. Drawn as
             // interlaced picks, not as coloured bands - Exodus describes no
             // bands anywhere in either cloth.
-            const yarns = ['#d9cfb8', DYE_TEKHELET, DYE_ARGAMAN, DYE_SHANI];
+            // [TEXT Ex 26:1 / 26:31] the linen cloths carry four yarns. The goats'-hair
+            // tent (26:7) is ONE material and passes its own undyed palette instead.
+            const yarns = opts.yarns || ['#d9cfb8', DYE_TEKHELET, DYE_ARGAMAN, DYE_SHANI];
             ctx.lineCap = 'butt';
             for (let y = 0, i = 0; y < size; y += pitchV, i++) {
                 ctx.globalAlpha = 0.80;
@@ -3253,8 +3278,25 @@
         // [TEXT Ex 26:2-3] ten curtains, each 28 x 4 cubits, joined five and
         // five. The tile below IS one curtain: 4 cubits along the tent, the
         // full 10 cubits across it, with a selvedge at each end.
+        // YARN ORDER IS NOT THE SAME IN ALL FOUR CLOTHS, and the Hebrew is consistent
+        // about it (hebrew-lexicon/Exod.xml, morphhb, read directly):
+        //   26:1  שֵׁשׁ מָשְׁזָר וּתְכֵלֶת וְאַרְגָּמָן וְתֹלַעַת שָׁנִי   <- LINEN FIRST
+        //   26:31 תְּכֵלֶת וְאַרְגָּמָן וְתוֹלַעַת שָׁנִי וְשֵׁשׁ מָשְׁזָר   <- dyes first (veil)
+        //   26:36 / 27:16  same as 26:31                        <- dyes first (screens)
+        // The ten inner curtains are the ONLY one of the four that names the linen first.
+        // This file already reads list-order as proportion for the screen ("Linen is one
+        // pick in four here so the dyed yarns carry the cloth") but was then giving the
+        // ceiling that SAME dye-led ratio, which inverts 26:1.
+        // ! ASSUMPTION - Claude: that list ORDER implies PROPORTION is an inference, not a
+        // ! statement of the text. It is this file's own existing inference, now applied
+        // ! consistently instead of in one direction only. The 3:1 figure is mine.
+        const CEILING_YARNS = [
+            LINEN_GROUND, LINEN_GROUND, LINEN_GROUND, DYE_TEKHELET,
+            LINEN_GROUND, LINEN_GROUND, LINEN_GROUND, DYE_ARGAMAN,
+            LINEN_GROUND, LINEN_GROUND, LINEN_GROUND, DYE_SHANI
+        ];
         const linenCeilingTexture = createFiguredLinen({
-            size: 1024, cubitsU: 10, cubitsV: 4,
+            size: 1024, cubitsU: 10, cubitsV: 4, yarns: CEILING_YARNS,
             cols: 2, rows: 1, threads: 56, seamEveryV: true
         });
         // 30 cubits of roof / 4 cubits per curtain = 7.5 curtain widths, which
@@ -3763,10 +3805,23 @@
         // the ram and taḥash coverings. No dimensions survive for this upper sheet.
         // Drawn roof-only and just proud of the ram sheet; the 0.10-unit perimeter
         // excess is art direction so the two coincident meshes do not z-fight.
+        // MEASURED FAULT 2026-07-31: this sheet was drawn at exactly TENT_WIDTH x
+        // TENT_LENGTH - the SAME 10 x 30 footprint as the ram sheet below it, sitting
+        // 0.02 cubits above. The result is that the ram layer is completely buried and
+        // never visible from any angle, so [TEXT Ex 26:14] עֹרֹת אֵילִם מְאָדָּמִים, the
+        // one covering the Hebrew explicitly COLOURS, does not appear in the model at all.
+        //
+        // [RABBINIC Baraita para 11] fixes the RAM sheet at thirty by ten cubits
+        // ("אורכו שלשים אמה ורוחבו עשר אמות") and gives the tachash sheet NO dimensions;
+        // R. Judah has them as two separate pieces, lower and upper.
+        // ! ASSUMPTION - Claude: the inset below is mine. Nothing states it. It is the
+        // ! smallest change that lets a stated layer be seen: the upper sheet sits a half
+        // ! cubit in on every side, so the reddened ram shows as a rim beneath it.
+        const TACHASH_INSET_CUBITS = 0.5;
         const badgerCovering = createRoofLaidHide(0.15, tentCoveringMaterial, {
-            width: TENT_WIDTH,
-            length: TENT_LENGTH,
-            reconstruction: "R. Judah separate upper covering; dimensions unstated"
+            width: TENT_WIDTH - 2 * TACHASH_INSET_CUBITS * CUBIT,
+            length: TENT_LENGTH - 2 * TACHASH_INSET_CUBITS * CUBIT,
+            reconstruction: "R. Judah separate upper covering; dimensions unstated, inset 0.5 cu so the ram shows"
         });
         tabernacleGroup.add(badgerCovering);
 
