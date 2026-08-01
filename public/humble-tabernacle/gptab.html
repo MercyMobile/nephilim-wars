@@ -224,6 +224,7 @@
             right: 20px;
         }
 
+
         /* PHYSICS panel. Right-hand side so it does not fight #info-panel. */
         #physics-panel {
             position: fixed;
@@ -296,21 +297,21 @@
          ============================================================ -->
     <div id="physics-panel">
         <button id="physics-panel-close">×</button>
-        <h3>PHYSICS VALIDATION IN PROGRESS</h3>
-        <div class="src">No current physical conclusion is published from this viewer.</div>
-        <p>The earlier displayed results used superseded geometry and an effectively sealed
-        interior. The corrected model now includes the sourced curtain disposition, a porous
-        entrance sensitivity, distinct lamp and incense schedules, and the continuous exterior
-        bronze-altar fire and plume.</p>
-        <p>Results will appear here only after mesh convergence and uncertainty sweeps show
-        which conclusions remain stable. Textual facts, source-derived geometry, engineering
-        transfers, and solver assumptions will be labeled separately.</p>
+        <h3>ARK AMBIENT-FIELD CASE</h3>
+        <div class="src">Elmer 26.2 · StatElecSolve · ark_ambient_t0001.vtu · 2026-07-29</div>
+        <p>The visible arrows are down-sampled directly from the solved three-dimensional
+        electric-field vectors. Position, direction, and colour come from the FEM result;
+        arrow length is normalized for legibility.</p>
+        <p class="warn">This is a conditional 200 kV/m vertical ambient-field case around the
+        Ark mesh—not evidence that such a field existed at the Tabernacle, not a charging
+        mechanism, and not a full-Tabernacle electrical solve.</p>
         <table>
-            <tr><td>Geometry</td><td class="num">being revalidated</td></tr>
-            <tr><td>Ventilation</td><td class="num">porous/leakage sweep</td></tr>
-            <tr><td>Combustion</td><td class="num">lamps + incense + exterior altar</td></tr>
-            <tr><td>Electrostatics</td><td class="num">null-first; no assumed charge</td></tr>
-            <tr><td>Conclusion</td><td class="num">withheld pending converged run</td></tr>
+            <tr><td>Boundary condition</td><td class="num">200 kV/m downward</td></tr>
+            <tr><td>Displayed samples</td><td class="num">28 FEM nodes</td></tr>
+            <tr><td>Displayed range</td><td class="num">202.7–261.0 kV/m</td></tr>
+            <tr><td>Mesh-wide peak</td><td class="num">261.0 kV/m</td></tr>
+            <tr><td>Mesh status</td><td class="num">Ark only; simplified cherubim</td></tr>
+            <tr><td>Physical conclusion</td><td class="num">none</td></tr>
         </table>
         <div style="display:none" aria-hidden="true" data-status="superseded-legacy-results">
         <h3>SUPERSEDED 2026-07-28 RESULTS</h3>
@@ -565,6 +566,13 @@
         // Holy of Holies (Exodus 26:33-34)
         const HOLY_OF_HOLIES_SIZE = 10 * CUBIT; // 10x10 cube
 
+        // Court gate [TEXT Ex 27:16] "a curtain of twenty cubits"; its height is the
+        // courtyard hanging height, 5 cubits [TEXT Ex 27:18]. Hoisted out of the court
+        // builder 2026-08-01: the geometry used a local `gateWidth` while the audit block
+        // below asserted a hardcoded [20,5] against a hardcoded [20,5] — a check that could
+        // not fail and never read the drawn gate. Both now come from this one line.
+        const GATE_WIDTH = 20 * CUBIT;
+
         // Altar of Burnt Offering (Exodus 27:1)
         const ALTAR_SIZE = 5 * CUBIT;
         // [FORK] The height is DISPUTED and only one side is drawn here.
@@ -605,6 +613,23 @@
         const ARK_LENGTH = 2.5 * CUBIT;
         const ARK_WIDTH = 1.5 * CUBIT;
         const ARK_HEIGHT = 1.5 * CUBIT;
+
+        // Machine-readable dimensional audit. Values are scene units and cubits;
+        // this is exposed for browser-console inspection and automated checks.
+        window.__TABERNACLE_AUDIT__ = {
+            scale: { sceneUnitsPerCubit: CUBIT, modernMetresPerCubit: null,
+                note: 'No modern cubit length is asserted by the viewer.' },
+            fixedGeometry: {
+                courtyard: { actual: [COURTYARD_LENGTH/CUBIT, COURTYARD_WIDTH/CUBIT, COURTYARD_HEIGHT/CUBIT], expected: [100,50,5], source: 'Exodus 27:9-18' },
+                sanctuary: { actual: [TENT_LENGTH/CUBIT, TENT_WIDTH/CUBIT, TENT_HEIGHT/CUBIT], expected: [30,10,10], source: 'derived from Exodus 26 boards/curtains; later reconstruction fixes the plan' },
+                gate: { actual: [GATE_WIDTH/CUBIT, COURTYARD_HEIGHT/CUBIT], expected: [20,5], source: 'Exodus 27:16,18' },
+                bronzeAltar: { actual: [ALTAR_SIZE/CUBIT,ALTAR_SIZE/CUBIT,ALTAR_HEIGHT/CUBIT], expected: [5,5,3], source: 'Exodus 27:1; 3-cubit height follows the plain-text/R. Meir branch' },
+                table: { actual: [TABLE_LENGTH/CUBIT,TABLE_WIDTH/CUBIT,TABLE_HEIGHT/CUBIT], expected: [2,1,1.5], source: 'Exodus 25:23' },
+                incenseAltar: { actual: [INCENSE_ALTAR_SIZE/CUBIT,INCENSE_ALTAR_SIZE/CUBIT,INCENSE_ALTAR_HEIGHT/CUBIT], expected: [1,1,2], source: 'Exodus 30:2' },
+                arkBody: { actual: [ARK_LENGTH/CUBIT,ARK_WIDTH/CUBIT,ARK_HEIGHT/CUBIT], expected: [2.5,1.5,1.5], source: 'Exodus 25:10' }
+            },
+            loadedAssets: {}
+        };
 
         // ================================================================
         // PLACEMENT — corrected 2026-07-28.
@@ -679,6 +704,10 @@
                 camera: [62, 24, TENT_CENTRE_Z - 2],
                 target: [0, 7, TENT_CENTRE_Z]
             },
+            'tent-south': {
+                camera: [-62, 24, TENT_CENTRE_Z - 2],
+                target: [0, 7, TENT_CENTRE_Z]
+            },
             'tent-rear': {
                 camera: [-25, 21, TENT_CENTRE_Z + 48],
                 target: [0, 7, TENT_CENTRE_Z]
@@ -698,6 +727,14 @@
             'roof-front': {
                 camera: [22, 23, TENT_FACE_EAST_Z - 10],
                 target: [0, TENT_HEIGHT, TENT_FACE_EAST_Z]
+            },
+            'roof-overhead': {
+                camera: [0, 72, TENT_CENTRE_Z],
+                target: [0, 0, TENT_CENTRE_Z]
+            },
+            'physics-ark': {
+                camera: [10, 6, TENT_CENTRE_Z + 3],
+                target: [0, 2.5, TENT_CENTRE_Z + 7.5]
             }
         };
         if (inspectionViews[inspectionView]) {
@@ -1630,18 +1667,23 @@
 
                 if (opts.rotateY) model.rotation.y = opts.rotateY;
 
-                const box = new THREE.Box3().setFromObject(model);
+                // Textual dimensions apply to the vessel's structure, not to
+                // bread, bowls, a censer, the mercy seat, or cherubim above it.
+                const dimensionObject = opts.dimensionNodeName
+                    ? model.getObjectByName(opts.dimensionNodeName)
+                    : model;
+                if (!dimensionObject) throw new Error('Missing dimension node: ' + opts.dimensionNodeName);
+                const box = new THREE.Box3().setFromObject(dimensionObject);
                 const size = box.getSize(new THREE.Vector3());
                 let scaleFactor = 1;
                 if (opts.targetWidth && opts.targetHeight) {
-                    // Some furnishings include carrying poles in one horizontal axis,
-                    // so a single uniform bounding-box scale cannot satisfy both a
-                    // TEXT width and a TEXT height. Preserve the floor-plane X/Z scale
-                    // from the stated width, then independently enforce stated height.
-                    // This is used only where both dimensions are textually fixed.
-                    const floorScale = opts.targetWidth / size.x;
-                    const verticalScale = opts.targetHeight / size.y;
-                    model.scale.set(floorScale, verticalScale, floorScale);
+                    // Where Exodus fixes all three axes, enforce all three rather
+                    // than trusting the decorative asset's proportions. targetDepth
+                    // is scene Z; if omitted, preserve the X/Z aspect ratio.
+                    const scaleX = opts.targetWidth / size.x;
+                    const scaleY = opts.targetHeight / size.y;
+                    const scaleZ = opts.targetDepth ? opts.targetDepth / size.z : scaleX;
+                    model.scale.set(scaleX, scaleY, scaleZ);
                 } else if (opts.targetHeight) {
                     scaleFactor = opts.targetHeight / size.y;
                     model.scale.setScalar(scaleFactor);
@@ -1656,12 +1698,20 @@
                 }
 
                 // Recentre: feet on the ground, footprint centred on the origin
-                box.setFromObject(model);
+                box.setFromObject(dimensionObject);
                 const center = box.getCenter(new THREE.Vector3());
                 model.position.set(-center.x, -box.min.y, -center.z);
 
                 group.add(model);
-                box.setFromObject(model);
+                box.setFromObject(dimensionObject);
+                if (opts.auditName) {
+                    const rendered = box.getSize(new THREE.Vector3());
+                    window.__TABERNACLE_AUDIT__.loadedAssets[opts.auditName] = {
+                        sceneUnits: [rendered.x, rendered.z, rendered.y].map(v => Number(v.toFixed(4))),
+                        cubits: [rendered.x, rendered.z, rendered.y].map(v => Number((v / CUBIT).toFixed(4))),
+                        status: 'loaded and scaled'
+                    };
+                }
                 if (opts.onLoaded) opts.onLoaded(model, box);
                 console.log(file + ' loaded (' + size.x.toFixed(1) + ' x ' + size.y.toFixed(1) + ' x ' + size.z.toFixed(1) + ')');
             }, undefined, (error) => {
@@ -2534,7 +2584,7 @@
 
         // EAST (entrance) - fifteen cubits of hangings each flank with three posts,
         // and a twenty-cubit gate between them  [TEXT Ex 27:14-16]
-        const gateWidth = 20 * CUBIT;
+        const gateWidth = GATE_WIDTH;
         const flank = (COURTYARD_WIDTH - gateWidth) / 2;      // 15 cubits each side
         // The east-side posts already come from the same five-cubit perimeter
         // grid. Counting each interval by its starting post yields 3 left-flank,
@@ -3339,6 +3389,12 @@
             metalness: 0.0,
             side: THREE.DoubleSide
         });
+        // The goats'-hair layer occupies the same sourced wall plane as the
+        // linen beneath it. Resolve coplanar raster z-fighting in the material,
+        // not by enlarging the physical model beyond its stated dimensions.
+        goatHairMaterial.polygonOffset = true;
+        goatHairMaterial.polygonOffsetFactor = -2;
+        goatHairMaterial.polygonOffsetUnits = -2;
 
         // Layer 3: Ram skins dyed red (morocco leather)
         const ramTexture = createSkinTexture('#6B2000', 1.0, 18);
@@ -3364,7 +3420,8 @@
         //   GOATS' HAIR  11 curtains of 30 x 4 (26:8), joined 5+6, sixth doubled at the
         //          front (26:9) = one sheet 44 x 30.
         //          30 across the width  = 10 roof + 10 + 10  -> REACHES THE GROUND
-        //          44 along the length  = 2 doubled front + 30 roof + 10 back + 2 rear
+        //          44 cubits total along the longitudinal curtain axis; Exodus
+        //          does not fully determine a rendered ground-plane profile.
         //          -> 26:13, being 2 cubits wider than the linen, one per side, it covers
         //             exactly the linen's one-cubit shortfall. That is why the number is 30.
         //
@@ -3373,7 +3430,6 @@
         // not about the sides flaring. The text never cants the sides, so the flare is gone.
         const DRAPE_OUTWARD = 0;              // the text gives no outward cant
         const FRONT_OVERHANG = 2 * CUBIT;     // sixth curtain doubled over (26:9)
-        const BACK_OVERHANG = 2 * CUBIT;      // the half curtain lapping the back (26:12)
         const LINEN_HEM_CUBITS = 1;           // 28 = 10 + 9 + 9, so it stops 1 cubit high
         // ! ASSUMPTION - Claude: the text gives NO dimensions for the rams' skins (26:14)
         // or the covering above it. Their hems below are art direction, nothing more.
@@ -3644,6 +3700,7 @@
         function createRoofLaidHide(stackY, material, opts = {}) {
             const width = opts.width || TENT_WIDTH;
             const length = opts.length || TENT_LENGTH;
+            const centerZ = opts.centerZ || 0;
             const geo = new THREE.PlaneGeometry(width, length, 40, 120);
             const pos = geo.attributes.position;
             for (let i = 0; i < pos.count; i++) {
@@ -3661,7 +3718,7 @@
                 // This sheet may be INSET from the tent (the tachash is), so its local
                 // coords must be converted to world before asking the shared field.
                 const wx = x;
-                const wz = -z;
+                const wz = centerZ - z;
                 const sag = sharedRoofSag(wx, wz);
 
                 // The only motion of its own: the free perimeter of a dried skin curls
@@ -3676,7 +3733,7 @@
             geo.computeVertexNormals();
             const hide = new THREE.Mesh(geo, material);
             hide.rotation.x = -Math.PI / 2;
-            hide.position.set(0, TENT_HEIGHT + stackY, 0);
+            hide.position.set(0, TENT_HEIGHT + stackY, centerZ);
             hide.castShadow = true;
             hide.receiveShadow = true;
             hide.userData.reconstruction = opts.reconstruction || "visual assumption";
@@ -3690,14 +3747,9 @@
         // Layer 4: Badger/tachash skins - outermost (waterproof protection)
 
         // Layer 1: Fine linen (innermost) - visible from inside only
-        // LAYER OFFSETS RAISED 2026-07-28 (were 0 / 0.15 / 0.30 / 0.45).
-        // The bars added this session sit 0.30 proud of the wall centreline with
-        // radius 0.22, i.e. an outer surface at ~0.52 - so the curtains were
-        // starting INSIDE them and the bars poked through the fabric. Caught by
-        // rendering the page and looking at it, not by any check.
-        // The physical order is boards -> bars in their rings -> curtains over
-        // everything [TEXT Ex 26:26-29 then 26:1-14], so the fabric must clear
-        // the bars. Offsets now start outside them and keep the 0.15 spacing.
+        // The cloth planes remain on the sourced ten-cubit wall boundary.
+        // Coplanar visibility is handled by material polygon offset; it must not
+        // silently enlarge the sanctuary footprint.
         // CORRECTED: the linen back drop was hanging to the SIDE hem (1 cubit short),
         // which lost a cubit of a sheet whose own arithmetic is exact.
         //   [TEXT Ex 26:2-3]  ten curtains, 28 x 4 -> one sheet 40 x 28.
@@ -3709,8 +3761,8 @@
         //   he gave to the ROOF, and TEN CUBITS TO THE WEST, BEHIND the tabernacle: forty."
         // Both sources agree, so backHem is 0 (ground) and is READ, not chosen.
         const linenCovering = createDrapedCovering(
-            0.03, linenCurtainMaterial, LINEN_HEM_CUBITS * CUBIT,
-            { surfaceFront: 0, surfaceBack: 0.03, stackY: 0.03, backHem: 0,
+            0, linenCurtainMaterial, LINEN_HEM_CUBITS * CUBIT,
+            { surfaceFront: 0, surfaceBack: 0, stackY: 0.03, backHem: 0,
               uvMode: 'curtain' }
         );
         tabernacleGroup.add(linenCovering);
@@ -3752,10 +3804,8 @@
         //   [TEXT Ex 26:9]  joined 5 + 6, and the SIXTH curtain doubled at the FRONT
         //                   -> the six-curtain set (6 x 4 = 24 cubits) is the FRONT set
         //   [TEXT Ex 26:12] "the HALF curtain that is left over shall hang over the back"
-        //                   -> 2 cubits doubled front, 2 cubits over the back
-        //                   = R. Judah in [RABBINIC Baraita para 10], the reading adopted
-        //                     above at FRONT_OVERHANG / BACK_OVERHANG. Kept consistent here.
-        //   44 = 2 front + 30 roof + 10 back + 2 trailing.
+        //                   -> this viewer uses the two-cubit front fold only; it does
+        //                      not turn the rear surplus into ground-plane geometry.
         //   Two cubits of cloth are spent at the front before the roof run begins, so the
         //   5|6 seam lands 24 - 2 = 22 cubits back from the entrance edge of the roof,
         //   i.e. 30 - 22 = EIGHT cubits from the west wall.
@@ -3783,10 +3833,10 @@
 
         // Layer 2: Goat hair - given the extra length, it hangs lowest
         // and shows as the dark band at the ground (Exodus 26:12-13)
-        const GOAT_LAYER_OFFSET = 0.06;
+        const GOAT_LAYER_OFFSET = 0;
         const goatCovering = createDrapedCovering(
             GOAT_LAYER_OFFSET, goatHairMaterial, 0,
-            { surfaceFront: 0, surfaceBack: GOAT_LAYER_OFFSET, stackY: 0.06 }
+            { surfaceFront: 0, surfaceBack: 0, stackY: 0.06 }
         );
         tabernacleGroup.add(goatCovering);
 
@@ -3796,10 +3846,9 @@
         // the doubling but likewise supplies no vertical drop. Model the
         // conservative reading: the two-cubit portion is folded back over the
         // front of the roof, making a double thickness there.
-        // [TEXT Ex 26:12] the remaining half hangs at the rear.
-        // [RABBINIC R. Judah, Shabbat 98b / Baraita para 10] the rear two
-        // cubits trail on the ground like a train. These are separate pieces of
-        // geometry, not extra roof length.
+        // [TEXT Ex 26:12] the remaining half hangs at the rear. This viewer ends
+        // the rear drop at the wall plane and ground line. It draws no rear flap,
+        // train, or other ground-plane textile.
         const goatFoldGeo = new THREE.PlaneGeometry(TENT_WIDTH, FRONT_OVERHANG);
         const goatFrontFold = new THREE.Mesh(goatFoldGeo, goatHairMaterial);
         goatFrontFold.rotation.x = -Math.PI / 2;
@@ -3811,16 +3860,6 @@
         goatFrontFold.castShadow = true;
         goatCovering.add(goatFrontFold);
 
-        const goatTrainGeo = new THREE.PlaneGeometry(TENT_WIDTH, BACK_OVERHANG);
-        const goatRearTrain = new THREE.Mesh(goatTrainGeo, goatHairMaterial);
-        goatRearTrain.rotation.x = -Math.PI / 2;
-        goatRearTrain.position.set(
-            0, 0.03,
-            -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET - BACK_OVERHANG / 2
-        );
-        goatRearTrain.receiveShadow = true;
-        goatCovering.add(goatRearTrain);
-
         // Layer 3: Ram skins dyed red. The Baraita distinguishes its geometry:
         //   para 7   linen 28 cu = 10 roof + 9 + 9, stopping AT the sockets
         //   para 9   goats' hair 30 cu = 10 + 10 + 10, covering boards AND sockets
@@ -3828,37 +3867,23 @@
         //            wide, east to west" — 30 x 10 is exactly the ROOF FOOTPRINT.
         // This viewer adopts that roof-only profile. Exodus itself names the skins
         // but gives no dimensions, so the source level remains RABBINIC.
+        // Upper coverings. [TEXT Ex 26:14] puts the taḥash covering מעל
+        // (above/over) the red ram-skin covering, so an exterior observer sees
+        // ONE continuous outer surface, not both materials and not four bands.
+        // Exodus gives neither hide covering's dimensions. This roof-only 30 x 10
+        // profile follows the adopted rabbinic reconstruction; the lower red layer
+        // remains physically present but is correctly concealed by the outer layer.
         const ramCovering = createRoofLaidHide(0.12, ramSkinMaterial, {
             width: TENT_WIDTH,
             length: TENT_LENGTH,
-            reconstruction: "Baraita para 11: ram skins 30 x 10 cubits, roof only"
+            reconstruction: "Lower red ram-skin covering; roof-only 30 x 10 rabbinic profile"
         });
-        tabernacleGroup.add(ramCovering);
-
-        // Layer 4: taḥash skins, outermost. Para 11 records a fork: R. Nehemiah
-        // treats the upper covering as one striped covering; R. Judah distinguishes
-        // the ram and taḥash coverings. No dimensions survive for this upper sheet.
-        // Drawn roof-only and just proud of the ram sheet; the 0.10-unit perimeter
-        // excess is art direction so the two coincident meshes do not z-fight.
-        // MEASURED FAULT 2026-07-31: this sheet was drawn at exactly TENT_WIDTH x
-        // TENT_LENGTH - the SAME 10 x 30 footprint as the ram sheet below it, sitting
-        // 0.02 cubits above. The result is that the ram layer is completely buried and
-        // never visible from any angle, so [TEXT Ex 26:14] עֹרֹת אֵילִם מְאָדָּמִים, the
-        // one covering the Hebrew explicitly COLOURS, does not appear in the model at all.
-        //
-        // [RABBINIC Baraita para 11] fixes the RAM sheet at thirty by ten cubits
-        // ("אורכו שלשים אמה ורוחבו עשר אמות") and gives the tachash sheet NO dimensions;
-        // R. Judah has them as two separate pieces, lower and upper.
-        // ! ASSUMPTION - Claude: the inset below is mine. Nothing states it. It is the
-        // ! smallest change that lets a stated layer be seen: the upper sheet sits a half
-        // ! cubit in on every side, so the reddened ram shows as a rim beneath it.
-        const TACHASH_INSET_CUBITS = 0.5;
-        const badgerCovering = createRoofLaidHide(0.15, tentCoveringMaterial, {
-            width: TENT_WIDTH - 2 * TACHASH_INSET_CUBITS * CUBIT,
-            length: TENT_LENGTH - 2 * TACHASH_INSET_CUBITS * CUBIT,
-            reconstruction: "R. Judah separate upper covering; dimensions unstated, inset 0.5 cu so the ram shows"
+        const outerCovering = createRoofLaidHide(0.15, tentCoveringMaterial, {
+            width: TENT_WIDTH,
+            length: TENT_LENGTH,
+            reconstruction: "Outermost taḥash covering; roof-only 30 x 10 rabbinic profile"
         });
-        tabernacleGroup.add(badgerCovering);
+        tabernacleGroup.add(ramCovering, outerCovering);
 
         // Add brass pegs around the tent (Exodus 27:19)
         function addBrassPegs(startX, startZ, endX, endZ, numPegs, direction) {
@@ -3903,7 +3928,7 @@
                 } else if (direction === 'z-') {
                     // Back side - rope goes from peg inward toward -Z edge of drape
                     targetX = pegX;
-                    targetZ = -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET;
+                    targetZ = -TENT_LENGTH / 2;
                 } else {
                     targetX = pegX;
                     targetZ = pegZ;
@@ -3947,22 +3972,22 @@
 
         // Pegs on north side (left, -X)
         addBrassPegs(
-            -TENT_WIDTH / 2 - GOAT_LAYER_OFFSET - 2, -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET,
+            -TENT_WIDTH / 2 - GOAT_LAYER_OFFSET - 2, -TENT_LENGTH / 2,
             -TENT_WIDTH / 2 - GOAT_LAYER_OFFSET - 2, TENT_LENGTH / 2 + GOAT_LAYER_OFFSET,
             8, 'x-'
         );
 
         // Pegs on south side (right, +X)
         addBrassPegs(
-            TENT_WIDTH / 2 + GOAT_LAYER_OFFSET + 2, -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET,
+            TENT_WIDTH / 2 + GOAT_LAYER_OFFSET + 2, -TENT_LENGTH / 2,
             TENT_WIDTH / 2 + GOAT_LAYER_OFFSET + 2, TENT_LENGTH / 2 + GOAT_LAYER_OFFSET,
             8, 'x+'
         );
 
         // Pegs on back (west, -Z)
         addBrassPegs(
-            -TENT_WIDTH / 2 - GOAT_LAYER_OFFSET, -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET - 2,
-            TENT_WIDTH / 2 + GOAT_LAYER_OFFSET, -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET - 2,
+            -TENT_WIDTH / 2 - GOAT_LAYER_OFFSET, -TENT_LENGTH / 2 - 2,
+            TENT_WIDTH / 2 + GOAT_LAYER_OFFSET, -TENT_LENGTH / 2 - 2,
             6, 'z-'
         );
 
@@ -4019,17 +4044,17 @@
         // North-back corner (northwest)
         addCornerPeg(
             -TENT_WIDTH / 2 - GOAT_LAYER_OFFSET - 3,
-            -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET - 3,
+            -TENT_LENGTH / 2 - 3,
             -TENT_WIDTH / 2 - GOAT_LAYER_OFFSET,
-            -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET
+            -TENT_LENGTH / 2
         );
 
         // South-back corner (southwest)
         addCornerPeg(
             TENT_WIDTH / 2 + GOAT_LAYER_OFFSET + 3,
-            -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET - 3,
+            -TENT_LENGTH / 2 - 3,
             TENT_WIDTH / 2 + GOAT_LAYER_OFFSET,
-            -TENT_LENGTH / 2 - GOAT_LAYER_OFFSET
+            -TENT_LENGTH / 2
         );
 
         scene.add(tabernacleGroup);
@@ -4206,7 +4231,9 @@
         // Detailed altar model: horned corners, lattice grate walls
         // (Exodus 27:4), and carrying poles left in their rings
         loadFurnishing(altarGroup, 'models/SM_AltarBurntOffering.glb', {
+            auditName: 'bronzeAltarAsset',
             targetWidth: ALTAR_SIZE,
+            targetDepth: ALTAR_SIZE,
             targetHeight: ALTAR_HEIGHT,
             materials: { default: altarBronzeMaterial },
             onError: () => {
@@ -4360,6 +4387,10 @@
         // Golden table model: crown moulding, carrying poles, the twelve
         // loaves in two rows, and the golden vessels (Exodus 25:29)
         loadFurnishing(tableGroup, 'models/SM_TableShowbread.glb', {
+            auditName: 'showbreadTableAsset',
+            dimensionNodeName: 'SM_Showbread_Structure',
+            targetWidth: TABLE_LENGTH,
+            targetDepth: TABLE_WIDTH,
             targetHeight: TABLE_HEIGHT,
             materials: { default: goldMaterial },
             onError: () => {
@@ -4404,6 +4435,10 @@
         // Golden incense altar model: crown moulding, horns, carrying
         // poles, and a censer resting on top
         loadFurnishing(incenseAltarGroup, 'models/SM_AltarIncense.glb', {
+            auditName: 'incenseAltarAsset',
+            dimensionNodeName: 'SM_Altar_Structure',
+            targetWidth: INCENSE_ALTAR_SIZE,
+            targetDepth: INCENSE_ALTAR_SIZE,
             targetHeight: INCENSE_ALTAR_HEIGHT,
             rotateY: Math.PI / 2, // poles run across the tent, clear of the veil
             materials: { default: goldMaterial },
@@ -4565,16 +4600,21 @@
         });
 
         loadFurnishing(arkGroup, 'models/SM_ArkCovenant.glb', {
-            // With its carrying poles the Ark spans about half the Holy of Holies
-            targetLength: HOLY_OF_HOLIES_SIZE * 0.5,
+            auditName: 'arkAsset',
+            dimensionNodeName: 'Structure',
+            // [TEXT Ex 25:10] body: 2.5 x 1.5 x 1.5 cubits. The old target
+            // scaled the body to FIVE cubits, exactly doubling its stated length.
+            targetWidth: ARK_LENGTH,
+            targetDepth: ARK_WIDTH,
+            targetHeight: ARK_HEIGHT,
             materials: {
                 M_Ark_MercySeat: mercySeatMaterial,
                 default: arkGoldMaterial
             },
             onLoaded: (model, box) => {
                 // Seat the Shekinah glory between the cherubim wings
-                const actualHeight = box.max.y - box.min.y;
-                const gloryYPos = actualHeight * 0.92;
+                const fullArkBox = new THREE.Box3().setFromObject(model);
+                const gloryYPos = fullArkBox.max.y * 0.92;
                 if (arkGroup.userData.shekinahLight) {
                     arkGroup.userData.shekinahLight.position.y = gloryYPos + 0.5;
                     arkGroup.userData.gloryFill.position.y = gloryYPos;
@@ -4675,6 +4715,89 @@
             scripture: "Exodus 25:10-22 - 'They shall make an ark of acacia wood...overlay it with pure gold...make a mercy seat of pure gold...make two cherubim of gold...The cherubim shall stretch out their wings above, covering the mercy seat with their wings, and they shall face one another...There I will meet with you, and I will speak with you from above the mercy seat.'"
         });
         tabernacleGroup.add(arkGroup);
+
+        // ================================================================
+        // 3D ELECTRIC-FIELD OVERLAY — SOLVER DATA, NOT ART-DIRECTED VECTORS
+        // ================================================================
+        // Source: fem-lab/ark-case/mesh_ambient/ark_ambient_t0001.vtu
+        // Elmer 26.2 StatElecSolve, 2026-07-29. The boundary condition is an
+        // ASSUMED uniform vertical 200 kV/m ambient field. These are 28 actual
+        // FEM node samples down-selected from the 20,677-node result. Format:
+        // [x_m, y_m, z_m, Ex/|E|, Ey/|E|, Ez/|E|, |E|_kV_per_m].
+        // Solver axes: x=Ark length, y=Ark width, z=vertical. Viewer axes map
+        // to x=x, y=z, z=y. Arrow length is normalized only for visibility;
+        // node position, direction and colour are data-driven.
+        const ARK_FEM_SAMPLES = [
+            [-1.688,-0.945,-0.338,-0.001,-0.001,-1.000,202.8],
+            [-1.688,-0.945, 0.507, 0.002, 0.001,-1.000,202.7],
+            [-1.688,-0.945, 1.220, 0.001, 0.001,-1.000,203.1],
+            [-1.688, 0.945,-0.338,-0.001, 0.001,-1.000,202.8],
+            [-1.688, 0.945, 0.507, 0.002,-0.001,-1.000,202.7],
+            [-1.688, 0.945, 1.220, 0.001,-0.001,-1.000,203.1],
+            [-0.562,-0.945,-0.338,-0.006,-0.007,-1.000,203.0],
+            [-0.562,-0.945, 0.507, 0.007, 0.008,-1.000,202.9],
+            [-0.562,-0.945, 1.220, 0.003, 0.003,-1.000,203.4],
+            [-0.562, 0.945,-0.338,-0.006, 0.007,-1.000,203.0],
+            [-0.562, 0.945, 0.507, 0.007,-0.008,-1.000,202.9],
+            [-0.562, 0.945, 1.220, 0.003,-0.003,-1.000,203.4],
+            [ 0.562,-0.945,-0.338, 0.006,-0.007,-1.000,203.0],
+            [ 0.562,-0.945, 0.507,-0.007, 0.008,-1.000,202.9],
+            [ 0.562,-0.945, 1.220,-0.003, 0.003,-1.000,203.4],
+            [ 0.562, 0.945,-0.338, 0.006, 0.007,-1.000,203.0],
+            [ 0.562, 0.945, 0.507,-0.007,-0.008,-1.000,202.9],
+            [ 0.562, 0.945, 1.220,-0.003,-0.003,-1.000,203.4],
+            [ 1.688,-0.945,-0.338, 0.001,-0.001,-1.000,202.8],
+            [ 1.688,-0.945, 0.507,-0.002, 0.001,-1.000,202.7],
+            [ 1.688,-0.945, 1.220,-0.001, 0.001,-1.000,203.1],
+            [ 1.688, 0.945,-0.338, 0.001, 0.001,-1.000,202.8],
+            [ 1.688, 0.945, 0.507,-0.002,-0.001,-1.000,202.7],
+            [ 1.688, 0.945, 1.220,-0.001,-0.001,-1.000,203.1],
+            [-0.525,-0.300, 0.348, 0.069, 0.058,-0.996,261.0],
+            [-0.525, 0.300, 0.348, 0.069,-0.058,-0.996,261.0],
+            [ 0.525,-0.300, 0.348,-0.069, 0.058,-0.996,261.0],
+            [ 0.525, 0.300, 0.348,-0.069,-0.058,-0.996,261.0]
+        ];
+
+        const electricFieldGroup = new THREE.Group();
+        electricFieldGroup.name = 'Elmer Ark ambient-field samples';
+        // `field=1` is a deterministic inspection hook; the public control is
+        // still the Physics button below.
+        electricFieldGroup.visible = new URLSearchParams(window.location.search).get('field') === '1';
+        const solverMetresToScene = CUBIT / 0.45; // solver case_manifest cubit = 0.45 m
+        const arkSolverBottomMetres = -0.3375;    // -1.5 cubits / 2 at 0.45 m/cubit
+
+        function fieldColour(kVm) {
+            // Fixed legend domain for this conditional case: ambient 200 to
+            // mesh-wide peak 261 kV/m. Blue=ambient; yellow/red=enhancement.
+            const t = Math.max(0, Math.min(1, (kVm - 200) / 61));
+            return new THREE.Color().setHSL((0.58 - 0.58 * t), 1.0, 0.55);
+        }
+
+        ARK_FEM_SAMPLES.forEach(([sx, sy, sz, ex, ey, ez, magnitude]) => {
+            const origin = new THREE.Vector3(
+                sx * solverMetresToScene,
+                (sz - arkSolverBottomMetres) * solverMetresToScene,
+                sy * solverMetresToScene
+            );
+            const direction = new THREE.Vector3(ex, ez, ey).normalize();
+            const colour = fieldColour(magnitude);
+            const arrow = new THREE.ArrowHelper(direction, origin, 0.9, colour, 0.28, 0.14);
+            arrow.line.material.transparent = true;
+            arrow.line.material.opacity = 0.9;
+            arrow.line.material.depthTest = false;
+            arrow.cone.material.transparent = true;
+            arrow.cone.material.opacity = 0.95;
+            arrow.cone.material.depthTest = false;
+            arrow.renderOrder = 50;
+            electricFieldGroup.add(arrow);
+        });
+        electricFieldGroup.userData = {
+            source: 'ark_ambient_t0001.vtu',
+            solver: 'Elmer 26.2 StatElecSolve',
+            boundaryCondition: 'ASSUMPTION: 200 kV/m vertical ambient field',
+            interpretation: 'Conditional Ark-only FEM result; no historical field or charging mechanism established'
+        };
+        arkGroup.add(electricFieldGroup);
 
         // ================================================================
         // INTERACTION SYSTEM
@@ -4782,7 +4905,7 @@
         // ================================================================
 
         const dimensionGroup = new THREE.Group();
-        dimensionGroup.visible = false;
+        dimensionGroup.visible = new URLSearchParams(window.location.search).get('dimensions') === '1';
         scene.add(dimensionGroup);
 
         // Create dimension line with text sprite
@@ -4851,7 +4974,7 @@
         // Courtyard dimensions (100 x 50 cubits)
         // Length - along Z axis (100 cubits)
         const courtyardLengthLabel = createDimensionLabel(
-            '100 cubits (150 ft)',
+            '100 cubits',
             { x: COURTYARD_WIDTH / 2 + 5, y: 0, z: -COURTYARD_LENGTH / 2 },
             { x: COURTYARD_WIDTH / 2 + 5, y: 0, z: COURTYARD_LENGTH / 2 },
             COURTYARD_HEIGHT + 3
@@ -4860,7 +4983,7 @@
 
         // Width - along X axis (50 cubits)
         const courtyardWidthLabel = createDimensionLabel(
-            '50 cubits (75 ft)',
+            '50 cubits',
             { x: -COURTYARD_WIDTH / 2, y: 0, z: -COURTYARD_LENGTH / 2 - 5 },
             { x: COURTYARD_WIDTH / 2, y: 0, z: -COURTYARD_LENGTH / 2 - 5 },
             COURTYARD_HEIGHT + 3
@@ -4869,7 +4992,7 @@
 
         // Courtyard height (5 cubits)
         const courtyardHeightLabel = createDimensionLabel(
-            '5 cubits (7.5 ft)',
+            '5 cubits',
             { x: COURTYARD_WIDTH / 2 + 3, y: 0, z: -COURTYARD_LENGTH / 2 },
             { x: COURTYARD_WIDTH / 2 + 3, y: COURTYARD_HEIGHT, z: -COURTYARD_LENGTH / 2 },
             0, 0x00FF00
@@ -4881,7 +5004,7 @@
 
         // Tent length label (30 cubits)
         const tentLengthLabel = createDimensionLabel(
-            '30 cubits (45 ft)',
+            '30 cubits',
             { x: -TENT_WIDTH / 2 - 8, y: 0, z: tentWorldZ - TENT_LENGTH / 2 },
             { x: -TENT_WIDTH / 2 - 8, y: 0, z: tentWorldZ + TENT_LENGTH / 2 },
             TENT_HEIGHT + 5, 0xFF6B6B
@@ -4890,7 +5013,7 @@
 
         // Tent width label (10 cubits)
         const tentWidthLabel = createDimensionLabel(
-            '10 cubits (15 ft)',
+            '10 cubits',
             { x: -TENT_WIDTH / 2, y: 0, z: tentWorldZ + TENT_LENGTH / 2 + 8 },
             { x: TENT_WIDTH / 2, y: 0, z: tentWorldZ + TENT_LENGTH / 2 + 8 },
             TENT_HEIGHT + 5, 0xFF6B6B
@@ -4899,7 +5022,7 @@
 
         // Tent height label (10 cubits)
         const tentHeightLabel = createDimensionLabel(
-            '10 cubits (15 ft)',
+            '10 cubits',
             { x: TENT_WIDTH / 2 + 5, y: 0, z: tentWorldZ },
             { x: TENT_WIDTH / 2 + 5, y: TENT_HEIGHT, z: tentWorldZ },
             0, 0xFF6B6B
@@ -4917,7 +5040,7 @@
 
         // Gate width (20 cubits)
         const gateLabel = createDimensionLabel(
-            'Gate: 20 cubits (30 ft)',
+            'Gate: 20 cubits',
             { x: -gateWidth / 2, y: 0, z: -COURTYARD_LENGTH / 2 - 3 },
             { x: gateWidth / 2, y: 0, z: -COURTYARD_LENGTH / 2 - 3 },
             1, 0x9B59B6
@@ -4925,7 +5048,9 @@
         dimensionGroup.add(gateLabel);
 
         // Toggle dimensions button
-        let dimensionsVisible = false;
+        let dimensionsVisible = dimensionGroup.visible;
+        document.getElementById('toggle-measurements-btn').textContent =
+            dimensionsVisible ? 'HIDE DIMENSIONS' : 'SHOW DIMENSIONS';
         // ---- PHYSICS panel toggle (added 2026-07-28) ----
         (function wirePhysicsPanel() {
             const btn = document.getElementById('toggle-physics-btn');
@@ -4935,9 +5060,11 @@
             const setOpen = (open) => {
                 panel.style.display = open ? 'block' : 'none';
                 btn.textContent = open ? 'HIDE PHYSICS' : 'PHYSICS';
+                electricFieldGroup.visible = open;
             };
             btn.addEventListener('click', () => setOpen(panel.style.display !== 'block'));
             if (close) close.addEventListener('click', () => setOpen(false));
+            if (new URLSearchParams(window.location.search).get('physics') === '1') setOpen(true);
         })();
 
         document.getElementById('toggle-measurements-btn').addEventListener('click', () => {
