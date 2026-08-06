@@ -19,6 +19,16 @@ systems — Babylonian and, later, Hellenistic — without adopting the pagan
 theology underneath them. "Completely divorced" would overstate it; the
 mathematics was inherited, the gods were refused.
 
+What this project protects is the **witness correspondence** — the twelve
+read as the twelve, the rows as the seasons, the order as YHWH's — as the
+sources themselves attest it (Job, Genesis, the prophets; Josephus, Philo;
+the Qumran instruments). Identifications and narratives *inferred from*
+that correspondence — which stone carries which sign, which tribe flies
+which banner, what story a constellation tells — are not protected claims.
+They are labeled as tradition, scholarship, or inference wherever they
+appear, and no page may promote them to witness status. Introducing a new
+conflict to defend an inference is the one move this document forbids.
+
 ## The consolidated thesis
 
 The ancient Hebrew and Jewish traditions recognized the heavens as an
