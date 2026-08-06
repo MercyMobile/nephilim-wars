@@ -434,11 +434,18 @@ const TabernacleViewer = () => {
 
 
   // ---- WHAT THE HEBREW TEXT NAMES IN THE SKY -------------------------------
-  // Every celestial name in the Hebrew Bible, read from the pointed Hebrew in
-  // docs/scribe-texts/bib/tan/. FOUR names, and NO narrative attached to any of
-  // them anywhere in the text. Job names them as things God alone made and
-  // governs; 2 Kings names them among things Israel was forbidden to burn
-  // incense to. No Hebrew source tells us a story they were said to tell.
+  // Every celestial PROPER NAME in the Hebrew Bible, read from the pointed
+  // Hebrew in docs/scribe-texts/bib/tan/. FOUR names - but four names is not
+  // the whole of what the text says about the sky. The lights are set for
+  // signs and appointed times [Gen 1:14], the host is led out by number and
+  // called by name [Isa 40:26; Ps 147:4], and Job 38:33 calls the whole
+  // arrangement "the ordinances of the heavens". Job names the four as things
+  // God alone made and governs; 2 Kings names the mazzalot among things
+  // Israel was forbidden to burn incense to. An ordered, lawlike sky whose
+  // order serves its Maker - no myth narrated, no fate read out of it.
+  // REWRITTEN 2026-08-06: an earlier version of this note treated "four
+  // names, no story" as the whole picture, which under-stated the order the
+  // text itself asserts. Full case: docs/MAZZAROTH.md.
   // ! ASSUMPTION - Claude: the English identifications (Pleiades, Orion, Bear)
   // kesil/fool: VERIFIED 2026-07-27 by consonantal search of all of bib/tan/ --
   // 75 lines contain כסיל, concentrated in Proverbs and Ecclesiastes, and the
@@ -569,9 +576,9 @@ const TabernacleViewer = () => {
       where: "Job 9:9 (עָשׁ) · Job 38:32 (עַיִשׁ)",
       says: "Job 38:32 speaks of guiding Ayish al-baneha — with her sons. Two spellings, one apparent referent.",
       view: { ra: 11.243, dec: 52.96, span: 46 } },
-    { heb: "מַזָּרוֹת", tr: "Mazzarot", eng: "rendered a constellation",
-      where: "Job 38:32 — ONCE, in the whole Hebrew Bible",
-      says: "A hapax legomenon: it occurs exactly one time and nowhere else. The verse asks whether you can bring it out in its season. The text does not say how many there are, and does not say twelve.",
+    { heb: "מַזָּרוֹת", tr: "Mazzarot", eng: "read as the zodiacal band",
+      where: "Job 38:32 — ONCE, in the whole Hebrew Bible (mazzalot, 2 Kings 23:5, is the related word)",
+      says: "A hapax legomenon: it occurs exactly one time. The verse asks whether you can bring it out in its season — a named grouping led out on schedule, which is why the traditional reading is the zodiacal band, month by month. Job itself never numbers it; twelve is not stated. The count comes from the wider order the sources document, not from this verse.",
       view: null },
   ];
 
@@ -985,9 +992,9 @@ const TabernacleViewer = () => {
           {activeView === 'heavens' && (
             <div className="space-y-6">
               <div className="text-center">
-                <h2 className="font-cinzel text-amber-800 text-2xl mb-2 uppercase tracking-[0.2em]">What They Named in the Sky</h2>
+                <h2 className="font-cinzel text-amber-800 text-2xl mb-2 uppercase tracking-[0.2em]">What They Knew of the Stars</h2>
                 <p className="text-sm text-stone-600 italic max-w-2xl mx-auto">
-                  Four names. That is the whole celestial vocabulary of the Hebrew Bible &mdash; and not one text tells us a story they were said to tell.
+                  Four proper names &mdash; and behind them an ordered system: lights set for signs and appointed times, a host led out by number and called by name, kept under what Job calls <em>the ordinances of the heavens</em>. Ordered, lawlike, angelically administered &mdash; and never worshiped.
                 </p>
               </div>
 
@@ -1028,15 +1035,15 @@ const TabernacleViewer = () => {
               <div className="bg-white/70 p-5 rounded-lg border-l-4 border-amber-500 shadow">
                 <h3 className="font-cinzel text-amber-900 font-bold mb-2">The question God asks</h3>
                 <p className="text-sm text-stone-700 leading-relaxed">
-                  Job 38 does not explain the stars. It asks whether Job can <em>tie</em> the bonds of Kimah or <em>loose</em> the cords of Kesil, bring out Mazzarot in its season, guide Ayish with her sons. Every clause is a question about authorship and control &mdash; not about meaning, and not about prediction.
+                  Job 38 does not explain the stars. It asks whether Job can <em>tie</em> the bonds of Kimah or <em>loose</em> the cords of Kesil, bring out Mazzarot in its season, guide Ayish with her sons &mdash; and then, &ldquo;do you know the ordinances of the heavens?&rdquo; Every clause is a question about authorship and control: whose the order is, not what it predicts.
                 </p>
-                <div className="mt-2"><span className="text-[10px] uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300 rounded px-2 py-0.5">TEXT — Job 38:31-32, read in the Hebrew</span></div>
+                <div className="mt-2"><span className="text-[10px] uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300 rounded px-2 py-0.5">TEXT — Job 38:31-33, read in the Hebrew</span></div>
               </div>
 
               <div className="bg-white/70 p-5 rounded-lg border-l-4 border-red-700/60 shadow">
                 <h3 className="font-cinzel text-amber-900 font-bold mb-2">And the line they drew</h3>
                 <p className="text-sm text-stone-700 leading-relaxed">
-                  The related word <em>mazzalot</em> appears once too &mdash; in 2 Kings 23:5, where Josiah does away with the priests who burned incense to Baal, to the sun, to the moon, to the constellations and to all the host of heaven. The heavens could be named and admired. They could not be burned to.
+                  The related word <em>mazzalot</em> appears once too &mdash; in 2 Kings 23:5, where Josiah does away with the priests who burned incense to Baal, to the sun, to the moon, to the constellations and to all the host of heaven. The dispute was never whether the heavens possessed signs, stations, and ordered behavior &mdash; it was strictly over whom that order served. Named and admired, yes. Consulted, feared, burned to &mdash; never.
                 </p>
                 <div className="mt-2"><span className="text-[10px] uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300 rounded px-2 py-0.5">TEXT — 2 Kings 23:5</span></div>
               </div>
@@ -1044,18 +1051,24 @@ const TabernacleViewer = () => {
               <div className="bg-stone-100 p-5 rounded-lg border-l-4 border-stone-400 shadow">
                 <h3 className="font-cinzel text-stone-800 font-bold mb-2">What later Jewish writers added</h3>
                 <p className="text-sm text-stone-700 leading-relaxed mb-2">
-                  <strong>Enoch</strong> describes a machinery rather than a myth: the sun rising and setting through six portals at either edge of heaven, the whole reckoning shown to Enoch by the angel Uriel &mdash; and a warning that when the chiefs of the stars transgress their prescribed order, men will go astray over them.
+                  <strong>Enoch</strong> describes an administered order rather than a myth &mdash; not a machine (that metaphor belongs to a later age) but a law: the sun rising and setting through six portals at either edge of heaven, the whole reckoning shown to Enoch by the angel Uriel &mdash; and a warning that when the chiefs of the stars transgress their prescribed order, men will go astray over them.
+                </p>
+                <p className="text-sm text-stone-700 leading-relaxed mb-2">
+                  <strong>Qumran</strong> kept that order with instruments: 4Q319 reckons signs across a 294-year cycle of jubilees; 4Q320 synchronizes the phases of the moon with the 364-day calendar and the priestly courses; and 4Q318 maps the moon through an explicit twelve-sign zodiac in Jewish Aramaic &mdash; with a thunder-omen text bound to it on the same scroll, a boundary this page does not hide.
                 </p>
                 <p className="text-sm text-stone-700 leading-relaxed">
-                  <strong>Josephus</strong>, describing this very breastplate, wrote that the twelve stones may be understood as the twelve months, or as the twelve signs of the circle <em>which the Greeks call the Zodiac</em>. He names the referent and marks the name as somebody else&rsquo;s.
+                  <strong>Josephus</strong>, describing this very breastplate, wrote that whether the twelve stones are understood as the twelve months or as the twelve signs of the circle <em>which the Greeks call the Zodiac</em>, &ldquo;we shall not miss from the right meaning.&rdquo; The name is Greek; the correspondence he owns. <strong>Philo</strong> says it outright: the twelve stones are the twelve signs, in four rows of three for the seasons.
                 </p>
-                <div className="mt-2"><span className="text-[10px] uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300 rounded px-2 py-0.5">WITNESS — 1 Enoch 72, 80; Josephus, Antiquities 3</span></div>
+                <div className="mt-2"><span className="text-[10px] uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300 rounded px-2 py-0.5">WITNESS — 1 Enoch 72, 80; 4Q318–4Q320; Josephus, Antiquities 3.7.7; Philo, Life of Moses 2.124–126</span></div>
               </div>
 
               <div className="bg-stone-900 text-parchment-100 p-5 rounded-lg border border-gold-400/30">
-                <h3 className="font-cinzel text-gold-400 mb-2">What we do not have</h3>
+                <h3 className="font-cinzel text-gold-400 mb-2">The order, and the boundaries</h3>
+                <p className="text-sm leading-relaxed text-stone-300 mb-2">
+                  The Hebrew Bible itself lists no twelve signs and reads no narrative out of the sky &mdash; that stands. But the space between Job&rsquo;s four names and the later twelve is not empty: 4Q318 maps the twelve signs in Jewish Aramaic; Josephus and Philo read the breastplate&rsquo;s twelve stones as that circle; the camp of Numbers 2 stood in four divisions whose banners tradition ties to the four fixed signs &mdash; the lion, ox, man, and eagle that guard the throne in Ezekiel 1 and Revelation 4; and Revelation 21 founds the city on twelve stones the old lapidaries assign to the signs, in reverse order &mdash; the fated circuit run backwards, its lamp the Lamb.
+                </p>
                 <p className="text-sm leading-relaxed text-stone-300">
-                  No Hebrew text preserves a story told by these stars. There is no biblical list of twelve signs, no mapping of tribes to constellations, and no narrative read out of the sky. Later systems supply all three &mdash; but they are later, and this page keeps that line visible rather than filling the gap.
+                  The evidence supports Mazzarot as part of an ancient proto-zodiacal celestial order. It does not prove that Job carried the later standardized zodiac, nor that every Jewish use of the scheme stayed clear of divination &mdash; and the tribe-to-sign banners are tradition, labeled as such. The twelve was never surrendered to paganism; it was reclaimed, de-absolutized, and covenantally renamed. Full case: <span className="text-gold-300">docs/MAZZAROTH.md</span>.
                 </p>
               </div>
             </div>
