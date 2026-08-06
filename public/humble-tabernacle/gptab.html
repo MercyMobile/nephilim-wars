@@ -224,11 +224,18 @@
             right: 20px;
         }
 
+        #toggle-mazzaroth-btn {
+            top: 200px;
+            right: 20px;
+        }
 
-        /* PHYSICS panel. Right-hand side so it does not fight #info-panel. */
+
+        /* PHYSICS panel. Right-hand side so it does not fight #info-panel.
+           top moved 200 -> 260 on 2026-08-06 when the MAZZAROTH button took
+           the 200px slot; both right-edge panels open below the button rail. */
         #physics-panel {
             position: fixed;
-            top: 200px;
+            top: 260px;
             right: 20px;
             background: rgba(6, 10, 20, 0.96);
             border: 2px solid #6fd3ff;
@@ -240,7 +247,7 @@
             display: none;
             backdrop-filter: blur(10px);
             z-index: 1000;
-            max-height: calc(100vh - 230px);
+            max-height: calc(100vh - 290px);
             overflow-y: auto;
             color: #dbe7f5;
             font-size: 0.82rem;
@@ -266,6 +273,53 @@
             cursor: pointer; line-height: 1;
         }
 
+        /* MAZZAROTH panel. Shares the physics panel's right-edge slot; the
+           two are mutually exclusive so they never stack. Gold, because it
+           is the lore of the gold figures in the night sky. */
+        #mazzaroth-panel {
+            position: fixed;
+            top: 260px;
+            right: 20px;
+            background: rgba(14, 10, 24, 0.96);
+            border: 2px solid #ffd700;
+            border-radius: 12px;
+            padding: 16px 20px 20px;
+            width: 360px;
+            max-width: calc(100vw - 40px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.85);
+            display: none;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            max-height: calc(100vh - 290px);
+            overflow-y: auto;
+            color: #e8d5b5;
+            font-size: 0.82rem;
+            line-height: 1.5;
+        }
+        #mazzaroth-panel h3 {
+            color: #ffd700; margin: 0 0 4px; font-size: 1.0rem; letter-spacing: 1px;
+            padding-right: 26px;   /* two-line title must clear the × button */
+        }
+        #mazzaroth-panel h4 {
+            color: #c9a961; margin: 16px 0 4px; font-size: 0.82rem;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        #mazzaroth-panel .warn { color: #ff9d6f; }
+        #mazzaroth-panel .src  { color: #a6906a; font-size: 0.74rem; font-style: italic; }
+        #mazzaroth-panel .quote {
+            color: #c9a961; font-style: italic;
+            border-left: 3px solid #ffd700; padding-left: 10px; margin: 8px 0;
+        }
+        #mazzaroth-panel table { width: 100%; border-collapse: collapse; margin: 6px 0; }
+        #mazzaroth-panel td { padding: 2px 4px; border-bottom: 1px solid rgba(255,215,0,0.15); }
+        #mazzaroth-panel td:last-child { text-align: right; color: #fff; }
+        #mazzaroth-panel-close {
+            position: absolute; top: 10px; right: 10px;
+            background: #ffd700; color: #1a0f0a; border: none; border-radius: 50%;
+            width: 24px; height: 24px; font-size: 16px; font-weight: bold;
+            cursor: pointer; line-height: 1;
+        }
+
     </style>
 </head>
 <body>
@@ -287,6 +341,7 @@
     <button class="ui-button" id="reset-view-btn">RESET VIEW</button>
     <button class="ui-button" id="toggle-measurements-btn">SHOW DIMENSIONS</button>
     <button class="ui-button" id="toggle-physics-btn">PHYSICS</button>
+    <button class="ui-button" id="toggle-mazzaroth-btn">MAZZAROTH</button>
 
     <!-- ============================================================
          PHYSICS PANEL PUBLICATION RULE:
@@ -419,6 +474,107 @@
             [SILENT] charging rate, airflow, breakdown, injury thresholds ·
             [ASSUMPTION] source-layer labels assigned by editor</div>
         </div>
+    </div>
+
+    <!-- ============================================================
+         MAZZAROTH PANEL — the sky lore, stated as lore.
+         Same discipline as the physics panel: sources cited, boundaries
+         explicit, tradition labeled as tradition. The full case lives in
+         docs/MAZZAROTH.md; the sky's star data stays observational and is
+         never edited to fit this reading.
+         ============================================================ -->
+    <div id="mazzaroth-panel">
+        <button id="mazzaroth-panel-close">×</button>
+        <h3>MAZZAROTH — WHAT THEY KNEW OF THE STARS</h3>
+        <div class="src">Gen 1:14 · Job 9:9; 38:31–33 · Amos 5:8 · Isa 40:26 · Ps 147:4 ·
+            Sir 43:9–10 · Wis 7:17–19 · 1 En 72–82 · 4Q318–4Q320 ·
+            full case: docs/MAZZAROTH.md</div>
+        <p class="quote">"Can you bind the chains of the Pleiades, or loose the cords of
+        Orion? Can you lead out Mazzaroth in its season, or guide the Bear with her
+        children? Do you know the ordinances of the heavens?" — Job 38:31–33</p>
+        <p>The twelve gold figures in this night sky are that reading: the zodiacal band,
+        led out month by month in its season. The Hebrew and Jewish traditions knew the
+        heavens as an ordered system — named groupings, appointed seasons, measurable
+        cycles, enduring ordinances. Not mechanical, not clockwork (those are
+        post-Enlightenment metaphors): ordered, lawlike, and angelically administered.
+        The biblical writers denied the heavenly bodies any independent divinity and set
+        their order beneath the sovereignty of YHWH; Second Temple texts expanded the
+        tradition into detailed calendars and, at Qumran, an explicit twelve-sign
+        zodiac.</p>
+
+        <h4>The cumulative evidence</h4>
+        <table>
+            <tr><td>Genesis 1:14</td><td>lights for signs &amp; appointed times</td></tr>
+            <tr><td>Job 9:9; 38:31–33</td><td>bonds, seasons, ordinances</td></tr>
+            <tr><td>Amos 5:8</td><td>Pleiades &amp; Orion made by YHWH</td></tr>
+            <tr><td>Isa 40:26; Ps 147:4</td><td>host numbered, named, commanded</td></tr>
+            <tr><td>Sirach 43:9–10</td><td>stars keep appointed watches</td></tr>
+            <tr><td>Wisdom 7:17–19</td><td>cycles &amp; constellations, God-given knowledge</td></tr>
+            <tr><td>1 Enoch 72–82</td><td>gates, courses, luminary law</td></tr>
+            <tr><td>4Q319 / 4Q320</td><td>jubilee signs; lunar–priestly sync</td></tr>
+            <tr><td>4Q318</td><td>twelve-sign Aramaic zodiac</td></tr>
+        </table>
+        <p class="warn">Boundaries held: this strongly supports Mazzaroth as part of an
+        ancient proto-zodiacal celestial order. It does not prove Job carried the later
+        standardized zodiac, nor that every Jewish use of zodiacal knowledge was free of
+        divination — 4Q318 binds a thunder-omen text to its zodiac on the same
+        scroll.</p>
+
+        <h4>Whom the order serves</h4>
+        <p>The historical dispute was never whether the heavens possessed signs,
+        stations, and ordered behavior. It was strictly over whom that order served —
+        whether creation itself was to be consulted, feared, or worshiped in place of
+        its Creator. Israel inherited Babylon's and the Greeks' technical systems; it
+        refused their gods.</p>
+
+        <h4>The twelve, reclaimed</h4>
+        <p class="quote">"And for the twelve stones, whether we understand by them the
+        months, or whether we understand the like number of the signs of that circle
+        which the Greeks call the Zodiac, we shall not miss from the right meaning."
+        — Josephus, Antiquities III.7.7</p>
+        <p>Philo reads the high priest's breastpiece the same way: twelve stones for the
+        twelve signs, in four rows of three for the seasons (Mos. II.124–126). The
+        twelve-fold architecture runs through the covenant: twelve tribes, twelve ephod
+        stones, twelve apostles, twelve foundations. Around this courtyard the camp
+        stood in four divisions, whose banners tradition ties to the four fixed
+        signs:</p>
+        <table>
+            <tr><td>East · Judah · Lion</td><td>Leo</td></tr>
+            <tr><td>West · Ephraim · Ox</td><td>Taurus</td></tr>
+            <tr><td>South · Reuben · Man</td><td>Aquarius</td></tr>
+            <tr><td>North · Dan · Eagle/Serpent</td><td>Scorpio</td></tr>
+        </table>
+        <div class="src">[TEXT] Numbers 2 gives the camps; [TRADITION] the emblems and
+            sign links are rabbinic and early Christian commentary. The same four faces
+            guard the throne in Ezekiel 1 and Revelation 4. This courtyard's east gate
+            opened toward the camp of Judah.</div>
+
+        <h4>The foundations of the city</h4>
+        <p>Revelation 21:19–20 founds New Jerusalem on twelve stones bearing the
+        apostles' names. R. H. Charles (1920) and the old lapidaries match them to the
+        twelve zodiacal stones in reverse celestial order — jasper (Pisces) back to
+        amethyst (Aries) — the sun's fated circuit run backwards: the pagan order of
+        heimarmene counter-programmed, the city founded on redeemed covenant humanity.
+        Isaiah had promised the same city: "I will lay your foundations with sapphires…
+        your gates of jewels" (Isa 54:11–12). Eden's stones, the breastpiece, restored
+        Zion, tribes and apostles converge — not a copied star chart, but Israel's
+        priestly, prophetic, and cosmic symbolism gathered into one city.</p>
+
+        <h4>The Lamb is its lamp</h4>
+        <p class="quote">"The city has no need of the sun or the moon to shine on it,
+        for the glory of God illuminated it, and its lamp is the Lamb."
+        — Revelation 21:23</p>
+        <table>
+            <tr><td>Fate locked in the stars</td><td>God governs the stars</td></tr>
+            <tr><td>Birth-sign fixes identity</td><td>names written by the Lamb</td></tr>
+            <tr><td>Stars worshiped as gods</td><td>stars serve as timekeepers</td></tr>
+            <tr><td>Cycles imprison history</td><td>"I make all things new"</td></tr>
+            <tr><td>The zodiac over humanity</td><td>the covenant people as foundations</td></tr>
+        </table>
+        <p>The heavenly twelve does not disappear. It is de-absolutized, subordinated,
+        and covenantally renamed. The twelve-sign framework was never pagan in origin;
+        paganism hijacked a creation matrix built to reflect the covenantal structure
+        of YHWH's kingdom.</p>
     </div>
 
     <div id="info-panel">
@@ -5051,7 +5207,15 @@
         let dimensionsVisible = dimensionGroup.visible;
         document.getElementById('toggle-measurements-btn').textContent =
             dimensionsVisible ? 'HIDE DIMENSIONS' : 'SHOW DIMENSIONS';
-        // ---- PHYSICS panel toggle (added 2026-07-28) ----
+        // ---- right-edge panel toggles (PHYSICS 2026-07-28, MAZZAROTH 2026-08-06) ----
+        // The two panels share the same slot below the button rail, so opening one
+        // closes the other. The setters are outer `let`s initialized to no-ops
+        // BEFORE either wire function runs: each panel closes its sibling through
+        // the setter, and the URL-param auto-open in the first wiring fires before
+        // the second setter is assigned — with a real declaration below it, that
+        // would be the third TDZ crash this file has paid for.
+        let setPhysicsOpen = () => {};
+        let setMazzarothOpen = () => {};
         (function wirePhysicsPanel() {
             const btn = document.getElementById('toggle-physics-btn');
             const panel = document.getElementById('physics-panel');
@@ -5061,10 +5225,27 @@
                 panel.style.display = open ? 'block' : 'none';
                 btn.textContent = open ? 'HIDE PHYSICS' : 'PHYSICS';
                 electricFieldGroup.visible = open;
+                if (open) setMazzarothOpen(false);
             };
+            setPhysicsOpen = setOpen;
             btn.addEventListener('click', () => setOpen(panel.style.display !== 'block'));
             if (close) close.addEventListener('click', () => setOpen(false));
             if (new URLSearchParams(window.location.search).get('physics') === '1') setOpen(true);
+        })();
+        (function wireMazzarothPanel() {
+            const btn = document.getElementById('toggle-mazzaroth-btn');
+            const panel = document.getElementById('mazzaroth-panel');
+            const close = document.getElementById('mazzaroth-panel-close');
+            if (!btn || !panel) return;
+            const setOpen = (open) => {
+                panel.style.display = open ? 'block' : 'none';
+                btn.textContent = open ? 'HIDE MAZZAROTH' : 'MAZZAROTH';
+                if (open) setPhysicsOpen(false);
+            };
+            setMazzarothOpen = setOpen;
+            btn.addEventListener('click', () => setOpen(panel.style.display !== 'block'));
+            if (close) close.addEventListener('click', () => setOpen(false));
+            if (new URLSearchParams(window.location.search).get('mazzaroth') === '1') setOpen(true);
         })();
 
         document.getElementById('toggle-measurements-btn').addEventListener('click', () => {
@@ -5200,9 +5381,33 @@ for (let i = 0; i < _starCount; i++) {
 //   ASH        the Bear          [Job 9:9, 38:32 "the Bear with her children"]
 //              -> group 2, below.
 //
-// ! The meaning of MAZZAROTH is debated and this file does not pretend
-// ! otherwise - the identification with the zodiacal band is the traditional
-// ! reading, recorded here as a reading. The verse is quoted as it stands.
+// REWRITTEN 2026-08-06 - the old note here treated MAZZAROTH as one debated
+// word carrying a lone "traditional reading", and Cisco was right that this
+// was not representative. The zodiacal identification does not stand alone;
+// it sits inside a celestial order the sources describe on their own terms:
+// named groupings, appointed seasons, measurable cycles, and enduring
+// ordinances [TEXT Gen 1:14; Job 38:33 "the ordinances of the heavens";
+// Amos 5:8; Isa 40:26; Ps 147:4], kept as an appointed watch [DEUTEROCANON
+// Sir 43:9-10; Wis 7:17-19], expanded by Second Temple hands into
+// gate-by-gate luminary law [1 En 72-82], a 294-year jubilee sign-cycle
+// [QUMRAN 4Q319], lunar phases synchronized to the 364-day calendar and
+// priestly courses [QUMRAN 4Q320 - a distinct instrument from 4Q319], and
+// an explicit twelve-sign Aramaic zodiac [QUMRAN 4Q318] - then read onto
+// the high priest's twelve stones by both Josephus [Ant. III.7.7] and
+// Philo [Mos. II.124-126]. The right vocabulary for all of this is
+// ordered, lawlike, angelically administered - NOT "mechanical" or
+// "clockwork", which are post-Enlightenment metaphors the sources never
+// use. The technical systems were inherited (Babylonian, then Hellenistic);
+// the theology underneath them was refused.
+//
+// ! Boundaries held: the evidence strongly supports Mazzaroth as part of an
+// ! ancient proto-zodiacal celestial order. It does NOT prove Job's author
+// ! held the later standardized twelve, and 4Q318 carries a brontologion on
+// ! the same scroll, so Jewish use of the scheme was not everywhere free of
+// ! omen practice. The dispute in the sources is never WHETHER the sky has
+// ! stations and order - only WHOM that order serves. Full case, with the
+// ! covenantal twelve (camps, ephod, foundations, Rev 21): docs/MAZZAROTH.md
+// ! and this page's MAZZAROTH panel.
 //
 // ---- KIMAH, KESIL and ASH ------------------------------------------------
 // [TEXT Job 9:9]  "Who made the Bear and Orion, Pleiades, and the chambers of
