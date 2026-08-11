@@ -206,7 +206,7 @@ async function loadData() {
     allCards = [];
     if (bestiaryData && bestiaryData.entries) {
         for (const entry of bestiaryData.entries) {
-            allCards.push({ source: 'bestiary', ...entry, image: getImage(entry.id) });
+            allCards.push({ source: 'bestiary', ...entry, image: entry.image || getImage(entry.id) });
         }
     }
     
@@ -313,7 +313,22 @@ function openModal(card) {
         </div>`;
 
     let academicSection = '';
-    if (card.academicDossier) {
+    if (card.ancientDossier) {
+        academicSection = `
+            <div class="scholarly-section">
+                <h3>Witness Record</h3>
+                <p class="academic-text">${card.ancientDossier.witness}</p>
+            </div>
+            <div class="scholarly-section">
+                <h3>Traits Attested by the Text</h3>
+                <p class="academic-text">${card.ancientDossier.attestedTraits}</p>
+            </div>
+            <div class="scholarly-section">
+                <h3>Boundary of the Record</h3>
+                <p class="academic-text">${card.ancientDossier.textualBoundary}</p>
+            </div>
+        `;
+    } else if (card.academicDossier) {
         academicSection = `
             <div class="scholarly-section">
                 <h3>Scholarly Synthesis</h3>

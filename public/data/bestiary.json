@@ -1,7 +1,8 @@
 {
   "metadata": {
-    "version": "2.1",
-    "description": "Encyclopedia Angelorum et Daemonum - Full Archive"
+    "version": "2.4",
+    "description": "Ancient Witness Bestiary — textual dossiers from Hebrew Scripture, Dead Sea Scrolls, Apocrypha, and Pseudepigrapha",
+    "editorialMethod": "Ancient testimony first. Attested traits are separated from inference; later Solomonic material is used only where the earlier record is silent."
   },
   "entries": [
     {
@@ -11,35 +12,91 @@
       "translation": "Who is like God?",
       "type": "Angel",
       "classification": "Archangel",
-      "roles": ["Protector of Israel", "Psychopomp", "Defeater of Satan"],
-      "description": "Michael stands as the preeminent warrior among all angels. He is explicitly called 'one of the chief princes' and 'the great prince who stands guard over the sons of your people'. He serves as the primary antagonist to the forces of darkness, the divine warrior who executes God's judgments.",
-      "theology": {
-        "biblical": ["Daniel 10:13, 21", "Jude 1:9", "Revelation 12:7-9"],
-        "extraBiblical": ["1 Enoch 20:5", "War Scroll (1QM)", "Testament of Abraham"]
+      "image": "images/bestiary/archangel/Michael-testament-abraham-v3.png",
+      "artReview": {
+        "status": "replaced after full source packet",
+        "depictedWitness": "Testament of Abraham, long recension, chapters 2-6",
+        "scene": "At Mamre, Abraham washes the feet of the human-passing chief-captain Michael while Isaac attends; Michael's tears become precious stones in the basin.",
+        "crossTextualRestraints": [
+          "No wings, halo, crown, armor, or weapon is supplied by this encounter",
+          "The radiant warrior-traveler form belongs to the Testament of Abraham and is not projected into Daniel",
+          "Martial rank is conveyed by bearing; mercy and grief are conveyed by the witnessed action",
+          "Later planetary colors, seals, and Solomonic insignia are excluded"
+        ],
+        "sourcePacket": "docs/bestiary-source-packets/michael.md",
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Michael (Mikha'el, 'Who is like God?') is the Chief Prince and protector of Israel. He is the supreme commander of the heavenly hosts and the primary antagonist to the forces of darkness.",
-        "anthropologicalInsights": "The character of Michael reflects the transition from territorial tutelary spirits to a singular, cosmic defender of the righteous. In this capacity, he serves as the primary antithesis to the rebel 'Sarim' (territorial spirits) who have claimed dominion over the nations, functioning as the chief operative of the divine 'police force' sent to restore order.",
-        "mythicalBeliefs": "Tradition holds that Michael disputed with the devil over Moses' body and is commissioned to bind the fallen Watcher Semyaza for seventy generations. He is the restorer of cosmic equilibrium, tasked with dismantling the chaos introduced by the Egregores."
+      "roles": [
+        "Prince Who Stands for Daniel's People",
+        "Binder of Semyaza",
+        "Merciful Presence",
+        "Chief-Captain and Soul-Guide"
+      ],
+      "description": "Daniel calls Michael one of the chief princes and the great prince who stands for Daniel's people. Enoch's witnesses remember more than a warrior: Michael hears the earth's accusation, binds Semyaza, interprets mysteries, guards the elect portion of humankind, and trembles with mercy at severe judgment. Jude names him the archangel who refuses to condemn from his own authority; Revelation places him at the head of angels against the dragon. In the later Testament of Abraham he appears as God's radiant chief-captain, a beautiful young warrior who passes as a traveler, walks beside Abraham, weeps with the household, and receives Abraham's soul.",
+      "theology": {
+        "biblical": [
+          "Daniel 10:13, 21; 12:1",
+          "Jude 1:9",
+          "Revelation 12:7-9"
+        ],
+        "extraBiblical": [
+          "1 Enoch 9; 10:11-15; 20:5; 24:6; 40:9; 54:6; 60:4-6; 67-69; 71",
+          "4Q529 Words of Michael",
+          "War Scroll (1QM; Prince of Light identification is interpretive)",
+          "Testament of Abraham, recensions A and B"
+        ]
+      },
+      "ancientDossier": {
+        "witness": "Daniel's messenger says Michael came to his aid against Persia's prince and identifies Michael as both one of the chief princes and the prince assigned to Daniel's people. The Enochic seer places him among the holy presences before the Lord of Spirits: he joins the appeal for a blood-soaked earth, receives the order to bind Semyaza, explains hidden things, and helps execute the last judgment. The Testament of Abraham makes him the chief-captain sent to prepare Abraham for death.",
+        "attestedTraits": "High but not solitary rank; special responsibility for Daniel's people and Enoch's elect portion of humanity; command within a heavenly host; delegated rather than self-originating authority; mercy, patience, grief at judgment, interpretation of visions, custody of a powerful oath, restraint toward the adversary, and care for the righteous dead. The Testament of Abraham alone supplies a visible apparition: youthful, extraordinarily beautiful, radiant like the sun, and warriorlike, yet able to pass as a human traveler. It calls him incorporeal while narrating his feet, tears, walking, and hospitality; his tears become precious stones.",
+        "textualBoundary": "The earliest named witnesses give Michael no wings, halo, armor, weapon, hair color, or facial anatomy. Daniel's radiant linen-clad figure is not named Michael and must not be used as his portrait. The War Scroll does not plainly write Michael's name where modern summaries identify the Prince of Light with him. Solar colors, planetary emblems, seals, and ritual weapons belong to later magical corpora and are excluded from this card. The visible form used by the artwork is specifically the later Testament of Abraham apparition and is not projected backward into Daniel or 1 Enoch."
       }
     },
     {
       "id": "gabriel",
       "name": "Gabriel",
       "hebrew": "גַּבְרִיאֵל",
-      "translation": "God is my strength",
+      "translation": "Man / Mighty One of God",
       "type": "Angel",
       "classification": "Archangel",
-      "roles": ["Interpreter of Visions", "Herald of Messiah"],
-      "description": "Gabriel serves as God's primary herald, entrusted with delivering the most significant announcements in salvation history. Unlike Michael who wages war, Gabriel wields the weapon of divine communication, bringing understanding to confusion and revelation to mystery.",
-      "theology": {
-        "biblical": ["Daniel 8:15", "Daniel 9:20", "Luke 1:19, 26"],
-        "extraBiblical": ["1 Enoch 9:1", "1 Enoch 20:7"]
+      "image": "images/bestiary/archangel/Gabriel-daniel-ulai-v2.png",
+      "artReview": {
+        "status": "replaced after full source packet",
+        "depictedWitness": "Daniel 8:15-19",
+        "scene": "At the Ulai, the manlike Gabriel touches and sets the fallen Daniel upright while the ram-and-goat vision recedes behind them.",
+        "crossTextualRestraints": [
+          "No wings, halo, trumpet, lily, armor, or weapon is supplied by Daniel's encounter",
+          "Daniel 10's unnamed radiant linen-clad figure is not used as Gabriel's anatomy",
+          "The ram, goat, river, touch, and terrified seer anchor the image to Daniel 8",
+          "Later lunar, western, watery, and Solomonic correspondences are excluded"
+        ],
+        "sourcePacket": "docs/bestiary-source-packets/gabriel.md",
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Gabriel (Gavri'el, 'God is my strength') is the primary herald of the Almighty, entrusted with delivering the most significant announcements in salvation history.",
-        "anthropologicalInsights": "Gabriel represents the weapon of divine communication and revelation. As part of the archangelic 'police force,' he serves as the bridge between the celestial and the terrestrial, ensuring the transmission of true wisdom to counter the 'forbidden knowledge' spread by the fallen.",
-        "mythicalBeliefs": "In Enochic tradition, Gabriel is one of the four archangels who look down upon the earth's corruption and is commanded to destroy the children of the Watchers."
+      "roles": [
+        "Interpreter of Visions",
+        "Presence-Bearer and Herald",
+        "Petitioner for the Blood-Swept Earth",
+        "Executor against the Watchers' Children",
+        "Overseer of Powers, Paradise, Serpents, and Cherubim"
+      ],
+      "description": "Daniel remembers Gabriel first as a manlike heavenly interpreter: he approaches the terrified seer at the Ulai, touches him, sets him upright, and gives wisdom concerning the appointed end. In Luke, Gabriel identifies himself as one who stands in God's presence and is sent to speak to Zechariah and Mary. The Enochic witnesses give him a sterner reach: he joins the appeal over a blood-soaked earth, turns the Watchers' offspring against one another, stands over all the powers, and is assigned Paradise, serpents, and cherubim. He is herald and interpreter, but also petitioner, guardian, and executor of delegated judgment.",
+      "theology": {
+        "biblical": [
+          "Daniel 8:15-26",
+          "Daniel 9:20-23",
+          "Luke 1:11-20, 26-38"
+        ],
+        "extraBiblical": [
+          "1 Enoch 9; 10:9-10; 20:7; 40:3-9; 54:6; 71:7-13",
+          "4Q529 Words of Michael (fragmentary mention)",
+          "Shabbat 55a; Pesachim 118a-b; Sanhedrin 94a-95b"
+        ]
+      },
+      "ancientDossier": {
+        "witness": "At the Ulai, Daniel sees one with the appearance of a man; a voice names him Gabriel and commands him to make Daniel understand. Gabriel comes near, terrifies the seer, speaks, touches him, and sets him upright. He later reaches Daniel during prayer to give wisdom and understanding. In Luke he stands at the right of the incense altar, names himself as one who stands in God's presence, and is sent into Mary's dwelling at Nazareth. In 1 Enoch he sees humanity's bloodshed, brings its cause before the Most High, receives orders against the Watchers' children, and joins the fiery judgment of Azazel's hosts.",
+        "attestedTraits": "Manlike manifestation; immediate delegated access to God's presence; rapid arrival; intelligible speech; touch that restores a collapsed witness; interpretation, instruction, announcement, and correction. The Enochic record adds intercession, command over the Watchers' violent offspring, jurisdiction over all powers and over Paradise, serpents, and cherubim, and participation in final punishment. Later rabbinic reception remembers Gabriel as advocate, marker of judgment, prince of fire, and destroying messenger, but preserves conflicting accounts of his instruments.",
+        "textualBoundary": "No named early witness gives Gabriel wings, halo, trumpet, lily, armor, sword, complexion, hair, or clothing color. Daniel 9's difficult phrase about his swift arrival is not anatomical evidence for wings. Daniel 10's beryl-bodied, lightning-faced, fire-eyed linen figure is never named Gabriel. The furnace rescue and other identifications of unnamed biblical messengers belong to later rabbinic reception. Western, lunar, watery, colored, perfumed, and sigilic assignments are late magical systems and are excluded from the core portrait."
       }
     },
     {
@@ -49,16 +106,41 @@
       "translation": "God heals",
       "type": "Angel",
       "classification": "Archangel",
-      "roles": ["Binder of Demons", "Guide of Travelers", "Healer"],
-      "description": "Raphael embodies God's compassionate care, serving as the celestial physician. In 1 Enoch, he is commissioned to bind Azazel and 'heal the earth'. He acts not merely to heal victims but to restrain the victimizers.",
-      "theology": {
-        "biblical": ["Tobit 3:17", "Tobit 12:15"],
-        "extraBiblical": ["1 Enoch 10:4", "1 Enoch 20:3", "Jubilees 10:10"]
+      "image": "images/bestiary/archangel/Raphael-tobit-tigris-v2.png",
+      "artReview": {
+        "status": "replaced after full source packet",
+        "depictedWitness": "Tobit 5-6",
+        "scene": "Raphael, passing as the hired traveler Azariah, instructs Tobias beside the seized fish on the Tigris while their dog and journey gear remain nearby.",
+        "crossTextualRestraints": [
+          "No wings, halo, medical emblem, glowing staff, armor, or potion apparatus is supplied by Tobit",
+          "Raphael must pass completely as a young human traveler until his later disclosure",
+          "Fish, riverbank, dog, and travel gear anchor the image to Tobit's narrative",
+          "Later planetary, directional, colored, and Solomonic correspondences are excluded"
+        ],
+        "sourcePacket": "docs/bestiary-source-packets/raphael.md",
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Raphael (Refa'el, 'God heals') embodies divine compassion as the celestial physician, charged with healing the earth and restraining demonic forces.",
-        "anthropologicalInsights": "The figure of Raphael reflects the personification of divine providence and restoration. His mission to 'heal the earth' is a direct counter-operation against the 'Apkallu Inversion,' where he acts to bind the sources of corruption—specifically Azazel—and purify the world from monstrous hybridity.",
-        "mythicalBeliefs": "Raphael is famously known for binding the demon Azazel in the desert and guiding Tobias on his journey in the deuterocanonical Book of Tobit."
+      "roles": [
+        "Human-Passing Guide and Kinsman",
+        "Presenter of Prayers",
+        "Healer of Persons and Earth",
+        "Binder of Asmodeus and Azazel",
+        "Interpreter of the Dead and Eden"
+      ],
+      "description": "In Tobit, Raphael answers two desperate prayers by passing as the hired kinsman Azariah: he walks with Tobias, instructs him at the Tigris, arranges his marriage, binds Asmodeus, recovers family money, and directs the cure of Tobit's blinded eyes. Only at the end does he reveal that he presented their prayers and is one of the seven who stand before God. In 1 Enoch he hears the blood-soaked earth, binds Azazel beneath jagged stones, heals the corruption the Watchers caused, guides Enoch among the waiting dead, and stands over human spirits, diseases, and wounds.",
+      "theology": {
+        "biblical": [
+          "Tobit 3:16-17; 5-6; 8:2-3; 9-12"
+        ],
+        "extraBiblical": [
+          "1 Enoch 9; 10:4-8; 20:3; 22; 32; 40:9; 54:6; 68; 71",
+          "Jubilees 10:7-13 (unnamed healing angel; Raphael identification is editorial)"
+        ]
+      },
+      "ancientDossier": {
+        "witness": "Tobit and Sarah pray for death; God sends Raphael to heal them both. Appearing as the young kinsman Azariah, he accepts hire, travels on foot, instructs Tobias to seize and open the Tigris fish, explains its medicines, binds Asmodeus in Upper Egypt, conducts family business, and directs Tobit's eye cure. He then reveals that he carried their prayers before God and belongs to the seven who stand ready before divine glory. Enoch's seer sees the same named angel receive the command to bind Azazel and heal the injured earth.",
+        "attestedTraits": "A wholly human-passing young traveler; guide, negotiator, companion, prayer-bearer, healer, demon-binder, and custodian/interpreter of human spirits. His remedies use ordinary-looking matter—fish heart, liver, and gall—under divine commission. His healing includes restraining the agent of harm: Asmodeus is bound far away, and Azazel is buried under rough stones and darkness. His authority is delegated, practical, and often concealed until the work is complete.",
+        "textualBoundary": "Tobit gives Raphael no wings, halo, staff, medical emblem, armor, complexion, or clothing color. The dog accompanies the travelers in major textual forms but is not Raphael's symbolic animal. Jubilees 10 does not name its medicine-teaching angel; identifying him as Raphael is an editorial comparison. Later assignments to directions, elements, planets, colors, seals, and incenses belong to inconsistent magical systems and are excluded from the early portrait."
       }
     },
     {
@@ -68,35 +150,79 @@
       "translation": "God is my light",
       "type": "Angel",
       "classification": "Archangel",
-      "roles": ["Illuminator of Truth", "Overseer of Tartarus", "Guardian of Eden"],
-      "description": "Uriel stands as the archangel of divine illumination. He carries the flame of enlightenment and the scroll of knowledge. He is the celestial teacher par excellence, revealing mysteries about creation, judgment, and the movements of celestial bodies.",
-      "theology": {
-        "biblical": ["Genesis 3:24 (Tradition)"],
-        "extraBiblical": ["1 Enoch 20:2", "2 Esdras 4"]
+      "image": "images/bestiary/archangel/Uriel-luminary-portals-v2.png",
+      "artReview": {
+        "status": "replaced after full source packet",
+        "depictedWitness": "1 Enoch 33; 72-82",
+        "scene": "Uriel shows and records for Enoch the ordered courses, names, seasons, and portals of the luminaries at the ends of the earth.",
+        "crossTextualRestraints": [
+          "No early named witness gives Uriel wings, halo, flaming sword, handheld flame, armor, or crown",
+          "Genesis 3:24 does not identify Uriel as the guardian of Eden",
+          "Measured celestial order, not a modern astronomy diagram, anchors the Astronomical Book witness",
+          "Later elemental, planetary, directional, and Solomonic correspondences are excluded"
+        ],
+        "sourcePacket": "docs/bestiary-source-packets/uriel.md",
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Uriel (Uri'el, 'God is my light') is the archangel of divine illumination and wisdom, serving as the celestial teacher of prophets and overseer of judgment.",
-        "anthropologicalInsights": "Uriel personifies the light of reason and divine law. As a restorer of order, he guards the threshold of Eden and monitors the descent of the Grigori, ensuring that the boundaries between the sacred and the profane remain intact despite the rebellion at Mt. Hermon.",
-        "mythicalBeliefs": "Tradition places Uriel at the gate of Eden with a flaming sword and identifies him as the guide who showed Enoch the secrets of the cosmos and the underworld."
+      "roles": [
+        "Warner and Instructor of Noah",
+        "Guide of the Rebel Stars' Prison",
+        "Recorder and Leader of the Luminaries",
+        "Interpreter Who Limits Human Knowing",
+        "Comforter of the Fallen Seer"
+      ],
+      "description": "Enoch remembers Uriel as a guide through dangerous knowledge rather than a decorative bearer of light. He warns Noah of the flood, explains the prisons of rebel angels and burning stars, identifies the valley of judgment, and records for Enoch the exact names, portals, seasons, and 364-day courses of the heavenly lights. In 2 Esdras, Uriel answers Ezra's anguish by testing the limits of human understanding, disclosing the measured completion of the age, and finally taking the collapsed seer by the right hand to comfort and raise him.",
+      "theology": {
+        "biblical": [],
+        "extraBiblical": [
+          "1 Enoch 9-10; 18-21; 27; 33; 72-82",
+          "2 Esdras / 4 Ezra 4-10",
+          "Life of Adam and Eve 48-49"
+        ]
+      },
+      "ancientDossier": {
+        "witness": "Uriel joins the appeal over the Watchers' devastation, then is sent to warn Noah and preserve his seed. He leads Enoch through the chaotic prison where transgressing stars burn like mountains, interprets the abyss and accursed valley, and shows and writes the laws of the stars. Across the Astronomical Book he teaches the portals and measured courses of sun, moon, winds, seasons, and the exact year. To Ezra he is the sent examiner and interpreter who exposes what a mortal cannot measure, yet also takes the collapsed seer by the right hand and restores him.",
+        "attestedTraits": "Exact instruction; warning before catastrophe; guardianship and interpretation of penal cosmic regions; authority over the ordered luminaries, night, and day; willingness to challenge presumptuous questions; patient disclosure within limits; physical comfort and restoration. His light-office is cosmic and calendrical rather than an attested handheld object. Later Adam literature also makes him a participant in Adam and Abel's burial.",
+        "textualBoundary": "Genesis names no Uriel at Eden and assigns the flaming turning sword to no named angel. Early texts give Uriel no wings, halo, sword, flame, book, armor, complexion, or clothing color. English versions of 1 Enoch 20:2 diverge between 'world and Tartarus' and 'clamour and terror,' so the wording is not treated as uncontested. Later planetary, elemental, directional, colored, and sigilic systems are excluded from the core portrait."
       }
     },
     {
       "id": "sariel",
-      "name": "Sariel / Suriel",
-      "hebrew": "שַׂרִיאֵל",
-      "translation": "Prince of God",
+      "name": "Saraqiel",
+      "hebrew": "שָׂרַקְאֵל",
+      "translation": "Meaning uncertain",
       "type": "Angel",
       "classification": "Archangel",
-      "roles": ["Angel of Death", "Teacher of Lunar Courses", "Avenger of Spirits"],
-      "description": "Sariel serves as one of the seven archangels, often associated with judgment and the lunar calendar. His specific assignment is 'over the spirits of those who sin against the spirit', suggesting a role in judging spiritual corruption.",
+      "image": "images/bestiary/archangel/Saraqiel-spirit-watch-v2.png",
+      "artReview": {
+        "status": "replaced after source separation",
+        "depictedWitness": "1 Enoch 20:1, 6 (restrained visual inference)",
+        "scene": "Saraqiel is foregrounded among the seven holy watchers at the boundary of a shadowed holding-place for spirits who sin in the spirit.",
+        "crossTextualRestraints": [
+          "The text supplies an office but no individualized anatomy, costume, weapon, or narrative action",
+          "Sariêl the lunar-course teacher belongs to the fallen-teacher list and is not merged into this figure",
+          "No moon, scales, wings, halo, sword, armor, or death symbolism is used",
+          "Later magical correspondences are excluded"
+        ],
+        "sourcePacket": "docs/bestiary-source-packets/saraqiel.md",
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "roles": [
+        "One of the Seven Holy Watchers",
+        "Overseer of Spirits Who Sin in the Spirit"
+      ],
+      "description": "1 Enoch's sevenfold list names Saraqiel among the holy angels who watch and sets him over spirits who sin in the spirit. That terse office is the secure dossier. A different name-form, Sariêl, occurs among the rebellious teachers and is said in one translation to teach the moon's course; another translation reads Asaradel. The fallen lunar teacher is not silently merged into holy Saraqiel, and the early text does not call Saraqiel an angel of death or describe his appearance.",
       "theology": {
         "biblical": [],
-        "extraBiblical": ["1 Enoch 20:6", "1 Enoch 9:1"]
+        "extraBiblical": [
+          "1 Enoch 20:1, 6",
+          "1 Enoch 8:3 (Sariêl/Asaradel lunar teacher is a distinct, textually unstable figure)"
+        ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Sariel (Sari'el, 'Prince of God') is one of the seven holy archangels, primarily associated with divine instruction, the lunar calendar, and the judgment of spiritual sins.",
-        "anthropologicalInsights": "Sariel's role highlights the celestial concern for cosmic cycles and the punishment of spiritual corruption that undermines the divine order.",
-        "mythicalBeliefs": "He is credited with teaching Moses the secrets of the lunar calendar and is tasked with watching over the spirits of those who sin against the spirit."
+      "ancientDossier": {
+        "witness": "The Enochic seer gives only a roster statement: among the seven holy angels who watch, Saraqiel is set over spirits who sin in the spirit. The same corpus separately places Sariêl in the list of corrupting teachers, with the lunar course as his illicit disclosure in Charles's reading. Laurence reads Asaradel there, underscoring the instability rather than resolving it.",
+        "attestedTraits": "Holy-watcher status and delegated oversight concerning spiritually offending spirits. No further deed, temperament, visible form, instrument, or speech is securely attached to Saraqiel in the consulted early witness.",
+        "textualBoundary": "Saraqiel is not securely the fallen Sariêl, lunar teacher, angel of death, Moses' calendar instructor, or an avenger bearing scales. Suriel/Sariel/Suryal/Saraqael spellings wander across later lists and translations and are not combined automatically. The artwork's humanlike sentinel is explicitly a restrained visual inference from office, not attested anatomy."
       }
     },
     {
@@ -106,16 +232,37 @@
       "translation": "Friend of God",
       "type": "Angel",
       "classification": "Archangel",
-      "roles": ["Angel of Justice", "Overseer of Luminaries"],
-      "description": "Raguel holds a unique position as the enforcer of divine order among the angels themselves. He takes vengeance on the world of the luminaries, ensuring that celestial beings fulfill their duties.",
+      "image": "images/bestiary/archangel/Raguel-western-fire-v2.png",
+      "artReview": {
+        "status": "replaced after full source packet",
+        "depictedWitness": "1 Enoch 23",
+        "scene": "At the western end of the earth, Raguel explains to Enoch the unceasing regular course of fire associated with all the luminaries of heaven.",
+        "crossTextualRestraints": [
+          "No scales, measuring rod, throne, armor, sword, wings, or halo is supplied",
+          "Humanlike form is a restrained visual inference rather than attested anatomy",
+          "The marked translation verbs 'takes vengeance' and 'persecutes' are treated as uncertain",
+          "Later magical correspondences are excluded"
+        ],
+        "sourcePacket": "docs/bestiary-source-packets/raguel.md",
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "roles": [
+        "One of the Seven Holy Watchers",
+        "Corrective Power concerning the Luminaries",
+        "Interpreter of the Unceasing Western Fire"
+      ],
+      "description": "1 Enoch places Raguel among the seven holy watchers and assigns him a textually difficult corrective office concerning the world of the luminaries. At the western end of the earth he answers Enoch's question about a fire that runs regularly without rest by day or night, identifying it as the western fire associated with all heaven's luminaries. This makes him an interpreter and custodian of cosmic order; it does not establish the later courtroom portrait of scales, throne, armor, or authority over every angel.",
       "theology": {
         "biblical": [],
-        "extraBiblical": ["1 Enoch 20:4", "1 Enoch 23:4"]
+        "extraBiblical": [
+          "1 Enoch 20:4",
+          "1 Enoch 23:4"
+        ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Raguel (Re'u'el, 'Friend of God') is the archangel of justice and harmony, acting as the enforcer of order within the angelic hierarchy.",
-        "anthropologicalInsights": "Raguel represents the concept of internal celestial policing, ensuring that even spiritual beings remain accountable to divine law and cosmic harmony.",
-        "mythicalBeliefs": "Enochic tradition describes Raguel as the one who 'takes vengeance on the world of the luminaries' and oversees the conduct of his fellow angels."
+      "ancientDossier": {
+        "witness": "The sevenfold roster assigns Raguel an uncertainly worded punitive or corrective relation to the world of the luminaries. Later in Enoch's journey, Raguel is one of the holy angels with him at the western end of the earth. He explains the ceaseless, regular westward fire associated with the heavenly lights.",
+        "attestedTraits": "Holy-watcher status; knowledge of the luminary realm; corrective jurisdiction expressed through unstable translation; direct interpretation of witnessed cosmic fire. His concern is ordered heavenly lights, not an attested universal celestial court.",
+        "textualBoundary": "Charles marks both 'takes vengeance on' and 'persecutes' as uncertain readings, while Laurence phrases the passages differently. No source gives Raguel scales, measuring rod, throne, armor, wings, halo, color scheme, or bodily description. The artwork's humanlike guide is explicitly inferential."
       }
     },
     {
@@ -125,35 +272,80 @@
       "translation": "Thunder of God",
       "type": "Angel",
       "classification": "Archangel",
-      "roles": ["Angel of Resurrection", "Guide of Souls"],
-      "description": "Remiel serves as the archangel of resurrection and hope. He is 'set over those who rise', making him the herald of humanity's ultimate hope that death is not the end.",
+      "image": "images/bestiary/archangel/Remiel-baruch-waters-v2.png",
+      "artReview": {
+        "status": "replaced after full source packet",
+        "depictedWitness": "2 Baruch 53-76",
+        "scene": "Ramiel, who presides over true visions, interprets for Baruch the sea-cloud's alternating black and white waters and the final healing lightning.",
+        "crossTextualRestraints": [
+          "No trumpet, graveyard, floating souls, wings, halo, armor, or weapon is supplied",
+          "Humanlike anatomy is a restrained inference because 2 Baruch gives no bodily description",
+          "2 Esdras 4 names Uriel, not Remiel, and is excluded from this dossier",
+          "Later Jeremiel conflations and magical correspondences are not used as visual evidence"
+        ],
+        "sourcePacket": "docs/bestiary-source-packets/remiel.md",
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "roles": [
+        "One of the Seven Holy Watchers",
+        "Overseer of Those Who Rise",
+        "Presider over True Visions",
+        "Interpreter of History's Dark and Bright Waters"
+      ],
+      "description": "1 Enoch names Remiel among the seven holy watchers and says God set him over those who rise. In 2 Baruch, the name-form Ramiel presides over true visions and interprets the great sea-cloud whose alternating black and white waters disclose successive ages of corruption and righteousness, ending in tribulation, illumination, and healing. The record supports resurrection oversight and truthful apocalyptic interpretation, but not the later generic portrait of a trumpet-bearing guide escorting individual souls.",
       "theology": {
         "biblical": [],
-        "extraBiblical": ["1 Enoch 20:8", "2 Baruch", "2 Esdras 4:36"]
+        "extraBiblical": [
+          "1 Enoch 20:8",
+          "2 Baruch 53-76"
+        ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Remiel (Remi'el, 'Thunder of God') is the archangel of resurrection and hope, presiding over the souls awaiting the final judgment.",
-        "anthropologicalInsights": "Remiel personifies the eschatological hope of humanity, reflecting the belief in a transition from death to a new life and the eventual triumph of righteousness.",
-        "mythicalBeliefs": "In 2 Esdras, he is the one who answers the questions of the righteous dead concerning when the number of the faithful will be complete and judgment will begin."
+      "ancientDossier": {
+        "witness": "The Enochic roster says Remiel is set by God over those who rise. Baruch's apocalypse gives Ramiel a speaking role: sent as the angel over true visions, he interprets the cloud from the sea, its twelve alternating dark and bright waters, the final black waters, and the lightning that heals the earth as the ordered history and end of the age.",
+        "attestedTraits": "Holy-watcher status; delegated relation to those who rise; custody of truthful visions; sustained interpretation of symbolic history; disclosure of judgment, messianic culmination, illumination, and healing. The texts emphasize intelligible interpretation rather than spectacle or psychopomp activity.",
+        "textualBoundary": "The righteous dead's question in 2 Esdras 4:36 is answered by Uriel, not Remiel. Remiel/Ramiel/Jeremiel name equivalence varies across later traditions. No early witness gives this angel a trumpet, wings, halo, weapon, thunderbolt, graveyard, clothing color, or bodily description."
       }
     },
     {
       "id": "metatron",
       "name": "Metatron",
       "hebrew": "מֵטַטְרוֹן",
-      "translation": "Guardian",
+      "translation": "Etymology disputed",
       "type": "Angel",
       "classification": "High Angel",
-      "roles": ["Celestial Scribe", "Voice of God"],
-      "description": "Metatron stands as the greatest angel in Jewish mystical tradition, serving as God's scribe. Many identify him as the patriarch Enoch transformed into an angel after being taken to heaven.",
-      "theology": {
-        "biblical": ["Genesis 5:24 (Implied)"],
-        "extraBiblical": ["3 Enoch", "Babylonian Talmud"]
+      "image": "images/bestiary/high_angel/Metatron-hekalot-fire-v2.png",
+      "artReview": {
+        "status": "replaced after full source packet",
+        "depictedWitness": "3 Enoch 3-15",
+        "scene": "Before the seventh palace, Metatron recounts Enoch's transformation into a world-scale body of flame, many burning wings, and hundreds of thousands of sun-bright eyes as Rabbi Ishmael looks on.",
+        "crossTextualRestraints": [
+          "The fiery multi-winged, many-eyed form belongs specifically to the late Hekhalot witness",
+          "Genesis 5 does not name Metatron or describe Enoch's transformation",
+          "Delegated divine naming is not visualized as equality with God",
+          "Metatron's Cube, occult seals, and modern sacred geometry are excluded"
+        ],
+        "sourcePacket": "docs/bestiary-source-packets/metatron.md",
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness intensified for the Hekhalot vision"
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Metatron is the preeminent High Angel and celestial scribe in Jewish mystical tradition, often identified as the divinized patriarch Enoch.",
-        "anthropologicalInsights": "The figure of Metatron represents the ultimate human potential for ascension and the role of the 'Lesser YHWH' as a mediator of divine authority.",
-        "mythicalBeliefs": "Tradition holds that Enoch was transformed into Metatron, a being of fire with thirty-six pairs of wings and thousands of eyes, to record the deeds of Israel."
+      "roles": [
+        "Enoch Transformed in the Hekhalot Witness",
+        "Prince of the Divine Presence",
+        "Celestial Scribe",
+        "Servant of the Throne and Chariot",
+        "Youth and Delegated Judge"
+      ],
+      "description": "3 Enoch identifies Metatron as Enoch son of Jared transformed for service at the throne: flesh to flame, sinews to blazing fire, bones to coals, eyes to torches, hair to flame, and limbs to burning wings. He receives seventy-two world-spanning wings, 365,000 sun-bright eyes, a throne at the seventh palace, and delegated authority among heavenly households. Hagigah 15a supplies the necessary boundary: when his seated scribal office leads Elisha to imagine two powers, Metatron is punished with fiery lashes, demonstrating that even his terrifying rank remains subordinate.",
+      "theology": {
+        "biblical": [],
+        "extraBiblical": [
+          "3 Enoch / Sefer Hekhalot 1-15, 48",
+          "Babylonian Talmud, Hagigah 15a"
+        ]
+      },
+      "ancientDossier": {
+        "witness": "Metatron tells Rabbi Ishmael that he was Enoch, taken from the flood generation and installed to serve the throne, chariot, and Shekinah. He narrates his transformation into blazing fire, his multiplication of wings and eyes, and his enthronement near the seventh palace. The Talmud remembers him seated to write Israel's merits, then struck with sixty fiery lashes when that privilege occasions a two-powers error.",
+        "attestedTraits": "Late Hekhalot testimony supplies extreme visionary anatomy: flame flesh, fiery sinews, coal bones, lightning lashes, torch eyes, burning hair, seventy-two world-covering wings, and 365,000 eyes like the Great Light. Offices include Prince of the Presence, throne servant, chariot attendant, recorder, teacher, and delegated judge. The title Youth and the name-bearing language signal proximity and commission, not independence.",
+        "textualBoundary": "Metatron is absent from Genesis, and Enoch's biblical taking does not itself attest this transformation. The etymology of Metatron is disputed. 'Lesser YHWH' belongs to a specific late mystical naming theology and must be read beside rabbinic rejection of two powers. Modern cubes, seals, geometric diagrams, planetary systems, and New Age claims are excluded."
       }
     },
     {
@@ -163,130 +355,380 @@
       "translation": "Secret of God",
       "type": "Angel",
       "classification": "High Angel",
-      "roles": ["Keeper of Mysteries", "Teacher of Adam"],
-      "description": "Raziel is the angel of mysteries who stands near God's throne recording all divine secrets. He gave Adam the Sefer Raziel containing all knowledge of the universe.",
+      "roles": [
+        "Bearer of the Book to Adam",
+        "Teacher of Mysteries in Medieval Tradition"
+      ],
+      "description": "In the medieval Sefer Raziel tradition, Adam prays after his expulsion for understanding of his future and descendants. On the third day, beside the river from Paradise, Raziel appears carrying a sacred book, reads from it until Adam falls in fear, then commands him to rise, receive it, study it in purity, and teach the worthy. When Adam takes the book, flame rises by the river and the angel ascends. This is a medieval revelatory legend, not an episode named in Genesis.",
       "theology": {
         "biblical": [],
-        "extraBiblical": ["Sefer Raziel HaMalakh", "Zohar"]
+        "extraBiblical": [
+          "Sefer Raziel ha-Malakh (medieval compilation)",
+          "The Book of Raziel Adam legend"
+        ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Raziel (Razi'el, 'Secret of God') is the keeper of divine mysteries and secrets, standing in the closest proximity to the throne of the Almighty.",
-        "anthropologicalInsights": "Raziel personifies the transmission of esoteric knowledge and the belief that the secrets of the cosmos are accessible to the righteous through divine revelation.",
-        "mythicalBeliefs": "He is said to have authored the 'Sefer Raziel HaMalakh,' a book of all celestial knowledge, which he gave to Adam after the exile from Eden."
+      "image": "/images/bestiary/high_angel/Raziel-river-book-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "The old generalized occult portrait does not show the card's controlling textual event and imports unattested celestial symbolism.",
+        "requiredScene": "At midday beside the river flowing from Eden, a restrained humanlike messenger reads from and offers an inscribed book to frightened, kneeling Adam; a column of flame rises at the riverbank for Raziel's ascent.",
+        "exclusions": [
+          "throne room or cosmic library",
+          "modern occult glyphs or sacred geometry",
+          "Kabbalistic Tree of Life",
+          "armor or weaponry",
+          "invented many-eyed anatomy",
+          "visual claim that Genesis narrates the event"
+        ],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "The received legend speaks from Adam's exile: after his prayer for knowledge, Raziel comes on the third day in the heat beside Paradise's river, carrying and reading a book. Adam falls in terror, receives the volume at the angel's command, and sees flame rise as the messenger ascends.",
+        "attestedTraits": "Raziel is a commissioned revealer and bearer of a book concerned with times, future conditions, sacred knowledge, and angelic mysteries. The name is conventionally understood as 'Mystery/Secret of God,' and Sefer Raziel itself links the angel's name to transmitting mysteries to Adam. The scene supplies no extraordinary bodily anatomy.",
+        "textualBoundary": "Raziel is absent from Genesis, the Dead Sea Scrolls, and the early angel lists used elsewhere in this bestiary. The extant Sefer Raziel is a composite medieval work, probably compiled in the thirteenth century from earlier materials. Claims that he records every divine secret beside the throne, and modern occult diagrams attached to him, are not admitted without a controlling text."
       }
     },
     {
       "id": "azrael",
-      "name": "Azrael",
-      "hebrew": "עֲזַרְאֵל",
-      "translation": "Whom God Helps",
+      "name": "Angel of Death (later: Azrael)",
+      "hebrew": "מַלְאַךְ הַמָּוֶת",
+      "translation": "Angel of Death",
       "type": "Angel",
       "classification": "Angel of Death",
-      "roles": ["Psychopomp", "Separator of Soul"],
-      "description": "Azrael separates the soul from the body at death. Despite his fearsome role, he is often described as serving with compassion and accuracy.",
+      "roles": [
+        "Taker of Life",
+        "Plague Agent",
+        "Bearer of the Drawn Sword"
+      ],
+      "description": "The Hebrew Bible and Talmud know an Angel of Death or destroying messenger but do not name him Azrael. Avodah Zarah 20b places the Angel of Death above a dying person's head with a drawn sword and a drop of poison hanging from its tip; the terrified person opens the mouth, receives the drop, dies, pales, and decays. Other rabbinic scenes show a commissioned power whose appointed deaths cannot be evaded, not a gentle modern psychopomp.",
       "theology": {
         "biblical": [],
-        "extraBiblical": ["Jewish Mysticism", "Islamic Tradition"]
+        "extraBiblical": [
+          "Babylonian Talmud, Avodah Zarah 20b",
+          "Babylonian Talmud, Bava Batra 16a",
+          "Babylonian Talmud, Shabbat 89a",
+          "Babylonian Talmud, Sukkah 53a",
+          "Qur'an 32:11 (title only; no proper name)"
+        ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Azrael (Azar'el, 'Whom God Helps') is the Angel of Death, the psychopomp tasked with separating the soul from the body at the moment of expiration.",
-        "anthropologicalInsights": "Azrael reflects the personification of mortality as a compassionate and precise servant of God, ensuring the orderly transition from the temporal to the eternal.",
-        "mythicalBeliefs": "Folklore describes Azrael as being covered in eyes and tongues, each representing a living person, and recording the names of the born and dead in a vast book."
+      "image": "/images/bestiary/angel_of_death/Angel-of-Death-sword-drop-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "The prior image and dossier treat later Azrael folklore as though it were the ancient Jewish witness and romanticize the figure as a compassionate psychopomp.",
+        "requiredScene": "A late-antique sickroom: above the dying person's head an austere humanlike Angel of Death holds a drawn sword with one dark drop suspended from its point; the person sees it in terror.",
+        "exclusions": [
+          "scythe or skeleton",
+          "European monk's hood",
+          "comforting psychopomp embrace",
+          "glowing childlike soul",
+          "ledger of all living names",
+          "body covered in eyes and tongues",
+          "unattested wings"
+        ],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "Rabbinic witnesses call the figure simply the Angel of Death. Avodah Zarah sees him poised over the sickbed with drawn sword and a fatal drop. Sukkah presents him carrying out appointed deaths despite Solomon's attempt to evade them; Shabbat remembers him disclosing to Moses how plague may be checked.",
+        "attestedTraits": "He acts under permission or appointment, takes life, may operate through plague, and in one teaching is identified with Satan and the evil inclination as tempter, accuser, and executioner. The sword and suspended drop are specifically attested visual attributes; compassion, a soul-separating ritual, and universal eyes-and-tongues anatomy are not.",
+        "textualBoundary": "Neither Tanakh nor Talmud supplies the proper name Azrael. Exodus's destroyer and the plague angel remain unnamed, and their exact identity with every later Angel-of-Death story should not be assumed. Even Qur'an 32:11 uses only the title Angel of Death. 'Azrael' is retained solely as a later catalog label."
       }
     },
     {
       "id": "satan",
-      "name": "Satan / Sammael",
+      "name": "The Satan / The Adversary",
       "hebrew": "שָׂטָן",
       "translation": "The Adversary",
-      "type": "Demon",
-      "classification": "Demon Prince",
-      "roles": ["Accuser", "Father of Lies", "Ruler of this World"],
-      "description": "The supreme mystery of evil. Originally a high-ranking angel who chose rebellion. He operates through deception and accusation, holding temporary power over the world system.",
+      "type": "Adversarial Spirit",
+      "classification": "Heavenly Accuser in Job; Later Devil",
+      "roles": [
+        "Accuser",
+        "Tester under Permission",
+        "Later Rebel and Deceiver"
+      ],
+      "description": "Job's ha-satan comes among the sons of God as an accuser, challenges Job's motives, and can act only inside limits YHWH sets. Zechariah likewise places the accuser at the high priest's right hand and has YHWH rebuke him. A later Life of Adam and Eve gives the devil a fall narrative in his own speech: he refuses Michael's command to bow before Adam, claims seniority, seeks a seat above the stars, and is expelled with his angels. These layers must be distinguished rather than fused with Sammael or Isaiah's king of Babylon.",
       "theology": {
-        "biblical": ["Job 1-2", "Isaiah 14", "Revelation 12"],
-        "extraBiblical": ["Life of Adam and Eve", "Martyrdom of Isaiah"]
+        "biblical": [
+          "Job 1-2",
+          "Zechariah 3:1-2",
+          "1 Chronicles 21:1",
+          "Revelation 12"
+        ],
+        "extraBiblical": [
+          "Life of Adam and Eve",
+          "Greek Life of Adam and Eve 12-16"
+        ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Satan (The Adversary) represents the supreme mystery of cosmic evil and rebellion against the Creator, operating as the primary accuser of humanity.",
-        "anthropologicalInsights": "Satan embodies the archetype of the fallen pride and the personification of the chaotic forces that oppose the established divine order.",
-        "mythicalBeliefs": "Originally a high-ranking angel, he is believed to have led a celestial rebellion and is eschatologically destined to be cast down into the lake of fire."
+      "image": "/images/bestiary/corrupted/The-Satan-court-accuser-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A generic horned demon collapses Job's subordinate court accuser into much later devil iconography.",
+        "requiredScene": "Job's heavenly court: a severe humanlike accuser among the sons of God addresses overwhelming unfigured divine radiance and gestures toward Job far below.",
+        "exclusions": ["horns", "red skin", "goat legs", "bat wings", "pitchfork", "hell throne", "Revelation dragon", "Sammael label"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "Job sees the satan enter the divine assembly, question whether Job fears God for nothing, and receive bounded authority to test him. The Life of Adam and Eve later lets the devil explain his own exile as the result of refusing to bow before Adam and attempting self-exaltation.",
+        "attestedTraits": "In the Hebrew court scenes he accuses, tests, ranges through the earth, and remains subordinate to divine command. Later texts identify Satan with the devil, deceiver, ancient serpent, and defeated apocalyptic dragon, and give him angels of his own.",
+        "textualBoundary": "The Hebrew noun satan means adversary/accuser and is not always a proper name. Job's court officer, Chronicles' inciter, the Adam literature's expelled devil, and Revelation's dragon are related by developing tradition but not identical dossiers at every date. Isaiah 14 concerns Babylon's king; Sammael is later and excluded from the heading."
       }
     },
     {
       "id": "semyaza",
       "name": "Semyaza",
       "hebrew": "שֶׁמְחֲזַאי",
-      "translation": "The Name has Seen",
+      "translation": "Shemihazah (meaning uncertain)",
       "type": "Fallen",
       "classification": "Fallen Watcher",
-      "roles": ["Leader of the 200", "Progenitor of Giants"],
-      "description": "Leader of the Watchers who descended on Mount Hermon. He taught enchantments and root-cutting, and bound his brethren by an oath to corrupt humanity.",
+      "roles": [
+        "Leader of the 200",
+        "Speaker at the Hermon Oath",
+        "Teacher of Enchantments and Root-Cutting"
+      ],
+      "description": "In 1 Enoch 6, Semyaza leads the two hundred children of heaven who desire human wives. He fears the others will abandon the deed and leave him alone to bear its penalty; they answer by swearing together under mutual imprecations on Mount Hermon. He teaches enchantments and root-cutting, rules his associates, joins their transgression, and later weeps with them when Enoch bears the refusal of their petition. Michael is commanded to bind Semyaza and his associates after they witness their giant sons destroy one another.",
       "theology": {
-        "biblical": ["Genesis 6:1-4 (Implied)"],
-        "extraBiblical": ["1 Enoch 6-10", "Book of Giants"]
+        "biblical": [
+          "Genesis 6:1-4 (unnamed sons of God only)"
+        ],
+        "extraBiblical": [
+          "1 Enoch 6-10",
+          "Book of Giants"
+        ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Semyaza (Shemhazai) is the leader of the two hundred Watchers (Grigori) who descended upon Mount Hermon, an event that mirrors the emergence of the Apkallu from the Abzu but recontextualized as a cosmic rebellion.",
-        "anthropologicalInsights": "Semyaza represents the catalyst of 'monstrous hybridity.' His descent marks the beginning of the corruption of the natural order through the introduction of celestial mysteries, representing the 'Egregores' whose rebellion fundamentally fractured the antediluvian world.",
-        "mythicalBeliefs": "He bound his fellow Watchers by a mutual oath to commit their transgression and is eventually bound by Michael for seventy generations beneath the hills of the earth."
+      "image": "/images/bestiary/fallen/Semyaza-hermon-oath-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "Generic armored fallen-angel imagery misses the uniquely attested Hermon oath and invents anatomy, costume, and coercive command.",
+        "requiredScene": "On Hermon's cold summit Semyaza stands hesitantly at the center of a great ring of humanlike heavenly beings as all extend hands and bind themselves together by oath; their ranks recede around the ridge.",
+        "exclusions": [
+          "black feather wings",
+          "horns or monstrous anatomy",
+          "armor or weapons",
+          "magic circle or occult runes",
+          "giants already present",
+          "Semyaza forcing unwilling followers"
+        ],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "Semyaza speaks as a fearful leader, warning that he may be left alone to pay for the proposed sin. His two hundred associates answer with a collective oath on Hermon. Later Enoch sees the Watchers gathered in fear, weeping with covered faces, and reports that their petition will not be granted.",
+        "attestedTraits": "He bears authority among the associates, participates in taking human wives, teaches enchantments and root-cutting, fathers giant offspring in later Book of Giants tradition, and is sentenced with his associates to subterranean bonds for seventy generations before final judgment.",
+        "textualBoundary": "Genesis names no Watcher and supplies neither Semyaza, Hermon, oath, nor teachings. The name's etymology is uncertain. The Apkallu comparison is modern scholarship, while the Ohya-Ahya genealogy is clearest in a later Manichaean branch of the Book of Giants tradition; neither may be narrated as the plain wording of Genesis."
       }
     },
     {
       "id": "azazel",
       "name": "Azazel",
       "hebrew": "עֲזָאזֵל",
-      "translation": "Scapegoat",
+      "translation": "Azazel (etymology disputed)",
       "type": "Fallen",
       "classification": "Fallen Watcher",
-      "roles": ["Teacher of Warfare", "Corrupter"],
-      "description": "Azazel taught humanity the arts of war (swords, shields) and vanity (cosmetics). He corrupted the earth so thoroughly that Raphael was commanded to bind him in the desert.",
+      "roles": [
+        "Teacher of Weapons and Metalwork",
+        "Teacher of Ornament, Cosmetics, Stones, and Dyes",
+        "Prisoner in Dudael"
+      ],
+      "description": "Leviticus sends a living goat 'for Azazel' into the wilderness bearing Israel's confessed iniquities, but gives Azazel no anatomy or biography. In 1 Enoch, Azazel teaches swords, knives, shields, breastplates, metalwork, bracelets, ornament, antimony, beautified eyelids, costly stones, and dyes. Raphael is commanded to bind him hand and foot in Dudael, cover him with jagged rocks and darkness, and hide his face from light until the great judgment.",
       "theology": {
-        "biblical": ["Leviticus 16"],
-        "extraBiblical": ["1 Enoch 8:1", "1 Enoch 10:4", "Apocalypse of Abraham"]
+        "biblical": [
+          "Leviticus 16"
+        ],
+        "extraBiblical": [
+          "1 Enoch 8:1",
+          "1 Enoch 10:4",
+          "Apocalypse of Abraham"
+        ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Azazel is a chief Fallen Watcher whose revelation of metallurgy and the arts of vanity represents a radical 'Apkallu Inversion.' In this polemic, the civilizing gifts of the Mesopotamian sages are recontextualized as the primary drivers of human corruption and rebellion.",
-        "anthropologicalInsights": "Azazel symbolizes the destructive introduction of advanced technology. By teaching the construction of weaponry, he inverts the role of the traditional sage from a bringer of civilization to a purveyor of 'forbidden knowledge' that necessitates divine intervention.",
-        "mythicalBeliefs": "Associated with the scapegoat of Leviticus, Enochic tradition identifies him as one of the 'Grigori' who descended to Mt. Hermon, mirroring the Apkallu's emergence from the Abzu but as a source of terminal chaos rather than order."
+      "image": "/images/bestiary/fallen/Azazel-dudael-binding-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "The armored warrior portrait narrows Azazel's teachings and misses the uniquely detailed Dudael binding, while risking fusion with the Levitical goat.",
+        "requiredScene": "Raphael binds humanlike Azazel hand and foot in Dudael as rough jagged rocks close over him and his face is covered from light; abandoned weapons, ornaments, antimony, pigments, and stones mark his teachings.",
+        "exclusions": [
+          "goat head or goat body",
+          "identifying Azazel as the Levitical goat",
+          "horns or demon anatomy",
+          "triumphant armor",
+          "sword duel",
+          "medieval hell",
+          "visible idol receiving sacrifice"
+        ],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "Leviticus witnesses the goat bearing confessed iniquities into a cut-off wilderness for Azazel. Enoch witnesses a named revealer blamed for earthly corruption, hears the sentence delivered, and tells Azazel directly that bonds and denied peace await him.",
+        "attestedTraits": "Azazel reveals both instruments of bloodshed and technologies of adornment: weapons, defenses, metals, jewelry, eye paint, stones, and dyes. His Enochic punishment is unusually concrete—bound hand and foot by Raphael, cast into Dudael's darkness, buried beneath jagged rocks, and denied sight of light.",
+        "textualBoundary": "The meaning of Azazel in Leviticus is disputed, and 'scapegoat' names the English ritual image rather than securely translating a personal name. Leviticus does not explicitly identify a Watcher. The Enochic and later Abrahamic figures must be related cautiously rather than read wholesale into the Torah."
+      }
+    },
+    {
+      "id": "lilith_bensira",
+      "name": "Lilith (Ben Sira)",
+      "hebrew": "לִילִית",
+      "translation": "Lilith (name; not 'The First Who Refused')",
+      "type": "Demon",
+      "classification": "Demoness (Folklore Tradition)",
+      "roles": [
+        "First Woman in the Ben Sira Tale",
+        "Speaker of the Ineffable Name",
+        "Adversary of Unprotected Infants",
+        "Party to the Three-Angel Amulet Oath"
+      ],
+      "description": "In the medieval Alphabet of Ben Sira, God creates Lilith from earth as Adam was created. They quarrel over sexual position; she argues that they are equal because both came from earth, pronounces the Ineffable Name, and flies away. Sanoy, Sansanoy, and Semangelof find her at the sea and demand her return. She refuses; amid threats against her children and her declared danger to infants, she swears not to harm a child protected by an amulet bearing the three angels' names or forms. The episode explains a healing amulet and is not a lost Genesis account.",
+      "theology": {
+        "biblical": [
+        ],
+        "extraBiblical": [
+          "Alphabet of Ben Sira (Alfabeta de-Ben Sira)"
+        ]
+      },
+      "image": "/images/bestiary/fallen/Lilith-bensira-sea-oath-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A seductive crowned demoness imports later queen imagery and omits the Ben Sira tale's defining sea confrontation and amulet compact.",
+        "requiredScene": "At the dark sea Lilith, humanlike and wind-tossed, raises a hand in refusal before the three plainly robed messenger-angels; one bears a small protective amulet with non-legible marks.",
+        "exclusions": ["serpent body", "horns", "bat wings", "red skin", "nude glamour pose", "crown or throne", "Eden", "Adam", "infant attack", "legible divine names"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "Ben Sira tells the story to explain an amulet for a sick royal child: Lilith claims equality with Adam from shared earthly formation, speaks the Ineffable Name, flees, refuses the three angels at the sea, and enters a protective oath keyed to their names and images.",
+        "attestedTraits": "She is earth-formed, verbally defiant, capable of flight after pronouncing the Name, associated with the sea, mother of children threatened with daily death, and a danger to infants limited by the three-angel amulet. No extraordinary physical anatomy is described.",
+        "textualBoundary": "This anonymous medieval, frequently comic and transgressive work is not the biblical Ben Sira/Sirach and is not evidence of a suppressed Genesis wife. The text says she pronounced the Name, not that God gave it to her alongside Adam. Demon queenship, covenant philosophy, and modern ideological readings are excluded from the eyewitness-facing dossier."
+      }
+    },
+    {
+      "id": "lilith_isaiah",
+      "name": "Lilith (Isaiah 34)",
+      "hebrew": "לִילִית",
+      "translation": "The Night Creature",
+      "type": "Demon",
+      "classification": "Desolation Creature",
+      "roles": [
+        "Inhabitant of Edom's Ruins",
+        "Finder of a Resting Place"
+      ],
+      "description": "Isaiah 34:14 places the singular feminine lilith within Edom after judgment: among ruined palaces overgrown by thorns, jackals and desert creatures meet, a goat-being calls to its fellow, and there Lilith settles and finds herself a resting place. The following lines gather a nesting snake and paired birds under divine command. The verse gives Lilith no ancestry, speech, attack, or anatomy; she is an uncanny inhabitant within the poem's complete desolation ecology, not Adam's wife or a demon queen.",
+      "theology": {
+        "biblical": [
+          "Isaiah 34:14"
+        ],
+        "extraBiblical": []
+      },
+      "image": "/images/bestiary/fallen/Lilith-isaiah-edom-rest-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A glamorous demoness portrait overwhelms Isaiah's actual subject: a gathered ecology occupying judged Edom, in which Lilith is only one resting presence.",
+        "requiredScene": "Moonlit ruined Edomite fortifications overgrown by thorns, populated by jackals, desert birds, a goat-being, snake nest, and raptors; an elusive humanlike female night presence rests within a collapsed chamber threshold.",
+        "exclusions": ["Adam or Eden", "infants or amulet", "crown or throne", "sexualized pose", "serpent tail", "wings or talons", "red skin", "modern gothic clothing", "isolated glamour portrait"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "The prophet sees Edom emptied of rulers and human habitation, its defenses overtaken by thorn. The commanded creatures receive it as an enduring allotment; among them the singular Lilith settles and finds her own resting place.",
+        "attestedTraits": "Lilith is grammatically feminine, associated with ruined wilderness habitation, and at rest rather than attacking. Her neighbors—jackals/desert creatures, goat-being, nesting snake, and paired birds—define the scene more securely than any proposed bodily form.",
+        "textualBoundary": "This is the only biblical occurrence of לִילִית. A relationship with Mesopotamian lilītu traditions is plausible but does not import their whole dossier. Isaiah supplies no Adam story, infant threat, amulet, queenship, speech, flight, sexuality, or exact anatomy; those belong to other textual layers."
+      }
+    },
+    {
+      "id": "lilitu_qumran",
+      "name": "Lilith in 4Q510",
+      "hebrew": "לִילִית",
+      "translation": "Lilith (singular hostile spirit)",
+      "type": "Demon",
+      "classification": "Named Spirit in an Apotropaic Song",
+      "roles": [
+        "One Presence among the Hostile Spirits",
+        "Terrified by the Maskil's Praise"
+      ],
+      "description": "In 4Q510 fragment 1, the Maskil proclaims God's glorious splendor to frighten and terrify a company of hostile spirits: ravaging angels, spirits of the bastards, demons, singular Lilith, howlers, desert beings, and attackers who strike without warning. Lilith receives no separate biography or anatomy. The song places her inside the present, bounded dominion of wickedness and opposes that company with divine radiance and the spirit of understanding.",
+      "theology": {
+        "biblical": [],
+        "extraBiblical": [
+          "4Q510 (Songs of the Sage)",
+          "4Q511"
+        ]
+      },
+      "image": "/images/bestiary/fallen/Lilith-qumran-sage-song-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "The manuscript's scene is the Maskil's divine praise driving back a mixed company of spirits, not plural wind-demonesses attacking childbirth.",
+        "requiredScene": "A Qumran Maskil proclaims a hymn in a lamplit desert cave as restrained divine radiance presses ravaging spirits, demons, a howler, desert forms, and one elusive female-associated night presence back into darkness.",
+        "exclusions": ["childbirth or infant", "Adam or Eden", "multiple female Lilitu", "crown or throne", "seduction or sexualized anatomy", "wings or serpent tail", "magic circle or pentagram", "pseudo-Hebrew", "isolated glamour portrait"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "The Maskil proclaims the splendor of God in order to terrify the hostile company that stalks the age of wickedness; singular Lilith stands named among demons, bastard spirits, howlers, desert beings, and sudden assailants.",
+        "attestedTraits": "Lilith belongs to a mixed hostile company opposed to divine radiance and the spirit of understanding. The surviving fragment attests her name and placement, but supplies no appearance, speech, origin, victims, or individual deed.",
+        "textualBoundary": "The Hebrew is singular לילית. Childbirth, infants, sexuality, plural wind-demonesses, Adam, queenship, and a narrated binding are absent. Mesopotamian parallels and later Jewish protective traditions must remain outside this Qumran dossier."
       }
     },
     {
       "id": "lilith",
       "name": "Lilith",
       "hebrew": "לִילִית",
-      "translation": "Night Creature",
-      "type": "Demon",
-      "classification": "Demoness",
-      "roles": ["Mother of Monsters", "Night Terror"],
-      "description": "A female night demon associated with storms and danger to children. Later traditions identify her as Adam's first wife who refused submission and fled Eden.",
+      "translation": "Textual Witness Map",
+      "type": "Textual Index",
+      "classification": "Three Distinct Lilith Traditions",
+      "roles": [
+        "See: Lilith (Ben Sira)",
+        "See: Lilith (Isaiah 34)",
+        "See: Lilith in 4Q510"
+      ],
+      "description": "This is a concordance, not a fourth biography. Isaiah 34:14 places singular Lilith at rest within ruined Edom's wilderness company. 4Q510 names singular Lilith among hostile spirits terrified by the Maskil's praise. The medieval Alphabet of Ben Sira gives Lilith an Adam narrative and an oath-confrontation with three angels beside the sea. Each witness has its own card; no single ancient text joins all three dossiers.",
       "theology": {
-        "biblical": ["Isaiah 34:14"],
-        "extraBiblical": ["Dead Sea Scrolls 4Q510", "Alphabet of Ben-Sira"]
+        "biblical": [
+          "Isaiah 34:14"
+        ],
+        "extraBiblical": [
+          "Dead Sea Scrolls 4Q510",
+          "Alphabet of Ben-Sira"
+        ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Lilith is an ancient night demoness whose origins trace back to the Mesopotamian 'Lilitu'—storm demons and succubi associated with the wind and the wild places of the earth.",
-        "anthropologicalInsights": "Lilith represents the archetype of the rebellious and unsubmissive feminine. Historically, she embodies the 'Lilitu' storm-demon legacy, reflecting cultural anxieties regarding the untamed forces of nature and the subversion of domestic order.",
-        "mythicalBeliefs": "Later folklore identifies her as the first wife of Adam who fled Eden after refusing to be subordinate, eventually becoming the mother of demons and monsters."
+      "image": "/images/bestiary/fallen/Lilith-three-witnesses-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A single demoness portrait falsely fuses three texts separated by genre and centuries.",
+        "requiredScene": "A clearly divided three-panel ancient concordance: Lilith resting in ruined Edom; the Qumran Maskil's radiance driving back a mixed spirit company; and the Ben Sira sea-oath confrontation with exactly three angels.",
+        "exclusions": ["single glamour portrait", "crown or throne", "sexuality", "serpent tail", "modern gothic imagery", "readable or pseudo-Hebrew", "infant violence", "one continuous fused scene"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "The name is preserved in three different textual scenes: rest in Edom, opposition to the Maskil's praise, and a medieval sea-oath narrative after departure from Adam.",
+        "attestedTraits": "Only singular grammatical identity is shared securely between Isaiah and 4Q510; Ben Sira reuses the name in a developed narrative. The dedicated cards preserve what each witness actually attests.",
+        "textualBoundary": "No ancient witness combines Edom, Qumran's spirit catalogue, Adam, infant threat, demon queenship, succubus lore, and modern archetypal interpretation. Mesopotamian comparanda explain possibilities in transmission, not a continuous biography."
       }
     },
     {
       "id": "asmodeus",
       "name": "Asmodeus",
       "hebrew": "אַשְׁמְדַאי",
-      "translation": "Destroyer",
+      "translation": "Asmodeus / Ashmedai",
       "type": "Demon",
-      "classification": "Demon King",
-      "roles": ["Destroyer of Marriage", "Demon of Lust"],
-      "description": "A powerful demon associated with lust and rage. In Tobit, he kills Sarah's seven husbands. He was eventually bound by Raphael.",
+      "classification": "Evil Spirit in Tobit",
+      "roles": [
+        "Slayer of Sarah's Seven Bridegrooms",
+        "Driven to Egypt and Bound by Raphael"
+      ],
+      "description": "Asmodeus is the evil spirit who killed Sarah's seven husbands before they consummated their marriages. Raphael instructs Tobias to burn a fish's heart and liver upon incense ash; Asmodeus smells the smoke, flees from the marriage chamber to the far parts of Egypt, and is pursued and bound by Raphael. Tobit gives him no royal title, fixed anatomy, or general office as a demon of lust.",
       "theology": {
-        "biblical": ["Tobit 3:8"],
-        "extraBiblical": ["Testament of Solomon", "Talmud Gittin 68a"]
+        "biblical": [
+          "Tobit 3:8"
+        ],
+        "extraBiblical": [
+          "Testament of Solomon",
+          "Talmud Gittin 68a"
+        ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Asmodeus (Ashmeday, 'Destroyer') is a powerful demon king associated with uncontrolled lust, rage, and the subversion of marital bonds.",
-        "anthropologicalInsights": "Asmodeus personifies the destructive potential of human passions when unbridled by law or covenant, specifically targeting the core social unit of the family.",
-        "mythicalBeliefs": "In the Book of Tobit, he is the antagonist who slew seven of Sarah's husbands on their wedding nights before being driven away and bound by the archangel Raphael."
+      "image": "/images/bestiary/fallen/Asmodeus-tobit-egypt-flight-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "Later demon-king and grimoire iconography obscures Tobit's actual marriage-chamber expulsion and supplies anatomy the book never gives.",
+        "requiredScene": "Tobias burns the fish heart and liver on incense ash while Sarah prays; the smoke drives one unresolved dark spirit through the doorway toward Egypt as Raphael pursues in restrained angelic radiance.",
+        "exclusions": ["king regalia or throne", "three-headed chimera", "dragon mount", "grimoire seal", "lustful tableau", "attack on Sarah", "dead bodies or gore", "horns or red skin", "modern occult symbols", "readable or pseudo-writing"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "Sarah's seven bridegrooms die before consummation. At Raphael's instruction Tobias burns a fish's heart and liver; the spirit flees to Egypt, Raphael binds him, and the newlyweds turn to prayer.",
+        "attestedTraits": "Asmodeus is named an evil spirit, lethal to Sarah's husbands, repelled by the prescribed smoke, capable of flight to a distant region, and subject to Raphael's restraint.",
+        "textualBoundary": "Tobit does not call him king, personified lust, or rage; it supplies no body. The Testament of Solomon later makes him a self-described enemy of newlyweds and adulterous instigator, while Gittin 68 calls Ashmedai king of demons in a separate shamir story. Grimoire ranks and composite anatomy are later still."
       }
     },
     {
@@ -295,36 +737,241 @@
       "hebrew": "בְּלִיַּעַל",
       "translation": "Worthlessness",
       "type": "Demon",
-      "classification": "Demon Prince",
-      "roles": ["Prince of Darkness", "Spirit of Lawlessness"],
-      "description": "Belial is the embodiment of lawlessness, leading the forces of darkness against the forces of light in the Dead Sea Scrolls war theology.",
+      "classification": "Ruler of the Dark Lot at Qumran",
+      "roles": [
+        "Commander of the Army of Darkness",
+        "Ruler over Spirits of His Lot"
+      ],
+      "description": "In older Hebrew idiom, belial denotes worthlessness, lawlessness, or ruin; 'sons of Belial' are wicked people, not a demon's offspring. At Qumran the term becomes unmistakably personal: Belial rules the dark lot and its spirits, and his army opposes the Sons of Light in the War Scroll. His dominion is appointed and temporary; God destroys it in the decisive lot of battle.",
       "theology": {
-        "biblical": ["2 Corinthians 6:15"],
-        "extraBiblical": ["War Scroll (1QM)", "Testament of the Twelve Patriarchs"]
+        "biblical": [
+          "2 Corinthians 6:15"
+        ],
+        "extraBiblical": [
+          "Dead Sea Scrolls (War Scroll)",
+          "Testament of the Twelve Patriarchs"
+        ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Belial (Beliya'al, 'Worthlessness') is the personification of lawlessness and the chief adversary in the dualistic theology of the Qumran community.",
-        "anthropologicalInsights": "Belial represents the total absence of divine law and purpose, standing as the Prince of Darkness who leads the Sons of Darkness against the Sons of Light.",
-        "mythicalBeliefs": "The War Scroll (1QM) describes Belial as the leader of the demonic hosts who will be defeated by the archangel Michael in the final cosmic battle."
+      "image": "/images/bestiary/fallen/Belial-war-scroll-dark-lot-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A crowned demon prince imports later grimoire anatomy; the War Scroll depicts Belial through his lot, spirits, army, dark dominion, and coming defeat.",
+        "requiredScene": "Across a Judean valley, ordered Sons of Light face Belial's human army of darkness; an immense unresolved angelic shadow hangs behind the dark host while divine dawn reaches the light camp.",
+        "exclusions": ["throne or crown", "fiery chariot", "two beautiful angels", "goat head or horns", "red skin or bat wings", "grimoire seal", "medieval armor", "modern occult symbols", "readable or pseudo-Hebrew", "equal good and evil gods"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "The War Scroll sees Belial's army and the spirits of his lot assembled against the Sons of Light. The priests curse Belial, praise God's ancient appointment of the Prince of Light, and await God's decisive overthrow of darkness.",
+        "attestedTraits": "Belial is personalized as a hostile angelic ruler whose dominion is darkness and whose lot includes spirits and human forces. He leads astray and wages appointed war, but remains bounded by God's times and judgment.",
+        "textualBoundary": "Most Hebrew Bible occurrences are idiomatic worthlessness or lawlessness, not a personal demon. Qumran supplies no body, throne, crown, fiery chariot, seal, or legions counted by number; those images belong to much later magical literature."
+      }
+    },
+    {
+      "id": "gilgamesh",
+      "name": "Gilgamesh and Ḥobabish",
+      "hebrew": "גלגמיש · חובבש",
+      "translation": "Names preserved; meanings uncertain",
+      "type": "Legendary",
+      "classification": "Named Giants in Fragmentary Aramaic Witnesses",
+      "roles": [
+        "Speakers in the Giants' Assembly",
+        "Bearers of Mesopotamian Names",
+        "Subjects of the Coming Judgment"
+      ],
+      "description": "The Aramaic Book of Giants preserves Gilgamesh and Ḥobabish by name in broken narrative witnesses. Ohyah reports words spoken by Gilgamesh; Ḥobabish raises a roar, and judgment language follows. The wider work gathers terrified giants around dreams and Enoch's oracle, but the fragments do not call this Gilgamesh king of Uruk, identify his father, recount a Cedar Forest battle, or give either figure a complete biography. Their names evoke the Babylonian Gilgamesh and Humbaba traditions without importing the whole Epic.",
+      "theology": {
+        "biblical": [
+          "Genesis 6:1-4 (Implied)"
+        ],
+        "extraBiblical": [
+          "4Q203 (Book of Giants)",
+          "4Q530-4Q532",
+          "6Q8",
+          "1 Enoch 7:3-6",
+          "Manichaean Kawān (Turfan fragments)"
+        ]
+      },
+      "image": "/images/bestiary/giants-dss/Gilgamesh-Hobabish-assembly-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "Uruk hero imagery or Cedar Forest combat would fill Qumran's lacunae with a different composition; the surviving scene is a giant assembly under ominous judgment.",
+        "requiredScene": "In an antediluvian giant assembly, Gilgamesh speaks urgently to Ohyah while Ḥobabish roars; above them a dream-sign of uprooted trees and flood-shadow foretells judgment.",
+        "exclusions": ["Uruk crown or identified ziggurat", "Semyaza shown as father", "two-thirds-divine emblem", "Gilgamesh fighting or befriending Ḥobabish", "Cedar Forest or Enkidu", "right-of-first-night scene", "horned monster anatomy", "readable cuneiform or Hebrew", "modern fantasy armor"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "Ohyah makes known what Gilgamesh said; Ḥobabish raises a roar, and the damaged assembly text turns toward judgment. Elsewhere the giants' dreams and Enoch's answer announce destruction.",
+        "attestedTraits": "Both are named within the Book of Giants' company. Gilgamesh speaks to Ohyah; Ḥobabish is associated with a roar in a broken sequence. Their giant setting is secure, but individual motives, deeds, parentage, and bodies are not.",
+        "textualBoundary": "The Babylonian Epic supplies a king of Uruk and a Cedar Forest guardian named Humbaba, but Qumran does not retell that whole plot. It does not say Gilgamesh knowingly refused repentance, make Ḥobabish his companion, or call either Semyaza's son."
+      }
+    },
+    {
+      "id": "armaros",
+      "name": "Armaros",
+      "hebrew": "אַרְמָרוֹס",
+      "translation": "Name preserved; meaning uncertain",
+      "type": "Fallen",
+      "classification": "Watcher",
+      "roles": ["Teacher of the Resolving of Enchantments", "Chief of Ten"],
+      "image": "/images/bestiary/fallen/Armaros-unbinding-enchantments-v2.png",
+      "description": "In Enoch's list of the descending Watchers, Armaros is a chief over ten and is charged with teaching the resolving of enchantments.",
+      "theology": {"biblical": ["Genesis 6:1-4 (Watcher setting)"], "extraBiblical": ["1 Enoch 6:7", "1 Enoch 8:3"]},
+      "ancientDossier": {
+        "witness": "The Enochic narrator names Armaros among the leaders bound by the oath on Hermon, then assigns to him one forbidden instruction: how enchantments are undone.",
+        "attestedTraits": "He is a Watcher leader and teacher. The text associates him with counter-enchantment, not with a described body, weapon, seal, or later demonic office.",
+        "textualBoundary": "No surviving early passage supplies his appearance or an individual episode beyond the roster and teaching list. Solomonic ranks and modern elemental assignments are not part of this record."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A generic armored fallen angel does not depict Armaros's sole individual attestation: instruction in resolving enchantments.",
+        "requiredScene": "A plain humanlike Watcher shows ancient pupils how a knotted cord-and-herb binding is loosened on a flat stone below Hermon's ridge.",
+        "exclusions": ["wizard staff or spell blast", "magic circle or pentagram", "sigils or readable text", "grimoire", "horns or red skin", "fantasy armor or weapon", "benevolent healer halo", "modern occult costume"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      }
+    },
+    {
+      "id": "baraqel",
+      "name": "Baraqel",
+      "hebrew": "בָּרָקֵאל",
+      "translation": "Lightning of God",
+      "type": "Fallen",
+      "classification": "Watcher",
+      "roles": ["Teacher of Astrology", "Chief of Ten"],
+      "image": "/images/bestiary/fallen/Baraqel-star-signs-lesson-v2.png",
+      "description": "Baraqel is named among the Watcher chiefs, and the Book of Enoch remembers him as the one who taught the signs read by astrologers.",
+      "theology": {"biblical": ["Genesis 6:1-4 (Watcher setting)"], "extraBiblical": ["1 Enoch 6:7", "1 Enoch 8:3"]},
+      "ancientDossier": {
+        "witness": "Enoch's account places Baraqel under the Hermon oath and names his disclosure as astrology—the reading of heavenly signs as forbidden instruction.",
+        "attestedTraits": "Named Watcher chief; revealer of astrological knowledge. His name contains baraq, lightning, but the narrative does not say that he commands lightning.",
+        "textualBoundary": "The Book of Giants' Baraqel is named as Mahaway's father, but neither that notice nor the teaching list describes wings, lightning command, or a personal battle history. Such details must not be promoted from the name alone."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "Generic lightning-warrior art mistakes the name's baraq element for an attested power and ignores Baraqel's assigned disclosure of astrological knowledge.",
+        "requiredScene": "Below Hermon at night, a plain humanlike Watcher teaches ancient pupils to correlate star and planet paths using movable unmarked stones on dark cloth.",
+        "exclusions": ["zodiac wheel or horoscope glyphs", "readable chart", "lightning weapon or command pose", "planet or star held in hand", "wizard staff or magic circle", "wings or horns", "fantasy armor", "telescope or modern instrument"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      }
+    },
+    {
+      "id": "kokabiel",
+      "name": "Kokabiel",
+      "hebrew": "כּוֹכָבִיאֵל",
+      "translation": "Star of God",
+      "type": "Fallen",
+      "classification": "Watcher",
+      "roles": ["Teacher of Constellations", "Chief of Ten"],
+      "image": "/images/bestiary/fallen/Kokabiel-constellation-memory-v2.png",
+      "description": "Kokabiel belongs to the chiefs of the two hundred Watchers and is remembered as the revealer of the constellations.",
+      "theology": {"biblical": ["Genesis 6:1-4 (Watcher setting)"], "extraBiblical": ["1 Enoch 6:7", "1 Enoch 8:3"]},
+      "ancientDossier": {
+        "witness": "The Book of the Watchers lists Kokabiel among the chiefs and attributes instruction concerning the constellations to him.",
+        "attestedTraits": "Watcher authority and illicit celestial instruction are explicit. The star element is present both in the name and assigned teaching.",
+        "textualBoundary": "The text gives no colors, armor, weapon, planetary throne, or combat power. Visual art should show an ancient celestial instructor without inventing a modern zodiac magician."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A cosmic warrior or zodiac magician supplies powers and iconography absent from Kokabiel's brief constellation-teacher witness.",
+        "requiredScene": "Under the open sky, a plain humanlike Watcher teaches pupils to recognize one star grouping using sighting poles, a reflecting water bowl, and counting cords, without drawn lines.",
+        "exclusions": ["zodiac wheel or horoscope glyphs", "glowing constellation lines", "star crown or stars in hands", "cosmic armor or wings", "telescope or astrolabe", "magic circle", "readable diagram or modern notation"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      }
+    },
+    {
+      "id": "penemue",
+      "name": "Penemue",
+      "hebrew": "פְּנֵמוּאֵל",
+      "translation": "Name preserved; meaning disputed",
+      "type": "Fallen",
+      "classification": "Watcher",
+      "roles": ["Teacher of Writing", "Teacher of Bitter and Sweet"],
+      "image": "/images/bestiary/fallen/Penemue-ink-and-bitter-sweet-v2.png",
+      "description": "Penemue taught humankind writing with ink and paper and instructed them in bitter and sweet and the secrets of wisdom.",
+      "theology": {"biblical": [], "extraBiblical": ["1 Enoch 69:8-10"]},
+      "ancientDossier": {
+        "witness": "The Enochic indictment says Penemue showed human beings writing with ink and paper. The narrator treats this disclosure as a path by which many went astray, and also credits him with teaching bitter and sweet and wisdom's secrets.",
+        "attestedTraits": "Revealer of literacy and secret knowledge; a corrupting instructor rather than a battlefield figure in the surviving account.",
+        "textualBoundary": "The passage condemns the use and disclosure described by its narrator; it does not support the modern claim that writing itself originated historically with a single supernatural teacher."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A generic fallen scholar misses the material disclosure of ink-and-sheet writing and the narrator's immediate warning about its corrupt use.",
+        "requiredScene": "By lamplight Penemue teaches ink-making and non-linguistic practice strokes; nearby bitter herbs and honey embody the paired lesson, while a background tally deception foreshadows misuse.",
+        "exclusions": ["readable alphabet, Hebrew, or cuneiform", "library or spellbook", "magic sigils", "feather quill", "printing press or modern paper", "benevolent schoolmaster mood", "cosmic armor or wings", "weapon"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      }
+    },
+    {
+      "id": "kasdeja",
+      "name": "Kasdeja",
+      "hebrew": "כַּשְׂדְּיָא",
+      "translation": "Name preserved; often rendered Kasdeya",
+      "type": "Fallen",
+      "classification": "Watcher",
+      "roles": ["Teacher of Harmful Spirit-Strokes", "Revealer of the Serpent's Bite"],
+      "image": "/images/bestiary/fallen/Kasdeja-malignant-strokes-v2.png",
+      "description": "Kasdeja is accused of showing humankind destructive workings of spirits and demons, the striking of the embryo, and the bite of the serpent.",
+      "theology": {"biblical": [], "extraBiblical": ["1 Enoch 69:12"]},
+      "ancientDossier": {
+        "witness": "Enoch's later list assigns Kasdeja knowledge of malignant blows: attacks of spirits and demons, harm to the unborn, and the serpent's bite.",
+        "attestedTraits": "A revealer of occult injury and hostile spiritual practice. The testimony concerns what he taught, not a catalog of innate spell-like powers.",
+        "textualBoundary": "No early description gives his face, animal form, rank among Solomonic demons, or a complete pharmacology. The difficult wording should remain difficult rather than being expanded into modern lore."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "Generic serpent-demon imagery literalizes a difficult list of disclosed injuries and risks sensationalizing its embryo-harm line.",
+        "requiredScene": "At oppressive noon, a plain humanlike Watcher demonstrates linked ancient signs of serpent bite, bodily rupture, heat-stroke, and unseen spirit-blows without showing a victim.",
+        "exclusions": ["pregnant body, fetus, or miscarriage scene", "blood, gore, or attack", "serpent-man anatomy or Eden", "magic circle, sigils, or readable spell", "grimoire", "fantasy armor or weapon"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      }
+    },
+    {
+      "id": "gadreel",
+      "name": "Gadreel",
+      "hebrew": "גַּדְרֵאֵל",
+      "translation": "Wall of God",
+      "type": "Fallen",
+      "classification": "Watcher",
+      "roles": ["Deceiver of Eve", "Teacher of Weapons", "Agent of Death"],
+      "image": "/images/bestiary/fallen/Gadreel-weapons-and-Eve-v2.png",
+      "description": "One Enochic tradition names Gadreel as the being who led Eve astray and taught mortals the weapons of death.",
+      "theology": {"biblical": ["Genesis 3 (unnamed serpent; later identification only)"], "extraBiblical": ["1 Enoch 69:6-7"]},
+      "ancientDossier": {
+        "witness": "The Enochic narrator identifies Gadreel—not Azazel or Satan in this passage—as Eve's deceiver, and says he showed the children of men shield, breastplate, sword, and every weapon of death.",
+        "attestedTraits": "Deception and weapon instruction are explicit; the bloodshed of earth is laid at his door.",
+        "textualBoundary": "Genesis itself does not name its serpent Gadreel. This is a later Enochic identification and must remain labeled as such, not harmonized into a single biography of Satan."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A serpent-bodied or armored fallen-warrior portrait fuses Genesis, Satan lore, and Enoch while missing Gadreel's act of disclosing weapons.",
+        "requiredScene": "A divided field: Gadreel reveals shield, scale coat, and sword to ancient men; a smaller hazy garden-memory shows Eve listening to a partly hidden humanlike shadow beyond a fruiting tree.",
+        "exclusions": ["snake-man anatomy or Satan label", "apple", "nude or sexualized Eve", "winged armored portrait", "battle action, corpses, or gore", "magic seal or readable text", "medieval plate armor"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       }
     },
     {
       "id": "mastema",
       "name": "Mastema",
       "hebrew": "מַשְׂטֵמָה",
-      "translation": "Animosity",
+      "translation": "Hostility / Enmity",
       "type": "Demon",
-      "classification": "Prince of Evil Spirits",
-      "roles": ["Accuser", "Executor of Punishment"],
-      "description": "The chief of evil spirits who received permission from God to retain some demons after the Flood to continue testing humanity. He acts as both accuser and punisher.",
-      "theology": {
-        "biblical": [],
-        "extraBiblical": ["Book of Jubilees 10", "Book of Jubilees 48"]
+      "classification": "Prince of Hostility",
+      "roles": ["Chief of the Remaining Spirits", "Accuser", "Tester"],
+      "image": "/images/bestiary/fallen/Mastema-tenth-of-spirits-v2.png",
+      "description": "In Jubilees, Mastema petitions to retain a tenth of the corrupt spirits under his authority so that they may exercise judgment and lead the guilty astray.",
+      "theology": {"biblical": ["Hosea 9:7-8 (Hebrew mastemah, enmity)"], "extraBiblical": ["Jubilees 10:8-11", "Jubilees 17:15-18", "Jubilees 48:2-4"]},
+      "ancientDossier": {
+        "witness": "Jubilees presents the prince Mastema speaking before God. When Noah asks relief from unclean spirits, Mastema argues that some be left under his rule; nine parts are bound and one part remains. He later presses the testing of Abraham and opposes Moses.",
+        "attestedTraits": "He commands a limited remnant of spirits, accuses, tests, and obstructs. His activity occurs by sufferance and under limits, not as an equal rival sovereign.",
+        "textualBoundary": "Jubilees does not give Mastema horns, a seal, or a Solomonic legion number. Equating him completely with Satan is an interpretation, though the functions overlap. His retained tenth remains permitted, limited, and subject to restraint.",
+        "sourceLayer": "Jubilees 10 controls the dossier; Abraham and Exodus episodes are later scenes within the same work."
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Mastema (Animosity) is the chief of evil spirits who operates within the divine framework as a tester and accuser of humanity.",
-        "anthropologicalInsights": "Mastema functions as an agent of divine testing, reflecting a theological attempt to explain the persistence of evil and temptation in a world governed by a sovereign God.",
-        "mythicalBeliefs": "According to the Book of Jubilees, Mastema convinced God to allow one-tenth of the demons to remain on earth after the Flood to continue testing the faith of men."
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A horned infernal king contradicts Jubilees' subordinate petitioner who receives limited authority over only one tenth of the spirits.",
+        "requiredScene": "Before veiled divine light, Mastema kneels as nine streams of spirits descend to confinement and one smaller tenth remains; nearby an angel gives Noah healing herbs.",
+        "exclusions": ["bodily God on throne", "horned or red devil", "crown or trident", "hellfire kingdom", "equal opposing deity", "triumphant pose", "magic seal", "chained humans", "medieval court", "readable text"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       }
     },
     {
@@ -332,56 +979,119 @@
       "name": "Abaddon / Apollyon",
       "hebrew": "אֲבַדּוֹן",
       "translation": "Destruction",
-      "type": "Demon",
+      "type": "Angel",
       "classification": "Angel of the Abyss",
-      "roles": ["King of Locusts", "Destroyer"],
-      "description": "The angel of the bottomless pit who leads tormenting locust-like creatures during the apocalyptic judgments.",
-      "theology": {
-        "biblical": ["Revelation 9:11", "Job 26:6"],
-        "extraBiblical": ["Dead Sea Scrolls"]
+      "roles": ["King over the Abyssal Locusts"],
+      "image": "/images/bestiary/fallen/Abaddon-abyssal-locust-king-v2.png",
+      "description": "The Apocalypse names the king over the abyssal locust host: Abaddon in Hebrew and Apollyon in Greek.",
+      "theology": {"biblical": ["Job 26:6", "Job 28:22", "Proverbs 15:11", "Revelation 9:1-11"], "extraBiblical": []},
+      "ancientDossier": {
+        "witness": "In older Hebrew wisdom texts, Abaddon is the realm or condition of destruction paired with Sheol. Revelation 9 personifies the name as the angelic king over creatures released from the abyss.",
+        "attestedTraits": "Kingship over the locust host and association with the abyss are explicit. The locusts torment for five months and do not kill; their elaborate appearance belongs to the host, not automatically to their king.",
+        "textualBoundary": "The witness calls him an angel, without explicitly calling him fallen or a demon. The key-bearing fallen star is not explicitly identified with him, and the host's composite anatomy is not the king's. Later demonological rank, armor, and biography are absent."
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Abaddon (Avadon, 'Destruction') is the angel of the Abyss and the personification of the realm of the dead as a destructive force.",
-        "anthropologicalInsights": "Abaddon represents the evolution of the concept of the grave (Sheol) into a sentient, personified entity that serves as the jailer of the bottomless pit.",
-        "mythicalBeliefs": "In the Book of Revelation, he is the king of the demonic locusts that emerge from the smoke of the pit to torment those without the seal of God on their foreheads."
-      }
-    },
-    {
-      "id": "gadreel",
-      "name": "Gadreel",
-      "hebrew": "גַּדְרֵאל",
-      "translation": "Wall of God",
-      "type": "Fallen",
-      "classification": "Fallen Watcher",
-      "roles": ["Tempter of Eve", "Teacher of Weapons"],
-      "description": "Identified in 1 Enoch as the angel who led Eve astray. He also taught humanity the art of making weapons of death.",
-      "theology": {
-        "biblical": [],
-        "extraBiblical": ["1 Enoch 69:6"]
-      },
-      "academicDossier": {
-        "scholarlySynthesis": "Gadreel is a Fallen Watcher identified in the Enochic tradition as the one who seduced Eve and introduced the knowledge of lethal weaponry.",
-        "anthropologicalInsights": "Gadreel represents an alternative explanation for the origin of sin and violence, shifting the focus from the serpent to a celestial rebel who taught humanity the art of death.",
-        "mythicalBeliefs": "Enochic texts claim he revealed the secrets of the sword and shield to mortals and even taught them how to strike the embryo within the womb."
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A horned armored destroyer or grim reaper gives the king anatomy Revelation assigns only to his locust host.",
+        "requiredScene": "An unresolved plain-robed angelic silhouette commands at a smoking abyss while Revelation's composite locust host emerges below; protected people remain untouched in the distance.",
+        "exclusions": ["locust anatomy on Abaddon", "horned demon or grim reaper", "scythe", "crown or armor on the king", "key-bearing star conflation", "dead bodies or gore", "hell throne", "grimoire seal", "readable text"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       }
     },
     {
       "id": "prince_persia",
       "name": "Prince of Persia",
-      "hebrew": "שַׂר פָּרַס",
-      "translation": "Sar Paras",
-      "type": "Demon",
-      "classification": "Territorial Spirit",
-      "roles": ["Ruler of Nations", "Opposer of Angels"],
-      "description": "A powerful territorial spirit with authority over the Persian Empire who opposed the angelic messenger sent to Daniel for 21 days.",
-      "theology": {
-        "biblical": ["Daniel 10:13, 20"],
-        "extraBiblical": []
+      "hebrew": "שַׂר מַלְכוּת פָּרַס",
+      "translation": "Prince of the Kingdom of Persia",
+      "type": "Spirit",
+      "classification": "Territorial Prince",
+      "roles": ["Opposer of the Heavenly Messenger", "Prince over Persia"],
+      "image": "/images/bestiary/fallen/Prince-Persia-delayed-messenger-v2.png",
+      "description": "Daniel's heavenly messenger reports that the prince of Persia resisted him for twenty-one days until Michael came to help.",
+      "theology": {"biblical": ["Daniel 10:12-13", "Daniel 10:20-21"], "extraBiblical": []},
+      "ancientDossier": {
+        "witness": "A radiant messenger tells Daniel that Persia's prince withstood him twenty-one days. Michael, one of the chief princes, intervened; the messenger expects to contend again with Persia's prince and then with the prince of Greece.",
+        "attestedTraits": "Territorial association, prolonged resistance to a heavenly messenger, and conflict with Michael are explicit. The being is powerful enough to delay but not finally prevent the message.",
+        "textualBoundary": "Daniel supplies no personal name, face, weapon, genealogy, or moral origin story. Calling this prince a demon is a classification inferred from opposition, not the wording of the vision."
       },
-      "academicDossier": {
-        "scholarlySynthesis": "The Prince of Persia (Sar Paras) is a powerful territorial spirit (Sar) who exercises spiritual authority over the Persian Empire.",
-        "anthropologicalInsights": "The figure reflects the ancient belief in national tutelary deities who govern the destinies of empires and engage in spiritual warfare against divine messengers.",
-        "mythicalBeliefs": "As recorded in the Book of Daniel, this spirit successfully delayed a heavenly messenger for twenty-one days until the archangel Michael came to the messenger's aid."
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A crowned Persian demon invents both royal identity and anatomy; Daniel knows the prince only through the messenger's report of prolonged resistance.",
+        "requiredScene": "Daniel receives the radiant messenger beside the Tigris while a translucent storm-memory shows an unresolved Persian-associated prince blocking a mountain passage until Michael arrives to help.",
+        "exclusions": ["named demon", "Persian king or crown", "Achaemenid royal portrait", "Zoroastrian deity", "horns or red skin", "fantasy armor or specific weapon", "territorial map", "21 text or symbols", "modern Iran", "readable writing"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      }
+    },
+    {
+      "id": "behemoth",
+      "name": "Behemoth",
+      "hebrew": "בְּהֵמוֹת",
+      "translation": "Great Beast / Beasts",
+      "type": "Beast",
+      "classification": "Primeval Land Creature",
+      "roles": ["Mighty Creature of the Dry Land", "End-Time Provision"],
+      "image": "/images/bestiary/legendary/Behemoth-Job-river-reeds-v2.png",
+      "description": "God's speech to Job describes Behemoth as a grass-eating creature of immense strength; Enoch's vision places the male monster in the eastern wilderness.",
+      "theology": {"biblical": ["Job 40:15-24"], "extraBiblical": ["1 Enoch 60:7-10", "4 Ezra 6:49-52", "2 Baruch 29:4"]},
+      "ancientDossier": {
+        "witness": "Job is told to behold Behemoth, made by God as Job was: it eats grass, has strength in loins and belly, bones like bronze and iron, shelters among reeds, and is untroubled by the river. Enoch sees it separated from Leviathan and assigned to dry wilderness.",
+        "attestedTraits": "Colossal bodily strength, herbivory, riverine shelter, divine creaturehood, and later eschatological preservation are attested across the texts.",
+        "textualBoundary": "Job does not identify a modern animal species, nor does it call Behemoth demonic. Enoch calls it male; visual details beyond the passages remain artistic inference."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A conventional dinosaur, hippo, or armored monster prematurely settles the species that Job leaves wondrous and taxonomically open.",
+        "requiredScene": "An immense unresolved herbivorous quadruped rests among lotus, reeds, willows, and a swelling river; massive loins, columnar limbs, and a powerful cedar-like tail embody Job's description while smaller beasts play nearby.",
+        "exclusions": ["identifiable hippo, elephant, dinosaur, or rhinoceros", "horned demon or predator teeth", "armor plates or dragon scales", "multiple heads", "literal tree-tail", "attack", "human rider or saddle", "weapon wounds", "modern paleo-art"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      }
+    },
+    {
+      "id": "leviathan",
+      "name": "Leviathan",
+      "hebrew": "לִוְיָתָן",
+      "translation": "Twisting / Coiling One",
+      "type": "Beast",
+      "classification": "Primeval Sea Creature",
+      "roles": ["Sea Serpent", "Creature Reserved for Judgment"],
+      "image": "/images/bestiary/legendary/Leviathan-Job-boiling-deep-v2.png",
+      "description": "Leviathan is the unmasterable sea creature of Job, the twisting serpent punished in Isaiah, and the female monster assigned to the ocean abyss in Enoch's vision.",
+      "theology": {"biblical": ["Job 3:8", "Job 41:1-34", "Psalm 74:13-14", "Psalm 104:26", "Isaiah 27:1"], "extraBiblical": ["1 Enoch 60:7-10", "4 Ezra 6:49-52", "2 Baruch 29:4"]},
+      "ancientDossier": {
+        "witness": "Job's divine speech describes a creature no human can leash: armored scales, terrifying teeth, fiery and smoky breath, a wake that makes the deep seem hoary, and fearlessness before weapons. Isaiah names swift and twisting Leviathan and foretells its punishment. Enoch locates the female monster in the ocean abyss.",
+        "attestedTraits": "Aquatic habitation, serpentine language, extraordinary armor and force, smoke and flame imagery, and subjection to God are explicit.",
+        "textualBoundary": "The passages do not require a medieval dragon anatomy or identify Leviathan with Satan. Psalm 74's plural heads belong to its combat-poem and need not define Job's portrait; Enoch's female assignment belongs to that later vision and should not be retrojected into Job."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A winged or four-legged dragon imports medieval anatomy; Job describes an aquatic, armored, smoke-and-flame-breathing creature human beings cannot master.",
+        "requiredScene": "An immense limbless coiling sea creature with interlocked shield-scales rises from a boiling deep, smoke and restrained flame at its jaws, dawn-like eyes, and a shining wake beside a tiny ancient ship.",
+        "exclusions": ["wings, legs, or horns", "medieval dragon or Satan imagery", "crown", "multiple heads on the Job portrait", "humanoid torso or tentacles", "ship-eating attack", "visible divine sword", "grimoire sigil", "modern sea-monster trope"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      }
+    },
+    {
+      "id": "rephaim_shades",
+      "name": "Rephaim — The Shades",
+      "hebrew": "רְפָאִים",
+      "translation": "Rephaim / Departed Shades",
+      "type": "Spirit",
+      "classification": "Dead Rephaim",
+      "roles": ["Inhabitants of Sheol", "Fallen Ancient Rulers"],
+      "image": "/images/bestiary/legendary/Rephaim-Isaiah-Sheol-kings-v2.png",
+      "description": "Hebrew witnesses use Rephaim both for formidable ancient peoples and for the powerless dead who stir in Sheol; this card records the latter usage without collapsing it into the living clans.",
+      "theology": {"biblical": ["Job 26:5", "Psalm 88:10", "Proverbs 2:18", "Proverbs 9:18", "Isaiah 14:9", "Isaiah 26:14, 19"], "extraBiblical": ["Ugaritic KTU 1.20-1.22 (rpum)"]},
+      "ancientDossier": {
+        "witness": "The shades tremble beneath the waters in Job; they do not rise to praise in Psalm 88; Isaiah pictures Sheol rousing the Rephaim, the former leaders of the earth, to greet a fallen king. Isaiah 26 contrasts dead Rephaim who do not rise with God's dead who shall live.",
+        "attestedTraits": "They belong to the underworld and are portrayed as diminished dead, retaining identity and royal memory but lacking the vitality of the living giant clans.",
+        "textualBoundary": "The Hebrew texts do not depict these shades as game-style necromancers or prove that every dead human becomes a Rephaim. The relationship between Ugaritic ancestral rpum and biblical usage is comparative evidence, not an eyewitness identification."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A powerful spectral giant or necromancer erases the shades' defining diminution in Sheol and collapses them into the living Rephaim clans.",
+        "requiredScene": "In a rock-cut Sheol hall beneath deep-water shadow, weakened translucent former kings rise from low seats to mockingly greet a newly fallen tyrant reduced to their level.",
+        "exclusions": ["zombies or skeleton army", "necromancer", "weapons or combat", "giant bodies", "free-flying ghosts", "hellfire or torturing demons", "glowing magic", "active resurrection", "Ugaritic feast fused into Isaiah", "modern cemetery"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       }
     }
   ]
