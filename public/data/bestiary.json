@@ -150,25 +150,40 @@
       "translation": "God is my light",
       "type": "Angel",
       "classification": "Archangel",
-      "roles": [
-        "Illuminator of Truth",
-        "Overseer of Tartarus",
-        "Guardian of Eden"
-      ],
-      "description": "Uriel stands as the archangel of divine illumination. He carries the flame of enlightenment and the scroll of knowledge. He is the celestial teacher par excellence, revealing mysteries about creation, judgment, and the movements of celestial bodies.",
-      "theology": {
-        "biblical": [
-          "Genesis 3:24 (Tradition)"
+      "image": "images/bestiary/archangel/Uriel-luminary-portals-v2.png",
+      "artReview": {
+        "status": "replaced after full source packet",
+        "depictedWitness": "1 Enoch 33; 72-82",
+        "scene": "Uriel shows and records for Enoch the ordered courses, names, seasons, and portals of the luminaries at the ends of the earth.",
+        "crossTextualRestraints": [
+          "No early named witness gives Uriel wings, halo, flaming sword, handheld flame, armor, or crown",
+          "Genesis 3:24 does not identify Uriel as the guardian of Eden",
+          "Measured celestial order, not a modern astronomy diagram, anchors the Astronomical Book witness",
+          "Later elemental, planetary, directional, and Solomonic correspondences are excluded"
         ],
+        "sourcePacket": "docs/bestiary-source-packets/uriel.md",
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "roles": [
+        "Warner and Instructor of Noah",
+        "Guide of the Rebel Stars' Prison",
+        "Recorder and Leader of the Luminaries",
+        "Interpreter Who Limits Human Knowing",
+        "Comforter of the Fallen Seer"
+      ],
+      "description": "Enoch remembers Uriel as a guide through dangerous knowledge rather than a decorative bearer of light. He warns Noah of the flood, explains the prisons of rebel angels and burning stars, identifies the valley of judgment, and records for Enoch the exact names, portals, seasons, and 364-day courses of the heavenly lights. In 2 Esdras, Uriel answers Ezra's anguish by testing the limits of human understanding, disclosing the measured completion of the age, and finally taking the collapsed seer by the right hand to comfort and raise him.",
+      "theology": {
+        "biblical": [],
         "extraBiblical": [
-          "1 Enoch 20:2",
-          "2 Esdras 4"
+          "1 Enoch 9-10; 18-21; 27; 33; 72-82",
+          "2 Esdras / 4 Ezra 4-10",
+          "Life of Adam and Eve 48-49"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Uriel (Uri'el, 'God is my light') is the archangel of divine illumination and wisdom, serving as the celestial teacher of prophets and overseer of judgment.",
-        "anthropologicalInsights": "Uriel personifies the light of reason and divine law. As a restorer of order, he guards the threshold of Eden and monitors the descent of the Grigori, ensuring that the boundaries between the sacred and the profane remain intact despite the rebellion at Mt. Hermon.",
-        "mythicalBeliefs": "Tradition places Uriel at the gate of Eden with a flaming sword and identifies him as the guide who showed Enoch the secrets of the cosmos and the underworld."
+      "ancientDossier": {
+        "witness": "Uriel joins the appeal over the Watchers' devastation, then is sent to warn Noah and preserve his seed. He leads Enoch through the chaotic prison where transgressing stars burn like mountains, interprets the abyss and accursed valley, and shows and writes the laws of the stars. Across the Astronomical Book he teaches the portals and measured courses of sun, moon, winds, seasons, and the exact year. To Ezra he is the sent examiner and interpreter who exposes what a mortal cannot measure, yet also takes the collapsed seer by the right hand and restores him.",
+        "attestedTraits": "Exact instruction; warning before catastrophe; guardianship and interpretation of penal cosmic regions; authority over the ordered luminaries, night, and day; willingness to challenge presumptuous questions; patient disclosure within limits; physical comfort and restoration. His light-office is cosmic and calendrical rather than an attested handheld object. Later Adam literature also makes him a participant in Adam and Abel's burial.",
+        "textualBoundary": "Genesis names no Uriel at Eden and assigns the flaming turning sword to no named angel. Early texts give Uriel no wings, halo, sword, flame, book, armor, complexion, or clothing color. English versions of 1 Enoch 20:2 diverge between 'world and Tartarus' and 'clamour and terror,' so the wording is not treated as uncontested. Later planetary, elemental, directional, colored, and sigilic systems are excluded from the core portrait."
       }
     },
     {
