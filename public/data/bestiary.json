@@ -813,13 +813,20 @@
       "type": "Fallen",
       "classification": "Watcher",
       "roles": ["Teacher of the Resolving of Enchantments", "Chief of Ten"],
-      "image": "images/rutkowski/Fallen/armaros.png",
+      "image": "/images/bestiary/fallen/Armaros-unbinding-enchantments-v2.png",
       "description": "In Enoch's list of the descending Watchers, Armaros is a chief over ten and is charged with teaching the resolving of enchantments.",
       "theology": {"biblical": ["Genesis 6:1-4 (Watcher setting)"], "extraBiblical": ["1 Enoch 6:7", "1 Enoch 8:3"]},
       "ancientDossier": {
         "witness": "The Enochic narrator names Armaros among the leaders bound by the oath on Hermon, then assigns to him one forbidden instruction: how enchantments are undone.",
         "attestedTraits": "He is a Watcher leader and teacher. The text associates him with counter-enchantment, not with a described body, weapon, seal, or later demonic office.",
         "textualBoundary": "No surviving early passage supplies his appearance or an individual episode beyond the roster and teaching list. Solomonic ranks and modern elemental assignments are not part of this record."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A generic armored fallen angel does not depict Armaros's sole individual attestation: instruction in resolving enchantments.",
+        "requiredScene": "A plain humanlike Watcher shows ancient pupils how a knotted cord-and-herb binding is loosened on a flat stone below Hermon's ridge.",
+        "exclusions": ["wizard staff or spell blast", "magic circle or pentagram", "sigils or readable text", "grimoire", "horns or red skin", "fantasy armor or weapon", "benevolent healer halo", "modern occult costume"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       }
     },
     {
