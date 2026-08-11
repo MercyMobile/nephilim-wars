@@ -1006,13 +1006,20 @@
       "type": "Spirit",
       "classification": "Territorial Prince",
       "roles": ["Opposer of the Heavenly Messenger", "Prince over Persia"],
-      "image": "images/rutkowski/Demon/prince_persia.png",
+      "image": "/images/bestiary/fallen/Prince-Persia-delayed-messenger-v2.png",
       "description": "Daniel's heavenly messenger reports that the prince of Persia resisted him for twenty-one days until Michael came to help.",
       "theology": {"biblical": ["Daniel 10:12-13", "Daniel 10:20-21"], "extraBiblical": []},
       "ancientDossier": {
         "witness": "A radiant messenger tells Daniel that Persia's prince withstood him twenty-one days. Michael, one of the chief princes, intervened; the messenger expects to contend again with Persia's prince and then with the prince of Greece.",
         "attestedTraits": "Territorial association, prolonged resistance to a heavenly messenger, and conflict with Michael are explicit. The being is powerful enough to delay but not finally prevent the message.",
         "textualBoundary": "Daniel supplies no personal name, face, weapon, genealogy, or moral origin story. Calling this prince a demon is a classification inferred from opposition, not the wording of the vision."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A crowned Persian demon invents both royal identity and anatomy; Daniel knows the prince only through the messenger's report of prolonged resistance.",
+        "requiredScene": "Daniel receives the radiant messenger beside the Tigris while a translucent storm-memory shows an unresolved Persian-associated prince blocking a mountain passage until Michael arrives to help.",
+        "exclusions": ["named demon", "Persian king or crown", "Achaemenid royal portrait", "Zoroastrian deity", "horns or red skin", "fantasy armor or specific weapon", "territorial map", "21 text or symbols", "modern Iran", "readable writing"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       }
     },
     {
