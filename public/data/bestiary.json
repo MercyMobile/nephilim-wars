@@ -576,7 +576,6 @@
       "description": "In the medieval Alphabet of Ben Sira, God creates Lilith from earth as Adam was created. They quarrel over sexual position; she argues that they are equal because both came from earth, pronounces the Ineffable Name, and flies away. Sanoy, Sansanoy, and Semangelof find her at the sea and demand her return. She refuses; amid threats against her children and her declared danger to infants, she swears not to harm a child protected by an amulet bearing the three angels' names or forms. The episode explains a healing amulet and is not a lost Genesis account.",
       "theology": {
         "biblical": [
-          
         ],
         "extraBiblical": [
           "Alphabet of Ben Sira (Alfabeta de-Ben Sira)"
@@ -604,19 +603,28 @@
       "type": "Demon",
       "classification": "Desolation Creature",
       "roles": [
-        "Inhabitant of Edom's Ruins"
+        "Inhabitant of Edom's Ruins",
+        "Finder of a Resting Place"
       ],
-      "description": "In Isaiah 34:14, Lilith appears once - singular, nameless in narrative, listed among the creatures inhabiting the ruins of Edom after divine judgment. The Masoretic text reads lilith, and the Septuagint translates it as onocentaur, the LXX's rendering of the Hebrew. This is not a person or a queen; it is the creature that dwells where God has emptied a land. Lilith here is part of the inventory of desolation: owls, jackals, ostriches, and the night creature, all dwelling in the palaces and cities of a nation called to account.",
+      "description": "Isaiah 34:14 places the singular feminine lilith within Edom after judgment: among ruined palaces overgrown by thorns, jackals and desert creatures meet, a goat-being calls to its fellow, and there Lilith settles and finds herself a resting place. The following lines gather a nesting snake and paired birds under divine command. The verse gives Lilith no ancestry, speech, attack, or anatomy; she is an uncanny inhabitant within the poem's complete desolation ecology, not Adam's wife or a demon queen.",
       "theology": {
         "biblical": [
           "Isaiah 34:14"
         ],
         "extraBiblical": []
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Isaiah 34:14 is the only occurrence of the Hebrew lilith in the Hebrew Bible. The verse lists creatures inhabiting the ruins of Edom after God's judgment: 'The wild beasts of the desert shall also meet with the wild beasts of the island, and the satyr shall cry to his fellow; the night creature (lilith) also shall rest there, and find for herself a place of rest.' The Hebrew form lilith may derive from the Mesopotamian Lilitu, but the Isaiah usage has no narrative or mythological development - she is part of a poetic inventory of desolation, a creature of night who fills the void left by human habitation.",
-        "anthropologicalInsights": "Isaiah 34:14 is post-exilic (likely 6th-5th century BCE), written to comfort exilic Israel by proclaiming judgment on Edom. The list of creatures inhabiting Edom's ruins is a reversal of creation language: where Eden had ordered life, Edom has chaos. Lilith in this context is part of the theological picture: she is what lives when humanity has been taken away. The verse does not present her as a threat to be reckoned with, but as part of the judged landscape - the night creature who fills the void.",
-        "mythicalBeliefs": "Jewish and Christian tradition has read Lilith here as the night-demon, sometimes identifying her with the Mesopotamian Lilitu or the first wife of Adam. Modern scholarship is more cautious: the Isaiah 34 usage may simply mean 'night creature' or 'female night-spirit,' without committing to any specific mythological figure. The single attestation stands alone - no narrative, no characterization beyond inhabiting the ruins of a judged land."
+      "image": "/images/bestiary/fallen/Lilith-isaiah-edom-rest-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A glamorous demoness portrait overwhelms Isaiah's actual subject: a gathered ecology occupying judged Edom, in which Lilith is only one resting presence.",
+        "requiredScene": "Moonlit ruined Edomite fortifications overgrown by thorns, populated by jackals, desert birds, a goat-being, snake nest, and raptors; an elusive humanlike female night presence rests within a collapsed chamber threshold.",
+        "exclusions": ["Adam or Eden", "infants or amulet", "crown or throne", "sexualized pose", "serpent tail", "wings or talons", "red skin", "modern gothic clothing", "isolated glamour portrait"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "The prophet sees Edom emptied of rulers and human habitation, its defenses overtaken by thorn. The commanded creatures receive it as an enduring allotment; among them the singular Lilith settles and finds her own resting place.",
+        "attestedTraits": "Lilith is grammatically feminine, associated with ruined wilderness habitation, and at rest rather than attacking. Her neighbors—jackals/desert creatures, goat-being, nesting snake, and paired birds—define the scene more securely than any proposed bodily form.",
+        "textualBoundary": "This is the only biblical occurrence of לִילִית. A relationship with Mesopotamian lilītu traditions is plausible but does not import their whole dossier. Isaiah supplies no Adam story, infant threat, amulet, queenship, speech, flight, sexuality, or exact anatomy; those belong to other textual layers."
       }
     },
     {
