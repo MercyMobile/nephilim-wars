@@ -435,32 +435,41 @@
     },
     {
       "id": "satan",
-      "name": "Satan / Sammael",
+      "name": "The Satan / The Adversary",
       "hebrew": "שָׂטָן",
       "translation": "The Adversary",
-      "type": "Demon",
-      "classification": "Demon Prince",
+      "type": "Adversarial Spirit",
+      "classification": "Heavenly Accuser in Job; Later Devil",
       "roles": [
         "Accuser",
-        "Father of Lies",
-        "Ruler of this World"
+        "Tester under Permission",
+        "Later Rebel and Deceiver"
       ],
-      "description": "The supreme mystery of evil. Originally a high-ranking angel who chose rebellion. He operates through deception and accusation, holding temporary power over the world system.",
+      "description": "Job's ha-satan comes among the sons of God as an accuser, challenges Job's motives, and can act only inside limits YHWH sets. Zechariah likewise places the accuser at the high priest's right hand and has YHWH rebuke him. A later Life of Adam and Eve gives the devil a fall narrative in his own speech: he refuses Michael's command to bow before Adam, claims seniority, seeks a seat above the stars, and is expelled with his angels. These layers must be distinguished rather than fused with Sammael or Isaiah's king of Babylon.",
       "theology": {
         "biblical": [
           "Job 1-2",
-          "Isaiah 14",
+          "Zechariah 3:1-2",
+          "1 Chronicles 21:1",
           "Revelation 12"
         ],
         "extraBiblical": [
           "Life of Adam and Eve",
-          "Martyrdom of Isaiah"
+          "Greek Life of Adam and Eve 12-16"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Satan (The Adversary) represents the supreme mystery of cosmic evil and rebellion against the Creator, operating as the primary accuser of humanity.",
-        "anthropologicalInsights": "Satan embodies the archetype of the fallen pride and the personification of the chaotic forces that oppose the established divine order.",
-        "mythicalBeliefs": "Originally a high-ranking angel, he is believed to have led a celestial rebellion and is eschatologically destined to be cast down into the lake of fire."
+      "image": "/images/bestiary/corrupted/The-Satan-court-accuser-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A generic horned demon collapses Job's subordinate court accuser into much later devil iconography.",
+        "requiredScene": "Job's heavenly court: a severe humanlike accuser among the sons of God addresses overwhelming unfigured divine radiance and gestures toward Job far below.",
+        "exclusions": ["horns", "red skin", "goat legs", "bat wings", "pitchfork", "hell throne", "Revelation dragon", "Sammael label"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "Job sees the satan enter the divine assembly, question whether Job fears God for nothing, and receive bounded authority to test him. The Life of Adam and Eve later lets the devil explain his own exile as the result of refusing to bow before Adam and attempting self-exaltation.",
+        "attestedTraits": "In the Hebrew court scenes he accuses, tests, ranges through the earth, and remains subordinate to divine command. Later texts identify Satan with the devil, deceiver, ancient serpent, and defeated apocalyptic dragon, and give him angels of his own.",
+        "textualBoundary": "The Hebrew noun satan means adversary/accuser and is not always a proper name. Job's court officer, Chronicles' inciter, the Adam literature's expelled devil, and Revelation's dragon are related by developing tradition but not identical dossiers at every date. Isaiah 14 concerns Babylon's king; Sammael is later and excluded from the heading."
       }
     },
     {
