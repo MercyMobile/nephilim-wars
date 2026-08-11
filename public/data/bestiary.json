@@ -476,27 +476,43 @@
       "id": "semyaza",
       "name": "Semyaza",
       "hebrew": "שֶׁמְחֲזַאי",
-      "translation": "The Name has Seen",
+      "translation": "Shemihazah (meaning uncertain)",
       "type": "Fallen",
       "classification": "Fallen Watcher",
       "roles": [
         "Leader of the 200",
-        "Progenitor of Giants"
+        "Speaker at the Hermon Oath",
+        "Teacher of Enchantments and Root-Cutting"
       ],
-      "description": "Leader of the Watchers who descended on Mount Hermon. He taught enchantments and root-cutting, and bound his brethren by an oath to corrupt humanity.",
+      "description": "In 1 Enoch 6, Semyaza leads the two hundred children of heaven who desire human wives. He fears the others will abandon the deed and leave him alone to bear its penalty; they answer by swearing together under mutual imprecations on Mount Hermon. He teaches enchantments and root-cutting, rules his associates, joins their transgression, and later weeps with them when Enoch bears the refusal of their petition. Michael is commanded to bind Semyaza and his associates after they witness their giant sons destroy one another.",
       "theology": {
         "biblical": [
-          "Genesis 6:1-4 (Implied)"
+          "Genesis 6:1-4 (unnamed sons of God only)"
         ],
         "extraBiblical": [
           "1 Enoch 6-10",
           "Book of Giants"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Semyaza (Shemhazai) is the leader of the two hundred Watchers (Grigori) who descended upon Mount Hermon, an event that mirrors the emergence of the Apkallu from the Abzu but recontextualized as a cosmic rebellion.",
-        "anthropologicalInsights": "Semyaza represents the catalyst of 'monstrous hybridity.' His descent marks the beginning of the corruption of the natural order through the introduction of celestial mysteries, representing the 'Egregores' whose rebellion fundamentally fractured the antediluvian world.",
-        "mythicalBeliefs": "He bound his fellow Watchers by a mutual oath to commit their transgression and is eventually bound by Michael for seventy generations beneath the hills of the earth."
+      "image": "/images/bestiary/fallen/Semyaza-hermon-oath-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "Generic armored fallen-angel imagery misses the uniquely attested Hermon oath and invents anatomy, costume, and coercive command.",
+        "requiredScene": "On Hermon's cold summit Semyaza stands hesitantly at the center of a great ring of humanlike heavenly beings as all extend hands and bind themselves together by oath; their ranks recede around the ridge.",
+        "exclusions": [
+          "black feather wings",
+          "horns or monstrous anatomy",
+          "armor or weapons",
+          "magic circle or occult runes",
+          "giants already present",
+          "Semyaza forcing unwilling followers"
+        ],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "Semyaza speaks as a fearful leader, warning that he may be left alone to pay for the proposed sin. His two hundred associates answer with a collective oath on Hermon. Later Enoch sees the Watchers gathered in fear, weeping with covered faces, and reports that their petition will not be granted.",
+        "attestedTraits": "He bears authority among the associates, participates in taking human wives, teaches enchantments and root-cutting, fathers giant offspring in later Book of Giants tradition, and is sentenced with his associates to subterranean bonds for seventy generations before final judgment.",
+        "textualBoundary": "Genesis names no Watcher and supplies neither Semyaza, Hermon, oath, nor teachings. The name's etymology is uncertain. The Apkallu comparison is modern scholarship, while the Ohya-Ahya genealogy is clearest in a later Manichaean branch of the Book of Giants tradition; neither may be narrated as the plain wording of Genesis."
       }
     },
     {
