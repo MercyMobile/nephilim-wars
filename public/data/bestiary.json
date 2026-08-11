@@ -1030,13 +1030,20 @@
       "type": "Beast",
       "classification": "Primeval Land Creature",
       "roles": ["Mighty Creature of the Dry Land", "End-Time Provision"],
-      "image": "images/rutkowski/Beast/Behemoth.png",
+      "image": "/images/bestiary/legendary/Behemoth-Job-river-reeds-v2.png",
       "description": "God's speech to Job describes Behemoth as a grass-eating creature of immense strength; Enoch's vision places the male monster in the eastern wilderness.",
       "theology": {"biblical": ["Job 40:15-24"], "extraBiblical": ["1 Enoch 60:7-10", "4 Ezra 6:49-52", "2 Baruch 29:4"]},
       "ancientDossier": {
         "witness": "Job is told to behold Behemoth, made by God as Job was: it eats grass, has strength in loins and belly, bones like bronze and iron, shelters among reeds, and is untroubled by the river. Enoch sees it separated from Leviathan and assigned to dry wilderness.",
         "attestedTraits": "Colossal bodily strength, herbivory, riverine shelter, divine creaturehood, and later eschatological preservation are attested across the texts.",
         "textualBoundary": "Job does not identify a modern animal species, nor does it call Behemoth demonic. Enoch calls it male; visual details beyond the passages remain artistic inference."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A conventional dinosaur, hippo, or armored monster prematurely settles the species that Job leaves wondrous and taxonomically open.",
+        "requiredScene": "An immense unresolved herbivorous quadruped rests among lotus, reeds, willows, and a swelling river; massive loins, columnar limbs, and a powerful cedar-like tail embody Job's description while smaller beasts play nearby.",
+        "exclusions": ["identifiable hippo, elephant, dinosaur, or rhinoceros", "horned demon or predator teeth", "armor plates or dragon scales", "multiple heads", "literal tree-tail", "attack", "human rider or saddle", "weapon wounds", "modern paleo-art"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       }
     },
     {
