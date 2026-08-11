@@ -664,15 +664,15 @@
       "id": "lilith",
       "name": "Lilith",
       "hebrew": "לִילִית",
-      "translation": "Night Creature",
-      "type": "Demon",
-      "classification": "Demoness",
+      "translation": "Textual Witness Map",
+      "type": "Textual Index",
+      "classification": "Three Distinct Lilith Traditions",
       "roles": [
         "See: Lilith (Ben Sira)",
         "See: Lilith (Isaiah 34)",
-        "See: Lilitu (4Q510)"
+        "See: Lilith in 4Q510"
       ],
-      "description": "The name Lilith covers multiple distinct beings across traditions: the night creature of Isaiah 34:14, the plural wind-demons (Lilitu) of the Qumran incantation texts (4Q510), and the first wife of Adam in the Alphabet of Ben Sira. See the dedicated entries for each tradition. The folklore tradition that emerged in late antiquity blended these figures into a single archetype, but the underlying texts preserve them as separate presences.",
+      "description": "This is a concordance, not a fourth biography. Isaiah 34:14 places singular Lilith at rest within ruined Edom's wilderness company. 4Q510 names singular Lilith among hostile spirits terrified by the Maskil's praise. The medieval Alphabet of Ben Sira gives Lilith an Adam narrative and an oath-confrontation with three angels beside the sea. Each witness has its own card; no single ancient text joins all three dossiers.",
       "theology": {
         "biblical": [
           "Isaiah 34:14"
@@ -682,10 +682,18 @@
           "Alphabet of Ben-Sira"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Lilith is an ancient night demoness whose origins trace back to the Mesopotamian 'Lilitu'—storm demons and succubi associated with the wind and the wild places of the earth.",
-        "anthropologicalInsights": "Lilith represents the archetype of the rebellious and unsubmissive feminine. Historically, she embodies the 'Lilitu' storm-demon legacy, reflecting cultural anxieties regarding the untamed forces of nature and the subversion of domestic order.",
-        "mythicalBeliefs": "Later folklore identifies her as the first wife of Adam who fled Eden after refusing to be subordinate, eventually becoming the mother of demons and monsters."
+      "image": "/images/bestiary/fallen/Lilith-three-witnesses-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A single demoness portrait falsely fuses three texts separated by genre and centuries.",
+        "requiredScene": "A clearly divided three-panel ancient concordance: Lilith resting in ruined Edom; the Qumran Maskil's radiance driving back a mixed spirit company; and the Ben Sira sea-oath confrontation with exactly three angels.",
+        "exclusions": ["single glamour portrait", "crown or throne", "sexuality", "serpent tail", "modern gothic imagery", "readable or pseudo-Hebrew", "infant violence", "one continuous fused scene"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "The name is preserved in three different textual scenes: rest in Edom, opposition to the Maskil's praise, and a medieval sea-oath narrative after departure from Adam.",
+        "attestedTraits": "Only singular grammatical identity is shared securely between Isaiah and 4Q510; Ben Sira reuses the name in a developed narrative. The dedicated cards preserve what each witness actually attests.",
+        "textualBoundary": "No ancient witness combines Edom, Qumran's spirit catalogue, Adam, infant threat, demon queenship, succubus lore, and modern archetypal interpretation. Mesopotamian comparanda explain possibilities in transmission, not a continuous biography."
       }
     },
     {
