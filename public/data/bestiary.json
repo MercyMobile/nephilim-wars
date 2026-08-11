@@ -885,13 +885,20 @@
       "type": "Fallen",
       "classification": "Watcher",
       "roles": ["Teacher of Writing", "Teacher of Bitter and Sweet"],
-      "image": "images/rutkowski/Fallen/penemue.png",
+      "image": "/images/bestiary/fallen/Penemue-ink-and-bitter-sweet-v2.png",
       "description": "Penemue taught humankind writing with ink and paper and instructed them in bitter and sweet and the secrets of wisdom.",
       "theology": {"biblical": [], "extraBiblical": ["1 Enoch 69:8-10"]},
       "ancientDossier": {
         "witness": "The Enochic indictment says Penemue showed human beings writing with ink and paper. The narrator treats this disclosure as a path by which many went astray, and also credits him with teaching bitter and sweet and wisdom's secrets.",
         "attestedTraits": "Revealer of literacy and secret knowledge; a corrupting instructor rather than a battlefield figure in the surviving account.",
         "textualBoundary": "The passage condemns the use and disclosure described by its narrator; it does not support the modern claim that writing itself originated historically with a single supernatural teacher."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A generic fallen scholar misses the material disclosure of ink-and-sheet writing and the narrator's immediate warning about its corrupt use.",
+        "requiredScene": "By lamplight Penemue teaches ink-making and non-linguistic practice strokes; nearby bitter herbs and honey embody the paired lesson, while a background tally deception foreshadows misuse.",
+        "exclusions": ["readable alphabet, Hebrew, or cuneiform", "library or spellbook", "magic sigils", "feather quill", "printing press or modern paper", "benevolent schoolmaster mood", "cosmic armor or wings", "weapon"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       }
     },
     {
