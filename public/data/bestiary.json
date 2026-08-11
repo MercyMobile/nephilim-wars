@@ -700,14 +700,14 @@
       "id": "asmodeus",
       "name": "Asmodeus",
       "hebrew": "אַשְׁמְדַאי",
-      "translation": "Destroyer",
+      "translation": "Asmodeus / Ashmedai",
       "type": "Demon",
-      "classification": "Demon King",
+      "classification": "Evil Spirit in Tobit",
       "roles": [
-        "Destroyer of Marriage",
-        "Demon of Lust"
+        "Slayer of Sarah's Seven Bridegrooms",
+        "Driven to Egypt and Bound by Raphael"
       ],
-      "description": "A powerful demon associated with lust and rage. In Tobit, he kills Sarah's seven husbands. He was eventually bound by Raphael.",
+      "description": "Asmodeus is the evil spirit who killed Sarah's seven husbands before they consummated their marriages. Raphael instructs Tobias to burn a fish's heart and liver upon incense ash; Asmodeus smells the smoke, flees from the marriage chamber to the far parts of Egypt, and is pursued and bound by Raphael. Tobit gives him no royal title, fixed anatomy, or general office as a demon of lust.",
       "theology": {
         "biblical": [
           "Tobit 3:8"
@@ -717,10 +717,18 @@
           "Talmud Gittin 68a"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Asmodeus (Ashmeday, 'Destroyer') is a powerful demon king associated with uncontrolled lust, rage, and the subversion of marital bonds.",
-        "anthropologicalInsights": "Asmodeus personifies the destructive potential of human passions when unbridled by law or covenant, specifically targeting the core social unit of the family.",
-        "mythicalBeliefs": "In the Book of Tobit, he is the antagonist who slew seven of Sarah's husbands on their wedding nights before being driven away and bound by the archangel Raphael."
+      "image": "/images/bestiary/fallen/Asmodeus-tobit-egypt-flight-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "Later demon-king and grimoire iconography obscures Tobit's actual marriage-chamber expulsion and supplies anatomy the book never gives.",
+        "requiredScene": "Tobias burns the fish heart and liver on incense ash while Sarah prays; the smoke drives one unresolved dark spirit through the doorway toward Egypt as Raphael pursues in restrained angelic radiance.",
+        "exclusions": ["king regalia or throne", "three-headed chimera", "dragon mount", "grimoire seal", "lustful tableau", "attack on Sarah", "dead bodies or gore", "horns or red skin", "modern occult symbols", "readable or pseudo-writing"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "Sarah's seven bridegrooms die before consummation. At Raphael's instruction Tobias burns a fish's heart and liver; the spirit flees to Egypt, Raphael binds him, and the newlyweds turn to prayer.",
+        "attestedTraits": "Asmodeus is named an evil spirit, lethal to Sarah's husbands, repelled by the prescribed smoke, capable of flight to a distant region, and subject to Raphael's restraint.",
+        "textualBoundary": "Tobit does not call him king, personified lust, or rage; it supplies no body. The Testament of Solomon later makes him a self-described enemy of newlyweds and adulterous instigator, while Gittin 68 calls Ashmedai king of demons in a separate shamir story. Grimoire ranks and composite anatomy are later still."
       }
     },
     {
