@@ -564,27 +564,36 @@
       "id": "lilith_bensira",
       "name": "Lilith (Ben Sira)",
       "hebrew": "לִילִית",
-      "translation": "Night Creature / The First Who Refused",
+      "translation": "Lilith (name; not 'The First Who Refused')",
       "type": "Demon",
       "classification": "Demoness (Folklore Tradition)",
       "roles": [
-        "First Wife of Adam",
-        "Bearer of the Ineffable Name",
-        "Mother of Demons"
+        "First Woman in the Ben Sira Tale",
+        "Speaker of the Ineffable Name",
+        "Adversary of Unprotected Infants",
+        "Party to the Three-Angel Amulet Oath"
       ],
-      "description": "In the Alphabet of Ben Sira (8th-10th century CE), Lilith is the first wife of Adam, formed from the earth as he was, given the Ineffable Name of God alongside him, and created equal rather than from his side. When Adam demanded she lie beneath him in the marriage bed, she refused: 'We were both made from earth, why must you lord it over me?' She pronounced the Ineffable Name and flew up into the air. God sent three angels - Snwy, Sansnwy, and Smnglf - to bring her back, but she refused and swore to harm infants as vengeance. She is the archetype of conscious pride: a being who knew she was made, knew the Name, and chose rebellion rather than covenant.",
+      "description": "In the medieval Alphabet of Ben Sira, God creates Lilith from earth as Adam was created. They quarrel over sexual position; she argues that they are equal because both came from earth, pronounces the Ineffable Name, and flies away. Sanoy, Sansanoy, and Semangelof find her at the sea and demand her return. She refuses; amid threats against her children and her declared danger to infants, she swears not to harm a child protected by an amulet bearing the three angels' names or forms. The episode explains a healing amulet and is not a lost Genesis account.",
       "theology": {
         "biblical": [
-          "Genesis 1-3 (implied by tradition)"
+          
         ],
         "extraBiblical": [
           "Alphabet of Ben Sira (Alfabeta de-Ben Sira)"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "The Alphabet of Ben Sira is a late medieval Jewish folklore text (8th-10th century CE) that introduces Lilith as the first wife of Adam. Unlike Eve, who was formed from Adam's rib, Lilith was made from the earth itself - as Adam was - and was given the Ineffable Name (the Tetragrammaton) alongside him. This theological innovation, that a being besides Adam bore the divine name, sits at the heart of the legend: her refusal of the marriage covenant is a refusal to be subordinate to one who shares her nature. The legend's moral architecture places Lilith not as a mindless predator but as a being who saw clearly, knew her origin, and chose pride over covenant.",
-        "anthropologicalInsights": "The Ben Sira legend reflects medieval Jewish concerns about gender hierarchy, divine naming, and the meaning of covenant. By making Lilith the bearer of the Ineffable Name, the text gives her genuine divine authority - her flight is not mere rebellion but a claimed right. The angels' pursuit and her refusal (and her vow to harm infants in retaliation) represents the consequences of breaking covenant: she becomes the eternal antagonist of the household she refused. The text is polemical, theological, and deeply concerned with the boundaries of creation.",
-        "mythicalBeliefs": "Tradition holds that Lilith bears the Ineffable Name, flies through the air on her own power, and rules over the night-demons as their queen. She is pursued by three angels sent by God but refuses to return. She swears vengeance upon the children of those who refuse to wear her amulets. In some tellings, she is the mother of countless lilim (her offspring with spirits), each a being like herself - a conscious rebel against the divine order."
+      "image": "/images/bestiary/fallen/Lilith-bensira-sea-oath-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A seductive crowned demoness imports later queen imagery and omits the Ben Sira tale's defining sea confrontation and amulet compact.",
+        "requiredScene": "At the dark sea Lilith, humanlike and wind-tossed, raises a hand in refusal before the three plainly robed messenger-angels; one bears a small protective amulet with non-legible marks.",
+        "exclusions": ["serpent body", "horns", "bat wings", "red skin", "nude glamour pose", "crown or throne", "Eden", "Adam", "infant attack", "legible divine names"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "Ben Sira tells the story to explain an amulet for a sick royal child: Lilith claims equality with Adam from shared earthly formation, speaks the Ineffable Name, flees, refuses the three angels at the sea, and enters a protective oath keyed to their names and images.",
+        "attestedTraits": "She is earth-formed, verbally defiant, capable of flight after pronouncing the Name, associated with the sea, mother of children threatened with daily death, and a danger to infants limited by the three-angel amulet. No extraordinary physical anatomy is described.",
+        "textualBoundary": "This anonymous medieval, frequently comic and transgressive work is not the biblical Ben Sira/Sirach and is not evidence of a suppressed Genesis wife. The text says she pronounced the Name, not that God gave it to her alongside Adam. Demon queenship, covenant philosophy, and modern ideological readings are excluded from the eyewitness-facing dossier."
       }
     },
     {
