@@ -837,13 +837,20 @@
       "type": "Fallen",
       "classification": "Watcher",
       "roles": ["Teacher of Astrology", "Chief of Ten"],
-      "image": "images/rutkowski/Fallen/baraqel.png",
+      "image": "/images/bestiary/fallen/Baraqel-star-signs-lesson-v2.png",
       "description": "Baraqel is named among the Watcher chiefs, and the Book of Enoch remembers him as the one who taught the signs read by astrologers.",
       "theology": {"biblical": ["Genesis 6:1-4 (Watcher setting)"], "extraBiblical": ["1 Enoch 6:7", "1 Enoch 8:3"]},
       "ancientDossier": {
         "witness": "Enoch's account places Baraqel under the Hermon oath and names his disclosure as astrology—the reading of heavenly signs as forbidden instruction.",
         "attestedTraits": "Named Watcher chief; revealer of astrological knowledge. His name contains baraq, lightning, but the narrative does not say that he commands lightning.",
-        "textualBoundary": "The early witness does not identify Mahway's father by this name, describe wings, or provide a personal battle history. Those details must not be promoted from inference."
+        "textualBoundary": "The Book of Giants' Baraqel is named as Mahaway's father, but neither that notice nor the teaching list describes wings, lightning command, or a personal battle history. Such details must not be promoted from the name alone."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "Generic lightning-warrior art mistakes the name's baraq element for an attested power and ignores Baraqel's assigned disclosure of astrological knowledge.",
+        "requiredScene": "Below Hermon at night, a plain humanlike Watcher teaches ancient pupils to correlate star and planet paths using movable unmarked stones on dark cloth.",
+        "exclusions": ["zodiac wheel or horoscope glyphs", "readable chart", "lightning weapon or command pose", "planet or star held in hand", "wizard staff or magic circle", "wings or horns", "fantasy armor", "telescope or modern instrument"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       }
     },
     {
