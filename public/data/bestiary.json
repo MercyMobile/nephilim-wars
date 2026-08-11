@@ -861,13 +861,20 @@
       "type": "Fallen",
       "classification": "Watcher",
       "roles": ["Teacher of Constellations", "Chief of Ten"],
-      "image": "images/rutkowski/Fallen/kokabiel.png",
+      "image": "/images/bestiary/fallen/Kokabiel-constellation-memory-v2.png",
       "description": "Kokabiel belongs to the chiefs of the two hundred Watchers and is remembered as the revealer of the constellations.",
       "theology": {"biblical": ["Genesis 6:1-4 (Watcher setting)"], "extraBiblical": ["1 Enoch 6:7", "1 Enoch 8:3"]},
       "ancientDossier": {
         "witness": "The Book of the Watchers lists Kokabiel among the chiefs and attributes instruction concerning the constellations to him.",
         "attestedTraits": "Watcher authority and illicit celestial instruction are explicit. The star element is present both in the name and assigned teaching.",
         "textualBoundary": "The text gives no colors, armor, weapon, planetary throne, or combat power. Visual art should show an ancient celestial instructor without inventing a modern zodiac magician."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A cosmic warrior or zodiac magician supplies powers and iconography absent from Kokabiel's brief constellation-teacher witness.",
+        "requiredScene": "Under the open sky, a plain humanlike Watcher teaches pupils to recognize one star grouping using sighting poles, a reflecting water bowl, and counting cords, without drawn lines.",
+        "exclusions": ["zodiac wheel or horoscope glyphs", "glowing constellation lines", "star crown or stars in hands", "cosmic armor or wings", "telescope or astrolabe", "magic circle", "readable diagram or modern notation"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       }
     },
     {
