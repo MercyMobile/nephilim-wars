@@ -56,29 +56,47 @@
       "id": "gabriel",
       "name": "Gabriel",
       "hebrew": "גַּבְרִיאֵל",
-      "translation": "God is my strength",
+      "translation": "Man / Mighty One of God",
       "type": "Angel",
       "classification": "Archangel",
+      "image": "images/bestiary/archangel/Gabriel-daniel-ulai-v2.png",
+      "artReview": {
+        "status": "replaced after full source packet",
+        "depictedWitness": "Daniel 8:15-19",
+        "scene": "At the Ulai, the manlike Gabriel touches and sets the fallen Daniel upright while the ram-and-goat vision recedes behind them.",
+        "crossTextualRestraints": [
+          "No wings, halo, trumpet, lily, armor, or weapon is supplied by Daniel's encounter",
+          "Daniel 10's unnamed radiant linen-clad figure is not used as Gabriel's anatomy",
+          "The ram, goat, river, touch, and terrified seer anchor the image to Daniel 8",
+          "Later lunar, western, watery, and Solomonic correspondences are excluded"
+        ],
+        "sourcePacket": "docs/bestiary-source-packets/gabriel.md",
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
       "roles": [
         "Interpreter of Visions",
-        "Herald of Messiah"
+        "Presence-Bearer and Herald",
+        "Petitioner for the Blood-Swept Earth",
+        "Executor against the Watchers' Children",
+        "Overseer of Powers, Paradise, Serpents, and Cherubim"
       ],
-      "description": "Gabriel serves as God's primary herald, entrusted with delivering the most significant announcements in salvation history. Unlike Michael who wages war, Gabriel wields the weapon of divine communication, bringing understanding to confusion and revelation to mystery.",
+      "description": "Daniel remembers Gabriel first as a manlike heavenly interpreter: he approaches the terrified seer at the Ulai, touches him, sets him upright, and gives wisdom concerning the appointed end. In Luke, Gabriel identifies himself as one who stands in God's presence and is sent to speak to Zechariah and Mary. The Enochic witnesses give him a sterner reach: he joins the appeal over a blood-soaked earth, turns the Watchers' offspring against one another, stands over all the powers, and is assigned Paradise, serpents, and cherubim. He is herald and interpreter, but also petitioner, guardian, and executor of delegated judgment.",
       "theology": {
         "biblical": [
-          "Daniel 8:15",
-          "Daniel 9:20",
-          "Luke 1:19, 26"
+          "Daniel 8:15-26",
+          "Daniel 9:20-23",
+          "Luke 1:11-20, 26-38"
         ],
         "extraBiblical": [
-          "1 Enoch 9:1",
-          "1 Enoch 20:7"
+          "1 Enoch 9; 10:9-10; 20:7; 40:3-9; 54:6; 71:7-13",
+          "4Q529 Words of Michael (fragmentary mention)",
+          "Shabbat 55a; Pesachim 118a-b; Sanhedrin 94a-95b"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Gabriel (Gavri'el, 'God is my strength') is the primary herald of the Almighty, entrusted with delivering the most significant announcements in salvation history.",
-        "anthropologicalInsights": "Gabriel represents the weapon of divine communication and revelation. As part of the archangelic 'police force,' he serves as the bridge between the celestial and the terrestrial, ensuring the transmission of true wisdom to counter the 'forbidden knowledge' spread by the fallen.",
-        "mythicalBeliefs": "In Enochic tradition, Gabriel is one of the four archangels who look down upon the earth's corruption and is commanded to destroy the children of the Watchers."
+      "ancientDossier": {
+        "witness": "At the Ulai, Daniel sees one with the appearance of a man; a voice names him Gabriel and commands him to make Daniel understand. Gabriel comes near, terrifies the seer, speaks, touches him, and sets him upright. He later reaches Daniel during prayer to give wisdom and understanding. In Luke he stands at the right of the incense altar, names himself as one who stands in God's presence, and is sent into Mary's dwelling at Nazareth. In 1 Enoch he sees humanity's bloodshed, brings its cause before the Most High, receives orders against the Watchers' children, and joins the fiery judgment of Azazel's hosts.",
+        "attestedTraits": "Manlike manifestation; immediate delegated access to God's presence; rapid arrival; intelligible speech; touch that restores a collapsed witness; interpretation, instruction, announcement, and correction. The Enochic record adds intercession, command over the Watchers' violent offspring, jurisdiction over all powers and over Paradise, serpents, and cherubim, and participation in final punishment. Later rabbinic reception remembers Gabriel as advocate, marker of judgment, prince of fire, and destroying messenger, but preserves conflicting accounts of his instruments.",
+        "textualBoundary": "No named early witness gives Gabriel wings, halo, trumpet, lily, armor, sword, complexion, hair, or clothing color. Daniel 9's difficult phrase about his swift arrival is not anatomical evidence for wings. Daniel 10's beryl-bodied, lightning-faced, fire-eyed linen figure is never named Gabriel. The furnace rescue and other identifications of unnamed biblical messengers belong to later rabbinic reception. Western, lunar, watery, colored, perfumed, and sigilic assignments are late magical systems and are excluded from the core portrait."
       }
     },
     {
