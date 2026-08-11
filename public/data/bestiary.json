@@ -356,21 +356,36 @@
       "type": "Angel",
       "classification": "High Angel",
       "roles": [
-        "Keeper of Mysteries",
-        "Teacher of Adam"
+        "Bearer of the Book to Adam",
+        "Teacher of Mysteries in Medieval Tradition"
       ],
-      "description": "Raziel is the angel of mysteries who stands near God's throne recording all divine secrets. He gave Adam the Sefer Raziel containing all knowledge of the universe.",
+      "description": "In the medieval Sefer Raziel tradition, Adam prays after his expulsion for understanding of his future and descendants. On the third day, beside the river from Paradise, Raziel appears carrying a sacred book, reads from it until Adam falls in fear, then commands him to rise, receive it, study it in purity, and teach the worthy. When Adam takes the book, flame rises by the river and the angel ascends. This is a medieval revelatory legend, not an episode named in Genesis.",
       "theology": {
         "biblical": [],
         "extraBiblical": [
-          "Sefer Raziel HaMalakh",
-          "Zohar"
+          "Sefer Raziel ha-Malakh (medieval compilation)",
+          "The Book of Raziel Adam legend"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Raziel (Razi'el, 'Secret of God') is the keeper of divine mysteries and secrets, standing in the closest proximity to the throne of the Almighty.",
-        "anthropologicalInsights": "Raziel personifies the transmission of esoteric knowledge and the belief that the secrets of the cosmos are accessible to the righteous through divine revelation.",
-        "mythicalBeliefs": "He is said to have authored the 'Sefer Raziel HaMalakh,' a book of all celestial knowledge, which he gave to Adam after the exile from Eden."
+      "image": "/images/bestiary/high_angel/Raziel-river-book-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "The old generalized occult portrait does not show the card's controlling textual event and imports unattested celestial symbolism.",
+        "requiredScene": "At midday beside the river flowing from Eden, a restrained humanlike messenger reads from and offers an inscribed book to frightened, kneeling Adam; a column of flame rises at the riverbank for Raziel's ascent.",
+        "exclusions": [
+          "throne room or cosmic library",
+          "modern occult glyphs or sacred geometry",
+          "Kabbalistic Tree of Life",
+          "armor or weaponry",
+          "invented many-eyed anatomy",
+          "visual claim that Genesis narrates the event"
+        ],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "The received legend speaks from Adam's exile: after his prayer for knowledge, Raziel comes on the third day in the heat beside Paradise's river, carrying and reading a book. Adam falls in terror, receives the volume at the angel's command, and sees flame rise as the messenger ascends.",
+        "attestedTraits": "Raziel is a commissioned revealer and bearer of a book concerned with times, future conditions, sacred knowledge, and angelic mysteries. The name is conventionally understood as 'Mystery/Secret of God,' and Sefer Raziel itself links the angel's name to transmitting mysteries to Adam. The scene supplies no extraordinary bodily anatomy.",
+        "textualBoundary": "Raziel is absent from Genesis, the Dead Sea Scrolls, and the early angel lists used elsewhere in this bestiary. The extant Sefer Raziel is a composite medieval work, probably compiled in the thirteenth century from earlier materials. Claims that he records every divine secret beside the throne, and modern occult diagrams attached to him, are not admitted without a controlling text."
       }
     },
     {
