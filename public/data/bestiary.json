@@ -1074,17 +1074,24 @@
       "id": "rephaim_shades",
       "name": "Rephaim — The Shades",
       "hebrew": "רְפָאִים",
-      "translation": "Rephaim; later used of the departed shades",
+      "translation": "Rephaim / Departed Shades",
       "type": "Spirit",
       "classification": "Dead Rephaim",
       "roles": ["Inhabitants of Sheol", "Fallen Ancient Rulers"],
-      "image": "images/rutkowski/Spirit/refaim_spirit.png",
+      "image": "/images/bestiary/legendary/Rephaim-Isaiah-Sheol-kings-v2.png",
       "description": "Hebrew witnesses use Rephaim both for formidable ancient peoples and for the powerless dead who stir in Sheol; this card records the latter usage without collapsing it into the living clans.",
       "theology": {"biblical": ["Job 26:5", "Psalm 88:10", "Proverbs 2:18", "Proverbs 9:18", "Isaiah 14:9", "Isaiah 26:14, 19"], "extraBiblical": ["Ugaritic KTU 1.20-1.22 (rpum)"]},
       "ancientDossier": {
         "witness": "The shades tremble beneath the waters in Job; they do not rise to praise in Psalm 88; Isaiah pictures Sheol rousing the Rephaim, the former leaders of the earth, to greet a fallen king. Isaiah 26 contrasts dead Rephaim who do not rise with God's dead who shall live.",
         "attestedTraits": "They belong to the underworld and are portrayed as diminished dead, retaining identity and royal memory but lacking the vitality of the living giant clans.",
         "textualBoundary": "The Hebrew texts do not depict these shades as game-style necromancers or prove that every dead human becomes a Rephaim. The relationship between Ugaritic ancestral rpum and biblical usage is comparative evidence, not an eyewitness identification."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A powerful spectral giant or necromancer erases the shades' defining diminution in Sheol and collapses them into the living Rephaim clans.",
+        "requiredScene": "In a rock-cut Sheol hall beneath deep-water shadow, weakened translucent former kings rise from low seats to mockingly greet a newly fallen tyrant reduced to their level.",
+        "exclusions": ["zombies or skeleton army", "necromancer", "weapons or combat", "giant bodies", "free-flying ghosts", "hellfire or torturing demons", "glowing magic", "active resurrection", "Ugaritic feast fused into Isaiah", "modern cemetery"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       }
     }
   ]
