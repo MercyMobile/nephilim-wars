@@ -12,6 +12,22 @@
       "translation": "Who is like God?",
       "type": "Angel",
       "classification": "Archangel",
+      "image": "images/bestiary/archangel/Michael-ancient-witness-v2.png",
+      "artReview": {
+        "status": "replaced",
+        "basis": "Daniel 10:13, 21; Daniel 12:1; Jude 1:9; Revelation 12:7-9",
+        "attestedAnchors": [
+          "Chief prince",
+          "Defender of Israel",
+          "Combatant against hostile heavenly powers"
+        ],
+        "deliberateRestraints": [
+          "No wings attested in the cited Michael passages",
+          "No halo, flaming sword, or medieval plate armor",
+          "Face veiled because no physical portrait is supplied"
+        ],
+        "style": "Ancient-witness archive: historical oil and egg-tempera realism, natural pigments, sober numinous lighting"
+      },
       "roles": [
         "Protector of Israel",
         "Psychopomp",
