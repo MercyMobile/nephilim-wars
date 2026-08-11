@@ -1054,13 +1054,20 @@
       "type": "Beast",
       "classification": "Primeval Sea Creature",
       "roles": ["Sea Serpent", "Creature Reserved for Judgment"],
-      "image": "images/rutkowski/Beast/leviathan.png",
+      "image": "/images/bestiary/legendary/Leviathan-Job-boiling-deep-v2.png",
       "description": "Leviathan is the unmasterable sea creature of Job, the twisting serpent punished in Isaiah, and the female monster assigned to the ocean abyss in Enoch's vision.",
       "theology": {"biblical": ["Job 3:8", "Job 41:1-34", "Psalm 74:13-14", "Psalm 104:26", "Isaiah 27:1"], "extraBiblical": ["1 Enoch 60:7-10", "4 Ezra 6:49-52", "2 Baruch 29:4"]},
       "ancientDossier": {
         "witness": "Job's divine speech describes a creature no human can leash: armored scales, terrifying teeth, fiery and smoky breath, a wake that makes the deep seem hoary, and fearlessness before weapons. Isaiah names swift and twisting Leviathan and foretells its punishment. Enoch locates the female monster in the ocean abyss.",
         "attestedTraits": "Aquatic habitation, serpentine language, extraordinary armor and force, smoke and flame imagery, and subjection to God are explicit.",
-        "textualBoundary": "The passages do not require a medieval dragon anatomy or identify Leviathan with Satan. Enoch's sex assignment belongs to that textual tradition and should not be retrojected into Job."
+        "textualBoundary": "The passages do not require a medieval dragon anatomy or identify Leviathan with Satan. Psalm 74's plural heads belong to its combat-poem and need not define Job's portrait; Enoch's female assignment belongs to that later vision and should not be retrojected into Job."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A winged or four-legged dragon imports medieval anatomy; Job describes an aquatic, armored, smoke-and-flame-breathing creature human beings cannot master.",
+        "requiredScene": "An immense limbless coiling sea creature with interlocked shield-scales rises from a boiling deep, smoke and restrained flame at its jaws, dawn-like eyes, and a shining wake beside a tiny ancient ship.",
+        "exclusions": ["wings, legs, or horns", "medieval dragon or Satan imagery", "crown", "multiple heads on the Job portrait", "humanoid torso or tentacles", "ship-eating attack", "visible divine sword", "grimoire sigil", "modern sea-monster trope"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       }
     },
     {
