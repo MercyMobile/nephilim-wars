@@ -137,13 +137,13 @@ const imageMap = {
     nephilim_scout: 'images/rutkowski/Giant/nephilim_scout.png', nephilim_hunter: 'images/rutkowski/Giant/nephilim_hunter.png', rephaim_champion: 'images/rutkowski/Giant/rephaim_champion.png',
     rephaim_warrior: 'images/rutkowski/Giant/rephaim_warrior.png', rephaim_deathspeaker: 'images/rutkowski/Giant/rephaim_deathspeaker.png', anakim_berserker: 'images/rutkowski/Giant/anakim_berserker.png',
     horim_tunneler: 'images/rutkowski/Cave Dweller/horim_tunneler.png', horim_stoneshaper: 'images/rutkowski/Cave Dweller/horim_stoneshaper.png', gibborim_elite: 'images/rutkowski/Mighty One/gibborim_elite.png',
-    gibborim: 'images/rutkowski/Mighty One/gibborim.png', gammadim_tunnelfighter: 'images/rutkowski/Under-Walker/gammadim_tunnelfighter.png', gammadim_earthspeaker: 'images/rutkowski/Under-Walker/gammadim_earthspeaker.png',
-    elioud_deceiver: 'images/rutkowski/Giant/elioud_deceiver.png', elioud_champion: 'images/rutkowski/Giant/elioud_champion.png', ohya: 'images/rutkowski/Giant/ohya.png',
-    hahya: 'images/rutkowski/Giant/hahya.png', mahway: 'images/rutkowski/Giant/mahway.png', gilgamesh: 'images/rutkowski/Giant/gilgamesh.png',
+    gibborim: 'images/rutkowski/Mighty One/Gibborim.png', gammadim_tunnelfighter: 'images/rutkowski/Under-Walker/gammadim_tunnelfighter.png', gammadim_earthspeaker: 'images/rutkowski/Under-Walker/gammadim_earthspeaker.png',
+    elioud_deceiver: 'images/rutkowski/Giant/Elioud_Deceiver.png', elioud_champion: 'images/rutkowski/Giant/Elioud_Champion.png', ohya: 'images/rutkowski/Giant/ohya.png',
+    hahya: 'images/rutkowski/Giant/hahya.png', mahway: 'images/rutkowski/Giant/mahway.png', gilgamesh: 'images/rutkowski/Giant/Gilgamesh.png',
     baal_priest: 'images/rutkowski/Human/baal_priest.png', lamech: 'images/rutkowski/Human/lamech.png', cainite_assassin: 'images/rutkowski/Human/cainite_assassin.png',
     cainite_warrior: 'images/rutkowski/Human/cainite_warrior.png', sorcerer_priest: 'images/rutkowski/Human/sorcerer_priest.png', watcher_cult_leader: 'images/rutkowski/Human/watcher_cult_leader.png',
     watcher_cultist: 'images/rutkowski/Human/watcher_cultist.png', desert_raider: 'images/rutkowski/Human/desert_raider.png', refaim_wraith: 'images/rutkowski/Spirit/refaim_wraith.png',
-    refaim_spirit: 'images/rutkowski/Spirit/refaim_spirit.png', behemoth: 'images/rutkowski/Beast/behemoth.png', leviathan: 'images/rutkowski/Beast/leviathan.png',
+    refaim_spirit: 'images/rutkowski/Spirit/refaim_spirit.png', behemoth: 'images/rutkowski/Beast/Behemoth.png', leviathan: 'images/rutkowski/Beast/leviathan.png',
     ziz: 'images/rutkowski/Beast/ziz.png',
 };
 const fallbackImg = 'images/rutkowski/Angel/michael.png';
@@ -175,7 +175,7 @@ async function loadData() {
     allCards = [];
     if (bestiaryData && bestiaryData.entries) {
         for (const entry of bestiaryData.entries) {
-            allCards.push({ source: 'bestiary', ...entry, image: getImage(entry.id) });
+            allCards.push({ source: 'bestiary', ...entry, image: entry.image || getImage(entry.id) });
         }
     }
     
@@ -282,7 +282,22 @@ function openModal(card) {
         </div>`;
 
     let academicSection = '';
-    if (card.academicDossier) {
+    if (card.ancientDossier) {
+        academicSection = `
+            <div class="scholarly-section">
+                <h3>Witness Record</h3>
+                <p class="academic-text">${card.ancientDossier.witness}</p>
+            </div>
+            <div class="scholarly-section">
+                <h3>Traits Attested by the Text</h3>
+                <p class="academic-text">${card.ancientDossier.attestedTraits}</p>
+            </div>
+            <div class="scholarly-section">
+                <h3>Boundary of the Record</h3>
+                <p class="academic-text">${card.ancientDossier.textualBoundary}</p>
+            </div>
+        `;
+    } else if (card.academicDossier) {
         academicSection = `
             <div class="scholarly-section">
                 <h3>Scholarly Synthesis</h3>
@@ -331,7 +346,7 @@ function openModal(card) {
                                 <div class="action-name">${a.name}</div>
                                 <div class="action-meta">+${a.toHitBonus} To Hit // ${a.damageDice}${a.damageBonus >= 0 ? '+' : ''}${a.damageBonus} ${a.damageType}</div>
                             </div>
-                            <div class="action-desc">Cost: ${a.cost} Action(s) // ${a.traits ? a.actions.join(', ') : ''}</div>
+                            <div class="action-desc">Cost: ${a.cost} Action(s) // ${a.traits ? a.traits.join(', ') : ''}</div>
                         </div>
                     `).join('')}
                 </div>`;
