@@ -629,16 +629,16 @@
     },
     {
       "id": "lilitu_qumran",
-      "name": "Lilitu (4Q510)",
+      "name": "Lilith in 4Q510",
       "hebrew": "לִילִית",
-      "translation": "The Wind Spirits / Storm Demons",
+      "translation": "Lilith (singular hostile spirit)",
       "type": "Demon",
-      "classification": "Plural Wind-Demons",
+      "classification": "Named Spirit in an Apotropaic Song",
       "roles": [
-        "Threat to Childbearing",
-        "Spiritual Adversaries in Incantation"
+        "One Presence among the Hostile Spirits",
+        "Terrified by the Maskil's Praise"
       ],
-      "description": "In 4Q510 (Songs of the Sage / Sapiential Work), the plural form lilith (Lilitu) appears in a Qumran incantation text as wind-spirits that threaten women in childbirth. These are not a single queen or first wife; they are a class of demons drawn from Mesopotamian tradition, where Lilitu were female wind-demons associated with disease, sexual predation, and the wild places of the earth. The 4Q510 incantation invokes the 'spirits of the bastards' and the Lilitu together as spiritual adversaries to be bound or driven away by the power of God.",
+      "description": "In 4Q510 fragment 1, the Maskil proclaims God's glorious splendor to frighten and terrify a company of hostile spirits: ravaging angels, spirits of the bastards, demons, singular Lilith, howlers, desert beings, and attackers who strike without warning. Lilith receives no separate biography or anatomy. The song places her inside the present, bounded dominion of wickedness and opposes that company with divine radiance and the spirit of understanding.",
       "theology": {
         "biblical": [],
         "extraBiblical": [
@@ -646,10 +646,18 @@
           "4Q511"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "4Q510 and 4Q511 (the Songs of the Sage, also called the Sapiential Work) are Qumran liturgical/magical texts that invoke divine protection against demonic forces. The plural form lilith appears alongside other spiritual adversaries - the spirits of the bastards, the male demons (shedd), and the night-spirits - as a class of female wind-demons. The tradition behind them is Mesopotamian: the Akkadian Lilitu, alongside the Ardat Lili and the Lilit, were female demons of the wind, associated with sexual predation, nocturnal attacks, and harm to pregnant women and infants. Jewish tradition absorbed these figures, and the Qumran texts preserve the incantation formulas designed to repel them.",
-        "anthropologicalInsights": "The Qumran Lilitu are part of a broader pattern of Jewish demonology drawing from Mesopotamian and Persian sources. The plural form and the lack of any narrative development suggest these are practical spiritual adversaries, not theological figures with moral arcs. They represent a real fear - women in childbirth, infants in their cribs - and the incantation texts are designed to bind or drive them away through the invocation of God's name and power. The theological architecture is not 'Lilith who chose rebellion' but 'wind-demons who harm; God who protects.'",
-        "mythicalBeliefs": "4Q510 and 4Q511 do not develop Lilitu as characters with names, biographies, or moral choices. They appear in lists of demonic forces and are invoked as categories of spiritual threat. This is practical magic literature, not narrative theology. The creatures in these texts belong to the Jewish tradition of binding spiritual adversaries through divine names, not to the folkloric legends of late antiquity."
+      "image": "/images/bestiary/fallen/Lilith-qumran-sage-song-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "The manuscript's scene is the Maskil's divine praise driving back a mixed company of spirits, not plural wind-demonesses attacking childbirth.",
+        "requiredScene": "A Qumran Maskil proclaims a hymn in a lamplit desert cave as restrained divine radiance presses ravaging spirits, demons, a howler, desert forms, and one elusive female-associated night presence back into darkness.",
+        "exclusions": ["childbirth or infant", "Adam or Eden", "multiple female Lilitu", "crown or throne", "seduction or sexualized anatomy", "wings or serpent tail", "magic circle or pentagram", "pseudo-Hebrew", "isolated glamour portrait"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "The Maskil proclaims the splendor of God in order to terrify the hostile company that stalks the age of wickedness; singular Lilith stands named among demons, bastard spirits, howlers, desert beings, and sudden assailants.",
+        "attestedTraits": "Lilith belongs to a mixed hostile company opposed to divine radiance and the spirit of understanding. The surviving fragment attests her name and placement, but supplies no appearance, speech, origin, victims, or individual deed.",
+        "textualBoundary": "The Hebrew is singular לילית. Childbirth, infants, sexuality, plural wind-demonesses, Adam, queenship, and a narrated binding are absent. Mesopotamian parallels and later Jewish protective traditions must remain outside this Qumran dossier."
       }
     },
     {
