@@ -106,27 +106,41 @@
       "translation": "God heals",
       "type": "Angel",
       "classification": "Archangel",
+      "image": "images/bestiary/archangel/Raphael-tobit-tigris-v2.png",
+      "artReview": {
+        "status": "replaced after full source packet",
+        "depictedWitness": "Tobit 5-6",
+        "scene": "Raphael, passing as the hired traveler Azariah, instructs Tobias beside the seized fish on the Tigris while their dog and journey gear remain nearby.",
+        "crossTextualRestraints": [
+          "No wings, halo, medical emblem, glowing staff, armor, or potion apparatus is supplied by Tobit",
+          "Raphael must pass completely as a young human traveler until his later disclosure",
+          "Fish, riverbank, dog, and travel gear anchor the image to Tobit's narrative",
+          "Later planetary, directional, colored, and Solomonic correspondences are excluded"
+        ],
+        "sourcePacket": "docs/bestiary-source-packets/raphael.md",
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
       "roles": [
-        "Binder of Demons",
-        "Guide of Travelers",
-        "Healer"
+        "Human-Passing Guide and Kinsman",
+        "Presenter of Prayers",
+        "Healer of Persons and Earth",
+        "Binder of Asmodeus and Azazel",
+        "Interpreter of the Dead and Eden"
       ],
-      "description": "Raphael embodies God's compassionate care, serving as the celestial physician. In 1 Enoch, he is commissioned to bind Azazel and 'heal the earth'. He acts not merely to heal victims but to restrain the victimizers.",
+      "description": "In Tobit, Raphael answers two desperate prayers by passing as the hired kinsman Azariah: he walks with Tobias, instructs him at the Tigris, arranges his marriage, binds Asmodeus, recovers family money, and directs the cure of Tobit's blinded eyes. Only at the end does he reveal that he presented their prayers and is one of the seven who stand before God. In 1 Enoch he hears the blood-soaked earth, binds Azazel beneath jagged stones, heals the corruption the Watchers caused, guides Enoch among the waiting dead, and stands over human spirits, diseases, and wounds.",
       "theology": {
         "biblical": [
-          "Tobit 3:17",
-          "Tobit 12:15"
+          "Tobit 3:16-17; 5-6; 8:2-3; 9-12"
         ],
         "extraBiblical": [
-          "1 Enoch 10:4",
-          "1 Enoch 20:3",
-          "Jubilees 10:10"
+          "1 Enoch 9; 10:4-8; 20:3; 22; 32; 40:9; 54:6; 68; 71",
+          "Jubilees 10:7-13 (unnamed healing angel; Raphael identification is editorial)"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Raphael (Refa'el, 'God heals') embodies divine compassion as the celestial physician, charged with healing the earth and restraining demonic forces.",
-        "anthropologicalInsights": "The figure of Raphael reflects the personification of divine providence and restoration. His mission to 'heal the earth' is a direct counter-operation against the 'Apkallu Inversion,' where he acts to bind the sources of corruption—specifically Azazel—and purify the world from monstrous hybridity.",
-        "mythicalBeliefs": "Raphael is famously known for binding the demon Azazel in the desert and guiding Tobias on his journey in the deuterocanonical Book of Tobit."
+      "ancientDossier": {
+        "witness": "Tobit and Sarah pray for death; God sends Raphael to heal them both. Appearing as the young kinsman Azariah, he accepts hire, travels on foot, instructs Tobias to seize and open the Tigris fish, explains its medicines, binds Asmodeus in Upper Egypt, conducts family business, and directs Tobit's eye cure. He then reveals that he carried their prayers before God and belongs to the seven who stand ready before divine glory. Enoch's seer sees the same named angel receive the command to bind Azazel and heal the injured earth.",
+        "attestedTraits": "A wholly human-passing young traveler; guide, negotiator, companion, prayer-bearer, healer, demon-binder, and custodian/interpreter of human spirits. His remedies use ordinary-looking matter—fish heart, liver, and gall—under divine commission. His healing includes restraining the agent of harm: Asmodeus is bound far away, and Azazel is buried under rough stones and darkness. His authority is delegated, practical, and often concealed until the work is complete.",
+        "textualBoundary": "Tobit gives Raphael no wings, halo, staff, medical emblem, armor, complexion, or clothing color. The dog accompanies the travelers in major textual forms but is not Raphael's symbolic animal. Jubilees 10 does not name its medicine-teaching angel; identifying him as Raphael is an editorial comparison. Later assignments to directions, elements, planets, colors, seals, and incenses belong to inconsistent magical systems and are excluded from the early portrait."
       }
     },
     {
