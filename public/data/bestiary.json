@@ -519,14 +519,15 @@
       "id": "azazel",
       "name": "Azazel",
       "hebrew": "עֲזָאזֵל",
-      "translation": "Scapegoat",
+      "translation": "Azazel (etymology disputed)",
       "type": "Fallen",
       "classification": "Fallen Watcher",
       "roles": [
-        "Teacher of Warfare",
-        "Corrupter"
+        "Teacher of Weapons and Metalwork",
+        "Teacher of Ornament, Cosmetics, Stones, and Dyes",
+        "Prisoner in Dudael"
       ],
-      "description": "Azazel taught humanity the arts of war—swords, shields, and armor. He corrupted the earth so thoroughly that Raphael was commanded to bind him in the desert.",
+      "description": "Leviticus sends a living goat 'for Azazel' into the wilderness bearing Israel's confessed iniquities, but gives Azazel no anatomy or biography. In 1 Enoch, Azazel teaches swords, knives, shields, breastplates, metalwork, bracelets, ornament, antimony, beautified eyelids, costly stones, and dyes. Raphael is commanded to bind him hand and foot in Dudael, cover him with jagged rocks and darkness, and hide his face from light until the great judgment.",
       "theology": {
         "biblical": [
           "Leviticus 16"
@@ -537,10 +538,26 @@
           "Apocalypse of Abraham"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Azazel is the patron of warfare. His revelation of metallurgy represents the transition from tribal skirmishes to organized violence.",
-        "anthropologicalInsights": "Azazel symbolizes the introduction of advanced weaponry. By teaching the construction of lethal tools, he inverts the role of the sage from a bringer of civilization to a purveyor of death.",
-        "mythicalBeliefs": "Associated with the scapegoat of Leviticus, Azazel is bound beneath the jagged rocks of Dudael for his crimes against humanity."
+      "image": "/images/bestiary/fallen/Azazel-dudael-binding-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "The armored warrior portrait narrows Azazel's teachings and misses the uniquely detailed Dudael binding, while risking fusion with the Levitical goat.",
+        "requiredScene": "Raphael binds humanlike Azazel hand and foot in Dudael as rough jagged rocks close over him and his face is covered from light; abandoned weapons, ornaments, antimony, pigments, and stones mark his teachings.",
+        "exclusions": [
+          "goat head or goat body",
+          "identifying Azazel as the Levitical goat",
+          "horns or demon anatomy",
+          "triumphant armor",
+          "sword duel",
+          "medieval hell",
+          "visible idol receiving sacrifice"
+        ],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "Leviticus witnesses the goat bearing confessed iniquities into a cut-off wilderness for Azazel. Enoch witnesses a named revealer blamed for earthly corruption, hears the sentence delivered, and tells Azazel directly that bonds and denied peace await him.",
+        "attestedTraits": "Azazel reveals both instruments of bloodshed and technologies of adornment: weapons, defenses, metals, jewelry, eye paint, stones, and dyes. His Enochic punishment is unusually concrete—bound hand and foot by Raphael, cast into Dudael's darkness, buried beneath jagged rocks, and denied sight of light.",
+        "textualBoundary": "The meaning of Azazel in Leviticus is disputed, and 'scapegoat' names the English ritual image rather than securely translating a personal name. Leviticus does not explicitly identify a Watcher. The Enochic and later Abrahamic figures must be related cautiously rather than read wholesale into the Torah."
       }
     },
     {
