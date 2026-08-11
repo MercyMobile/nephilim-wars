@@ -272,23 +272,38 @@
       "translation": "Thunder of God",
       "type": "Angel",
       "classification": "Archangel",
+      "image": "images/bestiary/archangel/Remiel-baruch-waters-v2.png",
+      "artReview": {
+        "status": "replaced after full source packet",
+        "depictedWitness": "2 Baruch 53-76",
+        "scene": "Ramiel, who presides over true visions, interprets for Baruch the sea-cloud's alternating black and white waters and the final healing lightning.",
+        "crossTextualRestraints": [
+          "No trumpet, graveyard, floating souls, wings, halo, armor, or weapon is supplied",
+          "Humanlike anatomy is a restrained inference because 2 Baruch gives no bodily description",
+          "2 Esdras 4 names Uriel, not Remiel, and is excluded from this dossier",
+          "Later Jeremiel conflations and magical correspondences are not used as visual evidence"
+        ],
+        "sourcePacket": "docs/bestiary-source-packets/remiel.md",
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
       "roles": [
-        "Angel of Resurrection",
-        "Guide of Souls"
+        "One of the Seven Holy Watchers",
+        "Overseer of Those Who Rise",
+        "Presider over True Visions",
+        "Interpreter of History's Dark and Bright Waters"
       ],
-      "description": "Remiel serves as the archangel of resurrection and hope. He is 'set over those who rise', making him the herald of humanity's ultimate hope that death is not the end.",
+      "description": "1 Enoch names Remiel among the seven holy watchers and says God set him over those who rise. In 2 Baruch, the name-form Ramiel presides over true visions and interprets the great sea-cloud whose alternating black and white waters disclose successive ages of corruption and righteousness, ending in tribulation, illumination, and healing. The record supports resurrection oversight and truthful apocalyptic interpretation, but not the later generic portrait of a trumpet-bearing guide escorting individual souls.",
       "theology": {
         "biblical": [],
         "extraBiblical": [
           "1 Enoch 20:8",
-          "2 Baruch",
-          "2 Esdras 4:36"
+          "2 Baruch 53-76"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Remiel (Remi'el, 'Thunder of God') is the archangel of resurrection and hope, presiding over the souls awaiting the final judgment.",
-        "anthropologicalInsights": "Remiel personifies the eschatological hope of humanity, reflecting the belief in a transition from death to a new life and the eventual triumph of righteousness.",
-        "mythicalBeliefs": "In 2 Esdras, he is the one who answers the questions of the righteous dead concerning when the number of the faithful will be complete and judgment will begin."
+      "ancientDossier": {
+        "witness": "The Enochic roster says Remiel is set by God over those who rise. Baruch's apocalypse gives Ramiel a speaking role: sent as the angel over true visions, he interprets the cloud from the sea, its twelve alternating dark and bright waters, the final black waters, and the lightning that heals the earth as the ordered history and end of the age.",
+        "attestedTraits": "Holy-watcher status; delegated relation to those who rise; custody of truthful visions; sustained interpretation of symbolic history; disclosure of judgment, messianic culmination, illumination, and healing. The texts emphasize intelligible interpretation rather than spectacle or psychopomp activity.",
+        "textualBoundary": "The righteous dead's question in 2 Esdras 4:36 is answered by Uriel, not Remiel. Remiel/Ramiel/Jeremiel name equivalence varies across later traditions. No early witness gives this angel a trumpet, wings, halo, weapon, thunderbolt, graveyard, clothing color, or bodily description."
       }
     },
     {
