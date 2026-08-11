@@ -232,11 +232,26 @@
       "translation": "Friend of God",
       "type": "Angel",
       "classification": "Archangel",
+      "image": "images/bestiary/archangel/Raguel-western-fire-v2.png",
+      "artReview": {
+        "status": "replaced after full source packet",
+        "depictedWitness": "1 Enoch 23",
+        "scene": "At the western end of the earth, Raguel explains to Enoch the unceasing regular course of fire associated with all the luminaries of heaven.",
+        "crossTextualRestraints": [
+          "No scales, measuring rod, throne, armor, sword, wings, or halo is supplied",
+          "Humanlike form is a restrained visual inference rather than attested anatomy",
+          "The marked translation verbs 'takes vengeance' and 'persecutes' are treated as uncertain",
+          "Later magical correspondences are excluded"
+        ],
+        "sourcePacket": "docs/bestiary-source-packets/raguel.md",
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
       "roles": [
-        "Angel of Justice",
-        "Overseer of Luminaries"
+        "One of the Seven Holy Watchers",
+        "Corrective Power concerning the Luminaries",
+        "Interpreter of the Unceasing Western Fire"
       ],
-      "description": "Raguel holds a unique position as the enforcer of divine order among the angels themselves. He takes vengeance on the world of the luminaries, ensuring that celestial beings fulfill their duties.",
+      "description": "1 Enoch places Raguel among the seven holy watchers and assigns him a textually difficult corrective office concerning the world of the luminaries. At the western end of the earth he answers Enoch's question about a fire that runs regularly without rest by day or night, identifying it as the western fire associated with all heaven's luminaries. This makes him an interpreter and custodian of cosmic order; it does not establish the later courtroom portrait of scales, throne, armor, or authority over every angel.",
       "theology": {
         "biblical": [],
         "extraBiblical": [
@@ -244,10 +259,10 @@
           "1 Enoch 23:4"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Raguel (Re'u'el, 'Friend of God') is the archangel of justice and harmony, acting as the enforcer of order within the angelic hierarchy.",
-        "anthropologicalInsights": "Raguel represents the concept of internal celestial policing, ensuring that even spiritual beings remain accountable to divine law and cosmic harmony.",
-        "mythicalBeliefs": "Enochic tradition describes Raguel as the one who 'takes vengeance on the world of the luminaries' and oversees the conduct of his fellow angels."
+      "ancientDossier": {
+        "witness": "The sevenfold roster assigns Raguel an uncertainly worded punitive or corrective relation to the world of the luminaries. Later in Enoch's journey, Raguel is one of the holy angels with him at the western end of the earth. He explains the ceaseless, regular westward fire associated with the heavenly lights.",
+        "attestedTraits": "Holy-watcher status; knowledge of the luminary realm; corrective jurisdiction expressed through unstable translation; direct interpretation of witnessed cosmic fire. His concern is ordered heavenly lights, not an attested universal celestial court.",
+        "textualBoundary": "Charles marks both 'takes vengeance on' and 'persecutes' as uncertain readings, while Laurence phrases the passages differently. No source gives Raguel scales, measuring rod, throne, armor, wings, halo, color scheme, or bodily description. The artwork's humanlike guide is explicitly inferential."
       }
     },
     {
