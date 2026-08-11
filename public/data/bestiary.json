@@ -12,28 +12,44 @@
       "translation": "Who is like God?",
       "type": "Angel",
       "classification": "Archangel",
+      "image": "images/bestiary/archangel/Michael-testament-abraham-v3.png",
+      "artReview": {
+        "status": "replaced after full source packet",
+        "depictedWitness": "Testament of Abraham, long recension, chapters 2-6",
+        "scene": "At Mamre, Abraham washes the feet of the human-passing chief-captain Michael while Isaac attends; Michael's tears become precious stones in the basin.",
+        "crossTextualRestraints": [
+          "No wings, halo, crown, armor, or weapon is supplied by this encounter",
+          "The radiant warrior-traveler form belongs to the Testament of Abraham and is not projected into Daniel",
+          "Martial rank is conveyed by bearing; mercy and grief are conveyed by the witnessed action",
+          "Later planetary colors, seals, and Solomonic insignia are excluded"
+        ],
+        "sourcePacket": "docs/bestiary-source-packets/michael.md",
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
       "roles": [
-        "Protector of Israel",
-        "Psychopomp",
-        "Defeater of Satan"
+        "Prince Who Stands for Daniel's People",
+        "Binder of Semyaza",
+        "Merciful Presence",
+        "Chief-Captain and Soul-Guide"
       ],
-      "description": "Michael stands as the preeminent warrior among all angels. He is explicitly called 'one of the chief princes' and 'the great prince who stands guard over the sons of your people'. He serves as the primary antagonist to the forces of darkness, the divine warrior who executes God's judgments.",
+      "description": "Daniel calls Michael one of the chief princes and the great prince who stands for Daniel's people. Enoch's witnesses remember more than a warrior: Michael hears the earth's accusation, binds Semyaza, interprets mysteries, guards the elect portion of humankind, and trembles with mercy at severe judgment. Jude names him the archangel who refuses to condemn from his own authority; Revelation places him at the head of angels against the dragon. In the later Testament of Abraham he appears as God's radiant chief-captain, a beautiful young warrior who passes as a traveler, walks beside Abraham, weeps with the household, and receives Abraham's soul.",
       "theology": {
         "biblical": [
-          "Daniel 10:13, 21",
+          "Daniel 10:13, 21; 12:1",
           "Jude 1:9",
           "Revelation 12:7-9"
         ],
         "extraBiblical": [
-          "1 Enoch 20:5",
-          "War Scroll (1QM)",
-          "Testament of Abraham"
+          "1 Enoch 9; 10:11-15; 20:5; 24:6; 40:9; 54:6; 60:4-6; 67-69; 71",
+          "4Q529 Words of Michael",
+          "War Scroll (1QM; Prince of Light identification is interpretive)",
+          "Testament of Abraham, recensions A and B"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Michael (Mikha'el, 'Who is like God?') is the Chief Prince and protector of Israel. He is the supreme commander of the heavenly hosts and the primary antagonist to the forces of darkness.",
-        "anthropologicalInsights": "The character of Michael reflects the transition from territorial tutelary spirits to a singular, cosmic defender of the righteous. In this capacity, he serves as the primary antithesis to the rebel 'Sarim' (territorial spirits) who have claimed dominion over the nations, functioning as the chief operative of the divine 'police force' sent to restore order.",
-        "mythicalBeliefs": "Tradition holds that Michael disputed with the devil over Moses' body and is commissioned to bind the fallen Watcher Semyaza for seventy generations. He is the restorer of cosmic equilibrium, tasked with dismantling the chaos introduced by the Egregores."
+      "ancientDossier": {
+        "witness": "Daniel's messenger says Michael came to his aid against Persia's prince and identifies Michael as both one of the chief princes and the prince assigned to Daniel's people. The Enochic seer places him among the holy presences before the Lord of Spirits: he joins the appeal for a blood-soaked earth, receives the order to bind Semyaza, explains hidden things, and helps execute the last judgment. The Testament of Abraham makes him the chief-captain sent to prepare Abraham for death.",
+        "attestedTraits": "High but not solitary rank; special responsibility for Daniel's people and Enoch's elect portion of humanity; command within a heavenly host; delegated rather than self-originating authority; mercy, patience, grief at judgment, interpretation of visions, custody of a powerful oath, restraint toward the adversary, and care for the righteous dead. The Testament of Abraham alone supplies a visible apparition: youthful, extraordinarily beautiful, radiant like the sun, and warriorlike, yet able to pass as a human traveler. It calls him incorporeal while narrating his feet, tears, walking, and hospitality; his tears become precious stones.",
+        "textualBoundary": "The earliest named witnesses give Michael no wings, halo, armor, weapon, hair color, or facial anatomy. Daniel's radiant linen-clad figure is not named Michael and must not be used as his portrait. The War Scroll does not plainly write Michael's name where modern summaries identify the Prince of Light with him. Solar colors, planetary emblems, seals, and ritual weapons belong to later magical corpora and are excluded from this card. The visible form used by the artwork is specifically the later Testament of Abraham apparition and is not projected backward into Daniel or 1 Enoch."
       }
     },
     {
