@@ -310,27 +310,42 @@
       "id": "metatron",
       "name": "Metatron",
       "hebrew": "מֵטַטְרוֹן",
-      "translation": "Guardian",
+      "translation": "Etymology disputed",
       "type": "Angel",
       "classification": "High Angel",
-      "roles": [
-        "Celestial Scribe",
-        "Voice of God"
-      ],
-      "description": "Metatron stands as the greatest angel in Jewish mystical tradition, serving as God's scribe. Many identify him as the patriarch Enoch transformed into an angel after being taken to heaven.",
-      "theology": {
-        "biblical": [
-          "Genesis 5:24 (Implied)"
+      "image": "images/bestiary/high_angel/Metatron-hekalot-fire-v2.png",
+      "artReview": {
+        "status": "replaced after full source packet",
+        "depictedWitness": "3 Enoch 3-15",
+        "scene": "Before the seventh palace, Metatron recounts Enoch's transformation into a world-scale body of flame, many burning wings, and hundreds of thousands of sun-bright eyes as Rabbi Ishmael looks on.",
+        "crossTextualRestraints": [
+          "The fiery multi-winged, many-eyed form belongs specifically to the late Hekhalot witness",
+          "Genesis 5 does not name Metatron or describe Enoch's transformation",
+          "Delegated divine naming is not visualized as equality with God",
+          "Metatron's Cube, occult seals, and modern sacred geometry are excluded"
         ],
+        "sourcePacket": "docs/bestiary-source-packets/metatron.md",
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness intensified for the Hekhalot vision"
+      },
+      "roles": [
+        "Enoch Transformed in the Hekhalot Witness",
+        "Prince of the Divine Presence",
+        "Celestial Scribe",
+        "Servant of the Throne and Chariot",
+        "Youth and Delegated Judge"
+      ],
+      "description": "3 Enoch identifies Metatron as Enoch son of Jared transformed for service at the throne: flesh to flame, sinews to blazing fire, bones to coals, eyes to torches, hair to flame, and limbs to burning wings. He receives seventy-two world-spanning wings, 365,000 sun-bright eyes, a throne at the seventh palace, and delegated authority among heavenly households. Hagigah 15a supplies the necessary boundary: when his seated scribal office leads Elisha to imagine two powers, Metatron is punished with fiery lashes, demonstrating that even his terrifying rank remains subordinate.",
+      "theology": {
+        "biblical": [],
         "extraBiblical": [
-          "3 Enoch",
-          "Babylonian Talmud"
+          "3 Enoch / Sefer Hekhalot 1-15, 48",
+          "Babylonian Talmud, Hagigah 15a"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Metatron is the preeminent High Angel and celestial scribe in Jewish mystical tradition, often identified as the divinized patriarch Enoch.",
-        "anthropologicalInsights": "The figure of Metatron represents the ultimate human potential for ascension and the role of the 'Lesser YHWH' as a mediator of divine authority.",
-        "mythicalBeliefs": "Tradition holds that Enoch was transformed into Metatron, a being of fire with thirty-six pairs of wings and thousands of eyes, to record the deeds of Israel."
+      "ancientDossier": {
+        "witness": "Metatron tells Rabbi Ishmael that he was Enoch, taken from the flood generation and installed to serve the throne, chariot, and Shekinah. He narrates his transformation into blazing fire, his multiplication of wings and eyes, and his enthronement near the seventh palace. The Talmud remembers him seated to write Israel's merits, then struck with sixty fiery lashes when that privilege occasions a two-powers error.",
+        "attestedTraits": "Late Hekhalot testimony supplies extreme visionary anatomy: flame flesh, fiery sinews, coal bones, lightning lashes, torch eyes, burning hair, seventy-two world-covering wings, and 365,000 eyes like the Great Light. Offices include Prince of the Presence, throne servant, chariot attendant, recorder, teacher, and delegated judge. The title Youth and the name-bearing language signal proximity and commission, not independence.",
+        "textualBoundary": "Metatron is absent from Genesis, and Enoch's biblical taking does not itself attest this transformation. The etymology of Metatron is disputed. 'Lesser YHWH' belongs to a specific late mystical naming theology and must be read beside rabbinic rejection of two powers. Modern cubes, seals, geometric diagrams, planetary systems, and New Age claims are excluded."
       }
     },
     {
