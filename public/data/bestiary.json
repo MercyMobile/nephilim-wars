@@ -933,13 +933,20 @@
       "type": "Fallen",
       "classification": "Watcher",
       "roles": ["Deceiver of Eve", "Teacher of Weapons", "Agent of Death"],
-      "image": "images/rutkowski/Fallen/gadreel.png",
+      "image": "/images/bestiary/fallen/Gadreel-weapons-and-Eve-v2.png",
       "description": "One Enochic tradition names Gadreel as the being who led Eve astray and taught mortals the weapons of death.",
       "theology": {"biblical": ["Genesis 3 (unnamed serpent; later identification only)"], "extraBiblical": ["1 Enoch 69:6-7"]},
       "ancientDossier": {
         "witness": "The Enochic narrator identifies Gadreel—not Azazel or Satan in this passage—as Eve's deceiver, and says he showed the children of men shield, breastplate, sword, and every weapon of death.",
         "attestedTraits": "Deception and weapon instruction are explicit; the bloodshed of earth is laid at his door.",
         "textualBoundary": "Genesis itself does not name its serpent Gadreel. This is a later Enochic identification and must remain labeled as such, not harmonized into a single biography of Satan."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A serpent-bodied or armored fallen-warrior portrait fuses Genesis, Satan lore, and Enoch while missing Gadreel's act of disclosing weapons.",
+        "requiredScene": "A divided field: Gadreel reveals shield, scale coat, and sword to ancient men; a smaller hazy garden-memory shows Eve listening to a partly hidden humanlike shadow beyond a fruiting tree.",
+        "exclusions": ["snake-man anatomy or Satan label", "apple", "nude or sexualized Eve", "winged armored portrait", "battle action, corpses, or gore", "magic seal or readable text", "medieval plate armor"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       }
     },
     {
