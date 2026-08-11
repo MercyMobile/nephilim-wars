@@ -188,28 +188,41 @@
     },
     {
       "id": "sariel",
-      "name": "Sariel / Suriel",
-      "hebrew": "שַׂרִיאֵל",
-      "translation": "Prince of God",
+      "name": "Saraqiel",
+      "hebrew": "שָׂרַקְאֵל",
+      "translation": "Meaning uncertain",
       "type": "Angel",
       "classification": "Archangel",
+      "image": "images/bestiary/archangel/Saraqiel-spirit-watch-v2.png",
+      "artReview": {
+        "status": "replaced after source separation",
+        "depictedWitness": "1 Enoch 20:1, 6 (restrained visual inference)",
+        "scene": "Saraqiel is foregrounded among the seven holy watchers at the boundary of a shadowed holding-place for spirits who sin in the spirit.",
+        "crossTextualRestraints": [
+          "The text supplies an office but no individualized anatomy, costume, weapon, or narrative action",
+          "Sariêl the lunar-course teacher belongs to the fallen-teacher list and is not merged into this figure",
+          "No moon, scales, wings, halo, sword, armor, or death symbolism is used",
+          "Later magical correspondences are excluded"
+        ],
+        "sourcePacket": "docs/bestiary-source-packets/saraqiel.md",
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
       "roles": [
-        "Angel of Death",
-        "Teacher of Lunar Courses",
-        "Avenger of Spirits"
+        "One of the Seven Holy Watchers",
+        "Overseer of Spirits Who Sin in the Spirit"
       ],
-      "description": "Sariel serves as one of the seven archangels, often associated with judgment and the lunar calendar. His specific assignment is 'over the spirits of those who sin against the spirit', suggesting a role in judging spiritual corruption.",
+      "description": "1 Enoch's sevenfold list names Saraqiel among the holy angels who watch and sets him over spirits who sin in the spirit. That terse office is the secure dossier. A different name-form, Sariêl, occurs among the rebellious teachers and is said in one translation to teach the moon's course; another translation reads Asaradel. The fallen lunar teacher is not silently merged into holy Saraqiel, and the early text does not call Saraqiel an angel of death or describe his appearance.",
       "theology": {
         "biblical": [],
         "extraBiblical": [
-          "1 Enoch 20:6",
-          "1 Enoch 9:1"
+          "1 Enoch 20:1, 6",
+          "1 Enoch 8:3 (Sariêl/Asaradel lunar teacher is a distinct, textually unstable figure)"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Sariel (Sari'el, 'Prince of God') is one of the seven holy archangels, primarily associated with divine instruction, the lunar calendar, and the judgment of spiritual sins.",
-        "anthropologicalInsights": "Sariel's role highlights the celestial concern for cosmic cycles and the punishment of spiritual corruption that undermines the divine order.",
-        "mythicalBeliefs": "He is credited with teaching Moses the secrets of the lunar calendar and is tasked with watching over the spirits of those who sin against the spirit."
+      "ancientDossier": {
+        "witness": "The Enochic seer gives only a roster statement: among the seven holy angels who watch, Saraqiel is set over spirits who sin in the spirit. The same corpus separately places Sariêl in the list of corrupting teachers, with the lunar course as his illicit disclosure in Charles's reading. Laurence reads Asaradel there, underscoring the instability rather than resolving it.",
+        "attestedTraits": "Holy-watcher status and delegated oversight concerning spiritually offending spirits. No further deed, temperament, visible form, instrument, or speech is securely attached to Saraqiel in the consulted early witness.",
+        "textualBoundary": "Saraqiel is not securely the fallen Sariêl, lunar teacher, angel of death, Moses' calendar instructor, or an avenger bearing scales. Suriel/Sariel/Suryal/Saraqael spellings wander across later lists and translations and are not combined automatically. The artwork's humanlike sentinel is explicitly a restrained visual inference from office, not attested anatomy."
       }
     },
     {
