@@ -957,13 +957,21 @@
       "type": "Demon",
       "classification": "Prince of Hostility",
       "roles": ["Chief of the Remaining Spirits", "Accuser", "Tester"],
-      "image": "images/rutkowski/Demon/mastema.png",
+      "image": "/images/bestiary/fallen/Mastema-tenth-of-spirits-v2.png",
       "description": "In Jubilees, Mastema petitions to retain a tenth of the corrupt spirits under his authority so that they may exercise judgment and lead the guilty astray.",
       "theology": {"biblical": ["Hosea 9:7-8 (Hebrew mastemah, enmity)"], "extraBiblical": ["Jubilees 10:8-11", "Jubilees 17:15-18", "Jubilees 48:2-4"]},
       "ancientDossier": {
         "witness": "Jubilees presents the prince Mastema speaking before God. When Noah asks relief from unclean spirits, Mastema argues that some be left under his rule; nine parts are bound and one part remains. He later presses the testing of Abraham and opposes Moses.",
         "attestedTraits": "He commands a limited remnant of spirits, accuses, tests, and obstructs. His activity occurs by sufferance and under limits, not as an equal rival sovereign.",
-        "textualBoundary": "Jubilees does not give Mastema horns, a seal, or a Solomonic legion number. Equating him completely with Satan is an interpretation, though the functions overlap."
+        "textualBoundary": "Jubilees does not give Mastema horns, a seal, or a Solomonic legion number. Equating him completely with Satan is an interpretation, though the functions overlap. His retained tenth remains permitted, limited, and subject to restraint.",
+        "sourceLayer": "Jubilees 10 controls the dossier; Abraham and Exodus episodes are later scenes within the same work."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A horned infernal king contradicts Jubilees' subordinate petitioner who receives limited authority over only one tenth of the spirits.",
+        "requiredScene": "Before veiled divine light, Mastema kneels as nine streams of spirits descend to confinement and one smaller tenth remains; nearby an angel gives Noah healing herbs.",
+        "exclusions": ["bodily God on throne", "horned or red devil", "crown or trident", "hellfire kingdom", "equal opposing deity", "triumphant pose", "magic seal", "chained humans", "medieval court", "readable text"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       }
     },
     {
