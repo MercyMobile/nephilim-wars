@@ -909,13 +909,20 @@
       "type": "Fallen",
       "classification": "Watcher",
       "roles": ["Teacher of Harmful Spirit-Strokes", "Revealer of the Serpent's Bite"],
-      "image": "images/rutkowski/Fallen/kasdeja.png",
+      "image": "/images/bestiary/fallen/Kasdeja-malignant-strokes-v2.png",
       "description": "Kasdeja is accused of showing humankind destructive workings of spirits and demons, the striking of the embryo, and the bite of the serpent.",
       "theology": {"biblical": [], "extraBiblical": ["1 Enoch 69:12"]},
       "ancientDossier": {
         "witness": "Enoch's later list assigns Kasdeja knowledge of malignant blows: attacks of spirits and demons, harm to the unborn, and the serpent's bite.",
         "attestedTraits": "A revealer of occult injury and hostile spiritual practice. The testimony concerns what he taught, not a catalog of innate spell-like powers.",
         "textualBoundary": "No early description gives his face, animal form, rank among Solomonic demons, or a complete pharmacology. The difficult wording should remain difficult rather than being expanded into modern lore."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "Generic serpent-demon imagery literalizes a difficult list of disclosed injuries and risks sensationalizing its embryo-harm line.",
+        "requiredScene": "At oppressive noon, a plain humanlike Watcher demonstrates linked ancient signs of serpent bite, bodily rupture, heat-stroke, and unseen spirit-blows without showing a victim.",
+        "exclusions": ["pregnant body, fetus, or miscarriage scene", "blood, gore, or attack", "serpent-man anatomy or Eden", "magic circle, sigils, or readable spell", "grimoire", "fantasy armor or weapon"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       }
     },
     {
