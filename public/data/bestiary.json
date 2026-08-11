@@ -737,12 +737,12 @@
       "hebrew": "בְּלִיַּעַל",
       "translation": "Worthlessness",
       "type": "Demon",
-      "classification": "Demon Prince",
+      "classification": "Ruler of the Dark Lot at Qumran",
       "roles": [
-        "Prince of Darkness",
-        "Agent of Chaos"
+        "Commander of the Army of Darkness",
+        "Ruler over Spirits of His Lot"
       ],
-      "description": "A personification of wickedness and worthlessness. In the Dead Sea Scrolls, Belial is the leader of the 'Sons of Darkness' in the cosmic war.",
+      "description": "In older Hebrew idiom, belial denotes worthlessness, lawlessness, or ruin; 'sons of Belial' are wicked people, not a demon's offspring. At Qumran the term becomes unmistakably personal: Belial rules the dark lot and its spirits, and his army opposes the Sons of Light in the War Scroll. His dominion is appointed and temporary; God destroys it in the decisive lot of battle.",
       "theology": {
         "biblical": [
           "2 Corinthians 6:15"
@@ -752,10 +752,18 @@
           "Testament of the Twelve Patriarchs"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Belial (Beli-ya'al, 'Without Profit' or 'Worthlessness') is the personification of wickedness and the leader of the 'Sons of Darkness' in the Qumran War Scroll.",
-        "anthropologicalInsights": "Belial represents the cosmic principle of chaos and moral decay. In the dualistic theology of the Dead Sea Scrolls, he is the direct antagonist to the 'Prince of Light' (Michael), embodying the forces of disorder that seek to overthrow the divine order.",
-        "mythicalBeliefs": "The War Scroll (1QM) depicts a final cosmic battle between the forces of Belial and the forces of Light, with Belial's ultimate defeat signaling the end of the age of corruption."
+      "image": "/images/bestiary/fallen/Belial-war-scroll-dark-lot-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A crowned demon prince imports later grimoire anatomy; the War Scroll depicts Belial through his lot, spirits, army, dark dominion, and coming defeat.",
+        "requiredScene": "Across a Judean valley, ordered Sons of Light face Belial's human army of darkness; an immense unresolved angelic shadow hangs behind the dark host while divine dawn reaches the light camp.",
+        "exclusions": ["throne or crown", "fiery chariot", "two beautiful angels", "goat head or horns", "red skin or bat wings", "grimoire seal", "medieval armor", "modern occult symbols", "readable or pseudo-Hebrew", "equal good and evil gods"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "The War Scroll sees Belial's army and the spirits of his lot assembled against the Sons of Light. The priests curse Belial, praise God's ancient appointment of the Prince of Light, and await God's decisive overthrow of darkness.",
+        "attestedTraits": "Belial is personalized as a hostile angelic ruler whose dominion is darkness and whose lot includes spirits and human forces. He leads astray and wages appointed war, but remains bounded by God's times and judgment.",
+        "textualBoundary": "Most Hebrew Bible occurrences are idiomatic worthlessness or lawlessness, not a personal demon. Qumran supplies no body, throne, crown, fiery chariot, seal, or legions counted by number; those images belong to much later magical literature."
       }
     },
     {
