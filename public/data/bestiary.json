@@ -768,18 +768,17 @@
     },
     {
       "id": "gilgamesh",
-      "name": "Gilgamesh & Hobabish",
-      "hebrew": "גִּלְגָּמֶשׁ",
-      "translation": "The Exposed Ancestor",
+      "name": "Gilgamesh and Ḥobabish",
+      "hebrew": "גלגמיש · חובבש",
+      "translation": "Names preserved; meanings uncertain",
       "type": "Legendary",
-      "classification": "Giant (Nephilim Line)",
+      "classification": "Named Giants in Fragmentary Aramaic Witnesses",
       "roles": [
-        "King of Uruk",
-        "Watcher-Son",
-        "Dream-Receiver",
-        "Seeker of Immortality"
+        "Speakers in the Giants' Assembly",
+        "Bearers of Mesopotamian Names",
+        "Subjects of the Coming Judgment"
       ],
-      "description": "Gilgamesh and Hobabish stand as the most prominent giants named in the Dead Sea Scrolls Book of Giants (4Q203, 4Q530-4Q532, 6Q8). Two-thirds divine by his own epic's reckoning, Gilgamesh is the prototype of the conscious giant: aware of his corruption, warned by prophetic dreams, and still choosing violence. He is the named king of Uruk who demanded the right of first night from his people, who befriended the wild man Enkidu, who slew the cedar-forest demon, and who wept when death took what he loved. In the Qumran fragments, the same figure is named alongside Hobabish (the Qumran form of the Babylonian Humbaba) among the Nephilim who received Enoch's oracle of judgment.",
+      "description": "The Aramaic Book of Giants preserves Gilgamesh and Ḥobabish by name in broken narrative witnesses. Ohyah reports words spoken by Gilgamesh; Ḥobabish raises a roar, and judgment language follows. The wider work gathers terrified giants around dreams and Enoch's oracle, but the fragments do not call this Gilgamesh king of Uruk, identify his father, recount a Cedar Forest battle, or give either figure a complete biography. Their names evoke the Babylonian Gilgamesh and Humbaba traditions without importing the whole Epic.",
       "theology": {
         "biblical": [
           "Genesis 6:1-4 (Implied)"
@@ -792,10 +791,18 @@
           "Manichaean Kawān (Turfan fragments)"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Gilgamesh (Akkadian Gilgameš, possibly 'The Exposed Ancestor' or 'The Old Man Becomes Young') is named in 4Q203 of the Qumran Book of Giants alongside Hobabish, the Aramaic form of the Babylonian demon Humbaba. Both figures are absorbed into the Nephilim genealogy as exemplars of the giant who had free will and chose badly. The Book of Giants fragments at Qumran (Loren Stuckenbruck's 1997 critical edition) confirm that the giants received prophetic dreams, sent Mahway to Enoch for interpretation, and were given an oracle of judgment rather than mercy.",
-        "anthropologicalInsights": "Gilgamesh embodies the moral architecture of the Nephilim conflict. Where other giants are recorded as mindless destroyers, the Gilgamesh tradition—from the Sumerian/Babylonian Epic through the Qumran recursion—presents a being who knows he is corrupt, who mourns his losses, who seeks eternity, and who remains unrepentant. This is the theological linchpin of the soul economy: giants are not beasts to be harvested but conscious beings who saw the corruption in their own dreams and chose violence anyway. The Manichaean adaptation further renames the dream-receiving brothers Ohyah and Hahyah as Sam and Nariman, pairing the figure with Iranian heroic tradition, while Hobabish survives as the second-named giant of the Qumran pantheon.",
-        "mythicalBeliefs": "Tradition names Gilgamesh as two-thirds divine, born of the goddess Ninsun and the deified king Lugalbanda. He ruled Uruk with a tyrant's hand until the gods created Enkidu to balance him. He slew the demon Hobabish/Humbaba in the cedar forest, rejected the advances of Ishtar, watched the gods take Enkidu in retribution, and walked to the ends of the earth to find Utnapishtim and the secret of immortality. He came back empty-handed and accepted being human. In the Qumran material, he is named among the giants who received God's warning through dreams and refused to repent."
+      "image": "/images/bestiary/giants-dss/Gilgamesh-Hobabish-assembly-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "Uruk hero imagery or Cedar Forest combat would fill Qumran's lacunae with a different composition; the surviving scene is a giant assembly under ominous judgment.",
+        "requiredScene": "In an antediluvian giant assembly, Gilgamesh speaks urgently to Ohyah while Ḥobabish roars; above them a dream-sign of uprooted trees and flood-shadow foretells judgment.",
+        "exclusions": ["Uruk crown or identified ziggurat", "Semyaza shown as father", "two-thirds-divine emblem", "Gilgamesh fighting or befriending Ḥobabish", "Cedar Forest or Enkidu", "right-of-first-night scene", "horned monster anatomy", "readable cuneiform or Hebrew", "modern fantasy armor"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "Ohyah makes known what Gilgamesh said; Ḥobabish raises a roar, and the damaged assembly text turns toward judgment. Elsewhere the giants' dreams and Enoch's answer announce destruction.",
+        "attestedTraits": "Both are named within the Book of Giants' company. Gilgamesh speaks to Ohyah; Ḥobabish is associated with a roar in a broken sequence. Their giant setting is secure, but individual motives, deeds, parentage, and bodies are not.",
+        "textualBoundary": "The Babylonian Epic supplies a king of Uruk and a Cedar Forest guardian named Humbaba, but Qumran does not retell that whole plot. It does not say Gilgamesh knowingly refused repentance, make Ḥobabish his companion, or call either Semyaza's son."
       }
     },
     {
