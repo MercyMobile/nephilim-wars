@@ -982,13 +982,20 @@
       "type": "Angel",
       "classification": "Angel of the Abyss",
       "roles": ["King over the Abyssal Locusts"],
-      "image": "images/rutkowski/Demon/abaddon.png",
+      "image": "/images/bestiary/fallen/Abaddon-abyssal-locust-king-v2.png",
       "description": "The Apocalypse names the king over the abyssal locust host: Abaddon in Hebrew and Apollyon in Greek.",
       "theology": {"biblical": ["Job 26:6", "Job 28:22", "Proverbs 15:11", "Revelation 9:1-11"], "extraBiblical": []},
       "ancientDossier": {
         "witness": "In older Hebrew wisdom texts, Abaddon is the realm or condition of destruction paired with Sheol. Revelation 9 personifies the name as the angelic king over creatures released from the abyss.",
         "attestedTraits": "Kingship over the locust host and association with the abyss are explicit. The locusts torment for five months and do not kill; their elaborate appearance belongs to the host, not automatically to their king.",
-        "textualBoundary": "The witness calls him an angel, without explicitly calling him fallen or a demon. Later demonological rank, armor, and biography are absent."
+        "textualBoundary": "The witness calls him an angel, without explicitly calling him fallen or a demon. The key-bearing fallen star is not explicitly identified with him, and the host's composite anatomy is not the king's. Later demonological rank, armor, and biography are absent."
+      },
+      "artReview": {
+        "verdict": "replace",
+        "reason": "A horned armored destroyer or grim reaper gives the king anatomy Revelation assigns only to his locust host.",
+        "requiredScene": "An unresolved plain-robed angelic silhouette commands at a smoking abyss while Revelation's composite locust host emerges below; protected people remain untouched in the distance.",
+        "exclusions": ["locust anatomy on Abaddon", "horned demon or grim reaper", "scythe", "crown or armor on the king", "key-bearing star conflation", "dead bodies or gore", "hell throne", "grimoire seal", "readable text"],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
       }
     },
     {
