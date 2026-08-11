@@ -390,27 +390,47 @@
     },
     {
       "id": "azrael",
-      "name": "Azrael",
-      "hebrew": "עֲזַרְאֵל",
-      "translation": "Whom God Helps",
+      "name": "Angel of Death (later: Azrael)",
+      "hebrew": "מַלְאַךְ הַמָּוֶת",
+      "translation": "Angel of Death",
       "type": "Angel",
       "classification": "Angel of Death",
       "roles": [
-        "Psychopomp",
-        "Separator of Soul"
+        "Taker of Life",
+        "Plague Agent",
+        "Bearer of the Drawn Sword"
       ],
-      "description": "Azrael separates the soul from the body at death. Despite his fearsome role, he is often described as serving with compassion and accuracy.",
+      "description": "The Hebrew Bible and Talmud know an Angel of Death or destroying messenger but do not name him Azrael. Avodah Zarah 20b places the Angel of Death above a dying person's head with a drawn sword and a drop of poison hanging from its tip; the terrified person opens the mouth, receives the drop, dies, pales, and decays. Other rabbinic scenes show a commissioned power whose appointed deaths cannot be evaded, not a gentle modern psychopomp.",
       "theology": {
         "biblical": [],
         "extraBiblical": [
-          "Jewish Mysticism",
-          "Islamic Tradition"
+          "Babylonian Talmud, Avodah Zarah 20b",
+          "Babylonian Talmud, Bava Batra 16a",
+          "Babylonian Talmud, Shabbat 89a",
+          "Babylonian Talmud, Sukkah 53a",
+          "Qur'an 32:11 (title only; no proper name)"
         ]
       },
-      "academicDossier": {
-        "scholarlySynthesis": "Azrael (Azar'el, 'Whom God Helps') is the Angel of Death, the psychopomp tasked with separating the soul from the body at the moment of expiration.",
-        "anthropologicalInsights": "Azrael reflects the personification of mortality as a compassionate and precise servant of God, ensuring the orderly transition from the temporal to the eternal.",
-        "mythicalBeliefs": "Folklore describes Azrael as being covered in eyes and tongues, each representing a living person, and recording the names of the born and dead in a vast book."
+      "image": "/images/bestiary/angel_of_death/Angel-of-Death-sword-drop-v2.png",
+      "artReview": {
+        "verdict": "replace",
+        "reason": "The prior image and dossier treat later Azrael folklore as though it were the ancient Jewish witness and romanticize the figure as a compassionate psychopomp.",
+        "requiredScene": "A late-antique sickroom: above the dying person's head an austere humanlike Angel of Death holds a drawn sword with one dark drop suspended from its point; the person sees it in terror.",
+        "exclusions": [
+          "scythe or skeleton",
+          "European monk's hood",
+          "comforting psychopomp embrace",
+          "glowing childlike soul",
+          "ledger of all living names",
+          "body covered in eyes and tongues",
+          "unattested wings"
+        ],
+        "style": "Ancient Witness Bestiary: historically grounded narrative realism, encaustic and egg-tempera pigment character, tactile ancient materials, restrained sacred strangeness"
+      },
+      "ancientDossier": {
+        "witness": "Rabbinic witnesses call the figure simply the Angel of Death. Avodah Zarah sees him poised over the sickbed with drawn sword and a fatal drop. Sukkah presents him carrying out appointed deaths despite Solomon's attempt to evade them; Shabbat remembers him disclosing to Moses how plague may be checked.",
+        "attestedTraits": "He acts under permission or appointment, takes life, may operate through plague, and in one teaching is identified with Satan and the evil inclination as tempter, accuser, and executioner. The sword and suspended drop are specifically attested visual attributes; compassion, a soul-separating ritual, and universal eyes-and-tongues anatomy are not.",
+        "textualBoundary": "Neither Tanakh nor Talmud supplies the proper name Azrael. Exodus's destroyer and the plague angel remain unnamed, and their exact identity with every later Angel-of-Death story should not be assumed. Even Qur'an 32:11 uses only the title Angel of Death. 'Azrael' is retained solely as a later catalog label."
       }
     },
     {
