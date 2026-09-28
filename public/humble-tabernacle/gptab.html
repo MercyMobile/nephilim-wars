@@ -1847,6 +1847,64 @@
         //   opts.rotateY       - rotation applied before measuring/centring
         //   opts.onLoaded(model, box) - called after the model is in the group
         //   opts.onError()     - called if loading fails (build a placeholder)
+        // SIZE A CARRIED VESSEL BY ITS BODY. Casaretto's carrying poles are longer than the
+        // vessels they carry (ark body 127 cm, poles 225; table 92 / 180; incense altar
+        // 49 / 180; bronze altar 2.4 m / 4.5 m) and they sit in the very mesh the Exodus
+        // dimensions are fitted to. Measured whole, the POLE LENGTH was fitted to 25:10's
+        // 2.5 cubits: the ark body came out about 1.4 cubits long, the table's top about 1,
+        // the incense altar a quarter cubit deep, and the bronze altar 5 x 2.7 - not the
+        // square that 27:1 and 30:2 command. His models were being squashed, on every
+        // version of this page. Here each mesh is split into its connected pieces; a piece
+        // that runs the mesh's full extent on one axis and is thin on both others is a pole,
+        // and is left out of the measurement. The poles stay exactly as he made them.
+        function bodyBox(root) {
+            const box = new THREE.Box3(), v = new THREE.Vector3();
+            root.updateMatrixWorld(true);
+            root.traverse((o) => {
+                if (!o.isMesh) return;
+                const pos = o.geometry.attributes.position, idx = o.geometry.index;
+                const n = pos.count;
+                o.geometry.computeBoundingBox();
+                const ext = o.geometry.boundingBox.getSize(new THREE.Vector3());
+                const q = Math.max(ext.x, ext.y, ext.z) * 1e-4;
+                const weld = new Map(), rep = new Int32Array(n);
+                for (let i = 0; i < n; i++) {
+                    const k = Math.round(pos.getX(i) / q) + ',' + Math.round(pos.getY(i) / q) + ',' + Math.round(pos.getZ(i) / q);
+                    if (!weld.has(k)) weld.set(k, i);
+                    rep[i] = weld.get(k);
+                }
+                const par = new Int32Array(n).map((_, i) => i);
+                const find = (x) => { while (par[x] !== x) { par[x] = par[par[x]]; x = par[x]; } return x; };
+                const tri = idx ? idx.count : n;
+                for (let t = 0; t < tri; t += 3) {
+                    const a = find(rep[idx ? idx.getX(t) : t]);
+                    for (let k = 1; k < 3; k++) {
+                        const b = find(rep[idx ? idx.getX(t + k) : t + k]);
+                        if (b !== a) par[b] = a;
+                    }
+                }
+                const comps = new Map();
+                for (let i = 0; i < n; i++) {
+                    const r = find(rep[i]);
+                    let c = comps.get(r);
+                    if (!c) { c = new THREE.Box3(); comps.set(r, c); }
+                    c.expandByPoint(v.fromBufferAttribute(pos, i));
+                }
+                const pole = new Set();
+                comps.forEach((c, r) => {
+                    const s3 = c.getSize(new THREE.Vector3()).toArray(), e3 = ext.toArray();
+                    const ax = s3.indexOf(Math.max(...s3));
+                    const others = s3.filter((_, i) => i !== ax);
+                    if (s3[ax] >= 0.9 * e3[ax] && Math.max(...others) <= 0.06 * s3[ax]) pole.add(r);
+                });
+                for (let i = 0; i < n; i++) {
+                    if (pole.has(find(rep[i]))) continue;
+                    box.expandByPoint(v.fromBufferAttribute(pos, i).applyMatrix4(o.matrixWorld));
+                }
+            });
+            return box;
+        }
+
         function loadFurnishing(group, file, opts) {
             gltfLoader.load(file, (gltf) => {
                 const model = gltf.scene;
@@ -1898,7 +1956,11 @@
                     ? model.getObjectByName(opts.dimensionNodeName)
                     : model;
                 if (!dimensionObject) throw new Error('Missing dimension node: ' + opts.dimensionNodeName);
-                const box = new THREE.Box3().setFromObject(dimensionObject);
+                // opts.poles: measure the vessel's BODY, not its carrying poles (see bodyBox).
+                const measure = () => opts.poles
+                    ? bodyBox(dimensionObject)
+                    : new THREE.Box3().setFromObject(dimensionObject);
+                const box = measure();
                 const size = box.getSize(new THREE.Vector3());
                 let scaleFactor = 1;
                 if (opts.targetWidth && opts.targetHeight) {
@@ -1924,13 +1986,13 @@
 
                 // Recentre: feet on the ground, footprint centred on the origin
                 holder.updateMatrixWorld(true);
-                box.setFromObject(dimensionObject);
+                box.copy(measure());
                 const center = box.getCenter(new THREE.Vector3());
                 holder.position.set(-center.x, -box.min.y, -center.z);
 
                 group.add(holder);
                 holder.updateMatrixWorld(true);
-                box.setFromObject(dimensionObject);
+                box.copy(measure());
                 if (opts.auditName) {
                     const rendered = box.getSize(new THREE.Vector3());
                     window.__TABERNACLE_AUDIT__.loadedAssets[opts.auditName] = {
@@ -4682,6 +4744,7 @@
         // Detailed altar model: horned corners, lattice grate walls
         // (Exodus 27:4), and carrying poles left in their rings
         loadFurnishing(altarGroup, 'models/SM_AltarBurntOffering.glb', {
+            poles: true,
             auditName: 'bronzeAltarAsset',
             targetWidth: ALTAR_SIZE,
             targetDepth: ALTAR_SIZE,
@@ -4838,6 +4901,7 @@
         // Golden table model: crown moulding, carrying poles, the twelve
         // loaves in two rows, and the golden vessels (Exodus 25:29)
         loadFurnishing(tableGroup, 'models/SM_TableShowbread.glb', {
+            poles: true,
             envIntensity: 0.35,   // inside the tent: little sky to reflect
             auditName: 'showbreadTableAsset',
             dimensionNodeName: 'SM_Showbread_Structure',
@@ -4887,6 +4951,7 @@
         // Golden incense altar model: crown moulding, horns, carrying
         // poles, and a censer resting on top
         loadFurnishing(incenseAltarGroup, 'models/SM_AltarIncense.glb', {
+            poles: true,
             envIntensity: 0.35,   // inside the tent: little sky to reflect
             auditName: 'incenseAltarAsset',
             dimensionNodeName: 'SM_Altar_Structure',
@@ -5053,13 +5118,23 @@
         });
 
         loadFurnishing(arkGroup, 'models/SM_ArkCovenant.glb', {
+            poles: true,
+            // TURNED A QUARTER, poles untouched. [TEXT 1 Kgs 8:8] "the ends of the poles could
+            // be seen from the holy place" - they pointed EAST-WEST, at the veil; so too the
+            // baraita in Menachot 98b ("they pressed against the Curtain"), Rashi, Rashbam,
+            // Ramban. Casaretto set his poles along the ark's length, so the ark is turned to
+            // put them east-west; his model is otherwise exactly as he made it (Cisco 09-28:
+            // orient, don't move). Evidence: fem-lab/sources/ark-rings/README.md.
+            rotateY: Math.PI / 2,
             envIntensity: 0.35,   // inside the tent: little sky to reflect
             auditName: 'arkAsset',
             dimensionNodeName: 'Structure',
             // [TEXT Ex 25:10] body: 2.5 x 1.5 x 1.5 cubits. The old target
             // scaled the body to FIVE cubits, exactly doubling its stated length.
-            targetWidth: ARK_LENGTH,
-            targetDepth: ARK_WIDTH,
+            // Turned a quarter (rotateY below), so its 2.5-cubit LENGTH now lies east-west
+            // (scene Z) and its 1.5-cubit width north-south (scene X).
+            targetWidth: ARK_WIDTH,
+            targetDepth: ARK_LENGTH,
             targetHeight: ARK_HEIGHT,
             materials: {
                 M_Ark_MercySeat: mercySeatMaterial,
