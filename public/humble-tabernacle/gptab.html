@@ -683,6 +683,11 @@
         sunLight.shadow.camera.far = 200;
         sunLight.shadow.mapSize.width = 2048;
         sunLight.shadow.mapSize.height = 2048;
+        // SHADOW ACNE. With no bias the near-flat roof shadowed ITSELF in dark streaks along
+        // its length (measured on the noon roof-front render). A small bias plus a normal
+        // offset removes the self-shadowing without lifting real shadows off the sand.
+        sunLight.shadow.bias = -0.0004;
+        sunLight.shadow.normalBias = 0.04;
         scene.add(sunLight);
 
         // ================================================================
@@ -1779,11 +1784,49 @@
         });
 
         // ================================================================
-        // SACRED FURNISHING MODELS (models/*.glb, Draco-compressed)
-        // Each piece of furniture is a detailed 3D model; materials are
-        // assigned in code so every piece matches the scene's gold and
-        // bronze palette (the source models carry no real textures).
+        // SACRED FURNISHING MODELS - Andres Casaretto's six tabernacle pieces
+        // (Fab/Sketchfab download: glb.zip / extracted_glb/ in the repo root).
+        //
+        // CORRECTED 2026-09-28, Cisco: use HIS models with ALL their textures.
+        // The files served here until now were rebuilt from the FBX in
+        // source.zip with FBX2glTF + Draco (bd72fcd4), which stripped the
+        // textures: ark, laver and table carried NONE, the altar colour only.
+        // This comment then claimed "the source models carry no real textures"
+        // and repainted every piece in code. The originals carry full PBR sets
+        // (colour, metal/roughness, normal, occlusion; emissive on the incense
+        // altar and lampstand), 3-7 maps of 1024-2048 px each. models/ now holds
+        // the originals byte for byte; each piece is still scaled to its Exodus
+        // dimensions below. FURNISHING_OWN_MATERIALS = false restores the old
+        // code-assigned materials.
         // ================================================================
+        const FURNISHING_OWN_MATERIALS = true;
+
+        // His gold and bronze are metal (metallicRoughness maps), and metal shows
+        // only what it reflects. The scene has no environment map, so without one
+        // they would render near black. A soft desert sky-over-sand environment,
+        // applied to the furnishings ONLY (the rest of the scene is lit as before).
+        // ! ASSUMPTION - Claude: the environment's colours and the per-piece
+        // intensities (dimmer inside the tent) are lighting choices, not text.
+        const furnishingEnv = (() => {
+            const envScene = new THREE.Scene();
+            const geo = new THREE.SphereGeometry(10, 48, 24);
+            const pos = geo.attributes.position, cols = [];
+            const sky = new THREE.Color(0x9fc8e8), horizon = new THREE.Color(0xf0e2c4),
+                  sand = new THREE.Color(0xb89868), c = new THREE.Color();
+            for (let i = 0; i < pos.count; i++) {
+                const y = pos.getY(i) / 10;
+                if (y >= 0) c.copy(horizon).lerp(sky, Math.pow(y, 0.6));
+                else c.copy(horizon).lerp(sand, Math.pow(-y, 0.5));
+                cols.push(c.r, c.g, c.b);
+            }
+            geo.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3));
+            envScene.add(new THREE.Mesh(geo, new THREE.MeshBasicMaterial({
+                vertexColors: true, side: THREE.BackSide })));
+            const pm = new THREE.PMREMGenerator(renderer);
+            const tex = pm.fromScene(envScene, 0.04).texture;
+            pm.dispose();
+            return tex;
+        })();
 
         const dracoLoader = new THREE.DRACOLoader();
         // Keep the decoder beside the scene. Depending on a third-party CDN
@@ -1812,7 +1855,19 @@
                     if (child.isMesh) {
                         child.castShadow = true;
                         child.receiveShadow = true;
-                        if (opts.materials) {
+                        if (FURNISHING_OWN_MATERIALS) {
+                            (Array.isArray(child.material) ? child.material : [child.material]).forEach((m) => {
+                                if (!m) return;
+                                // The rest of this scene is authored in display colour
+                                // (linear output), so read his colour and glow maps the same
+                                // way; otherwise they show darker than his files.
+                                if (m.map) m.map.encoding = THREE.LinearEncoding;
+                                if (m.emissiveMap) m.emissiveMap.encoding = THREE.LinearEncoding;
+                                m.envMap = furnishingEnv;
+                                m.envMapIntensity = opts.envIntensity === undefined ? 1.0 : opts.envIntensity;
+                                m.needsUpdate = true;
+                            });
+                        } else if (opts.materials) {
                             child.material = opts.materials[child.name] ||
                                              (child.material && opts.materials[child.material.name]) ||
                                              opts.materials.default ||
@@ -1822,6 +1877,20 @@
                 });
 
                 if (opts.rotateY) model.rotation.y = opts.rotateY;
+                // TURN INSIDE, SCALE OUTSIDE. The box below is measured on WORLD axes, so the
+                // scale must be applied on world axes too. Scaling the turned model itself put
+                // Exodus's width onto the model's own (turned) axis: the incense altar, the one
+                // piece turned 90 degrees, came out 3.0 x 0.33 x 2 cubits instead of 1 x 1 x 2.
+                const holder = new THREE.Group();
+                holder.add(model);
+
+                // MEASURE WITH EVERY PARENT TRANSFORM APPLIED. Box3.setFromObject(child)
+                // updates only the child's own matrix, not its parents'. Casaretto's
+                // originals wrap each piece in a Fab root that converts centimetres to
+                // metres; unapplied, a sub-node measured 100x too large and the ark,
+                // table and incense altar were "scaled" to 150 / 120 / 120 cubits.
+                // The FBX2glTF copies had no such wrapper, which is why this never showed.
+                holder.updateMatrixWorld(true);
 
                 // Textual dimensions apply to the vessel's structure, not to
                 // bread, bowls, a censer, the mercy seat, or cherubim above it.
@@ -1839,26 +1908,28 @@
                     const scaleX = opts.targetWidth / size.x;
                     const scaleY = opts.targetHeight / size.y;
                     const scaleZ = opts.targetDepth ? opts.targetDepth / size.z : scaleX;
-                    model.scale.set(scaleX, scaleY, scaleZ);
+                    holder.scale.set(scaleX, scaleY, scaleZ);
                 } else if (opts.targetHeight) {
                     scaleFactor = opts.targetHeight / size.y;
-                    model.scale.setScalar(scaleFactor);
+                    holder.scale.setScalar(scaleFactor);
                 } else if (opts.targetWidth) {
                     scaleFactor = opts.targetWidth / size.x;
-                    model.scale.setScalar(scaleFactor);
+                    holder.scale.setScalar(scaleFactor);
                 } else if (opts.targetLength) {
                     scaleFactor = opts.targetLength / Math.max(size.x, size.z);
-                    model.scale.setScalar(scaleFactor);
+                    holder.scale.setScalar(scaleFactor);
                 } else {
-                    model.scale.setScalar(scaleFactor);
+                    holder.scale.setScalar(scaleFactor);
                 }
 
                 // Recentre: feet on the ground, footprint centred on the origin
+                holder.updateMatrixWorld(true);
                 box.setFromObject(dimensionObject);
                 const center = box.getCenter(new THREE.Vector3());
-                model.position.set(-center.x, -box.min.y, -center.z);
+                holder.position.set(-center.x, -box.min.y, -center.z);
 
-                group.add(model);
+                group.add(holder);
+                holder.updateMatrixWorld(true);
                 box.setFromObject(dimensionObject);
                 if (opts.auditName) {
                     const rendered = box.getSize(new THREE.Vector3());
@@ -2557,6 +2628,7 @@
             });
 
             loadFurnishing(group, 'models/SM_GoldLampstand.glb', {
+            envIntensity: 0.35,   // inside the tent: little sky to reflect
                 targetHeight: menorahHeight,
                 materials: {
                     SM_Candles: flameMat,
@@ -3119,7 +3191,13 @@
         // ! ASSUMPTION - Claude, NOT verified: pole LENGTH and DIAMETER. The
         // ! text gives neither, for any of the four objects. Drawn at 1.7x the
         // ! object's length so they project far enough to shoulder. Art direction.
+        // Casaretto's four carried pieces (ark, table, incense altar, bronze altar) model their
+        // OWN rings and poles, so these code poles doubled every one of them - four poles
+        // where Exodus gives two (25:13-14, 25:27-28, 27:6-7, 30:4-5). They stay off while his
+        // models are in use; the function remains for any placeholder that has no poles.
+        const MODELS_CARRY_OWN_POLES = true;
         function addCarryPoles(group, objLen, objWid, ringY, mat, opts) {
+            if (MODELS_CARRY_OWN_POLES) return;
             opts = opts || {};
             const axis = opts.axis || 'z';          // poles run along objLen
             const L = objLen * (opts.lengthFactor || 1.7);
@@ -3196,8 +3274,32 @@
         // ================================================================
 
         const BOARD_WIDTH = 1.5 * CUBIT; // 2.25 units (Exodus 26:16)
-        const socketGeo = new THREE.BoxGeometry(0.8, 0.55, 0.95);
-        const backSocketGeo = new THREE.BoxGeometry(0.95, 0.55, 0.8);
+        // SOCKET HEIGHT = ONE CUBIT. [RABBINIC Baraita para 7] the linen's 9-cubit side drop
+        // "reaches the sockets - hence you learn the sockets are a cubit high", the same
+        // reading that already fixes LINEN_HEM_CUBITS = 1 below. They were drawn 0.55 units
+        // (a third of a cubit), leaving a two-thirds-cubit gap under the linen hem.
+        // [RABBINIC Baraita para 3] the sockets were made HOLLOW (chalulin) and the board's
+        // two tenons went down into them. [TEXT Ex 38:25-27] a talent of silver each;
+        // 100 talents = 301,775 - 1,775 shekels, so a talent is 3,000 shekels (arithmetic).
+        // ! ASSUMPTION - Claude: footprint (0.8 x 0.95 units) is unchanged art; Exodus gives none.
+        const SOCKET_H = 1 * CUBIT;
+        const socketGeo = new THREE.BoxGeometry(0.8, SOCKET_H, 0.95);
+        const backSocketGeo = new THREE.BoxGeometry(0.95, SOCKET_H, 0.8);
+        // How far the sockets stand proud of the board face: x = W/2 - 0.15 + 0.8/2.
+        const SOCKET_PROUD = 0.25;
+        // [RABBINIC Baraita para 9] the goats' hair "descends and covers the boards AND THE
+        // SOCKETS". Cloth hanging down a flat board face must ease out over the sockets:
+        // it leaves the boards one cubit above them and reaches the socket face at their
+        // top, then falls to the sand. [JOSEPHUS Ant. III.6.4] "extended loosely down to the
+        // ground" - the last half cubit is left loose rather than pinned to the sockets.
+        // ! ASSUMPTION - Claude: the easing length (1 cubit) and the loose kick (0.12 units)
+        // are cloth behaviour, not text. The clearance itself is forced by the sockets.
+        const SOCKET_CLEAR = SOCKET_PROUD + 0.05;
+        function socketBulge(y) {
+            const k = Math.min(1, Math.max(0, (SOCKET_H + CUBIT - y) / CUBIT));
+            const hk = Math.min(1, Math.max(0, (0.5 * CUBIT - y) / (0.5 * CUBIT)));
+            return SOCKET_CLEAR * k * k * (3 - 2 * k) + 0.12 * hk * hk;
+        }
 
         function addBoardSockets() {
             // 20 boards down each side wall
@@ -3206,7 +3308,7 @@
                 [-0.55, 0.55].forEach((off) => {
                     [-1, 1].forEach((side) => {
                         const s = new THREE.Mesh(socketGeo, silverMaterial);
-                        s.position.set(side * (TENT_WIDTH / 2 - 0.15), 0.275, zc + off);
+                        s.position.set(side * (TENT_WIDTH / 2 - 0.15), SOCKET_H / 2, zc + off);
                         s.castShadow = true;
                         tabernacleGroup.add(s);
                     });
@@ -3222,7 +3324,7 @@
             backXs.push(-TENT_WIDTH / 2 + 1.1, TENT_WIDTH / 2 - 1.1);
             backXs.forEach((xc) => {
                 const s = new THREE.Mesh(backSocketGeo, silverMaterial);
-                s.position.set(xc, 0.275, -TENT_LENGTH / 2 + 0.15);
+                s.position.set(xc, SOCKET_H / 2, -TENT_LENGTH / 2 + 0.15);
                 s.castShadow = true;
                 tabernacleGroup.add(s);
             });
@@ -3297,6 +3399,10 @@
             metalness: 0.0,
             side: THREE.DoubleSide
         });
+        // The pore grain is finer than a pixel from any exterior view, and at full strength
+        // its normal map aliased into concentric rings across the roof. Halved: the hide
+        // still catches light unevenly skin to skin, without the moire.
+        tentCoveringMaterial.normalScale.set(0.5, 0.5);
 
         // Rope material for tent cords
         const tentRopeMaterial = new THREE.MeshStandardMaterial({
@@ -3551,6 +3657,42 @@
         goatHairMaterial.polygonOffset = true;
         goatHairMaterial.polygonOffsetFactor = -2;
         goatHairMaterial.polygonOffsetUnits = -2;
+        // CURTAINS, NOT A TARP. [TEXT Ex 26:7-9] eleven separately woven curtains, each four
+        // cubits wide, sewn into one sheet. The fibre texture alone averages to one flat tone
+        // at viewing distance, so the covering read as a rigid box. Every goats'-hair mesh
+        // carries aSheet (cubits along the sheet, see goatSheetS); the shader darkens a thin
+        // line at each 4-cubit join (S = 4 ... 40; the sheet's ends are hems, not joins) and
+        // gives each curtain its own weaving lot. Line width is held to about one pixel at
+        // distance so the joins stay legible without inventing a wide stripe.
+        // ! ASSUMPTION - Claude: the +/-6% tone per curtain and 28% join shadow are art.
+        goatHairMaterial.extensions = { derivatives: true };
+        goatHairMaterial.onBeforeCompile = (shader) => {
+            shader.vertexShader = shader.vertexShader
+                .replace('#include <common>', '#include <common>\nattribute float aSheet;\nvarying float vSheet;')
+                .replace('#include <begin_vertex>', '#include <begin_vertex>\nvSheet = aSheet;');
+            shader.fragmentShader = shader.fragmentShader
+                .replace('#include <common>', '#include <common>\nvarying float vSheet;')
+                .replace('#include <map_fragment>', [
+                    '#include <map_fragment>',
+                    'float gsC = vSheet / 4.0;',
+                    'float gsTone = 1.0 + (fract(sin(floor(gsC) * 12.9898 + 4.1) * 43758.5453) - 0.5) * 0.12;',
+                    'float gsFw = max(fwidth(vSheet), 1e-4);',
+                    'float gsD = abs(fract(gsC + 0.5) - 0.5) * 4.0;',
+                    'float gsHalf = max(0.03, gsFw * 0.6);',
+                    'float gsSeam = 1.0 - 0.28 * (1.0 - smoothstep(gsHalf, gsHalf + gsFw, gsD));',
+                    'float gsIn = step(3.9, vSheet) * step(vSheet, 40.1);',
+                    'diffuseColor.rgb *= gsTone * mix(1.0, gsSeam, gsIn);'
+                ].join('\n'));
+        };
+        // The same goats' hair for every piece that lies FLAT - the roof run, the front fold,
+        // the rear train. The polygon offset above exists only because the goats'-hair WALLS
+        // sit in the very plane of the linen walls. On the roof the same offset dragged the
+        // goats' hair up through both hide coverings 0.06 above it: seen at a distance as
+        // brown woven streaks on the violet roof, and at the front as a brown patch.
+        const goatHairFlatMaterial = goatHairMaterial.clone();
+        goatHairFlatMaterial.polygonOffset = false;
+        goatHairFlatMaterial.onBeforeCompile = goatHairMaterial.onBeforeCompile;
+        goatHairFlatMaterial.extensions = goatHairMaterial.extensions;
 
         // Layer 3: Ram skins dyed red (morocco leather)
         const ramTexture = createSkinTexture('#6B2000', 1.0, 18);
@@ -3612,11 +3754,37 @@
             const cl = (t) => Math.min(1, Math.max(0, t));
             const fade = cl(Math.min(u, 1 - u) * 7) * cl(Math.min(v, 1 - v) * 7);
             // pockets at the 4-cubit curtain widths [TEXT Ex 26:2]
+            // Was 0.24 - deep enough to read as dark transverse stripes through the hides,
+            // for a pocketing no source describes. Kept as a whisper of cloth, not a feature.
             const panelT = (((wz + halfL) / (4 * CUBIT)) % 1 + 1) % 1;
-            const panelSag = Math.pow(Math.sin(Math.PI * panelT), 2) * 0.24;
+            const panelSag = Math.pow(Math.sin(Math.PI * panelT), 2) * 0.08;
             const crossSag = Math.sin(Math.PI * cl(u)) * 0.12;
             const wrinkle  = Math.sin(u * 23 + v * 57) * Math.sin(v * 31 + u * 7) * 0.018;
-            return ((panelSag + crossSag) - wrinkle) * fade;   // downward, scene units
+            // THE ROOF RESTS ON THE VEIL PILLARS. [TEXT Ex 26:31-33] four pillars carry the
+            // veil "under the clasps", and they stand the full height of the house. Measured
+            // from above: their tops came up THROUGH all four coverings as a dotted line,
+            // because the sag took the cloth below them. Cloth lying across a row of posts
+            // is held up by them, so the sag dies out over a cubit either side of that line.
+            const veilZ = -halfL + HOLY_OF_HOLIES_SIZE;
+            const vs = cl(Math.abs(wz - veilZ) / CUBIT);
+            const veilHold = vs * vs * (3 - 2 * vs);
+            return ((panelSag + crossSag) - wrinkle) * fade * veilHold;   // downward, scene units
+        }
+
+        // THE GOATS'-HAIR SHEET, AS ONE PIECE OF CLOTH. [TEXT Ex 26:8-12] eleven curtains of
+        // 30 x 4 joined 5 + 6 = one sheet 44 cubits along the tent. S is the distance along
+        // that sheet from its FRONT edge, in cubits:
+        //   0-2    the doubled half of the sixth curtain, folded at the front   [Ex 26:9]
+        //   2-32   over the roof, east to west                                  (30)
+        //   32-42  down the back wall to the ground                             (10)
+        //   42-44  the half curtain trailing behind          [Ex 26:12; RABBINIC Baraita para 10]
+        // Curtain joins fall every 4 cubits of S (4, 8 ... 40); the join at S = 24 is the
+        // 5|6 join with the fifty bronze clasps [Ex 26:11], = GOAT_SEAM_FROM_WEST_CUBITS below.
+        // The goats'-hair shader draws the joins and gives each curtain its own weaving tone.
+        const GOAT_SHEET_FRONT_FOLD = 2;
+        const GOAT_SHEET_ROOF_END = GOAT_SHEET_FRONT_FOLD + TENT_LENGTH / CUBIT;   // 32
+        function goatSheetS(zLocal) {   // tent-local z (+z = east/front) on roof or side walls
+            return GOAT_SHEET_FRONT_FOLD + (TENT_LENGTH / 2 - zLocal) / CUBIT;
         }
 
         // Create a complete draped covering (roof + walls as one piece)
@@ -3653,6 +3821,8 @@
             const roofGeo = new THREE.PlaneGeometry(roofW, roofL, 48, 96);
             const roofPos = roofGeo.attributes.position;
             const roofZoff = (surfaceFront + frontOH - surfaceBack - backOH) / 2;
+            const sheetMode = !!longitudinal.sheet;
+            const roofSheet = sheetMode ? new Float32Array(roofPos.count) : null;
             for (let vi = 0; vi < roofPos.count; vi++) {
                 // local -> world. The plane is rotated -PI/2 about X, so local +Y maps
                 // to world -Z. Feeding WORLD coords to the shared field is what makes
@@ -3660,10 +3830,12 @@
                 const wx = roofPos.getX(vi);
                 const wz = roofZoff - roofPos.getY(vi);
                 roofPos.setZ(vi, roofPos.getZ(vi) - sharedRoofSag(wx, wz));
+                if (sheetMode) roofSheet[vi] = goatSheetS(wz);
             }
+            if (sheetMode) roofGeo.setAttribute('aSheet', new THREE.BufferAttribute(roofSheet, 1));
             roofGeo.computeVertexNormals();
             roofGeo.computeVertexNormals();
-            const roof = new THREE.Mesh(roofGeo, material);
+            const roof = new THREE.Mesh(roofGeo, longitudinal.roofMaterial || material);
             roof.rotation.x = -Math.PI / 2;
             roof.position.set(
                 0, roofY,
@@ -3677,7 +3849,8 @@
             // Enough longitudinal subdivisions for hanging folds to curve rather
             // than reading as a row of rigid triangular panels.
             const wallSegs = 64;
-            const heightSegs = 12;
+            const heightSegs = longitudinal.heightSegs || 12;
+            const socketClear = !!longitudinal.socketClear;
 
             // Function to create a canted wall
             // Note: walls are positioned relative to tent center (0,0,0) in local space
@@ -3695,6 +3868,7 @@
                 const vertices = [];
                 const indices = [];
                 const uvs = [];
+                const sheetS = [];
 
                 // UVs. 'legacy' keeps the old arbitrary scaling for layers whose cloth
                 // carries no drawn seam. 'curtain' CONTINUES THE ROOF'S UV FIELD around
@@ -3741,7 +3915,7 @@
                             Math.sin(along * 0.62) * 0.16 +
                             Math.sin(along * 1.7 + 1.3) * 0.04;
                         const fold = Math.abs(foldWave) * t * cornerFade;
-                        const reach = outward + fold;
+                        const reach = outward + fold + (socketClear ? socketBulge(y) : 0);
 
                         // Position along the wall based on direction
                         let x, z;
@@ -3756,6 +3930,8 @@
                         }
 
                         vertices.push(x, y, z);
+                        if (sheetMode) sheetS.push(isSide ? goatSheetS(z)
+                                                          : GOAT_SHEET_ROOF_END + (roofY - y) / CUBIT);
                         if (uvMode === 'curtain') {
                             if (isSide) {
                                 // u walks off the roof edge and on down the wall, so the
@@ -3800,6 +3976,7 @@
                 const geo = new THREE.BufferGeometry();
                 geo.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
                 geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+                if (sheetMode) geo.setAttribute('aSheet', new THREE.Float32BufferAttribute(sheetS, 1));
                 geo.setIndex(indices);
                 geo.computeVertexNormals();
                 return geo;
@@ -3933,15 +4110,27 @@
         // ברקיע — "the clasps appeared IN the tabernacle like stars in the firmament", i.e.
         // seen from INSIDE, from below. Raising them onto the roof would hide them under the
         // goats' hair and delete the one thing the source says about how they looked.
+        // THE FIFTY LOOPS RUN THE WHOLE JOINING EDGE. [TEXT Ex 26:4-5] the loops are "on the
+        // edge of the outermost curtain", and the curtains join along their 28-cubit LENGTH
+        // (26:2-3). So the fifty gold clasps are spread over 28 cubits: 9 down the north side,
+        // 10 across the ceiling, 9 down the south - about 18 of them overhead, not all fifty
+        // crowded into the ten-cubit ceiling as before. The wall ones lie between the boards
+        // and the goats' hair (the linen hangs OUTSIDE the boards), so only the ceiling run is
+        // seen - still "like stars in the firmament" from within [RABBINIC Baraita para 6].
         const claspGeo = new THREE.SphereGeometry(0.075, 8, 8);
         const CLASPS_PER_SEAM = 50;
+        const LINEN_EDGE_CU = 28, LINEN_DROP_CU = 28 / 2 - TENT_WIDTH / CUBIT / 2;   // 9
         for (let ci = 0; ci < CLASPS_PER_SEAM; ci++) {
+            const a = (ci + 0.5) * LINEN_EDGE_CU / CLASPS_PER_SEAM;   // cubits along the edge
             const clasp = new THREE.Mesh(claspGeo, goldMaterial);
-            clasp.position.set(
-                -TENT_WIDTH / 2 + 0.4 + (ci / (CLASPS_PER_SEAM - 1)) * (TENT_WIDTH - 0.8),
-                TENT_HEIGHT - 0.12,
-                -TENT_LENGTH / 2 + HOLY_OF_HOLIES_SIZE
-            );
+            const zc = -TENT_LENGTH / 2 + HOLY_OF_HOLIES_SIZE;
+            if (a < LINEN_DROP_CU) {
+                clasp.position.set(-TENT_WIDTH / 2 + 0.03, (LINEN_HEM_CUBITS + a) * CUBIT, zc);
+            } else if (a > LINEN_EDGE_CU - LINEN_DROP_CU) {
+                clasp.position.set(TENT_WIDTH / 2 - 0.03, (LINEN_HEM_CUBITS + LINEN_EDGE_CU - a) * CUBIT, zc);
+            } else {
+                clasp.position.set(-TENT_WIDTH / 2 + (a - LINEN_DROP_CU) * CUBIT, TENT_HEIGHT - 0.12, zc);
+            }
             clasp.castShadow = true;
             tabernacleGroup.add(clasp);
         }
@@ -3975,14 +4164,25 @@
         // follows R. Judah because NASB 26:12 says "half curtain" in the plain text.
         const GOAT_SEAM_FROM_WEST_CUBITS = 8;   // derived above; 4 cubits was arbitrary
         const GOAT_SEAM_Z = -TENT_LENGTH / 2 + GOAT_SEAM_FROM_WEST_CUBITS * CUBIT;
+        // Same rule as the gold: the fifty bronze clasps follow the goats'-hair join along its
+        // full 30-cubit length [Ex 26:8,10-11] - 10 down the north side, 10 across the roof,
+        // 10 down the south. On the roof they lie UNDER the two hide coverings (flattened so
+        // they fit between the goats' hair and the rams' skins); on the walls they are the
+        // outermost thing there is, a line of bronze running down each side to the sand.
         const bronzeClaspGeo = new THREE.SphereGeometry(0.075, 8, 8);
+        const GOAT_EDGE_CU = 30, GOAT_DROP_CU = 10;
         for (let ci = 0; ci < CLASPS_PER_SEAM; ci++) {
+            const a = (ci + 0.5) * GOAT_EDGE_CU / CLASPS_PER_SEAM;
             const bClasp = new THREE.Mesh(bronzeClaspGeo, bronzeMaterial);
-            bClasp.position.set(
-                -TENT_WIDTH / 2 + 0.4 + (ci / (CLASPS_PER_SEAM - 1)) * (TENT_WIDTH - 0.8),
-                TENT_HEIGHT + 0.15 - 0.10,          // sits on the goats'-hair layer above the linen
-                GOAT_SEAM_Z
-            );
+            if (a < GOAT_DROP_CU || a > GOAT_EDGE_CU - GOAT_DROP_CU) {
+                const side = a < GOAT_DROP_CU ? -1 : 1;
+                const y = (a < GOAT_DROP_CU ? a : GOAT_EDGE_CU - a) * CUBIT;
+                bClasp.position.set(side * (TENT_WIDTH / 2 + socketBulge(y) + 0.06), y, GOAT_SEAM_Z);
+            } else {
+                const x = -TENT_WIDTH / 2 + (a - GOAT_DROP_CU) * CUBIT;
+                bClasp.scale.set(1, 0.3, 1);
+                bClasp.position.set(x, TENT_HEIGHT + 0.085 - sharedRoofSag(x, GOAT_SEAM_Z), GOAT_SEAM_Z);
+            }
             bClasp.castShadow = true;
             tabernacleGroup.add(bClasp);
         }
@@ -3992,7 +4192,9 @@
         const GOAT_LAYER_OFFSET = 0;
         const goatCovering = createDrapedCovering(
             GOAT_LAYER_OFFSET, goatHairMaterial, 0,
-            { surfaceFront: 0, surfaceBack: 0, stackY: 0.06 }
+            { surfaceFront: 0, surfaceBack: 0, stackY: 0.06,
+              sheet: true, socketClear: true, heightSegs: 48,
+              roofMaterial: goatHairFlatMaterial }
         );
         tabernacleGroup.add(goatCovering);
 
@@ -4005,8 +4207,23 @@
         // [TEXT Ex 26:12] the remaining half hangs at the rear. This viewer ends
         // the rear drop at the wall plane and ground line. It draws no rear flap,
         // train, or other ground-plane textile.
-        const goatFoldGeo = new THREE.PlaneGeometry(TENT_WIDTH, FRONT_OVERHANG);
-        const goatFrontFold = new THREE.Mesh(goatFoldGeo, goatHairMaterial);
+        // The fold rests ON the sagging goats' hair, so it takes the same shared sag.
+        // It used to be a rigid flat plane, and where the roof sagged below it the fold
+        // poked up through BOTH hide coverings as a brown patch on the outermost surface.
+        const goatFoldGeo = new THREE.PlaneGeometry(TENT_WIDTH, FRONT_OVERHANG, 24, 6);
+        {
+            const fp = goatFoldGeo.attributes.position;
+            const fs = new Float32Array(fp.count);
+            const zc = TENT_LENGTH / 2 - FRONT_OVERHANG / 2;
+            for (let i = 0; i < fp.count; i++) {
+                const wz = zc - fp.getY(i);
+                fp.setZ(i, -sharedRoofSag(fp.getX(i), wz));
+                fs[i] = (TENT_LENGTH / 2 - wz) / CUBIT;     // 0..2: the doubled half
+            }
+            goatFoldGeo.setAttribute('aSheet', new THREE.BufferAttribute(fs, 1));
+            goatFoldGeo.computeVertexNormals();
+        }
+        const goatFrontFold = new THREE.Mesh(goatFoldGeo, goatHairFlatMaterial);
         goatFrontFold.rotation.x = -Math.PI / 2;
         goatFrontFold.position.set(
             0,
@@ -4015,6 +4232,83 @@
         );
         goatFrontFold.castShadow = true;
         goatCovering.add(goatFrontFold);
+
+        // [TEXT Ex 26:12] "the half curtain that is left over shall hang over the back".
+        // [RABBINIC Baraita para 10, R. Judah] half doubled at the front, "and half trailing
+        // (saruach) behind the tabernacle". 44 = 2 + 30 + 10 + 2, so after ten cubits down
+        // the back wall two cubits of cloth remain, and they lie on the sand behind it.
+        // Restored 2026-09-28: removed 08-01 (128c1c4a), which dropped two cubits of a sheet
+        // whose arithmetic is exact and left test_covering_geometry.py failing since.
+        // ! ASSUMPTION - Claude: the gentle rumple is cloth behaviour, not text.
+        const BACK_OVERHANG = 2 * CUBIT;      // the half curtain trailing behind (26:12)
+        {
+            const trainW = TENT_WIDTH + 2 * SOCKET_CLEAR;
+            const trainGeo = new THREE.PlaneGeometry(trainW, BACK_OVERHANG, 30, 8);
+            const tp = trainGeo.attributes.position;
+            const ts = new Float32Array(tp.count);
+            for (let i = 0; i < tp.count; i++) {
+                const along = BACK_OVERHANG / 2 - tp.getY(i);          // 0 at the wall hem
+                const lift = 0.035 + 0.05 * Math.max(0, 1 - along / 0.6)   // leaves the hem
+                           + 0.03 * Math.abs(Math.sin(tp.getX(i) * 1.1 + along * 0.7));
+                tp.setZ(i, lift);
+                ts[i] = GOAT_SHEET_ROOF_END + TENT_HEIGHT / CUBIT + along / CUBIT;   // 42..44
+            }
+            trainGeo.setAttribute('aSheet', new THREE.BufferAttribute(ts, 1));
+            trainGeo.computeVertexNormals();
+            const goatRearTrain = new THREE.Mesh(trainGeo, goatHairFlatMaterial);
+            goatRearTrain.rotation.x = -Math.PI / 2;
+            goatRearTrain.position.set(0, 0,
+                -TENT_LENGTH / 2 - socketBulge(0) - BACK_OVERHANG / 2);
+            goatRearTrain.receiveShadow = true;
+            goatCovering.add(goatRearTrain);
+        }
+
+        // THE BACK CORNERS. ! DERIVED - Claude, arithmetic on [TEXT Ex 26:8-12]: the sheet is
+        // 30 across and the tent 10 wide, so 10 cubits hang down each side; it runs 10 cubits
+        // down the back. At each back corner that leaves a 10 x 10 cubit square of cloth
+        // whose two edges are both sewn to the one vertical corner line. It cannot vanish.
+        // Folded on its diagonal it is a right triangle: the corner line (10 up), 10 cubits
+        // along the ground, and the crease running from the roof corner down to the sand.
+        // ! ASSUMPTION - Claude: HOW it was dressed is unstated. Drawn folded flat along each
+        // side wall (like a made bed's corner). Its curtains run across it, so its joins show
+        // as horizontal lines at S = 36 and 40, against the vertical joins beneath.
+        // The side cloth billows away from the boards toward its hem (createCantedWall's fold
+        // field); the corner fold lies on top of that, so it must follow the same billow or
+        // the cloth beneath pokes through it near the ground.
+        function goatWallBillow(z, y) {
+            const roofY = TENT_HEIGHT + 0.06;
+            const t = Math.min(1, Math.max(0, (roofY - y) / roofY));
+            const cornerFade = Math.sin(Math.PI * (z / TENT_LENGTH + 0.5));
+            const w = Math.sin(z * 0.62) * 0.16 + Math.sin(z * 1.7 + 1.3) * 0.04;
+            return Math.abs(w) * t * Math.max(0, cornerFade);
+        }
+        [-1, 1].forEach(side => {
+            const rows = 40, cols = 40;
+            const verts = [], sh = [], idx = [];
+            for (let j = 0; j <= rows; j++) {
+                const y = TENT_HEIGHT * (1 - j / rows);             // top -> ground
+                const reachLen = (TENT_HEIGHT - y);                 // triangle widens downward
+                for (let i = 0; i <= cols; i++) {
+                    const a = (i / cols) * reachLen;                // distance forward of the corner
+                    const x = side * (TENT_WIDTH / 2 + socketBulge(y) + goatWallBillow(-TENT_LENGTH / 2 + a, y) + 0.045);
+                    verts.push(x, y, -TENT_LENGTH / 2 + a);
+                    sh.push(GOAT_SHEET_ROOF_END + (TENT_HEIGHT - y) / CUBIT);
+                }
+            }
+            for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+                const a = j * (cols + 1) + i, b = a + 1, c = a + cols + 1, d = c + 1;
+                if (side > 0) idx.push(a, c, b, b, c, d); else idx.push(a, b, c, b, d, c);
+            }
+            const g = new THREE.BufferGeometry();
+            g.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+            g.setAttribute('aSheet', new THREE.Float32BufferAttribute(sh, 1));
+            g.setIndex(idx);
+            g.computeVertexNormals();
+            const cornerFold = new THREE.Mesh(g, goatHairMaterial);
+            cornerFold.castShadow = true;
+            cornerFold.receiveShadow = true;
+            goatCovering.add(cornerFold);
+        });
 
         // Layer 3: Ram skins dyed red. The Baraita distinguishes its geometry:
         //   para 7   linen 28 cu = 10 roof + 9 + 9, stopping AT the sockets
@@ -4141,9 +4435,10 @@
         );
 
         // Pegs on back (west, -Z)
+        // Stand beyond the 26:12 train, so the cords cross it instead of pinning it.
         addBrassPegs(
-            -TENT_WIDTH / 2 - GOAT_LAYER_OFFSET, -TENT_LENGTH / 2 - 2,
-            TENT_WIDTH / 2 + GOAT_LAYER_OFFSET, -TENT_LENGTH / 2 - 2,
+            -TENT_WIDTH / 2 - GOAT_LAYER_OFFSET, -TENT_LENGTH / 2 - BACK_OVERHANG - 1.5,
+            TENT_WIDTH / 2 + GOAT_LAYER_OFFSET, -TENT_LENGTH / 2 - BACK_OVERHANG - 1.5,
             6, 'z-'
         );
 
@@ -4543,6 +4838,7 @@
         // Golden table model: crown moulding, carrying poles, the twelve
         // loaves in two rows, and the golden vessels (Exodus 25:29)
         loadFurnishing(tableGroup, 'models/SM_TableShowbread.glb', {
+            envIntensity: 0.35,   // inside the tent: little sky to reflect
             auditName: 'showbreadTableAsset',
             dimensionNodeName: 'SM_Showbread_Structure',
             targetWidth: TABLE_LENGTH,
@@ -4591,6 +4887,7 @@
         // Golden incense altar model: crown moulding, horns, carrying
         // poles, and a censer resting on top
         loadFurnishing(incenseAltarGroup, 'models/SM_AltarIncense.glb', {
+            envIntensity: 0.35,   // inside the tent: little sky to reflect
             auditName: 'incenseAltarAsset',
             dimensionNodeName: 'SM_Altar_Structure',
             targetWidth: INCENSE_ALTAR_SIZE,
@@ -4756,6 +5053,7 @@
         });
 
         loadFurnishing(arkGroup, 'models/SM_ArkCovenant.glb', {
+            envIntensity: 0.35,   // inside the tent: little sky to reflect
             auditName: 'arkAsset',
             dimensionNodeName: 'Structure',
             // [TEXT Ex 25:10] body: 2.5 x 1.5 x 1.5 cubits. The old target
@@ -5760,7 +6058,14 @@ figureLines.renderOrder = -2;
             figMaterial.uniforms.uTime.value = t;
             figureLines.visible = false;   // never drawn - see note at skySpin
         }
-        updateSky(0);
+        // Inspection: ?sky=<seconds> freezes the day/night clock (0 sunrise, 22.5 noon,
+        // 45 sunset, 67.5 midnight) so review renders compare the same light. Like ?view=,
+        // it changes nothing unless asked for.
+        const SKY_PIN = (() => {
+            const v = parseFloat(new URLSearchParams(window.location.search).get('sky'));
+            return Number.isFinite(v) ? v : null;
+        })();
+        updateSky(SKY_PIN === null ? 0 : SKY_PIN);
 
         // ================================================================
         // ANIMATION LOOP
@@ -5801,7 +6106,7 @@ figureLines.renderOrder = -2;
                 }
             }
 
-            updateSky(animationTime);
+            updateSky(SKY_PIN === null ? animationTime : SKY_PIN);
 
             clampCameraToGround();   // ground lock: recompute the horizon limit for this frame
             controls.update();
