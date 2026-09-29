@@ -352,22 +352,88 @@
          ============================================================ -->
     <div id="physics-panel">
         <button id="physics-panel-close">×</button>
-        <h3>ARK AMBIENT-FIELD CASE</h3>
-        <div class="src">Elmer 26.2 · StatElecSolve · ark_ambient_t0001.vtu · 2026-07-29</div>
-        <p>The visible arrows are down-sampled directly from the solved three-dimensional
-        electric-field vectors. Position, direction, and colour come from the FEM result;
-        arrow length is normalized for legibility.</p>
-        <p class="warn">This is a conditional 200 kV/m vertical ambient-field case around the
-        Ark mesh—not evidence that such a field existed at the Tabernacle, not a charging
-        mechanism, and not a full-Tabernacle electrical solve.</p>
+        <h3>THE ARK IN A SANDSTORM FIELD — BY THE NUMBERS</h3>
+        <div class="src">Elmer 26.2 · StatElecSolve · ark_conductor_e6_t0001.vtu (2026-09-28) and
+            wings_conductor (2026-09-28) · fem-lab/ark-case/ARK_AMBIENT_CORRECTION_2026-09-28.md</div>
+        <p>The arrows are 28 nodes of the solved three-dimensional field around the Ark: position,
+        direction and colour from the solver; length normalised so they can be seen. Every number
+        below is read from a result file. Each solve is Laplace's equation in dry air: it locates
+        where the field is strongest and how strong; it does not model what happens once air
+        ionises.</p>
+
+        <h4>What was applied</h4>
         <table>
-            <tr><td>Boundary condition</td><td class="num">200 kV/m downward</td></tr>
-            <tr><td>Displayed samples</td><td class="num">28 FEM nodes</td></tr>
-            <tr><td>Displayed range</td><td class="num">202.7–261.0 kV/m</td></tr>
-            <tr><td>Mesh-wide peak</td><td class="num">261.0 kV/m</td></tr>
-            <tr><td>Mesh status</td><td class="num">Ark only; simplified cherubim</td></tr>
-            <tr><td>Physical conclusion</td><td class="num">none</td></tr>
+            <tr><td>Vertical field, applied</td><td class="num">200 kV/m</td></tr>
+            <tr><td>Measured desert dust-storm fields (ACP 20:14801, read)</td><td class="num">5–150 kV/m</td></tr>
+            <tr><td>The Ark's gold</td><td class="num">one neutral conductor, no charge of its own</td></tr>
+            <tr><td>Ark size (Ex 25:10)</td><td class="num">2.5 × 1.5 × 1.5 cubits</td></tr>
         </table>
+
+        <h4>Solve 1 — Ark with block cherubim, floating (this is the drawn field)</h4>
+        <p>Cherubim as rectangular blocks 0.30 m high (a placeholder shape, not from the text).
+        The mesh puts the ground plane 3.15 m below the Ark's centre.</p>
+        <table>
+            <tr><td>Field inside the gold</td><td class="num">0.02 kV/m (shielded)</td></tr>
+            <tr><td>Potential the Ark takes</td><td class="num">662,878 V</td></tr>
+            <tr><td>Undisturbed potential at its centre height</td><td class="num">630,000 V</td></tr>
+            <tr><td>So the Ark floats above its surroundings by</td><td class="num">32.9 kV</td></tr>
+            <tr><td>Strongest field, at the cherubim-block corners</td><td class="num">354 kV/m = 1.77 × ambient</td></tr>
+            <tr><td>Lower box edges</td><td class="num">309 kV/m = 1.54 ×</td></tr>
+            <tr><td>Nodes above 1 MV/m</td><td class="num">0</td></tr>
+        </table>
+
+        <h4>Solve 2 — Ark with tapered, converging wings (Ex 25:20: "stretching out their wings
+        upward, covering the atoning cover")</h4>
+        <p>Wing shape is an analytic profile (ours); tips 0.10 m apart, rising 0.42 m; ~1 cm cells
+        at the wings. Two placements, because the text gives none:</p>
+        <table>
+            <tr><td></td><td class="num">on the ground · 0.15 m above it</td></tr>
+            <tr><td>Potential the Ark takes</td><td class="num">0 V · 82,504 V</td></tr>
+            <tr><td>Strongest field, at the wing tips</td><td class="num">1,180 · 1,133 kV/m</td></tr>
+            <tr><td>Times the ambient</td><td class="num">5.90 · 5.67 ×</td></tr>
+            <tr><td>Lid edges</td><td class="num">787 · 550 kV/m</td></tr>
+            <tr><td>Nodes above 1 MV/m (all within centimetres of the tips)</td><td class="num">84 · 28</td></tr>
+            <tr><td>Nodes above 3 MV/m</td><td class="num">0 · 0</td></tr>
+            <tr><td>Wing-tip field if the ambient is the measured maximum, 150 kV/m</td><td class="num">885 · 850 kV/m</td></tr>
+        </table>
+        <p>A sharp tip at zero edge radius has no finite field in Laplace's equation: the peak
+        rises as the mesh is refined. 5.9 × is this mesh's value at this cell size.</p>
+
+        <h4>Solve 3 — the Ark on a cart, a man on the ground reaching for it (2 Sam 6:3, 6)</h4>
+        <p>Ark on a wooden cart bed 1.0 m up (assumed height; wheels and oxen left out); a grounded
+        man beside it, arm out at 1.35 m, fingertip 20, 10, 5 and 2 cm from the Ark's side; field
+        150 kV/m, the measured maximum. ~945,000 cells per case, 6 mm at the fingertip.</p>
+        <table>
+            <tr><td>Potential the Ark takes on the cart, alone</td><td class="num">203,129 V</td></tr>
+            <tr><td>With the man's hand at 20 · 10 · 5 · 2 cm</td><td class="num">166,890 · 161,025 · 156,838 · 152,852 V</td></tr>
+            <tr><td>The man (grounded through his feet)</td><td class="num">6 – 15 V</td></tr>
+            <tr><td>Mean field across the gap, 20 · 10 · 5 · 2 cm</td><td class="num">0.83 · 1.61 · 3.14 · 7.64 MV/m</td></tr>
+            <tr><td>Field at the fingertip surface</td><td class="num">3.4 · 3.8 · 5.4 · 8.2 MV/m</td></tr>
+            <tr><td>Gap breaks down (3 MV/m figure) at about</td><td class="num">5 cm</td></tr>
+            <tr><td>Gap breaks down (1 MV/m figure) at about</td><td class="num">16 cm</td></tr>
+            <tr><td>Energy on the Ark at that moment, ½CV², capacitances on the record</td><td class="num">1.0 – 2.2 J</td></tr>
+            <tr><td>Wing tips on this finer mesh</td><td class="num">1,318 kV/m = 8.8 ×</td></tr>
+        </table>
+        <p>Not modelled: the discharge itself, corona at the tips bleeding the Ark down first, the
+        oxen and wheels, and what one to two joules through a hand does to a heart (no sourced
+        threshold on the record). Case file: fem-lab/ark-case/CART_CASE_2026-09-28.md.</p>
+
+        <h4>Read against the materials science on the record</h4>
+        <table>
+            <tr><td>Air breakdown, standard references</td><td class="num">3 MV/m</td></tr>
+            <tr><td>Air breakdown, AlphaLab ("spark E-field 10 kV/cm") — conflict recorded, unresolved</td><td class="num">1 MV/m</td></tr>
+            <tr><td>Wing tips at 150 kV/m, as a share of 3 MV/m</td><td class="num">28–30 %</td></tr>
+            <tr><td>Wing tips at 150 kV/m, as a share of 1 MV/m</td><td class="num">85–89 %</td></tr>
+            <tr><td>Lifted winged Ark at 150 kV/m (linear)</td><td class="num">61.9 kV</td></tr>
+            <tr><td>Discharge thresholds (IEC TR 61340-1 via one secondary source)</td><td class="num">felt 1 kV · heard 5 kV · seen 8 kV</td></tr>
+            <tr><td>Ark capacitance on the record: alone / in the tent with poles</td><td class="num">84.6 pF / 156 pF</td></tr>
+            <tr><td>½CV² at 61.9 kV (arithmetic)</td><td class="num">0.16 – 0.30 J</td></tr>
+            <tr><td>Frame grounded through 96 silver sockets and bronze pegs (Ex 26:19, 27:19)</td><td class="num">10 – 65 Ω</td></tr>
+            <tr><td>Whether the Ark was bonded to that frame or stood isolated</td><td class="num">stated by no text</td></tr>
+        </table>
+        <div class="src">Earlier displays of this case (261 kV/m, 1.31 ×) came from a solve in which the
+            Ark was not a conductor — its potential varied by 122,707 V across the box and the field
+            inside was 188 kV/m. Replaced 2026-09-28; the diagnosis is in the correction file above.</div>
         <div style="display:none" aria-hidden="true" data-status="superseded-legacy-results">
         <h3>SUPERSEDED 2026-07-28 RESULTS</h3>
         <div class="src">Elmer 26.2 · StatElecSolve · solved 2026-07-28 ·
@@ -932,28 +998,27 @@
         // flashes over SOONER holding LESS. Sub-joule at any real seating gap.
         //
         // --- IN A SANDSTORM ----------------------------------------------
-        // Measured desert dust-storm fields run 50-200 kV/m near the surface.
-        // Khamsin gusts reach 140 km/h and RH drops BELOW 5% — every organic
+        // Measured desert dust-storm fields: 5-150 kV/m (ACP 20:14801, read; 200 kV/m
+        // below is the solver's labelled case, not a measurement). Khamsin/sharav event
+        // values on the record (fem-lab/sources/khamsin-sharav-wind-humidity.md): IMS
+        // April 2025 measured gusts above 100 km/h and RH below 10 %; the often-quoted
+        // 140 km/h and "below 5 %" trace only to uncited Wikipedia. Every organic
         // material in the tent then sits at its maximum resistivity.
-        // Ark floating (net charge zero) in a 200 kV/m field, SOLVED:
-        //   peak |E| = 261 kV/m = 1.31x ambient, located AT THE CHERUBIM
-        //   that is ~8.7% of the 3 MV/m clean-air breakdown threshold
-        // Three checks passed unprompted: the interior field came out ~0
-        // (Faraday shielding, not imposed); capacitance to ground was identical
-        // whether the inside was modelled or not; reported energy equalled
-        // 1/2 CV^2 exactly.
-        //
-        // ! LIMITS, stated plainly:
-        // ! - the cherubim in that mesh are rectangular BLOCKS. Flat faces
-        // !   concentrate field LESS than curved or pointed ones, so 1.31x is a
-        // !   LOWER BOUND. Real hammered wings have not been built or solved.
-        // ! - 3 MV/m is clean dry air at sea level. At 1569 m, hot, and
-        // !   dust-laden it is LOWER, which narrows the margin further.
-        // !   NOT SOURCED.
-        // ! - nothing establishes any mechanism that would CHARGE the object.
-        // ! On what has actually been computed: not a machine, by roughly an
-        // ! order of magnitude — and the dominant uncertainty is a geometry we
-        // ! know to be wrong in the direction that would close the gap.
+        // CORRECTED 2026-09-28. The 2026-07-29 "floating" solve was not a conductor
+        // solve (Capacitance Body without Calculate Capacitance Matrix = a natural
+        // boundary): its interior field was 188 kV/m and its potential varied by
+        // 122,707 V across the Ark. The "interior came out ~0" claim that stood here
+        // was false against its own result file. Re-solved with the gold as a
+        // neutral permittivity-limit conductor (fem-lab/ark-case/ark_conductor_e6.sif,
+        // fem-lab/ark/wings_conductor.sif; numbers and diagnosis in
+        // fem-lab/ark-case/ARK_AMBIENT_CORRECTION_2026-09-28.md):
+        //   block cherubim, floating:  interior 0.02 kV/m; Ark at +32.9 kV over its
+        //                              surroundings; peak 354 kV/m = 1.77x at the corners
+        //   tapered converging wings:  on the ground 1,180 kV/m = 5.90x at the tips;
+        //                              0.15 m up (floating, 82.5 kV) 1,133 kV/m = 5.67x
+        //   at the measured maximum 150 kV/m the tips reach 850-885 kV/m: 28-30 % of
+        //   3 MV/m, 85-89 % of the 1 MV/m figure the study also records.
+        //   Sharp voxel tips at zero edge radius: the peak grows with mesh refinement.
         //
         // --- THE AIR INSIDE ----------------------------------------------
         // [RABBINIC Menachot 89a] half a log of oil per lamp, burning
@@ -1596,6 +1661,91 @@
             return { map: mk(cCan), normalMap: mk(nCan), roughnessMap: mk(rCan) };
         }
 
+        // ================================================================
+        // PHOTOGRAPHED MATERIAL — 2026-09-28, Cisco: "stop playing Minecraft with this
+        // tabernacle and get a cover that looks textured like the skins they were made of."
+        // Until now every covering was runtime noise painted on a 512–1024 px canvas and
+        // tiled over a thirty-cubit roof. These are CC0 photographed PBR scans from Poly
+        // Haven (colour / normal / roughness; provenance in textures/SOURCES.md), tiled at
+        // their PHYSICAL size: each scan states its real-world size in mm, and every
+        // surface that wears one carries UVs in CUBITS (uvMode 'cubits', createRoofLaidHide,
+        // uvToCubits), so repeat = 1 / tile-size-in-cubits on roof, wall, fold and train
+        // alike. three r128 applies ONE uv transform per material (the colour map's) to all
+        // of its maps, so a set's three images always share that repeat.
+        // The LOOK is photographed; no cubit span, hem or solver figure changes here.
+        const TEX_DIR = 'textures/';
+        const MM_PER_CUBIT = 450;                       // 0.45 m cubit, as everywhere in this file
+        const texLoader = new THREE.TextureLoader();
+        function loadPBRSet(name, tileMm, opts = {}) {
+            const tileCu = tileMm / MM_PER_CUBIT;
+            const ru = 1 / tileCu, rv = 1 / tileCu;
+            const aniso = renderer.capabilities.getMaxAnisotropy();
+            const mk = (file) => {
+                const t = texLoader.load(TEX_DIR + name + '/' + file);
+                t.wrapS = t.wrapT = THREE.RepeatWrapping;
+                t.repeat.set(ru, rv);
+                t.anisotropy = aniso;
+                return t;
+            };
+            const set = { name, tileCubits: tileCu,
+                map: mk('diff.jpg'), normalMap: mk('nor.jpg'), roughnessMap: mk('rough.jpg') };
+            if (opts.grey) {
+                // The scan's colour is discarded and only its light/dark grain kept
+                // (normalised to a mid-grey mean), so the material's own tint IS the
+                // colour. Used where the sources name a colour the scanned hide doesn't have.
+                const ph = document.createElement('canvas'); ph.width = ph.height = 2;
+                const pg = ph.getContext('2d'); pg.fillStyle = '#b4b4b4'; pg.fillRect(0, 0, 2, 2);
+                const grey = new THREE.CanvasTexture(ph);
+                grey.wrapS = grey.wrapT = THREE.RepeatWrapping; grey.repeat.set(ru, rv); grey.anisotropy = aniso;
+                new THREE.ImageLoader().load(TEX_DIR + name + '/diff.jpg', (img) => {
+                    const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
+                    const x = c.getContext('2d'); x.drawImage(img, 0, 0);
+                    const im = x.getImageData(0, 0, c.width, c.height), d = im.data;
+                    let sum = 0;
+                    for (let i = 0; i < d.length; i += 4) {
+                        const l = 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
+                        d[i] = l; sum += l;
+                    }
+                    // Mean to 180, and the grain's departures from the mean stretched
+                    // (opts.contrast, default 1): a smooth scanned hide has faint colour
+                    // grain, and at one tile per 40 cm seen from thirty cubits it vanished.
+                    const mean = Math.max(1, sum / (d.length / 4));
+                    const k = opts.contrast || 1;
+                    for (let i = 0; i < d.length; i += 4) {
+                        const v = Math.min(255, Math.max(0, 180 + (d[i] - mean) * (180 / mean) * k));
+                        d[i] = d[i + 1] = d[i + 2] = v;
+                    }
+                    x.putImageData(im, 0, 0);
+                    grey.image = c; grey.needsUpdate = true;
+                });
+                set.map = grey;
+            }
+            return set;
+        }
+        // Rescale a geometry's 0..1 UVs to cubits so a physically-tiled set lands true.
+        function uvToCubits(geo, uCubits, vCubits) {
+            const uv = geo.attributes.uv;
+            if (!uv) return geo;
+            for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * uCubits, uv.getY(i) * vCubits);
+            uv.needsUpdate = true;
+            return geo;
+        }
+        // The four photographed sets and the real size of each scan (Poly Haven metadata):
+        //   rams' skins dyed red  [TEXT Ex 26:14]  leather_red_02   600 mm  (red, creased hide)
+        //   taḥash                [TEXT Ex 26:14]  brown_leather    400 mm  (aged hide grain, tinted:
+        //                                          see TACHASH_HIDE, the colour is the sources' call)
+        //   goats' hair           [TEXT Ex 26:7]   hessian_230      269 mm  (coarse plain weave, tinted dark)
+        //   fine twisted linen    [TEXT Ex 27:9]   terlenka         266 mm  (fine even plain weave, cream)
+        // ! ASSUMPTION — Claude: which scan stands for which material is art direction; the
+        // text names the fibre or the animal, never the grain. The goats'-hair scan is jute
+        // hessian: the nearest coarse hand-loomed plain weave in a CC0 library.
+        const ramHidePBR   = loadPBRSet('leather_red_02', 600);
+        // contrast 2.4 made the 40 cm tile read as a grid across the whole tent; 1.3 keeps
+        // the hide's mottling and hides the repeat at viewing distance.
+        const tachashPBR   = loadPBRSet('brown_leather', 400, { grey: true, contrast: 1.3 });
+        const goatClothPBR = loadPBRSet('hessian_230', 268.75);
+        const linenPBR     = loadPBRSet('terlenka', 265.7);
+
         // White linen material for curtains - more opaque and solid
         // [TEXT] Ex 26:1, 27:9 — "fine twisted linen". Fine, densely packed, evenly woven:
         // the Timna analysis calls the low fault rate "the mark of an experienced weaver",
@@ -1604,8 +1754,10 @@
         // Woven at the same thread pitch as every other cloth in the scene.
         const linenFab = makeFabricMaps({ base: LINEN_WHITE, cubits: [8, 5], size: 1024,
             warpShow:0.26, fuzz:0.05, rough:[0.68,0.88], normalStrength:2.6 });
+        // 2026-09-28: photographed fine plain weave (linenPBR, 26.6 cm scan) in place of the
+        // canvas noise. The court runs carry UVs in cubits (createRun), so it tiles true.
         const linenMaterial = new THREE.MeshStandardMaterial({
-            map: linenFab.map, normalMap: linenFab.normalMap, roughnessMap: linenFab.roughnessMap,
+            map: linenPBR.map, normalMap: linenPBR.normalMap, roughnessMap: linenPBR.roughnessMap,
             side: THREE.DoubleSide,
             roughness: 1.0,
             metalness: 0.0,
@@ -1731,7 +1883,15 @@
         // genuinely disagree - the Hebrew noun is opaque, and the two oldest translators,
         // who were nearer to living usage than any modern lexicon, understood it as a
         // colour. Cisco's standing rule is credence to the oldest sources. Violet stands.
-        const TACHASH_HIDE = '#453C7A';
+        // 2026-09-28, Cisco: the LOOK follows Andres Casaretto's Tabernacle (Sketchfab
+        // e06ea379, "made in a recreated VR experience by Bible scholars, clergy, and
+        // artists ... we just want to replicate his image here"). His outer hide is a
+        // pale weathered grey. The violet argued above (LXX/Vulgate; and Josephus III.6.4,
+        // the skins "seemed not at all to differ from the color of the sky") stays on the
+        // record here and can be put back by changing this one value. The solver takes no
+        // colour. Casaretto's grey, under the greyed hide grain, with mean 180/255:
+        const TACHASH_HIDE = '#B8B2A8';
+        const TACHASH_HIDE_VIOLET = '#453C7A';   // the sources' reading, kept for the record
         const badgerFab = makeHideMaps({ base:TACHASH_HIDE, panels:4, grainScale:260,
             coarseScale:7, poreDepth:0.30, seamWidth:0.007, stitchFreq:110,
             toneVar:0.13, warpAmt:0.09,
@@ -2832,7 +2992,10 @@
             const len = Math.hypot(x2 - x1, z2 - z1);
             const run = new THREE.Group();
             const p = new THREE.Mesh(
-                new THREE.BoxGeometry(len, COURTYARD_HEIGHT, textileRenderDepth),
+                // UVs in cubits, so the photographed linen tiles at its scan size along a
+                // 100-cubit run instead of being stretched once across it.
+                uvToCubits(new THREE.BoxGeometry(len, COURTYARD_HEIGHT, textileRenderDepth),
+                           len / CUBIT, COURTYARD_HEIGHT / CUBIT),
                 linenMaterial
             );
             p.position.set((x1 + x2) / 2, COURTYARD_HEIGHT / 2, (z1 + z2) / 2);
@@ -3454,17 +3617,27 @@
         // that root as "deep blue". LXX uses the SAME root in 26:1 for tekhelet. KJV reads
         // "badgers' skins", NASB "fine leather", Strong's H8476 hedges "probably antelope".
         // Cisco's rule: credence to the oldest sources — so this is BLUE, not grey hide.
+        // 2026-09-28: photographed aged-hide grain (tachashPBR, 40 cm scan, colour discarded)
+        // under the sources' violet. The colour is TACHASH_HIDE, argued above; the grain is a
+        // photograph of tanned skin, which is the one thing the canvas noise never was.
         const tentCoveringMaterial = new THREE.MeshStandardMaterial({
-            map: badgerFab.map, normalMap: badgerFab.normalMap, roughnessMap: badgerFab.roughnessMap,
-            color: 0xFFFFFF,
-            roughness: 0.95, // Matte, sun-bleached skin
+            map: tachashPBR.map, normalMap: tachashPBR.normalMap, roughnessMap: tachashPBR.roughnessMap,
+            color: TACHASH_HIDE,
+            roughness: 1.0,   // 1.0 so the photographed roughness map governs, unscaled
             metalness: 0.0,
             side: THREE.DoubleSide
         });
-        // The pore grain is finer than a pixel from any exterior view, and at full strength
-        // its normal map aliased into concentric rings across the roof. Halved: the hide
-        // still catches light unevenly skin to skin, without the moire.
-        tentCoveringMaterial.normalScale.set(0.5, 0.5);
+        // A real hide's relief at 1K per 40 cm is coarser than the old pore noise, so the
+        // moire that forced 0.5 is gone. Full strength: from thirty cubits the wrinkles are
+        // the only thing that says "skin" on a flat roof under a high sun.
+        tentCoveringMaterial.normalScale.set(1.0, 1.0);
+        // Since 2026-09-28 the hides drape down the walls, 1.8 and 3.6 cm outside the goats'
+        // hair, whose material pulls itself toward the eye by polygonOffset -2 (see below)
+        // and so bled through the hide at distance. Depth order follows the stack:
+        // goat -2, rams' skins -4, taḥash -6. Same fix the file already uses, no footprint change.
+        tentCoveringMaterial.polygonOffset = true;
+        tentCoveringMaterial.polygonOffsetFactor = -6;
+        tentCoveringMaterial.polygonOffsetUnits = -6;
 
         // Rope material for tent cords
         const tentRopeMaterial = new THREE.MeshStandardMaterial({
@@ -3703,13 +3876,16 @@
         // image. The old goatTexture had colour only. NOTE 2026-07-27: a near-identical
         // 'goatsHairMaterial' also exists and is NOT used by the tent; three commits of
         // fabric work went onto it by mistake. This is the one the coverings bind to.
+        // 2026-09-28: photographed coarse plain weave (goatClothPBR, 26.9 cm scan). The scan is
+        // natural tan jute, so the tint below carries it to dark goats' hair (tan ≈
+        // 0.55/0.45/0.33 × tint ≈ 0.34/0.25/0.16, the same overall brightness the page had
+        // before). A first try at 0x4A403A rendered the shaded walls near-black with the
+        // weave illegible — the very failure the old note warned of, from the other side.
+        // ! ASSUMPTION — Claude: the shade is mine, as before; the text names the fibre.
         const goatHairMaterial = new THREE.MeshStandardMaterial({
-            map: goatFab.map, normalMap: goatFab.normalMap, roughnessMap: goatFab.roughnessMap,
-            // Texture already carries the dark brown/black goat-hair colour.
-            // A second dark material tint multiplied it almost to zero, hiding
-            // the weave and turning the entire covering into a black silhouette.
-            color: 0xD6C7B5,
-            roughness: 0.95,
+            map: goatClothPBR.map, normalMap: goatClothPBR.normalMap, roughnessMap: goatClothPBR.roughnessMap,
+            color: 0x9C8C7A,
+            roughness: 1.0,   // the photographed roughness map governs
             metalness: 0.0,
             side: THREE.DoubleSide
         });
@@ -3759,13 +3935,19 @@
         // Layer 3: Ram skins dyed red (morocco leather)
         const ramTexture = createSkinTexture('#6B2000', 1.0, 18);
         // [TEXT] Ex 26:14 "rams' skins DYED RED".
+        // 2026-09-28: photographed red-dyed, creased leather (ramHidePBR, 60 cm scan), shown at
+        // its own colour. ! ASSUMPTION — Claude: the text says "dyed red" and no more; the
+        // exact red is the scan's.
         const ramSkinMaterial = new THREE.MeshStandardMaterial({
-            map: ramsFab.map, normalMap: ramsFab.normalMap, roughnessMap: ramsFab.roughnessMap,
-            color: 0x8B3010,
-            roughness: 0.85,
-            metalness: 0.05,
+            map: ramHidePBR.map, normalMap: ramHidePBR.normalMap, roughnessMap: ramHidePBR.roughnessMap,
+            color: 0xFFFFFF,
+            roughness: 1.0,   // the photographed roughness map governs
+            metalness: 0.0,
             side: THREE.DoubleSide
         });
+        ramSkinMaterial.polygonOffset = true;        // between goat (-2) and taḥash (-6)
+        ramSkinMaterial.polygonOffsetFactor = -4;
+        ramSkinMaterial.polygonOffsetUnits = -4;
 
         // Covering dimensions per Exodus 26:9,12-13
         // Half of the end goats'-hair curtain is doubled at the front: 2 cubits.
@@ -3881,6 +4063,9 @@
             const roofW = TENT_WIDTH + layerOffset * 2;
             const roofL = TENT_LENGTH + surfaceFront + surfaceBack + frontOH + backOH;
             const roofGeo = new THREE.PlaneGeometry(roofW, roofL, 48, 96);
+            // 'cubits' = UVs in cubits on roof and walls alike, for photographed sets
+            // that tile at a stated physical size (goats' hair).
+            if (longitudinal.uvMode === 'cubits') uvToCubits(roofGeo, roofW / CUBIT, roofL / CUBIT);
             const roofPos = roofGeo.attributes.position;
             const roofZoff = (surfaceFront + frontOH - surfaceBack - backOH) / 2;
             const sheetMode = !!longitudinal.sheet;
@@ -4010,6 +4195,10 @@
                                 // turn the corner and continue horizontally.
                                 uvs.push(s, 1 + (t * dropCu) / TENT_LEN_CU);
                             }
+                        } else if (uvMode === 'cubits') {
+                            // u along the wall and v down it, both in cubits: a 27 cm
+                            // scan then covers 27 cm here exactly as it does on the roof.
+                            uvs.push(s * length / CUBIT, t * dropCu);
                         } else {
                             uvs.push(s * uvScaleX, t * uvScaleY);
                         }
@@ -4092,11 +4281,15 @@
         // stitched skin boundaries. The material maps already provide irregular
         // hide panels, pores, tone variation, seams and stitches; this mesh supplies
         // only gravity settling and edge curl.
+        // UNUSED since 2026-09-28: this was the roof-only 30 x 10 hide (R. Nehemiah's
+        // reading in the Baraita). Kept so the alternative can be put back in one line if
+        // the witnesses are ever weighed the other way; the hides now use createDrapedCovering.
         function createRoofLaidHide(stackY, material, opts = {}) {
             const width = opts.width || TENT_WIDTH;
             const length = opts.length || TENT_LENGTH;
             const centerZ = opts.centerZ || 0;
             const geo = new THREE.PlaneGeometry(width, length, 40, 120);
+            uvToCubits(geo, width / CUBIT, length / CUBIT);   // photographed hide tiles at true size
             const pos = geo.attributes.position;
             for (let i = 0; i < pos.count; i++) {
                 const x = pos.getX(i);
@@ -4256,6 +4449,7 @@
             GOAT_LAYER_OFFSET, goatHairMaterial, 0,
             { surfaceFront: 0, surfaceBack: 0, stackY: 0.06,
               sheet: true, socketClear: true, heightSegs: 48,
+              uvMode: 'cubits',
               roofMaterial: goatHairFlatMaterial }
         );
         tabernacleGroup.add(goatCovering);
@@ -4273,6 +4467,7 @@
         // It used to be a rigid flat plane, and where the roof sagged below it the fold
         // poked up through BOTH hide coverings as a brown patch on the outermost surface.
         const goatFoldGeo = new THREE.PlaneGeometry(TENT_WIDTH, FRONT_OVERHANG, 24, 6);
+        uvToCubits(goatFoldGeo, TENT_WIDTH / CUBIT, FRONT_OVERHANG / CUBIT);
         {
             const fp = goatFoldGeo.attributes.position;
             const fs = new Float32Array(fp.count);
@@ -4306,6 +4501,7 @@
         {
             const trainW = TENT_WIDTH + 2 * SOCKET_CLEAR;
             const trainGeo = new THREE.PlaneGeometry(trainW, BACK_OVERHANG, 30, 8);
+            uvToCubits(trainGeo, trainW / CUBIT, BACK_OVERHANG / CUBIT);
             const tp = trainGeo.attributes.position;
             const ts = new Float32Array(tp.count);
             for (let i = 0; i < tp.count; i++) {
@@ -4346,7 +4542,9 @@
         }
         [-1, 1].forEach(side => {
             const rows = 40, cols = 40;
-            const verts = [], sh = [], idx = [];
+            // This mesh had NO uv attribute until 2026-09-28: every texel sampled at (0,0),
+            // so the corner folds were a flat swatch of whatever colour sat in that pixel.
+            const verts = [], sh = [], idx = [], uvc = [];
             for (let j = 0; j <= rows; j++) {
                 const y = TENT_HEIGHT * (1 - j / rows);             // top -> ground
                 const reachLen = (TENT_HEIGHT - y);                 // triangle widens downward
@@ -4355,6 +4553,7 @@
                     const x = side * (TENT_WIDTH / 2 + socketBulge(y) + goatWallBillow(-TENT_LENGTH / 2 + a, y) + 0.045);
                     verts.push(x, y, -TENT_LENGTH / 2 + a);
                     sh.push(GOAT_SHEET_ROOF_END + (TENT_HEIGHT - y) / CUBIT);
+                    uvc.push(a / CUBIT, (TENT_HEIGHT - y) / CUBIT);   // cubits, like the walls
                 }
             }
             for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
@@ -4364,6 +4563,7 @@
             const g = new THREE.BufferGeometry();
             g.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
             g.setAttribute('aSheet', new THREE.Float32BufferAttribute(sh, 1));
+            g.setAttribute('uv', new THREE.Float32BufferAttribute(uvc, 2));
             g.setIndex(idx);
             g.computeVertexNormals();
             const cornerFold = new THREE.Mesh(g, goatHairMaterial);
@@ -4382,19 +4582,45 @@
         // Upper coverings. [TEXT Ex 26:14] puts the taḥash covering מעל
         // (above/over) the red ram-skin covering, so an exterior observer sees
         // ONE continuous outer surface, not both materials and not four bands.
-        // Exodus gives neither hide covering's dimensions. This roof-only 30 x 10
-        // profile follows the adopted rabbinic reconstruction; the lower red layer
-        // remains physically present but is correctly concealed by the outer layer.
-        const ramCovering = createRoofLaidHide(0.12, ramSkinMaterial, {
-            width: TENT_WIDTH,
-            length: TENT_LENGTH,
-            reconstruction: "Lower red ram-skin covering; roof-only 30 x 10 rabbinic profile"
-        });
-        const outerCovering = createRoofLaidHide(0.15, tentCoveringMaterial, {
-            width: TENT_WIDTH,
-            length: TENT_LENGTH,
-            reconstruction: "Outermost taḥash covering; roof-only 30 x 10 rabbinic profile"
-        });
+        // HOW FAR DO THE HIDES HANG? [TEXT Ex 26:14] gives the two skin coverings no
+        // dimensions at all. The witnesses split:
+        //   [JOSEPHUS Ant. III.6.4, Whiston] "There were also other curtains made of skins
+        //   above these ... But those that were made of hair and of skins, reached down in
+        //   the same manner as did the veil at the gates" — i.e. to the ground, like the
+        //   goats' hair; and, seen at a distance, "they seemed not at all to differ from
+        //   the color of the sky" (the sky-coloured outer hide: see TACHASH_HIDE).
+        //   [RABBINIC Baraita de-Melekhet ha-Mishkan, line 43 of the numbered copy in
+        //   fem-lab/sources] R. Nehemiah: one piece of red rams' skins "thirty cubits long
+        //   and ten cubits wide" laid over the tent east to west (the roof only); R. Judah:
+        //   two pieces, rams' skins below and taḥash above, no size given.
+        // From 2026-07-31 (session commit d69fb7f4) to 2026-09-28 this file followed
+        // R. Nehemiah's 30 x 10 roof-only profile and called it "the adopted rabbinic
+        // reconstruction". Cisco, 2026-09-28: "it was never roof only" — it was never his
+        // choice. Rule: credence to the oldest source. Josephus (1st c.) beats the Baraita
+        // (2nd c.), and he has the skins reaching the ground on the sides and back, as the
+        // hair does. So both hide layers now take the same draped path as the goats' hair
+        // (roof + two sides + back, hems on the ground), stacked outside it.
+        // ! ASSUMPTION — Claude: the rams' skins reach the ground and the taḥash stops ONE
+        // CUBIT short of it, so a red band shows at the hem all round. Josephus gives the
+        // skins' reach, not the two layers' relative hems; the one-cubit figure is borrowed
+        // from the linen's own shortfall (26:2-3) and the red hem is Casaretto's composition
+        // (his red skins show below the grey as pegged-out points; the points are not drawn).
+        // The front stays open to the screen.
+        const TACHASH_HEM_CUBITS = 1;
+        const ramCovering = createDrapedCovering(
+            0.06, ramSkinMaterial, 0,
+            { surfaceFront: 0, surfaceBack: 0, stackY: 0.12, backHem: 0,
+              socketClear: true, heightSegs: 48, uvMode: 'cubits' }
+        );
+        ramCovering.userData.reconstruction =
+            "Lower red rams'-skin covering; draped to the ground per Josephus III.6.4";
+        const outerCovering = createDrapedCovering(
+            0.12, tentCoveringMaterial, TACHASH_HEM_CUBITS * CUBIT,
+            { surfaceFront: 0, surfaceBack: 0, stackY: 0.15, backHem: TACHASH_HEM_CUBITS * CUBIT,
+              socketClear: true, heightSegs: 48, uvMode: 'cubits' }
+        );
+        outerCovering.userData.reconstruction =
+            "Outermost taḥash covering; draped to the ground per Josephus III.6.4";
         tabernacleGroup.add(ramCovering, outerCovering);
 
         // Add brass pegs around the tent (Exodus 27:19)
@@ -5248,43 +5474,47 @@
         // ================================================================
         // 3D ELECTRIC-FIELD OVERLAY — SOLVER DATA, NOT ART-DIRECTED VECTORS
         // ================================================================
-        // Source: fem-lab/ark-case/mesh_ambient/ark_ambient_t0001.vtu
-        // Elmer 26.2 StatElecSolve, 2026-07-29. The boundary condition is an
-        // ASSUMED uniform vertical 200 kV/m ambient field. These are 28 actual
-        // FEM node samples down-selected from the 20,677-node result. Format:
+        // Source: fem-lab/ark-case/mesh_ambient/ark_conductor_e6_t0001.vtu
+        // Elmer 26.2 StatElecSolve, 2026-09-28: the Ark as ONE neutral floating
+        // conductor (permittivity-limit body) in a uniform vertical 200 kV/m field
+        // (the solver's case value; measured storms 5-150 kV/m). Replaces the
+        // 2026-07-29 ark_ambient result, in which the Ark was NOT a conductor
+        // (see fem-lab/ark-case/ARK_AMBIENT_CORRECTION_2026-09-28.md). 28 FEM node
+        // samples from the 20,677-node result: 24 field nodes at the old sample
+        // positions + the 4 peak nodes at the cherubim-block corners. Format:
         // [x_m, y_m, z_m, Ex/|E|, Ey/|E|, Ez/|E|, |E|_kV_per_m].
         // Solver axes: x=Ark length, y=Ark width, z=vertical. Viewer axes map
         // to x=x, y=z, z=y. Arrow length is normalized only for visibility;
         // node position, direction and colour are data-driven.
         const ARK_FEM_SAMPLES = [
-            [-1.688,-0.945,-0.338,-0.001,-0.001,-1.000,202.8],
-            [-1.688,-0.945, 0.507, 0.002, 0.001,-1.000,202.7],
-            [-1.688,-0.945, 1.220, 0.001, 0.001,-1.000,203.1],
-            [-1.688, 0.945,-0.338,-0.001, 0.001,-1.000,202.8],
-            [-1.688, 0.945, 0.507, 0.002,-0.001,-1.000,202.7],
-            [-1.688, 0.945, 1.220, 0.001,-0.001,-1.000,203.1],
-            [-0.562,-0.945,-0.338,-0.006,-0.007,-1.000,203.0],
-            [-0.562,-0.945, 0.507, 0.007, 0.008,-1.000,202.9],
-            [-0.562,-0.945, 1.220, 0.003, 0.003,-1.000,203.4],
-            [-0.562, 0.945,-0.338,-0.006, 0.007,-1.000,203.0],
-            [-0.562, 0.945, 0.507, 0.007,-0.008,-1.000,202.9],
-            [-0.562, 0.945, 1.220, 0.003,-0.003,-1.000,203.4],
-            [ 0.562,-0.945,-0.338, 0.006,-0.007,-1.000,203.0],
-            [ 0.562,-0.945, 0.507,-0.007, 0.008,-1.000,202.9],
-            [ 0.562,-0.945, 1.220,-0.003, 0.003,-1.000,203.4],
-            [ 0.562, 0.945,-0.338, 0.006, 0.007,-1.000,203.0],
-            [ 0.562, 0.945, 0.507,-0.007,-0.008,-1.000,202.9],
-            [ 0.562, 0.945, 1.220,-0.003,-0.003,-1.000,203.4],
-            [ 1.688,-0.945,-0.338, 0.001,-0.001,-1.000,202.8],
-            [ 1.688,-0.945, 0.507,-0.002, 0.001,-1.000,202.7],
-            [ 1.688,-0.945, 1.220,-0.001, 0.001,-1.000,203.1],
-            [ 1.688, 0.945,-0.338, 0.001, 0.001,-1.000,202.8],
-            [ 1.688, 0.945, 0.507,-0.002,-0.001,-1.000,202.7],
-            [ 1.688, 0.945, 1.220,-0.001,-0.001,-1.000,203.1],
-            [-0.525,-0.300, 0.348, 0.069, 0.058,-0.996,261.0],
-            [-0.525, 0.300, 0.348, 0.069,-0.058,-0.996,261.0],
-            [ 0.525,-0.300, 0.348,-0.069, 0.058,-0.996,261.0],
-            [ 0.525, 0.300, 0.348,-0.069,-0.058,-0.996,261.0]
+            [ -1.688, -0.945, -0.338, -0.031, -0.016, -0.999, 199.2],
+            [ -1.688, -0.945,  0.507,  0.029,  0.017, -0.999, 196.0],
+            [ -1.688, -0.945,  1.220,  0.031,  0.020, -0.999, 203.0],
+            [ -1.688,  0.945, -0.338, -0.031,  0.016, -0.999, 199.2],
+            [ -1.688,  0.945,  0.507,  0.029, -0.017, -0.999, 196.0],
+            [ -1.688,  0.945,  1.220,  0.031, -0.020, -0.999, 203.0],
+            [ -0.562, -0.945, -0.338, -0.112, -0.126, -0.986, 211.7],
+            [ -0.562, -0.945,  0.507,  0.156,  0.207, -0.966, 175.6],
+            [ -0.562, -0.945,  1.220,  0.064,  0.089, -0.994, 214.8],
+            [ -0.562,  0.945, -0.338, -0.112,  0.126, -0.986, 211.7],
+            [ -0.562,  0.945,  0.507,  0.156, -0.207, -0.966, 175.6],
+            [ -0.562,  0.945,  1.220,  0.064, -0.089, -0.994, 214.8],
+            [  0.562, -0.945, -0.338,  0.112, -0.126, -0.986, 211.7],
+            [  0.562, -0.945,  0.507, -0.156,  0.207, -0.966, 175.6],
+            [  0.562, -0.945,  1.220, -0.064,  0.089, -0.994, 214.8],
+            [  0.562,  0.945, -0.338,  0.112,  0.126, -0.986, 211.7],
+            [  0.562,  0.945,  0.507, -0.156, -0.207, -0.966, 175.6],
+            [  0.562,  0.945,  1.220, -0.064, -0.089, -0.994, 214.8],
+            [  1.688, -0.945, -0.338,  0.031, -0.016, -0.999, 199.2],
+            [  1.688, -0.945,  0.507, -0.029,  0.017, -0.999, 196.0],
+            [  1.688, -0.945,  1.220, -0.031,  0.020, -0.999, 203.0],
+            [  1.688,  0.945, -0.338,  0.031,  0.016, -0.999, 199.2],
+            [  1.688,  0.945,  0.507, -0.029, -0.017, -0.999, 196.0],
+            [  1.688,  0.945,  1.220, -0.031, -0.020, -0.999, 203.0],
+            [ -0.531, -0.319,  0.657,  0.431,  0.069, -0.900, 354.0],
+            [ -0.531,  0.319,  0.657,  0.431, -0.069, -0.900, 354.0],
+            [  0.531, -0.319,  0.657, -0.431,  0.069, -0.900, 354.0],
+            [  0.531,  0.319,  0.657, -0.431, -0.069, -0.900, 354.0]
         ];
 
         const electricFieldGroup = new THREE.Group();
@@ -5296,9 +5526,9 @@
         const arkSolverBottomMetres = -0.3375;    // -1.5 cubits / 2 at 0.45 m/cubit
 
         function fieldColour(kVm) {
-            // Fixed legend domain for this conditional case: ambient 200 to
-            // mesh-wide peak 261 kV/m. Blue=ambient; yellow/red=enhancement.
-            const t = Math.max(0, Math.min(1, (kVm - 200) / 61));
+            // Legend domain: ambient 200 to the solve's peak 354 kV/m (cherubim-block
+            // corners). Blue=ambient; yellow/red=enhancement.
+            const t = Math.max(0, Math.min(1, (kVm - 200) / 154));
             return new THREE.Color().setHSL((0.58 - 0.58 * t), 1.0, 0.55);
         }
 
@@ -5321,10 +5551,10 @@
             electricFieldGroup.add(arrow);
         });
         electricFieldGroup.userData = {
-            source: 'ark_ambient_t0001.vtu',
+            source: 'ark_conductor_e6_t0001.vtu',
             solver: 'Elmer 26.2 StatElecSolve',
-            boundaryCondition: 'ASSUMPTION: 200 kV/m vertical ambient field',
-            interpretation: 'Conditional Ark-only FEM result; no historical field or charging mechanism established'
+            boundaryCondition: '200 kV/m vertical ambient field (solver case value; measured storms 5-150 kV/m)',
+            interpretation: 'Ark alone as one neutral floating conductor; peak 354 kV/m = 1.77x at the cherubim-block corners'
         };
         arkGroup.add(electricFieldGroup);
 
