@@ -63,10 +63,11 @@ async function queryKnowledgeBase(env, question, topK = 5) {
       returnMetadata: 'all',
     });
 
-    return results.matches || [];
+    const matches = results.matches || [];
+    return { matches, kbError: matches.length ? null : 'index returned 0 matches' };
   } catch (error) {
     console.error('Vectorize query failed:', error.message);
-    return [];
+    return { matches: [], kbError: error.message };
   }
 }
 
@@ -115,7 +116,7 @@ export async function onRequestPost(context) {
     }
 
     // 1. Query the knowledge base for relevant context
-    const matches = await queryKnowledgeBase(env, question);
+    const { matches, kbError } = await queryKnowledgeBase(env, question);
     const ragContext = buildContext(matches);
     const sources = extractSources(matches);
 
@@ -145,6 +146,7 @@ export async function onRequestPost(context) {
       sources,
       model,
       contextChunks: matches.length,
+      ...(kbError ? { kbError } : {}),
     }), {
       headers: { 'Content-Type': 'application/json' },
     });
