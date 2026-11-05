@@ -54,7 +54,9 @@ const ScribeChat = () => {
   } = useScribeTTS();
 
   const scrollToBottom = () => chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  useEffect(scrollToBottom, [messages]);
+  // Block body on purpose: Chrome now returns a Promise from scrollIntoView, and an effect that
+  // returns it makes React call the Promise as a cleanup -> "l is not a function" -> whole app crashes.
+  useEffect(() => { scrollToBottom(); }, [messages]);
 
   // Speak when new scribe message arrives
   useEffect(() => {
