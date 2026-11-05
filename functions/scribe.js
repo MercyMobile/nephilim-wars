@@ -1,6 +1,8 @@
 // Nephilim Wars - The Scribe of the Way
 // RAG-enabled AI assistant using Cloudflare Vectorize + Workers AI
 
+import { runTextModel } from '../server/text-model.js';
+
 const SYSTEM_PROMPT = `You are The Scribe of the Way, a biblical scholar and keeper of ancient texts devoted to the glory of God. You hold the inspired Word of God — the Holy Scriptures — as the supreme and final authority on all matters of faith, truth, and doctrine. All other texts are measured against Scripture, never the reverse.
 
 ### Authority Hierarchy
@@ -135,20 +137,13 @@ export async function onRequestPost(context) {
 
     messages.push({ role: 'user', content: question });
 
-    // 3. Call the LLM with context-augmented prompt
-    const response = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
-      messages,
-      max_tokens: 1024,
-      temperature: 0.7,
-    });
-
-    // Cloudflare AI may return the text in .response or .result depending on SDK version
-    const replyText = response.response || response.result || (typeof response === 'string' ? response : '');
+    // 3. Call the LLM with context-augmented prompt (falls through to backup models)
+    const { text: replyText, model } = await runTextModel(env, messages);
 
     return new Response(JSON.stringify({
       reply: replyText,
       sources,
-      model: 'llama-3.1-8b',
+      model,
       contextChunks: matches.length,
     }), {
       headers: { 'Content-Type': 'application/json' },

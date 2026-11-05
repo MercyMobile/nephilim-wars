@@ -1,3 +1,5 @@
+import { runTextModel } from '../../server/text-model.js';
+
 // Nephilim Wars Rules Oracle - Lightweight AI assistant for game rules
 // Uses Cloudflare Workers AI with game system context baked in
 
@@ -107,15 +109,11 @@ export async function onRequestPost(context) {
 
     messages.push({ role: 'user', content: question });
 
-    const response = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
-      messages,
-      max_tokens: 1024,
-      temperature: 0.7
-    });
+    const { text, model } = await runTextModel(env, messages);
 
     return new Response(JSON.stringify({
-      reply: response.response,
-      model: 'llama-3.1-8b'
+      reply: text,
+      model
     }), {
       headers: { 'Content-Type': 'application/json' }
     });
