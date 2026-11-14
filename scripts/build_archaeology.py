@@ -202,6 +202,10 @@ def index(db):
 
 def main():
     db = json.loads(DB.read_text())
+    # Separate, reviewed additions are included in both page generation and count.
+    supplement = DB.parent / "additions-2026.json"
+    if supplement.exists():
+        db["sites"].extend(json.loads(supplement.read_text())["sites"])
     problems = check(db)
     for p in problems:
         print("PROBLEM", p)
