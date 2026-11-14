@@ -1,0 +1,163 @@
+{
+  "reviewed_through": "2026-11-14",
+  "sites": [
+    {
+      "id": "tel-shiqmona-industry-2026",
+      "name": "Tel Shiqmona: purple-dye industry and seasonal production",
+      "period_id": "divided-kingdom-israel",
+      "subtitle": "Iron Age coastal industrial compound with purple dye, oil processing, weaving and livestock activity · new peer-reviewed microarchaeological analysis, 2026",
+      "date": "c. 790–740 BCE (Stratum 11); study published 24 September 2026",
+      "date_basis": "Excavation stratigraphy and ceramic chronology, supplemented by sediment micromorphology and chemical and micro-remain analysis",
+      "location": "In situ, Tel Shiqmona, Haifa coast, Israel",
+      "overview": [
+        "Tel Shiqmona preserves an unusually well-documented Iron Age complex with evidence of purple-dye manufacture, olive pressing, textile work and livestock management.",
+        "A 2026 PLOS ONE study recovered detailed sedimentary traces of changing use of industrial space. Its proposed seasonal timetable is an interpretation of the archaeological record, not a calendar directly inscribed at the site."
+      ],
+      "evidence": [
+        "Purple-stained vessel fragments, murex shells, olive-press installations and loom weights occur in the industrial sequence.",
+        "Microscopic sediment evidence includes dung-related spherulites and wood ash, documenting activities beyond purple dye."
+      ],
+      "questions": [
+        "The exact season in which the purple-dye workshops operated has not been established directly.",
+        "Whether the site's political administration can be attributed to specific named kings is unresolved by these finds."
+      ],
+      "biblical": [
+        {
+          "ref": "1 Kings 16–22",
+          "tie": "Historical context: northern kingdom; no named figure identified at this site"
+        },
+        {
+          "ref": "Amos 3:15; 6:4",
+          "tie": "Material setting of eighth-century elite industry; not direct proof of these verses"
+        }
+      ],
+      "sources": [
+        {
+          "cite": "Ogloblin Ramirez et al., PLOS ONE 21(9): e0355104 (24 September 2026)",
+          "url": "https://doi.org/10.1371/journal.pone.0355104",
+          "kind": "Peer-reviewed primary study"
+        },
+        {
+          "cite": "Shalvi, Oxford Journal of Archaeology (11 September 2026)",
+          "url": "https://doi.org/10.1111/ojoa.70027",
+          "kind": "Peer-reviewed contextual analysis"
+        }
+      ],
+      "checked_through": "2026-11-14"
+    },
+    {
+      "id": "ophel-ritual-baths-2026",
+      "name": "Ophel: monumental Second Temple ritual-bath complex",
+      "period_id": "second-temple",
+      "subtitle": "Three large mikva’ot, a plastered pool, paved plaza and water system near the Temple Mount · announced September 2026",
+      "date": "Late Second Temple period, first century BCE–70 CE; announcement 24 September 2026",
+      "date_basis": "Architectural sequence, associated ceramics and coins; excavation directors' preliminary report",
+      "location": "In situ, Ophel, immediately south of Temple Mount, Jerusalem",
+      "overview": [
+        "Hebrew University excavations led by Uzi Leibner and Orit Peleg-Barkat exposed a large purification complex immediately south of the Temple Mount.",
+        "Three substantial ritual baths, a central plastered pool, a plaza and water installations indicate infrastructure suited to ritual washing. Use by pilgrims is a strongly supported site interpretation, not the identity of particular biblical visitors."
+      ],
+      "evidence": [
+        "One bath survives unusually high, including a stone-vaulted ceiling.",
+        "Architectural and coin evidence associates the complex with the final centuries of Second Temple Jerusalem."
+      ],
+      "questions": [
+        "The precise function of the central pool and traffic patterns through the complex require continued analysis.",
+        "Architectural interpretation does not identify individual people or confirm a specific gospel episode."
+      ],
+      "biblical": [
+        {
+          "ref": "John 2:13; 7:2–14",
+          "tie": "Temple pilgrimage setting, not identification with any specific visit"
+        },
+        {
+          "ref": "Acts 21:26",
+          "tie": "Historical context of Temple purification practices"
+        }
+      ],
+      "sources": [
+        {
+          "cite": "Hebrew University press release, 24 September 2026",
+          "url": "https://www.eurekalert.org/news-releases/1144401",
+          "kind": "Excavation team announcement"
+        },
+        {
+          "cite": "Leibner and Peleg-Barkat interview, Jerusalem Post, 24 September 2026",
+          "url": "https://www.jpost.com/archaeology/article-909482",
+          "kind": "Excavator interview"
+        }
+      ],
+      "checked_through": "2026-11-14"
+    },
+    {
+      "id": "mount-scopus-vessel-workshop-2026",
+      "name": "Mount Scopus: stone-vessel manufacturing workshop",
+      "period_id": "second-temple",
+      "subtitle": "Workshop with hundreds of chalkstone fragments, unfinished vessels and production debris · reported February 2026",
+      "date": "Late Second Temple period, approximately first century BCE–first century CE; reported 20 February 2026",
+      "date_basis": "Typology and manufacturing remains from a cave workshop",
+      "location": "Cave on eastern slopes of Mount Scopus near Jerusalem; finds reported by Israel Antiquities Authority",
+      "overview": [
+        "Archaeologists identified a chalkstone vessel-production workshop in a cave east of Jerusalem after an investigation of antiquities theft.",
+        "Unfinished stone cups and bowls, waste fragments and lathe-turning marks document a production technique in Jewish society during the late Second Temple era."
+      ],
+      "evidence": [
+        "Hundreds of fragments and production debris, together with unfinished forms, support workshop identification.",
+        "Turning marks on vessels document use of rotary shaping methods."
+      ],
+      "questions": [
+        "The actual buyers and distribution network are not individually documented.",
+        "The workshop is contextual evidence for stone vessels, not a discovery of the six jars described in John."
+      ],
+      "biblical": [
+        {
+          "ref": "John 2:6",
+          "tie": "Stone purification jars are described in this passage; these are not those specific jars"
+        }
+      ],
+      "sources": [
+        {
+          "cite": "Lauren K. McCormick, Biblical Archaeology Society, 20 February 2026, reporting IAA discovery",
+          "url": "https://www.biblicalarchaeology.org/daily/biblical-topics/second-temple-period-workshop-discovered-near-jerusalem/",
+          "kind": "Specialist reporting with IAA attribution"
+        }
+      ],
+      "checked_through": "2026-11-14"
+    },
+    {
+      "id": "pilgrimage-road-financial-inscription-2026",
+      "name": "Pilgrimage Road: Hebrew commercial inscription",
+      "period_id": "second-temple",
+      "subtitle": "Small inscribed limestone slab with names and numerical amounts from Jerusalem's Early Roman-period commercial district · discussed July 2026",
+      "date": "Early Roman period, approximately 37 BCE–70 CE; published/reported 2026",
+      "date_basis": "Paleography and parallels; recovered from an old excavation tunnel, not original deposit",
+      "location": "City of David / Pilgrimage Road excavation, Jerusalem; modern repository not verified",
+      "overview": [
+        "A fragment of an inscribed chalkstone slab records portions of Hebrew personal names and amounts, likely a receipt or payment instruction.",
+        "Its discovery near Jerusalem's monumental stepped street illuminates commercial exchange in the Second Temple city. Because it came from a nineteenth-century excavation tunnel, it lacks its original depositional context."
+      ],
+      "evidence": [
+        "Seven partly preserved lines contain Hebrew letters and numerical signs; a fragment of the name Shimon is legible.",
+        "Letter shapes and comparable inscriptions support an Early Roman-period date, despite the disturbed context."
+      ],
+      "questions": [
+        "The transaction, full names, precise date and original location of use cannot be securely reconstructed.",
+        "There is no evidence identifying the named Shimon with a New Testament individual."
+      ],
+      "biblical": [
+        {
+          "ref": "Luke 19:45–46",
+          "tie": "Commercial activity in Jerusalem offers broad historical context, not direct verification of this scene"
+        }
+      ],
+      "sources": [
+        {
+          "cite": "City of David / Israel Antiquities Authority report, 26 July 2026, summarizing Szanton and Eshel in ‘Atiqot",
+          "url": "https://cityofdavid.org.il/en/a-financial-recor-eng/",
+          "kind": "Excavation project report"
+        }
+      ],
+      "checked_through": "2026-11-14"
+    }
+  ]
+}
