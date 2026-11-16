@@ -27,7 +27,8 @@
 </style>
 </head>
 <body>
-<div id="load"><div>Raising the Tabernacle…</div><div id="bar"><i></i></div><div class="hint" id="lt">Loading the 3D engine…</div><pre id="err" style="display:none;white-space:pre-wrap;max-width:90%;color:#ffb4a0;font-size:13px"></pre></div>
+<div id="load"><div>Raising the Tabernacle…</div><div id="bar"><i></i></div><div class="hint" id="lt">Loading the 3D engine…</div></div>
+<pre id="err" style="display:none;position:fixed;left:16px;right:16px;top:45%;z-index:9;white-space:pre-wrap;background:rgba(14,12,10,.9);padding:10px;color:#ffb4a0;font-size:13px"></pre>
 <div id="top">
   <h1>The Tabernacle</h1>
   <span id="views"></span>
@@ -75,6 +76,8 @@ import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { Sky } from 'three/addons/objects/Sky.js';
 window.__engine = true; document.getElementById('lt').textContent = 'Engine loaded; fetching pieces…';
 
+const q = new URLSearchParams(location.search);
+const OFF = new Set((q.get('off') || '').split(',').filter(Boolean));   // test switches: shadow,env,sky,lamp,tex,furn,cloth
 const mobile = matchMedia('(pointer:coarse)').matches || innerWidth < 760;
 const renderer = new THREE.WebGLRenderer({ antialias: !mobile, powerPreference: 'high-performance' });
 renderer.domElement.addEventListener('webglcontextlost', e => { e.preventDefault(); window.diag && diag('The phone\u2019s graphics dropped the 3D view (WebGL context lost), most likely out of graphics memory.'); });
@@ -82,7 +85,7 @@ renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1 : 2));
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 0.55;
-renderer.shadowMap.enabled = true;
+renderer.shadowMap.enabled = !OFF.has('shadow');
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.prepend(renderer.domElement);
 
@@ -98,14 +101,14 @@ const sky = new Sky(); sky.scale.setScalar(1500);
 const su = sky.material.uniforms;
 su.turbidity.value = 4; su.rayleigh.value = 1.2; su.mieCoefficient.value = 0.004; su.mieDirectionalG.value = 0.8;
 su.sunPosition.value.copy(sunDir);
-scene.add(sky);
+if (!OFF.has('sky')) scene.add(sky);
 const pmrem = new THREE.PMREMGenerator(renderer);
 const skyScene = new THREE.Scene(); const sky2 = new Sky(); sky2.scale.setScalar(1500); sky2.material.uniforms = su; skyScene.add(sky2);
 const envOut = pmrem.fromScene(skyScene, 0.02).texture;
 // Inside: no sky, no sun disc to mirror in the gold; a dim warm surround stands in for lamplight bouncing off gold and linen.
 const warm = new THREE.Scene(); warm.background = new THREE.Color(0x7a6a55);
 const envIn = pmrem.fromScene(warm).texture;
-scene.environment = envOut;
+scene.environment = OFF.has('env') ? null : envOut;
 scene.fog = new THREE.FogExp2(0xd6d6cf, 0.0045);
 
 const sun = new THREE.DirectionalLight(0xfff1dc, 3.2);
@@ -120,7 +123,7 @@ scene.add(sun, sun.target);
 const lamps = new THREE.Group();
 // The seven flames share one light so it can cast shadows: the veil must stop the lamplight (Ex 26:33).
 const lampLight = new THREE.PointLight(0xff9a45, 4, 14, 2); lampLight.position.set(-6.75, 1.5, 1.12);
-lampLight.castShadow = true; lampLight.shadow.mapSize.set(mobile ? 256 : 1024, mobile ? 256 : 1024); lampLight.shadow.bias = -0.002; lampLight.shadow.camera.near = 0.05;
+lampLight.castShadow = !OFF.has('lamp'); lampLight.shadow.mapSize.set(mobile ? 256 : 1024, mobile ? 256 : 1024); lampLight.shadow.bias = -0.002; lampLight.shadow.camera.near = 0.05;
 lamps.add(lampLight);
 for (let i = 0; i < 7; i++) {
   const z = 0.63 + i * (1.61 - 0.63) / 6;
@@ -135,6 +138,7 @@ const cache = {};
 function tex(name, rep, srgb) {
   const key = name + rep;
   if (cache[key]) return cache[key];
+  if (OFF.has('tex')) return null;
   const t = tl.load('t/' + name);
   t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep, rep); t.flipY = false;
   t.anisotropy = mobile ? 2 : renderer.capabilities.getMaxAnisotropy();
@@ -144,6 +148,7 @@ function tex(name, rep, srgb) {
 const lin = (r, g, b) => new THREE.Color().setRGB(r, g, b, THREE.LinearSRGBColorSpace);
 function cloth(o) {
   const m = new THREE.MeshStandardMaterial({ side: THREE.DoubleSide, color: o.color || 0xffffff, roughness: o.rough ?? 1, metalness: 0 });
+  if (OFF.has('tex')) return m;
   if (o.diff) m.map = tex(o.diff, o.dt ?? o.t, true);
   if (o.nor) { m.normalMap = tex(o.nor, o.t); m.normalScale.set(o.ns ?? 1, o.ns ?? 1); }
   if (o.rmap) m.roughnessMap = tex(o.rmap, o.t);
@@ -151,7 +156,7 @@ function cloth(o) {
   return m;
 }
 const metal = (c, r) => new THREE.MeshStandardMaterial({ color: lin(...c), metalness: 1, roughness: r,
-  roughnessMap: tex('leather_white_Rough.jpg', 3), envMapIntensity: 1 });
+  roughnessMap: tex('leather_white_Rough.jpg', 3) || null, envMapIntensity: 1 });
 const W = 1 / 1.8;  // woven pattern: one 4x4-cubit tile = 1.8 m
 const MAT = {
   gold: metal([1.0, 0.766, 0.336], 0.72),   // boards overlaid with beaten gold: a soft sheen, not a mirror
@@ -173,7 +178,8 @@ const MAT = {
   g.rotation.x = -Math.PI / 2; g.position.y = -0.02; g.receiveShadow = true; scene.add(g); }
 const PARTS = ['ground', 'court_linen', 'embroidery', 'bronze', 'silver', 'gold', 'acacia', 'veil',
   'linen_cover', 'goathair', 'ramskin', 'tachash', 'cord'].map(g => 'tab_' + g + '.glb')
-  .concat(['ArkCovenant', 'TableShowbread', 'AltarIncense', 'AltarBurntOffering', 'GoldLampstand', 'BronzeLaver'].map(f => 'furn_SM_' + f + '.glb'));
+  .concat(OFF.has('furn') ? [] : ['ArkCovenant', 'TableShowbread', 'AltarIncense', 'AltarBurntOffering', 'GoldLampstand', 'BronzeLaver'].map(f => 'furn_SM_' + f + '.glb'));
+if (OFF.has('cloth')) for (const g of ['linen_cover', 'goathair', 'ramskin', 'tachash', 'court_linen']) PARTS.splice(PARTS.indexOf('tab_' + g + '.glb'), 1);
 
 const draco = new DRACOLoader().setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/libs/draco/gltf/');
 const loader = new GLTFLoader().setDRACOLoader(draco).setMeshoptDecoder(MeshoptDecoder);
@@ -234,11 +240,10 @@ function frame(now) {
   renderer.toneMappingExposure = THREE.MathUtils.lerp(0.55, THREE.MathUtils.lerp(2.4, 4.5, holy), adapt);
   // Inside, the coverings already block the sun; swap its shadow work for the lamp's.
   const isIn = adapt > 0.5;
-  sun.visible = !isIn; scene.environment = isIn ? envIn : envOut; lampLight.visible = isIn; lamps.visible = true;
+  sun.visible = !isIn; if (!OFF.has('env')) scene.environment = isIn ? envIn : envOut; lampLight.visible = isIn; lamps.visible = true;
   scene.fog.density = THREE.MathUtils.lerp(0.0045, 0, adapt);
   renderer.render(scene, camera);
 }
-const q = new URLSearchParams(location.search);
 go(Math.max(0, Math.min(VIEWS.length - 1, +(q.get('v') || 0))), true);
 adapt = inside(camera.position) ? 1 : 0; holy = camera.position.x < -9.05 ? adapt : 0;
 renderer.setAnimationLoop(frame);
