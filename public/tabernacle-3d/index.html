@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Tabernacle in 3D</title>
+<meta name="description" content="The Tabernacle built to the measurements of Exodus 25-27, drawn live in your browser.">
+<style>
+  :root { --bg:#0e0c0a; --ink:#f3ead8; --dim:#b9ad96; --gold:#d8b25a; --panel:rgba(14,12,10,.78); }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--ink); font:15px/1.45 Georgia, "Times New Roman", serif; overflow:hidden; }
+  canvas { display:block; touch-action:none; }
+  #top { position:fixed; left:0; right:0; top:0; padding:10px 16px; display:flex; flex-wrap:wrap; gap:6px; align-items:center;
+         background:linear-gradient(var(--panel), transparent); }
+  #top h1 { font-size:17px; margin:0 12px 0 0; color:var(--gold); font-weight:normal; letter-spacing:.04em; }
+  button { background:rgba(40,34,26,.85); color:var(--ink); border:1px solid #5a4b33; border-radius:4px; padding:6px 10px;
+           font:inherit; font-size:13px; cursor:pointer; }
+  button:hover, button.on { border-color:var(--gold); color:#fff; }
+  #cap { position:fixed; left:16px; right:16px; bottom:14px; max-width:720px; padding:10px 14px; background:var(--panel);
+         border-left:3px solid var(--gold); font-size:14px; }
+  #src { position:fixed; right:16px; top:58px; width:min(420px, calc(100% - 32px)); max-height:70vh; overflow:auto; padding:12px 16px;
+         background:var(--panel); border:1px solid #5a4b33; font-size:13px; display:none; }
+  #src h2 { font-size:15px; color:var(--gold); margin:4px 0 8px; font-weight:normal; }
+  #src td { vertical-align:top; padding:3px 6px 3px 0; border-bottom:1px solid #3a3226; }
+  #load { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px; background:var(--bg); }
+  #bar { width:min(320px,80%); height:4px; background:#3a3226; } #bar i { display:block; height:100%; width:0; background:var(--gold); }
+  .hint { color:var(--dim); font-size:12px; }
+</style>
+</head>
+<body>
+<div id="load"><div>Raising the Tabernacle…</div><div id="bar"><i></i></div><div class="hint" id="lt">0 of 0 pieces</div></div>
+<div id="top">
+  <h1>The Tabernacle</h1>
+  <span id="views"></span>
+  <button id="srcb">Sources</button>
+</div>
+<div id="cap"></div>
+<div id="src">
+  <h2>Where every number comes from</h2>
+  <table>
+    <tr><td>Cubit</td><td>0.45 m (elbow to fingertip). All sizes below are in cubits.</td></tr>
+    <tr><td>Boards</td><td>48 boards, 10 × 1½ (Ex 26:15-25); thickness four fingers (Josephus, Ant. III 6.3). Silver sockets, gold bars.</td></tr>
+    <tr><td>Linen curtains</td><td>40 × 28 (Ex 26:1-6). Hang to a cubit above the ground (Philo, Mos. II 85-86; Josephus Ant. III 6.4).</td></tr>
+    <tr><td>Goats' hair</td><td>44 × 30 (Ex 26:7-13): doubled at the front (26:9), half a curtain over the back (26:12), a cubit past the linen each side (26:13), so it reaches the ground.</td></tr>
+    <tr><td>Rams' skins, red</td><td>Exodus gives no size (26:14). Shown to the ground, after Josephus ("like the veil"). Pegged hem: after Casaretto, no early source.</td></tr>
+    <tr><td>Taḥash skins</td><td>No size in Exodus (26:14). Shown a cubit short so the red shows: a choice, not a text.</td></tr>
+    <tr><td>Court</td><td>100 × 50, hangings 5 high, 60 pillars, bronze sockets, silver hooks (Ex 27:9-18).</td></tr>
+    <tr><td>Furniture</td><td>Andres Casaretto's models, fitted to Exodus sizes: Ark 2½×1½×1½, table 2×1×1½, incense altar 1×1×2, bronze altar 5×5×3, laver and lampstand (no size in the text).</td></tr>
+    <tr><td>Left out on purpose</td><td>Rashi and later commentators (after 476). No ridge pole: the text has none.</td></tr>
+  </table>
+  <p class="hint">Drag to look around, scroll or pinch to move closer. The gate faces east; walking in from the gate, north is on your right.</p>
+</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import { Sky } from 'three/addons/objects/Sky.js';
+
+const mobile = matchMedia('(pointer:coarse)').matches || innerWidth < 760;
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1.5 : 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.55;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(62, innerWidth / innerHeight, 0.05, 2000);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.maxPolarAngle = Math.PI * 0.495; controls.minDistance = 0.3; controls.maxDistance = 250;
+
+// ---- sky and sun: morning, sun in the east-southeast (azimuth 110 deg), 28 deg up. Time of day is a choice.
+const AZ = THREE.MathUtils.degToRad(110), EL = THREE.MathUtils.degToRad(28);
+const sunDir = new THREE.Vector3(Math.cos(EL) * Math.sin(AZ), Math.sin(EL), -Math.cos(EL) * Math.cos(AZ)); // east +X, north -Z
+const sky = new Sky(); sky.scale.setScalar(1500);
+const su = sky.material.uniforms;
+su.turbidity.value = 4; su.rayleigh.value = 1.2; su.mieCoefficient.value = 0.004; su.mieDirectionalG.value = 0.8;
+su.sunPosition.value.copy(sunDir);
+scene.add(sky);
+const pmrem = new THREE.PMREMGenerator(renderer);
+const skyScene = new THREE.Scene(); const sky2 = new Sky(); sky2.scale.setScalar(1500); sky2.material.uniforms = su; skyScene.add(sky2);
+const envOut = pmrem.fromScene(skyScene, 0.02).texture;
+// Inside: no sky, no sun disc to mirror in the gold; a dim warm surround stands in for lamplight bouncing off gold and linen.
+const warm = new THREE.Scene(); warm.background = new THREE.Color(0x7a6a55);
+const envIn = pmrem.fromScene(warm).texture;
+scene.environment = envOut;
+scene.fog = new THREE.FogExp2(0xd6d6cf, 0.0045);
+
+const sun = new THREE.DirectionalLight(0xfff1dc, 3.2);
+sun.position.copy(sunDir).multiplyScalar(60); sun.target.position.set(-3, 0, 0);
+sun.castShadow = true;
+sun.shadow.mapSize.set(mobile ? 2048 : 4096, mobile ? 2048 : 4096);
+Object.assign(sun.shadow.camera, { left: -32, right: 32, top: 22, bottom: -22, near: 1, far: 140 });
+sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.03;
+scene.add(sun, sun.target);
+
+// ---- seven lamps on the lampstand (Ex 25:37), south side of the Holy Place. Brightness is a choice.
+const lamps = new THREE.Group();
+// The seven flames share one light so it can cast shadows: the veil must stop the lamplight (Ex 26:33).
+const lampLight = new THREE.PointLight(0xff9a45, 4, 14, 2); lampLight.position.set(-6.75, 1.5, 1.12);
+lampLight.castShadow = true; lampLight.shadow.mapSize.set(1024, 1024); lampLight.shadow.bias = -0.002; lampLight.shadow.camera.near = 0.05;
+lamps.add(lampLight);
+for (let i = 0; i < 7; i++) {
+  const z = 0.63 + i * (1.61 - 0.63) / 6;
+  const f = new THREE.Mesh(new THREE.SphereGeometry(0.012, 8, 6), new THREE.MeshBasicMaterial({ color: 0xffd08a }));
+  f.scale.y = 2.2; f.position.set(-6.79, 1.40, z); lamps.add(f);
+}
+scene.add(lamps);
+
+// ---- textures (UVs on the structure are in metres, so repeat = repeats per metre)
+const tl = new THREE.TextureLoader();
+const cache = {};
+function tex(name, rep, srgb) {
+  const key = name + rep;
+  if (cache[key]) return cache[key];
+  const t = tl.load('t/' + name);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep, rep); t.flipY = false;
+  t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  if (srgb) t.colorSpace = THREE.SRGBColorSpace;
+  return cache[key] = t;
+}
+const lin = (r, g, b) => new THREE.Color().setRGB(r, g, b, THREE.LinearSRGBColorSpace);
+function cloth(o) {
+  const m = new THREE.MeshStandardMaterial({ side: THREE.DoubleSide, color: o.color || 0xffffff, roughness: o.rough ?? 1, metalness: 0 });
+  if (o.diff) m.map = tex(o.diff, o.dt ?? o.t, true);
+  if (o.nor) { m.normalMap = tex(o.nor, o.t); m.normalScale.set(o.ns ?? 1, o.ns ?? 1); }
+  if (o.rmap) m.roughnessMap = tex(o.rmap, o.t);
+  if (o.single) m.side = THREE.FrontSide;
+  return m;
+}
+const metal = (c, r) => new THREE.MeshStandardMaterial({ color: lin(...c), metalness: 1, roughness: r,
+  roughnessMap: tex('leather_white_Rough.jpg', 3), envMapIntensity: 1 });
+const W = 1 / 1.8;  // woven pattern: one 4x4-cubit tile = 1.8 m
+const MAT = {
+  gold: metal([1.0, 0.766, 0.336], 0.72),   // boards overlaid with beaten gold: a soft sheen, not a mirror
+  silver: metal([0.962, 0.949, 0.922], 0.25),
+  bronze: metal([0.80, 0.50, 0.32], 0.38),
+  acacia: cloth({ diff: 'mocha_oak_veneer_Diffuse.jpg', nor: 'mocha_oak_veneer_nor_gl.jpg', rmap: 'mocha_oak_veneer_Rough.jpg', t: 1, color: lin(1, .85, .7), single: true }),
+  court_linen: cloth({ nor: 'hessian_380_nor_gl.jpg', rmap: 'hessian_380_Rough.jpg', t: 4, color: '#E6DDC8', ns: .8 }),
+  linen_cover: cloth({ diff: 'figured_ceiling.png', dt: W, nor: 'hessian_380_nor_gl.jpg', rmap: 'hessian_380_Rough.jpg', t: 4 }),
+  veil: cloth({ diff: 'figured_veil.png', dt: W, nor: 'hessian_380_nor_gl.jpg', rmap: 'hessian_380_Rough.jpg', t: 4 }),
+  embroidery: cloth({ diff: 'embroidery.png', dt: W, nor: 'hessian_380_nor_gl.jpg', rmap: 'hessian_380_Rough.jpg', t: 4 }),
+  goathair: cloth({ diff: 'goat_gray.jpg', nor: 'hessian_230_nor_gl.jpg', rmap: 'hessian_230_Rough.jpg', t: 1.6, color: lin(.16, .13, .11) }),
+  ramskin: cloth({ diff: 'leather_white_Diffuse.jpg', nor: 'leather_white_nor_gl.jpg', rmap: 'leather_white_Rough.jpg', t: .8, color: '#9E2B22' }),
+  tachash: cloth({ diff: 'leather_white_Diffuse.jpg', nor: 'leather_white_nor_gl.jpg', rmap: 'leather_white_Rough.jpg', t: .6, color: '#B8B2A8' }),
+  cord: cloth({ diff: 'goat_gray.jpg', nor: 'hessian_230_nor_gl.jpg', t: 6, color: lin(.10, .08, .06) }),
+  ground: cloth({ diff: 'gravelly_sand_Diffuse.jpg', nor: 'gravelly_sand_nor_gl.jpg', rmap: 'gravelly_sand_Rough.jpg', t: .5, color: lin(1.05, .95, .82), single: true }),
+};
+
+{ const g = new THREE.Mesh(new THREE.CircleGeometry(3000, 64), cloth({ diff: 'gravelly_sand_Diffuse.jpg', t: 3000, color: lin(1.05, .95, .82), single: true }));
+  g.rotation.x = -Math.PI / 2; g.position.y = -0.02; g.receiveShadow = true; scene.add(g); }
+const PARTS = ['ground', 'court_linen', 'embroidery', 'bronze', 'silver', 'gold', 'acacia', 'veil',
+  'linen_cover', 'goathair', 'ramskin', 'tachash', 'cord'].map(g => 'tab_' + g + '.glb')
+  .concat(['ArkCovenant', 'TableShowbread', 'AltarIncense', 'AltarBurntOffering', 'GoldLampstand', 'BronzeLaver'].map(f => 'furn_SM_' + f + '.glb'));
+
+const draco = new DRACOLoader().setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/libs/draco/gltf/');
+const loader = new GLTFLoader().setDRACOLoader(draco).setMeshoptDecoder(MeshoptDecoder);
+let done = 0;
+const bar = document.querySelector('#bar i'), lt = document.getElementById('lt');
+const tick = () => { done++; bar.style.width = (100 * done / PARTS.length) + '%'; lt.textContent = done + ' of ' + PARTS.length + ' pieces'; };
+await Promise.all(PARTS.map(f => loader.loadAsync('m/' + f).then(g => {
+  const grp = f.startsWith('tab_') ? f.slice(4, -4) : null;
+  g.scene.traverse(o => {
+    if (!o.isMesh) return;
+    if (grp) o.material = MAT[grp];
+    else if (o.material) { o.material.envMapIntensity = 1; }
+    o.castShadow = grp !== 'ground'; o.receiveShadow = true;
+  });
+  scene.add(g.scene); tick();
+}).catch(e => { console.error(f, e); tick(); })));
+document.getElementById('load').remove();
+
+// ---- views: same six stops as the film (metres; +X east, -Z north, Y up)
+const VIEWS = [
+  ['Aerial', [42, 20, 27], [-5, 1.5, 0], 'From the east-southeast with the morning sun behind you. The court is 100 by 50 cubits (45 by 22.5 m); the tent stands in its western half.'],
+  ['The gate', [20.8, 1.7, 0], [0, 2.0, 0], 'Just inside the east gate, looking west: the bronze altar, the laver, then the embroidered screen of the tent door (Ex 27:1-8, 30:18, 26:36).'],
+  ['Holy Place', [-0.6, 1.65, 1.5], [-9, 1.7, -0.3], 'Inside the Holy Place, lit only by the seven lamps (Ex 25:37). Lampstand on the south, table on the north, incense altar before the veil (Ex 26:35, 30:6).'],
+  ['Holy of Holies', [-9.25, 1.5, -1.6], [-11.25, 0.7, 0], 'Behind the veil: the Ark, 2½ by 1½ by 1½ cubits (Ex 25:10). No cloud or fire is drawn over it.'],
+  ['South side', [4, 4.3, 17.5], [-6.2, 2.2, 3], 'Outside the court on the south, looking over the 5-cubit hangings at the four coverings: taḥash on top, the red rams’ skins reaching the ground.'],
+  ['Back corner', [-19, 4.7, 16.5], [-12.5, 2, 2.4], 'The west corner: the extra cloth gathered in a pleat and pegged out, after Casaretto’s model. No early source says how the corners were handled.'],
+  ['From the northwest', [-29, 23, -23], [-6, 1, 0], 'From the northwest, high. The tent door faces east toward the gate.'],
+];
+const cap = document.getElementById('cap'), vb = document.getElementById('views');
+let anim = null;
+function go(i, instant) {
+  const [, p, t, c] = VIEWS[i];
+  cap.textContent = c;
+  [...vb.children].forEach((b, k) => b.classList.toggle('on', k === i));
+  const p0 = camera.position.clone(), t0 = controls.target.clone(), p1 = new THREE.Vector3(...p), t1 = new THREE.Vector3(...t);
+  // Cut, not fly, when going through a wall: a flight would pass through the tent.
+  if (instant || inside(p0) !== inside(p1) || inside(p1)) { camera.position.copy(p1); controls.target.copy(t1); anim = null; return; }
+  anim = { p0, t0, p1, t1, s: performance.now() };
+}
+VIEWS.forEach((v, i) => { const b = document.createElement('button'); b.textContent = v[0]; b.onclick = () => go(i); vb.appendChild(b); });
+document.getElementById('srcb').onclick = () => { const s = document.getElementById('src'); s.style.display = s.style.display === 'block' ? 'none' : 'block'; };
+
+// ---- inside the tent the eye adapts: no sky light, lamps only (stands in for Unreal's auto exposure)
+const inside = v => v.x > -13.6 && v.x < 0.05 && Math.abs(v.z) < 2.35 && v.y < 4.5;
+let adapt = 0, holy = 0;
+function frame(now) {
+  if (anim) {
+    const k = Math.min(1, (now - anim.s) / 1600), e = k < .5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
+    camera.position.lerpVectors(anim.p0, anim.p1, e); controls.target.lerpVectors(anim.t0, anim.t1, e);
+    if (k >= 1) anim = null;
+  }
+  controls.update();
+  const want = inside(camera.position) ? 1 : 0;
+  adapt += (want - adapt) * 0.08;
+  scene.environmentIntensity = THREE.MathUtils.lerp(1, 0.22, adapt);
+  holy += ((camera.position.x < -9.05 && adapt > .5 ? 1 : 0) - holy) * 0.08;   // behind the veil: no lamp at all
+  renderer.toneMappingExposure = THREE.MathUtils.lerp(0.55, THREE.MathUtils.lerp(2.4, 4.5, holy), adapt);
+  // Inside, the coverings already block the sun; swap its shadow work for the lamp's.
+  const isIn = adapt > 0.5;
+  sun.visible = !isIn; scene.environment = isIn ? envIn : envOut; lampLight.visible = isIn; lamps.visible = true;
+  scene.fog.density = THREE.MathUtils.lerp(0.0045, 0, adapt);
+  renderer.render(scene, camera);
+}
+const q = new URLSearchParams(location.search);
+go(Math.max(0, Math.min(VIEWS.length - 1, +(q.get('v') || 0))), true);
+adapt = inside(camera.position) ? 1 : 0; holy = camera.position.x < -9.05 ? adapt : 0;
+renderer.setAnimationLoop(frame);
+addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+window.__ready = true;
+</script>
+</body>
+</html>
