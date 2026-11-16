@@ -1996,6 +1996,21 @@
 
         const gltfLoader = new THREE.GLTFLoader();
         gltfLoader.setDRACOLoader(dracoLoader);
+        // 2026-11-16 (Claude for Cisco): Casaretto's furniture textures now ship as KTX2 at their
+        // full 2048 px. Unpacked JPEG/PNG they asked a phone's graphics for ~680 MB and crashed it
+        // (Pixel 10, measured); KTX2 stays compressed on the graphics chip (~120 MB), and the
+        // transcoder picks the format each device's chip reads (ASTC, ETC2, BC7/DXT, PVRTC).
+        // Loader files are kept beside the scene in ktx2/, like the Draco decoder.
+        let ktx2Resolve; const ktx2Ready = new Promise((r) => { ktx2Resolve = r; });
+        window.__onKTX2 = (KTX2Loader) => {
+            try { gltfLoader.setKTX2Loader(new KTX2Loader().setTranscoderPath('ktx2/').detectSupport(renderer)); }
+            catch (e) { console.error('KTX2 setup failed', e); }
+            ktx2Resolve();
+        };
+        if (window.__KTX2) window.__onKTX2(window.__KTX2);
+        setTimeout(() => ktx2Resolve(), 20000);   // never hang the page on it
+        const gltfLoadDirect = gltfLoader.load.bind(gltfLoader);
+        gltfLoader.load = (...args) => { ktx2Ready.then(() => gltfLoadDirect(...args)); };
 
         // Load a furnishing GLB into `group`, standing on the ground and
         // centred on the group's origin.
@@ -4710,10 +4725,15 @@
             mesh.castShadow = true; mesh.receiveShadow = true;
             return mesh;
         }
+        // The layers stand LAID_STEP apart, so they need none of the depth nudge (polygonOffset) the old
+        // drapes used; on the pleated corners, seen edge-on from inside, that nudge drew the tahash
+        // through the gold boards as bright streaks. Own copies of the materials, nudge off.
+        const laidMat = (m) => { const c = m.clone(); c.polygonOffset = false; c.onBeforeCompile = m.onBeforeCompile;
+            c.extensions = m.extensions; c.customProgramCacheKey = m.customProgramCacheKey; return c; };
         //                                     L   W  front trail layer roof   material
-        const laidGoat    = buildLaidCovering(44, 30, 2,    2,    1,    0.06,  goatHairMaterial, { sheet: true });
-        const laidRams    = buildLaidCovering(40, 30, 0,    0,    2,    0.12,  ramSkinMaterial, { pegged: true });
-        const laidTachash = buildLaidCovering(39, 28, 0,    0,    3,    0.18,  tentCoveringMaterial);
+        const laidGoat    = buildLaidCovering(44, 30, 2,    2,    1,    0.06,  laidMat(goatHairMaterial), { sheet: true });
+        const laidRams    = buildLaidCovering(40, 30, 0,    0,    2,    0.12,  laidMat(ramSkinMaterial), { pegged: true });
+        const laidTachash = buildLaidCovering(39, 28, 0,    0,    3,    0.18,  laidMat(tentCoveringMaterial));
         laidGoat.userData.reconstruction = "Goats' hair 44 x 30 laid on per Ex 26:7-13";
         laidRams.userData.reconstruction = "Rams' skins dyed red, to the ground (Josephus Ant. III 6.4); size ASSUMED";
         laidTachash.userData.reconstruction = "Tahash skins, a cubit short of the ground; size ASSUMED";
@@ -5527,9 +5547,33 @@
         const gloryY = ARK_HEIGHT + 2.0;
 
         // Primary Shekinah light - subtle glow
+        // 2026-11-16 (Claude for Cisco): the Shekinah light is the same PointLight as before, but a
+        // point-light SHADOW (six renders per frame) crashed the Pixel 10's graphics on every load,
+        // whatever the filter (bisected on the phone: pcf, basic, vsm all crashed; this shadow off =
+        // no crash). Its shadow is now made by two spotlight PAIRS from the same point, down and up:
+        // a shadowed spot (+I) and an unshadowed spot (-I) of identical cone and falloff. Where the
+        // light is unobstructed they cancel to zero; where the ark, the walls or the veil block it,
+        // only -I remains and removes the point light's contribution. Lighting = the original point
+        // light; shadows = the same occluders; cost = two ordinary spot shadows, which every device
+        // that draws the sun's shadow also draws.
         const shekinahLight = new THREE.PointLight(0xfffaf0, 1.0, 30);
         shekinahLight.position.set(0, gloryY + 0.5, 0);
-        shekinahLight.castShadow = true;
+        const gloryShadowPairs = [];
+        [-1, 1].forEach((dir) => {
+            const lit = new THREE.SpotLight(0xfffaf0, 1.0, 30, 1.5, 0, 1);
+            lit.castShadow = true;
+            lit.shadow.mapSize.set(1024, 1024);
+            lit.shadow.camera.near = 0.1;
+            lit.shadow.bias = -0.0015;
+            const cut = new THREE.SpotLight(0xfffaf0, -1.0, 30, 1.5, 0, 1);
+            [lit, cut].forEach((s) => { s.position.set(0, 0, 0); s.target.position.set(0, dir * 10, 0); shekinahLight.add(s, s.target); });   // SpotLight defaults to (0,1,0): put it ON the light
+            gloryShadowPairs.push(lit, cut);
+        });
+        let gloryIntensity = 1.0;
+        Object.defineProperty(shekinahLight, 'intensity', {
+            get: () => gloryIntensity,
+            set: (v) => { gloryIntensity = v; gloryShadowPairs.forEach((s, i) => { s.intensity = (i % 2 ? -v : v); }); }
+        });
         arkGroup.add(shekinahLight);
 
         // Secondary fill light - very subtle
@@ -6559,6 +6603,10 @@ figureLines.renderOrder = -2;
 
         console.log('%c✝ The Tabernacle of Moses ✝', 'font-size: 20px; color: gold; font-weight: bold;');
         console.log('Improvements: Detailed 3D models for all six sacred furnishings');
+    </script>
+    <script type="module">
+        import { KTX2Loader } from './ktx2/KTX2Loader.js';
+        if (window.__onKTX2) window.__onKTX2(KTX2Loader); else window.__KTX2 = KTX2Loader;
     </script>
 </body>
 </html>

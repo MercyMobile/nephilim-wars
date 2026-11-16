@@ -1,0 +1,21 @@
+// Hands the page's global THREE (r128, classic scripts) to the r128 KTX2 module loader.
+const T = window.THREE;
+export const CompressedTexture = T.CompressedTexture;
+export const CompressedTextureLoader = T.CompressedTextureLoader;
+export const FileLoader = T.FileLoader;
+export const LinearEncoding = T.LinearEncoding;
+export const LinearFilter = T.LinearFilter;
+export const LinearMipmapLinearFilter = T.LinearMipmapLinearFilter;
+export const Loader = T.Loader;
+export const RGBAFormat = T.RGBAFormat;
+export const RGBA_ASTC_4x4_Format = T.RGBA_ASTC_4x4_Format;
+export const RGBA_BPTC_Format = T.RGBA_BPTC_Format;
+export const RGBA_ETC2_EAC_Format = T.RGBA_ETC2_EAC_Format;
+export const RGBA_PVRTC_4BPPV1_Format = T.RGBA_PVRTC_4BPPV1_Format;
+export const RGBA_S3TC_DXT5_Format = T.RGBA_S3TC_DXT5_Format;
+export const RGB_ETC1_Format = T.RGB_ETC1_Format;
+export const RGB_ETC2_Format = T.RGB_ETC2_Format;
+export const RGB_PVRTC_4BPPV1_Format = T.RGB_PVRTC_4BPPV1_Format;
+export const RGB_S3TC_DXT1_Format = T.RGB_S3TC_DXT1_Format;
+export const UnsignedByteType = T.UnsignedByteType;
+export const sRGBEncoding = T.sRGBEncoding;
