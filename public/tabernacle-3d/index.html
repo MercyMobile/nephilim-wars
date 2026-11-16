@@ -27,7 +27,7 @@
 </style>
 </head>
 <body>
-<div id="load"><div>Raising the Tabernacle…</div><div id="bar"><i></i></div><div class="hint" id="lt">0 of 0 pieces</div></div>
+<div id="load"><div>Raising the Tabernacle…</div><div id="bar"><i></i></div><div class="hint" id="lt">Loading the 3D engine…</div><pre id="err" style="display:none;white-space:pre-wrap;max-width:90%;color:#ffb4a0;font-size:13px"></pre></div>
 <div id="top">
   <h1>The Tabernacle</h1>
   <span id="views"></span>
@@ -50,6 +50,16 @@
   <p class="hint">Drag to look around, scroll or pinch to move closer. The gate faces east; walking in from the gate, north is on your right.</p>
 </div>
 
+<script>
+window.__diag = [];
+function diag(m) { window.__diag.push(m); var e = document.getElementById('err'); if (e) { e.style.display = 'block'; e.textContent = window.__diag.join('\n'); } }
+addEventListener('error', function (e) { diag('Error: ' + (e.message || (e.target && (e.target.src || e.target.href)) || 'unknown')); }, true);
+addEventListener('unhandledrejection', function (e) { diag('Error: ' + (e.reason && (e.reason.message || e.reason))); });
+(function () { var c = document.createElement('canvas');
+  if (!c.getContext('webgl2')) diag('This browser has no WebGL 2, which the 3D view needs. Try opening the link in Chrome.'); })();
+setTimeout(function () { if (!window.__engine) diag('The 3D engine (three.js from cdn.jsdelivr.net) has not arrived after 20 seconds. The network may be blocking it.'); }, 20000);
+setTimeout(function () { if (!window.__ready) diag('Still not finished after 90 seconds. Stuck at: ' + (document.getElementById('lt') || {}).textContent); }, 90000);
+</script>
 <script type="importmap">
 { "imports": {
   "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
@@ -63,10 +73,12 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { Sky } from 'three/addons/objects/Sky.js';
+window.__engine = true; document.getElementById('lt').textContent = 'Engine loaded; fetching pieces…';
 
 const mobile = matchMedia('(pointer:coarse)').matches || innerWidth < 760;
-const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1.5 : 2));
+const renderer = new THREE.WebGLRenderer({ antialias: !mobile, powerPreference: 'high-performance' });
+renderer.domElement.addEventListener('webglcontextlost', e => { e.preventDefault(); window.diag && diag('The phone\u2019s graphics dropped the 3D view (WebGL context lost), most likely out of graphics memory.'); });
+renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1 : 2));
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 0.55;
@@ -99,7 +111,7 @@ scene.fog = new THREE.FogExp2(0xd6d6cf, 0.0045);
 const sun = new THREE.DirectionalLight(0xfff1dc, 3.2);
 sun.position.copy(sunDir).multiplyScalar(60); sun.target.position.set(-3, 0, 0);
 sun.castShadow = true;
-sun.shadow.mapSize.set(mobile ? 2048 : 4096, mobile ? 2048 : 4096);
+sun.shadow.mapSize.set(mobile ? 1024 : 4096, mobile ? 1024 : 4096);
 Object.assign(sun.shadow.camera, { left: -32, right: 32, top: 22, bottom: -22, near: 1, far: 140 });
 sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.03;
 scene.add(sun, sun.target);
@@ -108,7 +120,7 @@ scene.add(sun, sun.target);
 const lamps = new THREE.Group();
 // The seven flames share one light so it can cast shadows: the veil must stop the lamplight (Ex 26:33).
 const lampLight = new THREE.PointLight(0xff9a45, 4, 14, 2); lampLight.position.set(-6.75, 1.5, 1.12);
-lampLight.castShadow = true; lampLight.shadow.mapSize.set(1024, 1024); lampLight.shadow.bias = -0.002; lampLight.shadow.camera.near = 0.05;
+lampLight.castShadow = true; lampLight.shadow.mapSize.set(mobile ? 256 : 1024, mobile ? 256 : 1024); lampLight.shadow.bias = -0.002; lampLight.shadow.camera.near = 0.05;
 lamps.add(lampLight);
 for (let i = 0; i < 7; i++) {
   const z = 0.63 + i * (1.61 - 0.63) / 6;
@@ -125,7 +137,7 @@ function tex(name, rep, srgb) {
   if (cache[key]) return cache[key];
   const t = tl.load('t/' + name);
   t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep, rep); t.flipY = false;
-  t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  t.anisotropy = mobile ? 2 : renderer.capabilities.getMaxAnisotropy();
   if (srgb) t.colorSpace = THREE.SRGBColorSpace;
   return cache[key] = t;
 }
@@ -168,7 +180,8 @@ const loader = new GLTFLoader().setDRACOLoader(draco).setMeshoptDecoder(MeshoptD
 let done = 0;
 const bar = document.querySelector('#bar i'), lt = document.getElementById('lt');
 const tick = () => { done++; bar.style.width = (100 * done / PARTS.length) + '%'; lt.textContent = done + ' of ' + PARTS.length + ' pieces'; };
-await Promise.all(PARTS.map(f => loader.loadAsync('m/' + f).then(g => {
+const timed = (f) => Promise.race([loader.loadAsync('m/' + f), new Promise((_, no) => setTimeout(() => no(new Error('timed out after 60 s')), 60000))]);
+await Promise.all(PARTS.map(f => timed(f).then(g => {
   const grp = f.startsWith('tab_') ? f.slice(4, -4) : null;
   g.scene.traverse(o => {
     if (!o.isMesh) return;
@@ -177,7 +190,7 @@ await Promise.all(PARTS.map(f => loader.loadAsync('m/' + f).then(g => {
     o.castShadow = grp !== 'ground'; o.receiveShadow = true;
   });
   scene.add(g.scene); tick();
-}).catch(e => { console.error(f, e); tick(); })));
+}).catch(e => { console.error(f, e); window.diag && diag('Could not load ' + f + ': ' + (e.message || e)); tick(); })));
 document.getElementById('load').remove();
 
 // ---- views: same six stops as the film (metres; +X east, -Z north, Y up)
