@@ -34,6 +34,7 @@ PERIODS = [
     ("divided-kingdom-judah", "Divided Kingdom - Judah (South)"),
     ("exile-postexile", "Exile & Post-Exile Period"),
     ("second-temple", "Second Temple Period"),
+    ("early-church", "The Early Church (after 70 CE)"),
 ]
 
 BANNED = re.compile(

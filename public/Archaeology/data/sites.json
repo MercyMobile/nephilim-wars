@@ -12313,8 +12313,8 @@
    ],
    "subtitle": "Copper mining and smelting district in the southern Arabah · Chalcolithic to Islamic, with a major smelting peak in the 11th-9th centuries BCE",
    "kind": "Site",
-   "date": "Mining from the Chalcolithic period onward; Egyptian New Kingdom (Late Bronze Age) activity at the Hathor shrine (Site 200); the main smelting camps Site 30 and Site 34 radiocarbon-dated to the early Iron Age (11th-9th century BCE), Site 34's Slag Mound 19 to the 10th century BCE",
-   "date_basis": "High-resolution AMS radiocarbon dating of short-lived seeds from stratified slag mounds (Ben-Yosef et al., BASOR 367, 2012 for Site 30; eleven AMS dates from Slag Mound 19 at Site 34, all 10th century BCE, per the Central Timna Valley Project); OSL dating of sediments filling mines (Merkavot 1 and 2); earlier Egyptian New Kingdom dating from the Hathor shrine (Site 200) excavated by Rothenberg's Arabah Expedition in 1969.",
+   "date": "Mining from the Chalcolithic period onward; Egyptian New Kingdom (Late Bronze Age) activity at the Hathor shrine (Site 200); the main smelting camps Site 30 and Site 34 radiocarbon-dated to the early Iron Age (11th-9th century BCE), Site 34's Slag Mound 19 to the 10th century BCE; at the Hathor shrine itself, charcoal from an undisturbed context dates to 1496–1304 BCE (2σ) and a wool textile to 1257–1051 BCE (2σ) (Asscher et al. 2025)",
+   "date_basis": "High-resolution AMS radiocarbon dating of short-lived seeds from stratified slag mounds (Ben-Yosef et al., BASOR 367, 2012 for Site 30; eleven AMS dates from Slag Mound 19 at Site 34, all 10th century BCE, per the Central Timna Valley Project); OSL dating of sediments filling mines (Merkavot 1 and 2); earlier Egyptian New Kingdom dating from the Hathor shrine (Site 200) excavated by Rothenberg's Arabah Expedition in 1969. For Site 200, AMS radiocarbon on short-lived charcoal from a context shown by sediment analysis to be untouched by the conservation work of the 1980s (Asscher et al. 2025).",
    "discovery": {
     "when": "Surveyed 1934 (Glueck); Arabah Expedition surveys 1959-1961 and excavations from the 1960s (Hathor shrine 1969); Central Timna Valley Project from 2012 (field seasons from 2013, latest listed 2025)",
     "who": "Nelson Glueck (survey); Beno Rothenberg and the Arabah Expedition; Erez Ben-Yosef, Central Timna Valley (CTV) Project, Tel Aviv University",
@@ -12327,7 +12327,8 @@
    "overview": [
     "The Timna Valley in the southern Arabah holds thousands of ancient mine shafts and several large smelting camps. Nelson Glueck surveyed it in 1934. Beno Rothenberg's Arabah Expedition surveyed from 1959 and in 1969 excavated a shrine of the Egyptian goddess Hathor (Site 200); from that find the main mining and smelting was assigned to the Egyptian New Kingdom (the 'Egyptian paradigm').",
     "Since 2012 the Central Timna Valley Project of Tel Aviv University, directed by Erez Ben-Yosef, has re-excavated the smelting camps with radiocarbon dating of short-lived seeds. Site 30 is now dated to the early Iron Age (11th-9th century BCE) (Ben-Yosef et al. 2012). At Site 34, the 'Slaves' Hill', a 1 m section through Slag Mound 19 contains 32 layers representing about 150 years of smelting, and eleven AMS dates from it fall in the 10th century BCE. Extraordinary dryness preserved seeds, textiles (wool, goat hair and linen), rope and cordage.",
-    "OSL dating of mine fills showed open-pit mining at Merkavot 1 in the Chalcolithic and again at the end of the 2nd millennium BCE, and a shaft at Merkavot 2 in the Chalcolithic-Early Bronze Age, overturning the assumption that simpler mining techniques are always older. The Iron Age industry relied on local white broom and acacia charcoal, and its end has been linked to fuel exhaustion. The Hebrew Bible never names Timna; the tie to Solomon is a modern label."
+    "OSL dating of mine fills showed open-pit mining at Merkavot 1 in the Chalcolithic and again at the end of the 2nd millennium BCE, and a shaft at Merkavot 2 in the Chalcolithic-Early Bronze Age, overturning the assumption that simpler mining techniques are always older. The Iron Age industry relied on local white broom and acacia charcoal, and its end has been linked to fuel exhaustion. The Hebrew Bible never names Timna; the tie to Solomon is a modern label.",
+    "The Hathor shrine (Site 200) has its own history. Rothenberg found Egyptian inscriptions there with the names of pharaohs from Seti I to Ramesses V, and above the Egyptian phase a later one in which the shrine was reused under a tent, which he assigned to the Midianites: heaps of cloth lay along the walls in that layer, with a copper serpent. A 2025 study separated the deposits disturbed by conservation in the 1980s from untouched ones and obtained a radiocarbon date of 1496–1304 BCE from an untouched context, which its authors take to show Egyptian copper work at Timna already under the 18th Dynasty. How late the tent phase lasted is disputed."
    ],
    "text": null,
    "evidence": [
@@ -12340,12 +12341,21 @@
     "About 100 textile and cordage fragments from the 2013-2014 seasons at Site 34: wool, goat hair and linen, some with coloured designs (CTV textile page).",
     "Charcoal from two stratified waste heaps of the 11th-9th century industry is mostly local white broom (Retama raetam) and acacia; later layers include less suitable taxa, read by the authors as a widening search for fuel (Cavanagh, Ben-Yosef and Langgut 2022).",
     "In Timna the smelting ores were almost exclusively the Amir/Avrona type in the Late Bronze-Early Iron cycle (Bode et al. 2024).",
-    "Heavy-metal enrichment of soil at two Timna smelting camps is confined to the production areas (Yagel et al. 2024)."
+    "Heavy-metal enrichment of soil at two Timna smelting camps is confined to the production areas (Yagel et al. 2024).",
+    "Site 200: cartouches of pharaohs from Seti I to Ramesses V, about 1300–1140 BCE (Asscher et al. 2025).",
+    "Site 200: charcoal of the short-lived shrub Salsola baryosma from Probe 3, an undisturbed context: OxA-37,652, 3136 ± 27 BP, calibrated 1496–1304 BCE (2σ) (Asscher et al. 2025).",
+    "Site 200: a wool textile fragment from Rothenberg's excavation: OxA-30,696, 2946 ± 25 BP, calibrated 1257–1051 BCE (2σ); two other textile samples gave no result, probably because of undocumented conservation treatment (Asscher et al. 2025, citing Sukenik et al.).",
+    "Site 200: Rothenberg's own charcoal date BM-1117, 2779 ± 55 BP, calibrates to 1077–809 BCE (2σ) (Asscher et al. 2025).",
+    "Site 200: the tent cloth was found 'lying in heaps along the walls of the temple' in the layer assigned by stratigraphy to the Midianite phase, and a copper serpent came from the same layer (Rothenberg, Biblical Archaeology Review 1:2, 1975).",
+    "Site 200: textiles dyed red, blue and yellow; Sukenik et al. (2017) judge that some belong to the early Iron Age, when the place was still a shrine but of local deities.",
+    "The painted pottery of the later phase is petrographically identical to the painted ware of Qurayyah in northwest Arabia (Rothenberg and Glass 1983, as reported in Biblical Archaeology Review).",
+    "The shrine's plant remains are of the same species as those of the smelting camps, which the authors read as workers offering their own food (David et al. 2022)."
    ],
    "questions": [
     "Who ran the Iron Age industry? Ben-Yosef (Vetus Testamentum 69, 2019) argues that a complex society of largely nomadic people ran the Arabah copper centers, and that archaeologists of all schools have missed such polities because they rely on stone architecture ('architectural bias'). Eshel et al. (PLoS One 2025) call it 'the Arabah copper polity' and propose Faynan and Timna were 'possibly controlled by a joint polity'. Whether this polity is biblical Edom, a Judahite/Israelite enterprise, or something else is not settled by any inscription from the sites; it is an inference from location (1 Kings 9:26 places Ezion-geber 'in the land of Edom') and date.",
     "Egyptian or local? Rothenberg's Arabah Expedition dated the main mining and smelting to the Egyptian New Kingdom from the Hathor shrine (Site 200). Ben-Yosef et al. (BASOR 367, 2012) show from radiocarbon that the largest camps (Site 30, Site 34) operated in the 11th-9th centuries BCE, after Egyptian control of Canaan ended. Both phases are real; the dispute is over which phase the thousands of shafts belong to, which the CTV Project calls 'now insecure'.",
-    "Link to Solomon. The radiocarbon peak at Site 34 overlaps the 10th century BCE that the biblical chronology gives Solomon. No object, inscription or trade record found at Timna links its copper to Jerusalem; 1 Kings 7:46 places the casting of the temple bronze in the Jordan plain, not the Arabah."
+    "Link to Solomon. The radiocarbon peak at Site 34 overlaps the 10th century BCE that the biblical chronology gives Solomon. No object, inscription or trade record found at Timna links its copper to Jerusalem; 1 Kings 7:46 places the casting of the temple bronze in the Jordan plain, not the Arabah.",
+    "The tent shrine: how late, and whose? Rothenberg ended the tent phase (his Stratum II) no later than 1100 BCE and called it Midianite. Asscher et al. (2025) report that Avner's stratigraphic work and the pottery study of Kleiman et al. carry the activity at least to the 10th century and probably into the early or middle 9th, and Rothenberg's own date BM-1117 allows it. 'Midianite' rests on the painted pottery, which matches the ware of Qurayyah in northwest Arabia, the region identified with Midian; no inscription from the shrine names the worshippers. Asscher et al. say the bearing of the later dates on the Midianite question is discussed elsewhere."
    ],
    "biblical": [
     {
@@ -12367,6 +12377,18 @@
     {
      "ref": "Genesis 36:31",
      "tie": "'kings that reigned in the land of Edom, before there reigned any king over the children of Israel.' Ben-Yosef's case for a complex nomadic polity in the Arabah bears on whether an early Edomite kingdom is plausible (our reading)."
+    },
+    {
+     "ref": "Exodus 2:15–21; 18:1–12",
+     "tie": "Moses lives in Midian and marries the daughter of its priest, who later offers sacrifice in Israel's camp. The later phase of the Timna shrine is assigned by its excavator to Midianites, on the evidence of pottery from northwest Arabia. Our comparison: it puts worshippers from that region at a sanctuary in the Arabah; it does not name them."
+    },
+    {
+     "ref": "Exodus 26:1–14; 36:8–19",
+     "tie": "A sanctuary made of woven and dyed cloth over a frame. At Timna cloth lay in heaps along the walls of the shrine's later phase, and its textiles include wool dyed red, blue and yellow. The shrine was Hathor's and then one of local deities; the comparison is of construction, not of cult."
+    },
+    {
+     "ref": "Numbers 21:4–9",
+     "tie": "Moses makes a bronze serpent in the Arabah. Rothenberg reports a copper serpent from the Midianite layer of the shrine. Similar objects, the same region; no link between the two is attested."
     }
    ],
    "sources": [
@@ -12429,6 +12451,41 @@
      "url": "https://doi.org/10.1080/00758914.2016.1145943",
      "kind": "excavation report",
      "verified": "Crossref record confirms title, authors, Levant 48(1): 33-51 (2016). Article text not read."
+    },
+    {
+     "cite": "Asscher, Y., Peters, I., Cavanagh, M., Ondricek, W. and Ben-Yosef, E. 2025. \"Distinguishing pristine and conserved sediments in heritage sites: The Hathor temple at Timna Valley as a case study.\" Journal of Cultural Heritage 76: 251-262. doi:10.1016/j.culher.2025.10.005",
+     "url": "https://doi.org/10.1016/j.culher.2025.10.005",
+     "kind": "study",
+     "verified": "ScienceDirect article page read 15 Nov 2026: cartouches Seti I to Ramesses V; OxA-37,652 (3136 ± 27 BP; 1496-1304 BCE 2σ) from Probe 3; OxA-30,696 wool textile (2946 ± 25 BP; 1257-1051 BCE 2σ) cited from Sukenik et al.; BM-1117 (1077-809 BCE 2σ); Rothenberg's end date for Stratum II against Avner and Kleiman et al. Volume and pages from the University of Haifa research record."
+    },
+    {
+     "cite": "Sukenik, N., Iluz, D., Amar, Z., Varvak, A., Workman, V., Shamir, O. and Ben-Yosef, E. 2017. \"Early evidence (late 2nd millennium BCE) of plant-based dyeing of textiles from Timna, Israel.\" PLoS One 12(6): e0179014. doi:10.1371/journal.pone.0179014",
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5489155",
+     "kind": "study",
+     "verified": "PMC text read 15 Nov 2026 as returned by web search: Site 200 textiles dyed red, blue and yellow; Site 200 dated 13th-11th centuries BCE; some textiles likely from early Iron Age contexts when the site was a temple of local deities; Site 34 textiles 83% wool."
+    },
+    {
+     "cite": "Rothenberg, B. 1988. The Egyptian Mining Temple at Timna (Researches in the Arabah 1959-1984, vol. 1; Metal in History 2). London: Institute for Archaeo-Metallurgical Studies and Institute of Archaeology, University College London.",
+     "url": "https://library.arce.org/portal/Record/11422",
+     "kind": "excavation report",
+     "verified": "Library catalogue records read 15 Nov 2026 (ARCE, Texas A&M, DAI): title, series, 1988, viii + 317 pp., ISBN 0906183022. Book not read; its results are used as Asscher et al. 2025 and Sukenik et al. 2017 report them."
+    },
+    {
+     "cite": "Rothenberg, B. 1975. \"Beno Rothenberg Answers Query on Midianite Tented Shrine.\" Biblical Archaeology Review 1(2), Queries & Comments.",
+     "url": "https://old.biblicalarchaeology.org/node/9253",
+     "kind": "response (excavator)",
+     "verified": "Letter read 15 Nov 2026: tent cloth 'lying in heaps along the walls of the temple' in the layer attributed by stratigraphy to the Midianite phase; many fragments preserved and examined by textile specialists; the copper serpent from the same layer. The letter does not state the fibre or colour of the cloth."
+    },
+    {
+     "cite": "David, M., Kislev, M., Melamed, Y., Ben-Yosef, E. and Weiss, E. 2022. \"Plant Remains from Rothenberg's Excavations in Timna: Smelters' Food and Cultic Offerings at the Turn of the First Millennium BCE.\" Tel Aviv 49(2): 230-249. doi:10.1080/03344355.2022.2102110",
+     "url": "https://doi.org/10.1080/03344355.2022.2102110",
+     "kind": "study",
+     "verified": "Abstract read 15 Nov 2026 via the Tel Aviv University and Bar-Ilan research records: some 10,000 plant remains from Sites 2, 30 and 200, 13th-9th centuries BCE; the shrine's assemblage matches the smelting camps'."
+    },
+    {
+     "cite": "Rothenberg, B. and Glass, J. 1983. \"The Midianite Pottery.\" In J. F. A. Sawyer and D. J. A. Clines (eds), Midian, Moab and Edom (JSOT Supplement 24; Sheffield: JSOT Press), 65-124.",
+     "kind": "study",
+     "verified": "Not read. Its petrographic result is given as reported in an endnote of Biblical Archaeology Review ('Where Is Mount Sinai?', endnote 25)."
     }
    ],
    "updates": [
@@ -12456,6 +12513,11 @@
      "date": "2026",
      "what": "Langford et al. (Journal of Arid Environments 233) document 14 isolated copper-mining sites across the Araba outside the main hubs.",
      "source_index": 8
+    },
+    {
+     "date": "2025-11",
+     "what": "Asscher et al. (Journal of Cultural Heritage 76) date undisturbed charcoal in the Hathor shrine to 1496-1304 BCE and set out the dispute over the end of its tent phase.",
+     "source_index": 10
     }
    ],
    "checked_through": null,
@@ -12465,7 +12527,8 @@
     "Old entry describes 'administrative structures' and an 'Israelite economy'. The excavators describe smelting camps, slag mounds and a gate complex at Site 34 and attribute the industry to an Arabah polity with a large nomadic component (Ben-Yosef 2019; Eshel et al. 2025), not to Israel.",
     "Old entry cites 1 Kings 10:22 (ships of Tarshish bringing gold, silver, ivory, apes, peacocks) and 2 Chronicles 8:1 (twenty years of building) as connections; neither mentions copper or the Arabah. The relevant Ezion-geber verses are 1 Kings 9:26-28 and 2 Chronicles 8:17-18.",
     "Old entry omits the Egyptian New Kingdom Hathor shrine (Site 200, excavated 1969) and the resulting 'Egyptian paradigm', which the radiocarbon work since 2012 revised.",
-    "Old entry's 'Scholarly Consensus' box removed per house rules."
+    "Old entry's 'Scholarly Consensus' box removed per house rules.",
+    "Earlier edition of this page did not describe the later, tent-covered phase of the Hathor shrine or its textiles. Added November 2026 from Asscher et al. 2025, Sukenik et al. 2017 and Rothenberg's 1975 letter."
    ],
    "storybook_names": [
     "Timna",
@@ -12475,7 +12538,9 @@
     "Solomon's mines",
     "Slaves' Hill",
     "Hathor shrine at Timna",
-    "Arabah copper"
+    "Arabah copper",
+    "Timna Site 200",
+    "Midianite tent shrine"
    ],
    "period_id": "united-monarchy",
    "currency_note": "limited: web-search quota ran out before this entry; 2024-2026 check done via Europe PMC, Crossref and the CTV Project website; news outlets such as BAR/ASOR/IAA were not searched"
@@ -12987,6 +13052,639 @@
     "Temple Mount Sifting Project bulla",
     "seal of Josiah's servant"
    ]
+  },
+  {
+   "id": "tell-el-daba-avaris",
+   "name": "Tell el-Dab'a (Avaris): the Levantine Town in the Eastern Delta",
+   "aka": [
+    "Avaris",
+    "Tell el-Dabʿa",
+    "Tell el-Daba",
+    "Hut-waret",
+    "Hyksos capital at Tell el-Dab'a"
+   ],
+   "subtitle": "Excavated Delta town settled by Western Asiatic immigrants from the late 12th Dynasty, later the Hyksos capital · tooth-enamel isotopes show about half of 75 sampled people grew up outside the Delta",
+   "kind": "Site (town, cemeteries and human remains)",
+   "date": "Egyptian planned settlement from the start of the 12th Dynasty; Western Asiatic community from the late 12th Dynasty onward; capital of the Hyksos (15th Dynasty); taken by Ahmose I c. 1530 BCE (Bietak 2022)",
+   "date_basis": "Excavation stratigraphy tied to the Egyptian dynasties through pottery, scarabs and royal names (Bietak 2022, with its stratigraphic chart); the end date rests on the tomb inscription of the naval officer Ahmose son of Ibana at El-Kab. The isotope and dental studies sort individuals into pre-Hyksos and Hyksos-period groups by the excavators' phasing.",
+   "discovery": {
+    "when": "Édouard Naville 1895; Labib Habachi in the 1940s (he proposed the identification with Avaris in 1941–42); Shehata Adam at 'Ezbet Rushdi in the 1950s; Austrian excavations under Manfred Bietak 1966–2011 (75 campaigns); Irene Forstner-Müller at 'Ezbet Rushdi 2010–15",
+    "who": "Austrian Archaeological Institute and University of Vienna (Manfred Bietak, then Irene Forstner-Müller), after Naville, Habachi and Adam",
+    "where": "Tell el-Dab'a and 'Ezbet Rushdi, eastern Nile Delta, Egypt"
+   },
+   "location": "In situ, Tell el-Dab'a, eastern Nile Delta, Egypt",
+   "physical": {
+    "material": "Mudbrick town: houses, mansions, a palace and temples; cemeteries with human, donkey and goat burials; pottery, scarabs, weapons and statuary",
+    "dimensions": "The town grew from about 240 to about 620 acres; Bietak (2022) also gives 640 acres for the Hyksos period"
+   },
+   "overview": [
+    "Tell el-Dab'a is the site of ancient Avaris in the eastern Nile Delta. It began as a planned Egyptian settlement at the start of the 12th Dynasty. Manfred Bietak, who directed 75 excavation campaigns there between 1966 and 2011, reports that during the late 12th Dynasty people he calls Canaanites moved into the Egyptian town. They built house types foreign to Egypt (the middle-room house, the broad-room house and the hearth-house) and buried their dead with Near Eastern weapons and with donkeys and goats (Bietak 2022).",
+    "The community stayed and grew. Two large mansions stood at the start of the 13th Dynasty, with a cemetery of dignitaries in their gardens; later their statues were smashed and the mansions abandoned. One phase ends with many emergency burials, which Bietak reads as epidemic or violence. A precinct of Near Eastern temples was built about 1720 BCE. The town then became the capital of the Hyksos, the foreign 15th Dynasty, covering some 620–640 acres, until Ahmose I took it about 1530 BCE. Its southern part was later absorbed into Piramesse, the Delta residence of Ramesses II (Bietak 2022).",
+    "Three laboratory studies of the excavated skeletons add a second kind of evidence. Strontium in tooth enamel shows that 40 of 75 sampled people (53%) spent childhood outside the Nile Delta, with more non-locals before Hyksos rule than during it (Stantis et al. 2020). Adding oxygen isotopes raises the count to 45 of 75 (Stantis et al. 2021). Dental traits of 90 people set Avaris apart from other Egyptian sites, and show the Delta-born and the immigrants to be one population (Maaranen et al. 2021)."
+   ],
+   "text": null,
+   "evidence": [
+    "Late 12th Dynasty: a settlement of Canaanites with middle-room, broad-room and hearth-houses, and a cemetery of weapon-bearers and high dignitaries (Bietak 2022, fig. 4, after Bietak 1996, fig. 7).",
+    "Tombs with donkey and goat burials and prestigious Near Eastern weapons; a scarab with the title 'Ruler of Retjenu', which Bietak takes to show an Egyptian-appointed head of the community (Bietak 2022).",
+    "Early 13th Dynasty: two mansions at area F/I, one growing to 2,400 m², with a dignitaries' cemetery in the gardens; a statue of a Western Asiatic dignitary, now Munich ÄS 7171 (Bietak 2022).",
+    "Phase G ends with numerous emergency burials, mostly without offerings, in areas A/II and F/I (Bietak 2022).",
+    "Sacred precinct in the Eastern Town (A/II): Near Eastern temple III, 32.5 × 21.5 m, dated by Bietak to the time of Nehesy, c. 1720 BCE (Bietak 2022).",
+    "Strontium (87Sr/86Sr) in tooth enamel of 75 individuals: 40 (53%) non-local to the Delta; 36 individuals pre-Hyksos and 35 Hyksos-period; significantly more non-locals in the pre-Hyksos group (t(70) = 2.6, p = 0.012); 77% of the females non-local (Stantis et al. 2020).",
+    "With oxygen isotopes added, 45 of the same 75 (60%) are classed non-local; no clear dietary difference between immigrants and locals; first-generation immigrants and Delta-born alike were buried with elite Asiatic customs (Stantis et al. 2021).",
+    "Dental non-metric traits of 90 individuals: Avaris differs significantly (p < 0.01) from other Egyptian samples; the 30 'locals' and 33 'non-locals' of the isotope study are not ancestrally distinct from one another (Maaranen et al. 2021).",
+    "Ahmose I took Avaris c. 1530 BCE, on the evidence of the tomb inscription of Ahmose son of Ibana; most of the town was then abandoned (Bietak 2022)."
+   ],
+   "questions": [
+    "Where did the settlers come from? Stantis et al. (2020) found the non-local strontium values so varied that the incomers 'were not from a unified place of origin', and could not name the regions. Bietak (2022) calls the first settlers Canaanites. In a 2024 preprint Bietak ties the early elite to the northern Levant, Byblos in particular, sets aside a southern Levantine origin, and proposes that the people behind Hyksos rule came from Asiatic communities already living elsewhere in Egypt, near the Memphis–Fayum region. These three accounts do not agree with one another.",
+    "Invasion or rise from within? Josephus, quoting Manetho, tells of an invasion. Stantis et al. (2020) read the isotopes as an immigrant community that 'gained power' in a city it already knew. Bietak's 2024 preprint reports that the palace assigned to the 14th Dynasty was burned, and that violence and turmoil attended the change to Hyksos rule. An internal rise and a violent one are not exclusive.",
+    "What has this to do with Israel in Egypt? No inscription from the site names Jacob, Joseph, Israel or Hebrews, and Bietak's 2022 entry does not raise the subject. The town is in the region where Genesis puts Jacob's family, and its Levantine community begins in the late 12th Dynasty. Whether that is before, during or after the biblical sojourn depends on the chronology adopted for both Egypt and Genesis; on the conventional Egyptian dates, where the 12th Dynasty ends about 1800 BCE, and a reckoning that brings Jacob to Egypt about 1700 BCE, the Levantine town was already about a century old."
+   ],
+   "biblical": [
+    {
+     "ref": "Genesis 46:28–47:6, 27",
+     "tie": "Jacob's family settles in the eastern Delta as herdsmen, keeps its identity and multiplies. Avaris shows a West Asian community doing that in the eastern Delta over generations: its own houses, its own burial customs, intermarriage and growth. The fit is of setting. No find names the family, and the town was not founded by a single household."
+    },
+    {
+     "ref": "Genesis 47:11; Exodus 1:11; 12:37",
+     "tie": "'The land of Rameses' and the store-city Raamses. Bietak identifies Avaris as the southern part of Piramesse, the Delta residence of Ramesses II, so the same ground carries both the Middle Bronze Age Levantine town and the Ramesside city (Bietak 2022)."
+    },
+    {
+     "ref": "Genesis 41:41–45; 50:26",
+     "tie": "Joseph as a Semite in high Egyptian office. The 13th-Dynasty mansions with their cemetery of dignitaries, the statue of a Western Asiatic official and the 'Ruler of Retjenu' scarab show West Asians holding rank in this town. None is identified with Joseph by the excavator in the sources read here."
+    },
+    {
+     "ref": "Genesis 12:10; 42:1–5",
+     "tie": "People of Canaan going down to Egypt. Compare the 37 Asiatics registered at Beni Hasan in the same dynasty."
+    }
+   ],
+   "sources": [
+    {
+     "cite": "C. Stantis, A. Kharobi, N. Maaranen, G. M. Nowell, M. Bietak, S. Prell and H. Schutkowski, 'Who were the Hyksos? Challenging traditional narratives using strontium isotope (87Sr/86Sr) analysis of human remains from ancient Egypt', PLOS ONE 15(7) (2020) e0235414, DOI 10.1371/journal.pone.0235414",
+     "url": "https://doi.org/10.1371/journal.pone.0235414",
+     "kind": "study",
+     "verified": "Article page read 15 Nov 2026: 75 individuals; 40 (53%) non-local; 36 pre-Hyksos and 35 Hyksos-period; t(70) = 2.6, p = 0.012; 77% of females non-local; the rulers 'were not from a unified place of origin'. The list of excavation areas and the local baseline values were not rechecked."
+    },
+    {
+     "cite": "C. Stantis, A. Kharobi, N. Maaranen, C. Macpherson, M. Bietak, S. Prell and H. Schutkowski, 'Multi-isotopic study of diet and mobility in the northeastern Nile Delta', Archaeological and Anthropological Sciences 13 (2021) article 105, DOI 10.1007/s12520-021-01344-x",
+     "url": "https://doi.org/10.1007/s12520-021-01344-x",
+     "kind": "study",
+     "verified": "Springer article page read 15 Nov 2026 (first part of the page): 75 individuals for oxygen and carbon; 45 of 75 (60%) non-local when oxygen is combined with the earlier strontium data; collagen failed in 31 samples; no clear dietary difference. The page shortens the author list, so further co-authors may exist."
+    },
+    {
+     "cite": "N. Maaranen, S. Zakrzewski, A. Kharobi, C. Stantis, S. Prell, M. Bietak and H. Schutkowski, 'The people of Avaris: Intra-regional biodistance analysis using dental non-metric traits', Bioarchaeology of the Near East 15 (2021) 1–24",
+     "url": "https://eprints.soton.ac.uk/454072/2/People_of_Avaris_Maaranenetal2021TeDEgyptbiodistanceMMD.pdf",
+     "kind": "study",
+     "verified": "Author PDF (University of Southampton repository) read 15 Nov 2026: 90 individuals from areas A/I, A/II and F/I; 63 of the 75 isotope individuals usable (30 locals, 33 non-locals); locals and non-locals not ancestrally different; Avaris differs from other Egyptian sites at p < 0.01. No DOI is printed."
+    },
+    {
+     "cite": "M. Bietak, 'Avaris/Tell el-Dab'a', in A. Erskine, D. B. Hollander and A. Papaconstantinou (eds), The Encyclopedia of Ancient History (John Wiley & Sons, 2022)",
+     "url": "https://www.ancientportsantiques.com/wp-content/uploads/Documents/PLACES/Egypt-Libya/NileDelta/Avaris-Bietak2022.pdf",
+     "kind": "summary of the excavator's report",
+     "verified": "PDF copy read 15 Nov 2026: excavation history (Naville 1895 to Forstner-Müller 2010–15), 75 campaigns, late 12th Dynasty Canaanite houses and cemetery, 'Ruler of Retjenu' scarab, F/I mansions, Munich ÄS 7171, Phase G emergency burials, temple III dimensions, Nehesy c. 1720 BCE, Ahmose c. 1530 BCE, Avaris as the southern part of Piramesse. The copy is hosted on a third-party site, not by the publisher."
+    },
+    {
+     "cite": "M. Bietak, 'The Unexpected Origin of the People Behind Hyksos Rule in Egypt' (preprint, 2024)",
+     "url": "https://ancientportsantiques.com/wp-content/uploads/Documents/PLACES/Egypt-Libya/NileDelta/Avaris-Bietak2024.pdf",
+     "kind": "study",
+     "verified": "Preprint PDF read 15 Nov 2026; it is marked 'Preprint' and no journal is named, so it has not been checked as a peer-reviewed publication. Read: burned 14th-Dynasty palace; ties of the early elite to the northern Levant and Byblos; proposal that the Hyksos-era population came from Asiatic communities near the Memphite/Fayum region; acknowledgment of the ERC grant 'The Enigma of the Hyksos' (2015–2021)."
+    },
+    {
+     "cite": "Austrian Archaeological Institute, Tell el-Dab'a excavation website, 'History of the site'",
+     "url": "https://auaris.at/html/history_en.html",
+     "kind": "excavation project page",
+     "verified": "Search-result extract read: Habachi 1941–42 and the identification with Avaris; Shehata Adam 1951–1954 at 'Ezbet Rushdi; settlement from Amenemhet I; Asiatic community from the late 12th Dynasty (stratum H). The page itself was not opened in full."
+    },
+    {
+     "cite": "M. Bietak, Avaris: The Capital of the Hyksos. Recent Excavations at Tell el-Dab'a (London: British Museum Press, 1996)",
+     "kind": "excavation report",
+     "verified": "Not read. Cited by Bietak 2022 and 2024 as the source of the house-plan figure (1996, fig. 7). Publisher given from memory of the title page, not checked."
+    }
+   ],
+   "corrections": [],
+   "updates": [
+    {
+     "date": "2024",
+     "what": "Bietak circulates a preprint arguing that the people behind Hyksos rule came from Asiatic communities already settled elsewhere in Egypt, with earlier elite ties to Byblos.",
+     "source_index": 4
+    }
+   ],
+   "checked_through": null,
+   "storybook_names": [
+    "Avaris",
+    "Tell el-Dab'a",
+    "Tell el-Dab‘a",
+    "Tell el-Daba"
+   ],
+   "period_id": "patriarchal",
+   "currency_note": "partial: a November 2026 web search for 2024–2026 work found the 2024 Bietak preprint and news coverage of the 2020 study; journal databases were not searched"
+  },
+  {
+   "id": "papyrus-anastasi-vi",
+   "name": "Papyrus Anastasi VI: the Shasu of Edom at the Border Fortress",
+   "aka": [
+    "P. Anastasi VI",
+    "pBM EA 10245",
+    "Report of a Frontier Official",
+    "A Report of Bedouin"
+   ],
+   "subtitle": "Hieratic model letter reporting that Shasu herdsmen of Edom were let past a Delta border fortress to the pools of Pithom · late 19th Dynasty, end of the 13th century BCE",
+   "kind": "Papyrus (scribal miscellany)",
+   "date": "Manuscript: reign of Seti II, whose name stands in its first line. The frontier report copied in it is dated 'Year 8', which J. P. Allen takes as probably that of Seti's predecessor Merneptah; K. A. Kitchen gives Year 8 of Merneptah, c. 1206 BCE",
+   "date_basis": "The royal name in line 1 of the manuscript (Thesaurus Linguae Aegyptiae record); the regnal year written in the letter; the fortress and the pools in the letter carry Merneptah's name, so the report is not earlier than his reign.",
+   "discovery": {
+    "when": "Bought from the collection of Giovanni Anastasi (the British Museum records its companion papyri Anastasi III and V as acquired in 1839); facsimile published 1844",
+    "who": "Giovanni Anastasi (collector); first facsimile in the British Museum's Select Papyri in the Hieratic Character",
+    "where": "Findspot not recorded; probably Saqqara, to judge from what is known of the Anastasi collection (Thesaurus Linguae Aegyptiae record)"
+   },
+   "location": "British Museum, London, EA 10245",
+   "physical": {
+    "material": "Papyrus, ink",
+    "script": "Hieratic",
+    "language": "Late Egyptian"
+   },
+   "overview": [
+    "Papyrus Anastasi VI is one of the Late-Egyptian Miscellanies, rolls on which scribes copied letters, reports and praise texts. J. P. Allen describes this piece as a model letter, one of four scribal exercises on the roll, and J. A. Wilson describes the group as letters that served as models for schoolboys.",
+    "In the passage numbered lines 51–61 the scribe Inena writes to the treasury scribe Qagabu. He reports that the Shasu clans of Edom have been allowed past the Fortress of Merneptah in Tjeku and on to the pools of Per-Atum (Pithom) in Tjeku, so that they and their herds may stay alive, and he mentions a list of the other days on which the fortress was passed.",
+    "K. A. Kitchen notes that the name Edom appears here for the first time. The passage is also a plain account of how Egypt ran its eastern Delta border at the end of the 13th century BCE: a named fort, named water, a people identified by homeland, and permission recorded in writing."
+   ],
+   "text": {
+    "quote": "The writer reports that the Shasu clans of Edom have been let through the fortress named for Merneptah in Tjeku and on to the pools of Per-Atum, so that they and their animals may live.",
+    "translation": "Summary, not a quotation. After the translations of J. A. Wilson (ANET, p. 259), J. P. Allen (The Context of Scripture 3.5) and D. E. Fleming (2020), lines 51–61",
+    "quote_type": "paraphrase"
+   },
+   "evidence": [
+    "Manuscript: British Museum EA 10245; an incomplete dating formula with the name of Seti II in line 1 (Thesaurus Linguae Aegyptiae record).",
+    "Published in facsimile in Select Papyri in the Hieratic Character (1844), pls. CXXII–CXXVII; hieroglyphic transcription in Gardiner, Late-Egyptian Miscellanies (1937), pp. 72–78a; translation and commentary in Caminos, Late-Egyptian Miscellanies (1954), pp. 279–300 (Thesaurus Linguae Aegyptiae record).",
+    "Sender and addressee: the scribe Inena to the treasury scribe Qagabu, whose name is partly lost (Allen; Wilson).",
+    "The people: 'the tribes (mhwt) of the Shasu of Edom' (Fleming 2020, citing Giveon's Document 37).",
+    "The places: the Fortress of Merneptah-Hotephirmaat in Tjeku and the pools of Pithom of Merneptah in Tjeku (Fleming 2020; Allen).",
+    "The stated purpose: to keep the Shasu and their herds alive (Allen; Wilson; Fleming).",
+    "The date line: Year 8, read by Allen as the third epagomenal day, the Birth of Seth, and by Wilson as the '5 [intercalary] days, [the Birth of] Seth'.",
+    "Kitchen (1992): 'the term Edom appears for the first time' in this report."
+   ],
+   "questions": [
+    "Whose Year 8? The manuscript was written under Seti II, but Allen judges that the year in the letter is probably Merneptah's. Kitchen dates the report to Year 8 of Merneptah, c. 1206 BCE. A passage in the Biblical Archaeology Society library, attributed to M. Bietak on a compilation page, dates it to Year 5 of Seti II. Either way it belongs to the last years of the 13th century BCE.",
+    "A real dispatch or a school text? Allen and Wilson both class it as a model letter. A model letter may copy a real report, and its place names and procedure had to be credible to the scribes who used it, but the papyrus cannot show that this crossing took place on the day named.",
+    "Is this Israel? No. The Shasu here are named for Edom. The Merneptah Stele, from the same reign, names Israel as a people already in Canaan. The report shows a neighbouring herding people being admitted to the Delta, not Israel entering or leaving it.",
+    "Tjeku and Succoth. Kitchen renders the fort as the fort at Succoth, equating Egyptian Tjeku with the Succoth of Exodus 12:37, and Per-Atum with Pithom. The papyrus gives the Egyptian names only; the equations are philological."
+   ],
+   "biblical": [
+    {
+     "ref": "Genesis 46:31–47:6",
+     "tie": "Herdsmen from the east ask leave to bring their flocks into the eastern Delta to survive, and an official grants it. The papyrus records the same administrative act for a different people at a later date."
+    },
+    {
+     "ref": "Exodus 1:11",
+     "tie": "Pithom. The pools in the report are 'of Per-Atum', the Egyptian name behind Pithom, and they lie in Tjeku."
+    },
+    {
+     "ref": "Exodus 12:37; 13:20",
+     "tie": "Succoth, the first stage out of Egypt. Kitchen equates it with Tjeku, the district of the border fortress. The papyrus shows that district fortified and its crossings recorded by day."
+    },
+    {
+     "ref": "Genesis 36:1–9; Numbers 20:14–21",
+     "tie": "Edom as a people with a land of its own before Israel's monarchy. An Egyptian scribe names Edom as a homeland of herding clans by the end of the 13th century BCE."
+    }
+   ],
+   "sources": [
+    {
+     "cite": "Thesaurus Linguae Aegyptiae, object record 'pAnastasi VI = pBM EA 10245 (Miscellanies)', Object ID IDY4E6RTAZBGDIYBZYM5OL2CC4",
+     "url": "https://thesaurus-linguae-aegyptiae.de/object/IDY4E6RTAZBGDIYBZYM5OL2CC4",
+     "kind": "museum record",
+     "verified": "Record text read 15 Nov 2026 as returned by web search: dating to Seti II from his name in line 1; probable Saqqara provenance; bibliography with the page ranges of Select Papyri 1844, Gardiner 1937, Dawson 1949 and Caminos 1954."
+    },
+    {
+     "cite": "A. H. Gardiner, Late-Egyptian Miscellanies (Bibliotheca Aegyptiaca VII; Brussels, 1937), pp. xvi–xvii, 72–78a",
+     "kind": "editio princeps",
+     "verified": "Not read. Page range from the Thesaurus Linguae Aegyptiae record; the frontier report is cited by others at pp. 76–77."
+    },
+    {
+     "cite": "R. A. Caminos, Late-Egyptian Miscellanies (Brown Egyptological Studies I; London: Oxford University Press, 1954), pp. 279–300",
+     "kind": "translation",
+     "verified": "Not read. Page range from the Thesaurus Linguae Aegyptiae record; the frontier report is cited at p. 293 in two Biblical Archaeology Review notes and in the reprint of Kitchen 1992. Bibliographic details from the DAI and ARCE library catalogues."
+    },
+    {
+     "cite": "J. A. Wilson, 'The Report of a Frontier Official', in J. B. Pritchard (ed.), Ancient Near Eastern Texts Relating to the Old Testament (Princeton University Press), p. 259",
+     "kind": "translation",
+     "verified": "Not read in the book. Wilson's translation and introduction were read 15 Nov 2026 as reproduced on the compilation page listed below."
+    },
+    {
+     "cite": "J. P. Allen, 'A Report of Bedouin', The Context of Scripture 3.5 (Leiden: Brill; cited as 2003)",
+     "kind": "translation",
+     "verified": "Not read in the book. Allen's translation and notes were read 15 Nov 2026 as reproduced on the compilation page listed below, including 'model letter' and the judgment that the regnal year is probably Merneptah's."
+    },
+    {
+     "cite": "K. A. Kitchen, 'The Egyptian Evidence on Ancient Jordan', in P. Bienkowski (ed.), Early Edom and Moab: The Beginning of the Iron Age in Southern Jordan (Sheffield Archaeological Monographs 7; Sheffield: J. R. Collis, 1992), pp. 21–34",
+     "url": "https://zenon.dainst.org/Record/000328000/Details",
+     "kind": "study",
+     "verified": "German Archaeological Institute catalogue record read 15 Nov 2026: author, title, pp. 21–34, in the Bienkowski volume. Kitchen's sentence on Year 8 of Merneptah, c. 1206 BC, and the first appearance of Edom was read in an online reproduction of the chapter, not in the book."
+    },
+    {
+     "cite": "D. E. Fleming, Yahweh before Israel: Glimpses of History in a Divine Name (Cambridge University Press, 2020), chapter 2, 'Yhwȝ of Shasu-Land'",
+     "url": "https://www.cambridge.org/core/books/yahweh-before-israel/yhw-of-shasuland/119116DC7806AE299828B5D58EA06539",
+     "kind": "study",
+     "verified": "Cambridge Core chapter page (summary) read 15 Nov 2026. Fleming's translation of lines 54–56 and his reference to Giveon's Document 37 were read as quoted on intertextual.bible, not in the book."
+    },
+    {
+     "cite": "S. Rudd, 'Papyrus Anastasi VI mentions the Lakes of Pithom and Bedouin tribes of Edom' (bible.ca), a web page reproducing the Allen, Wilson and Kitchen passages",
+     "url": "https://www.bible.ca/manuscripts/bible-inscriptions-archeology-edomites-Papyrus-Egyptian-Anastasi-VI-Shasu-tribes-of-Edom-Pharaoh-Merneptah-Succoth-1205bc.htm",
+     "kind": "compilation of published translations",
+     "verified": "Page read 15 Nov 2026. Used only for the passages it reproduces from Allen, Wilson and Kitchen and for its page references (Gardiner 1937: 76–77; Caminos 1954: 293; ANET 259). The page author's own dating and commentary are not used."
+    }
+   ],
+   "corrections": [],
+   "updates": [],
+   "checked_through": null,
+   "storybook_names": [
+    "Papyrus Anastasi VI",
+    "Anastasi VI",
+    "Shasu of Edom"
+   ],
+   "period_id": "exodus-conquest",
+   "currency_note": "not completed: no search for 2024–2026 publications was run for this entry, and none of the print editions was read directly"
+  },
+  {
+   "id": "tel-moza-temple",
+   "name": "Tel Moẓa Temple",
+   "aka": [
+    "Tel Motza",
+    "Tel Moza",
+    "Moẓa temple complex",
+    "Building 500 at Moẓa"
+   ],
+   "subtitle": "Iron Age II temple complex with courtyard altar and cult objects, 7 km northwest of Jerusalem · built in the Iron IIA, late 10th–early 9th century BCE",
+   "kind": "Site (temple complex and cult objects)",
+   "date": "Temple built in the Iron IIA, 'no later than the first half of the 9th century BCE' (Kisilevitz 2015); the expedition gives the late 10th–early 9th century BCE and reports at least four courtyard phases down to the late 7th/early 6th century BCE",
+   "date_basis": "Pottery from stratified floors and fills (Kisilevitz 2015, p. 149 with n. 8). No radiocarbon dates are reported in the sources read here.",
+   "discovery": {
+    "when": "Salvage excavations 1993 and 2002–2003; the temple recognised in salvage excavations of 2012–2013; Tel Moẓa Expedition Project from spring 2019",
+    "who": "Israel Antiquities Authority (Z. Greenhut and A. De Groot; then S. Kisilevitz, A. Eirikh-Rose, H. Khalaily and Z. Greenhut); Tel Moẓa Expedition Project of Tel Aviv University and the IAA (S. Kisilevitz and O. Lipschits)",
+    "where": "Tel Moẓa, about 7 km northwest of the City of David, on the line of Highway 1"
+   },
+   "location": "In situ; the part exposed in 2012–2013 was backfilled in 2013 and lies beneath the highway bridge (Kisilevitz 2015, p. 150 n. 10). Finds with the Israel Antiquities Authority",
+   "physical": {
+    "material": "Stone-built temple with portico; fieldstone altar; refuse pit with ash and animal bone; pottery cult stand; clay figurines",
+    "dimensions": "Reconstructed building about 18 × 13 m; main hall 7–7.5 m wide inside; altar about 1.35 × 1.4 m (Kisilevitz 2015, pp. 150–151)"
+   },
+   "overview": [
+    "Tel Moẓa lies on the main approach to Jerusalem from the west. Salvage excavations ahead of the rebuilding of Highway 1 had already shown an Iron Age settlement that its excavators read as a royal granary supplying Jerusalem. In 2012 new salvage work showed that beneath the late Iron Age 'Building 500' lay a temple complex of the Iron IIA.",
+    "The temple faces east. Its entrance has a portico with two column bases set between antae, opening into a main hall. Only the northern part of the building was excavated, and the southern half is restored by symmetry; an inner shrine is suggested by differences in the floor but, in the excavator's words, 'cannot be positively ascertained'. In the courtyard stood a square altar of fieldstones beside a pit filled with ash, sherds and the bones of young animals, and a stone podium around which cult objects lay: figurines of people and horses, chalices and a tall decorated stand. They had been covered deliberately with earth and plaster (Kisilevitz 2015).",
+    "Since 2019 the Tel Moẓa Expedition Project has dug the site as a research excavation. It reports a structure beneath the temple and at least four phases in the courtyard, and compares the plan with the temples of Tell Tayinat and 'Ain Dara and with the description of Solomon's temple in 1 Kings 6–7. In 2025 Kisilevitz described the sequence as two temples, a modest early shrine replaced by a monumental long-room temple."
+   ],
+   "text": null,
+   "evidence": [
+    "Location: about 7 km northwest of the City of David (Kisilevitz 2015, p. 147; expedition website).",
+    "Plan: east-facing building with a portico of two column bases flanked by antae; main hall 7–7.5 m wide; reconstructed size about 18 × 13 m. Excavated were the northern courtyard, the building's northeast corner and part of its west side; the southern half is inferred (Kisilevitz 2015, pp. 150–151).",
+    "A possible inner shrine is suggested only by floor differences and 'cannot be positively ascertained' (Kisilevitz 2015, p. 151 n. 11).",
+    "Courtyard: a rectangular fieldstone altar about 1.35 × 1.4 m; beside it a pit about 1.85 × 1.3 m with ash, sherds and many animal bones, preliminarily described as young, unblemished animals (Kisilevitz 2015, pp. 151–154).",
+    "Cult objects clustered at a stone podium about 1 m north of the pit: two human head figurines, a large hollow horse with the remains of a rider, a smaller solid equid, a tall stand with lion or sphinx reliefs, chalices and a pomegranate-shaped pendant (Kisilevitz 2015, pp. 154–160).",
+    "The objects were deliberately covered with earth and plaster and sealed beneath later Iron II walls and floors (Kisilevitz 2015, pp. 156, 161).",
+    "Date of construction: Iron IIA, probably early in the late Iron IIA, no later than the first half of the 9th century BCE (Kisilevitz 2015, p. 149 n. 8).",
+    "The expedition reports at least four courtyard phases spanning the late 10th/early 9th to the late 7th/early 6th centuries BCE, and a plan of the North Syrian type known at Tell Tayinat and 'Ain Dara (expedition website).",
+    "A structure beneath the temple, partly uncovered and tentatively dated to the 10th century BCE (Tel Aviv University statement, 4 February 2020)."
+   ],
+   "questions": [
+    "Is there an inner room? The 2015 report leaves it open, and the south half of the building was never dug. Descriptions that give the temple a main hall and a holy of holies go beyond what was excavated by 2013.",
+    "How long was it a temple? Kisilevitz (2015) gives no end date, reports that the cult objects were buried under later Iron II floors, and says it is not possible to tell whether the 7th–early 6th century Building 500 was still a temple. D. R. Moulis (2019) places the covering of the altar and temple in the 8th century BCE. The expedition now reports courtyard phases to the late 7th/early 6th century, and the Biblical Archaeology Society's summary of Kisilevitz and Lipschits (2020) has the temple functional until the early 6th century.",
+    "Whose temple? The 2015 report names no deity. Kisilevitz and Lipschits (2020, 2022) argue that it began as the work of a local group tied to the granary and came to stand within Judah's official system, so that sanctioned temples existed beside Jerusalem's. That reading rests on the site's economic role and its nearness to the capital; no inscription from Moẓa names the god, the builders or a king.",
+    "What of Hezekiah and Josiah? 2 Kings credits both kings with removing sanctuaries outside Jerusalem. A temple 7 km from the city with phases into the late 7th century bears directly on how far, and when, those measures reached. The excavators raise the question; the stratigraphy published so far does not settle it."
+   ],
+   "biblical": [
+    {
+     "ref": "Joshua 18:26",
+     "tie": "Mozah is listed among the towns of Benjamin. The site's name preserves it."
+    },
+    {
+     "ref": "1 Kings 6:2–5; 7:15–21; 2 Chronicles 3",
+     "tie": "A long-room temple entered from the east through a porch with two pillars. The Moẓa portico has two column bases at an east entrance. The excavators compare the two plans, and both belong to a building type also known at Tell Tayinat and 'Ain Dara. The comparison is of type; nothing identifies the Moẓa building with Jerusalem's."
+    },
+    {
+     "ref": "1 Kings 3:2–4; 15:14; 22:43",
+     "tie": "The text itself says the people and kings of Judah went on sacrificing at high places outside Jerusalem. Moẓa is an excavated place of sacrifice in Judah from that period."
+    },
+    {
+     "ref": "2 Kings 18:4, 22; 23:8",
+     "tie": "The reforms of Hezekiah and Josiah against sanctuaries outside Jerusalem. See the open question on the date at which the Moẓa temple went out of use."
+    }
+   ],
+   "sources": [
+    {
+     "cite": "S. Kisilevitz, 'The Iron IIA Judahite Temple at Tel Moẓa', Tel Aviv 42(2) (2015) 147–164, DOI 10.1179/0334435515Z.00000000052",
+     "url": "https://www.telmoza.org/_files/ugd/9617d2_af85fb5d9d6140bbbbfedc7169232eeb.pdf",
+     "kind": "excavation report",
+     "verified": "PDF on the expedition's website read 15 Nov 2026: plan and dimensions (pp. 150–151), n. 11 on the inner shrine, altar, pit and bones (pp. 151–154), figurines and stand (pp. 156–160), burial of the objects (pp. 156, 161), date (p. 149 n. 8), Building 500 (pp. 149–150), backfilling (p. 150 n. 10). The article calls itself a preliminary presentation."
+    },
+    {
+     "cite": "Tel Moẓa Expedition Project (Tel Aviv University and Israel Antiquities Authority; dirs S. Kisilevitz and O. Lipschits), project website",
+     "url": "https://www.telmoza.org/",
+     "kind": "excavation project page",
+     "verified": "Site text read 15 Nov 2026 as returned by web search: project begun spring 2019; construction in the late 10th–early 9th century BCE; North Syrian plan with Tell Tayinat and 'Ain Dara named; at least four courtyard phases to the late 7th/early 6th century BCE; notice that no season would be held in summer 2024."
+    },
+    {
+     "cite": "S. Kisilevitz and O. Lipschits, 'Tel Moẓa', Hadashot Arkheologiyot: Excavations and Surveys in Israel 132 (2020)",
+     "url": "https://www.hadashot-esi.org.il/report_detail_eng.aspx?id=25702&mag_id=128",
+     "kind": "excavation report",
+     "verified": "Not read: the journal's site refused the fetch. Citation and link as given by the Biblical Archaeology Society of Israel page on the site. A preliminary report of the April 2019 season (License G-18/2019) is summarised there."
+    },
+    {
+     "cite": "S. Kisilevitz and O. Lipschits, 'Tel Motza: Un centre économique et cultuel de l'âge du Fer II (période du Premier Temple)', Semitica 64 (2022) 297–321, DOI 10.2143/SE.64.0.3291278",
+     "url": "https://doi.org/10.2143/SE.64.0.3291278",
+     "kind": "study",
+     "verified": "Publisher's record and abstract read 15 Nov 2026 as returned by web search: a first cult building and then a monumental temple in antis above it, both of the Iron IIA (10th–9th centuries BCE); synthesis of the 1993–2013 salvage results. Article text not read."
+    },
+    {
+     "cite": "S. Kisilevitz and O. Lipschits, 'Another Temple in Judah! The Tale of Tel Moẓa', Biblical Archaeology Review 46:1 (January/February 2020)",
+     "url": "https://www.biblicalarchaeology.org/daily/biblical-sites-places/temple-at-jerusalem/a-rival-to-solomons-temple/",
+     "kind": "study",
+     "verified": "Article not read (subscription). The Biblical Archaeology Society's summary page, linked here, was read 15 Nov 2026: established around 900 BCE, functional until the early 6th century BCE; the authors' statement on sanctioned temples in Judah."
+    },
+    {
+     "cite": "Tel Aviv University, 'Newly discovered temple near Jerusalem calls into question Biblical depictions' (statement of 4 February 2020)",
+     "url": "https://english.tau.ac.il/node/2541",
+     "kind": "news (statements of the project director)",
+     "verified": "Read 15 Nov 2026 as returned by web search: two cult buildings one above the other; the lower only partly uncovered and tentatively dated to the 10th century BCE; the authors' proposal that a local group built the temple."
+    },
+    {
+     "cite": "Friends of ASOR, webinar notice, S. Kisilevitz, 'Holier than Thou? The Temples at Tel Moza and Reflections of Ritual Practices in Ancient Judah' (10 September 2025)",
+     "url": "https://www.asor.org/news/2025/08/webinar-kisilevitz",
+     "kind": "news (statements of the project director)",
+     "verified": "Notice read 15 Nov 2026 as returned by web search: 'a succession of two temples', a modest early shrine replaced by a monumental long-room temple. The talk itself was not heard."
+    },
+    {
+     "cite": "D. R. Moulis, chapter on Hezekiah's cultic reforms and the archaeological evidence, in F. Čapek and O. Lipschits (eds), a 2019 collected volume, pp. 166–167",
+     "url": "https://web.etf.cuni.cz/ETFN-442-version1-moulisdr_2019_hezekiahs_cultic_reform_x.pdf",
+     "kind": "study",
+     "verified": "Extract of the author's PDF read as returned by web search: the Moẓa altar and temple 'were covered with a layer of earth during the eighth century BCE', citing Kisilevitz. The volume's full title and publisher were not confirmed."
+    },
+    {
+     "cite": "Z. Greenhut and A. De Groot, Salvage Excavations at Tel Moza: The Bronze and Iron Age Settlements and Later Occupations (Jerusalem: Israel Antiquities Authority, 2009)",
+     "kind": "excavation report",
+     "verified": "Not read. Quoted by Kisilevitz 2015 (p. 149) for the reading of the site as a royal granary supplying Jerusalem."
+    }
+   ],
+   "corrections": [],
+   "updates": [
+    {
+     "date": "2024",
+     "what": "The expedition's website states that no excavation season would be held in summer 2024 and that the next season was not yet set.",
+     "source_index": 1
+    },
+    {
+     "date": "2025-09",
+     "what": "Kisilevitz presents the site as a succession of two temples, an early shrine replaced by a monumental long-room temple (Friends of ASOR webinar).",
+     "source_index": 6
+    }
+   ],
+   "checked_through": null,
+   "storybook_names": [
+    "Tel Moẓa",
+    "Tel Motza",
+    "Tel Moza",
+    "Motza"
+   ],
+   "period_id": "divided-kingdom-judah",
+   "currency_note": "partial: the 2024–2026 check was a web search only (expedition website and an ASOR notice); the 2020 Hadashot Arkheologiyot report and the 2020 and 2022 articles could not be read in full"
+  },
+  {
+   "id": "kefar-othnay-megiddo-mosaic",
+   "name": "Kefar 'Othnay Prayer Hall Mosaic (the Megiddo Mosaic)",
+   "aka": [
+    "Megiddo Mosaic",
+    "Megiddo Prison mosaic",
+    "Megiddo church",
+    "Akeptous inscription",
+    "Legio prayer hall",
+    "Kfar ʿOthnay mosaics"
+   ],
+   "subtitle": "Mosaic floor of a Christian prayer hall with three Greek inscriptions, one offering a table 'to God Jesus Christ' · 3rd century CE",
+   "kind": "Mosaic floor with inscriptions",
+   "date": "3rd century CE. Excavators: hall and mosaic built in the early 3rd century and abandoned about 300 CE. G. W. Bowersock (2018): the end of the 3rd century, or very early in the 4th",
+   "date_basis": "Coins and pottery from the building (the excavators, as summarised by the Hebrew University corpus); the presence of the Sixth Legion Ferrata at Udhruḥ by about 303–4 CE as a latest date, with the name Akeptous and the spelling of the verb in her inscription (Bowersock 2018, pp. 67–69); Gaianus's double name, a usage common in the 1st–3rd centuries that faded in the 4th (Hebrew University corpus, inscription 1).",
+   "discovery": {
+    "when": "2005",
+    "who": "Yotam Tepper, Israel Antiquities Authority, with inmates of the prison working on the excavation; inscriptions edited by Leah Di Segni",
+    "where": "Megiddo Prison compound, at ancient Kefar 'Othnay beside the legionary base of Legio, near Tel Megiddo, Israel"
+   },
+   "location": "On loan from the Israel Antiquities Authority to the Museum of the Bible, Washington DC, in the exhibition 'The Megiddo Mosaic: Foundations of Faith' (opened 15 September 2024; current run listed as 25 July 2025 – 31 December 2026). Press reports say it will then return to Israel for display where it was found",
+   "physical": {
+    "material": "Stone mosaic (tesserae) floor",
+    "dimensions": "Mosaic about 54 m²; hall about 5 × 10 m",
+    "script": "Greek",
+    "language": "Greek"
+   },
+   "overview": [
+    "In 2005 an excavation inside Megiddo Prison uncovered a room with a mosaic floor in a large building at Kefar 'Othnay, the village beside the camp of the Sixth Legion Ferrata. The floor carries a panel with two fish in a roundel and three Greek inscriptions, and the base of a table stood in it.",
+    "One inscription says that Gaianus, also called Porphyrius, a centurion, 'our brother', paid for the mosaic from his own money, and that Brutius made it. A second asks that four women be remembered: Primilla, Cyriaca, Dorothea and Chreste. The third records that a woman named Akeptous gave the table 'to God Jesus Christ as a memorial'. The words God, Jesus and Christ are abbreviated, as sacred names are in Christian manuscripts.",
+    "The excavators called the room a Christian prayer hall and dated it to the 3rd century, before Christianity was legal in the empire. It is a room for worship inside a larger residential building, not a church building of the later kind."
+   ],
+   "text": {
+    "quote": "The God-loving Akeptous has offered the table to God Jesus Christ as a memorial.",
+    "translation": "Translation as given in the Hebrew University Corpus record for inscription 2 (ed. L. Di Segni). Greek: Προσήνικεν Ἀκεπτοῦς ἡ φιλόθεος τὴν τράπεζαν Θ(ε)ῷ Ἰ(ησο)ῦ Χ(ριστ)ῷ μνημόσυνον.",
+    "quote_type": "verbatim"
+   },
+   "evidence": [
+    "Inscription 2 (Akeptous): text and translation as above; SEG 56 (2006) 1900; SEG 61 (2011) 1441; first edition Tepper and Di Segni 2006, pp. 36–41 (Hebrew University corpus).",
+    "Akeptous was a woman: the Greek gives her the feminine article and adjective, ἡ φιλόθεος. Bowersock calls the feminine name rare and relatively late (2018, p. 68).",
+    "Inscription 1 (Gaianus): a dedicatory building inscription at the north end of the northern panel, naming Gaianus also called Porphyrius, centurion, and the craftsman; SEG 56 (2006) 1899 (Hebrew University corpus; Bowersock 2018, p. 68).",
+    "Inscription 3: a request to remember four women, at the east side of the southern panel; SEG 56 (2006) 1901. The corpus notes that the same remembrance formula is used in the synagogue at Dura Europos.",
+    "The largest panel shows two fish in a roundel (Bowersock 2018, p. 68).",
+    "A raised platform in the floor, most likely the base of the table named in the Akeptous inscription; Bowersock identifies the table as the place of the Eucharist (2018, pp. 68–69).",
+    "Coins and pottery put the building of the hall in the early 3rd century, and its end about 300 CE, which the corpus connects with the orderly transfer of the Sixth Legion to Arabia under Diocletian (Hebrew University corpus, site record)."
+   ],
+   "questions": [
+    "How early? Tepper and Di Segni date the hall to the early 3rd century; the exhibition gives 'about the year 230'. Bowersock (2018) dates the mosaic to the late 3rd century or very early 4th, and reports that R. Talgam, judging by style, would lean later while granting the excavators' arguments. C. Markschies questioned the 3rd-century date; Bowersock reports that Di Segni answered him in SEG 61, no. 1441. Every date proposed in these sources is earlier than the Council of Nicaea (325).",
+    "'God Jesus Christ'. Bowersock observes that calling Christ God in an inscription is rare before Constantine, and uses that as an argument against a date after the 3rd century. The inscription shows what one congregation wrote on its own floor; it does not show how widely the wording was used.",
+    "A church? The excavators' term is 'prayer hall', and others use aula ecclesiae for such rooms. Bowersock says the space was clearly not a church. The find is a room set aside for Christian worship within another building.",
+    "Soldiers and Christians. A serving centurion paid for the floor. Bowersock takes this as a sign of Christianity's spread in the army. How the hall stood in relation to the camp's official cults is not known from the finds."
+   ],
+   "biblical": [
+    {
+     "ref": "John 1:1; 20:28; Titus 2:13",
+     "tie": "The New Testament calls Jesus God. The Akeptous inscription shows a congregation doing so in its own words on its own floor in the 3rd century."
+    },
+    {
+     "ref": "1 Corinthians 10:16–21; 11:23–26",
+     "tie": "'The table of the Lord' and the Lord's supper. Akeptous gave a table, and its base stood in the middle of the hall."
+    },
+    {
+     "ref": "Acts 10:1–2, 44–48",
+     "tie": "Cornelius, a centurion, is baptised with his household. At Kefar 'Othnay a centurion is named as a brother and as the donor of the floor."
+    },
+    {
+     "ref": "Romans 16:1–15",
+     "tie": "Paul greets women of the Roman congregation by name. Five women are named in this hall: the donor of the table and four to be remembered."
+    }
+   ],
+   "sources": [
+    {
+     "cite": "Y. Tepper and L. Di Segni, A Christian Prayer Hall of the Third Century CE at Kefar 'Othnay (Legio): Excavations at the Megiddo Prison 2005 (Jerusalem: Israel Antiquities Authority, 2006)",
+     "kind": "editio princeps",
+     "verified": "Not read. Its dating and the page range for the Akeptous inscription (pp. 36–41) are taken from the Hebrew University corpus records below."
+    },
+    {
+     "cite": "The Hebrew University of Jerusalem, Corpus of churches and monasteries in the Holy Land, site record 'Kefar 'Othnai - Megiddo Prison'",
+     "url": "https://dig.corps-cmhl.huji.ac.il/churches/kefar-othnai-megiddo-prison",
+     "kind": "museum record",
+     "verified": "Record read 15 Nov 2026: prayer hall (aula ecclesiae) with mosaic floor, table and three Greek inscriptions; built early 3rd century on numismatic and pottery evidence; abandoned about 300 CE; excavated by Y. Tepper in 2005; bibliography including Bowersock 2018."
+    },
+    {
+     "cite": "The Hebrew University of Jerusalem, Corpus of churches and monasteries in the Holy Land, inscription records for Kefar 'Othnai nos 1, 2 and 3",
+     "url": "https://dig.corps-cmhl.huji.ac.il/node/18645",
+     "kind": "museum record",
+     "verified": "Inscription 2 (node 18645) read in full 15 Nov 2026: Greek text, translation, 3rd-century date, SEG 56: 1900 and 61: 1441. Inscriptions 1 (node 18626) and 3 (node 18646) read as returned by web search: SEG 56: 1899 and 1901, location in the floor, the note on the signum and the Dura Europos parallel."
+    },
+    {
+     "cite": "G. W. Bowersock, 'Religion in Early Fourth Century Roman Palestine: The Kfar ʿOthnay Mosaics', Syria 95 (2018) 65–71",
+     "url": "https://core.ac.uk/download/430252715.pdf",
+     "kind": "study",
+     "verified": "PDF read 15 Nov 2026: date and its grounds (pp. 67–69), the inscriptions and donors (pp. 68–69), the two fish, the table and Eucharist, Talgam's view, and p. 66 n. 1 on Markschies and Di Segni. The repository metadata gives pp. 65–72."
+    },
+    {
+     "cite": "Museum of the Bible, 'The Megiddo Mosaic: Foundations of Faith', inscriptions page and current-exhibits listing",
+     "url": "https://www.museumofthebible.org/the-inscriptions",
+     "kind": "museum record",
+     "verified": "Inscriptions page read 15 Nov 2026: the three inscriptions and the names. The current-exhibits listing, read as returned by web search, gives the run as 25 July 2025 – 31 December 2026."
+    },
+    {
+     "cite": "M. Wecker, ''Greatest discovery since Dead Sea Scrolls,' Megiddo mosaic goes on view at Bible Museum in DC', JNS (September 2024)",
+     "url": "https://www.jns.org/greatest-discovery-since-dead-sea-scrolls-megiddo-mosaic-goes-on-view-at-bible-museum-in-dc/",
+     "kind": "news",
+     "verified": "Read 15 Nov 2026 as returned by web search: exhibition opened 15 September 2024; the exhibition's date of 'about the year 230'. Size of the mosaic (54 m²) and the planned return to the findspot are from a second press report (All Israel News)."
+    }
+   ],
+   "corrections": [],
+   "updates": [
+    {
+     "date": "2024-09",
+     "what": "The mosaic, lifted and conserved by the Israel Antiquities Authority, goes on display outside Israel for the first time, at the Museum of the Bible in Washington DC.",
+     "source_index": 5
+    },
+    {
+     "date": "2025-07",
+     "what": "The Museum of the Bible lists a further run of the exhibition, 25 July 2025 to 31 December 2026.",
+     "source_index": 4
+    }
+   ],
+   "checked_through": null,
+   "storybook_names": [
+    "Megiddo Mosaic",
+    "Megiddo mosaic",
+    "Megiddo Prison mosaic",
+    "Kefar 'Othnay",
+    "Kefar ‘Othnay",
+    "Akeptous"
+   ],
+   "period_id": "early-church",
+   "currency_note": "partial: a November 2026 web search covered the exhibition history; journals were not searched for 2024–2026 studies, and the 2006 excavation report was not read"
+  },
+  {
+   "id": "alexamenos-graffito",
+   "name": "Alexamenos Graffito",
+   "aka": [
+    "Graffito blasfemo",
+    "Palatine crucifixion graffito",
+    "Alexamenos worships his god"
+   ],
+   "subtitle": "Scratched drawing of a donkey-headed figure on a cross with a Greek caption, from the imperial Paedagogium on the Palatine · about 200 CE",
+   "kind": "Graffito (drawing with caption)",
+   "date": "Severan period, late 2nd to early 3rd century CE (Parco archeologico del Colosseo); commonly given as about 200 CE",
+   "date_basis": "The date assigned by the museum to the graffito in its building. The sources read here give no independent date for the scratching itself.",
+   "discovery": {
+    "when": "1857 (museum catalogue; 1856 in some accounts)",
+    "where": "The so-called Paedagogium, a building attached to the imperial palace on the Palatine Hill, Rome"
+   },
+   "location": "Palatine Museum (Museo Palatino), Rome",
+   "physical": {
+    "material": "Wall plaster, scratched",
+    "dimensions": "33.5 × 38 cm",
+    "script": "Greek",
+    "language": "Greek"
+   },
+   "overview": [
+    "The graffito was scratched into the plaster of a room in the Paedagogium, a dependency of the imperial palace thought to have housed or trained the emperor's household slaves. It shows a figure with a donkey's head on a cross, seen from behind, and a man at the left raising a hand toward it. A Greek caption runs beneath.",
+    "The museum reads the caption as 'Alexamenos worships [his] god' and describes the drawing as hard to interpret, probably a mockery of a Christian. If so, it is among the earliest pictures of a crucifixion, and it is drawn by someone who thought the worship absurd.",
+    "The insult is not isolated. Christian writers of the same generation report the charge that Christians worshipped a donkey's head: Tertullian in the Apology and To the Nations, and Minucius Felix, who gives it to the pagan speaker of his dialogue along with scorn for the worship of a crucified man and his cross."
+   ],
+   "text": {
+    "quote": "Alexamenos worships [his] god",
+    "translation": "Parco archeologico del Colosseo catalogue. Greek: ΑΛΕΞΑΜΕΝΟϹ ϹΕΒΕΤΕ ΘΕΟΝ (Solin and Itkonen-Kaila 1966, no. 246), with σέβετε taken as a spelling of σέβεται",
+    "quote_type": "verbatim"
+   },
+   "evidence": [
+    "Findspot and date: discovered 1857 in the Paedagogium on the Palatine; dated to the Severan age (Parco archeologico del Colosseo catalogue).",
+    "The drawing: a donkey-headed figure on a cross seen from behind, a man at the left with raised arm, and a Y-shaped sign at the upper right (museum catalogue).",
+    "The caption is written across four lines (museum catalogue); 33.5 × 38 cm, plaster (Judaism and Rome database).",
+    "Standard publication: H. Solin and M. Itkonen-Kaila, Graffiti del Palatino I: Paedagogium (1966), no. 246. The building yielded 369 graffiti in Latin and Greek (Judaism and Rome database, citing Solin and Itkonen-Kaila).",
+    "The donkey-head charge in contemporary writers: Tertullian, Apology 16 and To the Nations 1.14; Minucius Felix, Octavius 9, where the pagan speaker says Christians worship a crucified man, his cross, and the head of an ass (as quoted by J. Grout and the Catholic Encyclopedia).",
+    "Tertullian also describes a picture carried about in Carthage, a figure in a toga with a donkey's ears and a hoof, labelled as the god of the Christians (To the Nations 1.14, as quoted by Grout)."
+   ],
+   "questions": [
+    "Is the target a Christian? The museum calls that probable, not certain. The literary evidence for the donkey slander supports it. R. Wünsch proposed instead a Gnostic group that identified Christ with the donkey-headed Seth-Typhon; the Catholic Encyclopedia (1907) reports this and judges the reasons unconvincing.",
+    "The Y sign. The museum reports two readings, a cry of pain or a pitchfork. D. Balch and others doubt that the upsilon belongs to the original graffito (Judaism and Rome database).",
+    "The grammar. The verb as written does not agree with its subject; O. L. Yarbrough reads σέβετε as a phonetic spelling of σέβεται, 'worships' (Judaism and Rome database).",
+    "A reply? Secondary accounts report a second graffito in a neighbouring room reading 'Alexamenos fidelis'. This was not checked against Solin and Itkonen-Kaila and is not used here as evidence.",
+    "The date. 'About 200' is the museum's Severan date for the graffito in its setting. It is an estimate."
+   ],
+   "biblical": [
+    {
+     "ref": "1 Corinthians 1:18–23",
+     "tie": "'Christ crucified … to Gentiles foolishness.' The drawing is that judgment made by a Gentile hand: a crucified god shown as a donkey."
+    },
+    {
+     "ref": "Philippians 4:22",
+     "tie": "'Those of Caesar's household.' The graffito comes from the quarters of the imperial household staff. If it mocks a Christian, there was one among them about 200 CE."
+    },
+    {
+     "ref": "1 Peter 4:14–16",
+     "tie": "Being reviled for the name of Christ, and suffering 'as a Christian'."
+    }
+   ],
+   "sources": [
+    {
+     "cite": "Parco archeologico del Colosseo, catalogue of works, 'Scratched graffito with blasphemous crucifix'",
+     "url": "https://colosseo.it/en/opere/scratched-graffito-with-blasphemous-crucifix/",
+     "kind": "museum record",
+     "verified": "Catalogue page read 15 Nov 2026: found 1857 in the so-called Paedagogium; Severan date; description of the two figures; caption in four lines; 'probably a mockery of a Christian'; the two readings of the Y sign; Palatine Museum. No inventory number is given on the page."
+    },
+    {
+     "cite": "H. Solin and M. Itkonen-Kaila (eds), Graffiti del Palatino I: Paedagogium (Helsinki: Institutum Romanum Finlandiae, 1966), no. 246",
+     "kind": "editio princeps",
+     "verified": "Not read. Number and bibliographic details as given by the Judaism and Rome database record and by J. Grout."
+    },
+    {
+     "cite": "K. Fowler, 'Alexamenos Graffito', Judaism and Rome database, record 31",
+     "url": "https://heurist.huma-num.fr/heurist/judaism_and_rome/view/31",
+     "kind": "study",
+     "verified": "Record read 15 Nov 2026 as returned by web search: plaster, 33.5 × 38 cm, Palatine Museum, Greek text, 369 graffiti from the complex, Yarbrough on σέβετε, Balch on the upsilon, bibliography."
+    },
+    {
+     "cite": "J. Grout, 'Alexamenos Graffito', Encyclopaedia Romana (University of Chicago, Penelope)",
+     "url": "https://penelope.uchicago.edu/~grout/encyclopaedia_romana/gladiators/graffito.html",
+     "kind": "study",
+     "verified": "Page read 15 Nov 2026 as returned by web search: quotations of Minucius Felix, Octavius 9, and of Tertullian, Apology 16 and To the Nations 1.14; the 1856 discovery date; Solin and Itkonen-Kaila no. 246. Tertullian and Minucius Felix were not read in an edition."
+    },
+    {
+     "cite": "M. Hassett, 'The Ass (in Caricature of Christian Beliefs and Practices)', The Catholic Encyclopedia vol. 1 (New York: Robert Appleton, 1907)",
+     "url": "https://www.newadvent.org/cathen/01793c.htm",
+     "kind": "study",
+     "verified": "Read 15 Nov 2026 as returned by web search: references to Tertullian (Apol. xvi; Ad nationes I, 14) and Minucius Felix (Octavius ix); Wünsch's Seth-Typhon proposal and the article's judgment on it."
+    },
+    {
+     "cite": "O. L. Yarbrough, 'The Shadow of an Ass: On Reading the Alexamenos Graffiti', in A. C. Niang and C. Osiek (eds), Text, Image, and Christians in the Graeco-Roman World: A Festschrift in Honor of David Lee Balch (Eugene, OR: Pickwick, 2012) 239–256",
+     "kind": "study",
+     "verified": "Not read. Cited from the Judaism and Rome database record."
+    }
+   ],
+   "corrections": [],
+   "updates": [],
+   "checked_through": null,
+   "storybook_names": [
+    "Alexamenos graffito",
+    "Alexamenos Graffito",
+    "Alexamenos"
+   ],
+   "period_id": "early-church",
+   "currency_note": "not completed: no search for 2024–2026 publications was run for this entry, and the 1966 edition was not read"
   }
  ]
 }
